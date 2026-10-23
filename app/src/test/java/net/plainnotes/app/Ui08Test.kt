@@ -293,12 +293,17 @@ class Ui08ContrastTest(private val name: String, private val fg: Int, private va
     @Test fun meetsMinimum() { val r = ratio(Color(fg), Color(bg)); println("UI08CONTRAST\t$name\t${"%.2f".format(r)}"); assertTrue("$name ${"%.2f".format(r)} < $min", r >= min) }
 }
 
-/** UI-08 §3.7: the wellbeing PDF summary is unchanged — its code and every existing string are the base bytes (only new keys added). */
+/**
+ * UI-08 §3.7: the wellbeing PDF summary is unchanged — its code and every existing string are the base bytes (only new keys added).
+ * PDF-01 (REQUIREMENTS §145) migration: Exports.kt now carries the new PDF layout, so its byte pin became "text identical + layout
+ * per PDF-01": the pre-PDF-01 renderer is frozen as LegacyPdfReport (pinned here) and Pdf01Test shows, for the summary in four
+ * languages with every part and with a partial set, that the new layout writes exactly the same words.
+ */
 class Ui08PdfSummaryUnchangedTest {
     private fun sha(b: ByteArray) = MessageDigest.getInstance("SHA-256").digest(b).joinToString("") { "%02x".format(it) }
     @Test fun summaryCodeAndStringsAreTheBase() {
         assertEquals("df0d246ba308f43dd869c131b5d781dfba4125ec940df9fd55dcc15ddb1c497b", sha(File("src/main/java/net/plainnotes/app/export/WellbeingSummary.kt").readBytes()))
-        assertEquals("407710c35904da6bede1a8f42b2d64c0491ebdaf641b893c11c9aa4ede2b192b", sha(File("src/main/java/net/plainnotes/app/export/Exports.kt").readBytes()))
+        assertEquals("a9a2de731d4d0ffcfbd7c4ce154eef6a720f4c7b0420e5098c51d65026ba4fc0", sha(File("src/test/java/net/plainnotes/app/export/LegacyPdfReport.kt").readBytes()))
         assertEquals("51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06", sha(File("src/main/java/net/plainnotes/app/ui/ConcChart.kt").readBytes()))
         val base = mapOf("values" to "caa533fbbe4165f32d7ba7f7a1f9c3620995c4b4a2de1e9f81353c9fd3a4638a", "values-zh" to "7d0d69f1e8734cde743aa0e94f669895003c4b6508acf76b6d2920b269f1ef84",
             "values-b+zh+Hant" to "2c53efeec7e47153485abac6f345dd11f43047849e9ebc140067b991be459a29", "values-fr" to "b12b41def544ec6069e8e941af03589bb9837403cb8426b4a1c16975c254eaf0")

@@ -1330,6 +1330,16 @@ LAB-03 的同文件增量授权记录 `PD-2026-10-19-LAB03-CATALOG-ADAPTER`：�
 
 负责人针对明确问题答复：“批准默认关闭的实现，外部审核在启用前完成”。授权采用已有Tink方案A，开发正式writer/reader和设备密钥适配；先提交所需迁移、完整医疗备份兼容设计。此前要求外部审核先于实施的时序由本决定替代，独立审核仍为启用前门槛（当前NOT_REVIEWED_EXTERNALLY）。这不是批准启用附件、存入唯一原件或更改正式Room/PNBAK1/完整备份格式；迁移和新完整备份格式仍先设计评审。不得把阶段密文结果声称为数据库真实提交，不复用数据库密钥，不以丢失alias时重建key冒充恢复。保持feature_enabled=0和所有原有保护。具体边界见docs/medical-attachments/2026-10-22/storage-compatibility.md。
 
+## 145. PDF-01 用瑞士风格重排 PDF 报告和就诊资料包（只改版式）（2026-10-23）
+
+负责人任务书 v2 原文归档于 `docs/audits/product-quality-2026-10/sources/pdf01/pdf01-prompt.md`（v1 另存 `pdf01-prompt-v1.md`）。v2 与 v1 的唯一差别：**章节之间不画线**，只靠留白和粗体标题区分（章节上方 12pt、下方 16pt）；全文的线只有页眉下的强调色粗线、表格内的线、页脚上方的细线。
+
+受保护文件批准：负责人在任务书开头明确批准修改 `app/src/main/java/net/plainnotes/app/export/Exports.kt`（PK_DISPLAY_REVIEW），范围仅限 `PdfReport` 的版式：页面网格、字号层级、标题、编号、细线、表格样式、页眉页脚。追加式批准记录 id：`PD-2026-10-23-PDF01-EXPORTS`（`docs/audits/product-quality-2026-10/display-approvals-after-archive.json`）。
+
+规格：A4，左右 48pt、上 56pt、下 64pt；12 栏、栏间距 12pt、基线 4pt；系统 Roboto / Noto CJK，只用常规和真粗体；标题 26、章节标题 13、正文 10、元信息与页脚 8，正文不小于 10；黑白加唯一强调色 #006A63（章节编号和页眉下粗线）；全文左对齐，表格数字列右对齐；页眉为标题、三栏元信息（期间 / 生成时间 / 校验码）、就诊信息、1.5pt 强调色线；章节编号 01、02… 在左 2 栏，标题和内容在右 10 栏；表格 8pt 粗体表头、0.5pt 表头线、0.25pt #BDBDBD 行线、跨页重复表头；页脚左为说明、右为页码，上方 0.25pt 细线；章节标题加两行放不下就整体移到下一页。
+
+内容不变：每一行文字、数字、章节出现条件和顺序、浓度估算内容与说明、`visit_digest` 全部与改动前相同；唯一新增文字是章节编号。不改 CSV、`VisitPack.kt` 事实与摘要、PK 与校准、`ConcChart.kt`、Room；浓度图由原 `drawChart` 原样绘制，只调整页面位置。不新增字体或依赖，不改 versionCode，不交付 APK。PR 按 §106 自动合并。报告 `76-pdf01-swiss-layout.md`。
+
 ## 146. UI-09 借用瑞士风格的排版纪律（应用内小幅精修）（2026-10-23）
 
 负责人任务书原文归档于 `docs/audits/product-quality-2026-10/sources/ui09/ui09-prompt.md`（SHA-256 09e39ce7…）。决定：不整体改换风格，保留 UI-05 至 UI-08 的 M3 Expressive 方向；红色仍只用于真正的错误；不缩小正文字号，不引入新字体。只借用四个手法：

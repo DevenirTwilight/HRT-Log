@@ -1,8 +1,19 @@
-## UI-09 瑞士排版纪律（进行中）与 PDF-01（进行中）— 2026-10-23
+## UI-09 瑞士排版纪律（PR #107 收尾）；PDF-01 已合并（#105）— 2026-10-23
 
-- **UI-09**（REQUIREMENTS §146，分支 `feature/ui09-swiss-discipline-20261023`，基线 d2223c0a）：实现与 `Ui09Test` 已提交（Grid 令牌、`Swiss.kt` 的 SectionRule/NumberedHeading/NumberedSection、EmptyState 左对齐、47 处间距取整、阶段回顾编号与细线、复诊详情编号区块、服药记录日期细线）。截图测试 `Ui09ScreenshotTest`（UI09_SHOTS=<label>）首轮因等待 ViewModel 超时全部失败，已改为直接传入状态，正在重跑。待办：前后截图（基线在 /home/user/wt-rem 复制测试渲染后删除副本）→ `docs/ui-audit/2026-10-23-ui09/` → 报告 75 → 完整单测/lint → PR 自动合并。
-- **PDF-01**（REQUIREMENTS §145，分支 `feature/pdf01-swiss-layout-20261023`，工作树 /home/user/wt-pdf01）：任务书 v2（章节之间不画线）为准。`PdfReport` 已改为 Sink/render/trace 结构并按 12 栏网格重排；测试侧冻结旧实现 `LegacyPdfReport` 做文字对照。`Pdf01Test`（文字四语一致、digest、图表调用不变、版式断言、无孤立标题、表头重复、章节间无线）正在首跑。待办：迁移 `Ui08PdfSummaryUnchangedTest` 的 Exports.kt 哈希；登记追加式批准记录；样张；报告 76；PR。
-- 两项都不交付 APK、不改 versionCode。
+- **PDF-01**：PR #105 已合并到默认分支（REQUIREMENTS §145，报告 76）。
+- **UI-09**（REQUIREMENTS §146，原拟 §144；MED-02 #104 占用 §144）：PR #107，分支 `feature/ui09-swiss-discipline-20261023`，已开自动合并，已合入含 #104、#105 的默认分支。
+  - 本地验证：完整单测 2327 项 0 失败，core:ui 700 项 0 失败，lint 通过。
+  - 截图在 `docs/ui-audit/2026-10-23-ui09/`（前后各 336 张，另有 21 张对照）；411dp 下的阶段回顾对话框截图为 NOT_RUN。
+  - 报告 75。
+- 待办：#107 的 CI 通过并合并后，复验默认分支 CI。两项都不交付 APK、不改 versionCode。
+
+## PDF-01 PDF 瑞士版式（PR 前收尾）— 2026-10-23
+
+- 分支 `feature/pdf01-swiss-layout-20261023`（工作树 /home/user/wt-pdf01，基线 d2223c0a），REQUIREMENTS §145，报告 76。
+- `PdfReport` 改为 Sink/render/trace；测试侧冻结旧实现 `LegacyPdfReport`（哈希在 `Ui08PdfSummaryUnchangedTest` 固定），`Pdf01Test` 做文字四语逐字对照、digest、drawChart 调用对比，以及版式断言。
+- 已登记 `PD-2026-10-23-PDF01-EXPORTS`（407710c3… → 30067c52…，证据为提交 86b00f88 的 REQUIREMENTS）。**之后再改 Exports.kt 必须同步更新这条记录的 new_sha256**（或另加记录）。
+- 与 UI-09 的交叉：UI-09 已把对 Exports.kt 的字节固定改为内容检查，不再冲突。MED-02（#104）先合并并占用了 §144，所以 PDF-01 用 §145，UI-09 改为 §146。
+- 待办：完整单测/lint → PR 自动合并 → 默认分支 CI 复验。不交付 APK。
 ## MED-02：#104 最终源许可守卫修复，持久化授权已接收 — 2026-10-23
 
 默认分支 d2223c0a，#102/#103 已合并；#104 f86d4a5e 尚未合并。原 PR Android 39854454660：API26 job120089049019 在 adb/emulator 启动阶段失败（测试未运行）；同源 push API26 job120089018775 成功，PR API29/35、JVM 成功。另有真实主机失败 job120089049277：2255 项中 Ui08PdfSummaryUnchangedTest 1 FAIL、492 skip，原因是合法新增的四语 Tink 许可文字进入旧资源整文件哈希，不是 PDF 实现变化。
