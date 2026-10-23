@@ -1,3 +1,11 @@
+## MED-02 portable生产路径已编码，本地回归通过，进入精确源CI — 2026-10-23
+
+独立feature/med02-portable-archive-20261023，基线e6112698。§147.D授权默认OFF格式实施已落实：MedicalArchiveCrypto（80B头/严格密码/正式Argon64MiB3/1/HKDF/portable wrapping）、typed canonical encoder/独立逐token decoder、MedicalArchiveWriter、MedicalArchiveReader及完整outer/footer/set/全inner认证，接现有preflight和BusinessRestore。Snapshot新增受归属保护的密文/临时DEK消费接口及业务快照承诺；原preflight历史闭合规则复用于导出，没有删减旧审计。详细边界见portable-implementation-contract.md。
+
+本地完整数据层585项/0fail/error/skip，新增MedicalArchive7项、原Foundation33/Preflight5/BusinessReconstruction6均PASS；最终原生测试源码编译PASS。首轮Tink首次read前size调用真实FAIL已保留local-first-red；修复把长度验证移至完整read/EOF后，无断言放宽。原始XML/log及生产源码SHA256见portable-archive-evidence/local-final。新原生9项已纳入API26/29显式名单和35全包：含真实生产export→源合成alias/原库清理→不同SQLCipher密码/dataset的独立reader→完整预检/隔离RAM SQLCipher重建及逐字节/历史/trash/typed关系/目标原库全表不变；目前仅编译，NATIVE_NOT_RUN，不预报通过。
+
+下一步只提交此源码PR并检查其六门/三API原件，修真实问题；不重复P4/旧源性能，不重写已合并底座。实现receipt不是provider持久保存或临床恢复成功；候选activatable=false，无新alias重新包装发布/全库激活/公共入口。永久冻结、联合上限资源、durable generation authority和旧scope请求屏障仍未完成/未批准；现有本地资源限额不升。feature0/NOT_REVIEWED_EXTERNALLY/真实原件/永久删除OFF，Room14/PNBAK1/既有对象协议/密钥/无关UI/PK/BDPM/P5P6不变，不交付APK。
+
 ## MED-02 PNMEDBK1 OFF格式实施已明确获批 — 2026-10-23
 
 负责人批准唯一整合方案的80B头、正式Argon2id64MiB/3/1、Tink64KiB、portable DEK包装、生产writer/独立reader/集合认证并接既有预检（§147.D）；不再重复询问。独立feature/med02-portable-archive-20261023，基线e6112698；#113已MERGED，主线Android40009477772/Science40009478000 SUCCESS，旧审查分支的TEST_ONLY canonical证据不冒充生产验收。无其他开放附件/Room变更。

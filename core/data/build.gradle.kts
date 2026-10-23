@@ -31,6 +31,9 @@ dependencies {
 ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 android.sourceSets.getByName("androidTest").apply { assets.srcDir("$projectDir/schemas"); java.srcDirs("src/historyTest/java", "src/medicalTest/java", "src/attachmentTest/java") }
 android.sourceSets.getByName("test").apply { assets.srcDir("$projectDir/schemas"); java.srcDirs("src/historyTest/java", "src/medicalTest/java", "src/attachmentTest/java") }
+// Independent synthetic canonical vectors only; never application/runtime assets.
+android.sourceSets.getByName("test").resources.srcDir("../../tools/attachment-poc/src/test/resources")
+android.sourceSets.getByName("androidTest").assets.srcDir("../../tools/attachment-poc/src/test/resources")
 android.sourceSets.getByName("androidTest").java.srcDir("../../tools/attachment-poc/src/contractTest/kotlin")
 
 // ANSM-03B0: compile only the read-only shadow adapter; its measurement API now comes from domain main.

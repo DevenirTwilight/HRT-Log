@@ -21,11 +21,11 @@
 |Tink64KiB长度/随机读取/独立上游互通|现有原生合同已通过；下方精确长度公式有执行断言|
 |Argon2id65536KiB/3/1|API26/29/35独立 KAT/孤立资源观测通过；不是联合档案接受证明|
 |canonical manifest 编解码审查向量|新增 TEST_ONLY Python 编码/逆解码与独立 Kotlin 严格解码；不是生产集合 codec|
-|生产 portable writer/reader/KDF/wrapping|IMPLEMENTATION_AUTHORIZED_OFF，实施中；尚未验收|
+|生产 portable writer/reader/KDF/wrapping|IMPLEMENTED_OFF，完整本地585/0/0/0；精确源CI/原生待验收|
 |持久整库激活|NOT_IMPLEMENTED / NOT_APPROVED|
 |真机/正式完整换机/外部审查|PHYSICAL_NOT_RUN / NOT_IMPLEMENTED / EXTERNAL_REVIEW_PENDING|
 
-本次代码和原件记录：[最新HANDOFF/原始证据分支](https://github.com/DevenirTwilight/HRT-Log/tree/docs/med02-reconstruction-evidence-20261023)。本审批分支仅TEST_ONLY/文档，本地5项通过、CI_NOT_RUN、未合并，不计生产CI_PASS。
+本次代码和原件记录：[最新HANDOFF/原始证据分支](https://github.com/DevenirTwilight/HRT-Log/tree/docs/med02-reconstruction-evidence-20261023)。原审批分支仅TEST_ONLY/文档，本地5项通过、CI_NOT_RUN。获授权后独立生产实现及新增7项合同见portable-implementation-contract.md；不得把旧审查原件当作新生产CI。
 
 入口始终 feature_enabled=0；NOT_REVIEWED_EXTERNALLY；永久密文/alias删除 OFF。
 
@@ -135,7 +135,7 @@ Pinned Tink1.23.0：plaintext `n` 的 ciphertext长度为 `n+40+16*max(1,ceil((n
 
 **冻结前尚缺三项，不能写成PASS：**
 
-1. 生产独立writer/reader/portable wrapping的集合互通与错误密码/损坏/缺失/额外/取消/边界证明。目前只有manifest TEST_ONLY跨语言证据，没有正式outer归档的生产实现或互通证明。
+1. 生产独立writer/reader/portable wrapping的集合互通与错误密码/损坏/缺失/额外/取消/边界证明。现已有OFF生产归档实现和本地独立测试producer互通/拒绝证明；真实writer/独立reader/不同源密钥的原生SQLCipher合同仍待最终三API/CI，不预报通过。
 2. 固定API26 512MiB/192MiB下完整上限档案、SQLCipher持久候选、旧库保留/rollback的联合RAM/磁盘/一次性wrap预算，以及不同设备Keystore恢复。孤立KDF和2MiB旧候选不能替代。
 3. 本地durable authority、旧句柄/maintenance屏障、旧版本拒绝、allocator下界和真实崩溃恢复契约；需明确迁移和共享文件所有权后批准激活实现。
 
