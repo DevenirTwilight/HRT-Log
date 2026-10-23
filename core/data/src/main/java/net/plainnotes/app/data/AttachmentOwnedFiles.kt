@@ -30,6 +30,9 @@ internal class AttachmentOwnedFiles(context: Context) {
         } catch (failure: Throwable) { parent.close(); throw failure }
     }
 
+    private fun own(fd:java.io.FileDescriptor):ParcelFileDescriptor =
+        try { ParcelFileDescriptor.dup(fd) } finally { Os.close(fd) }
+
     private fun directory(stat: StructStat) {
         check(S_ISDIR(stat.st_mode) && stat.st_uid == Os.getuid() && stat.st_mode and 63 == 0) { "Private parent unavailable" }
     }
@@ -46,10 +49,12 @@ internal class AttachmentOwnedFiles(context: Context) {
             try {
                 // Never truncate or follow an existing lock file. OS lock excludes live writers in other processes.
                 val fd = Os.open("$anchor/lock", O_RDWR or O_NONBLOCK or O_CREAT or O_NOFOLLOW or O_CLOEXEC, 384)
-                val stream = FileOutputStream(fd).also { lockStream = it }
-                regular(Os.fstat(fd))
+                val owned = own(fd)
+                val stream = try { ParcelFileDescriptor.AutoCloseOutputStream(owned) } catch(failure:Throwable) {owned.close();throw failure}
+                lockStream = stream
+                regular(Os.fstat(owned.fileDescriptor))
                 lock = stream.channel.tryLock() ?: error("Attachment storage busy")
-                Os.fsync(fd); Os.fsync(parent.fileDescriptor)
+                Os.fsync(owned.fileDescriptor); Os.fsync(parent.fileDescriptor)
                 val parentFd = Os.open(root.parentFile!!.path, O_RDONLY or O_NONBLOCK or O_NOFOLLOW or O_CLOEXEC, 0)
                 try { Os.fsync(parentFd) } finally { Os.close(parentFd) }
                 checkParent()
@@ -66,11 +71,14 @@ internal class AttachmentOwnedFiles(context: Context) {
         fun create(id: UUID): Created {
             checkParent()
             val fd = Os.open(path(id), O_RDWR or O_CREAT or O_EXCL or O_NOFOLLOW or O_CLOEXEC, 384)
-            try {
+            val identity = try {
                 val stat = Os.fstat(fd); regular(stat)
                 Os.fsync(fd); Os.fsync(parent.fileDescriptor)
-                return Created(FileOutputStream(fd), Identity(parentStat.st_dev, parentStat.st_ino, stat.st_dev, stat.st_ino))
+                Identity(parentStat.st_dev, parentStat.st_ino, stat.st_dev, stat.st_ino)
             } catch (failure: Throwable) { Os.close(fd); throw failure }
+            val owned=own(fd)
+            try { return Created(ParcelFileDescriptor.AutoCloseOutputStream(owned),identity) }
+            catch(failure:Throwable) {owned.close();throw failure}
         }
         fun open(id: UUID, expected: Identity): FileInputStream {
             checkParent()
@@ -79,8 +87,10 @@ internal class AttachmentOwnedFiles(context: Context) {
             try {
                 val stat = Os.fstat(fd); regular(stat)
                 check(stat.st_dev == expected.device && stat.st_ino == expected.inode && stat.st_mode and 128 == 0) { "Ciphertext replaced or still writable" }
-                return FileInputStream(fd)
             } catch (failure: Throwable) { Os.close(fd); throw failure }
+            val owned=own(fd)
+            try { return ParcelFileDescriptor.AutoCloseInputStream(owned) }
+            catch(failure:Throwable) {owned.close();throw failure}
         }
         override fun close() {
             try { lock?.release() } finally { try { lockStream?.close() } finally { parent.close() } }

@@ -9,5 +9,10 @@
   },
   "local_targeted": "32 foundation + 5 migration, 0fail/error/skip; final Android instrumentation compile PASS",
   "full_data_task": "PASS before final coordinator operation-state/recovery helper adjustment; final CI must validate exact committed source",
-  "external_review": "NOT_REVIEWED_EXTERNALLY"
+  "external_review": "NOT_REVIEWED_EXTERNALLY",
+  "fd_ownership_followup": {
+    "parent": "ca733bacbc21954d5a043b05e54e89572ebbdeeb",
+    "AttachmentOwnedFiles.kt_sha256": "518d97f9213a6991f6b318f0fd1bceb545681387f724dc3d27d06a2ed8dd0201",
+    "compile": "production and Android instrumentation compile PASS; native runtime pending"
+  }
 }

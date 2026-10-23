@@ -1,3 +1,7 @@
+## MED-02 文件描述符归属复核 — 2026-10-23
+
+持久化首提交 ca733bac 已推送。复核补齐所有 Os.open 产生的持有FD：显式转交 ParcelFileDescriptor，原FD立即关闭，使用 AutoCloseInput/OutputStream；不依赖 Android 对 FileInput/OutputStream(FileDescriptor) 的隐含归属。seal 后写FD确实释放，锁和读channel也有明确owner。最终生产与原生测试源码编译通过，原生执行仍待CI；此为真实资源正确性修复，未削弱任何断言。此前 local-freeze 的文件哈希仍仅归旧工作树，新FD文件哈希见同目录 provenance 的 followup；不借旧源证据冒充最终源通过。#104 原生工件26/29/35均已下载，正在核验并保存在独立证据分支，主机最后检查仍在途。
+
 ## MED-02 持久化实现与备份兼容设计待原生验收 — 2026-10-23
 
 独立分支 feature/med02-persistent-store-20261023：候选 Room14 单表 journal、文件归属、一次性包装预算、真实提交/CAS、UUID 重放查询、保守恢复、逻辑 trash/restore 已编码。备份具体字段/状态/兼容矩阵在 persistence-and-backup-compatibility.md，仅 DESIGN_ONLY；PNBAK1/业务备份最高13不变。默认 OFF，旧版本无 journal 仍 UNKNOWN；现有物理 namespace 仍 STAGING，不伪造整库代次 VALIDATED。每尝试2个新alias、失败密文/预算保留，不做危险 GC；全局配额/清理与正式导入/格式准入/AppLock接线仍是启用前工作。
