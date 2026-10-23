@@ -1,3 +1,9 @@
+## #106现有三API原件独立复核，无重跑 — 2026-10-23
+
+#106已验收0210ab9c、PR测试checkout09120ae4与合并a291源码树均cd3d434715cb69df8e776f8742dafba8824cd224。独立再读三API原ZIP，SHA与官方upload digest/原manifest一致、CRC PASS；每API Store7/Restart1/Foundation33/Migration5/Keystore2均0fail/0skip；原job日志确有WRITE/STAGED/IN_COMMIT/COMMITTED四条生产restart PASS。新复核JSON在postmerge-a291-bdpm/pr106-independent-recheck.json，不借此宣称#109已过CI，不把进程强停当硬件断电。
+
+证据限制同时保留：run_attachment_persistent_restart.py把各seam killed/verify输出写med02-persistent-restart，但现有artifact路径未收该目录；现有原job日志有四条PASS和源码断言，不能声称独立seam输出已上传。下次相关CI更新补保留这些文件，不为此破坏当前#109冻结源/重跑已验证工作。当前#109原12+Period5本地PASS，待精确源六门与主线。
+
 ## #109本地四语真实导航12项+Period5全PASS — 2026-10-23
 
 独立PR109源7aecef43ee929ccbce668530abf9a92070b6851b，本地BdpmReferenceFlowTest12/0fail/error/skip（英法简繁320dp2x真实AppShell入口、搜索/关联/取消/重新打开/解除、旧数据不变）及PeriodStability5/0/0/0全部PASS。原XML和完整日志保留postmerge-a291-bdpm/local-green，原a291失败原件继续保留，不重写旧结果。源码仅测试等待与交接，没有修改生产BDPM/医学/数据/UI。

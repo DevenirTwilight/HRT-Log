@@ -1,0 +1,140 @@
+{
+  "accepted_head": "0210ab9ce8dc47c978d77417a32641872d92ade0",
+  "accepted_checkout": "09120ae4ecc7d5873b3ab337cde9ed76c6505ca5",
+  "main": "a2917086ead90b3967eee71908160e8021dfe89a",
+  "source_tree": "cd3d434715cb69df8e776f8742dafba8824cd224",
+  "action": "re-read existing original artifacts, no rerun",
+  "artifacts": [
+    {
+      "api": 26,
+      "sha256": "b56927b36989805bb44a6a53ef2bdc25a2063d8e4e31da1b478f85f1f6a145ef",
+      "crc": "PASS",
+      "class_counts": {
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentRestartAndroidTest": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentFoundationAndroidTest": {
+          "tests": 33,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentSqlCipherMigrationTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentKeyAndroidTest": {
+          "tests": 2,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "existing_native_restart_log": [
+        "2026-10-23T12:07:27.6710800Z PASS production persistence fresh PID: WRITE; original decrypts, uncommitted never publishes, budget retained, OFF",
+        "2026-10-23T12:07:30.1650120Z PASS production persistence fresh PID: STAGED; original decrypts, uncommitted never publishes, budget retained, OFF",
+        "2026-10-23T12:07:32.6460688Z PASS production persistence fresh PID: IN_COMMIT; original decrypts, uncommitted never publishes, budget retained, OFF",
+        "2026-10-23T12:07:35.1470016Z PASS production persistence fresh PID: COMMITTED; original decrypts, uncommitted never publishes, budget retained, OFF"
+      ]
+    },
+    {
+      "api": 29,
+      "sha256": "03acd253c33bc2542e0b100b567fbba16f963290910e57019877e5a78dc33ad3",
+      "crc": "PASS",
+      "class_counts": {
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentRestartAndroidTest": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentFoundationAndroidTest": {
+          "tests": 33,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentSqlCipherMigrationTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentKeyAndroidTest": {
+          "tests": 2,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "existing_native_restart_log": [
+        "2026-10-23T12:05:12.8450869Z PASS production persistence fresh PID: WRITE; original decrypts, uncommitted never publishes, budget retained, OFF",
+        "2026-10-23T12:05:15.6402215Z PASS production persistence fresh PID: STAGED; original decrypts, uncommitted never publishes, budget retained, OFF",
+        "2026-10-23T12:05:18.4674327Z PASS production persistence fresh PID: IN_COMMIT; original decrypts, uncommitted never publishes, budget retained, OFF",
+        "2026-10-23T12:05:21.3140125Z PASS production persistence fresh PID: COMMITTED; original decrypts, uncommitted never publishes, budget retained, OFF"
+      ]
+    },
+    {
+      "api": 35,
+      "sha256": "33509543018b18fc0c6c5188ccb1d61df6a038780d999f5a6fff765e24a287b1",
+      "crc": "PASS",
+      "class_counts": {
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentRestartAndroidTest": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentFoundationAndroidTest": {
+          "tests": 33,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentSqlCipherMigrationTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentKeyAndroidTest": {
+          "tests": 2,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "existing_native_restart_log": [
+        "2026-10-23T12:07:24.2588039Z PASS production persistence fresh PID: WRITE; original decrypts, uncommitted never publishes, budget retained, OFF",
+        "2026-10-23T12:07:26.5322072Z PASS production persistence fresh PID: STAGED; original decrypts, uncommitted never publishes, budget retained, OFF",
+        "2026-10-23T12:07:29.3138369Z PASS production persistence fresh PID: IN_COMMIT; original decrypts, uncommitted never publishes, budget retained, OFF",
+        "2026-10-23T12:07:32.0901350Z PASS production persistence fresh PID: COMMITTED; original decrypts, uncommitted never publishes, budget retained, OFF"
+      ]
+    }
+  ],
+  "official_artifacts": [
+    {
+      "api": 26,
+      "id": 12500527787
+    },
+    {
+      "api": 29,
+      "id": 12500581594
+    },
+    {
+      "api": 35,
+      "id": 12500996860
+    }
+  ],
+  "upload_digest_independently_compared": true,
+  "scope": "Only re-read existing accepted artifacts/source; no native rerun and no new-source acceptance claim",
+  "evidence_limitation": "Per-boundary med02-persistent-restart verify/killed files are written by the runner but current upload paths omit that directory; raw job logs retain four PASS lines and code checks, not standalone seam stdout files. Include these files in the next relevant CI artifact update."
+}
