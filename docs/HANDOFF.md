@@ -1,3 +1,9 @@
+## MED-02 PR114已创建，精确源码CI在途 — 2026-10-23
+
+生产分支HEAD `62c3b92ebfd2803ffe90eb1a6d9bfa27b11b6cab`，PR https://github.com/DevenirTwilight/HRT-Log/pull/114 。依§106已开启正常保护auto-merge，无admin/跳检查。PR Android40016845668：JVM已SUCCESS，其余android/API26/29/35在途；Science40016845679同源运行。尚未核实原生结果，不能标NATIVE_VERIFIED或MERGED。默认主线仍e6112698，#113原验收不替代新格式验收。
+
+此docs/med02-portable-evidence-20261023分支只补原始CI证据/交接，不向生产分支追加元数据触发反复原生测试，不用于绕过PR114自己的必需检查。实现/本地585/0/0/0范围见下方；新归档9个原生合同仍待结果。无新功能启用/冻结/全库激活授权，无APK。接手先读PR114与最终HEAD/运行原件，只有真实失败才修根因。
+
 ## MED-02 portable生产路径已编码，本地回归通过，进入精确源CI — 2026-10-23
 
 独立feature/med02-portable-archive-20261023，基线e6112698。§147.D授权默认OFF格式实施已落实：MedicalArchiveCrypto（80B头/严格密码/正式Argon64MiB3/1/HKDF/portable wrapping）、typed canonical encoder/独立逐token decoder、MedicalArchiveWriter、MedicalArchiveReader及完整outer/footer/set/全inner认证，接现有preflight和BusinessRestore。Snapshot新增受归属保护的密文/临时DEK消费接口及业务快照承诺；原preflight历史闭合规则复用于导出，没有删减旧审计。详细边界见portable-implementation-contract.md。
