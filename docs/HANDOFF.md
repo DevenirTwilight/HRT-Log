@@ -1,3 +1,9 @@
+## MED-02：受保护主线同步后的0210三API再验收通过，待主机门 — 2026-10-23
+
+#106当前0210ab9ce8dc47c978d77417a32641872d92ade0，正常自动合并已启用，主线25f8bac2包含独立UI-09。没有借用e4绿色：新PR39949680638实际checkout09120ae4ecc7d5873b3ab337cde9ed76c6505ca5与head源码树均cd3d434715cb69df8e776f8742dafba8824cd224，已fetch验证；26/29/35各Store7+Restart1+Foundation33+SQLCipherMigration5+Keystore2全部0fail/0skip，四处真实新PID强停均PASS。原ZIP/日志gz/上传digest一致SHA/CRC和来源JSON保存在pr106-protected-native。附件后端及合同与e4逐字节相同，前端与主线逐字节相同，既有审查和源证据不混写。
+
+两次主机android仍在途，尚未合并，不标主线PASS。后续等必需门全部完成、保护自动合并、核实际merge SHA与主线CI，再收尾；不追加实现、性能实验或元数据触发CI。入口OFF/外审NOT_REVIEWED_EXTERNALLY，PNBAK1不变，完整备份仅可审阅设计；retired namespace/孤立旧临床关系的后续schema评审义务已明确，不冒充可移植备份实现。#104合并和主线最终SUCCESS的证据继续保留。
+
 ## MED-02 保护同步后继续验收，完整备份旧namespace义务已明确 — 2026-10-23
 
 e4b8b6ce已三API原生与六必需门全PASS，无未解决评审；#106已Ready并开启正常自动合并。因#107 UI-09主线25f8bac2先合并，保护规则要求追上主线，已正常同步为0210ab9ce8dc47c978d77417a32641872d92ade0。附件生产/原生合同字节与e4完全一致，UI/core-ui与已合并主线一致；无冲突、未碰对方业务，医疗授权§144.A避免占用UI§146。新集成源必需CI正在运行，不能借旧源状态当新源通过；不强推、不admin合并、不跳门。
