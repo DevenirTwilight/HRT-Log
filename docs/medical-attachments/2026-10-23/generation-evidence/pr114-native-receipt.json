@@ -1,0 +1,108 @@
+{
+  "source": "372b69812f6f2946c68853be6f1732ab84876915",
+  "run": 40018846173,
+  "artifacts": [
+    {
+      "artifact": {
+        "id": 12531400274,
+        "node_id": "MDg6QXJ0aWZhY3QxMjUzMTQwMDI3NA==",
+        "name": "device-test-results",
+        "size_in_bytes": 170398,
+        "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12531400274",
+        "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12531400274/zip",
+        "expired": false,
+        "digest": "sha256:1a849b678372a394b5f3c4061bc4360c49b9e605f801c4381b2d2ffd7a8ea7c9",
+        "created_at": "2026-10-23T20:43:59Z",
+        "updated_at": "2026-10-23T20:43:59Z",
+        "expires_at": "2027-01-21T20:23:31Z",
+        "workflow_run": {
+          "id": 40018846173,
+          "repository_id": 1406091596,
+          "head_repository_id": 1406091596,
+          "head_branch": "feature/med02-portable-archive-20261023",
+          "head_sha": "372b69812f6f2946c68853be6f1732ab84876915"
+        }
+      },
+      "sha_crc_pass": true,
+      "reports": [
+        {
+          "file": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MedicalArchiveAndroidTest.html",
+          "counter": [
+            "9",
+            "0",
+            "0",
+            "16.781s"
+          ]
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "id": 12531295070,
+        "node_id": "MDg6QXJ0aWZhY3QxMjUzMTI5NTA3MA==",
+        "name": "attachment-poc-api26",
+        "size_in_bytes": 82162,
+        "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12531295070",
+        "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12531295070/zip",
+        "expired": false,
+        "digest": "sha256:f7613d4cd556acc6bdd6fd3ff11db4000ebfc6f074ed1767d2de053e76a1dea2",
+        "created_at": "2026-10-23T20:42:18Z",
+        "updated_at": "2026-10-23T20:42:18Z",
+        "expires_at": "2027-01-21T20:23:31Z",
+        "workflow_run": {
+          "id": 40018846173,
+          "repository_id": 1406091596,
+          "head_repository_id": 1406091596,
+          "head_branch": "feature/med02-portable-archive-20261023",
+          "head_sha": "372b69812f6f2946c68853be6f1732ab84876915"
+        }
+      },
+      "sha_crc_pass": true,
+      "reports": [
+        {
+          "file": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MedicalArchiveAndroidTest.html",
+          "counter": [
+            "9",
+            "0",
+            "0",
+            "12.652s"
+          ]
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "id": 12530103242,
+        "node_id": "MDg6QXJ0aWZhY3QxMjUzMDEwMzI0Mg==",
+        "name": "attachment-poc-api29",
+        "size_in_bytes": 82204,
+        "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12530103242",
+        "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12530103242/zip",
+        "expired": false,
+        "digest": "sha256:a19124f909430f1936ead010e3aa7ba4dafd214b6f885771644721cf8fb208cc",
+        "created_at": "2026-10-23T20:41:01Z",
+        "updated_at": "2026-10-23T20:41:01Z",
+        "expires_at": "2027-01-21T20:23:31Z",
+        "workflow_run": {
+          "id": 40018846173,
+          "repository_id": 1406091596,
+          "head_repository_id": 1406091596,
+          "head_branch": "feature/med02-portable-archive-20261023",
+          "head_sha": "372b69812f6f2946c68853be6f1732ab84876915"
+        }
+      },
+      "sha_crc_pass": true,
+      "reports": [
+        {
+          "file": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.MedicalArchiveAndroidTest.html",
+          "counter": [
+            "9",
+            "0",
+            "0",
+            "13.608s"
+          ]
+        }
+      ]
+    }
+  ]
+}
