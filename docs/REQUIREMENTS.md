@@ -1371,3 +1371,9 @@ LAB-03 的同文件增量授权记录 `PD-2026-10-19-LAB03-CATALOG-ADAPTER`：�
 负责人本轮授权：先核#103/104/106/110/111精确源和CI；已合并快照/Tink/Keystore/Room14不重做。继续格式无关的生产恢复预检（完整成员、历史/回收站、类型化UUID与明确新ID、墓碑/未知对象拒绝、空间/对象/密钥预算）和私有密文隔离准备，禁止写当前医疗数据、提前发布或激活。新进程不得自动采用未知暂存文件，失败保留旧数据库与原件，不删除未知归属，不生成明文临时文件。
 
 PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrapping/完整集合认证/全库原子激活必须获得针对格式及激活方案的明确批准后再实施。TEST_ONLY不升级生产；已有单对象COMMIT不能冒充全库激活。PNBAK1、SQLCipher/Tink协议、BDPM/PK/P5/P6/化验事实及历史关系不改；无Schema编号争抢。入口feature_enabled=0、真实原件OFF、永久删除OFF、NOT_REVIEWED_EXTERNALLY，不签名交付发布。适用JVM与API26/29/35验证后按§106保护合并；低成本测试KDF/2MiB样本不能作为低内存正式换机验收。
+
+### 147.B MED-02 可执行隔离业务重建（2026-10-23）
+
+负责人授权从最新#112主线实现格式无关、无正式激活入口的隔离业务恢复组件：完整业务快照和预检typed UUID映射进入全新dataset/epoch/generation候选，复用现有插入依赖、业务版本门与独立全历史审核，逐字段核对业务事实、历史、回收站和附件关系；缺失/损坏/重复/冲突/取消整次拒绝，原库不变。DOSE_RECORD reference trash与LAB/APPOINTMENT snapshot trash不得混淆，PURGED仅有明确墓碑证据时接受。只用合成样本，适用JVM和API26/29/35验证，按§106保护合并；不占新Room版本，不改变既有业务及PNBAK1。
+
+最小实现保留整个业务图的整数键于全新隔离库，并逐一核实显式typed UUID映射；不凭整数相同推断身份，也不擅自改写带哈希/历史/回收站的图。要求任意整数重编号的计划安全拒绝。候选仅私有内存SQLCipher及TEMP关系，不制造正式VERIFIED/密钥包装/活动指针。生产附件入口feature_enabled=0、NOT_REVIEWED_EXTERNALLY、真实原件/永久密文及密钥删除OFF。PNMEDBK1仍NOT_APPROVED/NOT_READY_TO_FREEZE；正式字节/KDF/wrapping/集合codec与durable全库激活须另行明确批准，研究probe不得升级生产。优先交付此闭环，不重复P4研究或已完成密码学底座。

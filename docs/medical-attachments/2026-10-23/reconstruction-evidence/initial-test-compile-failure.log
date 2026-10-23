@@ -1,0 +1,114 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:compileKotlin UP-TO-DATE
+> Task :core:domain:compileJava NO-SOURCE
+> Task :core:domain:processResources NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :core:domain:jar UP-TO-DATE
+> Task :importer:compileKotlin UP-TO-DATE
+> Task :importer:compileJava NO-SOURCE
+> Task :importer:processResources NO-SOURCE
+> Task :importer:classes UP-TO-DATE
+> Task :importer:jar UP-TO-DATE
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preDebugBuild UP-TO-DATE
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:data:generateDebugResources UP-TO-DATE
+> Task :core:data:packageDebugResources UP-TO-DATE
+> Task :core:data:processDebugNavigationResources UP-TO-DATE
+> Task :core:data:parseDebugLocalResources UP-TO-DATE
+> Task :core:data:generateDebugRFile UP-TO-DATE
+> Task :core:data:javaPreCompileDebug
+> Task :core:data:generateDebugUnitTestAssets UP-TO-DATE
+> Task :core:data:generateDebugAssets UP-TO-DATE
+> Task :core:data:mergeDebugAssets
+> Task :core:data:preDebugUnitTestBuild UP-TO-DATE
+> Task :core:data:mergeDebugUnitTestAssets
+> Task :core:data:writeDebugAarMetadata
+> Task :core:data:checkDebugUnitTestAarMetadata
+> Task :core:data:mapDebugSourceSetPaths
+> Task :core:data:compileDebugLibraryResources
+> Task :core:data:mapDebugUnitTestSourceSetPaths
+> Task :core:data:generateDebugUnitTestResources
+> Task :core:data:mergeDebugUnitTestResources
+> Task :core:data:extractDeepLinksDebug
+> Task :core:data:processDebugManifest
+> Task :core:data:processDebugUnitTestManifest
+> Task :core:data:processDebugUnitTestResources
+> Task :core:data:packageDebugUnitTestForUnitTest
+> Task :core:data:generateDebugUnitTestConfig
+> Task :core:data:prepareAnsm03b0TestSources
+> Task :core:data:javaPreCompileDebugUnitTest
+> Task :core:data:kspDebugKotlin
+
+> Task :core:data:compileDebugKotlin
+w: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt:30:99 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt:31:101 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt:32:109 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt:33:89 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+
+> Task :core:data:compileDebugJavaWithJavac
+> Task :core:data:processDebugJavaRes
+> Task :core:data:transformDebugClassesWithAsm
+> Task :core:data:bundleLibRuntimeToJarDebug
+> Task :core:data:bundleLibCompileToJarDebug
+> Task :core:data:createFullJarDebug
+> Task :core:data:kspDebugUnitTestKotlin
+
+> Task :core:data:compileDebugUnitTestKotlin
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:61:20 Cannot infer type for type parameter 'R'. Specify it explicitly.
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:61:20 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T : Closeable?, R> T.use(block: (T) -> R): R
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:62:24 Cannot infer type for type parameter 'R'. Specify it explicitly.
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:62:24 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T : Closeable?, R> T.use(block: (T) -> R): R
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:75:20 Cannot infer type for type parameter 'R'. Specify it explicitly.
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:75:20 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T : Closeable?, R> T.use(block: (T) -> R): R
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:75:55 Inapplicable candidate(s): fun <K> TRY_CALL(vararg branches: K): K
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:76:24 Cannot infer type for type parameter 'R'. Specify it explicitly.
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:76:24 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T : Closeable?, R> T.use(block: (T) -> R): R
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:83:20 Cannot infer type for type parameter 'R'. Specify it explicitly.
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:83:20 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T : Closeable?, R> T.use(block: (T) -> R): R
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:84:24 Cannot infer type for type parameter 'R'. Specify it explicitly.
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:84:24 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T : Closeable?, R> T.use(block: (T) -> R): R
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:95:20 Cannot infer type for type parameter 'R'. Specify it explicitly.
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:95:20 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T : Closeable?, R> T.use(block: (T) -> R): R
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:104:20 Cannot infer type for type parameter 'R'. Specify it explicitly.
+e: file:///workspace/HRT-Log-med02-reconstruction/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionContract.kt:104:20 Unresolved reference. None of the following candidates is applicable because of a receiver type mismatch:
+fun <T : Closeable?, R> T.use(block: (T) -> R): R
+
+> Task :core:data:compileDebugUnitTestKotlin FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':core:data:compileDebugUnitTestKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 50s
+37 actionable tasks: 28 executed, 9 up-to-date

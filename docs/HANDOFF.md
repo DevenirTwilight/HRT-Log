@@ -1,3 +1,15 @@
+## MED-02 隔离业务数据库重建已编码，进入精确源码验收 — 2026-10-23
+
+起点默认分支claude/new-session-1959qb `0a95293d4743656d90464827893a7b39aaedcf2f`。本轮实时核实#103/#104/#106/#110/#111/#112均已合并；主线Android39990596705、Science39990596652均SUCCESS。下面历史PENDING不代表最新状态；#112原三API工件已在独立证据分支docs/med02-storage-evidence-20261023（a4b5e45c）核验SHA/CRC、真实PID日志，不重跑旧源。无竞争Room/storage PR。独立worktree HRT-Log-med02-reconstruction，分支feature/med02-isolated-reconstruction-20261023。
+
+本轮新增生产AttachmentBusinessRestore/AttachmentCandidateMetadata和RawData.reconstructIsolated：只写全新私有RAM SQLCipher，TEMP MEMORY关系表保存全部版本/typed UUID/软删除/墓碑/原时间/关系证据；保留全业务图整数键、逐项显式映射，拒绝任意重编号。复用既有插入依赖和冻结全历史SQL审计（两个复用预算0），再独立逐字段/整行多重集比较及main/temp FK检查，最后复用完整Tink隔离暂存。无正式VERIFIED伪证、DB句柄/激活入口、Schema/现库/PNBAK1变更。返回candidate activatable=false；不是跨手机恢复成功。完整契约business-reconstruction-contract.md。
+
+本地中间全数据层577/0fail/error/skip通过；之后仅增加一项“预检通过但业务FK破坏仍须全库拒绝”的测试，最终业务合同6/0/0/0通过，生产代码不变。最终原生all-row不变断言后native源码编译PASS，API26/29/35尚NOT_RUN，CI必须绑定最终HEAD。无本地KVM，不把Robolectric当SQLCipher验收。第一次新测试因Room数据库不是Closeable而编译失败，已修测试清理，无删除断言；原始失败/完整577/最终6 XML日志在reconstruction-evidence。
+
+真实native E2E新增合成PDF/PNG/binary、不可变旧版本、业务更正、三种trash、ACTIVE/PURGED typed身份、每行原库不变、缺失/篡改/取消/改写映射拒绝；不能提前PASS。原生三API必需名单纳入，保留原全部检查/真实重启seams，不触发额外P4研究。
+
+PNMEDBK1单一proposal仍NOT_APPROVED/NOT_READY_TO_FREEZE：补具体规范化候选字段/文本/数值规则、联合预算表及durable激活证明义务。Pinned Tink长度边界加入原合同，TEST_ONLY固定Argon65536KiB/3/1原生资源探针使用独立libargon2 KAT，collector保留同次报告、不重复跑。尚无独立完整codec一致性、完整档案联合低内存/存储预算或durable全库激活证据；正式格式/KDF/wrapping/集合codec/激活须新批准。feature_enabled=0、NOT_REVIEWED_EXTERNALLY、真实原件/永久密文及key删除OFF。下一步冻结此范围、创建题为MED-02: isolated business restore reconstruction and verification (OFF)的PR，仅修真实失败；最终六必需门/无冲突/无未决评审后按§106保护合并并复验主线，不签名发布。
+
 ## MED-02 完整集合边界的两项遗漏已拒绝，重新冻结验收 — 2026-10-23
 
 在PR112语义复核中发现#111及中间b694的per-version认证不足以表示完整集合：无version但仍有typed identity的retired dataset会漏掉；原objects目录的未知/孤立密文不在已知version扫描中。新增真实反例保留旧查询的阳性事实。生产capture现拒绝任何其他dataset保留的records/documents/versions/links、未COMMITTED journal，以及与全部期望源文件/归属不精确一致的有界目录inventory。不会删除/跳过文件换绿色，不能声称这些来源已完整备份；多namespace/保留未知原件模型仍待批准。

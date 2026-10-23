@@ -1,0 +1,30 @@
+{
+  "baseline": "0a95293d4743656d90464827893a7b39aaedcf2f",
+  "production_files_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentBusinessRestore.kt": "85cebba636cdb8970db24a55bc846e95b25c096b34c2dbd69dc142ebcf3d649e",
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt": "2309063a255c22b89717e6712899776ea838c8f927de6146b3b8830979f8c6c6",
+    "core/data/src/main/java/net/plainnotes/app/data/DataTransfer.kt": "f9d539f5d31d2a3d992597d13f1429bb88250e860fe58d7e3469d7e570c661dd"
+  },
+  "intermediate_full_data": {
+    "tests": 577,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "log": "local-full-577.log",
+    "scope": "before added sixth full-oracle refusal case; production bytes unchanged"
+  },
+  "final_business_contract": {
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "native_execution": "NOT_RUN_LOCALLY_NO_KVM",
+  "native_source_compile": "PASS including final all-row assertions",
+  "format": "NOT_APPROVED",
+  "external_review": "NOT_REVIEWED_EXTERNALLY",
+  "new_native_files_sha256": {
+    "core/data/src/androidTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionAndroidTest.kt": "596d4532897fe6425bf259925d14ed34744b35a8191b042a83cb498b199c82f3",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/AttachmentBusinessRestoreAndroidTest.kt": "088dd789ba42d0176a3045c80825d02c011ffaf7b9900ac0d4035dbe923e6785"
+  }
+}

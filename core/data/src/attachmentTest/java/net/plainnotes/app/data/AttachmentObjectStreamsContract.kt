@@ -56,6 +56,11 @@ abstract class AttachmentObjectStreamsContract {
             val value=ByteArray(size) { ((it*17)%251).toByte() };val parent=session().issue()
             val (manifest,ciphertext)=written(value,parent)
             assertEquals(size.toLong(),manifest.plaintextBytes);assertEquals(hash(value),manifest.plaintextSha256)
+            // Pinned 64KiB AES256-GCM-HKDF: header40, tag16, first clear65480,
+            // subsequent clear65520. Independent integer calculation, including empty/exact edges.
+            val segments=maxOf(1L,(size.toLong()+40+65519)/65520)
+            assertEquals(size.toLong()+40+16*segments,manifest.ciphertextBytes)
+            assertEquals(manifest.ciphertextBytes,ciphertext.size.toLong())
             assertEquals(hash(ciphertext),manifest.ciphertextSha256)
             val channel=Bytes(ciphertext);val owned=key
             AttachmentObjectStreams.open(parent,manifest,owned,channel).use { reader ->

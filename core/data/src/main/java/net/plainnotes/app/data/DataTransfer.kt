@@ -31,6 +31,24 @@ internal val DOMAIN_TABLES = listOf("medication", "pk_profile", "schedule_rule",
 internal enum class RestoreCheckpoint { PLAINTEXT_AUTHENTICATED, INPUT_VALIDATED, STAGING_ROWS_INSERTED, STAGING_HISTORY_VALIDATED, STAGING_CLOSED, PREFLIGHT_VALIDATED, IDENTITIES_RETIRED, ROWS_DELETED, ROWS_INSERTED, HISTORY_VALIDATED, EPOCH_REPLACED }
 
 internal object RawData {
+    /** New OFF restore candidate only. Never repairs projections or touches an existing library.
+     * The caller creates a private in-memory SQLCipher DB; reuse the exact insertion dependencies
+     * and frozen complete oracle, with all source business values preserved rather than renumbered.
+     */
+    internal fun reconstructIsolated(db:SupportSQLiteDatabase,tables:BackupTables,checkActive:()->Unit) {
+        check(db.inTransaction())
+        db.query("PRAGMA database_list").use {c->while(c.moveToNext())check(c.getString(2).isNullOrEmpty()) {"Isolated reconstruction must stay in memory"}}
+        db.query("PRAGMA temp_store").use {check(it.moveToFirst() && it.getInt(0)==2)}
+        require(tables.keys()==DOMAIN_TABLES.toSet())
+        DOMAIN_TABLES.forEach {t->checkActive();db.query("SELECT 1 FROM $t LIMIT 1").use {check(!it.moveToFirst()) {"Candidate is not empty"}}}
+        BackupValidation.validateRows(db,tables)
+        val order=tables.optJSONArray("supply_transaction")?.let(LedgerReplacement::insertionOrder).orEmpty()
+        unguarded(db) {
+            insertRows(db,tables,order);checkActive()
+            // Independent original SQL/full-history path, without cross-transaction trust or repair.
+            MeasuredConsumptionStore.auditStagedDataset(db,0,0);checkActive()
+        }
+    }
     private data class Guard(val name: String, val sql: String)
     private fun triggers(db: SupportSQLiteDatabase): List<Guard> = db.query("SELECT name,sql FROM sqlite_master WHERE type='trigger' AND tbl_name NOT LIKE 'attachment_%'").use { c ->
         buildList { while (c.moveToNext()) add(Guard(c.getString(0), c.getString(1))) } }
