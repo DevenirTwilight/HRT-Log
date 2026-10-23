@@ -1,3 +1,9 @@
+## MED-02 保护同步后继续验收，完整备份旧namespace义务已明确 — 2026-10-23
+
+e4b8b6ce已三API原生与六必需门全PASS，无未解决评审；#106已Ready并开启正常自动合并。因#107 UI-09主线25f8bac2先合并，保护规则要求追上主线，已正常同步为0210ab9ce8dc47c978d77417a32641872d92ade0。附件生产/原生合同字节与e4完全一致，UI/core-ui与已合并主线一致；无冲突、未碰对方业务，医疗授权§144.A避免占用UI§146。新集成源必需CI正在运行，不能借旧源状态当新源通过；不强推、不admin合并、不跳门。
+
+完整备份设计在此证据分支同日兼容文档补齐明确字段：all retained includes RETIRED source namespaces；PNBAK1替换后的旧临床行可能已不存在，关联必须保存 namespace-qualified UUID、原状态、legacy整数仅证据、snapshot可用性/摘要与UNRESOLVED_TARGET，绝不伪造ACTIVE/PURGED或与新整数ID重关联。Room14不能无损表达完整孤立历史证据，须后续非破坏性方案评审；完整export需明确授权的全namespace快照/pin，不能绕过当前ScopedReader。此为具体兼容设计义务，不是已实现或冻结完整备份格式；当前真实本地保存闭环不受此设计隔离风险影响。PNBAK1未变、入口OFF/外审NOT_REVIEWED_EXTERNALLY。
+
 ## MED-02 最终修复源三API原始验收完成，仍待主机门 — 2026-10-23
 
 #106当前e4b8b6ceda6b9ac846615a0132b7fdc594423df3。PR39946180356的实际checkout082147b01b016d7bda5f0be91791e482c43ad6e1与head源码树均为4bdd1cd37eee6de53aced1abf285e461c81cc603，已fetch验证，不混淆测试merge SHA与head SHA。26/29/35原始ZIP、SHA与GitHub上传digest一致、CRC均PASS，原日志gz保留pr106-final-native。
