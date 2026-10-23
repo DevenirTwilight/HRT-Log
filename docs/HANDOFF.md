@@ -24,10 +24,10 @@
 
 ## MED-02：#104已完成；持久化Draft #106等待最终安全验收 — 2026-10-23
 
-已同步#105，UI/PDF/批准记录与主线逐字节一致；当前Room13无其他迁移竞争。本节放在原医疗交接段内，避免与前端不断追加的文件首部冲突；需求用§144.A日期补充，给并行UI-09保留§146。
+已同步#105和#107，UI/PDF/批准记录与主线逐字节一致；当前Room13无其他迁移竞争。e4b8b6ce三API和六必需门已全PASS，受保护自动合并因最新主线BEHIND要求本次正常同步；附件生产代码逐字节不变，新集成提交仍等待自己的必需CI，不冒充已通过。本节放在原医疗交接段内，避免与前端不断追加的文件首部冲突；需求用§144.A日期补充，给并行UI-09保留§146。
 
 - **#104收尾完成**：最终663901f97e6806e217dd0f7066e156fdc88d7b83六必需门PASS，无未解决评审，保护自动合并4f3c52a579ac3304096706093888ef46e37dcc79。主线Android39940095721最终SUCCESS；首轮API26启动前adb离线日志保留，只对job120369117416发起一次同源重试（attempt2成功），没有重跑整套。主线Science39940095774 SUCCESS。三API原始工件及SHA/CRC已推证据分支 docs/med02-storage-evidence-20261023；Foundation32、实际Keystore2各API全PASS，不等于外审。
-- **正式持久化已编码**：独立分支feature/med02-persistent-store-20261023，Draft #106，实施基线4f3c52a5，当前合并基线adc8cbb7（#105）。当前生产代码包含私有FD归属、先于加密的FULL同步一次性包装预留、Room14单表journal、完整认证后版本/关联/活动指针CAS和真实COMMIT、UUID同请求重放及跨数据集UUID拒绝、幂等隔离恢复、逻辑trash/restore。复用原Tink/Session，不建立验证缓存/任务队列。父目录固定FD、O_EXCL/O_NOFOLLOW、显式PFD归属；进程内非重入门闩先于锁文件open，与跨进程fcntl锁配合。原Gate3 RED/oracle未改，另PID peer验证生产失败探测不释放活跃锁。
+- **正式持久化已编码**：独立分支feature/med02-persistent-store-20261023，Draft #106，实施基线4f3c52a5，当前合并基线25f8bac2（#107，含#105）。当前生产代码包含私有FD归属、先于加密的FULL同步一次性包装预留、Room14单表journal、完整认证后版本/关联/活动指针CAS和真实COMMIT、UUID同请求重放及跨数据集UUID拒绝、幂等隔离恢复、逻辑trash/restore。复用原Tink/Session，不建立验证缓存/任务队列。父目录固定FD、O_EXCL/O_NOFOLLOW、显式PFD归属；进程内非重入门闩先于锁文件open，与跨进程fcntl锁配合。原Gate3 RED/oracle未改，另PID peer验证生产失败探测不释放活跃锁。
 - **发现并修复的实质性缺口**：旧0e02f7e7已通过API26/29/35原生写入/认证/重启恢复，但旧open返回的纯密码reader不检查当前DB epoch；漏撤销session时旧租约可继续读取，因此该绿色源仍NO-GO，不能借它合并。原crypto原样保留为阳性反例基准；新AttachmentScopedReader在读前/后检查当前已提交scope，拒绝旧调用方事务快照/已关闭DB，失效清零并关闭。真实持久化原生合同增加“已有lease→换库→未撤销session→拒绝且清零”。AttachmentTransaction同时拒绝借用任何调用方外层事务，避免嵌套Room返回被误认为原生COMMIT/持久预算。
 - **当前验证范围**：本地Foundation33、ScopedReader3全部0fail/error/skip，包含原reader阳性反例、读中换库晚到输出清零、旧事务快照拒绝、借用外层事务拒绝；新增原生测试源码编译PASS。此前完整数据层任务通过，最终精确提交仍必须独立CI，不能借旧源数据。Schema13→14迁移/中断回滚/旧附件UNKNOWN/旧读者拒绝本地5项PASS；全历史链1→…→14仍在原合同中。local-first保留548项中1项故障注入缺13→14路径的原FAIL，修复只补路径、未删断言；f86的UI08冻结守卫和API26启动失败原日志也保留。
 - **待核验**：最终修复源的API26/29/35原生及四处外部强停（写入中、密文完成、事务内提交前、提交后）、完整必需CI及保护合并/主线检查。不要把旧源绿色、JVM、模拟器或CI替代为真机/外审通过。生产分支只因真实失败或必要主线冲突再改，不继续性能研究、无意义元数据推送或重复跑旧源。
