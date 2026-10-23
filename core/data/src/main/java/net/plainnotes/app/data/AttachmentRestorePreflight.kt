@@ -43,19 +43,12 @@ internal object AttachmentRestorePreflight {
             val m=manifest.copy(records=immutable(manifest.records),documents=immutable(manifest.documents),
                 versions=immutable(manifest.versions),links=immutable(manifest.links))
             val ml=AttachmentBackupManifest.Limits(limits.maximumRows,limits.maximumVersions,limits.maximumCiphertextBytes)
-            m.validate(ml)
+            m.validateComplete(ml)
             val fresh=listOf(namespace.dataset,namespace.epoch,namespace.generation)
             require(fresh.toSet().size==3 && fresh.none {it in forbiddenNamespaces || it==m.dataset || it==m.epoch || it==m.logicalVault}) {"Restore namespace is not fresh"}
             fun <T> unique(v:List<T>) {require(v.size==v.toSet().size) {"Duplicate restore identity"}}
-            unique(m.records.map {it.kind to it.sourceId})
-            unique(m.versions.map {it.context.attempt});unique(m.versions.map {it.context.dekHandle})
             require(members.size==m.versions.size && members.map {it.context.version}.toSet().size==members.size)
             require(members.associateBy {it.context.version}==m.versions.associate {it.context.version to it.manifest}) {"Missing, extra or substituted original"}
-            m.documents.forEach {d->
-                val history=m.versions.filter {it.document==d.uuid}.sortedBy {it.ordinal}
-                require(history.map {it.ordinal}==(1L..history.size.toLong()).toList()) {"Missing immutable history ordinal"}
-                require(history.last().context.version==d.activeVersion) {"Active version is not the latest retained original"}
-            }
             // mapTo uses the same invariants with this caller's explicit lower resource limits.
             val mapping=m.mapTo(namespace.dataset,namespace.epoch,targets,ml)
             unique(targetRows.map {it.record});unique(targetRows.map {it.kind to it.localId})

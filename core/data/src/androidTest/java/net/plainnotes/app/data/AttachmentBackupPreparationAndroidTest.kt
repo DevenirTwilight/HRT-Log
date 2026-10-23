@@ -22,11 +22,10 @@ import java.util.UUID
 /** Production read-only snapshot + native SQLCipher/Keystore/full Tink authentication. */
 class AttachmentBackupPreparationAndroidTest {
     private val app get()=InstrumentationRegistry.getInstrumentation().targetContext
-    internal class Fixture(val app:Context):AutoCloseable {
+    internal class Fixture(val app:Context,val password:ByteArray=ByteArray(32) {43}):AutoCloseable {
         val name="synthetic-backup-preparation-${UUID.randomUUID()}.db"
         val directory=File(app.noBackupFilesDir,"synthetic-backup-preparation-${UUID.randomUUID()}").apply {check(mkdir())}
         val context=object:ContextWrapper(app) {override fun getNoBackupFilesDir()=directory}
-        val password=ByteArray(32) {43}
         val db:NotesDatabase
         val scope:AttachmentIdentity.Scope
         val record:UUID

@@ -1,0 +1,4 @@
+d4830a9c231f0c12b74ef9010ffbae65c412e99c206bc3c940d1693afcb71099  core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveCrypto.kt
+bfca01a6f796b1fefcf670ac6772e593cb724b2a0d6d63e254df33109bd0c70d  core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveManifest.kt
+b370920e9e163750ec6b436f42904fcca3152e82b04616890f989166c97bae4e  core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveReader.kt
+0b94581143c40e336dde2ae220e089535be7da1e233f47bf5b1e64c70970246f  core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveWriter.kt

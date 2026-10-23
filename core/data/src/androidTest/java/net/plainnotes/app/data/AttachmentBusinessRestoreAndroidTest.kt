@@ -21,7 +21,7 @@ import java.util.concurrent.Callable
  */
 class AttachmentBusinessRestoreAndroidTest {
     private val app get()=InstrumentationRegistry.getInstrumentation().targetContext
-    private fun build(f:AttachmentBackupPreparationAndroidTest.Fixture) {
+    internal fun build(f:AttachmentBackupPreparationAndroidTest.Fixture) {
         val repo=NotesRepository(object:DatabaseAccess(f.app) {override fun get(space:Space)=f.db})
         runBlocking {
             val med=repo.saveMedication(MedicationEntity(name="SYNTHETIC complete restore",molecule="E2",route="SUBLINGUAL",unit="MG",dose_per_intake=0.5,container_capacity=37.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0),

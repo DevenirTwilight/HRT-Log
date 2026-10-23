@@ -9,6 +9,8 @@ import java.util.UUID
 import java.security.MessageDigest
 import org.json.JSONObject
 import java.util.concurrent.Callable
+import java.io.InputStream
+import java.nio.channels.Channels
 
 /** Read-only preparation. No portable cipher, archive writer, restore SQL or application entry. */
 internal class AttachmentBackupPreparation(context:Context,private val db:NotesDatabase,
@@ -17,7 +19,8 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
     private val raw get()=db.openHelper.writableDatabase
     class Snapshot internal constructor(private val db:NotesDatabase,private val scope:AttachmentIdentity.Scope,
         private val cap:AttachmentSession.Capability,private val owner:BackupPlaintextOwner,
-        private val value:AttachmentBackupManifest):AutoCloseable {
+        private val value:AttachmentBackupManifest,private val files:AttachmentOwnedFiles,
+        private val keys:AttachmentDeviceKeys,private val sources:Map<UUID,Source>,private val recordCommitment:String):AutoCloseable {
         private fun checkCurrent() {
             check(Looper.myLooper()!=Looper.getMainLooper()) {"Backup snapshot requires a worker"}
             check(db.isOpen && !db.openHelper.writableDatabase.inTransaction())
@@ -32,18 +35,40 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
         /** Borrowed bytes may be cleared asynchronously. Consume only into private bounded staging;
          * never retain/publish before return. Revocation must not wait for an arbitrary consumer. */
         fun <T> records(block:(ByteArray)->T):T = try {
-            current {Unit};val result=block(owner.bytes());current {result}
+            current {Unit}
+            fun unchanged() {check(MessageDigest.getInstance("SHA-256").digest(owner.bytes()).joinToString("") {"%02x".format(it.toInt() and 255)}==recordCommitment) {"Snapshot bytes changed"}}
+            unchanged();val result=block(owner.bytes());unchanged();current {result}
         } catch(failure:Throwable) {try {close()}catch(cleanup:Throwable) {failure.addSuppressed(cleanup)};throw failure}
+        /** Borrowed cipher and DEK only, never a plaintext file or source device alias. The pinned
+         * original is authenticated again before transfer; consumers run outside publication locks.
+         * The callback must not retain either resource. Late scope changes refuse its result. */
+        fun <T> member(version:UUID,consume:(InputStream,ByteArray)->T):T = try {
+            current {Unit}
+            val source=requireNotNull(sources[version]) {"Unknown snapshot member"}
+            files.locked().use {directory->
+                current {Unit}
+                val key=keys.unwrapExisting(source.alias,source.binding,source.wrapped)
+                val keyLease=cap.ownBytes(key)
+                try {
+                    val first=directory.open(source.version.context.objectId,source.identity)
+                    AttachmentObjectStreams.open(cap,source.version.manifest,key.copyOf(),first.channel).close()
+                    current {Unit}
+                    val input=Channels.newInputStream(directory.open(source.version.context.objectId,source.identity).channel)
+                    val lease=cap.own(input)
+                    try {val result=consume(input,key);current {result}} finally {lease.close()}
+                } finally {keyLease.close()}
+            }
+        } catch(failure:Throwable) {try {close()}catch(e:Throwable) {failure.addSuppressed(e)};throw failure}
         override fun close()=cap.close()
     }
-    private data class Source(val version:AttachmentBackupManifest.Version,val identity:AttachmentOwnedFiles.Identity,
+    internal data class Source(val version:AttachmentBackupManifest.Version,val identity:AttachmentOwnedFiles.Identity,
         val alias:AttachmentDeviceKeys.Alias,val binding:AttachmentDeviceKeys.Binding,val wrapped:ByteArray)
 
     fun capture(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,
         limits:AttachmentBackupManifest.Limits=AttachmentBackupManifest.Limits(),created:Instant=Instant.now()):Snapshot {
         check(Looper.myLooper()!=Looper.getMainLooper()) {"Backup preparation requires a worker"}
         check(!raw.inTransaction()) {"Cannot borrow a stale caller snapshot"}
-        val child=cap.fork();val owner=BackupPlaintextOwner();val sources=ArrayList<Source>()
+        val child=cap.fork();val owner=BackupPlaintextOwner();val sources=ArrayList<Source>();var transferred=false
         try {
             child.own(owner)
             return files.locked().use {directory->
@@ -127,7 +152,7 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
                     }
                     val links=read("SELECT link_uuid,record_uuid,document_uuid,revision,state FROM attachment_link WHERE store_uuid=? ORDER BY link_uuid") {c->
                         AttachmentBackupManifest.Link(c.uuid(0),c.uuid(1),c.uuid(2),c.getLong(3),c.getString(4))}
-                    AttachmentBackupManifest(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch),UUID.fromString(scope.logicalVault),records,documents,versions,links).also {it.validate(limits)}
+                    AttachmentBackupManifest(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch),UUID.fromString(scope.logicalVault),records,documents,versions,links).also {it.validateComplete(limits)}
                 })
                 // The manifest cannot represent unknown/orphan/incomplete leaves. Retaining them
                 // locally while claiming a complete export would silently omit protected bytes.
@@ -142,14 +167,16 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
                     val input=try {directory.open(source.version.context.objectId,source.identity)} catch(failure:Throwable) {key.fill(0);throw failure}
                     AttachmentObjectStreams.open(child,source.version.manifest,key,input.channel).close()
                 }
+                val recordCommitment=MessageDigest.getInstance("SHA-256").digest(owner.bytes()).joinToString("") {"%02x".format(it.toInt() and 255)}
                 child.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
                     check(db.isOpen && AttachmentIdentity.current(raw)==scope) {"Dataset changed during snapshot authentication"}
-                    Snapshot(db,scope,child,owner,manifest)
+                    child.own(AutoCloseable {sources.forEach {it.wrapped.fill(0)}})
+                    Snapshot(db,scope,child,owner,manifest,files,keys,sources.associateBy {it.version.context.version},recordCommitment).also {transferred=true}
                 }
             }
         } catch(failure:Throwable) {
             try {child.close()}catch(cleanup:Throwable) {failure.addSuppressed(cleanup)}
             throw failure
-        } finally {sources.forEach {it.wrapped.fill(0)}}
+        } finally {if(!transferred)sources.forEach {it.wrapped.fill(0)}}
     }
 }

@@ -1,0 +1,23 @@
+{
+  "base": "e61126989a7433d9ba2bf5e387c6b8a434e8f187",
+  "fullDataLayer": {
+    "tests": 585,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "nativeSourceCompilation": "PASS",
+  "nativeExecution": "NOT_RUN",
+  "physical": "NOT_RUN",
+  "external": "NOT_REVIEWED_EXTERNALLY",
+  "sources": {
+    "core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveCrypto.kt": "d4830a9c231f0c12b74ef9010ffbae65c412e99c206bc3c940d1693afcb71099",
+    "core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveManifest.kt": "8b5e4bb731330c1a5f628a85417a93ce22c87641e6b2b5cdfe6b58b39b5788a4",
+    "core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveReader.kt": "e05e010f1ed814be93dffb1b68f50c4aea7392e6597980a8faa0a0d51952f762",
+    "core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveWriter.kt": "0b94581143c40e336dde2ae220e089535be7da1e233f47bf5b1e64c70970246f",
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentBackupManifest.kt": "3b1814c94f1f0f20589311427351cdaa2a550e6d460ea423c1e33aba6f417357",
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentBackupPreparation.kt": "3b84af7f69383672846743ad7e48d693adb5d0a132a04213184be3302706b43f",
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentRestorePreflight.kt": "e0acadcd3b52acbe7521988b020efafb034d9446fb2a1759593f125a255f415a",
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentObjectStreams.kt": "1b8df6394042319b83c0212d5736cce9150bdad18d7b839fa49c1cfb89dd45e5"
+  }
+}
