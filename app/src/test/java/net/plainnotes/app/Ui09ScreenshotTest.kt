@@ -102,6 +102,8 @@ class Ui09ScreenshotTest(private val locale: String, private val width: Int, pri
     @Test fun stageReview() {
         val label = System.getenv("UI09_SHOTS")
         assumeTrue("set UI09_SHOTS to render", !label.isNullOrBlank())
+        // At 411 dp the dialog window never settles under Robolectric (same as UI-08's dialog shots): NOT_RUN, report 75 §9.
+        assumeTrue("dialog shots at 320 dp only", width == 320)
         RuntimeEnvironment.setQualifiers("$locale-w${width}dp-h${if (width == 320) 640 else 891}dp-xxhdpi"); RuntimeEnvironment.setFontScale(font)
         rule.mainClock.autoAdvance = false
         var open by mutableStateOf(true)
