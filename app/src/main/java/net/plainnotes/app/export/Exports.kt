@@ -141,6 +141,8 @@ object PdfReport {
         fun line(c: Int, width: Float) = Paint().apply { color = c; strokeWidth = width; isAntiAlias = true }
         val contentX = colX(2); val contentW = span(10); val fullW = span(12)
         var atTop = true
+        /** Runs after each new page is started; a table in progress uses it to repeat its header. */
+        var continued: () -> Unit = {}
         fun newPage() {
             if (started) sink.finishPage(); started = true; pageNo++; canvas = sink.startPage(pageNo); y = TOP; atTop = true
             // Footer: the same words as before, the note on the left and the page on the right, under a 0.25 pt rule.
@@ -151,6 +153,7 @@ object PdfReport {
             canvas!!.drawLine(M, H - BOTTOM + 16f, W - M, H - BOTTOM + 16f, line(RULE_LIGHT, 0.25f))
             canvas!!.drawText(TextUtilsEllipsize(note, meta, span(9)), M, H - BOTTOM + 32f, meta)
             canvas!!.drawText(pagePart, W - M - meta.measureText(pagePart), H - BOTTOM + 32f, meta)
+            continued()
         }
         /** Left-aligned block at [x] / [width]; heights round up to the 4 pt baseline; long text continues on the next page. */
         fun block(s: String, p: TextPaint, x: Float, width: Float, gap: Float = 4f, record: Boolean = true) {
@@ -168,7 +171,7 @@ object PdfReport {
                 if (remaining.isNotEmpty()) newPage()
             } while (remaining.isNotEmpty())
         }
-        fun text(s: String, p: TextPaint = body, gap: Float = 4f) = block(s, p, contentX, contentW, gap)
+        fun text(s: String, p: TextPaint = body) = block(s, p, contentX, contentW, 0f)
         fun lineHeight(p: TextPaint) = round4(StaticLayout.Builder.obtain("Ag", 0, 2, p, contentW.toInt()).build().getLineBottom(0).toFloat())
         var sectionNo = 0
         /** 01, 02 … in the accent at the left two columns, the bold title on the right ten; never alone at a page foot. */
@@ -197,8 +200,8 @@ object PdfReport {
             canvas!!.drawLine(contentX, y, contentX + contentW, y, line(Color.BLACK, 0.5f))
         }
         fun tableRow(t: Table, cols: List<String>) {
+            if (y + lineHeight(body) + 4f > CONTENT_BOTTOM) newPage()
             trace("row", cols.joinToString("\n"))
-            if (y + lineHeight(body) + 4f > CONTENT_BOTTOM) { newPage(); tableHeader(t) }
             drawRow(t, cols, body)
             canvas!!.drawLine(contentX, y, contentX + contentW, y, line(RULE_LIGHT, 0.25f))
         }
@@ -218,7 +221,7 @@ object PdfReport {
         section(context.getString(R.string.report_current_plan))
         d.medications.filter { it.active }.forEach { m ->
             val ester = d.profiles[m.id]?.ester
-            text("• ${m.name} — ${listOfNotNull(m.molecule, ester?.takeIf { it != "E2" }, m.route).joinToString(" / ")} — ${fmt(m.dose_per_intake)} ${m.unit} · ${d.scheduleText[m.id] ?: ""}", body, 4f)
+            text("• ${m.name} — ${listOfNotNull(m.molecule, ester?.takeIf { it != "E2" }, m.route).joinToString(" / ")} — ${fmt(m.dose_per_intake)} ${m.unit} · ${d.scheduleText[m.id] ?: ""}", body)
         }
         if(visit!=null){
             // Frozen regimen versions overlapping the range, described from their own snapshots.
@@ -226,13 +229,13 @@ object PdfReport {
             val versions=d.regimens.filter{it.effective_from_utc<until && (it.effective_until_utc?:Long.MAX_VALUE)>since}.sortedWith(compareBy({it.effective_from_utc},{it.id}))
             if(versions.isEmpty())text(context.getString(R.string.report_none))
             versions.forEach{v->text("• "+Instant.ofEpochMilli(v.effective_from_utc).atZone(zone).format(dtFmt)+" → "+(v.effective_until_utc?.let{Instant.ofEpochMilli(it).atZone(zone).format(dtFmt)}?:context.getString(R.string.epoch_ongoing))+
-                (if(v.origin=="LEGACY_RULE")" · "+context.getString(R.string.epoch_reconstructed) else "")+"\n"+(visit.regimenLabels[v.id]?:visit.unknownName),body,4f)}
+                (if(v.origin=="LEGACY_RULE")" · "+context.getString(R.string.epoch_reconstructed) else "")+"\n"+(visit.regimenLabels[v.id]?:visit.unknownName), body)}
         }
         endSection()
         }
         if(visit!=null && facts!=null && on(VisitSection.FACTS)){
             section(context.getString(R.string.visit_facts_title))
-            net.plainnotes.app.visit.factLines(context.resources,facts,visit.unknownName).forEach{text(it,body,4f)}
+            net.plainnotes.app.visit.factLines(context.resources,facts,visit.unknownName).forEach{text(it, body)}
             endSection()
         }
         if(on(VisitSection.INTAKES)){
@@ -247,10 +250,10 @@ object PdfReport {
             val r = inRange.filter { it.medication_id == m.id && it.scheduled_utc != null }
             val (onTime, late, missed, skipped) = net.plainnotes.app.visit.scheduledCounts(inRange.filter { it.medication_id == m.id })
             if(r.any{it.unconfirmed})text(context.getString(R.string.unconfirmed_count,r.count{it.unconfirmed}))
-            text("• ${m.name}: " + context.getString(R.string.report_adherence_line_v2, onTime, late, missed, skipped), body, 4f)
+            text("• ${m.name}: " + context.getString(R.string.report_adherence_line_v2, onTime, late, missed, skipped), body)
             // REQUIREMENTS §35a: records matching their period are not counted separately; no count is based on a missing scheduled time.
             val counts = net.plainnotes.app.visit.labelCounts(inRange.filter { it.medication_id == m.id && it.status in listOf("ON_TIME", "LATE") }.map { it.id }, labels)
-            if (counts.any { it > 0 }) text(context.getString(R.string.visit_fact_labels, counts[0], counts[1], counts[2], counts[3]), body, 4f)
+            if (counts.any { it > 0 }) text(context.getString(R.string.visit_fact_labels, counts[0], counts[1], counts[2], counts[3]), body)
         }
         endSection()
         }
@@ -265,6 +268,8 @@ object PdfReport {
             trace("row", table.header.joinToString("\n"))
             if (y + 2 * (lineHeight(body) + 4f) > CONTENT_BOTTOM) newPage()
             tableHeader(table)
+            // Any page break inside the table, after a row or inside a row's context lines, starts with the header again.
+            continued = { atTop = false; tableHeader(table) }
             labs.forEach { l ->
                 val saved=d.labContexts.filter{it.lab_id==l.id}.maxByOrNull{it.revision}
                 val ingredient=when(l.analyte_code){"E2","T"->l.analyte_code;"P4","P4_IA","P4_MS"->"P4";else->null}
@@ -276,6 +281,7 @@ object PdfReport {
                 if(saved==null)text(context.getString(R.string.lab_context_not_saved))
                 else net.plainnotes.app.ui.labContextLines(context,saved).forEach{text(it)}
             }
+            continued = {}
         }
         endSection()
         }
@@ -288,7 +294,9 @@ object PdfReport {
         if (e2Plan.drawChart) {
             text(context.getString(R.string.pk_disclaimer_short))
             // The chart itself is drawn by the unchanged drawChart, full text width as before; only its place on the page moved.
-            if (y + 196f > CONTENT_BOTTOM) newPage()
+            // 8 pt of air first: the chart writes its top axis label just above its own top edge.
+            if (y + 8f + 196f > CONTENT_BOTTOM) newPage()
+            y += 8f
             trace("chart", "${W - 2 * M}x180"); drawChart(canvas!!, conc!!, M, y, W - 2 * M, 180f, from.atStartOfDay(zone).toEpochSecond() / 3600.0, conc.nowH)
             y += 196f
         }
@@ -297,7 +305,7 @@ object PdfReport {
         if (scored.isNotEmpty() && on(VisitSection.DAILY)) {
             section(context.getString(R.string.wellbeing))
             d.items.forEach { item -> scored.filter { it.item_id == item.id }.takeIf { it.isNotEmpty() }?.let { s ->
-                text("• ${d.itemLabel(item)}: ${context.getString(R.string.wb_recorded_days,s.size)}", body, 4f) } }
+                text("• ${d.itemLabel(item)}: ${context.getString(R.string.wb_recorded_days,s.size)}", body) } }
             endSection()
         }
         val summary=WellbeingSummary(d,from,to)
@@ -306,11 +314,12 @@ object PdfReport {
             symptomLines(context,summary.symptoms).forEach{text(it)}; endSection()}
             if(on(VisitSection.REVIEWS)){section(context.getString(R.string.wb_reviews))
             summary.reviews.forEach{r->reviewLines(context,r).forEach{text(it)}}; endSection()}
+            val dailyTop = y; val dailyPage = pageNo
             if(on(VisitSection.DAILY))d.items.forEach{item->val pts=summary.scores.filter{it.item_id==item.id}.sortedBy{it.date}
                 if(pts.isNotEmpty()){
                     if(y+100>CONTENT_BOTTOM)newPage()
                     text(d.itemLabel(item)+" · "+context.getString(R.string.wb_recorded_days,pts.size))
-                    val paint=Paint().apply{color=Color.DKGRAY;strokeWidth=1f;isAntiAlias=true}
+                    val paint=Paint().apply{color=GREY;strokeWidth=1f;isAntiAlias=true}
                     val first=from.toEpochDay();val span=(to.toEpochDay()-first).coerceAtLeast(1)
                     var last:Pair<Float,Float>?=null
                     val plotX=contentX+16f; val plotW=contentW-16f
@@ -320,12 +329,14 @@ object PdfReport {
                 }
             }
             if(on(VisitSection.DAILY))summary.notes.forEach{text(it.date+" · "+it.text)}
+            // The daily plots and notes close their part with the same 16 pt as a section.
+            if (y != dailyTop || pageNo != dailyPage) endSection()
         }
         if(visit!=null && on(VisitSection.QUESTIONS)){
             section(context.getString(R.string.visit_questions))
             if(visit.questions.isEmpty())text(context.getString(R.string.report_none))
             visit.questions.sortedWith(compareBy({it.sort_order},{it.id})).forEachIndexed{i,q->
-                text("${i+1}. "+q.text+" · "+context.getString(if(q.status=="ASKED")R.string.visit_question_asked else R.string.visit_question_open),body,4f)
+                text("${i+1}. "+q.text+" · "+context.getString(if(q.status=="ASKED")R.string.visit_question_asked else R.string.visit_question_open), body)
                 q.answer_note?.let{text(context.getString(R.string.visit_answer)+": "+it)}
             }
             endSection()
