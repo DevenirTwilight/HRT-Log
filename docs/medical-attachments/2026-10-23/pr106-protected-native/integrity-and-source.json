@@ -6,7 +6,7 @@
   "head_and_checkout_tree": "cd3d434715cb69df8e776f8742dafba8824cd224",
   "tree_identity_verified": true,
   "backend_and_shared_native_contracts_identical_to_e4": true,
-  "host_gate": "PENDING_AT_SNAPSHOT",
+  "host_gate": "PASS",
   "physical_device": "NOT_RUN",
   "real_power_loss_and_actual_volume_exhaustion": "NOT_RUN",
   "external_review": "NOT_REVIEWED_EXTERNALLY",
@@ -132,5 +132,13 @@
         "COMMITTED": "PASS_FRESH_PID"
       }
     }
-  ]
+  ],
+  "protected_pr_required_checks": "ALL_SUCCESS",
+  "merged_main": "a2917086ead90b3967eee71908160e8021dfe89a",
+  "merge_source_tree_identical_to_tested_head": true,
+  "main_ci": {
+    "android_run": 39953226169,
+    "science_run": 39953226326,
+    "status": "PENDING_ANDROID_SCIENCE_PASS"
+  }
 }

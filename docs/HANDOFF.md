@@ -1,3 +1,11 @@
+## MED-02 #106已受保护合并，主线复验在途 — 2026-10-23
+
+#106最终HEAD0210ab9ce8dc47c978d77417a32641872d92ade0，六必需门（push/PR两轮）全部SUCCESS，research-deep也PASS；无未解决评审、无冲突。自动合并已开启，在CLEAN状态下使用正常expected-head merge（无admin/force/旁路）完成合并a2917086ead90b3967eee71908160e8021dfe89a，2026-10-23T12:25:39Z。主线与已验收head/PR测试merge源码树都为cd3d434715cb69df8e776f8742dafba8824cd224，已fetch核对。合并回执和完整主机日志（单测/lint/build/unsigned release隔离PASS）与三API原ZIP/上传digest/SHA/CRC在pr106-protected-native。
+
+主线Science39953226326 SUCCESS；主线Android39953226169仍在运行，不能提前标PASS。接下来只读该运行并完成核查，不重复触发测试、不扩范围。#104及其主线全绿也已完成。Room14仅journal增量；正式生产代码已在三API用合成文件完成持久化、全认证、真实COMMIT、关闭重开读取、逻辑trash/restore及四处跨进程强停恢复；source权限缺口已修并原生验证。入口仍OFF，NOT_REVIEWED_EXTERNALLY，未保存真实原件/签名/交付APK/发布。
+
+完整医疗备份仍仅设计（此分支兼容文档含retired namespace、旧临床目标缺失证据及后续schema评审义务），PNBAK1未变；没有冒充可移植备份实现。安全GC/总配额、正式导入/格式准入/应用级AppLock接线及独立审核仍是启用前条件。物理真机/真实断电/灌满存储未执行，不能用合成IO失败和进程强停冒充。旧0e02绿色源的已知缺口、原失败日志与本地RED均保留，没有挑绿/删除反例。
+
 ## MED-02：受保护主线同步后的0210三API再验收通过，待主机门 — 2026-10-23
 
 #106当前0210ab9ce8dc47c978d77417a32641872d92ade0，正常自动合并已启用，主线25f8bac2包含独立UI-09。没有借用e4绿色：新PR39949680638实际checkout09120ae4ecc7d5873b3ab337cde9ed76c6505ca5与head源码树均cd3d434715cb69df8e776f8742dafba8824cd224，已fetch验证；26/29/35各Store7+Restart1+Foundation33+SQLCipherMigration5+Keystore2全部0fail/0skip，四处真实新PID强停均PASS。原ZIP/日志gz/上传digest一致SHA/CRC和来源JSON保存在pr106-protected-native。附件后端及合同与e4逐字节相同，前端与主线逐字节相同，既有审查和源证据不混写。
