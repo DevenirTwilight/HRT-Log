@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.AttachmentRestorePreflightTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-23T16:17:11.311Z" hostname="ed2a3e4b604e" time="4.276">
+  <properties/>
+  <testcase name="mappingsMustNameActualTypedRowsAndNeverResurrectTombstones" classname="net.plainnotes.app.data.AttachmentRestorePreflightTest" time="3.735"/>
+  <testcase name="unknownTablesInvalidJsonBoundsSpaceKeysAndOverflowRefuseAndWipe" classname="net.plainnotes.app.data.AttachmentRestorePreflightTest" time="0.059"/>
+  <testcase name="missingExtraDuplicateSubstitutedObjectsAndMissingHistoryRefuse" classname="net.plainnotes.app.data.AttachmentRestorePreflightTest" time="0.055"/>
+  <testcase name="softDeletedDoseReferenceIsNotMistakenForSnapshotTrashAndTamperingRefuses" classname="net.plainnotes.app.data.AttachmentRestorePreflightTest" time="0.041"/>
+  <testcase name="completeHistoryClinicalTrashTypedMappingAndTombstonesArePreservedWithoutWriting" classname="net.plainnotes.app.data.AttachmentRestorePreflightTest" time="0.082"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,3 +1,11 @@
+## MED-02 恢复准备源码冻结，进入真实原生与完整CI — 2026-10-23
+
+生产/原生代码checkpoint35a8ed8f。本地此前完整数据层572/0fail/error/skip通过；随后合计manifest+business行数上限这一处加强后，精确冻结源码新preflight5项重新PASS、native Kotlin全部编译PASS，日志/XML/生产文件SHA在restore-preparation-evidence。不得将旧完整运行归给最终源码；最终HEAD完整回归仍以自己CI为准。
+
+新增原生独立合同：strict preflight5、真实SQLCipher/heldFD/Tink quarantine4、原snapshot的真实软删dose引用回归1；新增COPY/VERIFIED两处实际force-stop/新PID探针，明确只证明旧DB保持/未知密文保留/无auto-activation，不冒充完整导出恢复。原全部断言和原四处对象COMMIT强停保留；26/29显式class名单加入两个新合同，35原全包照常；新探针原日志列入artifact，不以CI状态替代原件核验。目前尚未原生PASS，不开启入口，不签名发布，不提交未经批准格式/激活。
+
+#111最终原件本轮已补核：API26/29/35的Preparation6/Candidate6/Store11全部0fail/skip、官方SHA/CRC通过，原ZIP在docs/med02-storage-evidence-20261023的pr111-final-native。Candidate始终TEST_ONLY。新正式PNMEDBK1 writer/reader/KDF/portable wrapping/全库激活仍BLOCKED_PENDING_EXPLICIT_APPROVAL，审批摘要在现有proposal首部。下一步只处理本精确源真实失败/验收/保护合并，不重跑旧源、不做P4研究。
+
 ## MED-02 完整恢复预检与隔离准备已编码，等待验证 — 2026-10-23
 
 本轮起点主线4dca6744e93ad585a2a824262bd72d083e4f2bce，#103/104/106/110/111均已合并；#111最终5c8068d2的PR39979087267/push39979078536六必需门全部PASS，不重做快照/Tink/Keystore/Room14。#110主线39978847114 SUCCESS。本地独立feature/med02-restore-preflight-20261023，不修改其他库存/UI工作树。

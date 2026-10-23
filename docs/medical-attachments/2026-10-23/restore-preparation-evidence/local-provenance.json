@@ -1,0 +1,21 @@
+{
+  "frozen_source": "35a8ed8f",
+  "production_sha256": {
+    "AttachmentRestorePreflight.kt": "3a9d2c5bc8a7c2c0506857610ec8ec4df664bf55b0445025c0897e28fe31ea1a",
+    "AttachmentRestoreStaging.kt": "a327c3b5ed3ceebd978cc7fbfd37375c1317e1dc505e9d46ef81e20b0e98320a",
+    "AttachmentBackupPreparation.kt": "1d12531d4e03030882589771030d69c5ead1dcca6713dac8847a46a77466f924",
+    "AttachmentOwnedFiles.kt": "93cdbca07df98921432e119f429c26eda99f0c11bb023ab0cb2a5d79c84043cd",
+    "AttachmentBackupManifest.kt": "e5993628c786d1a4d5da5e1cc0c3a83334bf586bbc2972eef78f471c996ac782"
+  },
+  "frozen_target_tests": 5,
+  "frozen_target_failures": 0,
+  "frozen_native_kotlin_compile": "PASS",
+  "earlier_full_worktree_tests": 572,
+  "earlier_full_failures": 0,
+  "earlier_full_skipped": 0,
+  "earlier_full_source_limit": "prior compiled runtime before the additional combined manifest+business row count; not final-head full regression",
+  "native_execution": "NOT_RUN_LOCALLY_NO_KVM",
+  "portable_format": "NOT_APPROVED",
+  "entry": "OFF",
+  "external_review": "NOT_REVIEWED_EXTERNALLY"
+}
