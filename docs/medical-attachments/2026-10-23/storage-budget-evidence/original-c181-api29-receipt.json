@@ -1,0 +1,9 @@
+{
+  "source": "c1810d3e45ebf2a4813778c69f75031f292392e7",
+  "run": 39968772333,
+  "job": 120465970244,
+  "artifact": 12508093770,
+  "sha256": "3b8c183f441d4c9faf0fa1369425b7a806639d2a10fbbb3ebce0073453f4aca0",
+  "crc": "PASS",
+  "result": "FAIL: original corruption test tried to allocate further fixtures after selected inode was deliberately replaced; production capacity refusal is retained. Arrange all corruption targets first; all original safety assertions retained and new rejection assertion added. No production rule relaxed."
+}

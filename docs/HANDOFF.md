@@ -1,3 +1,7 @@
+## PR110首轮API29真实FAIL已留原件，修测试安排不放宽检查 — 2026-10-23
+
+c181 push39968772333/job120465970244真实FAIL：missingKeyAndReplacedFile用例在已经故意替换已选inode之后再创建wrong-key/tampered测试目标，新库存归属检查正确以INCOMPLETE_INVENTORY拒绝。原371测试中的该失败报告/ZIP SHA256/CRC和日志已保留storage-budget-evidence。修正只提前准备四个独立破坏目标，所有原missing-key/换key/路径替换/坏尾/未知文件保留/四版本CORRUPT断言保留，并追加破坏后新写不建journal、不开输入、不生alias。生产完整性及预算规则完全不变；新源仍需完整三API，不用旧绿/重跑掩盖原FAIL。
+
 ## 存储容量PR110冻结源本地完整回归通过 — 2026-10-23
 
 源c1810d3e，本地core:data完整JVM {'tests': 561, 'failures': 0, 'errors': 0, 'skipped': 0}；Android测试APK编译PASS。新增Budget8、原Foundation33及ScopedReader3均零fail/error/skip。原初轮编译失败保留在source分支docs/storage-budget-evidence，修fixture尾随lambda未删断言；最终计数与XML/日志归档本分支storage-budget-evidence。PR110仍Draft，三API与host在途，不把本地编译当原生执行；源保持冻结，结果独立证据分支及时推送避免重置CI。
