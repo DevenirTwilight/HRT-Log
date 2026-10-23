@@ -13,6 +13,20 @@ object Spacing {
 }
 
 /**
+ * UI-09 B (REQUIREMENTS §146): the phone grid. Four columns, 16 dp page margins and gutters, a 4 dp baseline; spacing uses
+ * the 4 dp steps only (4/8/12/16/24/32). Cards pad 16 dp ([card]) or 20 dp ([cardLarge]).
+ */
+object Grid {
+    const val COLUMNS = 4
+    val margin = 16.dp
+    val gutter = 16.dp
+    val baseline = 4.dp
+    val steps = listOf(4.dp, 8.dp, 12.dp, 16.dp, 24.dp, 32.dp)
+    val card = 16.dp
+    val cardLarge = 20.dp
+}
+
+/**
  * UI-02 A3 / UI-06 D: semantic corner radii. [tag] (10dp) is a rounded rectangle for filter tags and small marks, not a pill;
  * [pill] is fully rounded, for pill buttons and status labels.
  */

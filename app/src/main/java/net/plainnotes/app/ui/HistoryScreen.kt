@@ -109,10 +109,10 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
             }
             AdaptiveActions(listOf(stringResource(R.string.batch_add),stringResource(R.string.history_add))) { i,mod ->
                 if(i==0)OutlinedButton(onClick = onBatch, enabled = canAdd, modifier=mod) {
-                    Icon(Icons.Outlined.Layers, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.batch_add))
+                    Icon(Icons.Outlined.Layers, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.batch_add))
                 }
                 else Button(onClick = onAdd, enabled = canAdd, modifier=mod) {
-                    Icon(Icons.Outlined.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.history_add))
+                    Icon(Icons.Outlined.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.history_add))
                 }
             }
         }
@@ -124,10 +124,12 @@ private fun RecordEntity.at(): Instant = Instant.ofEpochMilli(taken_utc ?: sched
     val c = MaterialTheme.colorScheme
     // UI-07 E: the day's date, then its records as a connected grouped list (each record its own container, 3 dp apart).
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(GroupedGap)) {
-        Row(Modifier.fillMaxWidth().padding(start = 8.dp, top = 4.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(8.dp).clip(CircleShape).background(c.primary)); Spacer(Modifier.width(10.dp))
+        Row(Modifier.fillMaxWidth().padding(start = 8.dp, top = 4.dp, bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.size(8.dp).clip(CircleShape).background(c.primary)); Spacer(Modifier.width(8.dp))
             Text(formatDate(day), style = NotesTheme.typeExtra.sectionTitle, color = c.onSurfaceVariant)
         }
+        // UI-09 C: a thin rule under the day heading.
+        SectionRule(Modifier.padding(bottom = 4.dp).testTag("history-day-rule:$day"))
         list.forEachIndexed { i, r ->
             GroupedItem(i, list.size, color = c.surfaceContainerLow, modifier = Modifier.testTag("history-item:${r.id}")) {
                 RecordRow(r, meds[r.medication_id], profiles[r.medication_id], { onEdit(r) }, { onDelete(r) }, {onConfirmMissed(r)}, labels[r.id].orEmpty(), {onUndoSkip(r)}) { onExtra(r, it) }
@@ -154,7 +156,7 @@ fun routeIcon(route: String?): ImageVector = when (route) {
         if(a.unconfirmed>0)Text(stringResource(R.string.unconfirmed_count,a.unconfirmed),style=MaterialTheme.typography.bodySmall)
         Row(verticalAlignment = Alignment.Bottom) {
             Text(a.onTimeRate?.let { "${(it * 100).roundToInt()}%" } ?: "—", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.SemiBold)
-            Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.adherence_on_time_rate), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(bottom = 6.dp))
+            Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.adherence_on_time_rate), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(bottom = 8.dp))
         }
         // UI-06: missed is the neutral missed token, never red; late is taken (success), told apart by its own words.
         val sem = NotesTheme.semantic
@@ -194,8 +196,8 @@ fun routeIcon(route: String?): ImageVector = when (route) {
                 .border(1.dp, c.outlineVariant.copy(alpha = 0.6f), RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
                 Icon(routeIcon(route), null, tint = if (taken) c.primary else c.onSurfaceVariant)
             }
-            Spacer(Modifier.width(14.dp))
-            Column(Modifier.weight(1f).widthIn(min=120.dp),verticalArrangement=Arrangement.spacedBy(3.dp)) {
+            Spacer(Modifier.width(16.dp))
+            Column(Modifier.weight(1f).widthIn(min=120.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
                 Text(if (simple) choiceLabel(historyMed?.molecule ?: "OTHER") else historyMed?.name ?: stringResource(R.string.history_context_unknown), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 val sub = listOfNotNull(route?.let { choiceLabel(it) }, historyProfile?.ester?.takeIf { it != "E2" && !simple }?.let { choiceLabel(it) }, r.site?.let { siteLabel(it) })
                 if (sub.isNotEmpty()) Text(sub.joinToString(" · "), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
@@ -209,7 +211,7 @@ fun routeIcon(route: String?): ImageVector = when (route) {
                 if ((r.unallocated_supply_amount ?: 0.0) > 0) Text(stringResource(R.string.history_unallocated, formatDose(r.unallocated_supply_amount!!, historyMed?.unit)), style = MaterialTheme.typography.labelSmall, color = c.tertiary)
             }
             Spacer(Modifier.width(8.dp))
-            Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Chip(formatTime(r.at()))
                 // UI-06: status labels from the one status table.
                 when (r.status) {

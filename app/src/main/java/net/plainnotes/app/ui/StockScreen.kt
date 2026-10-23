@@ -74,7 +74,7 @@ fun stockSummary(m: MedicationEntity, containers: List<ContainerEntity>, forecas
                             forecasts: Map<Long, StockForecast> = emptyMap(), today: LocalDate = LocalDate.now(), zone: ZoneId = ZoneId.systemDefault()) {
     val meds = state.medications.filter { it.active }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
-        bottom = contentPadding.calculateBottomPadding() + 32.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        bottom = contentPadding.calculateBottomPadding() + 32.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (meds.isEmpty()) item { EmptyState(Icons.Outlined.Inventory2, stringResource(R.string.no_medications), stringResource(R.string.stock_empty_body)) }
         items(meds, key = { it.id }) { m ->
             val sum = stockSummary(m, containers, forecasts[m.id], today, zone)
@@ -136,7 +136,7 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
                 // UI-05 C: the days the shared forecast already computed; nothing without a plan or when it lasts the whole window.
                 s.daysLeft?.takeIf { s.forecast?.lastCovered != null }?.let { d ->
                     Text(stringResource(R.string.stock_about_days, d), style = MaterialTheme.typography.titleSmall.tnum(),
-                        color = if (s.low) c.onTertiaryContainer else c.onSurfaceVariant, modifier = Modifier.padding(bottom = 2.dp).testTag("stock-days-${m.id}"))
+                        color = if (s.low) c.onTertiaryContainer else c.onSurfaceVariant, modifier = Modifier.padding(bottom = 4.dp).testTag("stock-days-${m.id}"))
                 }
             }
             // Same sentence and warning as the calendar's stock card, from the same shared forecast.
@@ -222,7 +222,7 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
     var left by remember(chosen) { mutableStateOf(box?.let { inputNumber((it.capacity - it.used_amount).coerceAtLeast(0.0)) } ?: "") }
     val v = left.toDoubleOrNull()?.takeIf { box != null && it.isFinite() && it >= 0 && it <= box.capacity }
     AlertDialog(onDismissRequest = onDismiss, icon = { Icon(Icons.Outlined.Tune, null) }, title = { Text(stringResource(R.string.stock_check)) },
-        text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(m.name, style = MaterialTheme.typography.titleSmall)
             Text(stringResource(R.string.stock_check_pick), style = MaterialTheme.typography.labelLarge)
             candidates.forEach { c ->
@@ -266,7 +266,7 @@ val CHECKABLE_STATES = setOf("IN_USE", "EMPTY")
     }
     AlertDialog(onDismissRequest = onDismiss, title = { Text(m.name) },
         text = { LazyColumn(Modifier.fillMaxWidth().heightIn(max = 420.dp).testTag("packages-${m.id}"), state = listState,
-            verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            verticalArrangement = Arrangement.spacedBy(8.dp)) {
             groups.forEach { (status, label) ->
                 val boxes = grouped[status].orEmpty()
                 if (boxes.isEmpty()) return@forEach
