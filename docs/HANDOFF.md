@@ -1,3 +1,9 @@
+## MED-02 持久恢复与单一authority任务已接手 — 2026-10-23
+
+实时起点e6112698，#103/104/106/110–113已合并；#114固定候选372b69812f6f2946c68853be6f1732ab84876915，PR三API/JVM/科学均PASS、主机PASS，push主机仍待结束，不重跑。新独立feature/med02-durable-generation-20261023工作树，未改其他树。负责人§147.E已明确授权必要默认OFF持久化/安全激活，外审、永久冻结格式/删除/公开入口仍未授权。
+
+先审计单一DatabaseAccess及NotesRepository/提醒等真实写入入口，防止旧整数ID跨新库。计划文件所有权：本分支独占新增generation/持久恢复数据层与其测试，必要DatabaseAccess/NotesRepository集成；不修改UI/PK/BDPM/P5P6。当前尚未实现新持久闭环，不先声称PASS。保持入口OFF，任何缺乏完整资源/提交证明的候选不得激活。每个已完成检查点持续提交推送；#114继续按其精确源验收。
+
 ## MED-02 隔离业务数据库重建已编码，进入精确源码验收 — 2026-10-23
 
 起点默认分支claude/new-session-1959qb `0a95293d4743656d90464827893a7b39aaedcf2f`。本轮实时核实#103/#104/#106/#110/#111/#112均已合并；主线Android39990596705、Science39990596652均SUCCESS。下面历史PENDING不代表最新状态；#112原三API工件已在独立证据分支docs/med02-storage-evidence-20261023（a4b5e45c）核验SHA/CRC、真实PID日志，不重跑旧源。无竞争Room/storage PR。独立worktree HRT-Log-med02-reconstruction，分支feature/med02-isolated-reconstruction-20261023。

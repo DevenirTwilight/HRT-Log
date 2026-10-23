@@ -1377,3 +1377,10 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 负责人授权从最新#112主线实现格式无关、无正式激活入口的隔离业务恢复组件：完整业务快照和预检typed UUID映射进入全新dataset/epoch/generation候选，复用现有插入依赖、业务版本门与独立全历史审核，逐字段核对业务事实、历史、回收站和附件关系；缺失/损坏/重复/冲突/取消整次拒绝，原库不变。DOSE_RECORD reference trash与LAB/APPOINTMENT snapshot trash不得混淆，PURGED仅有明确墓碑证据时接受。只用合成样本，适用JVM和API26/29/35验证，按§106保护合并；不占新Room版本，不改变既有业务及PNBAK1。
 
 最小实现保留整个业务图的整数键于全新隔离库，并逐一核实显式typed UUID映射；不凭整数相同推断身份，也不擅自改写带哈希/历史/回收站的图。要求任意整数重编号的计划安全拒绝。候选仅私有内存SQLCipher及TEMP关系，不制造正式VERIFIED/密钥包装/活动指针。生产附件入口feature_enabled=0、NOT_REVIEWED_EXTERNALLY、真实原件/永久密文及密钥删除OFF。PNMEDBK1仍NOT_APPROVED/NOT_READY_TO_FREEZE；正式字节/KDF/wrapping/集合codec与durable全库激活须另行明确批准，研究probe不得升级生产。优先交付此闭环，不重复P4研究或已完成密码学底座。
+
+
+### 147.E MED-02 持久新数据集恢复与安全激活（2026-10-23）
+
+负责人明确授权默认OFF的全库恢复持久化基础设施、必要非破坏性迁移、单一持久generation authority、旧请求/旧会话屏障及恢复后独立核验。先验收并按§106合并#114；仅基于已验收组件续作，不重做Tink/输入/审计或隔离业务重建。新库保留完整业务事实/历史/回收站/全部附件版本和typed关系，旧库/密文/key保留；新的设备本地密钥和dataset/epoch/generation不得复制源alias。完整认证、联合容量/alias/存储/内存预算和独立核验通过前不得激活；单一可判定持久提交点，不能把多rename或两独立事务称原子。旧UI/通知/后台/协程的整数ID请求必须绑定旧generation并拒绝跨库重放。资源/兼容/权限不足fail closed，不扩大256MiB密文/512alias预算，不截断历史。
+
+仅内部合成验收：正式归档→独立认证→持久重建→安全切换→实际新进程读取核对，适用API26/29/35和低内存证据区分NOT_RUN。feature_enabled=0、永久删除OFF、NOT_REVIEWED_EXTERNALLY；不永久冻结PNMEDBK1，不开放导入/恢复UI，不用真实原件、不签名交付发布。不改变PNBAK1密码学/PK/BDPM/P5P6。共享DatabaseAccess/NotesRepository/提醒/Schema仅在明确文件所有权的独立集成PR处理，保留其他未合并工作。
