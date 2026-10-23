@@ -7,6 +7,7 @@ on:
       - 'core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt'
       - 'core/data/src/main/java/net/plainnotes/app/data/AttachmentTransaction.kt'
       - 'scripts/run_library_restore_restart.py'
+      - 'scripts/run_library_low_memory_acceptance.sh'
       - '.github/workflows/med02-library-low-memory.yml'
   workflow_dispatch:
 permissions:
@@ -42,22 +43,7 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -memory 512 -qemu -m 512
           script: |
             python3 scripts/configure_ansm_native_runtime.py
-            mkdir -p core/data/build/reports/med02-generation-memory
-            adb shell cat /proc/meminfo > core/data/build/reports/med02-generation-memory/guest-meminfo.txt
-            adb logcat -G 16M
-            python3 -c 'from pathlib import Path; import re; text=Path("core/data/build/reports/med02-generation-memory/guest-meminfo.txt").read_text(); value=int(re.search(r"MemTotal:\s+(\d+)",text)[1]); assert 400*1024 <= value <= 512*1024, "Unexpected guest memory"'
-            set +e
-            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.NativeCiHeapProbe,net.plainnotes.app.data.LibraryRestoreAndroidTest -Pandroid.testInstrumentationRunnerArguments.ansmExpectedHeapMb=192 --no-parallel --max-workers=2
-            result=$?
-            if [ "$result" -eq 0 ]; then
-              python3 scripts/run_library_restore_restart.py
-              result=$?
-            fi
-            adb exec-out run-as net.plainnotes.app.data.test cat files/synthetic-library-memory.json > core/data/build/reports/med02-generation-memory/sampled-process-memory.json
-            metrics=$?
-            adb logcat -d > core/data/build/reports/med02-generation-memory/logcat.txt
-            if [ "$result" -eq 0 ] && [ "$metrics" -ne 0 ]; then result=1; fi
-            exit "$result"
+            bash scripts/run_library_low_memory_acceptance.sh
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:

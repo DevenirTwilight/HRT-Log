@@ -1,3 +1,9 @@
+## MED-02 首次真实低内存失败已定位并修复候选 — 2026-10-23
+
+源50204345低内存run40030685177：真实API26/x86、MemTotal508752KiB、ART192MiB，5项2FAIL/0skip。正向在SQLCipher执行PRAGMA mmap_size=0时被拒绝（返回行却用了execSQL）；故障注入后段因同错误未达seam，断言正确失败。改query并要求返回0，未放宽内存/SQL或安全断言。原官方ZIP SHA11d7fa92…/CRC已核并保存native-50204345，连原日志；不是LMK或恢复PASS。新源native Kotlin编译PASS。
+
+另两项app既有化验单/库存撤销重启测试末版本仍写14，现仅改15，完整app native Kotlin编译PASS，无Compose/业务改动。发现emulator-runner逐行启动shell，旧多行set+e/exitstatus无法跨行保留，失败时未采样；同样命令移至一个小bash脚本，确保原测试失败码不被覆盖且always采集logcat/内存文件，不放宽任何断言。新生产仅修PRAGMA调用，全部native/三个fresh-PID仍待这一源实际验收，Draft/OFF。
+
 ## MED-02 原生失败回收与夹具修正 — 2026-10-23
 
 PR #115（Draft），此前源852e8ac2的run40027709483原始failed日志已保存generation-evidence/earlier-native-ci，未删失败。确认两个旧native测试仍期待Room14、显式9→14链缺14→15，现仅更新末版本期待/补迁移，保留所有业务/VOIDED/重启断言。新增RootFixture错误地用非零ID调用“编辑已有就诊”接口，导致required null，在进入恢复前失败；改为DAO插入固定id2合成旧记录，继续要求其与新库同ID隔离，未改生产save语义。native Kotlin编译PASS（首次夹具修正误把suspend DAO放同步事务的编译错误同样保留）。cd6fa5fc在途原生/低内存结果仍非PASS；新测试源需重新CI，继续七门Draft/OFF。

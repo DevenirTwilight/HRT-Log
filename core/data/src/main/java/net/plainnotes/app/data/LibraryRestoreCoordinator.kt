@@ -187,7 +187,7 @@ internal class LibraryRestoreCoordinator(private val access:DatabaseAccess,
         try {
             val raw=db.openHelper.writableDatabase
             raw.execSQL("PRAGMA synchronous=FULL");raw.execSQL("PRAGMA temp_store=MEMORY")
-            raw.execSQL("PRAGMA cache_size=-2048");raw.execSQL("PRAGMA mmap_size=0")
+            raw.execSQL("PRAGMA cache_size=-2048");raw.query("PRAGMA mmap_size=0").use {check(it.moveToFirst() && it.getLong(0)==0L)}
             raw.query("PRAGMA page_size").use {check(it.moveToFirst());val pages=LibraryRestoreAdmission.DATABASE_BYTES/it.getLong(0);raw.query("PRAGMA max_page_count=$pages").use {c->check(c.moveToFirst() && c.getLong(0)<=pages)}}
             return db
         } catch(e:Throwable) {db.close();throw e}

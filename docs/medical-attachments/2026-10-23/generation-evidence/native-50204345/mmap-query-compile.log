@@ -1,0 +1,66 @@
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+
+> Task :attachment-poc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:compileKotlin UP-TO-DATE
+> Task :core:domain:compileJava NO-SOURCE
+> Task :core:domain:processResources NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :core:domain:jar UP-TO-DATE
+> Task :attachment-poc:compileKotlin UP-TO-DATE
+> Task :attachment-poc:compileJava NO-SOURCE
+> Task :attachment-poc:processResources NO-SOURCE
+> Task :attachment-poc:classes UP-TO-DATE
+> Task :attachment-poc:jar UP-TO-DATE
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :importer:compileKotlin UP-TO-DATE
+> Task :importer:compileJava NO-SOURCE
+> Task :importer:processResources NO-SOURCE
+> Task :importer:classes UP-TO-DATE
+> Task :importer:jar UP-TO-DATE
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preDebugBuild UP-TO-DATE
+> Task :core:data:generateDebugResources UP-TO-DATE
+> Task :core:data:packageDebugResources UP-TO-DATE
+> Task :core:data:processDebugNavigationResources UP-TO-DATE
+> Task :core:data:parseDebugLocalResources UP-TO-DATE
+> Task :core:data:generateDebugRFile UP-TO-DATE
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:data:javaPreCompileDebug UP-TO-DATE
+> Task :core:data:preDebugAndroidTestBuild UP-TO-DATE
+> Task :core:data:generateDebugAndroidTestResources UP-TO-DATE
+> Task :core:data:packageDebugAndroidTestResources UP-TO-DATE
+> Task :core:data:processDebugAndroidTestNavigationResources UP-TO-DATE
+> Task :core:data:parseDebugAndroidTestLocalResources UP-TO-DATE
+> Task :core:data:generateDebugAndroidTestRFile UP-TO-DATE
+> Task :core:data:prepareAnsm03b0TestSources UP-TO-DATE
+> Task :core:data:kspDebugKotlin
+
+> Task :core:data:compileDebugKotlin
+w: file:///workspace/HRT-Log-med02-generation/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:41:18 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-generation/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:47:26 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+w: file:///workspace/HRT-Log-med02-generation/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:47:58 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-generation/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:50:96 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-generation/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:100:183 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-generation/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:170:14 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-generation/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:179:22 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+w: file:///workspace/HRT-Log-med02-generation/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:179:54 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-generation/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:181:92 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+
+> Task :core:data:compileDebugJavaWithJavac UP-TO-DATE
+> Task :core:data:transformDebugClassesWithAsm
+> Task :core:data:bundleLibCompileToJarDebug
+> Task :core:data:kspDebugAndroidTestKotlin UP-TO-DATE
+> Task :core:data:compileDebugAndroidTestKotlin UP-TO-DATE
+
+BUILD SUCCESSFUL in 2s
+25 actionable tasks: 4 executed, 21 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.1/userguide/configuration_cache_enabling.html
