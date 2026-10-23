@@ -97,7 +97,19 @@ class LibraryRestoreAndroidTest {
     }
     @Test fun realArchiveActivatesFreshPersistentLibraryAndRejectsOldRequestsAndReaders() {
         val app=InstrumentationRegistry.getInstrumentation().targetContext
-        SourceBundle(app).use {source->RootFixture(app).use {target->
+        val started=android.os.SystemClock.elapsedRealtime();val samples=org.json.JSONArray()
+        fun sample(stage:String) {
+            val vm=Runtime.getRuntime();val memory=android.os.Debug.MemoryInfo();android.os.Debug.getMemoryInfo(memory)
+            val rss=File("/proc/self/status").readLines().firstOrNull {it.startsWith("VmRSS:")}?.trim()?.split(Regex("\\s+"))?.getOrNull(1)?.toLongOrNull()
+            samples.put(org.json.JSONObject().put("stage",stage).put("elapsedMs",android.os.SystemClock.elapsedRealtime()-started)
+                .put("javaUsedBytes",vm.totalMemory()-vm.freeMemory()).put("javaMaxBytes",vm.maxMemory())
+                .put("nativeHeapAllocatedBytes",android.os.Debug.getNativeHeapAllocatedSize()).put("totalPssKiB",memory.totalPss)
+                .put("rssKiB",rss ?: org.json.JSONObject.NULL))
+            File(app.filesDir,"synthetic-library-memory.json").writeText(org.json.JSONObject().put("api",android.os.Build.VERSION.SDK_INT)
+                .put("pid",android.os.Process.myPid()).put("sampledNotPeak",true).put("samples",samples).toString())
+        }
+        sample("before_export")
+        SourceBundle(app).use {source->sample("after_export");RootFixture(app).use {target->
             val original=target.facts();val oldRepo=NotesRepository(target.access)
             val displayed=runBlocking {oldRepo.appointments().single()}
             val record=target.root.runInTransaction(java.util.concurrent.Callable {UUID.fromString(AttachmentIdentity.bind(target.raw,target.scope,"APPOINTMENT",2))})
@@ -106,11 +118,18 @@ class LibraryRestoreAndroidTest {
             val oldStore=AttachmentPersistentStore(target.context,target.root)
             oldStore.save(target.scope,target.session.issue(),request) {ByteArrayInputStream(oldBytes)}
             val oldReader=oldStore.open(target.scope,target.session.issue(),request.document)
-            val operation=UUID.randomUUID()
+            val operation=UUID.randomUUID();var closeRefused=false
             val result=MedicalArchiveReader.read(target.session.issue(),source.password(),FileInputStream(source.file).channel).use {archive->
-                LibraryRestoreCoordinator(target.access).restore(target.scope,target.session.issue(),operation,archive)
+                sample("after_reader_auth")
+                LibraryRestoreCoordinator(target.access) {
+                    sample(it.name)
+                    if(it==LibraryRestoreCoordinator.Boundary.OBJECTS_COMMITTED) {
+                        try {target.access.close(Space.PRIMARY);fail("Close entered a live restore")}
+                        catch(e:IllegalStateException) {assertEquals("Database generation work is still running",e.message);closeRefused=true}
+                    }
+                }.restore(target.scope,target.session.issue(),operation,archive)
             }
-            assertTrue(result.requiresNewSession);assertArrayEquals(original,target.facts())
+            assertTrue(closeRefused);assertTrue(result.requiresNewSession);assertArrayEquals(original,target.facts())
             reject {runBlocking {oldRepo.saveAppointment(displayed.copy(note="stale edit"))}}
             val refused=ByteArray(3) {4};reject {oldReader.readAt(0,refused,0,3)};assertArrayEquals(ByteArray(3),refused);oldReader.close()
             verify(target,source,result.generation)
@@ -149,6 +168,37 @@ class LibraryRestoreAndroidTest {
                 assertEquals(aliases,AttachmentDeviceKeys().retainedAliases(4096));assertArrayEquals(before,target.facts());before.fill(0)
             }
         }
+    }
+    @Test fun revocationRetainsOldLibraryAndNeedsExplicitFreshAuthorityToAbort() {
+        val app=InstrumentationRegistry.getInstrumentation().targetContext
+        SourceBundle(app).use {source->RootFixture(app).use {target->
+            val before=target.facts();val op=UUID.randomUUID();var reached=false
+            MedicalArchiveReader.read(target.session.issue(),source.password(),FileInputStream(source.file).channel).use {archive->
+                reject {LibraryRestoreCoordinator(target.access) {if(it==LibraryRestoreCoordinator.Boundary.PREPARED) {reached=true;target.session.revoke()}}.restore(target.scope,target.session.issue(),op,archive)}
+            }
+            assertTrue(reached);assertNull(LibraryAuthority.current(target.raw));assertArrayEquals(before,target.facts())
+            target.session=AttachmentSession(UUID.fromString(target.scope.dataset),UUID.fromString(target.scope.epoch))
+            val coordinator=LibraryRestoreCoordinator(target.access)
+            assertEquals(LibraryRestoreCoordinator.OperationState("PREPARED",target.raw.query("SELECT generation_uuid FROM library_candidate").use {assertTrue(it.moveToFirst());UUID.fromString(it.getString(0))},false),coordinator.state(target.scope,target.session.issue(),op))
+            assertTrue(coordinator.abort(target.scope,target.session.issue(),op));assertTrue(coordinator.abort(target.scope,target.session.issue(),op))
+            assertArrayEquals(before,target.facts());before.fill(0)
+        }}
+    }
+    @Test fun jointAliasAndStrictHeadroomRefuseBeforeAnyCandidateOrTargetKey() {
+        val app=InstrumentationRegistry.getInstrumentation().targetContext
+        SourceBundle(app).use {source->RootFixture(app).use {target->
+            val before=target.facts();val aliases=AttachmentDeviceKeys().retainedAliases(4096)
+            for(policy in listOf(LibraryRestorePolicy(maximumAliases=0),LibraryRestorePolicy(minimumFreeBytes=64L*1024*1024*1024))) {
+                MedicalArchiveReader.read(target.session.issue(),source.password(),FileInputStream(source.file).channel).use {archive->
+                    reject {LibraryRestoreCoordinator(target.access,policy).restore(target.scope,target.session.issue(),UUID.randomUUID(),archive)}
+                }
+                target.raw.query("SELECT COUNT(*) FROM library_candidate").use {assertTrue(it.moveToFirst());assertEquals(0L,it.getLong(0))}
+                assertNull(LibraryAuthority.current(target.raw));assertArrayEquals(before,target.facts())
+                assertEquals(aliases,AttachmentDeviceKeys().retainedAliases(4096))
+                assertFalse(File(target.directory,"library-generations-v1").exists())
+            }
+            before.fill(0)
+        }}
     }
     private fun reject(action:()->Unit) {try {action();fail("Unsafe action accepted")}catch(_:Exception) {}}
 }

@@ -41,7 +41,7 @@ const val BACKFILL_MAX_DAYS=731L
     }
     private fun writeBinding(target:Space,database:NotesDatabase) {
         bindDatabase(target,database)
-        if(DatabaseAccess.managedGeneration(database)) {
+        if(requestScope!=null || DatabaseAccess.managedGeneration(database)) {
             val expected=requireNotNull(requestScope) {"A generation-scoped request is required after full restore"}
             val live=requireNotNull(AttachmentIdentity.current(database.openHelper.writableDatabase))
             check(expected.generation==DatabaseAccess.handleIdentity(database) && expected.dataset==live.dataset && expected.epoch==live.epoch) {"Retired record request scope"}

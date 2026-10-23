@@ -1,3 +1,11 @@
+## MED-02 候选源码冻结，进入正式原生/低内存CI — 2026-10-23
+
+本地完整data591/0fail/error/skip（随后补owned-copy早登记、关闭lease、严格预算policy与未释放空间保留）；最终相应目标6/0/0/0及全部native Kotlin源码编译PASS，精确生产SHA在generation-evidence/frozen-candidate。最新HEAD必须自己完整CI，不能把旧591归给新源。#114主线ca69ee5a的Android40022686679已SUCCESS；其原三API9项ZIP/HTML/SHA/CRC已存pr114-original。
+
+生产实现/迁移/守卫和内部E2E、AppLock撤权、低空间/alias拒绝、真实强停三seam已提交；预留Root alias/整库quota不提高；旧文件/keys均保留。单一authority实际Native COMMIT为可见点，数据集不同整数ID不能重关联。未完成IO即使ABORTED也不自动释放已预留的DB/WAL/密文余量；保守占用可阻止重试，需后续明确owner-release政策，不能靠假定线程已退出退费。新增普通附件写入在retained generations存在后仍拒绝，显式新scope临床写入独立支持。
+
+三API必需作业加真实LibraryRestoreAndroidTest+三freshPID runner；新独立API26/x86/512MiB/192MiB作业只跑最短合成归档恢复，复用既有AVD配置，不跑P4夹具。内存仅阶段采样Java/native allocated/RSS/PSS，不宣称峰值。真实Native/进程死亡/低内存当前待CI，真机/物理断电及disk-fill NOT_RUN。创建单一Draft PR，七项（原六门+低内存）和原件核验完成前不Ready，不以mock/编译替代。协议不永久冻结、入口OFF/外审未完成、无APK发布。详见durable-library-restore-contract.md（真实入口和启用前边界）。
+
 ## MED-02 持久恢复生产路径已编码，尚待原生闭环验收 — 2026-10-23
 
 分支feature/med02-durable-generation-20261023；基于已保护合并#114 ca69ee5a。新增Room15仅本地library_authority/library_candidate，原Room1–14链保留，业务备份Schema13和PNBAK1不变。LibraryRestoreCoordinator实际执行：独立reader→联合预算/持久意图→新held-FD私有SQLCipher及新本地key→精确业务重建→原始内层密文复制/真实双alias预留包装和独立全认证→关闭并新连接/本地key重开逐字段/全历史/全版本复验→单一root authority原生COMMIT。原DB/原件/alias保留，无rename式伪原子。Root存初始来源的加密provenance，不执行archive SQL，不复制源Keystore alias。

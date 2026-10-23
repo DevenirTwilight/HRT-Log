@@ -34,8 +34,8 @@ internal class LibraryGenerationContext private constructor(base:Context,val gen
         fun directory(base:Context)=File(base.noBackupFilesDir,"library-generations-v1")
         fun open(base:Context,id:UUID,create:Boolean,expected:Pair<Long,Long>?=null):LibraryGenerationContext {
             val root=directory(base)
-            if(create && !root.exists()) {Os.mkdir(root.path,448);val parent=Os.open(base.noBackupFilesDir.path,O_RDONLY or O_NOFOLLOW or O_CLOEXEC,0);try {Os.fsync(parent)}finally {Os.close(parent)}}
-            val parent=Os.open(root.path,O_RDONLY or O_NOFOLLOW or O_CLOEXEC,0)
+            if(create && !root.exists()) {Os.mkdir(root.path,448);val parent=Os.open(base.noBackupFilesDir.path,O_RDONLY or O_NONBLOCK or O_NOFOLLOW or O_CLOEXEC,0);try {Os.fsync(parent)}finally {Os.close(parent)}}
+            val parent=Os.open(root.path,O_RDONLY or O_NONBLOCK or O_NOFOLLOW or O_CLOEXEC,0)
             try {
                 requirePrivate(Os.fstat(parent))
                 val physical=File(root,id.toString())
@@ -44,7 +44,7 @@ internal class LibraryGenerationContext private constructor(base:Context,val gen
                 val fd=try {
                     val path="/proc/self/fd/${parentOwned.fd}/$id"
                     if(create) {Os.mkdir(path,448);Os.fsync(parent)}
-                    Os.open(path,O_RDONLY or O_NOFOLLOW or O_CLOEXEC,0)
+                    Os.open(path,O_RDONLY or O_NONBLOCK or O_NOFOLLOW or O_CLOEXEC,0)
                 }finally {parentOwned.close()}
                 try {
                     val s=Os.fstat(fd);requirePrivate(s)

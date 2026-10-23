@@ -22,7 +22,7 @@ internal object LibraryRestoreAdmission {
     fun inspect(context:Context,root:SupportSQLiteDatabase,checkActive:()->Unit):Available {
         check(root.inTransaction());checkActive()
         val budget=AttachmentStorageBudget()
-        var charged=0L;val aliases=HashSet<String>()
+        var charged=0L;var unresolvedSpace=0L;val aliases=HashSet<String>()
         AttachmentOwnedFiles(context).locked().use {d->
             val usage=AttachmentStorageAccounting.inspect(root,d,AttachmentDeviceKeys(),budget,checkActive)
             require(usage.complete && usage.missingKnownObjects==0L)
@@ -32,20 +32,22 @@ internal object LibraryRestoreAdmission {
         root.query("SELECT o.reserved_bytes,j.stage_alias_uuid,j.active_alias_uuid,j.proof FROM attachment_journal j JOIN attachment_operation o USING(store_uuid,operation_uuid)").use {c->while(c.moveToNext()) {
             checkActive();aliases+=AttachmentDeviceKeys.Alias(UUID.fromString(c.getString(1)),AttachmentDeviceKeys.Role.STAGING).value
             aliases+=AttachmentDeviceKeys.Alias(UUID.fromString(c.getString(2)),AttachmentDeviceKeys.Role.ACTIVE).value
-            if(c.getString(3)!="COMMITTED")charged=Math.addExact(charged,c.getLong(0))
+            if(c.getString(3)!="COMMITTED") {
+                charged=Math.addExact(charged,c.getLong(0));unresolvedSpace=Math.addExact(unresolvedSpace,c.getLong(0))
+            }
         }}
         AttachmentOwnedFiles(context,AttachmentOwnedFiles.Namespace.RESTORE_QUARANTINE).locked().use {d->
             val i=d.inventory(4096,checkActive);require(i.entries.all {it.privateRegular})
             charged=Math.addExact(charged,i.entries.fold(i.overheadBytes) {n,e->Math.addExact(n,e.chargedBytes)})
         }
         val known=HashSet<String>();var retainedMetadata=0L
-        root.query("SELECT generation_uuid,database_alias,alias_plan,reserved_ciphertext,length(manifest),length(structured_source) FROM library_candidate").use {c->while(c.moveToNext()) {
+        root.query("SELECT generation_uuid,database_alias,alias_plan,reserved_ciphertext,length(manifest),length(structured_source),state FROM library_candidate").use {c->while(c.moveToNext()) {
             checkActive();val gen=UUID.fromString(c.getString(0));known+=gen.toString()
             require(c.getString(1)=="notes.gen.db.$gen");aliases+=c.getString(1)
             val slots=LibraryRestoreObjects.decode(c.getBlob(2))
             slots.forEach {s->aliases+=AttachmentDeviceKeys.Alias(s.staging,AttachmentDeviceKeys.Role.STAGING).value;aliases+=AttachmentDeviceKeys.Alias(s.active,AttachmentDeviceKeys.Role.ACTIVE).value}
             retainedMetadata=Math.addExact(retainedMetadata,Math.addExact(c.getLong(4),c.getLong(5)));require(retainedMetadata<=METADATA_BYTES)
-            var actual=0L
+            var actual=0L;var databaseAllocation=0L
             val directory=File(LibraryGenerationContext.directory(context),gen.toString())
             if(Files.exists(directory.toPath(),java.nio.file.LinkOption.NOFOLLOW_LINKS)) {
                 // Never adopt/open unknown generations. Only lstat a bounded, known namespace.
@@ -60,10 +62,14 @@ internal object LibraryRestoreAdmission {
                             actual=Math.addExact(actual,maxOf(v.st_size,Math.multiplyExact(v.st_blocks,512)))
                         }}
                         actual=Math.addExact(actual,maxOf(s.st_size,Math.multiplyExact(s.st_blocks,512)))
-                    } else {require(name in setOf("notes.db","notes.db-wal","notes.db-shm","notes.db-journal","key.wrap","key.wrap.bak"));privateFile(s)}
+                    } else {require(name in setOf("notes.db","notes.db-wal","notes.db-shm","notes.db-journal","key.wrap","key.wrap.bak"));privateFile(s);databaseAllocation=Math.addExact(databaseAllocation,maxOf(s.st_size,Math.multiplyExact(s.st_blocks,512)))}
                 }}
             }
             charged=Math.addExact(charged,maxOf(c.getLong(3),actual))
+            unresolvedSpace=Math.addExact(unresolvedSpace,maxOf(0L,c.getLong(3)-actual))
+            // ABORTED does not prove that an old process has finished its current IO primitive.
+            // Without an approved owner-release protocol, retain its bounded DB/WAL allowance.
+            if(c.getString(6)!in setOf("ACTIVE","RETIRED"))unresolvedSpace=Math.addExact(unresolvedSpace,maxOf(0L,DATABASE_BYTES*3-databaseAllocation))
         }}
         val directory=LibraryGenerationContext.directory(context)
         if(Files.exists(directory.toPath(),java.nio.file.LinkOption.NOFOLLOW_LINKS)) {
@@ -74,9 +80,10 @@ internal object LibraryRestoreAdmission {
         while(names.hasMoreElements()) {checkActive();val a=names.nextElement();if(a.startsWith("notes.obj.v1.") || a.startsWith("notes.gen.db."))aliases+=a;require(aliases.size<=ALIASES)}
         val fs=Os.statvfs(context.noBackupFilesDir.path);require(fs.f_bavail>=0 && fs.f_frsize>0)
         require(charged<=CIPHER_BYTES)
-        return Available(ALIASES-aliases.size,CIPHER_BYTES-charged,Math.multiplyExact(fs.f_bavail,fs.f_frsize),fs.f_frsize)
+        return Available(ALIASES-aliases.size,CIPHER_BYTES-charged,maxOf(0L,Math.multiplyExact(fs.f_bavail,fs.f_frsize)-unresolvedSpace),fs.f_frsize)
     }
-    fun admit(a:Available,objects:List<AttachmentBackupManifest.Version>,json:Int,manifest:Int,retainedMetadata:Long):Long {
+    fun admit(a:Available,objects:List<AttachmentBackupManifest.Version>,json:Int,manifest:Int,retainedMetadata:Long,minimumFreeBytes:Long=32L*1024*1024):Long {
+        require(minimumFreeBytes>=32L*1024*1024)
         require(json in 0..BackupLimits.MAX_JSON_BYTES && manifest in 0..MedicalArchiveCrypto.MAX_MANIFEST && retainedMetadata>=0)
         val count=Math.addExact(Math.multiplyExact(objects.size,2),1)
         require(count<=a.aliases) {"Joint local alias budget exhausted"}
@@ -85,7 +92,7 @@ internal object LibraryRestoreAdmission {
         objects.forEach {v->cipher=Math.addExact(cipher,Math.multiplyExact(Math.addExact(v.manifest.ciphertextBytes,a.unit-1)/a.unit,a.unit))}
         require(cipher<=a.ciphertext) {"Joint retained ciphertext budget exhausted"}
         // One bounded candidate DB plus worst-case WAL/rollback, root journal/blob growth and floor.
-        val needed=Math.addExact(cipher,Math.addExact(DATABASE_BYTES*3,Math.addExact((json.toLong()+manifest)*3,32L*1024*1024)))
+        val needed=Math.addExact(cipher,Math.addExact(DATABASE_BYTES*3,Math.addExact((json.toLong()+manifest)*3,minimumFreeBytes)))
         require(needed<=a.free) {"Insufficient combined restore storage"}
         return cipher
     }

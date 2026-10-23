@@ -1,0 +1,33 @@
+# Internal durable restore, OFF
+
+Baseline `ca69ee5a` (#114); owner authorization REQUIREMENTS147.E. No public restore/import route, original-file picker, permanent deletion, protocol freeze, APK or release. External review remains NOT_REVIEWED_EXTERNALLY. Every attachment_store remains feature_enabled=0.
+
+`LibraryRestoreCoordinator.restore` takes only the independent reader's fully authenticated Archive and a live current-dataset capability. It freezes the authenticated metadata/records, validates typed identities with the existing preflight, and reserves fresh local alias identities before provisioning. The original business graph is reconstructed with the existing trusted insertion order, original full oracle and exact full-row comparison. Original integer graph keys are retained inside a **fresh** namespace, never used to infer a cross-library relationship. No source Keystore alias/database key or archive-supplied SQL/path is accepted.
+
+Room15 adds only local library_authority/library_candidate. Room1–14 migration history, old failure injection and all business comparisons remain; PNBAK1 framing/crypto and business Schema13 are unchanged. Candidate provenance stays SQLCipher-encrypted in the original root. Separate held-FD private directories contain the fresh-key candidate DB, local key envelope and authenticated inner ciphertext. FULL synchronization, immutable contexts, actual per-role one-use reservations/wrapping, owned inode evidence and the existing guarded journal transitions precede VERIFIED. Copies are authenticated again; no plaintext original reaches a file.
+
+After all business/metadata/objects have been written, the coordinator closes and reopens the candidate using its persisted local key. It reruns the original full audit, all-row comparison and complete per-version authentication/metadata comparison. Only then may READY be recorded. The **single visibility point** is the native COMMIT updating library_authority in the original encrypted root; candidate states and that pointer update share that same transaction. Earlier candidate DB/READY commits do not activate anything. Neither renames nor two independent commits are called atomic activation. The old DB/files/keys are retained. Old per-DB attachment_store CURRENT/STAGING markers are local object protocol facts, not a second global routing authority.
+
+## Real entry points and old requests
+
+| Entry | Boundary |
+|---|---|
+| DatabaseAccess.get(PRIMARY) | Sole root authority selects the known owned generation; missing key/DB/identity refuses, no fallback/adoption |
+| NotesRepository transaction/import/backup restore/stock/trash | Root native gate spans the selected DB transaction through commit; queued old handle bindings refuse |
+| Fresh process with saved old integers | Unscoped writes refuse after a full switch; explicit LibraryRequestScope must travel with the displayed fact/draft |
+| forGeneration / pinnedTo | Explicit new scope checks generation plus dataset/epoch; pinning preserves bindings, never retags an old integer |
+| Attachment transactions/readers/snapshot | Persistent root authority checked as well as original per-DB scope; stale reads clear the destination buffer |
+| Reminder/background | Existing opaque mappings are not restored; old repository or unscoped post-switch mutations refuse. Runtime scope propagation is a later enablement prerequisite |
+| close/destroy | A live generation lease refuses before touching handles/keys. Any retained candidate prevents ordinary destroy until deletion policy is reviewed |
+
+Lock order is SQLite root → selected DB → capability publication. Writer locks are acquired before waiting for the capability monitor; actual COMMIT remains inside authorization. Full audit/preflight never holds that monitor. WAL authority reads during a private child snapshot do not acquire a reverse root writer lock; final publication acquires the root gate before the session monitor. No cross-transaction validity cache or replacement fast validator is introduced.
+
+PREPARED/READY freezes ordinary mutations. Successful switching unfreezes them. Failure attempts logical ABORTED; revocation/process death may leave an incomplete phase requiring **fresh authorized abort**. Abort releases no key/wrap/cipher ownership and never deletes/adopts/resumes. A committed operation cannot be cancelled; `state` reconciles the actual persistent result without another password/KDF. Identical committed UUID replay returns its fact, conflicting payload and interrupted/superseded replay refuse.
+
+## Joint resources and honest limitations
+
+Root admissions union actual and reserved local aliases, count all retained generations and unknown/quarantined original objects, and include DB/WAL/root-provenance growth and filesystem headroom. Existing 256MiB ciphertext/512 alias limits cannot be raised by LibraryRestorePolicy; callers may tighten them. A candidate uses 2 aliases per retained version plus one fresh DB key, so a valid 1000-version archive can be refused on this device rather than truncated. A 64MiB candidate DB page cap, 32MiB total retained provenance cap, original JSON/row limits and bounded heap admission apply. Missing/inconsistent/unknown ownership refuses. Interrupted allowances remain charged, including unmaterialized bytes and bounded DB/WAL space until safe owner release is proven; this may conservatively exhaust admission. No permanent cleanup authority is implied.
+
+Additional ordinary attachment imports and old quarantine preparation currently refuse when retained generations exist; they cannot bypass the joint quota through a per-directory writer. Current-library reads, explicit scoped clinical edits and the full restore path are separate. Published UI/reminder/saved-state propagation, retained-library browsing/export policy and safe reservation release remain enablement work. The current archive covers its authenticated active logical library, not a claim to archive every separate recipient fallback generation.
+
+Free-space/heap observations do not reserve resources against other apps or prove that LMK is impossible. The new low-memory job reuses only API26/512MiB/192MiB configuration, never P4 inventory workloads. Memory samples distinguish Java usage, native allocation, RSS and PSS and explicitly are **not peaks**. Physical device, real disk-fill/power loss and external security review are not claimed by emulator CI. Three actual force-stop seams check pre-READY, inside the pointer transaction and after actual COMMIT in fresh PIDs. Latest SHA-specific evidence is required before Ready/merge.

@@ -13,13 +13,15 @@ import java.util.concurrent.Callable
 /** Internal OFF full-library restore. Never overwrite/delete the original root or adopt an
  * interrupted candidate. The ONLY visibility commit is library_authority in the encrypted root. */
 internal class LibraryRestoreCoordinator(private val access:DatabaseAccess,
-    private val checkpoint:(Boundary)->Unit={}) {
+    private val policy:LibraryRestorePolicy=LibraryRestorePolicy(),private val checkpoint:(Boundary)->Unit={}) {
     enum class Boundary { PREPARED, DATABASE_COMMITTED, OBJECTS_COMMITTED, REOPEN_VERIFIED, READY, IN_SWITCH, SWITCHED }
     data class Committed(val operation:UUID,val generation:UUID,val dataset:UUID,val epoch:UUID,
         val requiresNewSession:Boolean=true)
     private val context get()=access.applicationContext
     private fun hash(bytes:ByteArray)=MessageDigest.getInstance("SHA-256").digest(bytes)
     fun restore(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,operation:UUID,
+        archive:MedicalArchiveReader.Archive):Committed=access.holdGeneration().use {restoreHeld(scope,cap,operation,archive)}
+    private fun restoreHeld(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,operation:UUID,
         archive:MedicalArchiveReader.Archive):Committed {
         check(Looper.myLooper()!=Looper.getMainLooper())
         val current=access.get(Space.PRIMARY);val root=access.legacyRoot()
@@ -51,8 +53,8 @@ internal class LibraryRestoreCoordinator(private val access:DatabaseAccess,
         try {
             checkCurrent();require(archive.wholeArchiveAuthenticated)
             val manifest=archive.manifest()
-            val provenance=archive.retainedManifest {it.copyOf()};owner.ownBytes(provenance)
-            val records=archive.records {LibraryRestoreAdmission.memory(it.size,provenance.size);it.copyOf()};owner.ownBytes(records)
+            val provenance=archive.retainedManifest {it.copyOf().also {copy->owner.ownBytes(copy)}}
+            val records=archive.records {LibraryRestoreAdmission.memory(it.size,provenance.size);it.copyOf().also {copy->owner.ownBytes(copy)}}
             val digest=MessageDigest.getInstance("SHA-256").also {it.update(archive.header.bytes());it.update(provenance);it.update(hash(records))}.digest()
             rootTransaction {
                 root.openHelper.writableDatabase.query("SELECT archive_sha256,state,generation_uuid,dataset_uuid,epoch_uuid FROM library_candidate WHERE operation_uuid=?",arrayOf(operation.toString())).use {c->
@@ -74,9 +76,9 @@ internal class LibraryRestoreCoordinator(private val access:DatabaseAccess,
                 val raw=root.openHelper.writableDatabase
                 raw.execSQL("PRAGMA defer_foreign_keys=ON")
                 LibraryAuthority.requireNoPending(raw)
-                val available=LibraryRestoreAdmission.inspect(context,raw,::checkCurrent)
+                val available=policy.restrict(LibraryRestoreAdmission.inspect(context,raw,::checkCurrent))
                 val retained=raw.query("SELECT COALESCE(SUM(length(manifest)+length(structured_source)),0) FROM library_candidate").use {it.moveToFirst();it.getLong(0)}
-                val reserved=LibraryRestoreAdmission.admit(available,manifest.versions,records.size,provenance.size,retained)
+                val reserved=LibraryRestoreAdmission.admit(available,manifest.versions,records.size,provenance.size,retained,policy.minimumFreeBytes)
                 val forbidden=hashSetOf(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch),UUID.fromString(scope.logicalVault))
                 raw.query("SELECT generation_uuid,dataset_uuid,epoch_uuid FROM library_candidate").use {c->while(c.moveToNext())repeat(3) {forbidden+=UUID.fromString(c.getString(it))}}
                 val p=AttachmentRestorePreflight.inspect(manifest,records.copyOf(),archive.members(),ns,targets,rows,forbidden,
@@ -116,7 +118,7 @@ internal class LibraryRestoreCoordinator(private val access:DatabaseAccess,
             rootTransaction {
                 val raw=root.openHelper.writableDatabase
                 val free=android.system.Os.statvfs(context.noBackupFilesDir.path)
-                require(Math.multiplyExact(free.f_bavail,free.f_frsize)>=32L*1024*1024) {"Storage headroom lost"}
+                require(Math.multiplyExact(free.f_bavail,free.f_frsize)>=policy.minimumFreeBytes) {"Storage headroom lost"}
                 raw.compileStatement("UPDATE library_candidate SET state='READY' WHERE operation_uuid=? AND state='PREPARED'").use {
                     it.bindString(1,operation.toString());check(it.executeUpdateDelete()==1) {"Restore reservation changed"}
                 }
@@ -159,7 +161,9 @@ internal class LibraryRestoreCoordinator(private val access:DatabaseAccess,
     }
     /** Authorized logical abort only: retains every encrypted object/key/reservation. No resume,
      * auto-adoption, budget refund or permanent deletion. A committed request cannot be cancelled. */
-    fun abort(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,operation:UUID):Boolean {
+    fun abort(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,operation:UUID):Boolean=
+        access.holdGeneration().use {abortHeld(scope,cap,operation)}
+    private fun abortHeld(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,operation:UUID):Boolean {
         check(Looper.myLooper()!=Looper.getMainLooper())
         val current=access.get(Space.PRIMARY);val root=access.legacyRoot()
         check(!root.openHelper.writableDatabase.inTransaction());root.openHelper.writableDatabase.execSQL("PRAGMA synchronous=FULL")

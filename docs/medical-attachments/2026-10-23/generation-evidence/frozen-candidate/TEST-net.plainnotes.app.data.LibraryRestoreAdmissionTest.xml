@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.LibraryRestoreAdmissionTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-23T21:55:16.503Z" hostname="4043b3b97612" time="0.02">
+  <properties/>
+  <testcase name="allVersionsAndDatabaseAliasMustFitWithoutRaising512Limit" classname="net.plainnotes.app.data.LibraryRestoreAdmissionTest" time="0.013"/>
+  <testcase name="oldAndFailedRetainedBytesCannotBeTreatedAsAvailableAgain" classname="net.plainnotes.app.data.LibraryRestoreAdmissionTest" time="0.0"/>
+  <testcase name="evenNoOriginalNeedsItsOwnDatabaseKeyAndDirectoryBudget" classname="net.plainnotes.app.data.LibraryRestoreAdmissionTest" time="0.001"/>
+  <testcase name="jointSqlWalRootGrowthAndFloorArePartOfStorageAdmission" classname="net.plainnotes.app.data.LibraryRestoreAdmissionTest" time="0.0"/>
+  <testcase name="retainedProvenanceCannotGrowWithoutBoundOrBeNegative" classname="net.plainnotes.app.data.LibraryRestoreAdmissionTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

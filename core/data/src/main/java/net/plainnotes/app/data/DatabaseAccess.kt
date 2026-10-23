@@ -34,6 +34,12 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
     @Inject constructor(@ApplicationContext context:Context):this(context,null)
     private fun rootAlias(space:Space)=deviceNamespace?.let {"notes.local.$it.${space.alias}"} ?: space.alias
     internal val measuredSaveGate=MeasuredSaveGate()
+    private var liveGenerationLeases=0
+    @Synchronized internal fun holdGeneration():AutoCloseable {
+        liveGenerationLeases++
+        val closed=java.util.concurrent.atomic.AtomicBoolean(false)
+        return AutoCloseable {if(closed.compareAndSet(false,true))synchronized(this) {check(liveGenerationLeases>0);liveGenerationLeases--}}
+    }
     private val instances=mutableMapOf<Space,NotesDatabase>()
     private val passphrases=mutableMapOf<Space,ByteArray>()
     private data class GenerationConnection(val db:NotesDatabase,val context:LibraryGenerationContext,val key:ByteArray)
@@ -74,7 +80,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
             db.openHelper.writableDatabase.query("SELECT 1 FROM attachment_store WHERE store_uuid=? AND record_epoch=?",arrayOf(selected.dataset,selected.epoch)).use {check(it.moveToFirst()) {"Active database origin mismatch"}}
             owned.checkCurrent()
             generations[selected.generation.toString()]=GenerationConnection(db,owned,password)
-            register(db,root,selected.generation.toString(),owned)
+            register(db,root,selected.generation.toString(),owned,this)
             return db
         } catch(e:Throwable) {try {database?.close()}finally {key?.fill(0);owned.close()};throw e}
     }
@@ -97,17 +103,17 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
             // SQLCipher 4.10 retains this array for every WAL connection. Clearing it here
             // makes later concurrent reads fail to decrypt the same database.
             instances[space]=db;passphrases[space]=passphrase
-            if(space==Space.PRIMARY)register(db,db,"LEGACY",context)
+            if(space==Space.PRIMARY)register(db,db,"LEGACY",context,this)
             return db
         } catch(e:Throwable) { passphrase.fill(0); throw e }
     }
     /** One root native transaction serializes the final authority switch with the ENTIRE
      * selected database transaction (including its commit). No untrusted callback selects a path. */
     internal suspend fun <T> withGenerationTransaction(space:Space,checkBinding:(NotesDatabase)->Unit,
-        action:suspend(NotesDatabase)->T):T {
+        action:suspend(NotesDatabase)->T):T = holdGeneration().use {
         val selected=get(space)
         val root=synchronized(this) {instances[space]} ?: selected // overridden in-memory test access
-        return root.withTransaction {
+        root.withTransaction {
             val current=get(space)
             if(space==Space.PRIMARY)LibraryAuthority.requireNoPending(root.openHelper.writableDatabase)
             checkBinding(current)
@@ -115,18 +121,20 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
         }
     }
     companion object {
-        private data class Handle(val root:NotesDatabase,val identity:String,val context:Context)
+        private data class Handle(val root:NotesDatabase,val identity:String,val context:Context,val owner:DatabaseAccess)
         private val handles=java.util.WeakHashMap<NotesDatabase,Handle>()
-        private fun register(db:NotesDatabase,root:NotesDatabase,identity:String,context:Context)=synchronized(handles) {handles[db]=Handle(root,identity,context);Unit}
-        /** Called inside the capability publication monitor; the native root transaction covers
+        private fun register(db:NotesDatabase,root:NotesDatabase,identity:String,context:Context,owner:DatabaseAccess)=synchronized(handles) {handles[db]=Handle(root,identity,context,owner);Unit}
+        /** Acquire before the capability publication monitor. The native root transaction covers
          * publication and excludes the authority's final COMMIT, including across processes. */
         internal fun <T> withActiveHandle(db:NotesDatabase,block:()->T):T {
             val handle=synchronized(handles) {handles[db]} ?: return block() // private test/candidate DB
             check(handle.root.isOpen && db.isOpen)
-            return handle.root.runInTransaction(java.util.concurrent.Callable {
-                check(LibraryAuthority.identity(handle.root.openHelper.writableDatabase)==handle.identity) {"Retired database handle"}
-                block()
-            })
+            return handle.owner.holdGeneration().use {
+                handle.root.runInTransaction(java.util.concurrent.Callable {
+                    check(LibraryAuthority.identity(handle.root.openHelper.writableDatabase)==handle.identity) {"Retired database handle"}
+                    block()
+                })
+            }
         }
         internal fun storageContext(db:NotesDatabase,fallback:Context):Context=synchronized(handles) {handles[db]?.context ?: fallback}
         internal fun managedGeneration(db:NotesDatabase)=synchronized(handles) {handles[db]?.identity?.let {it!="LEGACY"} ?: false}
@@ -142,6 +150,8 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
             cap:net.plainnotes.app.domain.AttachmentSession.Capability,block:()->T):T {
             val h=synchronized(handles) {handles[db]};val root=h?.root ?: db
             check(!db.openHelper.writableDatabase.inTransaction() && !root.openHelper.writableDatabase.inTransaction()) {"Own native transactions required"}
+            val lease=h?.owner?.holdGeneration()
+            try {
             root.beginTransaction()
             try {
                 if(db!==root)db.beginTransaction()
@@ -159,6 +169,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
                     }
                 } finally {if(db!==root && db.isOpen && db.openHelper.writableDatabase.inTransaction())db.endTransaction()}
             } finally {if(root.isOpen && root.openHelper.writableDatabase.inTransaction())root.endTransaction()}
+            } finally {lease?.close()}
         }
         /** Additional ordinary attachment allocations cannot escape the combined-generation budget.
          * Until that writer is integrated, refuse new imports; exact committed replays/read remain. */
@@ -176,6 +187,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
         }
     }
     @Synchronized fun close(space:Space=current) {
+        check(liveGenerationLeases==0) {"Database generation work is still running"}
         measuredSaveGate.synchronousMutation(space) {
             try {
                 if(space==Space.PRIMARY) {
@@ -193,6 +205,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
     }
     /** Closes and deletes one space's database, wrapped key and Keystore alias ("delete all data"). */
     @Synchronized fun destroy(space:Space=current) {
+        check(liveGenerationLeases==0) {"Database generation work is still running"}
         measuredSaveGate.synchronousMutation(space) {
             if(space==Space.PRIMARY) {
                 val root=legacyRoot(space).openHelper.writableDatabase
