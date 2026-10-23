@@ -90,7 +90,7 @@
 
 - `Pdf01Test` 7 项（`samples` 只在设置 `PDF01_SAMPLES` 时运行）与 `Ui08PdfSummaryUnchangedTest`：全部通过。
 - `tools/pk-research` 的 `test_research.py` 32 项：通过（含追加式批准记录检查）。
-- 完整 `:app:testFullDebugUnitTest`、lint 和 CI：见 PR。
+- 完整 `:app:testFullDebugUnitTest`（含 PK 显示回归：浓度、化验上下文、D-2、CausalTimeUiTest、ExportTest）：2261 项，0 失败，493 项跳过（按环境变量开启的截图/样张测试等）。`:app:lintFullDebug`：通过。CI：见 PR。
 
 ## 7. 样张
 
