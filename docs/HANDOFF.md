@@ -1,3 +1,11 @@
+## MED-02 本轮完成状态：#113及主线CI已收尾，单一OFF格式实施审批待答复 — 2026-10-23
+
+起点0a95293d，最终主线e61126989a7433d9ba2bf5e387c6b8a434e8f187，#113 MERGED。原取消API29保留全部证据，仅同源单job有界补验一次SUCCESS；保护六门通过无未决review，正常auto-merge，无绕过。主线Android40009477772全5job SUCCESS、Science40009478000 SUCCESS；三API各新6+3+1和原全套/六新PID seam核官方ZIP SHA/CRC PASS，host data578/0fail/0skip、app2335/0fail/557原有skip、Period5/0/0及release隔离/no INTERNET PASS，main原件在docs/med02-reconstruction-evidence-20261023/reconstruction-evidence/main-e611-*，没有假定旧绿等于新main。
+
+生产IMPLEMENTED/MERGED/CI_PASS/NATIVE_VERIFIED是#113的隔离RAM SQLCipher业务图/历史/trash/typed关系重建和独立审核，未形成正式换机功能。本review分支canonical Python/Kotlin独立验证是TEST_ONLY、本地5/0/0/0、CI_NOT_RUN/未合并，源码SHA和原件已保存；不能称生产协议。PHYSICAL_NOT_RUN、EXTERNAL_REVIEW_PENDING/NOT_REVIEWED_EXTERNALLY、feature0/真实原件/永久删除OFF，Room14/PNBAK1/密钥体系/PK/BDPM/P5/P6/UI不变，无新APK交付或发布。
+
+同一portable-backup-format-proposal.md是唯一整合审批方案。已发出一次完整请求：批准其默认OFF格式特有writer/独立reader/KDF/portable wrapping/集合认证实施；不是永久格式冻结、全库激活或启用许可，不提升现有资源限额。尚无批准答复，格式特有生产路径暂停；当前具备受限实施审批的具体候选，不具备直接冻结条件。具体未闭合项：生产完整archive互通/失败证明、低内存+旧库保留联合资源（1000版本需2000新alias，对比现默认512）、durable generation authority及旧句柄/旧整数intent/maintenance执行点scope屏障。下一最小生产交付在明确批准后做writer+独立reader+集合认证接已有预检，不再重写已完成底座；完整激活继续待专项证明与审批。
+
 ## MED-02 激活审查补充：旧请求不等于旧DB句柄 — 2026-10-23
 
 沿现有NotesRepository整数参数与DatabaseAccess.get()复核，旧SavedState/PendingIntent/排队请求可在generation切换后取得新DB却仍带旧id。已补入同一审批提案的第3冻结阻断：退休旧句柄或进程重启均不能单独证明安全，未来执行点须验证dataset/epoch绑定的写请求与后台intent合同；与UI/提醒负责人协调，不在本轮擅自改模块。该发现不改变#113隔离候选正确性，因为候选无激活/公共写入口。格式特有生产开发仍待唯一整合授权；没有提出第二套crypto或额外零散选择。

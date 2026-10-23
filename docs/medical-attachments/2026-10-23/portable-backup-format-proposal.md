@@ -13,12 +13,14 @@
 |能力|实际状态|
 |---|---|
 |受限输入、Tink1.23.0/Keystore、Room14持久对象事务/恢复、空间及alias预算、完整快照、预检/密文隔离|#103/104/106/110/111/112 MERGED；不重写|
-|真实隔离 SQLCipher 业务图、历史/trash/typed links 重建和独立比对|#113 IMPLEMENTED；合并/最新CI以 HANDOFF 和 GitHub 实时状态为准|
+|真实隔离 SQLCipher 业务图、历史/trash/typed links 重建和独立比对|#113 MERGED e6112698；主线Android40009477772/Science40009478000 SUCCESS，三API原件已核；不是正式激活|
 |Tink64KiB长度/随机读取/独立上游互通|现有原生合同已通过；下方精确长度公式有执行断言|
 |Argon2id65536KiB/3/1|API26/29/35独立 KAT/孤立资源观测通过；不是联合档案接受证明|
 |canonical manifest 编解码审查向量|新增 TEST_ONLY Python 编码/逆解码与独立 Kotlin 严格解码；不是生产集合 codec|
 |生产 portable writer/reader/KDF/wrapping、持久整库激活|NOT_IMPLEMENTED / BLOCKED_PENDING_EXPLICIT_APPROVAL|
 |真机/正式完整换机/外部审查|PHYSICAL_NOT_RUN / NOT_IMPLEMENTED / EXTERNAL_REVIEW_PENDING|
+
+本次代码和原件记录：[最新HANDOFF/原始证据分支](https://github.com/DevenirTwilight/HRT-Log/tree/docs/med02-reconstruction-evidence-20261023)。本审批分支仅TEST_ONLY/文档，本地5项通过、CI_NOT_RUN、未合并，不计生产CI_PASS。
 
 入口始终 feature_enabled=0；NOT_REVIEWED_EXTERNALLY；永久密文/alias删除 OFF。
 
