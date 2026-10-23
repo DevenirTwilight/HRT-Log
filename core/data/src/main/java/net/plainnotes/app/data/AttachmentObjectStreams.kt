@@ -38,7 +38,8 @@ internal object AttachmentObjectStreams {
         .setHkdfHashType(AesGcmHkdfStreamingParameters.HashType.SHA256)
         .setCiphertextSegmentSizeBytes(65536).build()
 
-    private fun primitive(key: ByteArray): StreamingAead {
+    // Shared pinned suite; archive supplies its own approved domain/AAD, never object AAD.
+    internal fun primitive(key: ByteArray): StreamingAead {
         require(key.size == 32)
         StreamingAeadConfig.register()
         val imported = AesGcmHkdfStreamingKey.create(parameters,

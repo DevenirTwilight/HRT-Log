@@ -4,6 +4,48 @@
 
 先审计单一DatabaseAccess及NotesRepository/提醒等真实写入入口，防止旧整数ID跨新库。计划文件所有权：本分支独占新增generation/持久恢复数据层与其测试，必要DatabaseAccess/NotesRepository集成；不修改UI/PK/BDPM/P5P6。当前尚未实现新持久闭环，不先声称PASS。保持入口OFF，任何缺乏完整资源/提交证明的候选不得激活。每个已完成检查点持续提交推送；#114继续按其精确源验收。
 
+## PR114第一轮原生夹具断言FAIL，保留证据并作最小修正 — 2026-10-23
+
+62c3b92e的API26/29新MedicalArchive9项中8PASS，真实writer导出后唯一FAIL：新场景已将appointment1移入回收站，却误调用简单Fixture.safety()要求该行仍live。官方API26 artifact12529301881 SHA8ef8973c…/CRC已核，HTML明确栈在Fixture.safety:50；不是密码学失败或infra。现不改旧helper/期望、不删保护，改为精确检查该源行已删除、manifest typed记录TRASHED、全表前后相同、FK无错误及feature0。目标库仍沿用旧live行safety。生产密码学/SQL实现未变；最终新提交须自己的全部CI，不能借8PASS或本地585冒充最终端到端通过。
+
+另push API29 job120631204038在adb root连接关闭、测试开始前infra FAIL；原件已存独立证据分支。一次rerun请求因整个run仍active被GitHub拒绝，未发起任何重跑；因本次真实测试修正需新源码完整CI，不再重跑旧62c3的infra job。受保护auto-merge仍等待最终检查，不能合并旧FAIL。下一generation分支仅独立准备，不覆盖PR114，未启用/激活。
+
+## MED-02 portable生产路径已编码，本地回归通过，进入精确源CI — 2026-10-23
+
+独立feature/med02-portable-archive-20261023，基线e6112698。§147.D授权默认OFF格式实施已落实：MedicalArchiveCrypto（80B头/严格密码/正式Argon64MiB3/1/HKDF/portable wrapping）、typed canonical encoder/独立逐token decoder、MedicalArchiveWriter、MedicalArchiveReader及完整outer/footer/set/全inner认证，接现有preflight和BusinessRestore。Snapshot新增受归属保护的密文/临时DEK消费接口及业务快照承诺；原preflight历史闭合规则复用于导出，没有删减旧审计。详细边界见portable-implementation-contract.md。
+
+本地完整数据层585项/0fail/error/skip，新增MedicalArchive7项、原Foundation33/Preflight5/BusinessReconstruction6均PASS；最终原生测试源码编译PASS。首轮Tink首次read前size调用真实FAIL已保留local-first-red；修复把长度验证移至完整read/EOF后，无断言放宽。原始XML/log及生产源码SHA256见portable-archive-evidence/local-final。新原生9项已纳入API26/29显式名单和35全包：含真实生产export→源合成alias/原库清理→不同SQLCipher密码/dataset的独立reader→完整预检/隔离RAM SQLCipher重建及逐字节/历史/trash/typed关系/目标原库全表不变；目前仅编译，NATIVE_NOT_RUN，不预报通过。
+
+下一步只提交此源码PR并检查其六门/三API原件，修真实问题；不重复P4/旧源性能，不重写已合并底座。实现receipt不是provider持久保存或临床恢复成功；候选activatable=false，无新alias重新包装发布/全库激活/公共入口。永久冻结、联合上限资源、durable generation authority和旧scope请求屏障仍未完成/未批准；现有本地资源限额不升。feature0/NOT_REVIEWED_EXTERNALLY/真实原件/永久删除OFF，Room14/PNBAK1/既有对象协议/密钥/无关UI/PK/BDPM/P5P6不变，不交付APK。
+
+## MED-02 PNMEDBK1 OFF格式实施已明确获批 — 2026-10-23
+
+负责人批准唯一整合方案的80B头、正式Argon2id64MiB/3/1、Tink64KiB、portable DEK包装、生产writer/独立reader/集合认证并接既有预检（§147.D）；不再重复询问。独立feature/med02-portable-archive-20261023，基线e6112698；#113已MERGED，主线Android40009477772/Science40009478000 SUCCESS，旧审查分支的TEST_ONLY canonical证据不冒充生产验收。无其他开放附件/Room变更。
+
+实施顺序：受控快照密文/DEK消费接口→严格canonical/header/KDF与归档writer→独立reader/outer EOF/全集合→既有预检与隔离业务重建。无新Schema/激活路由。新增源码尚未实现/验收；本节为授权及开始状态，后续按实际更新。永久冻结、durable全库激活、正式入口和升限仍未批准，feature0/NOT_REVIEWED_EXTERNALLY/真实原件/永久删除OFF，不交付APK。
+
+## MED-02 本轮完成状态：#113及主线CI已收尾，单一OFF格式实施审批待答复 — 2026-10-23
+
+起点0a95293d，最终主线e61126989a7433d9ba2bf5e387c6b8a434e8f187，#113 MERGED。原取消API29保留全部证据，仅同源单job有界补验一次SUCCESS；保护六门通过无未决review，正常auto-merge，无绕过。主线Android40009477772全5job SUCCESS、Science40009478000 SUCCESS；三API各新6+3+1和原全套/六新PID seam核官方ZIP SHA/CRC PASS，host data578/0fail/0skip、app2335/0fail/557原有skip、Period5/0/0及release隔离/no INTERNET PASS，main原件在docs/med02-reconstruction-evidence-20261023/reconstruction-evidence/main-e611-*，没有假定旧绿等于新main。
+
+生产IMPLEMENTED/MERGED/CI_PASS/NATIVE_VERIFIED是#113的隔离RAM SQLCipher业务图/历史/trash/typed关系重建和独立审核，未形成正式换机功能。本review分支canonical Python/Kotlin独立验证是TEST_ONLY、本地5/0/0/0、CI_NOT_RUN/未合并，源码SHA和原件已保存；不能称生产协议。PHYSICAL_NOT_RUN、EXTERNAL_REVIEW_PENDING/NOT_REVIEWED_EXTERNALLY、feature0/真实原件/永久删除OFF，Room14/PNBAK1/密钥体系/PK/BDPM/P5/P6/UI不变，无新APK交付或发布。
+
+同一portable-backup-format-proposal.md是唯一整合审批方案。已发出一次完整请求：批准其默认OFF格式特有writer/独立reader/KDF/portable wrapping/集合认证实施；不是永久格式冻结、全库激活或启用许可，不提升现有资源限额。尚无批准答复，格式特有生产路径暂停；当前具备受限实施审批的具体候选，不具备直接冻结条件。具体未闭合项：生产完整archive互通/失败证明、低内存+旧库保留联合资源（1000版本需2000新alias，对比现默认512）、durable generation authority及旧句柄/旧整数intent/maintenance执行点scope屏障。下一最小生产交付在明确批准后做writer+独立reader+集合认证接已有预检，不再重写已完成底座；完整激活继续待专项证明与审批。
+
+## MED-02 激活审查补充：旧请求不等于旧DB句柄 — 2026-10-23
+
+沿现有NotesRepository整数参数与DatabaseAccess.get()复核，旧SavedState/PendingIntent/排队请求可在generation切换后取得新DB却仍带旧id。已补入同一审批提案的第3冻结阻断：退休旧句柄或进程重启均不能单独证明安全，未来执行点须验证dataset/epoch绑定的写请求与后台intent合同；与UI/提醒负责人协调，不在本轮擅自改模块。该发现不改变#113隔离候选正确性，因为候选无激活/公共写入口。格式特有生产开发仍待唯一整合授权；没有提出第二套crypto或额外零散选择。
+
+## MED-02 #113已保护合并；单一portable审批审查分支 — 2026-10-23
+
+起点0a95293d；#103–112核实MERGED。#113保留78bd4eaa不变，取消原件证明404/404 native PASS后旧App POC卡66/71，被cancel、取消发起者未知，不冒充纯infra。仅取消API29单项补验一次（run39998254238 attempt2 job120597910693）16m24s SUCCESS，其他四job成功结果保留；required checks全部PASS、无未决review。GitHub正常auto-merge于19:11完成，主线 `e61126989a7433d9ba2bf5e387c6b8a434e8f187`；其tree09426d与78bd/PR f28完全一致。原cancel和retry12525801130官方SHA9de5121b…/CRC及新6+3+1、原六restart seam已核，见docs/med02-reconstruction-evidence-20261023。新主线Android40009477772/Science40009478000自动CI在途，不能提前PASS。
+
+本review分支review/med02-portable-approval-20261023从已合并e611起，不争抢共享Room/Repository，也不触发第二轮原生基准；不是待合并生产分支，CI_NOT_RUN，不能以skip标绿或绕过保护合并。新增TEST_ONLY Python manifest encoder/stdlib inverse +独立Kotlin严格token decoder，4619B合成全字段向量、unsigned UUID/signed64/Unicode/control字段及非canonical拒绝，最终5/0fail/error/skip本地PASS，原件/源码SHA见portable-review-evidence。代码仅test/tools，不生成正式归档或进入APK，不是外审/全流程低内存证明。
+
+同一portable-backup-format-proposal.md已收敛为单一整合审批：推荐一次性批准固定候选的OFF格式特有writer/独立reader/KDF/portable wrapping/集合认证实施；不把此当永久冻结、全库激活或启用授权。现有Tink/Keystore/journal/快照/预检/重建不重写。明确完整头、password/domain、canonical字段、Tink边界、framing/footer集合、历史trash/PURGED、typed图、failure规则及唯一generation authority推荐；无新Room编号、未实现激活。当前DatabaseAccess固定notes.db，无generation路由；旧句柄/maintenance（RawData.unguarded）屏障尚缺，不能只换文件或用单对象COMMIT。发现候选1000版本需2000新alias，而现有默认512 alias/256MiB且还保留旧库，格式上限不等于准入承诺；不升限、不减样本伪称通过。联合资源和durable激活证明仍阻断冻结。
+
+生产交付仅#113隔离RAM SQLCipher真实业务重建现已MERGED、PR CI_PASS/NATIVE_VERIFIED；本次新增canonical证据是TEST_ONLY/本地PASS，未称新增正式生产备份。当前可演示合成capture→preflight→业务重建→全inner认证→独立比对，不能完整新手机可携带恢复。PHYSICAL_NOT_RUN、EXTERNAL_REVIEW_PENDING；feature0、真实原件/永久删除OFF。无需新APK，不签名发布。下一最小生产交付在获得整合OFF格式实施授权后做writer+独立reader+集合认证并接既有预检；未批准前暂停格式特有生产路径，主线核查继续。
+
 ## MED-02 隔离业务数据库重建已编码，进入精确源码验收 — 2026-10-23
 
 起点默认分支claude/new-session-1959qb `0a95293d4743656d90464827893a7b39aaedcf2f`。本轮实时核实#103/#104/#106/#110/#111/#112均已合并；主线Android39990596705、Science39990596652均SUCCESS。下面历史PENDING不代表最新状态；#112原三API工件已在独立证据分支docs/med02-storage-evidence-20261023（a4b5e45c）核验SHA/CRC、真实PID日志，不重跑旧源。无竞争Room/storage PR。独立worktree HRT-Log-med02-reconstruction，分支feature/med02-isolated-reconstruction-20261023。

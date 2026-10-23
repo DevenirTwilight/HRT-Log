@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.attachmentpoc.PortableCanonicalReviewTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-23T19:17:39.261Z" hostname="ed2a3e4b604e" time="0.125">
+  <properties/>
+  <testcase name="integersRemainExactAndAlternateRepresentationsOverflowAndCoercionsRefuse" classname="net.plainnotes.attachmentpoc.PortableCanonicalReviewTest" time="0.031"/>
+  <testcase name="independentPythonReferenceMatchesAllDecodedFieldsAndUnsignedUuidOrder" classname="net.plainnotes.attachmentpoc.PortableCanonicalReviewTest" time="0.066"/>
+  <testcase name="fieldTypesBoundedEnvelopeClosureAndInputLengthRefuse" classname="net.plainnotes.attachmentpoc.PortableCanonicalReviewTest" time="0.012"/>
+  <testcase name="alternateWhitespaceKeysAndDuplicateIdentitiesAreRejected" classname="net.plainnotes.attachmentpoc.PortableCanonicalReviewTest" time="0.006"/>
+  <testcase name="utf8AndStringEscapesAreStrictAndNoUnicodeNormalizationIsApplied" classname="net.plainnotes.attachmentpoc.PortableCanonicalReviewTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

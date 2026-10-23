@@ -42,6 +42,19 @@ internal data class AttachmentBackupManifest(
         links.forEach {require(it.record in rs && it.document in ds && it.revision>0 && it.state in setOf("ACTIVE","RETRACTED","QUARANTINED"))
             if(it.state=="ACTIVE")require(rs.getValue(it.record).state=="ACTIVE" && ds.getValue(it.document).state=="ACTIVE")}
     }
+    /** Shared existing preflight rules, also required before claiming a complete export. */
+    fun validateComplete(limits:Limits=Limits()) {
+        validate(limits)
+        require(records.map {it.kind to it.sourceId}.toSet().size==records.size)
+        require(versions.map {it.context.attempt}.toSet().size==versions.size)
+        require(versions.map {it.context.dekHandle}.toSet().size==versions.size)
+        val histories=versions.groupBy {it.document}
+        documents.forEach {d->
+            val history=histories.getValue(d.uuid).sortedBy {it.ordinal}
+            require(history.withIndex().all {(i,v)->v.ordinal==i+1L}) {"Missing immutable history ordinal"}
+            require(history.last().context.version==d.activeVersion) {"Active version is not the latest retained original"}
+        }
+    }
     /** Explicit, exhaustive typed mapping for a NEW local identity. Never infer from source integers. */
     data class Target(val record:UUID,val kind:Kind,val localId:Long?)
     fun mapTo(newDataset:UUID,newEpoch:UUID,targets:List<Target>,limits:Limits=Limits()):Map<UUID,Target> {
