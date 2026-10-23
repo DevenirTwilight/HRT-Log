@@ -1,0 +1,136 @@
+{
+  "head_source": "e4b8b6ceda6b9ac846615a0132b7fdc594423df3",
+  "workflow_run": 39946180356,
+  "workflow_event": "pull_request",
+  "actual_checkout": "082147b01b016d7bda5f0be91791e482c43ad6e1",
+  "source_tree": "4bdd1cd37eee6de53aced1abf285e461c81cc603",
+  "head_and_testmerge_tree_identical": true,
+  "native_evidence": "REAL_ANDROID_EMULATOR_SQLCIPHER_KEYSTORE_PRIVATE_FILES",
+  "physical_device": "NOT_RUN",
+  "real_power_loss_and_actual_volume_exhaustion": "NOT_RUN",
+  "feature": "OFF",
+  "external_review": "NOT_REVIEWED_EXTERNALLY",
+  "host_required_checks": "PENDING_AT_THIS_SNAPSHOT",
+  "artifacts": [
+    {
+      "api": 26,
+      "artifact_bytes": 69490,
+      "sha256": "0decf1f38c857bc479cbbfb4677cc6ed6c2c5a0db67320cca69bc8c1832ba640",
+      "github_upload_digest_matches": true,
+      "zip_crc": "PASS",
+      "classes": {
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentRestartAndroidTest": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentFoundationAndroidTest": {
+          "tests": 33,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentSqlCipherMigrationTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentKeyAndroidTest": {
+          "tests": 2,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "process_death_seams": {
+        "WRITE": "PASS_FRESH_PID",
+        "STAGED": "PASS_FRESH_PID",
+        "IN_COMMIT": "PASS_FRESH_PID",
+        "COMMITTED": "PASS_FRESH_PID"
+      }
+    },
+    {
+      "api": 29,
+      "artifact_bytes": 69543,
+      "sha256": "7cdf0386ddb1a023111e57187d50ed4e7ad0779594cd26f31b6937926e5cf7dd",
+      "github_upload_digest_matches": true,
+      "zip_crc": "PASS",
+      "classes": {
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentRestartAndroidTest": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentFoundationAndroidTest": {
+          "tests": 33,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentSqlCipherMigrationTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentKeyAndroidTest": {
+          "tests": 2,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "process_death_seams": {
+        "WRITE": "PASS_FRESH_PID",
+        "STAGED": "PASS_FRESH_PID",
+        "IN_COMMIT": "PASS_FRESH_PID",
+        "COMMITTED": "PASS_FRESH_PID"
+      }
+    },
+    {
+      "api": 35,
+      "artifact_bytes": 156689,
+      "sha256": "7741acbd5454be43de8887f32d4cd28928b2bac775ea3744c60504b9e45df8e9",
+      "github_upload_digest_matches": true,
+      "zip_crc": "PASS",
+      "classes": {
+        "AttachmentPersistentStoreAndroidTest": {
+          "tests": 7,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentPersistentRestartAndroidTest": {
+          "tests": 1,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentFoundationAndroidTest": {
+          "tests": 33,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentSqlCipherMigrationTest": {
+          "tests": 5,
+          "failures": 0,
+          "skipped": 0
+        },
+        "AttachmentKeyAndroidTest": {
+          "tests": 2,
+          "failures": 0,
+          "skipped": 0
+        }
+      },
+      "process_death_seams": {
+        "WRITE": "PASS_FRESH_PID",
+        "STAGED": "PASS_FRESH_PID",
+        "IN_COMMIT": "PASS_FRESH_PID",
+        "COMMITTED": "PASS_FRESH_PID"
+      }
+    }
+  ]
+}

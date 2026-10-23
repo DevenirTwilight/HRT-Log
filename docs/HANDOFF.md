@@ -1,3 +1,11 @@
+## MED-02 最终修复源三API原始验收完成，仍待主机门 — 2026-10-23
+
+#106当前e4b8b6ceda6b9ac846615a0132b7fdc594423df3。PR39946180356的实际checkout082147b01b016d7bda5f0be91791e482c43ad6e1与head源码树均为4bdd1cd37eee6de53aced1abf285e461c81cc603，已fetch验证，不混淆测试merge SHA与head SHA。26/29/35原始ZIP、SHA与GitHub上传digest一致、CRC均PASS，原日志gz保留pr106-final-native。
+
+每API Store7、Restart1、Foundation33、SQLCipherMigration5、实际Keystore2全部0fail/0skip；包含已有lease换库拒绝清零与调用方外层事务拒绝。每API四次真实新PID强停WRITE/STAGED/IN_COMMIT/COMMITTED验证均OK：原提交对象可解密、未提交不发布、包装预算不退还、重复恢复幂等、入口0。纯密码reader独立阳性反例与读中换库晚到清零/旧快照拒绝本地3合同保留；旧0e02原生绿色仍标NO-GO，不替代最终源。
+
+本次只把已验证原生事实写库。#106仍Draft，主机android检查尚在途，尚未合并；后续必须读其完整结果及无未解决评审，再按§106正常保护合并和查主线。外审NOT_REVIEWED_EXTERNALLY/入口OFF、无真实原件/无签名发布。Room14新增单表journal，PNBAK1不变，完整备份仅DESIGN_ONLY。真机/真实卷耗尽/断电NOT_RUN，不与合成异常和进程强停混称。当前主线含已审查#105（adc8cbb7），无Room编号冲突；UI-09 #107仍独立，不抢它的§146，医疗授权§144.A。
+
 ## MED-02：#104主线全绿；#106旧原生绿色源存在已确认缺口，不可合并 — 2026-10-23
 
 #104源663901f9已保护合并4f3c52a5。主线39940095721 attempt2 SUCCESS（仅API26启动故障一次重试），Science39940095774 SUCCESS；重试原ZIP/SHA/CRC、Foundation32+Keystore2均验，通过证据在pr104-final-native，原启动失败保留。
