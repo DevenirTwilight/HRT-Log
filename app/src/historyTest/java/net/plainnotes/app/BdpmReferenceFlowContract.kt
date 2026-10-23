@@ -55,6 +55,16 @@ abstract class BdpmReferenceFlowContract {
             val med=runBlocking{repo.medications()};val stock=runBlocking{repo.containers()};val records=runBlocking{repo.records()};val profile=runBlocking{repo.profile(id)}
             model.sync()
             ui.setContent{NotesTheme(ThemeMode.LIGHT){NotesApp(model,UiPrefs(ui.activity).appearance,{})}}
+            // sync() starts asynchronous IO; a ready Compose tree does not mean its Room snapshot arrived.
+            // Wait for the real committed medication before asking a lazy list to search for its row.
+            ui.waitUntil(30000) {
+                idlePlatform()
+                model.state.value.let { !it.loading && it.medications.any { medication -> medication.id == id } }
+            }
+            ui.runOnIdle {
+                assertNull("Initial committed snapshot failed", model.state.value.error)
+                assertEquals(med, model.state.value.medications)
+            }
             ui.onNodeWithContentDescription(ui.activity.getString(R.string.menu)).performClick()
             ui.onNodeWithTag("drawer-content").performScrollToNode(hasText(ui.activity.getString(R.string.medications)))
             ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(ui.activity.getString(R.string.medications))).performClick()
