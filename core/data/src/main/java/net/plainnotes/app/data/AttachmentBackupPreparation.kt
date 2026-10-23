@@ -54,8 +54,15 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
                         check(AttachmentIdentity.current(raw)==scope) {"Dataset changed"}
                     }
                     // A single-current-dataset preparation must never silently omit retired originals.
-                    raw.query("SELECT 1 FROM attachment_version WHERE store_uuid!=? LIMIT 1",arrayOf(scope.dataset)).use {
+                    raw.query("""SELECT 1 FROM attachment_store s WHERE s.store_uuid!=? AND (
+                        EXISTS(SELECT 1 FROM attachment_record_identity r WHERE r.store_uuid=s.store_uuid) OR
+                        EXISTS(SELECT 1 FROM attachment_document d WHERE d.store_uuid=s.store_uuid) OR
+                        EXISTS(SELECT 1 FROM attachment_version v WHERE v.store_uuid=s.store_uuid) OR
+                        EXISTS(SELECT 1 FROM attachment_link l WHERE l.store_uuid=s.store_uuid)) LIMIT 1""",arrayOf(scope.dataset)).use {
                         check(!it.moveToFirst()) {"Retained other dataset requires multi-namespace format review"}
+                    }
+                    raw.query("SELECT 1 FROM attachment_journal WHERE proof!='COMMITTED' LIMIT 1").use {
+                        check(!it.moveToFirst()) {"Unfinished/quarantined retention is not representable in this complete snapshot"}
                     }
                     var rows=0L
                     DOMAIN_TABLES.forEach {table->child.check();raw.query("SELECT COUNT(*) FROM $table").use {
@@ -80,12 +87,20 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
                         child.check()
                         val table=when(record.kind) {AttachmentBackupManifest.Kind.APPOINTMENT->"appointment";AttachmentBackupManifest.Kind.LAB->"lab_value";AttachmentBackupManifest.Kind.DOSE_RECORD->"dose_record"}
                         if(record.state=="ACTIVE")raw.query("SELECT 1 FROM $table WHERE id=?",arrayOf(record.sourceId)).use {check(it.moveToFirst()) {"Missing typed source row"}}
-                        if(record.state=="TRASHED")raw.query("SELECT payload_json FROM trash_item WHERE id=?",arrayOf(record.trashId)).use {c->
+                        if(record.state=="TRASHED")raw.query("SELECT payload_json,kind,ref FROM trash_item WHERE id=?",arrayOf(record.trashId)).use {c->
                             check(c.moveToFirst());val payload=c.getString(0)
                             val digest=MessageDigest.getInstance("SHA-256").digest(payload.toByteArray(Charsets.UTF_8)).joinToString("") {"%02x".format(it.toInt() and 255)}
                             check(digest==record.evidenceSha256) {"Trash evidence changed"}
-                            val retained=JSONObject(payload).getJSONObject("tables").getJSONArray(table)
-                            check((0 until retained.length()).any {retained.getJSONObject(it).getLong("id")==record.sourceId}) {"Wrong typed trash row"}
+                            if(record.kind==AttachmentBackupManifest.Kind.DOSE_RECORD) {
+                                check(c.getString(1)==Trash.RECORD && c.getString(2)==record.sourceId.toString()) {"Wrong retained dose reference"}
+                                raw.query("SELECT deleted_at_utc FROM dose_record WHERE id=?",arrayOf(record.sourceId)).use {dose->
+                                    check(dose.moveToFirst() && !dose.isNull(0)) {"Missing soft-deleted dose fact"}
+                                }
+                            } else {
+                                check(c.getString(1) in if(record.kind==AttachmentBackupManifest.Kind.LAB)setOf(Trash.LAB,Trash.LAB_PANEL) else setOf(Trash.APPOINTMENT))
+                                val retained=JSONObject(payload).getJSONObject("tables").getJSONArray(table)
+                                check((0 until retained.length()).count {retained.getJSONObject(it).getLong("id")==record.sourceId}==1) {"Wrong typed trash row"}
+                            }
                         }
                     }
                     val documents=read("SELECT document_uuid,revision,title,category,state,active_version_uuid,deleted_utc FROM attachment_document WHERE store_uuid=? ORDER BY document_uuid") {c->
@@ -114,6 +129,13 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
                         AttachmentBackupManifest.Link(c.uuid(0),c.uuid(1),c.uuid(2),c.getLong(3),c.getString(4))}
                     AttachmentBackupManifest(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch),UUID.fromString(scope.logicalVault),records,documents,versions,links).also {it.validate(limits)}
                 })
+                // The manifest cannot represent unknown/orphan/incomplete leaves. Retaining them
+                // locally while claiming a complete export would silently omit protected bytes.
+                val inventory=directory.inventory(minOf(100000,limits.maximumVersions+1)) {child.check()}
+                val expected=sources.associateBy {it.version.context.objectId.toString()}
+                check(inventory.entries.size==expected.size && inventory.entries.all {e->
+                    e.privateRegular && expected[e.name]?.identity==e.identity
+                }) {"Unrepresented or missing retained ciphertext; complete backup refused"}
                 for(source in sources) {
                     child.check()
                     val key=keys.unwrapExisting(source.alias,source.binding,source.wrapped)

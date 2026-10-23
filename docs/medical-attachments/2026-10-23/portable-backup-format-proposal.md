@@ -1,5 +1,15 @@
 # Portable medical backup: concrete review candidate, NOT_APPROVED
 
+## Owner decision summary — 2026-10-23, still NOT_APPROVED
+
+Recommend this single PNMEDBK1 option below; do not promote `DraftMedicalArchive` or invent a second production suite. Implemented: full current-dataset snapshot/authentication (#111), and format-independent strict restore admission/private ciphertext quarantine (§147.A). Not implemented: production outer writer/independent reader, Argon2id hierarchy/portable wraps, authenticated set codec, SQL restore/atomic activation or cross-phone recovery. PNBAK1 is unchanged.
+
+Explicit approval is required to freeze: the exact80-byte header/strict UTF8 password/no normalization; Argon2id v1.3 65536KiB/3/1; HKDF labels; existing64KiB Tink suite; portable AES256-GCM binding/1000-wrap ceiling; canonical frame/manifest/footer bytes and stated1GiB/512MiB/1000-object/32MiB-record bounds. Caller engineering budgets may be lower. Before claiming those parameters are viable, independently verify pinned Tink length boundaries and API26 192MiB-heap KDF/full-stream memory cost; both remain NOT_RUN here. No fallback or weaker automatic KDF is proposed.
+
+Recommend v1 **refuse the entire export/restore** if any retained retired/orphan namespace cannot be represented with honest typed clinical provenance. This preserves data but means such libraries cannot yet use complete portable backup. Never call a current-only archive complete while omitting retained files. Broader multi-namespace/orphan support needs explicit model approval, not fabricated rows or integer relinking.
+
+Atomic activation remains a separate required approval: encrypted isolated structured staging, new dataset/epoch/generation and exact typed mapping, durable one-use key reservations, authenticated whole-set/generation evidence, old-state retention and one native SQL publication including crash reconciliation. Current STAGING/object COMMIT evidence cannot authorize this. Total archive+object+SQL/index/WAL/old-library retention space and simultaneous KDF/stream memory must be budgeted there. The new quarantine-only preparation neither allocates a Room number nor activates anything; its receipt always says wholeArchiveAuthenticated=false/activatable=false. This task's authorization does **not** approve this format or activation proposal.
+
 Source baseline01f45fb8; owner task147 (recorded on independent storage PR-A). This PR prepares production snapshot/membership/typed identity components and a TEST_ONLY reference candidate. No app export/import route, final magic bytes, persistent format or activation. PNBAK1 remains records-only and unchanged. Permanent deletion remains OFF.
 
 ## Proposed reviewed boundary

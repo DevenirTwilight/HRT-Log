@@ -20,8 +20,9 @@ import java.nio.file.Paths
  * /proc/self/fd traverses our open directory descriptor, never an untrusted pathname ancestor.
  * Unknown or interrupted objects are retained, not reclaimed by filename or inode guesses.
  */
-internal class AttachmentOwnedFiles(context: Context) {
-    private val root = File(context.noBackupFilesDir, "attachment-objects-v1")
+internal class AttachmentOwnedFiles(context: Context,namespace:Namespace=Namespace.OBJECTS) {
+    enum class Namespace(val directory:String) { OBJECTS("attachment-objects-v1"), RESTORE_QUARANTINE("attachment-restore-quarantine-v1") }
+    private val root = File(context.noBackupFilesDir, namespace.directory)
     data class Identity(val parentDevice: Long, val parentInode: Long, val device: Long, val inode: Long)
     data class Entry(val name: String, val identity: Identity, val logicalBytes: Long,
         val chargedBytes: Long, val privateRegular: Boolean)

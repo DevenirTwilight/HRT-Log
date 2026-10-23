@@ -140,6 +140,58 @@ class AttachmentBackupPreparationAndroidTest {
             assertEquals(0L,f.number("SELECT COUNT(*) FROM attachment_operation"));f.safety()
         }
     }
+    @Test fun retiredTypedIdentityWithoutVersionsAndUnknownCiphertextCannotBeSilentlyOmitted() {
+        Fixture(app).use {f->
+            f.raw.beginTransaction();try {AttachmentIdentity.replaceStructuredDataset(f.raw);f.raw.setTransactionSuccessful()}finally {f.raw.endTransaction()}
+            // Frozen old predicate was empty: no versions existed, but a retained typed identity did.
+            assertEquals(0L,f.number("SELECT COUNT(*) FROM attachment_version"))
+            assertEquals(1L,f.number("SELECT COUNT(*) FROM attachment_record_identity"))
+            val scope=requireNotNull(AttachmentIdentity.current(f.raw));val session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
+            try {reject {AttachmentBackupPreparation(f.context,f.db).capture(scope,session.issue())}}finally {session.revoke()}
+            f.safety()
+        }
+        Fixture(app).use {f->
+            val bytes=byteArrayOf(2,7,1,8);f.store().save(f.scope,f.session.issue(),f.request(bytes)) {ByteArrayInputStream(bytes)}
+            val orphan=UUID.randomUUID()
+            AttachmentOwnedFiles(f.context).locked().use {d->d.create(orphan).use {c->c.sink().use {it.write(byteArrayOf(9,9,9))};c.seal()}}
+            // Original was verified; old per-version-only verification would never inspect the extra leaf.
+            reject {AttachmentBackupPreparation(f.context,f.db).capture(f.scope,f.session.issue())}
+            assertTrue(File(f.directory,"attachment-objects-v1/$orphan").exists())
+            assertEquals(1L,f.number("SELECT COUNT(*) FROM attachment_version"));f.safety()
+        }
+    }
+    @Test fun softDeletedDoseAttachmentUsesExactReferenceTrashInsteadOfInventedSnapshotRows() {
+        Fixture(app).use {f->
+            val repo=NotesRepository(object:DatabaseAccess(f.app) {override fun get(space:Space)=f.db})
+            kotlinx.coroutines.runBlocking {
+                val med=repo.saveMedication(MedicationEntity(name="SYNTHETIC dose archive",molecule="E2",route="SUBLINGUAL",unit="MG",dose_per_intake=0.5,container_capacity=37.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0),
+                    "E2",net.plainnotes.app.domain.RuleKind.EVERY_N_DAYS,1,listOf(java.time.LocalTime.NOON),emptySet(),Instant.now().minusSeconds(86400))
+                repo.unscheduled(med,Instant.now().minusSeconds(3600),0.5)
+            }
+            val id=f.number("SELECT MAX(id) FROM dose_record")
+            val record=f.db.runInTransaction(java.util.concurrent.Callable {UUID.fromString(AttachmentIdentity.bind(f.raw,f.scope,"DOSE_RECORD",id))})
+            val bytes=byteArrayOf(5,8,13);val request=f.request(bytes).copy(record=record)
+            f.store().save(f.scope,f.session.issue(),request) {ByteArrayInputStream(bytes)}
+            kotlinx.coroutines.runBlocking {repo.deleteRecord(id)}
+            // Frozen old assumption is RED on the genuine existing reference-trash representation.
+            f.raw.query("SELECT payload_json FROM trash_item WHERE kind='RECORD' AND ref=?",arrayOf(id.toString())).use {c->
+                assertTrue(c.moveToFirst());assertFalse(JSONObject(c.getString(0)).has("tables"))
+            }
+            AttachmentBackupPreparation(f.context,f.db).capture(f.scope,f.session.issue()).use {snapshot->
+                val m=snapshot.manifest();assertEquals("TRASHED",m.records.single {it.uuid==record}.state)
+                assertEquals("QUARANTINED",m.links.single().state);assertEquals(1,m.versions.size)
+                snapshot.records {b->
+                    val targets=m.records.map {AttachmentBackupManifest.Target(it.uuid,it.kind,77)}
+                    val rows=m.records.map {AttachmentRestorePreflight.TargetRow(it.uuid,it.kind,77,it.state)}
+                    val plan=AttachmentRestorePreflight.inspect(m,b.copyOf(),m.versions.map {it.manifest},
+                        AttachmentRestorePreflight.Namespace(UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID()),targets,rows,emptySet(),
+                        AttachmentRestorePreflight.Resources(1024L*1024*1024,4096,100,100))
+                    assertEquals(record,plan.mapping.getValue(record).record)
+                }
+            }
+            f.safety()
+        }
+    }
     @Test fun readOnlyCaptureAndRecordConsumerDoNotHoldTheRevocationMonitor() {
         for(duringCapture in listOf(true,false))Fixture(app).use {f->
             val reached=java.util.concurrent.CountDownLatch(1);val release=java.util.concurrent.CountDownLatch(1)
