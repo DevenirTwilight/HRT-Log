@@ -1,3 +1,15 @@
+## MED-02 #113收尾完成：MERGED / CI_PASS / NATIVE_VERIFIED — 2026-10-23
+
+起始主线0a95293d→最终默认claude/new-session-1959qb `e61126989a7433d9ba2bf5e387c6b8a434e8f187`。#113源码78bd4eaa未变；原PR cancel保留且原因不冒充已查明，唯一被取消API29作业仅补验一次即SUCCESS，全部保护检查通过、无未决review后GitHub正常auto-merge。源78bd/PR f28/merge e611 tree均09426d。无force/admin/bypass、源码/断言/配额改动。
+
+主线Android40009477772五job全部SUCCESS、Science40009478000 SUCCESS。API26/29/35三个官方ZIP SHA/CRC已核：各新BusinessReconstruction6/BusinessRestore3/FormatReadiness1，原Preparation8/Preflight5/Staging4/Foundation33/Store11/Migration5/Key2/Restart1/TEST_ONLY Candidate6全0fail/skip；原四对象+两quarantine新PID日志各OK1。host artifact12526658466官方SHA8e550c1d…/CRC PASS；真实HTML data578/0fail/0skip、app2335/0fail/557原有skip、业务重建6/0/0、Period5/0/0；source绑定e611，原始host日志及release隔离/无INTERNET PASS存main-e611-host。仅unsigned CI验证产物，未签名/交付/发布。所有必要原件和准确SHA在reconstruction-evidence/main-e611-*，不是用旧绿替新main。
+
+本轮实际进入主线的生产能力是#113完整临床业务图/版本/trash/typed UUID关系的私有RAM SQLCipher重建、原完整历史审计、逐字段/行独立校验和全部inner密文认证。原库不动，candidate.activatable=false；没有正式portable writer/reader或全库切换。PHYSICAL_NOT_RUN，NOT_REVIEWED_EXTERNALLY/EXTERNAL_REVIEW_PENDING，feature0/真实原件/永久删除OFF；Room14/PNBAK1/SQLCipher/Tink/Keystore体系不变，无BDPM/PK/P5/P6/UI改动。
+
+单一下一阶段审批包及本轮新TEST_ONLY代码在review/med02-portable-approval-20261023：独立Python canonical编码/stdlib逆解和独立Kotlin严格解码，合成全字段4619B向量，本地最终5/0fail/error/skip；未合并、CI_NOT_RUN、不是生产archive codec。提案已统一头/KDF/domain/framing/footer/全历史政策/新身份恢复与激活约束；明确两项具体差距：1000版本需2000新alias但现有默认512且保留旧资源；当前fixed notes.db和旧整数intent没有generation/执行点scope屏障。未放宽资源或假定重启能安全激活。仍NOT_APPROVED/NOT_READY_TO_FREEZE，联合资源和durable全库证明未完成。
+
+已一次性请求仅按唯一候选开展默认OFF格式特有writer/独立reader/KDF/portable wrapping/集合认证实现的新授权；截至本记录无答复，不能视为批准。永久冻结、激活实施和正式启用均不包含在请求里。候选具备提交该受限实施审批的具体方案，不具备直接永久冻结/启用条件。下一最小生产工作须待明确批准；没有用TEST_ONLY替代正式协议。可演示合成存储/完整快照/隔离业务重建与独立比较，不能演示正式密码档案→新手机完整激活；无需新用户APK。接手先读本节、#113及review分支，不再重跑已经成功的原生验收。
+
 ## MED-02 已合并主线三API原件核验完成 — 2026-10-23
 
 主线e6112698的Android40009477772：API26/API29/API35以及JVM均SUCCESS，Science40009478000 SUCCESS；仅host android尚在途。三个官方artifact12526521366/12526906692/12526711798已核SHA/CRC，main-e611-api26/29/35各新6+3+1、原Foundation33/Store11/Preparation8/Preflight5/Staging4/Migration5/Key2/Restart1/TEST_ONLY Candidate6均0fail/skip，原四对象+两quarantine真实新PID seam均OK1。source字段实际e611、tree09426d，非误标旧78bd。完整归档/新设备激活/真机/外审未因此通过。

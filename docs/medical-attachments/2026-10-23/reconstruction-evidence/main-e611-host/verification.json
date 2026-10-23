@@ -1,0 +1,36 @@
+{
+  "run": 40009477772,
+  "job": 120605834230,
+  "source": "e61126989a7433d9ba2bf5e387c6b8a434e8f187",
+  "tree": "09426d156f312608c552c47ac67b6b2c60f89560",
+  "artifact": 12526658466,
+  "sha256": "8e550c1da419e0d40720a2a010195bcd48a9ab14334ea63bd7c091634535c418",
+  "crc": "PASS",
+  "counts": {
+    "data": {
+      "tests": 578,
+      "failures": 0,
+      "skipped": 0
+    },
+    "app": {
+      "tests": 2335,
+      "failures": 0,
+      "skipped": 557
+    },
+    "business": {
+      "tests": 6,
+      "failures": 0,
+      "skipped": 0
+    },
+    "period": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "original_job_log_sha256": "ea309552461b70a96218d1dab91008f6372f7fa2b1961faf674c419ab6983789",
+  "release_isolation": "PASS, unsigned validation artifact only; not delivered",
+  "app_skips": "557 original skips; not claimed passed",
+  "physical": "PHYSICAL_NOT_RUN",
+  "external": "EXTERNAL_REVIEW_PENDING"
+}
