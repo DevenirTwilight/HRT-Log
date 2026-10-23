@@ -1,3 +1,7 @@
+## 容量PR110已验收b5，正常同步最新UI/PDF交接 — 2026-10-23
+
+b5e26ae5 PR39970443750/push39970434554六必需门均PASS，本地561项PASS；官方API26/29原件独立核Store11/Foundation33/Migration5/Key2/Restart1合计52/0fail/skip，四freshPID seam均OK(1 test)，35状态SUCCESS待原件核。原c181错误测试安排导致FAIL仍保留。最新主线e21c09bf只合并#108交接，没有生产/Schema变化；本次正常合并保留双方HANDOFF全部内容，不覆盖UI/PDF。容量生产/测试代码逐字节不变，新集成HEAD仍需自己的六门和最新冲突/讨论检查，不借旧绿合并。入口OFF、永久删除OFF、format未批准。
+
 ## PR110本地561项通过；首轮原生因旧用例安排失败已修 — 2026-10-23
 
 生产源c181本地完整数据层561/0fail/error/skip，native APK编译PASS；八个新预算边界与原所有测试均保留。真实API29 push39968772333在旧missingKeyAndReplacedFile用例失败：故意换inode后继续创建下一破坏目标，被新容量守卫拒绝。现只提前安排四个独立目标，保留全部原断言及末尾四CORRUPT，增加坏归属后新操作不开户/不建journal/不生成alias的拒绝断言。生产预算/归属逻辑未改，新native测试源码编译PASS，精确新HEAD仍待完整CI，保留Draft。原失败ZIP/HTML/日志及本地561证据在docs/med02-postmerge-evidence-20261023的storage-budget-evidence，不冒充最终源已验收。
@@ -14,6 +18,7 @@
 
 当前独立feature/med02-storage-budget-20261023实施PR-A：基于现有同一文件锁和持久journal统计已提交/历史/隔离/未知/在途占用，明确可配置容量与alias预算，写入前拒绝，不删除、不退还wrap预算。先测试合同再接入PREPARE前，新源码尚未测试，不提前PASS。PR-B随后独立分支做快照/全量成员/身份映射及格式提案，新格式未批准不能正式导出恢复。入口OFF/未外审，永久删除关闭。不触碰UI、PK、PNBAK1或Schema。
 
+## UI-09 与 PDF-01 已完成并合并 — 2026-10-23
 ## 远端接手：#104/#106已合并，修复主线药品UI异步等待竞态 — 2026-10-23
 
 重新核对默认分支仍claude/new-session-1959qb，HEAD a2917086ead90b3967eee71908160e8021dfe89a。#104最终663901f9已合并4f3c52a5且主线全绿；#106最终0210ab9c受保护合并a2917086，Room14单表journal/真实保存恢复已实现，REQUIREMENTS§144.A已有明确授权。复用这些成果，不重做旧crypto或迁移。其证据在docs/med02-storage-evidence-20261023。入口仍OFF/外审NOT_REVIEWED_EXTERNALLY、完整医疗备份仍仅设计。
@@ -24,12 +29,15 @@
 
 ## UI-09 瑞士排版纪律（PR #107 收尾）；PDF-01 已合并（#105）— 2026-10-23
 
-- **PDF-01**：PR #105 已合并到默认分支（REQUIREMENTS §145，报告 76）。
-- **UI-09**（REQUIREMENTS §146，原拟 §144；MED-02 #104 占用 §144）：PR #107，分支 `feature/ui09-swiss-discipline-20261023`，已开自动合并，已合入含 #104、#105 的默认分支。
-  - 本地验证：完整单测 2327 项 0 失败，core:ui 700 项 0 失败，lint 通过。
-  - 截图在 `docs/ui-audit/2026-10-23-ui09/`（前后各 336 张，另有 21 张对照）；411dp 下的阶段回顾对话框截图为 NOT_RUN。
-  - 报告 75。
-- 待办：#107 的 CI 通过并合并后，复验默认分支 CI。两项都不交付 APK、不改 versionCode。
+- **PDF-01**：PR #105 已合并（REQUIREMENTS §145，报告 76）。
+- **UI-09**：PR #107 已合并（REQUIREMENTS §146，报告 75）。
+- 默认分支合并后的提交 25f8bac2：Android and domain checks 和 Science validation 全部通过。
+- 一处 CI 插曲：#105 合并提交 adc8cbb7 上的 android job，在 setup-android 一步因 EPIPE 失败（基础设施问题，发生在任何构建或测试之前）。重跑后被更新的运行取代、取消；最新提交已全部通过。
+- 两项都没有交付 APK，也没有改 versionCode。下一次交付需要 versionCode ≥ 36。
+- 未完成（NOT_RUN）：
+  - 真机 PDF 原件；
+  - 411dp 下的阶段回顾对话框截图；
+  - 真机 TalkBack。
 
 ## PDF-01 PDF 瑞士版式（PR 前收尾）— 2026-10-23
 
