@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-23T17:47:40.685Z" hostname="ed2a3e4b604e" time="5.803">
+  <properties/>
+  <testcase name="reconstructionRejectsExistingBusinessRowsInsteadOfReplacingThem" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="3.995"/>
+  <testcase name="cancellationRollsBackWholeCandidateAndSourceRemainsBitForBitUnchanged" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="0.431"/>
+  <testcase name="sameCountsChangedFactsAreRejectedByIndependentComparison" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="0.416"/>
+  <testcase name="admittedTypedClosureCannotReplaceOriginalFullBusinessIntegrityAudit" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="0.274"/>
+  <testcase name="fullBusinessHistoryAndThreeTrashRepresentationsAreReconstructedAndIndependentlyCompared" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="0.28"/>
+  <testcase name="missingTypedTrashDuplicateIdentityAndBrokenRelationshipRefuseWholePlan" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="0.119"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
