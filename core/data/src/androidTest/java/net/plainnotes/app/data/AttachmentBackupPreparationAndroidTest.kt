@@ -140,6 +140,32 @@ class AttachmentBackupPreparationAndroidTest {
             assertEquals(0L,f.number("SELECT COUNT(*) FROM attachment_operation"));f.safety()
         }
     }
+    @Test fun readOnlyCaptureAndRecordConsumerDoNotHoldTheRevocationMonitor() {
+        for(duringCapture in listOf(true,false))Fixture(app).use {f->
+            val reached=java.util.concurrent.CountDownLatch(1);val release=java.util.concurrent.CountDownLatch(1)
+            val borrowed=java.util.concurrent.atomic.AtomicReference<ByteArray>()
+            val pool=java.util.concurrent.Executors.newFixedThreadPool(2)
+            val prep=AttachmentBackupPreparation(f.context,f.db,beforeRecordTransfer={if(duringCapture) {
+                reached.countDown();check(release.await(30,java.util.concurrent.TimeUnit.SECONDS))
+            }})
+            val work=pool.submit(java.util.concurrent.Callable {prep.capture(f.scope,f.session.issue()).use {snapshot->
+                snapshot.records {bytes->if(!duringCapture) {
+                    assertTrue(bytes.isNotEmpty());assertTrue(bytes.any {it!=0.toByte()});borrowed.set(bytes)
+                    reached.countDown();check(release.await(30,java.util.concurrent.TimeUnit.SECONDS))
+                }}
+            }})
+            try {
+                assertTrue(reached.await(30,java.util.concurrent.TimeUnit.SECONDS))
+                // Old write-COMMIT monitor reuse would deadlock here until release, detected by this bound.
+                pool.submit(java.util.concurrent.Callable {f.session.revoke()}).get(5,java.util.concurrent.TimeUnit.SECONDS)
+                if(!duringCapture)assertTrue(borrowed.get().all {it==0.toByte()})
+                release.countDown()
+                try {work.get(30,java.util.concurrent.TimeUnit.SECONDS);fail("Revoked read-only snapshot returned")}
+                catch(e:java.util.concurrent.ExecutionException) {assertTrue(e.cause is IllegalStateException)}
+                assertEquals(0L,f.number("SELECT COUNT(*) FROM attachment_operation"));f.safety()
+            } finally {release.countDown();pool.shutdownNow();assertTrue(pool.awaitTermination(30,java.util.concurrent.TimeUnit.SECONDS))}
+        }
+    }
     companion object {
         private fun sha(bytes:ByteArray)=MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") {"%02x".format(it.toInt() and 255)}
         private fun reject(block:()->Unit) {try {block();fail("Invalid snapshot accepted")}catch(_:Exception){}}

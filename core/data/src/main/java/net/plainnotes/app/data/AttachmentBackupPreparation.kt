@@ -8,10 +8,11 @@ import java.time.Instant
 import java.util.UUID
 import java.security.MessageDigest
 import org.json.JSONObject
+import java.util.concurrent.Callable
 
 /** Read-only preparation. No portable cipher, archive writer, restore SQL or application entry. */
 internal class AttachmentBackupPreparation(context:Context,private val db:NotesDatabase,
-    private val keys:AttachmentDeviceKeys=AttachmentDeviceKeys()) {
+    private val keys:AttachmentDeviceKeys=AttachmentDeviceKeys(),private val beforeRecordTransfer:()->Unit={}) {
     private val files=AttachmentOwnedFiles(context)
     private val raw get()=db.openHelper.writableDatabase
     class Snapshot internal constructor(private val db:NotesDatabase,private val scope:AttachmentIdentity.Scope,
@@ -28,8 +29,11 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
             }
         } catch(failure:Throwable) {try {close()}catch(cleanup:Throwable) {failure.addSuppressed(cleanup)};throw failure}
         fun manifest()=current {value}
-        /** Owned memory, valid only during the callback. Never persist plaintext or retain an alias. */
-        fun <T> records(block:(ByteArray)->T):T=current {block(owner.bytes())}
+        /** Borrowed bytes may be cleared asynchronously. Consume only into private bounded staging;
+         * never retain/publish before return. Revocation must not wait for an arbitrary consumer. */
+        fun <T> records(block:(ByteArray)->T):T = try {
+            current {Unit};val result=block(owner.bytes());current {result}
+        } catch(failure:Throwable) {try {close()}catch(cleanup:Throwable) {failure.addSuppressed(cleanup)};throw failure}
         override fun close()=cap.close()
     }
     private data class Source(val version:AttachmentBackupManifest.Version,val identity:AttachmentOwnedFiles.Identity,
@@ -43,7 +47,12 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
         try {
             child.own(owner)
             return files.locked().use {directory->
-                val manifest=AttachmentTransaction.commit(db,scope,child) {
+                // This transaction is READ ONLY, with no result visible until final publication.
+                // Do not hold the write-COMMIT authorization monitor across full audit/encoding.
+                val manifest=db.runInTransaction(Callable {
+                    child.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
+                        check(AttachmentIdentity.current(raw)==scope) {"Dataset changed"}
+                    }
                     // A single-current-dataset preparation must never silently omit retired originals.
                     raw.query("SELECT 1 FROM attachment_version WHERE store_uuid!=? LIMIT 1",arrayOf(scope.dataset)).use {
                         check(!it.moveToFirst()) {"Retained other dataset requires multi-namespace format review"}
@@ -53,7 +62,12 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
                         check(it.moveToFirst());rows=Math.addExact(rows,it.getLong(0));require(rows<=limits.maximumRows)
                     }}
                     MeasuredConsumptionStore.auditStagedDataset(raw) // Existing independent full records oracle.
-                    owner.capture(MeasuredBackupJson.encode(raw,created)) // Existing bounded business JSON, not a new wire format.
+                    child.check()
+                    val encoded=MeasuredBackupJson.encode(raw,created) // Existing bounded JSON, not a new wire format.
+                    try {
+                        child.check();beforeRecordTransfer()
+                        child.publish {owner.capture(encoded)}
+                    } catch(failure:Throwable) {encoded.fill(0);throw failure}
                     fun <T> read(sql:String,make:(Cursor)->T):List<T> = raw.query(sql,arrayOf(scope.dataset)).use {c->
                         buildList {while(c.moveToNext()) {child.check();rows=Math.addExact(rows,1);require(rows<=limits.maximumRows);add(make(c))}}
                     }
@@ -99,7 +113,7 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
                     val links=read("SELECT link_uuid,record_uuid,document_uuid,revision,state FROM attachment_link WHERE store_uuid=? ORDER BY link_uuid") {c->
                         AttachmentBackupManifest.Link(c.uuid(0),c.uuid(1),c.uuid(2),c.getLong(3),c.getString(4))}
                     AttachmentBackupManifest(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch),UUID.fromString(scope.logicalVault),records,documents,versions,links).also {it.validate(limits)}
-                }
+                })
                 for(source in sources) {
                     child.check()
                     val key=keys.unwrapExisting(source.alias,source.binding,source.wrapped)

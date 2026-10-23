@@ -3283,3 +3283,9 @@ DraftMedicalArchive只在attachmentTest测试源集：2MiB内存reference，BC A
 541a6d42的完整core:data JVM559/0fail/error/skip，含6项隔离候选；Python发布隔离4项PASS。首次新增真实PDF fixture错误使用PdfDocument.use导致native源码编译FAIL，原日志initial-full-native-compile.log保留，不计原生执行。改显式try/finally.close，并增加真实就诊删除/恢复→快照保留原UUID/记录回收站/关联不自动恢复的正负测试，最新native Kotlin编译PASS（五个Snapshot测试+六个隔离Candidate，原生执行仍待CI）。生产源码和预算/旧PNBAK1未改，跨软件新device候选不是实际手机迁移或生产SQL恢复。
 
 具体正式格式评审选项现含80B独立PNMEDBK1 header、suite/KDF/域/帧顺序/全集认证/严格版本与大小限额、原子激活和未知多namespace策略；仅提案NOT_APPROVED，64MiB/3pass KDF低内存/正式wire长度推导/多namespace/恢复SQL及进程死亡验收未完成。测试参考magic与1MiB KDF绝不可升为正式格式。完整格式必须单独明确批准；本PR只合入无入口准备组件和隔离测试。
+
+## 只读快照撤权锁审查修复（仍OFF）— 2026-10-23
+
+代码复查发现只读capture误用写COMMIT授权监视器，可能让锁屏撤权等待完整audit/encode；records消费回调同样不应长期持有该锁。改为同一受控只读Room事务保持一致快照，完整审计不变，只在起点/owned记录缓冲转交/最终结果交付短窗口校验权限；编码失败或迟到转交清零，结果仍在全部对象认证和活scope校验后交付。records消费在监视器外，只允许私有有界staging，撤权可异步清零，返回前post-check拒绝迟到结果。没有缩减业务/历史检查、没有新写入或信任缓存。
+
+新增第六个真实Snapshot原生合同分别暂停记录缓冲转交前和记录消费中，另一线程revoke须在释放阻塞点前完成（5s死锁检测上界），owned记录清零，读任务拒绝且原临床/附件事实不变；不是P4性能预算测试。新源未执行原生，不先称安全问题已验收；继续编译/适用三API回归，保留Draft。
