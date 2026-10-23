@@ -70,14 +70,53 @@ object CsvExport {
     }
 }
 
-/** A4 report for a prescriber: medications, adherence, lab results, optional concentration estimate. Plain text, no interpretation. */
+/**
+ * A4 report for a prescriber: medications, adherence, lab results, optional concentration estimate. Plain text, no interpretation.
+ *
+ * PDF-01 (REQUIREMENTS §145): Swiss layout only, the words are unchanged. A4 with 48 pt side, 56 pt top and 64 pt bottom
+ * margins; a 12-column grid (12 pt gutters) on a 4 pt baseline; Roboto / Noto CJK in regular and bold only (26 / 13 / 10 /
+ * 8 pt); black on white with one accent (#006A63) for section numbers and the rule under the header; left aligned, numbers
+ * right aligned in tables. Sections are numbered 01, 02 … in the order they appear (the only new text), separated by space
+ * alone; the only lines are the header rule, table rules and the footer rule.
+ */
 object PdfReport {
     private const val W = 595; private const val H = 842; private const val M = 48f
+    internal const val TOP = 56f; internal const val BOTTOM = 64f; internal const val GUTTER = 12f; internal const val COLUMNS = 12
+    /** One grid column (499 pt content, 11 gutters). */
+    internal const val COL = (W - 2 * M - GUTTER * (COLUMNS - 1)) / COLUMNS
+    internal fun colX(i: Int) = M + i * (COL + GUTTER)
+    internal fun span(n: Int) = n * COL + (n - 1) * GUTTER
+    internal val ACCENT = Color.rgb(0, 0x6A, 0x63)
+    internal val GREY = Color.rgb(0x61, 0x61, 0x61)
+    internal val RULE_LIGHT = Color.rgb(0xBD, 0xBD, 0xBD)
+    /** The last baseline area for content; the footer sits below it. */
+    internal const val CONTENT_BOTTOM = H - BOTTOM
+
+    /** Where pages go: a PdfDocument in the app, a recording canvas in tests. */
+    interface Sink { fun startPage(number: Int): Canvas; fun finishPage() }
 
     /** [visit] limits the output to the chosen parts; parts that are not chosen never appear. */
     fun write(context: Context, d: ExportData, days: Int, conc: ConcentrationResult?, out: OutputStream, period0:Pair<LocalDate,LocalDate>?=null,
               visit: net.plainnotes.app.visit.VisitPackSpec? = null, facts: net.plainnotes.app.visit.VisitFacts? = null, digest: String? = null,
               labels: Map<Long, Set<net.plainnotes.app.domain.RecordLabel>> = emptyMap()) {
+        val doc = PdfDocument(); var page: PdfDocument.Page? = null
+        render(context, d, days, conc, object : Sink {
+            override fun startPage(number: Int): Canvas { page = doc.startPage(PdfDocument.PageInfo.Builder(W, H, number).create()); return page!!.canvas }
+            override fun finishPage() { doc.finishPage(page) }
+        }, period0, visit, facts, digest, labels)
+        doc.writeTo(out); doc.close()
+    }
+
+    private fun round4(v: Float) = kotlin.math.ceil(v / 4f) * 4f
+
+    /**
+     * Lays the report out on [sink]. [trace] receives each piece of text as it is written (before wrapping or ellipsis) and
+     * each section number, so tests can compare the words with the pre-PDF-01 report.
+     */
+    internal fun render(context: Context, d: ExportData, days: Int, conc: ConcentrationResult?, sink: Sink, period0:Pair<LocalDate,LocalDate>?=null,
+              visit: net.plainnotes.app.visit.VisitPackSpec? = null, facts: net.plainnotes.app.visit.VisitFacts? = null, digest: String? = null,
+              labels: Map<Long, Set<net.plainnotes.app.domain.RecordLabel>> = emptyMap(), now: java.time.LocalDateTime = java.time.LocalDateTime.now(),
+              trace: (String, String) -> Unit = { _, _ -> }) {
         val period = visit?.let { it.from to it.to } ?: period0
         fun on(section: VisitSection) = visit == null || section in visit.sections
         val zone = ZoneId.systemDefault()
@@ -88,156 +127,223 @@ object PdfReport {
         require(from<=to)
         val until=to.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli()
         val since = from.atStartOfDay(zone).toInstant().toEpochMilli()
-        val doc = PdfDocument()
-        var pageNo = 0; var page: PdfDocument.Page? = null; var canvas: Canvas? = null; var y = 0f
-        val title = TextPaint().apply { textSize = 18f; isFakeBoldText = true; color = Color.BLACK; isAntiAlias = true }
-        val head = TextPaint().apply { textSize = 13f; isFakeBoldText = true; color = Color.rgb(0, 0x6A, 0x63); isAntiAlias = true }
-        val body = TextPaint().apply { textSize = 10f; color = Color.BLACK; isAntiAlias = true }
-        val small = TextPaint().apply { textSize = 8.5f; color = Color.DKGRAY; isAntiAlias = true }
-        fun newPage() { page?.let(doc::finishPage); pageNo++; page = doc.startPage(PdfDocument.PageInfo.Builder(W, H, pageNo).create()); canvas = page!!.canvas; y = M
-            canvas!!.drawText(if(period==null)context.getString(R.string.report_footer,pageNo)else context.getString(R.string.wb_summary_footer)+" · "+pageNo, M, H - 24f, small) }
-        fun text(s:String,p:TextPaint,gap:Float=4f) {
-            var remaining=s
+        var pageNo = 0; var started = false; var canvas: Canvas? = null; var y = 0f
+        val regular = android.graphics.Typeface.create(android.graphics.Typeface.SANS_SERIF, android.graphics.Typeface.NORMAL)
+        val bold = android.graphics.Typeface.create(android.graphics.Typeface.SANS_SERIF, android.graphics.Typeface.BOLD)
+        fun paint(size: Float, face: android.graphics.Typeface, c: Int = Color.BLACK) = TextPaint().apply { textSize = size; typeface = face; color = c; isAntiAlias = true }
+        val title = paint(26f, bold)
+        val head = paint(13f, bold)
+        val sub = paint(10f, bold)
+        val body = paint(10f, regular)
+        val meta = paint(8f, regular, GREY)
+        val tableHead = paint(8f, bold)
+        val number = paint(13f, bold, ACCENT).apply { fontFeatureSettings = "tnum" }
+        fun line(c: Int, width: Float) = Paint().apply { color = c; strokeWidth = width; isAntiAlias = true }
+        val contentX = colX(2); val contentW = span(10); val fullW = span(12)
+        var atTop = true
+        fun newPage() {
+            if (started) sink.finishPage(); started = true; pageNo++; canvas = sink.startPage(pageNo); y = TOP; atTop = true
+            // Footer: the same words as before, the note on the left and the page on the right, under a 0.25 pt rule.
+            val footer = if(period==null)context.getString(R.string.report_footer,pageNo)else context.getString(R.string.wb_summary_footer)+" · "+pageNo
+            trace("footer", footer)
+            val pagePart = if (period == null) footer.split(" · ").first() else pageNo.toString()
+            val note = if (period == null) footer.split(" · ").drop(1).joinToString(" · ") else context.getString(R.string.wb_summary_footer)
+            canvas!!.drawLine(M, H - BOTTOM + 16f, W - M, H - BOTTOM + 16f, line(RULE_LIGHT, 0.25f))
+            canvas!!.drawText(TextUtilsEllipsize(note, meta, span(9)), M, H - BOTTOM + 32f, meta)
+            canvas!!.drawText(pagePart, W - M - meta.measureText(pagePart), H - BOTTOM + 32f, meta)
+        }
+        /** Left-aligned block at [x] / [width]; heights round up to the 4 pt baseline; long text continues on the next page. */
+        fun block(s: String, p: TextPaint, x: Float, width: Float, gap: Float = 4f, record: Boolean = true) {
+            if (record) trace("text", s)
+            var remaining = s
             do {
-                val layout=StaticLayout.Builder.obtain(remaining,0,remaining.length,p,(W-2*M).toInt()).setAlignment(Layout.Alignment.ALIGN_NORMAL).build()
-                if(y+layout.getLineBottom(0)>H-48f)newPage()
-                val fit=(0 until layout.lineCount).lastOrNull{y+layout.getLineBottom(it)<=H-48f}?:0
-                val end=layout.getLineEnd(fit)
-                canvas!!.withSave{translate(M,y);clipRect(0f,0f,W-2*M,layout.getLineBottom(fit).toFloat());layout.draw(this)}
-                y+=layout.getLineBottom(fit)+gap
-                remaining=remaining.substring(end)
-                if(remaining.isNotEmpty())newPage()
-            } while(remaining.isNotEmpty())
+                val layout = StaticLayout.Builder.obtain(remaining, 0, remaining.length, p, width.toInt()).setAlignment(Layout.Alignment.ALIGN_NORMAL).build()
+                if (y + layout.getLineBottom(0) > CONTENT_BOTTOM) newPage()
+                val fit = (0 until layout.lineCount).lastOrNull { y + layout.getLineBottom(it) <= CONTENT_BOTTOM } ?: 0
+                val end = layout.getLineEnd(fit)
+                canvas!!.withSave { translate(x, y); clipRect(0f, 0f, width, layout.getLineBottom(fit).toFloat()); layout.draw(this) }
+                y += round4(layout.getLineBottom(fit).toFloat()) + gap
+                atTop = false
+                remaining = remaining.substring(end)
+                if (remaining.isNotEmpty()) newPage()
+            } while (remaining.isNotEmpty())
         }
-        fun row(cols: List<String>, widths: List<Float>, p: TextPaint) {
-            if (y + 14f > H - 48f) newPage()
-            var x = M; cols.forEachIndexed { i, c -> canvas!!.drawText(TextUtilsEllipsize(c, p, widths[i] - 6f), x, y + 10f, p); x += widths[i] }; y += 14f
+        fun text(s: String, p: TextPaint = body, gap: Float = 4f) = block(s, p, contentX, contentW, gap)
+        fun lineHeight(p: TextPaint) = round4(StaticLayout.Builder.obtain("Ag", 0, 2, p, contentW.toInt()).build().getLineBottom(0).toFloat())
+        var sectionNo = 0
+        /** 01, 02 … in the accent at the left two columns, the bold title on the right ten; never alone at a page foot. */
+        fun section(titleText: String) {
+            val need = 12f + lineHeight(head) + 4f + 2 * (lineHeight(body) + 4f)
+            if (!atTop) { if (y + need > CONTENT_BOTTOM) newPage() else y += 12f }
+            sectionNo++
+            val n = "%02d".format(sectionNo); trace("number", n)
+            val layout = StaticLayout.Builder.obtain(titleText, 0, titleText.length, head, contentW.toInt()).build()
+            canvas!!.drawText(n, colX(0), y + layout.getLineBaseline(0), number)
+            block(titleText, head, contentX, contentW, 4f)
         }
+        fun endSection() { y += 16f }
+        /** A table on the right ten columns: 8 pt bold header over a 0.5 pt rule, rows split by 0.25 pt light rules; [numeric] columns align right. */
+        class Table(val header: List<String>, val widths: List<Float>, val numeric: Set<Int>)
+        fun drawRow(t: Table, cols: List<String>, p: TextPaint) {
+            val h = lineHeight(p) + 4f
+            var x = contentX
+            cols.forEachIndexed { i, c -> val cell = TextUtilsEllipsize(c, p, t.widths[i] - 6f)
+                val cx = if (i in t.numeric) x + t.widths[i] - 6f - p.measureText(cell) else x
+                canvas!!.drawText(cell, cx, y + h - 6f, p); x += t.widths[i] }
+            y += h
+        }
+        fun tableHeader(t: Table) {
+            drawRow(t, t.header, tableHead)
+            canvas!!.drawLine(contentX, y, contentX + contentW, y, line(Color.BLACK, 0.5f))
+        }
+        fun tableRow(t: Table, cols: List<String>) {
+            trace("row", cols.joinToString("\n"))
+            if (y + lineHeight(body) + 4f > CONTENT_BOTTOM) { newPage(); tableHeader(t) }
+            drawRow(t, cols, body)
+            canvas!!.drawLine(contentX, y, contentX + contentW, y, line(RULE_LIGHT, 0.25f))
+        }
+
         newPage()
-        text(context.getString(if(visit!=null)R.string.visit_pack_title else if(period==null)R.string.report_title else R.string.wb_summary), title, 2f)
-        visit?.appointment?.let{a->text(listOfNotNull(context.getString(net.plainnotes.app.ui.choiceRes(a.type.ifBlank{"OTHER"}))+" · "+Instant.ofEpochMilli(a.at_utc).atZone(zone).format(dtFmt),a.practitioner,a.location).joinToString(" · "),body,2f)}
-        text(context.getString(R.string.report_period, from.format(dateFmt), to.format(dateFmt)) + " · " + context.getString(R.string.report_generated, java.time.LocalDateTime.now().format(dtFmt)), small, if(digest==null)12f else 2f)
-        digest?.let{text(context.getString(R.string.visit_digest,it.take(12)),small,12f)}
+        // Header: title, then period / generated / check code in three four-column cells, the visit on its own line, an accent rule.
+        block(context.getString(if(visit!=null)R.string.visit_pack_title else if(period==null)R.string.report_title else R.string.wb_summary), title, M, fullW, 8f)
+        val metaCells = listOfNotNull(context.getString(R.string.report_period, from.format(dateFmt), to.format(dateFmt)),
+            context.getString(R.string.report_generated, now.format(dtFmt)), digest?.let { context.getString(R.string.visit_digest, it.take(12)) })
+        val metaTop = y; var metaBottom = y
+        metaCells.forEachIndexed { i, cell -> y = metaTop; block(cell, meta, colX(4 * i), span(4), 0f); metaBottom = maxOf(metaBottom, y) }
+        y = metaBottom + 8f
+        visit?.appointment?.let{a->block(listOfNotNull(context.getString(net.plainnotes.app.ui.choiceRes(a.type.ifBlank{"OTHER"}))+" · "+Instant.ofEpochMilli(a.at_utc).atZone(zone).format(dtFmt),a.practitioner,a.location).joinToString(" · "),body,M,fullW,8f)}
+        canvas!!.drawLine(M, y, W - M, y, line(ACCENT, 1.5f)); y += 16f; atTop = true
 
         if(on(VisitSection.REGIMEN)){
-        text(context.getString(R.string.report_current_plan), head)
+        section(context.getString(R.string.report_current_plan))
         d.medications.filter { it.active }.forEach { m ->
             val ester = d.profiles[m.id]?.ester
-            text("• ${m.name} — ${listOfNotNull(m.molecule, ester?.takeIf { it != "E2" }, m.route).joinToString(" / ")} — ${fmt(m.dose_per_intake)} ${m.unit} · ${d.scheduleText[m.id] ?: ""}", body, 2f)
+            text("• ${m.name} — ${listOfNotNull(m.molecule, ester?.takeIf { it != "E2" }, m.route).joinToString(" / ")} — ${fmt(m.dose_per_intake)} ${m.unit} · ${d.scheduleText[m.id] ?: ""}", body, 4f)
         }
         if(visit!=null){
             // Frozen regimen versions overlapping the range, described from their own snapshots.
-            text(context.getString(R.string.visit_regimen_versions),head)
+            y += 4f; text(context.getString(R.string.visit_regimen_versions),sub)
             val versions=d.regimens.filter{it.effective_from_utc<until && (it.effective_until_utc?:Long.MAX_VALUE)>since}.sortedWith(compareBy({it.effective_from_utc},{it.id}))
-            if(versions.isEmpty())text(context.getString(R.string.report_none),body)
+            if(versions.isEmpty())text(context.getString(R.string.report_none))
             versions.forEach{v->text("• "+Instant.ofEpochMilli(v.effective_from_utc).atZone(zone).format(dtFmt)+" → "+(v.effective_until_utc?.let{Instant.ofEpochMilli(it).atZone(zone).format(dtFmt)}?:context.getString(R.string.epoch_ongoing))+
-                (if(v.origin=="LEGACY_RULE")" · "+context.getString(R.string.epoch_reconstructed) else "")+"\n"+(visit.regimenLabels[v.id]?:visit.unknownName),body,2f)}
+                (if(v.origin=="LEGACY_RULE")" · "+context.getString(R.string.epoch_reconstructed) else "")+"\n"+(visit.regimenLabels[v.id]?:visit.unknownName),body,4f)}
         }
-        y += 8f
+        endSection()
         }
         if(visit!=null && facts!=null && on(VisitSection.FACTS)){
-            text(context.getString(R.string.visit_facts_title),head)
-            net.plainnotes.app.visit.factLines(context.resources,facts,visit.unknownName).forEach{text(it,body,2f)}
-            y+=8f
+            section(context.getString(R.string.visit_facts_title))
+            net.plainnotes.app.visit.factLines(context.resources,facts,visit.unknownName).forEach{text(it,body,4f)}
+            endSection()
         }
         if(on(VisitSection.INTAKES)){
-        text(context.getString(R.string.adherence_title), head)
+        section(context.getString(R.string.adherence_title))
         val inRange = d.records.filter { it.deleted_at_utc == null && (it.taken_utc ?: it.scheduled_utc ?: 0) in since until until }
-        text(context.getString(R.string.report_recorded_contexts),head)
+        text(context.getString(R.string.report_recorded_contexts),sub)
         inRange.map{MedicationSnapshot.decode(it.config_snapshot,it.medication_id)}.distinct().forEach{snapshot->
             val description=snapshot?.let{listOfNotNull(it.name,it.molecule,it.profile?.ester,it.route,it.unit).joinToString(" · ")}
-            text(description?.takeIf{it.isNotBlank()} ?: context.getString(R.string.history_context_unknown),body)
+            text(description?.takeIf{it.isNotBlank()} ?: context.getString(R.string.history_context_unknown))
         }
         d.medications.filter { m -> inRange.any { it.medication_id == m.id } }.forEach { m ->
             val r = inRange.filter { it.medication_id == m.id && it.scheduled_utc != null }
             val (onTime, late, missed, skipped) = net.plainnotes.app.visit.scheduledCounts(inRange.filter { it.medication_id == m.id })
-            if(r.any{it.unconfirmed})text(context.getString(R.string.unconfirmed_count,r.count{it.unconfirmed}),body)
-            text("• ${m.name}: " + context.getString(R.string.report_adherence_line_v2, onTime, late, missed, skipped), body, 2f)
+            if(r.any{it.unconfirmed})text(context.getString(R.string.unconfirmed_count,r.count{it.unconfirmed}))
+            text("• ${m.name}: " + context.getString(R.string.report_adherence_line_v2, onTime, late, missed, skipped), body, 4f)
             // REQUIREMENTS §35a: records matching their period are not counted separately; no count is based on a missing scheduled time.
             val counts = net.plainnotes.app.visit.labelCounts(inRange.filter { it.medication_id == m.id && it.status in listOf("ON_TIME", "LATE") }.map { it.id }, labels)
-            if (counts.any { it > 0 }) text(context.getString(R.string.visit_fact_labels, counts[0], counts[1], counts[2], counts[3]), body, 2f)
+            if (counts.any { it > 0 }) text(context.getString(R.string.visit_fact_labels, counts[0], counts[1], counts[2], counts[3]), body, 4f)
         }
-        y += 8f
+        endSection()
         }
         if(on(VisitSection.LABS)){
         val labs = d.labs.filter { it.sampled_utc in since until until }.sortedBy { it.sampled_utc }
-        text(context.getString(R.string.labs), head)
-        if (labs.isEmpty()) text(context.getString(R.string.report_none), body) else {
-            val widths = listOf(120f, 90f, 90f, 120f, 79f)
-            row(listOf(context.getString(R.string.report_col_date), context.getString(R.string.lab_analyte), context.getString(R.string.lab_value),
-                context.getString(R.string.report_col_range), context.getString(R.string.report_col_since_dose)), widths, small.apply { isFakeBoldText = true })
-            small.isFakeBoldText = false
+        section(context.getString(R.string.labs))
+        if (labs.isEmpty()) text(context.getString(R.string.report_none)) else {
+            // Columns on the grid: date 3, analyte 1, value 2 (right aligned), report range 2, time since dose 2.
+            val table = Table(listOf(context.getString(R.string.report_col_date), context.getString(R.string.lab_analyte), context.getString(R.string.lab_value),
+                context.getString(R.string.report_col_range), context.getString(R.string.report_col_since_dose)),
+                listOf(span(3) + GUTTER, span(1) + GUTTER, span(2) + GUTTER, span(2) + GUTTER, span(2)), setOf(2))
+            trace("row", table.header.joinToString("\n"))
+            if (y + 2 * (lineHeight(body) + 4f) > CONTENT_BOTTOM) newPage()
+            tableHeader(table)
             labs.forEach { l ->
                 val saved=d.labContexts.filter{it.lab_id==l.id}.maxByOrNull{it.revision}
                 val ingredient=when(l.analyte_code){"E2","T"->l.analyte_code;"P4","P4_IA","P4_MS"->"P4";else->null}
                 val actual=saved?.let{LabContext.validate(it.context_json).getJSONArray("actual")}
                 val last=if(ingredient==null || actual==null)"" else (0 until actual.length()).map{actual.getJSONObject(it)}.firstOrNull{it.optString("ingredient")==ingredient}?.let{r->val m=r.getLong("elapsed_ms")/60000;"${m/60} h ${m%60} min"}.orEmpty()
                 val range = if (l.reference_lower != null || l.reference_upper != null) "${l.reference_lower?.let(::fmt) ?: "–"} – ${l.reference_upper?.let(::fmt) ?: "–"} ${l.reference_unit ?: ""}" else ""
-                row(listOf(Instant.ofEpochMilli(l.sampled_utc).atZone(zone).format(dtFmt), l.analyte_code, "${fmt(l.value)} ${l.unit}", range, last), widths, body)
-                if(saved==null)text(context.getString(R.string.lab_context_not_saved),small)
-                else net.plainnotes.app.ui.labContextLines(context,saved).forEach{text(it,small)}
+                tableRow(table, listOf(Instant.ofEpochMilli(l.sampled_utc).atZone(zone).format(dtFmt), l.analyte_code, "${fmt(l.value)} ${l.unit}", range, last))
+                y += 4f
+                if(saved==null)text(context.getString(R.string.lab_context_not_saved))
+                else net.plainnotes.app.ui.labContextLines(context,saved).forEach{text(it)}
             }
         }
-        y += 8f
+        endSection()
         }
         // D-2 (REQUIREMENTS §67 item 5): no retired Legacy sublingual E2 curve or band in a new PDF, and no combined
         // total E2 for mixed routes; the report says why. Other-route-only E2 keeps its existing chart.
         val e2Plan = e2ReportPlan(net.plainnotes.app.conc.SublingualEstimatePolicy.pdfE2(conc, d.records))
-        if (e2Plan.drawChart && y + 260f > H - 48f) newPage()
-        if (e2Plan.drawChart || e2Plan.messages.isNotEmpty()) text(context.getString(R.string.report_conc_title), head)
-        e2Plan.messages.forEach { text(context.getString(it), body) }
+        if (e2Plan.drawChart && y + 12f + 260f > CONTENT_BOTTOM) newPage()
+        if (e2Plan.drawChart || e2Plan.messages.isNotEmpty()) section(context.getString(R.string.report_conc_title))
+        e2Plan.messages.forEach { text(context.getString(it)) }
         if (e2Plan.drawChart) {
-            text(context.getString(R.string.pk_disclaimer_short), small)
-            drawChart(canvas!!, conc!!, M, y, W - 2 * M, 180f, from.atStartOfDay(zone).toEpochSecond() / 3600.0, conc.nowH)
+            text(context.getString(R.string.pk_disclaimer_short))
+            // The chart itself is drawn by the unchanged drawChart, full text width as before; only its place on the page moved.
+            if (y + 196f > CONTENT_BOTTOM) newPage()
+            trace("chart", "${W - 2 * M}x180"); drawChart(canvas!!, conc!!, M, y, W - 2 * M, 180f, from.atStartOfDay(zone).toEpochSecond() / 3600.0, conc.nowH)
             y += 196f
         }
+        if (e2Plan.drawChart || e2Plan.messages.isNotEmpty()) endSection()
         val scored = d.scores.filter { it.date >= from.toString() && it.date<=to.toString() }
         if (scored.isNotEmpty() && on(VisitSection.DAILY)) {
-            text(context.getString(R.string.wellbeing), head)
+            section(context.getString(R.string.wellbeing))
             d.items.forEach { item -> scored.filter { it.item_id == item.id }.takeIf { it.isNotEmpty() }?.let { s ->
-                text("• ${d.itemLabel(item)}: ${context.getString(R.string.wb_recorded_days,s.size)}", body, 2f) } }
+                text("• ${d.itemLabel(item)}: ${context.getString(R.string.wb_recorded_days,s.size)}", body, 4f) } }
+            endSection()
         }
         val summary=WellbeingSummary(d,from,to)
         if(period!=null){
-            if(on(VisitSection.SYMPTOMS)){text(context.getString(R.string.wb_symptoms),head)
-            symptomLines(context,summary.symptoms).forEach{text(it,body)}}
-            if(on(VisitSection.REVIEWS)){text(context.getString(R.string.wb_reviews),head)
-            summary.reviews.forEach{r->reviewLines(context,r).forEach{text(it,body)}}}
+            if(on(VisitSection.SYMPTOMS)){section(context.getString(R.string.wb_symptoms))
+            symptomLines(context,summary.symptoms).forEach{text(it)}; endSection()}
+            if(on(VisitSection.REVIEWS)){section(context.getString(R.string.wb_reviews))
+            summary.reviews.forEach{r->reviewLines(context,r).forEach{text(it)}}; endSection()}
             if(on(VisitSection.DAILY))d.items.forEach{item->val pts=summary.scores.filter{it.item_id==item.id}.sortedBy{it.date}
                 if(pts.isNotEmpty()){
-                    if(y+100>H-48)newPage()
-                    text(d.itemLabel(item)+" · "+context.getString(R.string.wb_recorded_days,pts.size),body)
+                    if(y+100>CONTENT_BOTTOM)newPage()
+                    text(d.itemLabel(item)+" · "+context.getString(R.string.wb_recorded_days,pts.size))
                     val paint=Paint().apply{color=Color.DKGRAY;strokeWidth=1f;isAntiAlias=true}
                     val first=from.toEpochDay();val span=(to.toEpochDay()-first).coerceAtLeast(1)
                     var last:Pair<Float,Float>?=null
-                    pts.forEach{point->val x=M+(LocalDate.parse(point.date).toEpochDay()-first).toFloat()/span*(W-2*M);val py=y+65f-(point.value-1)*15f
+                    val plotX=contentX+16f; val plotW=contentW-16f
+                    pts.forEach{point->val x=plotX+(LocalDate.parse(point.date).toEpochDay()-first).toFloat()/span*plotW;val py=y+64f-(point.value-1)*15f
                         last?.let{canvas!!.drawLine(it.first,it.second,x,py,paint)};canvas!!.drawCircle(x,py,2f,paint);last=x to py}
-                    canvas!!.drawText("1",M,y+66f,small);canvas!!.drawText("5",M,y+6f,small);y+=82f
+                    canvas!!.drawText("1",contentX,y+66f,meta);canvas!!.drawText("5",contentX,y+6f,meta);y+=84f
                 }
             }
-            if(on(VisitSection.DAILY))summary.notes.forEach{text(it.date+" · "+it.text,body)}
+            if(on(VisitSection.DAILY))summary.notes.forEach{text(it.date+" · "+it.text)}
         }
         if(visit!=null && on(VisitSection.QUESTIONS)){
-            text(context.getString(R.string.visit_questions),head)
-            if(visit.questions.isEmpty())text(context.getString(R.string.report_none),body)
+            section(context.getString(R.string.visit_questions))
+            if(visit.questions.isEmpty())text(context.getString(R.string.report_none))
             visit.questions.sortedWith(compareBy({it.sort_order},{it.id})).forEachIndexed{i,q->
-                text("${i+1}. "+q.text+" · "+context.getString(if(q.status=="ASKED")R.string.visit_question_asked else R.string.visit_question_open),body,2f)
-                q.answer_note?.let{text(context.getString(R.string.visit_answer)+": "+it,small)}
+                text("${i+1}. "+q.text+" · "+context.getString(if(q.status=="ASKED")R.string.visit_question_asked else R.string.visit_question_open),body,4f)
+                q.answer_note?.let{text(context.getString(R.string.visit_answer)+": "+it)}
             }
+            endSection()
         }
         if(visit!=null && on(VisitSection.MILESTONES)){
-            text(context.getString(R.string.visit_milestones),head)
+            section(context.getString(R.string.visit_milestones))
             val rows=d.milestones.filter{LocalDate.parse(it.date) in from..to}.sortedBy{it.date}
-            if(rows.isEmpty())text(context.getString(R.string.report_none),body)
-            rows.forEach{m->text(listOfNotNull(m.date,context.getString(when(m.kind){"STARTED"->R.string.milestone_started;"ROUTE"->R.string.milestone_route;"SURGERY"->R.string.appt_surgery;"PAUSED"->R.string.milestone_paused;"STOPPED"->R.string.milestone_stopped;"RESUMED"->R.string.milestone_resumed;else->R.string.milestone_custom}),m.title,m.note).joinToString(" · "),body)}
+            if(rows.isEmpty())text(context.getString(R.string.report_none))
+            rows.forEach{m->text(listOfNotNull(m.date,context.getString(when(m.kind){"STARTED"->R.string.milestone_started;"ROUTE"->R.string.milestone_route;"SURGERY"->R.string.appt_surgery;"PAUSED"->R.string.milestone_paused;"STOPPED"->R.string.milestone_stopped;"RESUMED"->R.string.milestone_resumed;else->R.string.milestone_custom}),m.title,m.note).joinToString(" · "))}
+            endSection()
         }
         if(on(VisitSection.PACKAGES)){
-        text(context.getString(R.string.wb_package_info),head)
-        if(visit!=null)text(context.getString(R.string.visit_packages_current),small)
-        d.containers.filter{it.source_note!=null||it.batch!=null}.forEach{c->text(listOfNotNull(d.medications.firstOrNull{it.id==c.medication_id}?.name,"#"+c.id,c.source_note,c.batch).joinToString(" · "),body)}
+        section(context.getString(R.string.wb_package_info))
+        if(visit!=null)text(context.getString(R.string.visit_packages_current))
+        d.containers.filter{it.source_note!=null||it.batch!=null}.forEach{c->text(listOfNotNull(d.medications.firstOrNull{it.id==c.medication_id}?.name,"#"+c.id,c.source_note,c.batch).joinToString(" · "))}
+        endSection()
         }
-        page?.let(doc::finishPage)
-        doc.writeTo(out); doc.close()
+        if (started) sink.finishPage()
     }
 
     private fun fmt(v: Double, decimals: Int = 3) = java.text.NumberFormat.getNumberInstance().apply { maximumFractionDigits = decimals; isGroupingUsed = false }.format(v)
