@@ -1,3 +1,4 @@
+## UI-09 与 PDF-01 已完成并合并 — 2026-10-23
 ## 远端接手：#104/#106已合并，修复主线药品UI异步等待竞态 — 2026-10-23
 
 重新核对默认分支仍claude/new-session-1959qb，HEAD a2917086ead90b3967eee71908160e8021dfe89a。#104最终663901f9已合并4f3c52a5且主线全绿；#106最终0210ab9c受保护合并a2917086，Room14单表journal/真实保存恢复已实现，REQUIREMENTS§144.A已有明确授权。复用这些成果，不重做旧crypto或迁移。其证据在docs/med02-storage-evidence-20261023。入口仍OFF/外审NOT_REVIEWED_EXTERNALLY、完整医疗备份仍仅设计。
@@ -8,12 +9,15 @@
 
 ## UI-09 瑞士排版纪律（PR #107 收尾）；PDF-01 已合并（#105）— 2026-10-23
 
-- **PDF-01**：PR #105 已合并到默认分支（REQUIREMENTS §145，报告 76）。
-- **UI-09**（REQUIREMENTS §146，原拟 §144；MED-02 #104 占用 §144）：PR #107，分支 `feature/ui09-swiss-discipline-20261023`，已开自动合并，已合入含 #104、#105 的默认分支。
-  - 本地验证：完整单测 2327 项 0 失败，core:ui 700 项 0 失败，lint 通过。
-  - 截图在 `docs/ui-audit/2026-10-23-ui09/`（前后各 336 张，另有 21 张对照）；411dp 下的阶段回顾对话框截图为 NOT_RUN。
-  - 报告 75。
-- 待办：#107 的 CI 通过并合并后，复验默认分支 CI。两项都不交付 APK、不改 versionCode。
+- **PDF-01**：PR #105 已合并（REQUIREMENTS §145，报告 76）。
+- **UI-09**：PR #107 已合并（REQUIREMENTS §146，报告 75）。
+- 默认分支合并后的提交 25f8bac2：Android and domain checks 和 Science validation 全部通过。
+- 一处 CI 插曲：#105 合并提交 adc8cbb7 上的 android job，在 setup-android 一步因 EPIPE 失败（基础设施问题，发生在任何构建或测试之前）。重跑后被更新的运行取代、取消；最新提交已全部通过。
+- 两项都没有交付 APK，也没有改 versionCode。下一次交付需要 versionCode ≥ 36。
+- 未完成（NOT_RUN）：
+  - 真机 PDF 原件；
+  - 411dp 下的阶段回顾对话框截图；
+  - 真机 TalkBack。
 
 ## PDF-01 PDF 瑞士版式（PR 前收尾）— 2026-10-23
 
