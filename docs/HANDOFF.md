@@ -1,3 +1,7 @@
+## 更正前轮日志归档判断：四seam原件已在原ZIP保留 — 2026-10-23
+
+重新逐项枚举#106和01f45主线原ZIP，实际均包含med02-persistent-restart下WRITE/STAGED/IN_COMMIT/COMMITTED的killed.log与verify.log；主线三API共12个verify均含OK(1 test)、无FAILURES。前轮“上传路径缺失”的判断不准确，已修正production-review-scope当前清单并写restart-log-correction.json；旧交接保留为历史，勿据此新增无谓CI路径或重跑。源码workflow本来已收这些日志。
+
 ## #109与合并后主线完整收尾：六必需门全PASS — 2026-10-23
 
 主线01f45fb889d198b201b3bb1904ecf4c3f41eb501，Android39960227901、Science39960227840最终SUCCESS；五Android作业全部PASS，没有手工重跑。官方host artifact12505114780 SHA256 750a02bf3f70ce709e3fc84b88946d2e1e404aee8d420f1eadef379c17650908/CRC已核，实际四语320dp2x BDPM12、Period5零fail/skip；主线三API实际附件各48、35另BDPM3零fail/skip。主线host原日志亦核无INTERNET、R8附件隔离、SOURCE_DIRTY=false及SOURCE_SHA=01f45fb8，原HTML/日志/元数据保留postmerge-a291-bdpm/main-green。原a291真实FAIL仍保留，不借新绿改写旧失败。PR109已正常保护合并，无生产改动、Schema/PNBAK1/PK/权限/版本变化。

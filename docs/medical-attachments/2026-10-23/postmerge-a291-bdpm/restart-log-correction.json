@@ -1,0 +1,77 @@
+{
+  "correction": "Prior statement about missing uploaded restart logs was incorrect; no CI change or rerun needed. Original ZIPs already retain them.",
+  "results": [
+    {
+      "api": "api26",
+      "boundary": "WRITE",
+      "verify": "OK (1 test)",
+      "killed_log": "PRESENT"
+    },
+    {
+      "api": "api26",
+      "boundary": "STAGED",
+      "verify": "OK (1 test)",
+      "killed_log": "PRESENT"
+    },
+    {
+      "api": "api26",
+      "boundary": "IN_COMMIT",
+      "verify": "OK (1 test)",
+      "killed_log": "PRESENT"
+    },
+    {
+      "api": "api26",
+      "boundary": "COMMITTED",
+      "verify": "OK (1 test)",
+      "killed_log": "PRESENT"
+    },
+    {
+      "api": "api29",
+      "boundary": "WRITE",
+      "verify": "OK (1 test)",
+      "killed_log": "PRESENT"
+    },
+    {
+      "api": "api29",
+      "boundary": "STAGED",
+      "verify": "OK (1 test)",
+      "killed_log": "PRESENT"
+    },
+    {
+      "api": "api29",
+      "boundary": "IN_COMMIT",
+      "verify": "OK (1 test)",
+      "killed_log": "PRESENT"
+    },
+    {
+      "api": "api29",
+      "boundary": "COMMITTED",
+      "verify": "OK (1 test)",
+      "killed_log": "PRESENT"
+    },
+    {
+      "api": "api35",
+      "boundary": "WRITE",
+      "verify": "OK (1 test)",
+      "killed_log": "PRESENT"
+    },
+    {
+      "api": "api35",
+      "boundary": "STAGED",
+      "verify": "OK (1 test)",
+      "killed_log": "PRESENT"
+    },
+    {
+      "api": "api35",
+      "boundary": "IN_COMMIT",
+      "verify": "OK (1 test)",
+      "killed_log": "PRESENT"
+    },
+    {
+      "api": "api35",
+      "boundary": "COMMITTED",
+      "verify": "OK (1 test)",
+      "killed_log": "PRESENT"
+    }
+  ]
+}

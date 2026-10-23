@@ -95,12 +95,12 @@
     ],
     "limitations": [
       "Synthetic emulator data only, no physical device or hardware power-loss proof",
-      "Raw restart seam stdout files missing from upload paths; four PASS markers retained in original job logs",
       "Internal tests and author review are not independent expert review"
     ],
     "unsigned_release_guard": "Final PR host log retained in postmerge-a291-bdpm/pr-green/host-job.log.gz: no INTERNET, attachment R8/DEX isolation and provenance checks PASS. Unsigned CI build is not a signed delivery or release.",
     "postmerge_run": 39960227901,
-    "postmerge_result": "All six required checks PASS; same source01f45fb8, native48 per API26/29/35; native35 BDPM3 and host four-locale12 + Period5 PASS"
+    "postmerge_result": "All six required checks PASS; same source01f45fb8, native48 per API26/29/35; native35 BDPM3 and host four-locale12 + Period5 PASS",
+    "restart_original_logs": "CORRECTION: existing original #106 and merged-main native ZIPs contain all four killed.log/verify.log pairs under med02-persistent-restart. Prior missing-upload statement was an inspection error, not an actual workflow gap."
   },
   "review_obligations": [
     "Tink supported API and version maintenance; immutable context/domain encoding; fresh DEK and two single-use device aliases per attempt",
