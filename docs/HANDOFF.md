@@ -1,3 +1,9 @@
+## #109与合并后主线完整收尾：六必需门全PASS — 2026-10-23
+
+主线01f45fb889d198b201b3bb1904ecf4c3f41eb501，Android39960227901、Science39960227840最终SUCCESS；五Android作业全部PASS，没有手工重跑。官方host artifact12505114780 SHA256 750a02bf3f70ce709e3fc84b88946d2e1e404aee8d420f1eadef379c17650908/CRC已核，实际四语320dp2x BDPM12、Period5零fail/skip；主线三API实际附件各48、35另BDPM3零fail/skip。主线host原日志亦核无INTERNET、R8附件隔离、SOURCE_DIRTY=false及SOURCE_SHA=01f45fb8，原HTML/日志/元数据保留postmerge-a291-bdpm/main-green。原a291真实FAIL仍保留，不借新绿改写旧失败。PR109已正常保护合并，无生产改动、Schema/PNBAK1/PK/权限/版本变化。
+
+本次接手已核#104/#106为已合并生产存储，修正并合并#109异步UI测试竞态，完成精确源及主线验证；不重做别号成果。附件仍OFF/NOT_REVIEWED_EXTERNALLY，真机/TalkBack NOT_RUN。剩余启用工作：完整portable医疗备份（仅设计，未授权新密码格式）、应用session/AppLock/换库owner接线、原件格式准入/预览、全局配额/安全清理、外部审核及真实用户流程；不能因48项原生绿而当附件库可用。生产审查输入固定production-review-scope.json，旧test-only审查不认证当前源。独立PR108文档冲突尚未处理，不覆盖其UI/PDF。此分支是证据归档，不将其旧HANDOFF整体覆盖最新主线。
+
 ## #109主线三API原生全部PASS，待最终host — 2026-10-23
 
 01f45fb8主线39960227901的API35已SUCCESS；官方device-test-results12505423113 SHA256 a639f3da79803505891836c7bf33fa40aa3763b50833e7235c84c218947becd5与上传digest一致、CRC PASS。实际附件48项和BdpmReferenceFlowAndroidTest3项均0fail/0skip，原ZIP/receipt及BDPM HTML保留main-green。26/29前一检查点已推。Science/JVM亦SUCCESS；host仍在运行，不提前称整轮完成。保持OFF/未外审/无新生产改动，未重跑任何任务。

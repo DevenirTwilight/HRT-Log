@@ -9,10 +9,21 @@
   "pr_android_run": 39957082418,
   "push_android_run": 39956960416,
   "main_android_run": 39960227901,
-  "main_android_status": "IN_PROGRESS",
+  "main_android_status": "SUCCESS",
   "main_science_run": 39960227840,
   "main_science_status": "SUCCESS",
   "production_change": false,
   "pr_checkout": "dff8e30d492726d08442619877fb57e67efeaf93",
-  "pr_checkout_tree": "ae90ff2111634ae16ead96a93ba001c2a908e7eb"
+  "pr_checkout_tree": "ae90ff2111634ae16ead96a93ba001c2a908e7eb",
+  "main_required_checks": "All six PASS, independent postmerge run completed; no manual rerun",
+  "final_pr_metadata": {
+    "headRefOid": "7aecef43ee929ccbce668530abf9a92070b6851b",
+    "mergeCommit": {
+      "oid": "01f45fb889d198b201b3bb1904ecf4c3f41eb501"
+    },
+    "mergedAt": "2026-10-23T13:19:18Z",
+    "number": 109,
+    "state": "MERGED",
+    "url": "https://github.com/DevenirTwilight/HRT-Log/pull/109"
+  }
 }

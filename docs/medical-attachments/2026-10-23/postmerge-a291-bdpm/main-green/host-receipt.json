@@ -1,0 +1,19 @@
+{
+  "source": "01f45fb889d198b201b3bb1904ecf4c3f41eb501",
+  "run": 39960227901,
+  "artifact": 12505114780,
+  "sha256": "750a02bf3f70ce709e3fc84b88946d2e1e404aee8d420f1eadef379c17650908",
+  "crc": "PASS",
+  "classes": {
+    "BdpmReferenceFlowTest": {
+      "tests": 12,
+      "failures": 0,
+      "skipped": 0
+    },
+    "PeriodStabilityTest": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    }
+  }
+}
