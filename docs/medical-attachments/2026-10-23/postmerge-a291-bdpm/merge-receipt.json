@@ -1,0 +1,16 @@
+{
+  "pr": 109,
+  "source": "7aecef43ee929ccbce668530abf9a92070b6851b",
+  "base": "a2917086ead90b3967eee71908160e8021dfe89a",
+  "merge": "01f45fb889d198b201b3bb1904ecf4c3f41eb501",
+  "merged_at": "2026-10-23T13:19:18Z",
+  "source_and_merge_tree": "ae90ff2111634ae16ead96a93ba001c2a908e7eb",
+  "protected_checks": "six required PASS; no unresolved review threads; exact-head normal MERGE",
+  "pr_android_run": 39957082418,
+  "push_android_run": 39956960416,
+  "main_android_run": 39960227901,
+  "main_android_status": "IN_PROGRESS",
+  "main_science_run": 39960227840,
+  "main_science_status": "SUCCESS",
+  "production_change": false
+}

@@ -1,0 +1,40 @@
+{
+  "artifact_id": 12504262382,
+  "run": 39957082418,
+  "source": "7aecef43ee929ccbce668530abf9a92070b6851b",
+  "sha256": "56123ceb99e28ab00e227409fec7135d0a30c8f8ef048cdac85b24d594acb101",
+  "crc": "PASS",
+  "classes": {
+    "AttachmentPersistentStoreAndroidTest": {
+      "tests": 7,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentPersistentRestartAndroidTest": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentFoundationAndroidTest": {
+      "tests": 33,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentSqlCipherMigrationTest": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    },
+    "AttachmentKeyAndroidTest": {
+      "tests": 2,
+      "failures": 0,
+      "skipped": 0
+    },
+    "BdpmReferenceFlowAndroidTest": {
+      "tests": 3,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "scope": "Native emulator API35; not physical device/TalkBack/external review"
+}

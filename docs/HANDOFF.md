@@ -1,3 +1,9 @@
+## #109已保护合并01f45fb8，最终三API与四语原件已保存 — 2026-10-23
+
+最新精确源7aecef43 PR39957082418和push39956960416全部六必需门SUCCESS，无冲突/未解决讨论，正常match-head MERGE于13:19:18Z合并01f45fb889d198b201b3bb1904ecf4c3f41eb501。git核源和主线tree均ae90ff2111634ae16ead96a93ba001c2a908e7eb。最终PR官方API35原ZIP12504262382与host12504461712 SHA256/CRC均PASS，API35附件48项+真实BdpmReferenceFlowAndroidTest3项全PASS；host四语12+Period5全PASS，原HTML/receipt保留native、pr-green。旧主线a291真实FAIL不删除。没有重跑/削弱断言/生产改动。
+
+主线Science39960227840 SUCCESS；Android39960227901在途，尚不称主线全绿。附件仍OFF/NOT_REVIEWED_EXTERNALLY；Room14/业务备份/PNBAK1均无本轮变更。已批准存储已实现并通过合成原生测试，不等于可导入真实原件；完整医疗备份设计、全局配额/安全清理、应用权限owner接线与外审仍待。下一步继续核主线，保存实际结果后收尾。
+
 ## #109 API26与同源push完整CI已核验，PR仍在途 — 2026-10-23
 
 源7aecef43未变化。push39956960416完整五Android作业及Science全PASS；官方build-results12503632436 SHA256/CRC已核验，真实HTML中BdpmReferenceFlowTest四语320dp2x合计12/0fail/0skip、PeriodStability5/0/0。报告保留postmerge-a291-bdpm/push-green。PR39957082418的API26现SUCCESS，artifact12504241667 SHA256/CRC PASS，Store7/Restart1/Foundation33/Migration5/Key2全零失败跳过；原job四seam PASS日志压缩保留native。PR尚待device/host，不以push或本地替代PR保护门。未重跑、未变源码/Schema、无生产改动。
