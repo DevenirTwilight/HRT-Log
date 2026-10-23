@@ -1,3 +1,13 @@
+## MED-02 完整恢复预检与隔离准备已编码，等待验证 — 2026-10-23
+
+本轮起点主线4dca6744e93ad585a2a824262bd72d083e4f2bce，#103/104/106/110/111均已合并；#111最终5c8068d2的PR39979087267/push39979078536六必需门全部PASS，不重做快照/Tink/Keystore/Room14。#110主线39978847114 SUCCESS。本地独立feature/med02-restore-preflight-20261023，不修改其他库存/UI工作树。
+
+新增真实生产AttachmentRestorePreflight：复用严格indexed JSON、版本门，完整成员/历史序号/当前指针、typed UUID→显式新ID/真实目标行、墓碑、临床回收站证据、空间与key预算。新增AttachmentRestoreStaging：复用既有held-FD/锁/NOFOLLOW/EXCL/fsync/只读封存与完整Tink验证，固定独立quarantine命名空间，仅密文，无SQL写入/alias生成/包装/激活。receipt明确wholeArchiveAuthenticated=false、activatable=false，当前数据库/原件不变。新进程一律保留收费UNKNOWN，不恢复/删除/采用；不是持久化整库恢复journal。
+
+接通时发现#111真实拒绝有效数据：DOSE_RECORD是reference trash，payload可{}且soft-deleted dose仍在表中；旧快照将其错当payload snapshot。最小修复检查原payload digest、exact RECORD ref和软删原行；LAB/APPOINTMENT仍严格payload membership，所有审计/原件认证保留。待新增原生合同验证，未提前PASS。
+
+首轮本地新preflight5项及native源码编译PASS（中间源）；后续新增staging原生与崩溃验证尚未执行，不把旧绿归给最终源。单一PNMEDBK1审批摘要更新在已有portable-backup-format-proposal.md：仍NOT_APPROVED，正式writer/reader/KDF/portable wrap/集合codec/全库激活均BLOCKED_PENDING_EXPLICIT_APPROVAL，2MiB TEST_ONLY未改。契约restore-preparation-contract.md明确资源估计≠总恢复空间、key计划≠持久预留、隔离对象认证≠整备份认证、退役namespace拒绝。入口OFF/feature0、外审NOT_REVIEWED_EXTERNALLY、真实原件/永久删除OFF；Room14/PNBAK1/SQLCipher/Tink/BDPM/PK/P5/P6不变。
+
 ## 容量PR110已验收b5，正常同步最新UI/PDF交接 — 2026-10-23
 
 b5e26ae5 PR39970443750/push39970434554六必需门均PASS，本地561项PASS；官方API26/29原件独立核Store11/Foundation33/Migration5/Key2/Restart1合计52/0fail/skip，四freshPID seam均OK(1 test)，35状态SUCCESS待原件核。原c181错误测试安排导致FAIL仍保留。最新主线e21c09bf只合并#108交接，没有生产/Schema变化；本次正常合并保留双方HANDOFF全部内容，不覆盖UI/PDF。容量生产/测试代码逐字节不变，新集成HEAD仍需自己的六门和最新冲突/讨论检查，不借旧绿合并。入口OFF、永久删除OFF、format未批准。

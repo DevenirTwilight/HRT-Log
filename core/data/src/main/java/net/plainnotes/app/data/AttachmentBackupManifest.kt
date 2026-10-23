@@ -44,8 +44,8 @@ internal data class AttachmentBackupManifest(
     }
     /** Explicit, exhaustive typed mapping for a NEW local identity. Never infer from source integers. */
     data class Target(val record:UUID,val kind:Kind,val localId:Long?)
-    fun mapTo(newDataset:UUID,newEpoch:UUID,targets:List<Target>):Map<UUID,Target> {
-        validate();require(newDataset!=dataset && newEpoch!=epoch) {"Restore needs fresh local identities"}
+    fun mapTo(newDataset:UUID,newEpoch:UUID,targets:List<Target>,limits:Limits=Limits()):Map<UUID,Target> {
+        validate(limits);require(newDataset!=dataset && newEpoch!=epoch) {"Restore needs fresh local identities"}
         require(targets.size==records.size && targets.map {it.record}.toSet().size==targets.size)
         val live=targets.filter {it.localId!=null}
         require(live.map {it.kind to it.localId}.toSet().size==live.size)
