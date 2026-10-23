@@ -1,3 +1,7 @@
+## PR110本地561项通过；首轮原生因旧用例安排失败已修 — 2026-10-23
+
+生产源c181本地完整数据层561/0fail/error/skip，native APK编译PASS；八个新预算边界与原所有测试均保留。真实API29 push39968772333在旧missingKeyAndReplacedFile用例失败：故意换inode后继续创建下一破坏目标，被新容量守卫拒绝。现只提前安排四个独立目标，保留全部原断言及末尾四CORRUPT，增加坏归属后新操作不开户/不建journal/不生成alias的拒绝断言。生产预算/归属逻辑未改，新native测试源码编译PASS，精确新HEAD仍待完整CI，保留Draft。原失败ZIP/HTML/日志及本地561证据在docs/med02-postmerge-evidence-20261023的storage-budget-evidence，不冒充最终源已验收。
+
 ## 容量保护生产代码已接通，首轮编译问题已修，最终回归在途 — 2026-10-23
 
 新增AttachmentStorageBudget/StorageAccounting，OwnedFiles在同一锁定目录FD下有界lstat枚举，不打开未知叶；DeviceKeys只枚举中性namespace身份，不删alias。PersistentStore在新PREPARE之前检查最坏密文/对象/alias/空间预算，重放不受新预算阻断；完整认证后发布前再查实际占用及空间，不重复预留第二次。历史/回收站/隔离/未知/未完成分别计费，未知目录/符号链接/身份冲突/缺失/溢出fail closed。永久删除OFF，无Schema或备份格式改动。

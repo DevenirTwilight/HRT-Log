@@ -232,26 +232,32 @@ class AttachmentPersistentStoreAndroidTest {
     }
     @Test fun missingKeyAndReplacedFileRefuseWithoutCreatingKeysOrDeletingUnknownBytes() {
         Fixture(app).use {f->
-            val bytes=byteArrayOf(1,3,5,7);val r=f.request(bytes);f.store().save(f.scope,f.session.issue(),r) {ByteArrayInputStream(bytes)}
-            val alias=f.raw.query("SELECT active_alias_uuid FROM attachment_journal").use {assertTrue(it.moveToFirst());AttachmentDeviceKeys.Alias(UUID.fromString(it.getString(0)),AttachmentDeviceKeys.Role.ACTIVE).value}
+            val bytes=byteArrayOf(1,3,5,7)
+            // Arrange every independent corruption target while the inventory is still valid.
+            // Once a selected inode is replaced, new allocations must now fail closed.
+            val r=f.request(bytes);val second=f.request(bytes);val wrong=f.request(bytes);val tampered=f.request(bytes)
+            listOf(r,second,wrong,tampered).forEach {request->f.store().save(f.scope,f.session.issue(),request) {ByteArrayInputStream(bytes)}}
+            val alias=f.raw.query("SELECT active_alias_uuid FROM attachment_journal WHERE operation_uuid=?",arrayOf(r.operation.toString())).use {assertTrue(it.moveToFirst());AttachmentDeviceKeys.Alias(UUID.fromString(it.getString(0)),AttachmentDeviceKeys.Role.ACTIVE).value}
             val keyStore=KeyStore.getInstance("AndroidKeyStore").apply {load(null)};keyStore.deleteEntry(alias)
             reject {f.store().open(f.scope,f.session.issue(),r.document)};assertFalse(keyStore.containsAlias(alias))
-            val second=f.request(bytes);f.store().save(f.scope,f.session.issue(),second) {ByteArrayInputStream(bytes)}
             val objectId=f.raw.query("SELECT object_uuid FROM attachment_journal WHERE operation_uuid=?",arrayOf(second.operation.toString())).use {assertTrue(it.moveToFirst());it.getString(0)}
             val target=File(f.directory,"attachment-objects-v1/$objectId");val retained=File(f.directory,"retained-original")
             assertTrue(target.renameTo(retained));target.writeBytes(byteArrayOf(9,9,9));assertTrue(target.setReadOnly())
             reject {f.store().open(f.scope,f.session.issue(),second.document)}
             assertEquals(0,f.store().recover(f.scope,f.session.issue()));assertTrue(target.exists());assertTrue(retained.exists())
-            val wrong=f.request(bytes);f.store().save(f.scope,f.session.issue(),wrong) {ByteArrayInputStream(bytes)}
             val wrongAlias=f.raw.query("SELECT active_alias_uuid FROM attachment_journal WHERE operation_uuid=?",arrayOf(wrong.operation.toString())).use {assertTrue(it.moveToFirst());AttachmentDeviceKeys.Alias(UUID.fromString(it.getString(0)),AttachmentDeviceKeys.Role.ACTIVE)}
             keyStore.deleteEntry(wrongAlias.value);AttachmentDeviceKeys().provisionNew(wrongAlias)
             reject {f.store().open(f.scope,f.session.issue(),wrong.document)}
-            val tampered=f.request(bytes);f.store().save(f.scope,f.session.issue(),tampered) {ByteArrayInputStream(bytes)}
             val tamperedId=f.raw.query("SELECT object_uuid FROM attachment_journal WHERE operation_uuid=?",arrayOf(tampered.operation.toString())).use {assertTrue(it.moveToFirst());it.getString(0)}
             val ciphertext=File(f.directory,"attachment-objects-v1/$tamperedId");assertTrue(ciphertext.setWritable(true,true))
             java.io.RandomAccessFile(ciphertext,"rw").use {it.seek(it.length()-1);val old=it.readByte();it.seek(it.length()-1);it.writeByte(old.toInt() xor 1)}
             assertTrue(ciphertext.setReadOnly());reject {f.store().open(f.scope,f.session.issue(),tampered.document)}
-            assertEquals(4L,f.number("SELECT COUNT(*) FROM attachment_version WHERE status='CORRUPT'"));f.safety()
+            assertEquals(4L,f.number("SELECT COUNT(*) FROM attachment_version WHERE status='CORRUPT'"))
+            val aliases=AttachmentDeviceKeys().retainedAliases(10000)
+            try {f.store().save(f.scope,f.session.issue(),f.request(bytes)) {error("Damaged inventory opened input")};fail("Damaged inventory accepted allocation")}
+            catch(e:AttachmentStorageBudget.Rejected) {assertEquals(AttachmentStorageBudget.Refusal.INCOMPLETE_INVENTORY,e.reason)}
+            assertEquals(4L,f.number("SELECT COUNT(*) FROM attachment_journal"))
+            assertEquals(aliases,AttachmentDeviceKeys().retainedAliases(10000));f.safety()
         }
     }
     @Test fun noReplaceSymlinkCreationAndLiveWriterExclusionPreserveUnknownFiles() {
