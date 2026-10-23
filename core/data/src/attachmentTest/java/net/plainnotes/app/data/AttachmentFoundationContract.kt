@@ -12,7 +12,7 @@ import java.time.Instant
 import java.util.UUID
 
 /** Real Room transactions and guards, synthetic clinical records only. */
-abstract class AttachmentFoundationContract {
+abstract class AttachmentFoundationContract : AttachmentObjectStreamsContract() {
     // Real Android pipes report unknown (-1). Robolectric's pipe shadow reports a false zero.
     protected open val pipeStatSize: Long get() = -1L
     private lateinit var db:NotesDatabase

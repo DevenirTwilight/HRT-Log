@@ -1,3 +1,31 @@
+## MED-02：#104 最终源许可守卫修复，持久化授权已接收 — 2026-10-23
+
+默认分支 d2223c0a，#102/#103 已合并；#104 f86d4a5e 尚未合并。原 PR Android 39854454660：API26 job120089049019 在 adb/emulator 启动阶段失败（测试未运行）；同源 push API26 job120089018775 成功，PR API29/35、JVM 成功。另有真实主机失败 job120089049277：2255 项中 Ui08PdfSummaryUnchangedTest 1 FAIL、492 skip，原因是合法新增的四语 Tink 许可文字进入旧资源整文件哈希，不是 PDF 实现变化。
+
+本次仅在该守卫中精确反归一化 licenses_body 内的一处获准 Tink 插入，再验证全部原冻结哈希；未更新任何期望哈希、PDF 代码、UI-08 逻辑或其他资源。独立 ThirdPartyNoticesTest 仍正向要求四语 Tink/Apache 归属。2026-10-23 本地针对此工作树：UI08 守卫1、许可3、PeriodStability5，合计9/9 PASS。最终提交需完整必需 CI，不把本地或旧源绿色当作新源验收；因需实际源码修复，不额外重跑旧 f86 的 API26 故障作业。
+
+负责人本轮明确授权默认关闭的最小非破坏性 Room/journal 持久化实现；接下来独立分支，先核真实 Schema13 与兼容设计，再实施 PREPARE→STAGE→AUTHENTICATE→COMMIT→RECOVER。完整医疗备份仅设计，不改 PNBAK1，不启用入口、不使用真实原件，外审仍 NOT_REVIEWED_EXTERNALLY。尚无持久化实现或迁移通过证据，不宣称闭环完成。
+
+## #104发现并修复运行依赖许可守卫FAIL，旧失败保留 — 2026-10-22
+
+749bacb5的push Android39851821726/job120080459643中ThirdPartyNoticesTest.everyRuntimeLibraryHasANotice FAIL（新增runtime alias tink.android不在许可映射）；不是加密合同或数据层失败。三API先前PASS仍仅归旧源，不能宣称全CI通过。补齐原许可映射和四语licenses_body里的Tink Apache-2.0归属，并新增四语归属正向检查，所有旧断言保持；未改页面布局/导航或开启功能。原失败日志/工件保留并写证据分支，PR保持自动合并待全部最终门。新最终源需要复验许可、时期稳定性与六门，不靠重跑旧源挑绿色。
+
+## #104代码复核：资源边界与依赖声明 — 2026-10-22
+
+复核将64KiB工作缓冲分配移到资源已登记且有finally清理的范围内；分配异常也会关闭移交的源/目标/channel并清除原始DEK，不以System.gc或扩大heap解决。THIRD_PARTY_NOTICES同步反映新runtime声明，未放宽现有R8发布隔离守卫；正式启用时仍需补齐适用应用内许可。此为必要源码调整，旧bbc的本地32项仍只归属旧源码，新最终提交需重跑相关回归和完整CI，不借旧绿冒充新源通过。
+
+## 默认OFF附件crypto writer/reader与设备key适配已编码，测试在途 — 2026-10-22
+
+分支feature/med02-object-store-20261022；先行设计13fbf748已推送。新增AttachmentObjectContext、AttachmentObjectStreams和AttachmentDeviceKeys：使用Tink1.23公共key/primitive API，流式密文写出，完整cipher/plain承诺和AEAD严格EOF后才给同channel reader；设备stage/active独立alias、显式provision、unwrap绝不创建key。原型subtle API只作独立测试oracle。没有文件路径协调器/SQL发布/持久quota、AppLock接线或正式备份，不能声称完整文件库已可用。
+
+初次生产Kotlin编译PASS；随后追加cipher增长界限，最终回归尚在运行。新增12个共享crypto合同（被Foundation JVM与三API现有runner继承），以及实际Keystore新adapter测试。尚不能报这些测试PASS。Room13/业务备份/PNBAK1、feature0、权限/PK/签名版本均不变。发布隔离断言不放宽，R8仍须删去未接线的Tink路径。当前仅设计兼容性，无新migration。继续检查测试、修复真实失败并提交PR，不能在此停止。
+
+## #103已合并；负责人批准默认OFF正式存储实现 — 2026-10-22
+
+#103最终8dd60c435d924abafd3aabf8d7947b7691eae520六必需门PASS，受保护自动合并d2223c0a（20:36:11Z）。API26/29/35原始ZIP、SHA/CRC、实际Foundation20及Saf5全部PASS；35另有真实Tink sandbox8项PASS。26/29的app逐类HTML被后续suite覆盖，不能声称该逐类证据保留。完整证据在docs/med02-resource-evidence-20261022，旧首轮平台断言失败保留。
+
+最新明确批准见REQUIREMENTS§144。接下来独立feature/med02-object-store-20261022，基线d2223c0a；先提交storage-compatibility设计，然后实现默认关闭的Tink公共API流式writer/全认证reader和设备key适配。尚无新Room迁移/完整备份格式授权，不开放UI/文件选择器/正式发布。外部审核改为启用前完成，目前NOT_REVIEWED_EXTERNALLY。不得继续将旧“实施前外审”当作阻断授权范围内代码的理由。
+
 ## 附件受限输入本地256项通过，真实密文sandbox集成通过；首轮平台断言失败保留 — 2026-10-22
 
 生产传输层未变；ce902c89的Foundation20项中1FAIL是新测试把Robolectric管道statSize误断言为-1，实际为0，发生在读取前。原日志/XML保留input-platform-red。改为JVM精确0/真实Android仍精确-1的平台hook，读取/限量/清理/feature0原断言全保留。修正后Foundation20/0/0，domain172/0/0、附件原型64/0/0（新增一项新输入层接既有Tink真实密文sandbox：超限旧cipher/pointer/revision不变、精确上限完整认证后才CAS）；Python69 PASS。不是正式Room文件writer或新格式审核。
