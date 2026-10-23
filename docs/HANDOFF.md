@@ -1,3 +1,24 @@
+## 容量PR110已验收b5，正常同步最新UI/PDF交接 — 2026-10-23
+
+b5e26ae5 PR39970443750/push39970434554六必需门均PASS，本地561项PASS；官方API26/29原件独立核Store11/Foundation33/Migration5/Key2/Restart1合计52/0fail/skip，四freshPID seam均OK(1 test)，35状态SUCCESS待原件核。原c181错误测试安排导致FAIL仍保留。最新主线e21c09bf只合并#108交接，没有生产/Schema变化；本次正常合并保留双方HANDOFF全部内容，不覆盖UI/PDF。容量生产/测试代码逐字节不变，新集成HEAD仍需自己的六门和最新冲突/讨论检查，不借旧绿合并。入口OFF、永久删除OFF、format未批准。
+
+## PR110本地561项通过；首轮原生因旧用例安排失败已修 — 2026-10-23
+
+生产源c181本地完整数据层561/0fail/error/skip，native APK编译PASS；八个新预算边界与原所有测试均保留。真实API29 push39968772333在旧missingKeyAndReplacedFile用例失败：故意换inode后继续创建下一破坏目标，被新容量守卫拒绝。现只提前安排四个独立目标，保留全部原断言及末尾四CORRUPT，增加坏归属后新操作不开户/不建journal/不生成alias的拒绝断言。生产预算/归属逻辑未改，新native测试源码编译PASS，精确新HEAD仍待完整CI，保留Draft。原失败ZIP/HTML/日志及本地561证据在docs/med02-postmerge-evidence-20261023的storage-budget-evidence，不冒充最终源已验收。
+
+## 容量保护生产代码已接通，首轮编译问题已修，最终回归在途 — 2026-10-23
+
+新增AttachmentStorageBudget/StorageAccounting，OwnedFiles在同一锁定目录FD下有界lstat枚举，不打开未知叶；DeviceKeys只枚举中性namespace身份，不删alias。PersistentStore在新PREPARE之前检查最坏密文/对象/alias/空间预算，重放不受新预算阻断；完整认证后发布前再查实际占用及空间，不重复预留第二次。历史/回收站/隔离/未知/未完成分别计费，未知目录/符号链接/身份冲突/缺失/溢出fail closed。永久删除OFF，无Schema或备份格式改动。
+
+第一轮native源码编译因测试fixture增加budget参数破坏原尾随lambda调用失败，原initial-compile.log保留；改为保留boundary末参数，未删原测试。随后初版目标JVM及native编译PASS，intermediate-targeted.log仅归属中间源；又补发布前实占复核与alias分项报告，最终源完整数据层回归+native APK编译在途，不冒充已通过。旧前轮“重启日志未上传”已复核更正：#106和主线原ZIP本来含全部四seam原件，不需CI改动。
+
+## MED-02 容量保护与完整备份准备启动 — 2026-10-23
+
+最新默认claude/new-session-1959qb HEAD01f45fb8，主线Android39960227901/Science39960227840全部PASS；#102–106/109均已合并，Room14、PNBAK1不变。PR109原失败/修复/主线证据在docs/med02-postmerge-evidence-20261023，不能因本main旧交接仍写在途而重跑。
+
+当前独立feature/med02-storage-budget-20261023实施PR-A：基于现有同一文件锁和持久journal统计已提交/历史/隔离/未知/在途占用，明确可配置容量与alias预算，写入前拒绝，不删除、不退还wrap预算。先测试合同再接入PREPARE前，新源码尚未测试，不提前PASS。PR-B随后独立分支做快照/全量成员/身份映射及格式提案，新格式未批准不能正式导出恢复。入口OFF/未外审，永久删除关闭。不触碰UI、PK、PNBAK1或Schema。
+
+## UI-09 与 PDF-01 已完成并合并 — 2026-10-23
 ## 远端接手：#104/#106已合并，修复主线药品UI异步等待竞态 — 2026-10-23
 
 重新核对默认分支仍claude/new-session-1959qb，HEAD a2917086ead90b3967eee71908160e8021dfe89a。#104最终663901f9已合并4f3c52a5且主线全绿；#106最终0210ab9c受保护合并a2917086，Room14单表journal/真实保存恢复已实现，REQUIREMENTS§144.A已有明确授权。复用这些成果，不重做旧crypto或迁移。其证据在docs/med02-storage-evidence-20261023。入口仍OFF/外审NOT_REVIEWED_EXTERNALLY、完整医疗备份仍仅设计。
@@ -8,12 +29,15 @@
 
 ## UI-09 瑞士排版纪律（PR #107 收尾）；PDF-01 已合并（#105）— 2026-10-23
 
-- **PDF-01**：PR #105 已合并到默认分支（REQUIREMENTS §145，报告 76）。
-- **UI-09**（REQUIREMENTS §146，原拟 §144；MED-02 #104 占用 §144）：PR #107，分支 `feature/ui09-swiss-discipline-20261023`，已开自动合并，已合入含 #104、#105 的默认分支。
-  - 本地验证：完整单测 2327 项 0 失败，core:ui 700 项 0 失败，lint 通过。
-  - 截图在 `docs/ui-audit/2026-10-23-ui09/`（前后各 336 张，另有 21 张对照）；411dp 下的阶段回顾对话框截图为 NOT_RUN。
-  - 报告 75。
-- 待办：#107 的 CI 通过并合并后，复验默认分支 CI。两项都不交付 APK、不改 versionCode。
+- **PDF-01**：PR #105 已合并（REQUIREMENTS §145，报告 76）。
+- **UI-09**：PR #107 已合并（REQUIREMENTS §146，报告 75）。
+- 默认分支合并后的提交 25f8bac2：Android and domain checks 和 Science validation 全部通过。
+- 一处 CI 插曲：#105 合并提交 adc8cbb7 上的 android job，在 setup-android 一步因 EPIPE 失败（基础设施问题，发生在任何构建或测试之前）。重跑后被更新的运行取代、取消；最新提交已全部通过。
+- 两项都没有交付 APK，也没有改 versionCode。下一次交付需要 versionCode ≥ 36。
+- 未完成（NOT_RUN）：
+  - 真机 PDF 原件；
+  - 411dp 下的阶段回顾对话框截图；
+  - 真机 TalkBack。
 
 ## PDF-01 PDF 瑞士版式（PR 前收尾）— 2026-10-23
 
@@ -3289,3 +3313,11 @@ DraftMedicalArchive只在attachmentTest测试源集：2MiB内存reference，BC A
 代码复查发现只读capture误用写COMMIT授权监视器，可能让锁屏撤权等待完整audit/encode；records消费回调同样不应长期持有该锁。改为同一受控只读Room事务保持一致快照，完整审计不变，只在起点/owned记录缓冲转交/最终结果交付短窗口校验权限；编码失败或迟到转交清零，结果仍在全部对象认证和活scope校验后交付。records消费在监视器外，只允许私有有界staging，撤权可异步清零，返回前post-check拒绝迟到结果。没有缩减业务/历史检查、没有新写入或信任缓存。
 
 新增第六个真实Snapshot原生合同分别暂停记录缓冲转交前和记录消费中，另一线程revoke须在释放阻塞点前完成（5s死锁检测上界），owned记录清零，读任务拒绝且原临床/附件事实不变；不是P4性能预算测试。新源未执行原生，不先称安全问题已验收；继续编译/适用三API回归，保留Draft。
+
+## MED-02 两个独立交付整合检查点 — 2026-10-23
+
+PR #110 容量/生命周期保护已按保护规则合并，实际主线6bae935c8eefafdfb44161311e6f863cbd303318，源cb51a143六项必需CI全部PASS，26/29/35原生及进程重启契约PASS。保留c181原始FAIL及b5夹具修正证据，未弱化容量拒绝。
+
+PR #111 源4991e629六项必需CI全部PASS；真实快照6项及隔离候选6项已在API26/29/35运行成功。现一次同步已验收主线#110及#108的HANDOFF，无生产源码冲突（唯一共享文件HANDOFF完整保留两侧）；整合HEAD的CI必须独立验收，不能借旧源绿色。环境失联前源码/本地回归及原始工件均已推送；后续由GitHub远端接口正常非强推整合并验收。最新快照撤权合同证明回调期间revoke不等整个全量审计完成。
+
+状态：存储保护PRODUCTION_IMPLEMENTED但功能入口OFF；快照准备生产只读、候选归档TEST_ONLY；完整可携带备份NOT_IMPLEMENTED，格式NOT_APPROVED；外审NOT_REVIEWED_EXTERNALLY；永久密文/key删除政策未批准所以无自动回收。Room14/原业务schema及PNBAK1不变，不交付APK。新设备候选仅软件包装/模型原子性，实际临床SQL恢复/真实archive进程死亡/新物理世代激活仍未实现。真实手机/TalkBack/真实ENOSPC未运行。详见独立evidence分支docs/med02-postmerge-evidence-20261023原始日志和摘要。

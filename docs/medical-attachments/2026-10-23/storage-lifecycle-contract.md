@@ -1,0 +1,13 @@
+# Storage lifecycle slice (default OFF)
+
+Baseline01f45fb8; REQUIREMENTS147. No migration, crypto or PNBAK1 change.
+
+Admission is serialized with existing production writer/recovery lock and checked inside PREPARE before new journal, alias provisioning or source open. Exact committed replay remains available even if the budget is now exhausted. All datasets and retired generations share the physical directory, so all are counted. Stream/SQL failures retain old data and normal recovery; a disk-space observation cannot reserve space against other apps and is not a guarantee of successful IO.
+
+Categories: committed current active; history (superseded/trash/retired); quarantined; in-flight; unknown. Physical admission charges max(logical file length, allocated blocks), plus directory/lock overhead, never clinical plaintext size. Unknown regular leaves are charged without opening. Symlinks/directories/ownership conflicts, missing known files, bounded enumeration exhaustion or arithmetic overflow make admission fail closed. Unknown is never zero or permission to delete.
+
+Each new attempt reserves worst-case existing writer ciphertext bound (16MiB+64KiB rounded to blocks), one new object and two neutral aliases; the stream still enforces its existing independent bounds. Configurable engineering defaults are256MiB charged bytes,512 alias identities,4096 directory entries and32MiB minimum remaining filesystem headroom; these are internal OFF defaults, not user quota UX or a permanent retention policy. After authentication and before publication, actual occupancy and remaining headroom are checked again without reserving a second attempt; a late rejection retains the candidate for recovery and never replaces the old pointer. Actual namespace aliases and journal-reserved identities are unioned and separately reported; missing READY does not prove no key was generated. Consumed wraps never refund.
+
+Cleanup is review-only: committed/history/backup/recovery references retain their objects and keys. Incomplete attempts can be quarantined by existing recovery but cannot be unlinked; unknown ownership retains. No delete/key-delete API is added. Future purge requires approved policy, durable release intent, all reference/pin closure, existing writer exclusion, identity recheck and restart-safe completion; inode/name/age alone cannot authorize removal. Current safety choice is bounded new allocation rather than guessing garbage eligibility.
+
+Tests must cover accounting, overflow/bounds, source/key-not-opened on reject, retained history and original bytes, UUID replay under tighter budget, recovered attempts/alias budget, unknown leaves, low-space simulation and existing process-death seams. Native is distinct from JVM; no real originals.

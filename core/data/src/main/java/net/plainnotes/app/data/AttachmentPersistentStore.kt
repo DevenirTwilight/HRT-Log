@@ -19,6 +19,7 @@ import java.util.UUID
  */
 internal class AttachmentPersistentStore(context: Context, private val db: NotesDatabase,
     private val keys: AttachmentDeviceKeys = AttachmentDeviceKeys(),
+    private val storageBudget: AttachmentStorageBudget = AttachmentStorageBudget(),
     private val checkpoint: (Boundary) -> Unit = {}) {
     enum class Boundary { PREPARED, STAGED, AUTHENTICATED, IN_COMMIT, COMMITTED }
     data class Request(val operation: UUID, val document: UUID, val record: UUID,
@@ -118,6 +119,12 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
                     }
                     checkRecord(scope,request.record.toString())
                     checkRevision(scope,request)
+                    // Under the same writer lock and SQL snapshot, BEFORE prepare/provision/source.
+                    val usage=AttachmentStorageAccounting.inspect(raw,directory,keys,storageBudget,cap::check)
+                    when(val decision=storageBudget.evaluate(usage)) {
+                        is AttachmentStorageBudget.Decision.Denied -> throw AttachmentStorageBudget.Rejected(decision.reason)
+                        is AttachmentStorageBudget.Decision.Allowed -> Unit
+                    }
                     val gen=raw.query("SELECT generation,generation_uuid FROM attachment_store s JOIN attachment_generation g ON g.store_uuid=s.store_uuid WHERE s.store_uuid=? AND s.store_state='CURRENT' AND g.state='STAGING' ORDER BY g.created_utc,g.generation_uuid LIMIT 1",arrayOf(scope.dataset)).use {
                         check(it.moveToFirst()) { "No local physical namespace" }; it.getLong(0) to it.getString(1)
                     }
@@ -178,7 +185,12 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
                         checkpoint(Boundary.AUTHENTICATED)
                         // Recheck the path and directory while the fully authenticated original FD remains pinned.
                         directory.open(row.context.objectId,requireNotNull(owned.identity)).close()
-                        transaction(scope,cap) { publish(scope,request,row,manifest,active); checkpoint(Boundary.IN_COMMIT) }
+                        transaction(scope,cap) {
+                            val actual=AttachmentStorageAccounting.inspect(raw,directory,keys,storageBudget,cap::check)
+                            val decision=storageBudget.retained(actual)
+                            if(decision is AttachmentStorageBudget.Decision.Denied) throw AttachmentStorageBudget.Rejected(decision.reason)
+                            publish(scope,request,row,manifest,active); checkpoint(Boundary.IN_COMMIT)
+                        }
                     }
                 } finally { dek.fill(0) }
             } catch(failure:Throwable) {
@@ -279,6 +291,13 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
         val crypto=openChecked(scope,cap,document,false)
         try {return AttachmentScopedReader(db,scope,cap,crypto)}
         catch(failure:Throwable) {try {crypto.close()} catch(cleanup:Throwable) {failure.addSuppressed(cleanup)};throw failure}
+    }
+    /** Aggregate metadata only. All known historical objects/aliases remain retained. */
+    fun storageUsage(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability):AttachmentStorageBudget.Report {
+        worker()
+        return files.locked().use { directory -> transaction(scope,cap) {
+            AttachmentStorageAccounting.inspect(raw,directory,keys,storageBudget,cap::check)
+        } }
     }
     private fun openChecked(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,document:UUID,trashed:Boolean):AttachmentObjectStreams.Reader {
         worker();scopeCheck(scope,cap)
