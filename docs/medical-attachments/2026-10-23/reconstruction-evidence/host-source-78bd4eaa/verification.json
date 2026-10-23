@@ -1,0 +1,36 @@
+{
+  "source": "78bd4eaa6ac10e0eb5e58d61fab542dfda1166b7",
+  "source_tree": "09426d156f312608c552c47ac67b6b2c60f89560",
+  "pr_test_merge": "f28e7fa47900d39e88716131be73a4e98fa5bb17",
+  "test_merge_tree": "09426d156f312608c552c47ac67b6b2c60f89560",
+  "run": 39998209198,
+  "artifact": 12522745572,
+  "sha256": "bcd3adf7635ff83de2fb3459b6824f31130bb06dd38e47073a55402c36186b3e",
+  "crc": "PASS",
+  "counts": {
+    "data": {
+      "tests": 578,
+      "failures": 0,
+      "skipped": 0
+    },
+    "app": {
+      "tests": 2335,
+      "failures": 0,
+      "skipped": 557
+    },
+    "business": {
+      "tests": 6,
+      "failures": 0,
+      "skipped": 0
+    },
+    "period": {
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "scope": "host source exact SHA; native verified separately; no real-device or external review",
+  "app_skips": "Existing 557 skips unchanged; not claimed passed or newly introduced",
+  "original_job_log_sha256": "a285082c23a236d918a37f59b87259540d4c8ef23c59934beabe3cfe71f6da39",
+  "release_isolation": "PASS in original job; unsigned validation APK only, not delivered"
+}

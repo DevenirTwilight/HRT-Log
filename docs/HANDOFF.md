@@ -1,3 +1,7 @@
+## MED-02 最终源码完整主机回归原件已核验 — 2026-10-23
+
+冻结源码78bd4eaa的push39998209198整套CI已SUCCESS。官方build-results12522745572 ZIP SHA256 bcd3adf7635ff83de2fb3459b6824f31130bb06dd38e47073a55402c36186b3e/CRC通过，原始主机日志gzip与选定HTML存host-source-78bd4eaa：data578/0fail/0skip、业务重建6/0/0、app2335/0fail/557原有skip、不可更改PeriodStability5/0/0。release隔离和无INTERNET检查原日志PASS；只读取CI未签名验证产物，不签名/交付/发布。PR checkout f28与该源tree完全一致；PR本身Android/API29仍在途，不能用push替代它们的最终状态。当前主线仍0a95293d，PR113尚Draft未合并。
+
 ## MED-02 PR113 原生恢复底座已获得真实通过证据，CI收尾中 — 2026-10-23
 
 冻结源码78bd4eaa（PR checkout f28e7fa47900d39e88716131be73a4e98fa5bb17）两者tree均09426d156f312608c552c47ac67b6b2c60f89560。PR39998254238 API26/35作业SUCCESS；同源push39998209198 API29 SUCCESS。三个原ZIP官方SHA256及CRC均PASS，关键原报告在reconstruction-evidence/pr113-api26、pr113-api35、push-api29。每API新BusinessReconstruction6 + BusinessRestore3 + FormatReadiness1均0fail/skip；原Preparation8/Preflight5/Staging4/Foundation33/Store11/Migration5/Key2/Restart1、TEST_ONLY Candidate6均0fail/skip。保留原四对象+两隔离真实force-stop/newPID日志，每份均OK (1 test)；不是新完整候选跨进程激活证据。
