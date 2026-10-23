@@ -90,7 +90,7 @@ internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant
                     modifier = Modifier.padding(end = Spacing.s).semantics { heading() }.testTag("today-date"))
                 if (total > 0) Surface(color = c.onPrimary.copy(alpha = 0.16f), contentColor = c.onPrimary, shape = Corners.pill, modifier = Modifier.testTag("today-progress-pill")) {
                     Text(stringResource(R.string.today_progress, taken.size, total), style = MaterialTheme.typography.labelLarge.tnum(),
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp).testTag("today-progress"))
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp).testTag("today-progress"))
                 }
             }
             // UI-07 D: "Logged · Undo" for 4 s after a dose is logged here; Undo is the existing delete of that record.
@@ -123,7 +123,7 @@ internal val LocalTodayClock = staticCompositionLocalOf<() -> Instant> { Instant
                         Text(formatTime(next.slot.at), style = type.heroNumber, modifier = Modifier.testTag("today-next-time"))
                         // OVERDUE is said in words, not only by colour; UI-06: attention, not red ("past time · you can still log it").
                         if (next.state == SlotState.OVERDUE) Surface(color = NotesTheme.semantic.attention.container, contentColor = NotesTheme.semantic.attention.onContainer, shape = Corners.pill) {
-                            Text(statusText(StatusStyles.of(SlotState.OVERDUE)), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp).testTag("today-next-status"))
+                            Text(statusText(StatusStyles.of(SlotState.OVERDUE)), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp).testTag("today-next-status"))
                         } else Countdown(next.slot.at)
                     }
                     DoseLine(next, medOf(next), simple, Modifier.testTag("today-next-name"), title = type.cardTitle)

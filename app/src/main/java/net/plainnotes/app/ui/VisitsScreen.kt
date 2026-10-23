@@ -20,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -96,7 +97,7 @@ import java.time.*
                 a.location?.let { Text(stringResource(R.string.location) + ": " + it) }
                 a.note?.let { Text(it) }
                 AdaptiveActions(listOf(stringResource(R.string.edit),stringResource(R.string.visit_delete))) { i,mod ->
-                    if(i==0)OutlinedButton(onClick={if(medical)onMedicalEdit(a) else edit=true},modifier=mod){Icon(Icons.Outlined.Edit,null);Spacer(Modifier.width(6.dp));Text(stringResource(R.string.edit))}
+                    if(i==0)OutlinedButton(onClick={if(medical)onMedicalEdit(a) else edit=true},modifier=mod){Icon(Icons.Outlined.Edit,null);Spacer(Modifier.width(8.dp));Text(stringResource(R.string.edit))}
                     else TextButton(onClick={if(medical)medicalRemove=a else remove=true},modifier=mod){Text(stringResource(R.string.visit_delete))}
                 }
             }
@@ -105,14 +106,16 @@ import java.time.*
             SectionCard(stringResource(if (a.completed_utc != null) R.string.visit_completed else R.string.visit_not_confirmed)) {
                 a.completed_utc?.let { Text(formatDateTime(Instant.ofEpochMilli(it)), style = MaterialTheme.typography.bodySmall) }
                 Text(stringResource(R.string.visit_confirm_help), style = MaterialTheme.typography.bodySmall)
-                if (a.completed_utc == null) Button(onClick = { if(medical){model.clearMedicalVisitSave();model.saveMedicalVisit(a,a)}else model.setVisitCompleted(a.id, true) }) { Icon(Icons.Outlined.TaskAlt, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.visit_confirm)) }
+                if (a.completed_utc == null) Button(onClick = { if(medical){model.clearMedicalVisitSave();model.saveMedicalVisit(a,a)}else model.setVisitCompleted(a.id, true) }) { Icon(Icons.Outlined.TaskAlt, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.visit_confirm)) }
                 else if(medical)OutlinedButton(onClick={medicalRetract=a}){Text(stringResource(R.string.medical_retract))}
                 else OutlinedButton(onClick = { model.setVisitCompleted(a.id, false) }) { Text(stringResource(R.string.visit_unconfirm)) }
             }
         }
-        if(medical)item("medical-labs") { SectionCard(stringResource(R.string.medical_context_labs)) { MedicalVisitLabs(a,extra.labs,onLab) } }
+        // UI-09 C / D: the sections below the visit card are numbered in display order (not read aloud) and separated by thin
+        // rules instead of card fills.
+        if(medical)item("medical-labs") { NumberedSection(1, stringResource(R.string.medical_context_labs), Modifier.padding(top = 12.dp).testTag("visit-section:labs")) { MedicalVisitLabs(a,extra.labs,onLab) } }
         item {
-            SectionCard(stringResource(R.string.visit_questions)) {
+            NumberedSection(if (medical) 2 else 1, stringResource(R.string.visit_questions), Modifier.padding(top = 12.dp).testTag("visit-section:questions"), first = !medical) {
                 questions.forEachIndexed { i, q ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(q.status == "ASKED", { model.saveVisitQuestion(q.copy(status = if (it) "ASKED" else "OPEN")) })
@@ -125,13 +128,13 @@ import java.time.*
                         IconButton(onClick = { model.moveVisitQuestion(q.id, false) }, enabled = i < questions.lastIndex) { Icon(Icons.Outlined.KeyboardArrowDown, stringResource(R.string.visit_move_down)) }
                     }
                 }
-                OutlinedButton(onClick = { question = VisitQuestionEntity(appointment_id = a.id, sort_order = 0, text = "") }) { Icon(Icons.Outlined.Add, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.visit_question_add)) }
+                OutlinedButton(onClick = { question = VisitQuestionEntity(appointment_id = a.id, sort_order = 0, text = "") }) { Icon(Icons.Outlined.Add, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.visit_question_add)) }
             }
         }
         item {
-            SectionCard(stringResource(R.string.visit_pack_title)) {
+            NumberedSection(if (medical) 3 else 2, stringResource(R.string.visit_pack_title), Modifier.padding(top = 12.dp).testTag("visit-section:pack")) {
                 Text(stringResource(R.string.visit_pdf_note), style = MaterialTheme.typography.bodySmall)
-                Button(onClick = { generate = true }) { Icon(Icons.Outlined.PictureAsPdf, null); Spacer(Modifier.width(6.dp)); Text(stringResource(R.string.visit_generate)) }
+                Button(onClick = { generate = true }) { Icon(Icons.Outlined.PictureAsPdf, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.visit_generate)) }
                 if (packs.isNotEmpty()) Text(stringResource(R.string.visit_generated_list), style = MaterialTheme.typography.titleSmall)
                 packs.forEach { p -> Text(formatDateTime(Instant.ofEpochMilli(p.generated_utc)) + " · " + p.range_from + " – " + p.range_to + " · " + p.input_digest.take(12), style = MaterialTheme.typography.bodySmall) }
             }

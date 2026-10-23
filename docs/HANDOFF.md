@@ -1,3 +1,12 @@
+## UI-09 瑞士排版纪律（PR #107 收尾）；PDF-01 已合并（#105）— 2026-10-23
+
+- **PDF-01**：PR #105 已合并到默认分支（REQUIREMENTS §145，报告 76）。
+- **UI-09**（REQUIREMENTS §146，原拟 §144；MED-02 #104 占用 §144）：PR #107，分支 `feature/ui09-swiss-discipline-20261023`，已开自动合并，已合入含 #104、#105 的默认分支。
+  - 本地验证：完整单测 2327 项 0 失败，core:ui 700 项 0 失败，lint 通过。
+  - 截图在 `docs/ui-audit/2026-10-23-ui09/`（前后各 336 张，另有 21 张对照）；411dp 下的阶段回顾对话框截图为 NOT_RUN。
+  - 报告 75。
+- 待办：#107 的 CI 通过并合并后，复验默认分支 CI。两项都不交付 APK、不改 versionCode。
+
 ## PDF-01 PDF 瑞士版式（PR 前收尾）— 2026-10-23
 
 - 分支 `feature/pdf01-swiss-layout-20261023`（工作树 /home/user/wt-pdf01，基线 d2223c0a），REQUIREMENTS §145，报告 76。

@@ -46,7 +46,7 @@ import java.time.LocalDate
     var pick by remember { mutableStateOf(false) }
     val enabled = items.filter { it.enabled }
     val valueOf = { item: CheckinItemEntity -> scores.firstOrNull { it.date == current && it.item_id == item.id }?.value }
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         WellbeingDayCard(day, ::setDate, { pick = true }, enabled.count { valueOf(it) != null }, enabled.size)
         Column(verticalArrangement = Arrangement.spacedBy(GroupedGap)) {
             enabled.forEachIndexed { i, item -> CheckinItemRow(item, valueOf(item), i, enabled.size) { onScore(day, item.id, it) } }
@@ -73,7 +73,7 @@ import java.time.LocalDate
     SectionCard(null, shape = Corners.xl, modifier = Modifier.testTag("wb-recent")) {
         Text(stringResource(R.string.wb_recent_title), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
             modifier = Modifier.semantics { heading() })
-        Row(Modifier.fillMaxWidth().selectableGroup(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        Row(Modifier.fillMaxWidth().selectableGroup(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf(7, 30, 90, 0).forEach { d ->
                 FilterChip(days == d, { days = d }, { Text(if (d == 0) stringResource(R.string.range_all) else stringResource(R.string.days_short, d)) },
                     Modifier.heightIn(min = 48.dp).testTag("wb-range:$d"), shape = Corners.full)

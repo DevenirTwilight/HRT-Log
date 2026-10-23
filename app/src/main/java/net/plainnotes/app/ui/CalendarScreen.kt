@@ -89,8 +89,8 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         if (pending > 0) item {
             Surface(onClick = onReview, color = MaterialTheme.colorScheme.tertiaryContainer, shape = MaterialTheme.shapes.medium) {
-                Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Outlined.Info, null, tint = MaterialTheme.colorScheme.onTertiaryContainer); Spacer(Modifier.width(10.dp))
+                Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Outlined.Info, null, tint = MaterialTheme.colorScheme.onTertiaryContainer); Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.review_banner, pending), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onTertiaryContainer)
                 }
             }
@@ -124,7 +124,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
         if (!full) item(key = "calendar") { RecentDays(today, selected, infos, { select(it) }) { full = true; view = CalView.MONTH } }
         else item(key = "calendar") {
             Surface(shape = MaterialTheme.shapes.extraLarge, color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth().testTag("calendar-card")) {
-                Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     TextButton({ full = false }, Modifier.align(Alignment.End).heightIn(min = 48.dp).testTag("calendar-recent")) { Text(stringResource(R.string.recent_7_days)) }
                     PeriodBar(view, selected, today, { select(it) })
                     AdaptiveChoice(CalView.entries.map{stringResource(it.label)},CalView.entries.indexOf(view),{view=CalView.entries[it]},selectionIcon=false)
@@ -167,7 +167,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                 Text(stringResource(R.string.recent_7_days), style = NotesTheme.typeExtra.sectionTitle, modifier = Modifier.semantics { heading() })
                 TextButton(onFull, Modifier.heightIn(min = 48.dp).testTag("calendar-full")) { Text(stringResource(R.string.full_calendar)) }
             }
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 (6 downTo 0).forEach { back ->
                     val date = today.minusDays(back.toLong()); val info = infos[date]; val isToday = date == today
                     val mark = dayMark(info?.kind ?: DayKind.NONE)
@@ -176,9 +176,9 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                     Column(Modifier.weight(1f).heightIn(min = 88.dp).clip(Corners.pill).background(bg)
                         .then(if (date == selected && !isToday) Modifier.border(2.dp, c.primary, Corners.pill) else Modifier)
                         .selectable(date == selected, role = Role.Button) { onSelect(date) }
-                        .semantics { contentDescription = description; mark?.let { dayMarkSemantics = it } }.testTag("recent-day:$date").padding(vertical = 10.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Column(Modifier.clearAndSetSemantics {}, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        .semantics { contentDescription = description; mark?.let { dayMarkSemantics = it } }.testTag("recent-day:$date").padding(vertical = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Column(Modifier.clearAndSetSemantics {}, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             FitText(weekdayShort(date.dayOfWeek), MaterialTheme.typography.labelSmall, fg)
                             FitText(date.dayOfMonth.toString(), MaterialTheme.typography.titleMedium.tnum().copy(fontWeight = FontWeight.Bold), fg)
                             when {
@@ -266,7 +266,7 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
         // The digit and dots are decorative here; the cell's name already says them in words.
         Column(Modifier.clearAndSetSemantics {}, horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(4.dp)) {
         CalendarDateBadge(date.dayOfMonth,isToday,fg)
-        Row(Modifier.heightIn(min=18.dp), horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.heightIn(min=18.dp), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
             // UI-01 C: a shape for the day's state as well as its colour (✓ taken, ½ some missed, ✕ missed); drawn, so it never clips.
             // UI-07 A: the mark is the 18 dp status icon; the cell colour keeps the UI-06 rule. UI-07b: the line sits on the
             // state's own tinted cell, so it takes that token's onContainer.
@@ -296,8 +296,8 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
             val dayStyle = dayStyle(info?.kind ?: DayKind.NONE)
             Column(Modifier.weight(1f).heightIn(min = 140.dp).clip(RoundedCornerShape(12.dp)).background(bg)
                 .then(if (date == selected) Modifier.border(2.dp, c.primary, RoundedCornerShape(12.dp)) else Modifier.statusOutline(dayStyle, sem.of(dayStyle.tone), RoundedCornerShape(12.dp)))
-                .selectable(date == selected, role = Role.Button) { onSelect(date) }.clearAndSetSemantics { contentDescription = description }.padding(vertical = 6.dp),
-                horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                .selectable(date == selected, role = Role.Button) { onSelect(date) }.clearAndSetSemantics { contentDescription = description }.padding(vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(weekdayShort(date.dayOfWeek), style = MaterialTheme.typography.labelSmall, color = fg)
                 CalendarDateBadge(date.dayOfMonth,date==today,fg)
                 dayMark(info?.kind ?: DayKind.NONE)?.let { StatusIcon(dayMarkIcon(it), StatusIconSizes.S, Modifier.testTag("week-icon:$date"), onOwnContainer = true) }
@@ -322,12 +322,12 @@ enum class CalView(val label: Int) { DAY(R.string.view_day), WEEK(R.string.view_
                     val name = ym.format(java.time.format.DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(currentLocale(), "yMMMM"), currentLocale()))
                     val openMonth = stringResource(R.string.calendar_a11y_open_month)
                     Column(Modifier.weight(1f).clip(RoundedCornerShape(10.dp)).clickable(onClickLabel = openMonth, role = Role.Button) { onMonth(ym.atDay(1)) }
-                        .clearAndSetSemantics { contentDescription = name }.padding(4.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        .clearAndSetSemantics { contentDescription = name }.padding(4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(ym.month.getDisplayName(java.time.format.TextStyle.SHORT, currentLocale()), style = MaterialTheme.typography.labelLarge,
                             color = if (YearMonth.from(today) == ym) c.primary else c.onSurface)
                         val weeks = ((java.time.temporal.ChronoUnit.DAYS.between(start, ym.atEndOfMonth()) / 7) + 1).toInt()
                         (0 until weeks).forEach { w ->
-                            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                 (0 until 7).forEach { d ->
                                     val date = start.plusDays(w * 7L + d)
                                     val color = if (YearMonth.from(date) != ym) Color.Transparent else when (infos[date]?.kind ?: DayKind.NONE) {
@@ -473,7 +473,7 @@ private fun markLabel(status: String) = when (status) {
     Card(onClick, Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = c.secondaryContainer)) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.AutoMirrored.Outlined.EventNote, null, tint = c.onSecondaryContainer)
-            Spacer(Modifier.width(14.dp))
+            Spacer(Modifier.width(16.dp))
             Column(Modifier.weight(1f)) {
                 Text(choiceLabel(a.type.ifBlank { "OTHER" }), style = MaterialTheme.typography.titleMedium, color = c.onSecondaryContainer)
                 Text(listOfNotNull(formatTime(Instant.ofEpochMilli(a.at_utc)), a.practitioner?.takeIf { it.isNotBlank() }, a.location?.takeIf { it.isNotBlank() }).joinToString(" · "),
