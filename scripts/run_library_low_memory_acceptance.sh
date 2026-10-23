@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Single shell: emulator-runner executes each YAML script line separately.
-set -uo pipefail
+set -euo pipefail
 mkdir -p core/data/build/reports/med02-generation-memory
 adb shell cat /proc/meminfo > core/data/build/reports/med02-generation-memory/guest-meminfo.txt
 adb logcat -G 16M
