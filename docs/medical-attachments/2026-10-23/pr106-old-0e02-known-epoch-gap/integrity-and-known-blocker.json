@@ -1,0 +1,113 @@
+{
+  "warning": "Native green proves basic persistence, NOT safe merge: old open() returns crypto-only reader; a non-revoked lease can publish after dataset switch. Final scoped-reader source needs its own CI. Frozen crypto primitive remains independent positive counterexample.",
+  "artifacts": [
+    {
+      "source": "0e02f7e79054446824bc63de758fab977608a51b",
+      "api": 26,
+      "run": 39942252922,
+      "crc": "PASS",
+      "sha256": "7dda1fe21f2d1fd6516c293438ea2e09260ff278aad55447bfa4f06375343cd1",
+      "merge_eligibility": "NO_GO_KNOWN_OPEN_LEASE_EPOCH_DEFECT",
+      "classes": {
+        "AttachmentPersistentStoreAndroidTest": [
+          "7",
+          "0",
+          "0"
+        ],
+        "AttachmentPersistentRestartAndroidTest": [
+          "1",
+          "0",
+          "0"
+        ],
+        "AttachmentFoundationAndroidTest": [
+          "32",
+          "0",
+          "0"
+        ],
+        "AttachmentSqlCipherMigrationTest": [
+          "5",
+          "0",
+          "0"
+        ]
+      },
+      "restart_verifications": {
+        "WRITE": "PASS_OLD_SOURCE_ONLY",
+        "STAGED": "PASS_OLD_SOURCE_ONLY",
+        "IN_COMMIT": "PASS_OLD_SOURCE_ONLY",
+        "COMMITTED": "PASS_OLD_SOURCE_ONLY"
+      }
+    },
+    {
+      "source": "0e02f7e79054446824bc63de758fab977608a51b",
+      "api": 29,
+      "run": 39942252922,
+      "crc": "PASS",
+      "sha256": "62af05260e86f3ad419c6643f7ea14c08ad5cfbbebaa6c643309f8e0820f1aae",
+      "merge_eligibility": "NO_GO_KNOWN_OPEN_LEASE_EPOCH_DEFECT",
+      "classes": {
+        "AttachmentPersistentStoreAndroidTest": [
+          "7",
+          "0",
+          "0"
+        ],
+        "AttachmentPersistentRestartAndroidTest": [
+          "1",
+          "0",
+          "0"
+        ],
+        "AttachmentFoundationAndroidTest": [
+          "32",
+          "0",
+          "0"
+        ],
+        "AttachmentSqlCipherMigrationTest": [
+          "5",
+          "0",
+          "0"
+        ]
+      },
+      "restart_verifications": {
+        "WRITE": "PASS_OLD_SOURCE_ONLY",
+        "STAGED": "PASS_OLD_SOURCE_ONLY",
+        "IN_COMMIT": "PASS_OLD_SOURCE_ONLY",
+        "COMMITTED": "PASS_OLD_SOURCE_ONLY"
+      }
+    },
+    {
+      "source": "0e02f7e79054446824bc63de758fab977608a51b",
+      "api": 35,
+      "run": 39942252922,
+      "crc": "PASS",
+      "sha256": "a929afc0884e9330759276e17a62b15f9039c4da24add5293391cf78ad2b85ea",
+      "merge_eligibility": "NO_GO_KNOWN_OPEN_LEASE_EPOCH_DEFECT",
+      "classes": {
+        "AttachmentPersistentStoreAndroidTest": [
+          "7",
+          "0",
+          "0"
+        ],
+        "AttachmentPersistentRestartAndroidTest": [
+          "1",
+          "0",
+          "0"
+        ],
+        "AttachmentFoundationAndroidTest": [
+          "32",
+          "0",
+          "0"
+        ],
+        "AttachmentSqlCipherMigrationTest": [
+          "5",
+          "0",
+          "0"
+        ]
+      },
+      "restart_verifications": {
+        "WRITE": "PASS_OLD_SOURCE_ONLY",
+        "STAGED": "PASS_OLD_SOURCE_ONLY",
+        "IN_COMMIT": "PASS_OLD_SOURCE_ONLY",
+        "COMMITTED": "PASS_OLD_SOURCE_ONLY"
+      }
+    }
+  ]
+}

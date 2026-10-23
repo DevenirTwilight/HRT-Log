@@ -1,3 +1,11 @@
+## MED-02：#104主线全绿；#106旧原生绿色源存在已确认缺口，不可合并 — 2026-10-23
+
+#104源663901f9已保护合并4f3c52a5。主线39940095721 attempt2 SUCCESS（仅API26启动故障一次重试），Science39940095774 SUCCESS；重试原ZIP/SHA/CRC、Foundation32+Keystore2均验，通过证据在pr104-final-native，原启动失败保留。
+
+#106旧0e02f7e7的三API原始ZIP、SHA/CRC、Store7、Restart1、Foundation32、Migration5及四处真实跨进程强停全部通过并保存到pr106-old-0e02-known-epoch-gap，**仍NO-GO**：已有crypto-only reader漏撤销session后可跨dataset继续读。未删除/重写旧绿色，完整绑定并写明其不能证明修复后的安全性。生产修复0280114e新增ScopedReader读前/后current scope检查、清零/关闭、旧事务快照拒绝及AttachmentTransaction拒绝借用外层事务；本地Foundation33+ScopedReader3 PASS，原生源码编译PASS。新原生也增加已有lease跨库拒绝，不借旧绿冒充。
+
+当前源码已同步已审查合并#105主线adc8cbb7，HEAD e4b8b6ceda6b9ac846615a0132b7fdc594423df3。仅合并共享HANDOFF/需求记录，UI/PDF/审批JSON与主线逐字节相同；医疗新授权移至§144.A，避免占用PDF145/UI-09 146。Draft #106继续等待自己精确源CI，Room14无竞争，完整备份仅设计，PNBAK1不变，入口OFF/外审NOT_REVIEWED_EXTERNALLY。不要再修改实现或重跑旧源，除非真实失败或必要集成冲突。原生模拟器不是物理真机或断电/实际卷耗尽验证。
+
 ## #104 主线仅API26一次有界重试已发起 — 2026-10-23
 
 主线4f3c52a5运行39940095721 attempt1已结束：host/android、API35/device-tests、API29、JVM全部SUCCESS，API26仅启动前adb离线失败。2026-10-23本轮已调用一次 `gh run rerun --job 120369117416`，只重试该作业（attempt2，同一源码）；此前CLI参数用法错误未发远程请求，不计作业重试。不得再对其无限重试或重跑全部。最终结果尚待核验。Science39940095774 SUCCESS。

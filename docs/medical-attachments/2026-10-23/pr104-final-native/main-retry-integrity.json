@@ -1,0 +1,22 @@
+{
+  "source": "4f3c52a579ac3304096706093888ef46e37dcc79",
+  "run": 39940095721,
+  "attempt": 2,
+  "retry_count": 1,
+  "conclusion": "success",
+  "artifact_sha256": "3fbb982077f26eb54d9a1a5e6e5096b4f1bc104540c87c622515da7353982edd",
+  "crc": "PASS",
+  "classes": {
+    "AttachmentFoundationAndroidTest": [
+      "32",
+      "0",
+      "0"
+    ],
+    "AttachmentKeyAndroidTest": [
+      "2",
+      "0",
+      "0"
+    ]
+  },
+  "external_review": "NOT_REVIEWED_EXTERNALLY"
+}
