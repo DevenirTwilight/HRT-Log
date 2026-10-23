@@ -1,3 +1,9 @@
+## #104 已保护合并，主线 API26 基础设施失败保留 — 2026-10-23
+
+#104 最终663901f9六必需门PASS、无未解决评审，保护自动合并4f3c52a579ac3304096706093888ef46e37dcc79（10:34:40Z）。PR三API原始ZIP/SHA/CRC已保存；主线Android39940095721尚在运行，API26 job120369117416在测试前 adb offline / root closed 失败，不是测试PASS或代码FAIL，原始完整日志gz保留。待整轮结束后只对该失败作业进行一次有界同源重试；截至本记录尚未重试。主线Science39940095774 PASS，API29/JVM已PASS，35/host尚未完成。
+
+持久化独立Draft #106，仅有本地编译/回归，不借此#104证据宣称journal已通过。正式入口OFF、外审NOT_REVIEWED_EXTERNALLY、不签名发布。
+
 ## #104 最终源三API原始工件核验 — 2026-10-23
 
 663901f97e6806e217dd0f7066e156fdc88d7b83，PR运行39936584823；三API原始ZIP已保存到 pr104-final-native，SHA256/CRC均通过，各API Foundation32/0fail/0skip、实际Keystore2/0fail/0skip。此结论仅限 #104 加密/基础合同，不是后续持久化journal的原生通过。#104最后主机检查仍在途；未提前报告合并/主线成功。旧 f86 的API26启动失败和UI08冻结守卫FAIL保留在修复分支，不因最终绿色而删。持久化9c95ea6e已提交独立分支，等待其自己的真实运行，不重用本批证据。
