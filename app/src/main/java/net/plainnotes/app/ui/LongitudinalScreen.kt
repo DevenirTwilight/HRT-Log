@@ -180,7 +180,7 @@ import java.time.*
                                     shape=Corners.pill,modifier=Modifier.testTag("period-pill:${period.key}")) {
                                     Text(stringResource(if(standards.isEmpty())R.string.timeline_epoch_unknown else if(current)R.string.period_current else R.string.period_past),
                                         style=MaterialTheme.typography.labelLarge,fontWeight=androidx.compose.ui.text.font.FontWeight.SemiBold,
-                                        modifier=Modifier.padding(horizontal=10.dp,vertical=4.dp).semantics{heading()})
+                                        modifier=Modifier.padding(horizontal=8.dp,vertical=4.dp).semantics{heading()})
                                 }
                             }
                             Box {
@@ -231,7 +231,7 @@ import java.time.*
                             val confirmedRow=span.rawVersionIds.filter(ObservedTreatmentHistory::isConfirmedSpan).firstNotNullOfOrNull{id->
                                 confirmedRow(extra.historyPeriods,id)}
                             // UI-05 D: one medication per line, each after a small dot.
-                            Row(horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+                            Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
                                 Box(Modifier.padding(top=8.dp).size(6.dp).clip(androidx.compose.foundation.shape.CircleShape).background(MaterialTheme.colorScheme.primary))
                                 Column{StandardSummary(saved?.let{RegimenDefinition.read(it.definition_json).snapshot(it.medication_id)} ?: confirmedRow?.let{MedicationSnapshot.decode(it.identity_json,it.medication_id)} ?: observed?.snapshot,span.standard)}
                             }
@@ -449,7 +449,7 @@ internal fun eventKindLabelRes(kind:EventKind)=when(kind){
     var dateText by rememberSaveable(initial.id){mutableStateOf(initial.date)};val date=LocalDate.parse(dateText);var kind by rememberSaveable(initial.id){mutableStateOf(initial.kind)}
     var title by rememberSaveable(initial.id){mutableStateOf(initial.title.orEmpty())};var note by rememberSaveable(initial.id){mutableStateOf(initial.note.orEmpty())};var pick by remember{mutableStateOf(false)}
     AlertDialog(onDismissRequest=onDismiss,title={Text(stringResource(if(initial.id==0L)R.string.milestone_add else R.string.edit))},
-        text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(10.dp)) {
+        text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             if(saveState.failed)Text(stringResource(R.string.operation_error),color=MaterialTheme.colorScheme.error)
             Text(stringResource(R.string.milestone_intro),style=MaterialTheme.typography.bodySmall)
             OutlinedButton(enabled=!saveState.saving,onClick={pick=true}){Text(formatDate(date))}
@@ -481,7 +481,7 @@ private data class StoryBlock(val key:String,val period:DisplayPeriod?=null,val 
             SavedMedication(r.medication_id,m?.name,m?.molecule,m?.route,m?.unit,m?.profile?.ester)}.toList()
     }
     AlertDialog(onDismissRequest=onDismiss,title={Text(stringResource(R.string.timeline_imported_history))},text={
-        LazyColumn(Modifier.heightIn(max=420.dp),verticalArrangement=Arrangement.spacedBy(10.dp)){
+        LazyColumn(Modifier.heightIn(max=420.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){
             item{
                 Text(importedRange(summary,zone)+" · "+zone.id)
                 Text(stringResource(R.string.timeline_imported_count,summary.records.size))

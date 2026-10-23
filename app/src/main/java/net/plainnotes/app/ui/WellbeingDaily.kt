@@ -64,7 +64,7 @@ var SemanticsPropertyReceiver.levelColor by LevelSelectedColorKey
                 Surface(color = if (on) c.surfaceContainerLowest else Color.Transparent, contentColor = if (on) c.onSurface else c.onSurfaceVariant,
                     shape = Corners.full, shadowElevation = if (on) 1.dp else 0.dp,
                     modifier = Modifier.weight(1f).heightIn(min = 48.dp).selectable(on, role = Role.Tab) { onSelect(i) }.testTag("wb-tab:$i")) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(horizontal = 8.dp, vertical = 10.dp)) {
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)) {
                         Text(stringResource(label), style = MaterialTheme.typography.labelLarge, fontWeight = if (on) FontWeight.SemiBold else FontWeight.Medium)
                     }
                 }
@@ -112,7 +112,7 @@ internal fun sunColor(card: Color): Color = if (card.luminance() > 0.4f) lerp(ca
             Canvas(Modifier.align(Alignment.TopEnd).offset(x = 36.dp, y = (-36).dp).size(150.dp).semantics { sunAngle = angle.value }.testTag("wb-sun")) {
                 drawLineSun(sun, angle.value)
             }
-            Column(Modifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 20.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Column(Modifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 WellbeingDateRow(day, onDay, onPick, tone.onContainer)
                 Column(Modifier.fillMaxWidth().padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(stringResource(dayCardTitle(noted, total, day == LocalDate.now())), style = MaterialTheme.typography.headlineSmall,
@@ -120,7 +120,7 @@ internal fun sunColor(card: Color): Color = if (card.luminance() > 0.4f) lerp(ca
                     Text(stringResource(R.string.wb_card_subtitle), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("wb-card-subtitle"))
                     Surface(color = tone.onContainer.copy(alpha = 0.10f), contentColor = tone.onContainer, shape = Corners.full) {
                         Text(stringResource(R.string.wb_card_count, noted, total), style = MaterialTheme.typography.labelLarge.tnum(),
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp).testTag("wb-card-count"))
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp).testTag("wb-card-count"))
                     }
                 }
             }
@@ -156,7 +156,7 @@ private fun itemIcon(key: String?) = when (key) {
         "DAY_SLEEP" -> R.string.wb_low_sleep to R.string.wb_high_sleep; else -> R.string.wb_low_body to R.string.wb_high_body
     }
     GroupedItem(index, count, modifier = Modifier.testTag("wb-item:${item.id}")) {
-        Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(Modifier.size(40.dp).background(c.surfaceContainerHigh, CircleShape), contentAlignment = Alignment.Center) {
                     Icon(itemIcon(item.builtin_key), null, Modifier.size(if (daily) 22.dp else 12.dp), tint = c.onSurfaceVariant) }
@@ -189,7 +189,7 @@ private fun itemIcon(key: String?) = when (key) {
  */
 @Composable fun FiveLevelButtons(value: Int?, label: String, modifier: Modifier = Modifier, onPick: (Int) -> Unit) {
     val c = MaterialTheme.colorScheme
-    Row(modifier.fillMaxWidth().selectableGroup(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+    Row(modifier.fillMaxWidth().selectableGroup(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         (1..5).forEach { n ->
             val on = value == n; val (bg, fg) = levelColors(on)
             val spoken = stringResource(R.string.wb_level_spoken, label, n)
@@ -239,7 +239,7 @@ fun DrawScope.drawWellbeingTrend(points: Map<LocalDate, Int>, from: LocalDate, t
 @Composable fun WellbeingTrendLine(label: String, points: Map<LocalDate, Int>, from: LocalDate, to: LocalDate, days: Int, modifier: Modifier = Modifier) {
     val c = MaterialTheme.colorScheme
     val spoken = if (days == 0) stringResource(R.string.wb_trend_spoken_all, label, points.size) else stringResource(R.string.wb_trend_spoken, label, days, points.size)
-    Row(modifier.fillMaxWidth().height(64.dp).clearAndSetSemantics { contentDescription = spoken }, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+    Row(modifier.fillMaxWidth().height(64.dp).clearAndSetSemantics { contentDescription = spoken }, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
             Text("5", style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant); Text("1", style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant) }
         Canvas(Modifier.weight(1f).fillMaxHeight()) { drawWellbeingTrend(points, from, to, c.primary, 2.dp.toPx()) }

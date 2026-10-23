@@ -118,7 +118,7 @@ import java.time.*
     val days=java.time.temporal.ChronoUnit.DAYS.between(now.atZone(zone).toLocalDate(),local.toLocalDate()).toInt()
     Surface(color=c.secondaryContainer,contentColor=c.onSecondaryContainer,shape=Corners.card,modifier=Modifier.fillMaxWidth().testTag("medical-next:${a.id}")) {
         Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-            Row(horizontalArrangement=Arrangement.spacedBy(14.dp),verticalAlignment=Alignment.CenterVertically) {
+            Row(horizontalArrangement=Arrangement.spacedBy(16.dp),verticalAlignment=Alignment.CenterVertically) {
                 val locale=currentLocale()
                 Surface(color=c.surfaceContainerLowest,contentColor=c.onSurface,shape=RoundedCornerShape(14.dp),modifier=Modifier.testTag("medical-next-date")) {
                     Column(Modifier.padding(horizontal=12.dp,vertical=8.dp).widthIn(min=48.dp),horizontalAlignment=Alignment.CenterHorizontally) {
@@ -127,7 +127,7 @@ import java.time.*
                         Text(local.dayOfWeek.getDisplayName(java.time.format.TextStyle.SHORT,locale),style=MaterialTheme.typography.labelSmall)
                     }
                 }
-                Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(2.dp)) {
+                Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
                     Text(stringResource(R.string.medical_next_visit)+(if(days>0)" · "+stringResource(R.string.medical_in_days,days) else ""),
                         style=MaterialTheme.typography.labelLarge,modifier=Modifier.semantics{heading()})
                     Text(choiceLabel(a.type.ifBlank{"OTHER"}),style=MaterialTheme.typography.titleLarge,fontWeight=androidx.compose.ui.text.font.FontWeight.Bold)
@@ -160,7 +160,7 @@ import java.time.*
         verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
         Surface(shape=CircleShape,color=c.secondaryContainer,contentColor=c.onSecondaryContainer,modifier=Modifier.size(40.dp)) {
             Box(contentAlignment=Alignment.Center){Icon(Icons.AutoMirrored.Outlined.EventNote,null,Modifier.size(20.dp))}}
-        Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(2.dp)) {
+        Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
             Text(choiceLabel(a.type),style=MaterialTheme.typography.titleSmall,fontWeight=androidx.compose.ui.text.font.FontWeight.Bold)
             Text(listOfNotNull(visitWhen(a),(a.practitioner?.takeIf{it.isNotBlank()} ?: a.location?.takeIf{it.isNotBlank()})).joinToString(" · "),
                 style=MaterialTheme.typography.bodyMedium)
