@@ -44,7 +44,8 @@ class AttachmentPersistentStoreAndroidTest {
             db=Room.databaseBuilder(app,NotesDatabase::class.java,name).openHelperFactory(SupportOpenHelperFactory(password))
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
         }
-        fun store(boundary:(AttachmentPersistentStore.Boundary)->Unit={})=AttachmentPersistentStore(context,db,checkpoint=boundary)
+        fun store(budget:AttachmentStorageBudget=AttachmentStorageBudget(),boundary:(AttachmentPersistentStore.Boundary)->Unit={})=
+            AttachmentPersistentStore(context,db,checkpoint=boundary,storageBudget=budget)
         fun request(bytes:ByteArray,doc:UUID=UUID.randomUUID(),revision:Long=0)=AttachmentPersistentStore.Request(
             UUID.randomUUID(),doc,record,revision,"Synthetic attachment","REPORT","application/octet-stream",bytes.size.toLong(),sha(bytes))
         fun number(sql:String)=raw.query(sql).use {check(it.moveToFirst());it.getLong(0)}
@@ -63,6 +64,81 @@ class AttachmentPersistentStoreAndroidTest {
                     keyStore.deleteEntry(AttachmentDeviceKeys.Alias(UUID.fromString(c.getString(1)),AttachmentDeviceKeys.Role.ACTIVE).value)
                 }}
             } finally {db.close();app.deleteDatabase(name);directory.deleteRecursively();password.fill(0)}
+        }
+    }
+    @Test fun budgetRefusesBeforePrepareKeysOrInputButCommittedReplayStillWorks() {
+        Fixture(app).use {f->
+            val bytes=byteArrayOf(1,2,3);val r=f.request(bytes)
+            val before=AttachmentDeviceKeys().retainedAliases(10000)
+            for(b in listOf(AttachmentStorageBudget(maximumBytes=0),AttachmentStorageBudget(maximumAliases=0),
+                AttachmentStorageBudget(minimumFreeBytes=Long.MAX_VALUE-100000000))) {
+                try {f.store(budget=b).save(f.scope,f.session.issue(),r) {error("Rejected write opened input")};fail("Budget ignored")}
+                catch(_:AttachmentStorageBudget.Rejected){}
+                assertEquals(0L,f.number("SELECT COUNT(*) FROM attachment_journal"))
+                assertEquals(before,AttachmentDeviceKeys().retainedAliases(10000))
+            }
+            val saved=f.store().save(f.scope,f.session.issue(),r) {ByteArrayInputStream(bytes)}
+            assertEquals(saved,f.store(budget=AttachmentStorageBudget(maximumBytes=0)).save(f.scope,f.session.issue(),r) {error("Replay opened input")})
+            f.safety()
+        }
+    }
+    @Test fun accountingRetainsSupersededTrashedInterruptedAndUnknownObjects() {
+        Fixture(app).use {f->
+            val bytes=ByteArray(129) {11};val first=f.request(bytes)
+            f.store().save(f.scope,f.session.issue(),first) {ByteArrayInputStream(bytes)}
+            f.store().save(f.scope,f.session.issue(),f.request(bytes,first.document,1)) {ByteArrayInputStream(bytes)}
+            var u=f.store().storageUsage(f.scope,f.session.issue())
+            assertEquals(1L,u.categories.getValue(AttachmentStorageBudget.Category.CURRENT).objects)
+            assertEquals(1L,u.categories.getValue(AttachmentStorageBudget.Category.HISTORY).objects)
+            f.store().trash(f.scope,f.session.issue(),first.document,2)
+            val broken=f.request(bytes)
+            reject {f.store(boundary={if(it==AttachmentPersistentStore.Boundary.STAGED)throw IOException("synthetic interruption")}).save(f.scope,f.session.issue(),broken) {ByteArrayInputStream(bytes)}}
+            f.reopen();assertEquals(1,f.store().recover(f.scope,f.session.issue()));assertEquals(0,f.store().recover(f.scope,f.session.issue()))
+            val unknown=File(f.directory,"attachment-objects-v1/not-an-owned-object").apply {writeBytes(byteArrayOf(9,8,7));android.system.Os.chmod(path,384)}
+            u=f.store().storageUsage(f.scope,f.session.issue())
+            assertEquals(2L,u.categories.getValue(AttachmentStorageBudget.Category.HISTORY).objects)
+            assertEquals(1L,u.categories.getValue(AttachmentStorageBudget.Category.QUARANTINED).objects)
+            assertEquals(1L,u.categories.getValue(AttachmentStorageBudget.Category.UNKNOWN).objects)
+            assertTrue(u.complete);assertEquals(0L,u.missingKnownObjects)
+            val aliases=AttachmentDeviceKeys().retainedAliases(10000)
+            val tight=AttachmentStorageBudget(maximumAliases=u.aliasIdentities)
+            try {f.store(budget=tight).save(f.scope,f.session.issue(),f.request(bytes)) {error("Alias budget opened input")};fail("Alias budget ignored")}
+            catch(e:AttachmentStorageBudget.Rejected) {assertEquals(AttachmentStorageBudget.Refusal.ALIAS_BUDGET,e.reason)}
+            assertEquals(aliases,AttachmentDeviceKeys().retainedAliases(10000));assertArrayEquals(byteArrayOf(9,8,7),unknown.readBytes())
+            f.store().restore(f.scope,f.session.issue(),first.document,3)
+            f.store().open(f.scope,f.session.issue(),first.document).use {reader->val out=ByteArray(bytes.size);readFully(reader,out);assertArrayEquals(bytes,out)}
+            f.safety()
+        }
+    }
+    @Test fun unknownSymlinkIsNotFollowedOrDeletedAndAdmissionFailsClosed() {
+        Fixture(app).use {f->
+            val outside=File(f.directory,"synthetic-outside").apply {writeBytes(byteArrayOf(1,4,7))}
+            AttachmentOwnedFiles(f.context).locked().close()
+            val link=File(f.directory,"attachment-objects-v1/unknown-link")
+            android.system.Os.symlink(outside.path,link.path)
+            val usage=f.store().storageUsage(f.scope,f.session.issue());assertFalse(usage.complete)
+            try {f.store().save(f.scope,f.session.issue(),f.request(byteArrayOf(5))) {error("Unknown leaf opened input")};fail("Unknown directory entry accepted")}
+            catch(e:AttachmentStorageBudget.Rejected) {assertEquals(AttachmentStorageBudget.Refusal.INCOMPLETE_INVENTORY,e.reason)}
+            assertEquals(0L,f.number("SELECT COUNT(*) FROM attachment_journal"));assertArrayEquals(byteArrayOf(1,4,7),outside.readBytes())
+            assertEquals(outside.path,android.system.Os.readlink(link.path));f.safety()
+        }
+    }
+    @Test fun changedInventoryBeforePublicationRefusesAndKeepsOldCommittedVersion() {
+        Fixture(app).use {f->
+            val bytes=byteArrayOf(2,3,5);val first=f.request(bytes)
+            f.store().save(f.scope,f.session.issue(),first) {ByteArrayInputStream(bytes)}
+            val outside=File(f.directory,"synthetic-outside").apply {writeBytes(byteArrayOf(8))}
+            val next=f.request(byteArrayOf(7),first.document,1)
+            try {
+                f.store {if(it==AttachmentPersistentStore.Boundary.AUTHENTICATED)
+                    android.system.Os.symlink(outside.path,File(f.directory,"attachment-objects-v1/unknown-late").path)
+                }.save(f.scope,f.session.issue(),next) {ByteArrayInputStream(byteArrayOf(7))}
+                fail("Changed inventory was published")
+            } catch(e:AttachmentStorageBudget.Rejected) {assertEquals(AttachmentStorageBudget.Refusal.INCOMPLETE_INVENTORY,e.reason)}
+            assertEquals(1L,f.number("SELECT COUNT(*) FROM attachment_version"))
+            assertEquals(1,f.store().recover(f.scope,f.session.issue()));assertEquals(0,f.store().recover(f.scope,f.session.issue()))
+            f.store().open(f.scope,f.session.issue(),first.document).use {r->val out=ByteArray(bytes.size);readFully(r,out);assertArrayEquals(bytes,out)}
+            assertArrayEquals(byteArrayOf(8),outside.readBytes());f.safety()
         }
     }
     @Test fun syntheticPdfImageAndBinaryPersistReopenReadReplaceTrashRestore() {

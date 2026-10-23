@@ -32,6 +32,20 @@ internal class AttachmentDeviceKeys {
         val value: String get() = "notes.obj.v1.${if (role == Role.STAGING) "s" else "a"}.$identity"
     }
     private fun store() = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+    /** Metadata count only; unknown namespace aliases are retained, never adopted or deleted. */
+    fun retainedAliases(maximum: Int): Set<String> {
+        require(maximum > 0)
+        val result=HashSet<String>()
+        val aliases=store().aliases()
+        while(aliases.hasMoreElements()) {
+            val alias=aliases.nextElement()
+            if(alias.startsWith("notes.obj.v1.")) {
+                if(result.size>=maximum) throw AttachmentStorageBudget.Rejected(AttachmentStorageBudget.Refusal.ALIAS_BUDGET)
+                result+=alias
+            }
+        }
+        return result
+    }
     /** Never replaces an existing alias. Caller must record provisioning/rotation in a later journal. */
     fun provisionNew(alias: Alias) = synchronized(provisioning) {
         check(!store().containsAlias(alias.value)) { "Device alias already exists" }

@@ -1,3 +1,9 @@
+## 容量保护生产代码已接通，首轮编译问题已修，最终回归在途 — 2026-10-23
+
+新增AttachmentStorageBudget/StorageAccounting，OwnedFiles在同一锁定目录FD下有界lstat枚举，不打开未知叶；DeviceKeys只枚举中性namespace身份，不删alias。PersistentStore在新PREPARE之前检查最坏密文/对象/alias/空间预算，重放不受新预算阻断；完整认证后发布前再查实际占用及空间，不重复预留第二次。历史/回收站/隔离/未知/未完成分别计费，未知目录/符号链接/身份冲突/缺失/溢出fail closed。永久删除OFF，无Schema或备份格式改动。
+
+第一轮native源码编译因测试fixture增加budget参数破坏原尾随lambda调用失败，原initial-compile.log保留；改为保留boundary末参数，未删原测试。随后初版目标JVM及native编译PASS，intermediate-targeted.log仅归属中间源；又补发布前实占复核与alias分项报告，最终源完整数据层回归+native APK编译在途，不冒充已通过。旧前轮“重启日志未上传”已复核更正：#106和主线原ZIP本来含全部四seam原件，不需CI改动。
+
 ## MED-02 容量保护与完整备份准备启动 — 2026-10-23
 
 最新默认claude/new-session-1959qb HEAD01f45fb8，主线Android39960227901/Science39960227840全部PASS；#102–106/109均已合并，Room14、PNBAK1不变。PR109原失败/修复/主线证据在docs/med02-postmerge-evidence-20261023，不能因本main旧交接仍写在途而重跑。

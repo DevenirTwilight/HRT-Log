@@ -13,6 +13,8 @@ import java.nio.channels.FileLock
 import java.util.UUID
 import java.util.concurrent.Semaphore
 import java.util.concurrent.atomic.AtomicBoolean
+import java.nio.file.Files
+import java.nio.file.Paths
 
 /** Private ciphertext only. Kernel-pinned parent, no-follow/exclusive creation, no rename/delete.
  * /proc/self/fd traverses our open directory descriptor, never an untrusted pathname ancestor.
@@ -21,6 +23,10 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal class AttachmentOwnedFiles(context: Context) {
     private val root = File(context.noBackupFilesDir, "attachment-objects-v1")
     data class Identity(val parentDevice: Long, val parentInode: Long, val device: Long, val inode: Long)
+    data class Entry(val name: String, val identity: Identity, val logicalBytes: Long,
+        val chargedBytes: Long, val privateRegular: Boolean)
+    data class Inventory(val entries: List<Entry>, val overheadBytes: Long,
+        val freeBytes: Long, val allocationUnit: Long)
 
     fun locked(): Directory {
         val process=ProcessLease()
@@ -80,6 +86,36 @@ internal class AttachmentOwnedFiles(context: Context) {
             check(held.st_dev == parentStat.st_dev && held.st_ino == parentStat.st_ino)
         }
         private fun path(id: UUID) = "$anchor/$id"
+        /** Bounded metadata-only enumeration anchored to the same locked parent. Never opens a leaf. */
+        fun inventory(maximumEntries: Int, checkAuthority: () -> Unit): Inventory {
+            require(maximumEntries in 1..100000)
+            checkParent();checkAuthority()
+            fun charged(s: StructStat): Long {
+                check(s.st_size >= 0 && s.st_blocks >= 0)
+                return maxOf(s.st_size,Math.multiplyExact(s.st_blocks,512))
+            }
+            var overhead=charged(Os.fstat(parent.fileDescriptor))
+            val heldLock=Os.fstat(requireNotNull(lockStream).fd)
+            val entries=ArrayList<Entry>()
+            Files.newDirectoryStream(Paths.get(anchor)).use { stream ->
+                for (leaf in stream) {
+                    checkAuthority()
+                    val name=leaf.fileName.toString()
+                    val s=Os.lstat("$anchor/$name")
+                    if(name=="lock") {
+                        regular(s);check(s.st_dev==heldLock.st_dev && s.st_ino==heldLock.st_ino) {"Storage lock replaced"}
+                        overhead=Math.addExact(overhead,charged(s));continue
+                    }
+                    if(entries.size >= maximumEntries) throw AttachmentStorageBudget.Rejected(AttachmentStorageBudget.Refusal.ENTRY_BUDGET)
+                    entries+=Entry(name,Identity(parentStat.st_dev,parentStat.st_ino,s.st_dev,s.st_ino),
+                        s.st_size,charged(s),S_ISREG(s.st_mode) && s.st_uid==Os.getuid() && s.st_nlink==1L && s.st_mode and 63==0)
+                }
+            }
+            val space=Os.statvfs(anchor)
+            check(space.f_bavail>=0 && space.f_frsize>0)
+            checkParent();checkAuthority()
+            return Inventory(entries,overhead,Math.multiplyExact(space.f_bavail,space.f_frsize),space.f_frsize)
+        }
         fun create(id: UUID): Created {
             checkParent()
             val fd = Os.open(path(id), O_RDWR or O_CREAT or O_EXCL or O_NOFOLLOW or O_CLOEXEC, 384)
