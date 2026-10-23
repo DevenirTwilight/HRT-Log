@@ -35,7 +35,7 @@ class LibraryRestoreAndroidTest {
             scope=requireNotNull(AttachmentIdentity.current(access.get(Space.PRIMARY).openHelper.writableDatabase))
             session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
             if(create)runBlocking {
-                NotesRepository(access).saveAppointment(AppointmentEntity(2,"SYNTHETIC old recipient",999,"UTC",note="Retain original dataset",remind_minutes_before=0))
+                root.dao().appointment(AppointmentEntity(2,"SYNTHETIC old recipient",999,"UTC",note="Retain original dataset",remind_minutes_before=0))
             }
         }
         fun facts():ByteArray=root.runInTransaction(java.util.concurrent.Callable {MeasuredBackupJson.encode(raw,Instant.EPOCH)})

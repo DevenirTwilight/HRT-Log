@@ -1,3 +1,7 @@
+## MED-02 原生失败回收与夹具修正 — 2026-10-23
+
+PR #115（Draft），此前源852e8ac2的run40027709483原始failed日志已保存generation-evidence/earlier-native-ci，未删失败。确认两个旧native测试仍期待Room14、显式9→14链缺14→15，现仅更新末版本期待/补迁移，保留所有业务/VOIDED/重启断言。新增RootFixture错误地用非零ID调用“编辑已有就诊”接口，导致required null，在进入恢复前失败；改为DAO插入固定id2合成旧记录，继续要求其与新库同ID隔离，未改生产save语义。native Kotlin编译PASS（首次夹具修正误把suspend DAO放同步事务的编译错误同样保留）。cd6fa5fc在途原生/低内存结果仍非PASS；新测试源需重新CI，继续七门Draft/OFF。
+
 ## MED-02 候选源码冻结，进入正式原生/低内存CI — 2026-10-23
 
 本地完整data591/0fail/error/skip（随后补owned-copy早登记、关闭lease、严格预算policy与未释放空间保留）；最终相应目标6/0/0/0及全部native Kotlin源码编译PASS，精确生产SHA在generation-evidence/frozen-candidate。最新HEAD必须自己完整CI，不能把旧591归给新源。#114主线ca69ee5a的Android40022686679已SUCCESS；其原三API9项ZIP/HTML/SHA/CRC已存pr114-original。
