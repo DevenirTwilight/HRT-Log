@@ -1,8 +1,12 @@
-# PNMEDBK1：单一整合审批方案（NOT_APPROVED / NOT_READY_TO_FREEZE）
+# PNMEDBK1：单一整合方案（IMPLEMENTATION_AUTHORIZED_OFF / NOT_READY_TO_FREEZE）
 
 2026-10-23。本文是负责人一次审阅的完整候选，取代同一文件中先前各阶段重复的提案文字；原提案和所有失败/取消原件仍保留在 Git 历史与证据分支。不是生产协议声明、启用许可或外部安全审查结论。
 
-## 本次只请求一个决定
+## 授权状态（2026-10-23）
+
+负责人明确批准下述默认 OFF 格式实施范围（REQUIREMENTS §147.D），并再次确认“我授权，搞出来”。格式特有实施暂停解除；永久格式冻结、全库激活、正式入口和资源升限仍未批准。下文原审批推荐保留以界定授权范围。
+
+## 获批的单一决定
 
 **推荐批准按以下唯一 PNMEDBK1 候选开展默认 OFF 的格式特有实现**：生产 writer、独立 reader、密码输入/KDF/portable DEK 包装、完整集合认证，以及与既有预检/隔离重建的连接。参数、字段和拒绝政策作为本轮实现约束，任何安全相关偏离重新评审。批准实施不等于批准格式永久冻结：下面三项尚缺证据必须闭合后才能冻结；全库激活实现及正式入口启用仍未获授权。不要将本审批解读为允许跳过这些门槛。
 
@@ -17,7 +21,8 @@
 |Tink64KiB长度/随机读取/独立上游互通|现有原生合同已通过；下方精确长度公式有执行断言|
 |Argon2id65536KiB/3/1|API26/29/35独立 KAT/孤立资源观测通过；不是联合档案接受证明|
 |canonical manifest 编解码审查向量|新增 TEST_ONLY Python 编码/逆解码与独立 Kotlin 严格解码；不是生产集合 codec|
-|生产 portable writer/reader/KDF/wrapping、持久整库激活|NOT_IMPLEMENTED / BLOCKED_PENDING_EXPLICIT_APPROVAL|
+|生产 portable writer/reader/KDF/wrapping|IMPLEMENTATION_AUTHORIZED_OFF，实施中；尚未验收|
+|持久整库激活|NOT_IMPLEMENTED / NOT_APPROVED|
 |真机/正式完整换机/外部审查|PHYSICAL_NOT_RUN / NOT_IMPLEMENTED / EXTERNAL_REVIEW_PENDING|
 
 本次代码和原件记录：[最新HANDOFF/原始证据分支](https://github.com/DevenirTwilight/HRT-Log/tree/docs/med02-reconstruction-evidence-20261023)。本审批分支仅TEST_ONLY/文档，本地5项通过、CI_NOT_RUN、未合并，不计生产CI_PASS。

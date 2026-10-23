@@ -1,3 +1,9 @@
+## MED-02 PNMEDBK1 OFF格式实施已明确获批 — 2026-10-23
+
+负责人批准唯一整合方案的80B头、正式Argon2id64MiB/3/1、Tink64KiB、portable DEK包装、生产writer/独立reader/集合认证并接既有预检（§147.D）；不再重复询问。独立feature/med02-portable-archive-20261023，基线e6112698；#113已MERGED，主线Android40009477772/Science40009478000 SUCCESS，旧审查分支的TEST_ONLY canonical证据不冒充生产验收。无其他开放附件/Room变更。
+
+实施顺序：受控快照密文/DEK消费接口→严格canonical/header/KDF与归档writer→独立reader/outer EOF/全集合→既有预检与隔离业务重建。无新Schema/激活路由。新增源码尚未实现/验收；本节为授权及开始状态，后续按实际更新。永久冻结、durable全库激活、正式入口和升限仍未批准，feature0/NOT_REVIEWED_EXTERNALLY/真实原件/永久删除OFF，不交付APK。
+
 ## MED-02 本轮完成状态：#113及主线CI已收尾，单一OFF格式实施审批待答复 — 2026-10-23
 
 起点0a95293d，最终主线e61126989a7433d9ba2bf5e387c6b8a434e8f187，#113 MERGED。原取消API29保留全部证据，仅同源单job有界补验一次SUCCESS；保护六门通过无未决review，正常auto-merge，无绕过。主线Android40009477772全5job SUCCESS、Science40009478000 SUCCESS；三API各新6+3+1和原全套/六新PID seam核官方ZIP SHA/CRC PASS，host data578/0fail/0skip、app2335/0fail/557原有skip、Period5/0/0及release隔离/no INTERNET PASS，main原件在docs/med02-reconstruction-evidence-20261023/reconstruction-evidence/main-e611-*，没有假定旧绿等于新main。
