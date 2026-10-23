@@ -1,4 +1,13 @@
 ## UI-09 与 PDF-01 已完成并合并 — 2026-10-23
+## 远端接手：#104/#106已合并，修复主线药品UI异步等待竞态 — 2026-10-23
+
+重新核对默认分支仍claude/new-session-1959qb，HEAD a2917086ead90b3967eee71908160e8021dfe89a。#104最终663901f9已合并4f3c52a5且主线全绿；#106最终0210ab9c受保护合并a2917086，Room14单表journal/真实保存恢复已实现，REQUIREMENTS§144.A已有明确授权。复用这些成果，不重做旧crypto或迁移。其证据在docs/med02-storage-evidence-20261023。入口仍OFF/外审NOT_REVIEWED_EXTERNALLY、完整医疗备份仍仅设计。
+
+主线39953226169真实FAIL：BdpmReferenceFlowTest简中/320dp/2x在Contract:62滚动查药物1时列表没有该项；其余四个作业（三API及JVM）成功，Science39953226326成功。源码树与#106已验收PR一致，不应直接归因新增库存/持久化或UI09功能。定位测试model.sync()仅启动异步IO，却在实际Room快照发布前搜索LazyColumn，缺少明确就绪等待。当前独立fix/med02-postmerge-20261023仅补有界等待真实model snapshot并新增error为空/完整medication列表等于数据库快照的断言；原CIS/CIP选择、取消/重开/解除、剂量/库存/历史/Profile不变断言全部保留，不改生产BDPM或UI。
+
+官方失败build-results12502352491 SHA256/CRC已核验，原方法HTML已读；本地在/workspace/scratch/med02-a291-fail.zip和bdpm-a291-failed-method.html，需同步到独立证据分支保存。新修正尚未运行，不标PASS；下一步四语原合同+PeriodStability本地回归、独立PR/完整六门，再验主线。开放#108为独立UI/PDF交接，不覆盖其共享文档。
+
+## UI-09 瑞士排版纪律（PR #107 收尾）；PDF-01 已合并（#105）— 2026-10-23
 
 - **PDF-01**：PR #105 已合并（REQUIREMENTS §145，报告 76）。
 - **UI-09**：PR #107 已合并（REQUIREMENTS §146，报告 75）。
