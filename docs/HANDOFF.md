@@ -1,3 +1,9 @@
+## MED-02 容量保护与完整备份准备启动 — 2026-10-23
+
+最新默认claude/new-session-1959qb HEAD01f45fb8，主线Android39960227901/Science39960227840全部PASS；#102–106/109均已合并，Room14、PNBAK1不变。PR109原失败/修复/主线证据在docs/med02-postmerge-evidence-20261023，不能因本main旧交接仍写在途而重跑。
+
+当前独立feature/med02-storage-budget-20261023实施PR-A：基于现有同一文件锁和持久journal统计已提交/历史/隔离/未知/在途占用，明确可配置容量与alias预算，写入前拒绝，不删除、不退还wrap预算。先测试合同再接入PREPARE前，新源码尚未测试，不提前PASS。PR-B随后独立分支做快照/全量成员/身份映射及格式提案，新格式未批准不能正式导出恢复。入口OFF/未外审，永久删除关闭。不触碰UI、PK、PNBAK1或Schema。
+
 ## 远端接手：#104/#106已合并，修复主线药品UI异步等待竞态 — 2026-10-23
 
 重新核对默认分支仍claude/new-session-1959qb，HEAD a2917086ead90b3967eee71908160e8021dfe89a。#104最终663901f9已合并4f3c52a5且主线全绿；#106最终0210ab9c受保护合并a2917086，Room14单表journal/真实保存恢复已实现，REQUIREMENTS§144.A已有明确授权。复用这些成果，不重做旧crypto或迁移。其证据在docs/med02-storage-evidence-20261023。入口仍OFF/外审NOT_REVIEWED_EXTERNALLY、完整医疗备份仍仅设计。
