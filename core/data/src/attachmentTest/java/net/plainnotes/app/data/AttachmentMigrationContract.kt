@@ -129,11 +129,13 @@ abstract class AttachmentMigrationContract {
         val name="synthetic-b1-migration-failure-${UUID.randomUUID()}.db";val pass=ByteArray(32){11};var room:NotesDatabase?=null
         try {
             fixture(name,pass,9).use{it.writableDatabase.execSQL("INSERT INTO day_note(date,text) VALUES ('2026-01-01','synthetic rollback sentinel')")}
+            var injected=false
             val fault=object:androidx.room.migration.Migration(9,10) {
-                override fun migrate(db:SupportSQLiteDatabase) {AttachmentSchema.migrate(db);error("synthetic migration interruption")}
+                override fun migrate(db:SupportSQLiteDatabase) {AttachmentSchema.migrate(db);injected=true;error("synthetic migration interruption")}
             }
             room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration10To11,migration11To12,migration12To13,migration13To14,migration14To15).build()
             try{room!!.openHelper.writableDatabase;fail("Interrupted migration reported success")}catch(_:IllegalStateException){}
+            assertTrue("Injected migration must actually execute",injected)
             room!!.close();room=null
             fixture(name,pass,9).use {
                 val db=it.writableDatabase;assertEquals(9,db.version)
@@ -155,9 +157,11 @@ abstract class AttachmentMigrationContract {
                 db.execSQL("INSERT INTO attachment_document(store_uuid,document_uuid,revision,title,category,state) VALUES (?,?,1,'synthetic legacy','OTHER','ACTIVE')",arrayOf(dataset,doc))
                 db.execSQL("INSERT INTO attachment_version(store_uuid,document_uuid,version_uuid,ordinal,object_uuid,protocol_revision,dek_handle_uuid,plaintext_sha256,ciphertext_sha256,plaintext_bytes,ciphertext_bytes,mime,status) VALUES (?,?,?,1,?,1,?,zeroblob(32),zeroblob(32),1,100,'application/pdf','STAGED')",arrayOf(dataset,doc,version,UUID.randomUUID().toString(),UUID.randomUUID().toString()))
             }
-            val fault=object:androidx.room.migration.Migration(13,14) {override fun migrate(db:SupportSQLiteDatabase) {migration13To14.migrate(db);error("synthetic journal migration interruption")}}
-            val broken=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault).build()
+            var injected=false
+            val fault=object:androidx.room.migration.Migration(13,14) {override fun migrate(db:SupportSQLiteDatabase) {migration13To14.migrate(db);injected=true;error("synthetic journal migration interruption")}}
+            val broken=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration14To15).build()
             try {try {broken.openHelper.writableDatabase;fail("Interrupted journal migration accepted")}catch(_:IllegalStateException){}} finally {broken.close()}
+            assertTrue("Injected journal migration must actually execute",injected)
             fixture(name,pass,13).use {h->assertEquals(13,h.writableDatabase.version);h.writableDatabase.query("SELECT name FROM sqlite_master WHERE name='attachment_journal'").use {assertEquals(0,it.count)}}
             val room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
             try {val db=room.openHelper.writableDatabase;assertEquals(15,db.version)
@@ -169,6 +173,38 @@ abstract class AttachmentMigrationContract {
             try {fixture(name,pass,13).use {it.writableDatabase};fail("Old database reader accepted newer schema")}catch(_:android.database.sqlite.SQLiteException){}
             assertEncryptedDatabase(name)
         } finally {context.deleteDatabase(name);pass.fill(0)}
+    }
+
+    @Test fun room14AuthorityFailureRetainsOriginalDatasetAndLeavesNoPartialControlTables() {
+        val name="synthetic-authority14-${UUID.randomUUID()}.db";val pass=ByteArray(32){31}
+        val dataset=UUID.randomUUID().toString();val epoch=UUID.randomUUID().toString();val vault=UUID.randomUUID().toString()
+        try {
+            fixture(name,pass,14).use {h->val db=h.writableDatabase
+                db.execSQL("INSERT INTO day_note(date,text) VALUES ('2026-01-01','synthetic authority rollback sentinel')")
+                db.execSQL("INSERT INTO attachment_store(store_uuid,logical_vault_uuid,store_state,space,record_epoch,generation,feature_enabled) VALUES (?,?,'CURRENT','PRIMARY',?,1,0)",arrayOf(dataset,vault,epoch))
+            }
+            var injected=false
+            val fault=object:androidx.room.migration.Migration(14,15) {override fun migrate(db:SupportSQLiteDatabase) {
+                migration14To15.migrate(db);injected=true;error("synthetic authority migration interruption")
+            }}
+            val broken=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault).build()
+            try {try {broken.openHelper.writableDatabase;fail("Interrupted authority migration accepted")}catch(_:IllegalStateException){}}finally {broken.close()}
+            assertTrue("Authority migration fault must actually execute",injected)
+            fixture(name,pass,14).use {h->val db=h.writableDatabase
+                assertEquals(14,db.version)
+                db.query("SELECT name FROM sqlite_master WHERE name IN('library_candidate','library_authority')").use {assertEquals(0,it.count)}
+                db.query("SELECT text FROM day_note").use {assertTrue(it.moveToFirst());assertEquals("synthetic authority rollback sentinel",it.getString(0))}
+                db.query("SELECT store_uuid,logical_vault_uuid,record_epoch,feature_enabled FROM attachment_store").use {assertTrue(it.moveToFirst());assertEquals(dataset,it.getString(0));assertEquals(vault,it.getString(1));assertEquals(epoch,it.getString(2));assertEquals(0,it.getInt(3));assertFalse(it.moveToNext())}
+            }
+            val room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
+            try {val db=room.openHelper.writableDatabase;assertEquals(15,db.version)
+                assertEquals(AttachmentIdentity.Scope(dataset,vault,epoch),AttachmentIdentity.current(db))
+                for(t in listOf("library_authority","library_candidate"))db.query("SELECT COUNT(*) FROM $t").use {assertTrue(it.moveToFirst());assertEquals(0L,it.getLong(0))}
+                db.query("SELECT text FROM day_note").use {assertTrue(it.moveToFirst());assertEquals("synthetic authority rollback sentinel",it.getString(0))}
+                db.query("PRAGMA foreign_key_check").use {assertEquals(0,it.count)}
+            }finally {room.close()}
+            assertEncryptedDatabase(name)
+        }finally {context.deleteDatabase(name);pass.fill(0)}
     }
 
     @Test fun twoEncryptedDatabasesKeepSameIntegerTargetsAndAttachmentNamespaceSeparate()=runBlocking {

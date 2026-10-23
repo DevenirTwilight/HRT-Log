@@ -1,3 +1,9 @@
+## MED-02 连接/目录和迁移边界合并修正，待精确原生验收 — 2026-10-23
+
+源a4939480原生/低内存在途，不标PASS；本检查点新增候选修正后须由新HEAD重新验收。迁移合同发现13→14故障路径少14→15，可能因“无迁移”假通过；补完整路径，9→10及13→14均增加injected真实到达断言。新增14→15注入，要求原14库/附件scope/day_note和版本保持、两控制表不残留，重试升级15成功且不自动采用generation。最新本地迁移6及旧ID1共7/0fail/error/skip和全部native Kotlin编译PASS，XML/log在pinned-routing。
+
+宿主最小POSIX复现：对bare /proc/self/fd目录用O_NOFOLLOW会ELOOP，fd/.则打开同inode；不是Android证据。LibraryGenerationContext只把noBackup父目录表达改为同held-FD的dot子路径，保留最终leaf nofollow/inode/权限检查，无未知路径adopt。还发现get(PRIMARY)在子Room线程设置root synchronous可能等待其父root writer，路由改纯读；FULL设置仅在新连接未发布前，实际authority COMMIT仍检查FULL。新增恢复后scoped就诊删除/回收站恢复作为真实DAO+rawSQL跨线程路径，不改临床业务算法。Android是否通过仍须当前源码CI，不能用本地7或静态推导代替。入口0/外审未完成/永久删除OFF，旧失败ZIP/log继续保留。
+
 ## MED-02 首次真实低内存失败已定位并修复候选 — 2026-10-23
 
 源50204345低内存run40030685177：真实API26/x86、MemTotal508752KiB、ART192MiB，5项2FAIL/0skip。正向在SQLCipher执行PRAGMA mmap_size=0时被拒绝（返回行却用了execSQL）；故障注入后段因同错误未达seam，断言正确失败。改query并要求返回0，未放宽内存/SQL或安全断言。原官方ZIP SHA11d7fa92…/CRC已核并保存native-50204345，连原日志；不是LMK或恢复PASS。新源native Kotlin编译PASS。

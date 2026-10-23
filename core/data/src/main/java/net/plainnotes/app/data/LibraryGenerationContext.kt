@@ -19,7 +19,12 @@ internal class LibraryGenerationContext private constructor(base:Context,val gen
     val inode get()=stat.st_ino
     override fun getApplicationContext():Context=this
     override fun getDatabasePath(name:String):File {require(name=="notes.db");checkCurrent();return File(anchor,name)}
-    override fun getNoBackupFilesDir():File {checkCurrent();return anchor}
+    override fun getNoBackupFilesDir():File {
+        checkCurrent()
+        // Existing owned-file code opens this parent with O_NOFOLLOW. A bare proc FD is a
+        // symlink; trailing "." selects the SAME held directory inode without following a leaf.
+        return File(anchor,".")
+    }
     fun checkCurrent() {
         val current=Os.lstat(physical.path)
         requirePrivate(current)

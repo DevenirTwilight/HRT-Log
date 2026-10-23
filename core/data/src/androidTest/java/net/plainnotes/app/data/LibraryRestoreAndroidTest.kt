@@ -150,6 +150,15 @@ class LibraryRestoreAndroidTest {
             val current=runBlocking {scoped.appointments().single()}
             runBlocking {scoped.saveAppointment(current.copy(note="SYNTHETIC scoped new edit"))}
             assertEquals("SYNTHETIC scoped new edit",runBlocking {scoped.appointments().single().note})
+            // DAO + raw SQL from the nested child Room thread must route without trying to
+            // reacquire its parent root writer (delete/trash restore are genuine mixed paths).
+            runBlocking {
+                scoped.deleteAppointment(current.id,Instant.ofEpochMilli(9000))
+                assertTrue(scoped.appointments().isEmpty())
+                val item=scoped.trash().single {it.kind==Trash.APPOINTMENT && it.ref==current.id.toString()}
+                scoped.restoreTrash(item.id,Instant.ofEpochMilli(10000))
+                assertEquals("SYNTHETIC scoped new edit",scoped.appointments().single().note)
+            }
             assertArrayEquals(original,target.facts());original.fill(0)
         }}
     }

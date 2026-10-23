@@ -59,8 +59,8 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
         if(space!=Space.PRIMARY)return root
         val rawRoot=root.openHelper.writableDatabase
         val selected=LibraryAuthority.current(rawRoot) ?: return root
-        if(!rawRoot.inTransaction())rawRoot.execSQL("PRAGMA synchronous=FULL")
-        else rawRoot.query("PRAGMA synchronous").use {check(it.moveToFirst() && it.getInt(0)>=2)}
+        // Routing is read-only: a child transaction may hold the root writer on another
+        // Room thread. A setter here would wait for that writer and deadlock its parent.
         generations[selected.generation.toString()]?.let {connection->
             if(connection.db.isOpen) {connection.context.checkCurrent();return connection.db}
             connection.context.close();connection.key.fill(0);generations.remove(selected.generation.toString())
@@ -73,6 +73,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
             val db=Room.databaseBuilder(owned,NotesDatabase::class.java,"notes.db")
                 .setJournalMode(androidx.room.RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING)
                 .openHelperFactory(SupportOpenHelperFactory(password)).addMigrations(*allMigrations()).addCallback(SchemaGuards).build().also {database=it}
+            db.openHelper.writableDatabase.execSQL("PRAGMA synchronous=FULL")
             val scope=AttachmentIdentity.current(db.openHelper.writableDatabase)
             check(scope!=null) {"Missing current database namespace"}
             // The immutable original restore identity must remain retained. Ordinary PNBAK1
@@ -96,6 +97,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
             try {
                 val sql=db.openHelper.writableDatabase
+                sql.execSQL("PRAGMA synchronous=FULL")
                 sql.beginTransaction()
                 try { AttachmentIdentity.initialize(sql,space==Space.PRIMARY);sql.setTransactionSuccessful() }
                 finally { sql.endTransaction() }
