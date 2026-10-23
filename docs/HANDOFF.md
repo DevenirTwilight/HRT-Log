@@ -3277,3 +3277,9 @@ feature/med02-backup-preparation-20261023基于01f45fb8，不复制未合并PR-A
 新增AttachmentBackupManifest（全版本/回收站/链接闭包、显式类型化UUID映射、PURGED仅映射墓碑）和AttachmentBackupPreparation（同事务原业务JSON/元数据快照，复用独立全审计及原有held-FD/Tink/device-key逐版本认证，缺成员拒绝、父会话撤权/换库后拒绝并清零owned记录缓冲）。不写恢复SQL、不新增持久格式或应用入口。
 
 DraftMedicalArchive只在attachmentTest测试源集：2MiB内存reference，BC Argon2id测试专用1MiB/2次+成熟JCA AES-GCM封装、原Tink对象完整认证及集合/类型映射校验；不能用其magic/参数作为正式格式。候选跨软件新device key/dataset/epoch验证所有原字节、旧版本、trash/link、错密码/缺失/额外/重复/坏密文/未知版本/中断前旧库不变。本地初轮6项与native源码编译PASS。追加真实SQLCipher/Keystore只读快照4项（真实三页PDF/PNG/binary、历史坏尾/缺失、撤权清零、外层事务/错会话拒绝）后，最终源尚未测试。实际跨手机、归档恢复SQL事务/进程死亡、正式格式/KDF低内存验收NOT_IMPLEMENTED/NOT_RUN；旧PNBAK1和schema未改。源文件后续冻结才跑完整回归，不能借初轮候选6项称生产备份可用。
+
+## portable准备完整本地559项通过，最终native源码编译通过 — 2026-10-23
+
+541a6d42的完整core:data JVM559/0fail/error/skip，含6项隔离候选；Python发布隔离4项PASS。首次新增真实PDF fixture错误使用PdfDocument.use导致native源码编译FAIL，原日志initial-full-native-compile.log保留，不计原生执行。改显式try/finally.close，并增加真实就诊删除/恢复→快照保留原UUID/记录回收站/关联不自动恢复的正负测试，最新native Kotlin编译PASS（五个Snapshot测试+六个隔离Candidate，原生执行仍待CI）。生产源码和预算/旧PNBAK1未改，跨软件新device候选不是实际手机迁移或生产SQL恢复。
+
+具体正式格式评审选项现含80B独立PNMEDBK1 header、suite/KDF/域/帧顺序/全集认证/严格版本与大小限额、原子激活和未知多namespace策略；仅提案NOT_APPROVED，64MiB/3pass KDF低内存/正式wire长度推导/多namespace/恢复SQL及进程死亡验收未完成。测试参考magic与1MiB KDF绝不可升为正式格式。完整格式必须单独明确批准；本PR只合入无入口准备组件和隔离测试。

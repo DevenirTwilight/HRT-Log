@@ -61,9 +61,9 @@ class AttachmentBackupPreparationAndroidTest {
     }
     @Test fun consistentSnapshotAuthenticatesPdfImageBinarySupersededVersionAndTrash() {
         Fixture(app).use {f->
-            val pdf=ByteArrayOutputStream().also {output->PdfDocument().use {d->for(i in 1..3) {
+            val pdf=ByteArrayOutputStream().also {output->val d=PdfDocument();try {for(i in 1..3) {
                 val page=d.startPage(PdfDocument.PageInfo.Builder(200,200,i).create());page.canvas.drawText("Synthetic page $i",10f,40f,Paint());d.finishPage(page)
-            };d.writeTo(output)}}.toByteArray()
+            };d.writeTo(output)}finally {d.close()}}.toByteArray()
             val image=java.util.Base64.getDecoder().decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jc1sAAAAASUVORK5CYII=")
             val binary=ByteArray(12345) {(it*9).toByte()}
             val requests=listOf(f.request(pdf,mime="application/pdf"),f.request(image,mime="image/png"),f.request(binary))
@@ -105,6 +105,26 @@ class AttachmentBackupPreparationAndroidTest {
             val next=p.capture(f.scope,f.session.issue());next.records {owned=it}
             f.raw.beginTransaction();try {AttachmentIdentity.replaceStructuredDataset(f.raw);f.raw.setTransactionSuccessful()}finally {f.raw.endTransaction()}
             reject {next.manifest()};assertTrue(owned.all {it==0.toByte()});next.close();f.safety()
+        }
+    }
+    @Test fun clinicalTrashAndCorrectionKeepStableIdentityAndQuarantinedLinksInSnapshot() {
+        Fixture(app).use {f->
+            val bytes=byteArrayOf(1,2,3);val r=f.request(bytes);f.store().save(f.scope,f.session.issue(),r) {ByteArrayInputStream(bytes)}
+            val repo=NotesRepository(object:DatabaseAccess(f.app) {override fun get(space:Space)=f.db})
+            kotlinx.coroutines.runBlocking {repo.deleteAppointment(1)}
+            AttachmentBackupPreparation(f.context,f.db).capture(f.scope,f.session.issue()).use {snapshot->
+                val m=snapshot.manifest();assertEquals(f.record,m.records.single().uuid);assertEquals("TRASHED",m.records.single().state)
+                assertNotNull(m.records.single().trashId);assertEquals("QUARANTINED",m.links.single().state)
+                snapshot.records {data->val tables=JSONObject(String(data,Charsets.UTF_8)).getJSONObject("tables")
+                    assertEquals(0,tables.getJSONArray("appointment").length());assertEquals(1,tables.getJSONArray("trash_item").length())}
+            }
+            val trashId=f.raw.query("SELECT id FROM trash_item WHERE kind='APPOINTMENT'").use {assertTrue(it.moveToFirst());it.getLong(0)}
+            kotlinx.coroutines.runBlocking {repo.restoreTrash(trashId)}
+            AttachmentBackupPreparation(f.context,f.db).capture(f.scope,f.session.issue()).use {snapshot->
+                assertEquals(f.record,snapshot.manifest().records.single().uuid);assertEquals("ACTIVE",snapshot.manifest().records.single().state)
+                assertEquals("QUARANTINED",snapshot.manifest().links.single().state)
+            }
+            f.safety()
         }
     }
     @Test fun callerTransactionAndWrongSessionCannotCreateOrMutateBackupFacts() {
