@@ -1,3 +1,7 @@
+## 当前正式附件源码审查输入已固定，非外部审核 — 2026-10-23
+
+production-review-scope.json固定已合并01f45fb8的附件生产源逐文件SHA256、144/144.A授权范围、三API/四重启seam证据及启用阻断。旧报告44/47/51针对test-only候选，不能当作当前生产实现已外审；此文件仅给专家的固定输入，状态仍NOT_REVIEWED_EXTERNALLY，未联络任何人。应用AppLock/session owner尚无Attachment接线；全局配额/安全清理、原件格式准入、完整portable备份及人工真机仍独立未完成。主线Android39960227901在途，Science/JVM通过。没有新生产变更、没有再次测试已通过旧源。
+
 ## #109已保护合并01f45fb8，最终三API与四语原件已保存 — 2026-10-23
 
 最新精确源7aecef43 PR39957082418和push39956960416全部六必需门SUCCESS，无冲突/未解决讨论，正常match-head MERGE于13:19:18Z合并01f45fb889d198b201b3bb1904ecf4c3f41eb501。git核源和主线tree均ae90ff2111634ae16ead96a93ba001c2a908e7eb。最终PR官方API35原ZIP12504262382与host12504461712 SHA256/CRC均PASS，API35附件48项+真实BdpmReferenceFlowAndroidTest3项全PASS；host四语12+Period5全PASS，原HTML/receipt保留native、pr-green。旧主线a291真实FAIL不删除。没有重跑/削弱断言/生产改动。
