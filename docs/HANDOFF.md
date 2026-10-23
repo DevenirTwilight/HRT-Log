@@ -1,12 +1,29 @@
+## PDF-01 PDF 瑞士版式（PR 前收尾）— 2026-10-23
+
+- 分支 `feature/pdf01-swiss-layout-20261023`（工作树 /home/user/wt-pdf01，基线 d2223c0a），REQUIREMENTS §145，报告 76。
+- `PdfReport` 改为 Sink/render/trace；测试侧冻结旧实现 `LegacyPdfReport`（哈希在 `Ui08PdfSummaryUnchangedTest` 固定），`Pdf01Test` 做文字四语逐字对照、digest、drawChart 调用对比，以及版式断言。
+- 已登记 `PD-2026-10-23-PDF01-EXPORTS`（407710c3… → 30067c52…，证据为提交 86b00f88 的 REQUIREMENTS）。**之后再改 Exports.kt 必须同步更新这条记录的 new_sha256**（或另加记录）。
+- 与 UI-09 的交叉：UI-09 已把对 Exports.kt 的字节固定改为内容检查，不再冲突。MED-02（#104）先合并并占用了 §144，所以 PDF-01 用 §145，UI-09 改为 §146。
+- 待办：完整单测/lint → PR 自动合并 → 默认分支 CI 复验。不交付 APK。
+## MED-02：#104 最终源许可守卫修复，持久化授权已接收 — 2026-10-23
+
+默认分支 d2223c0a，#102/#103 已合并；#104 f86d4a5e 尚未合并。原 PR Android 39854454660：API26 job120089049019 在 adb/emulator 启动阶段失败（测试未运行）；同源 push API26 job120089018775 成功，PR API29/35、JVM 成功。另有真实主机失败 job120089049277：2255 项中 Ui08PdfSummaryUnchangedTest 1 FAIL、492 skip，原因是合法新增的四语 Tink 许可文字进入旧资源整文件哈希，不是 PDF 实现变化。
+
+本次仅在该守卫中精确反归一化 licenses_body 内的一处获准 Tink 插入，再验证全部原冻结哈希；未更新任何期望哈希、PDF 代码、UI-08 逻辑或其他资源。独立 ThirdPartyNoticesTest 仍正向要求四语 Tink/Apache 归属。2026-10-23 本地针对此工作树：UI08 守卫1、许可3、PeriodStability5，合计9/9 PASS。最终提交需完整必需 CI，不把本地或旧源绿色当作新源验收；因需实际源码修复，不额外重跑旧 f86 的 API26 故障作业。
+
+负责人本轮明确授权默认关闭的最小非破坏性 Room/journal 持久化实现；接下来独立分支，先核真实 Schema13 与兼容设计，再实施 PREPARE→STAGE→AUTHENTICATE→COMMIT→RECOVER。完整医疗备份仅设计，不改 PNBAK1，不启用入口、不使用真实原件，外审仍 NOT_REVIEWED_EXTERNALLY。尚无持久化实现或迁移通过证据，不宣称闭环完成。
+
 ## MED-02：#104已完成；持久化Draft #106等待最终安全验收 — 2026-10-23
 
+已同步#105，UI/PDF/批准记录与主线逐字节一致；当前Room13无其他迁移竞争。本节放在原医疗交接段内，避免与前端不断追加的文件首部冲突；需求用§144.A日期补充，给并行UI-09保留§146。
+
 - **#104收尾完成**：最终663901f97e6806e217dd0f7066e156fdc88d7b83六必需门PASS，无未解决评审，保护自动合并4f3c52a579ac3304096706093888ef46e37dcc79。主线Android39940095721最终SUCCESS；首轮API26启动前adb离线日志保留，只对job120369117416发起一次同源重试（attempt2成功），没有重跑整套。主线Science39940095774 SUCCESS。三API原始工件及SHA/CRC已推证据分支 docs/med02-storage-evidence-20261023；Foundation32、实际Keystore2各API全PASS，不等于外审。
-- **正式持久化已编码**：独立分支feature/med02-persistent-store-20261023，Draft #106，基线4f3c52a5。当前生产代码包含私有FD归属、先于加密的FULL同步一次性包装预留、Room14单表journal、完整认证后版本/关联/活动指针CAS和真实COMMIT、UUID同请求重放及跨数据集UUID拒绝、幂等隔离恢复、逻辑trash/restore。复用原Tink/Session，不建立验证缓存/任务队列。父目录固定FD、O_EXCL/O_NOFOLLOW、显式PFD归属；进程内非重入门闩先于锁文件open，与跨进程fcntl锁配合。原Gate3 RED/oracle未改，另PID peer验证生产失败探测不释放活跃锁。
+- **正式持久化已编码**：独立分支feature/med02-persistent-store-20261023，Draft #106，实施基线4f3c52a5，当前合并基线adc8cbb7（#105）。当前生产代码包含私有FD归属、先于加密的FULL同步一次性包装预留、Room14单表journal、完整认证后版本/关联/活动指针CAS和真实COMMIT、UUID同请求重放及跨数据集UUID拒绝、幂等隔离恢复、逻辑trash/restore。复用原Tink/Session，不建立验证缓存/任务队列。父目录固定FD、O_EXCL/O_NOFOLLOW、显式PFD归属；进程内非重入门闩先于锁文件open，与跨进程fcntl锁配合。原Gate3 RED/oracle未改，另PID peer验证生产失败探测不释放活跃锁。
 - **发现并修复的实质性缺口**：旧0e02f7e7已通过API26/29/35原生写入/认证/重启恢复，但旧open返回的纯密码reader不检查当前DB epoch；漏撤销session时旧租约可继续读取，因此该绿色源仍NO-GO，不能借它合并。原crypto原样保留为阳性反例基准；新AttachmentScopedReader在读前/后检查当前已提交scope，拒绝旧调用方事务快照/已关闭DB，失效清零并关闭。真实持久化原生合同增加“已有lease→换库→未撤销session→拒绝且清零”。AttachmentTransaction同时拒绝借用任何调用方外层事务，避免嵌套Room返回被误认为原生COMMIT/持久预算。
 - **当前验证范围**：本地Foundation33、ScopedReader3全部0fail/error/skip，包含原reader阳性反例、读中换库晚到输出清零、旧事务快照拒绝、借用外层事务拒绝；新增原生测试源码编译PASS。此前完整数据层任务通过，最终精确提交仍必须独立CI，不能借旧源数据。Schema13→14迁移/中断回滚/旧附件UNKNOWN/旧读者拒绝本地5项PASS；全历史链1→…→14仍在原合同中。local-first保留548项中1项故障注入缺13→14路径的原FAIL，修复只补路径、未删断言；f86的UI08冻结守卫和API26启动失败原日志也保留。
 - **待核验**：最终修复源的API26/29/35原生及四处外部强停（写入中、密文完成、事务内提交前、提交后）、完整必需CI及保护合并/主线检查。不要把旧源绿色、JVM、模拟器或CI替代为真机/外审通过。生产分支只因真实失败或必要主线冲突再改，不继续性能研究、无意义元数据推送或重复跑旧源。
 - **兼容性与边界**：只有新空journal表，旧附件无协议证据仍UNKNOWN，不伪造代次VALIDATED；原STAGING namespace不宣称全库已验证。业务备份最高13/普通用户导出12/PNBAK1不变，旧应用拒绝Room14。完整医疗备份具体字段、状态机、兼容矩阵与验收方案见同日persistence-and-backup-compatibility.md，仅DESIGN_ONLY，未冻结密码学格式。
-- **启用仍禁止**：feature_enabled=0，外审NOT_REVIEWED_EXTERNALLY，未接正式导入/AppLock应用层/文件准入与原生解析发布链；未保存真实原件。失败或未知密文保留隔离、不猜测删除，每尝试两个新alias与预算不回收；总配额/安全GC/保留策略仍需启用前解决。真机、真实卷耗尽/断电NOT_RUN；合成IO异常与提交前后进程强停不冒充这些验证。不改BDPM/P5/P6/PK/医疗UI，不签名、不交付APK、不发布。授权§146（并行PDF #105已占§145，未覆盖对方代码）。
+- **启用仍禁止**：feature_enabled=0，外审NOT_REVIEWED_EXTERNALLY，未接正式导入/AppLock应用层/文件准入与原生解析发布链；未保存真实原件。失败或未知密文保留隔离、不猜测删除，每尝试两个新alias与预算不回收；总配额/安全GC/保留策略仍需启用前解决。真机、真实卷耗尽/断电NOT_RUN；合成IO异常与提交前后进程强停不冒充这些验证。不改BDPM/P5/P6/PK/医疗UI，不签名、不交付APK、不发布。授权§144.A（作为§144的日期补充，不占PDF§145/UI-09§146，未覆盖对方代码）。
 
 ## #104发现并修复运行依赖许可守卫FAIL，旧失败保留 — 2026-10-22
 

@@ -110,6 +110,25 @@
     "test_scope": "Actual TG3.05g/L→305mg/dL and tinyNEUT0.0004→4.0E-4 canonical tooltip; all45 categories; exact0.0001–0.0005 bounds and French/normal/zero formatting; final four-language renders. Execution recorded separately."
    },
    "human_review": "Compare combined source against both parent approval entries; do not treat separate parent CI as final integration verification."
+  },
+  {
+   "id": "PD-2026-10-23-PDF01-EXPORTS",
+   "file": "app/src/main/java/net/plainnotes/app/export/Exports.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-23",
+   "scope": "PDF-01: the layout of PdfReport only (page grid, type sizes, titles, section numbers, rules, table style, header and footer). Same words, numbers, section conditions and order, concentration text and visit_digest; the only new text is the section numbers. drawChart, CSV export, VisitPack facts/digest, PK, calibration and ConcChart unchanged.",
+   "previous_sha256": "407710c35904da6bede1a8f42b2d64c0491ebdaf641b893c11c9aa4ede2b192b",
+   "new_sha256": "30067c52e4cd1509a97a7dd1d7ab3d04ce4a95627bf56b5b97a1b0da7c8e1a33",
+   "evidence": {
+    "commit": "86b00f886028ce821e09c568387a80b51da16343",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §145 (2026-10-23), quoting the PDF-01 task book v2 uploaded by the owner on 2026-10-23 (docs/audits/product-quality-2026-10/sources/pdf01/pdf01-prompt.md, SHA-256 4f0f9986…58db): 负责人在此明确批准修改 app/src/main/java/net/plainnotes/app/export/Exports.kt（PK_DISPLAY_REVIEW）。范围仅限 PdfReport 的版式：页面网格、字号层级、标题、编号、细线、表格样式、页眉页脚。",
+   "verification": {
+    "previous_blob": "407710c3… = Exports.kt on the default branch d2223c0a before PDF-01",
+    "tests": "Pdf01Test (text identical to the frozen pre-PDF-01 renderer LegacyPdfReport in zh-CN/en/fr/zh-Hant-TW for report, visit pack and wellbeing summary with all and partial parts; digest; drawChart calls identical up to a vertical offset; layout rules); PK display regression: CausalTimeUiTest, ExportTest, D-2 report plan tests, concentration and lab-context tests in the full :app:testFullDebugUnitTest"
+   },
+   "human_review": "recommended: compare the before/after samples in docs/ui-audit/2026-10-23-pdf01/."
   }
  ]
 }
