@@ -1,0 +1,207 @@
+{
+  "observedUTC": "2026-10-23T15:30:00Z",
+  "checks": {
+    "cb51a14383cadbfca9dbd189c53ee221a40b61b4": [
+      {
+        "id": 120487083606,
+        "name": "research-deep",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926658/job/120487083606"
+      },
+      {
+        "id": 120487045052,
+        "name": "research-deep",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974934437/job/120487045052"
+      },
+      {
+        "id": 120486936632,
+        "name": "science-change-gate",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974934437/job/120486936632"
+      },
+      {
+        "id": 120486934361,
+        "name": "jvm",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974933726/job/120486934361"
+      },
+      {
+        "id": 120486934314,
+        "name": "attachment-poc-compatibility (29)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974933726/job/120486934314"
+      },
+      {
+        "id": 120486934062,
+        "name": "attachment-poc-compatibility (26)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974933726/job/120486934062"
+      },
+      {
+        "id": 120486934003,
+        "name": "device-tests",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974933726/job/120486934003"
+      },
+      {
+        "id": 120486933648,
+        "name": "android",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974933726/job/120486933648"
+      },
+      {
+        "id": 120486910925,
+        "name": "device-tests",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926669/job/120486910925"
+      },
+      {
+        "id": 120486910837,
+        "name": "attachment-poc-compatibility (29)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926669/job/120486910837"
+      },
+      {
+        "id": 120486910729,
+        "name": "android",
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926669/job/120486910729"
+      },
+      {
+        "id": 120486910623,
+        "name": "attachment-poc-compatibility (26)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926669/job/120486910623"
+      },
+      {
+        "id": 120486910341,
+        "name": "jvm",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926669/job/120486910341"
+      },
+      {
+        "id": 120486908426,
+        "name": "science-change-gate",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926658/job/120486908426"
+      }
+    ],
+    "4991e629df3352e8ab195c0a0a490ba0b65e4d61": [
+      {
+        "id": 120485584995,
+        "name": "jvm",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974366212/job/120485584995"
+      },
+      {
+        "id": 120485584797,
+        "name": "device-tests",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974366212/job/120485584797"
+      },
+      {
+        "id": 120485584793,
+        "name": "attachment-poc-compatibility (26)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974366212/job/120485584793"
+      },
+      {
+        "id": 120485584751,
+        "name": "attachment-poc-compatibility (29)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974366212/job/120485584751"
+      },
+      {
+        "id": 120485584406,
+        "name": "android",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974366212/job/120485584406"
+      },
+      {
+        "id": 120485484438,
+        "name": "android",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974358732/job/120485484438"
+      },
+      {
+        "id": 120485484421,
+        "name": "attachment-poc-compatibility (29)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974358732/job/120485484421"
+      },
+      {
+        "id": 120485484298,
+        "name": "attachment-poc-compatibility (26)",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974358732/job/120485484298"
+      },
+      {
+        "id": 120485484266,
+        "name": "device-tests",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974358732/job/120485484266"
+      },
+      {
+        "id": 120485483904,
+        "name": "jvm",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974358732/job/120485483904"
+      },
+      {
+        "id": 120485123390,
+        "name": "research-deep",
+        "status": "completed",
+        "conclusion": "skipped",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974358722/job/120485123390"
+      },
+      {
+        "id": 120485116394,
+        "name": "research-deep",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974366166/job/120485116394"
+      },
+      {
+        "id": 120485016597,
+        "name": "science-change-gate",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974366166/job/120485016597"
+      },
+      {
+        "id": 120484990724,
+        "name": "science-change-gate",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974358722/job/120484990724"
+      }
+    ]
+  },
+  "environment": "Local execution unavailable; source and prior artifacts already pushed. Remote checks are actual GitHub CI, not local reruns.",
+  "scope": "PR110 capacity production; PR111 read-only snapshot production plus TEST_ONLY archive. Format NOT_APPROVED; entry OFF; external NOT_REVIEWED_EXTERNALLY."
+}
