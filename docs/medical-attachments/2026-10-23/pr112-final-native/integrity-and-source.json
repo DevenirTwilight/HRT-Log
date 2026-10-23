@@ -183,10 +183,41 @@
     }
   ],
   "api35": "PASS",
-  "host": "PENDING",
+  "host": "PASS",
   "entry": "OFF",
   "external_review": "NOT_REVIEWED_EXTERNALLY",
   "portable_format": "NOT_APPROVED",
   "checkout": "b9804918776569f99eca07db33634836d5ad4a99",
-  "checkout_and_head_tree_verified": true
+  "checkout_and_head_tree_verified": true,
+  "host_artifact": {
+    "id": 12517163050,
+    "sha256": "0d99f7fe1965b17f0642817c4180fc6bfbe27213bdc7e55f0eb1dd19a39df586",
+    "upload_digest_matches": true,
+    "crc": "PASS",
+    "selected_original_indices": {
+      "data": {
+        "tests": 572,
+        "failures": 0,
+        "skipped": 0
+      },
+      "app": {
+        "tests": 2335,
+        "failures": 0,
+        "skipped": 557
+      }
+    },
+    "period_stability": "5/0fail/0skip",
+    "release_isolation": "PASS"
+  },
+  "pr_required_gates": "ALL_SUCCESS",
+  "push_run": 39986371583,
+  "push_gates": "ALL_SUCCESS",
+  "merged_main": "0a95293d4743656d90464827893a7b39aaedcf2f",
+  "merged_at": "2026-10-23T16:53:57Z",
+  "merged_tree_matches_tested_source": true,
+  "main_ci": {
+    "android": 39990596705,
+    "science": 39990596652,
+    "status": "PENDING"
+  }
 }

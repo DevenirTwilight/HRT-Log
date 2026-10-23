@@ -1,3 +1,11 @@
+## PR112已保护合并，主线CI正在核对 — 2026-10-23
+
+最终head28198a21（PR checkout b980491，同树5724d0ac）在PR39986383632、push39986371583全部必需门SUCCESS，Science39986383604/39986371648完成，无冲突/未解决review thread。按§106正常ready+保护合并，主线0a95293d4743656d90464827893a7b39aaedcf2f，2026-10-23T16:53:57Z；未admin/force/跳门。原官方129MB host artifact SHA/CRC已核，data572/0fail/0skip，app2335/0fail/557原有skip，PeriodStability5/0fail/0skip，R8发布隔离PASS；原indices/loggz在pr112-final-native。三API75列明用例（其中Candidate6始终TEST_ONLY）及两新PID seam原件此前已独立核验，不能把候选逻辑当换机成功。
+
+生产范围：格式无关完整成员/typed映射/墓碑/预算预检，独立私有密文quarantine和全Tink内层认证，旧DB不变；修复dose reference-trash快照，以及拒绝retired typed-only/原目录未知或未完成对象的完整集合遗漏。无Room/PNBAK1/SQLCipher/Tink格式/临床事实/UI变更。receipt不可激活，重启只保留收费UNKNOWN，不猜删/恢复。
+
+主线Android39990596705、Science39990596652已自动启动，当前PENDING，尚未写为主线PASS。不重复触发旧源测试；接下来仅等原运行、如有真实失败读原件处理，否则收尾。正式PNMEDBK1/密码KDF/portable wrap/集合codec/整库SQL恢复与原子激活仍待明确审批；当前不能新手机完整恢复。入口OFF、NOT_REVIEWED_EXTERNALLY、真实原件/永久删除OFF，无签名交付发布。下一可独立产物是复用现有完整oracle的隔离结构化记录暂存/映射验证，仍不能激活；不要越过格式审批继续writer研究。
+
 ## PR112最终三API原件及新进程探针全部核验，主机门仍在途 — 2026-10-23
 
 28198a21d681ba620f424e119b93330e68f2b23f / PR39986383632，实际checkout b9804918776569f99eca07db33634836d5ad4a99与head同树5724d0acddb4af66f712f632557c851ecc47b136（fetch/rev-parse已核）。26/29/35三官方ZIP均与GitHub上传SHA256一致、CRC通过。每API新Preflight5/Staging4/Preparation8，以及原Foundation33/Store11/Migration5/Key2/Restart1/TEST_ONLY Candidate6全部0fail/skip；每API COPY/VERIFIED两处真实新PID原日志各OK(1 test)，原四处对象强停也保留。证据在pr112-final-native，不以同名旧类或CI绿点冒充执行。
