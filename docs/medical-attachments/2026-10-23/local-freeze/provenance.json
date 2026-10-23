@@ -36,5 +36,16 @@
     "AttachmentPersistentStore.kt_sha256": "cd9bfac7e2401410235b8520142e66edb2925353b2c547f8643a4c2409ac1023",
     "compile": "PASS",
     "native_runtime": "PENDING_CI"
+  },
+  "epoch_lease_and_native_transaction_followup": {
+    "parent": "0e02f7e79054446824bc63de758fab977608a51b",
+    "source_sha256": {
+      "AttachmentScopedReader.kt": "5a472028644ed494826834ec1fbdae0fd86a323e58beb0c56823a9576bb778bf",
+      "AttachmentPersistentStore.kt": "711f9fcfedb6809cd27616479cb79f5cada07b265175a3bae4eca0227466351d",
+      "AttachmentTransaction.kt": "1113192c5c038215fbe926b4636454235cf4b8880e24dabab5ea13d4e1b1e898"
+    },
+    "local": "Foundation33 + ScopedReader3 PASS, native test compilation PASS",
+    "old_source": "API26/29/35 green does NOT resolve old open-lease epoch defect; do not merge 0e02f7e7",
+    "native_runtime": "PENDING_CI for final source"
   }
 }

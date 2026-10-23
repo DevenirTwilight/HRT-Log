@@ -88,6 +88,15 @@ abstract class AttachmentFoundationContract : AttachmentObjectStreamsContract() 
             assertEquals(0L,runBlocking {db.attachments().current().single().feature_enabled})
         } finally {rawInput.close();pipe[1].close();session.revoke()}
     }
+    @Test fun callerTransactionCannotMasqueradeAsAnAttachmentCommit() {
+        val session=net.plainnotes.app.domain.AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
+        var entered=false
+        raw.beginTransaction()
+        try {
+            reject {AttachmentTransaction.commit(db,scope,session.issue()) {entered=true;AttachmentOperations.prepare(raw,scope,UUID.randomUUID(),"IMPORT")}}
+            assertFalse(entered)
+        } finally {raw.endTransaction();session.revoke()}
+    }
     @Test fun room11KeepsThreeAttachmentDomainsDefaultDisabled()=runBlocking {
         assertEquals(14,raw.version)
         assertNotEquals(scope.dataset,scope.logicalVault);assertNotEquals(scope.dataset,scope.epoch)

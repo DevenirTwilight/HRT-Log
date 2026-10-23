@@ -35,7 +35,9 @@ No raw key, provider URI, absolute patient path or plaintext temporary file.
 | COMMIT | Capability encloses actual SQL COMMIT: typed-record/current scope/generation check, document revision CAS, immutable version, active envelope, link, pointer and operation COMMITTED | Any SQL failure rolls back all publication; old pointer and links survive |
 | RECOVER | Exclusive writer lock; all incomplete journals→QUARANTINED and operations→ABORTED, including retired epochs | No auto-commit, encryption resume, alias resurrection or file deletion; repeat is a no-op |
 
-Success is returned only after transaction commit. A response lost after COMMIT is
+Success is returned only after transaction commit. AttachmentTransaction refuses
+caller-owned outer transactions/savepoints on every call, including reservations
+after slow IO; nested Room return is not accepted as durable COMMIT. A response lost after COMMIT is
 resolved by same UUID/same request returning the original committed receipt; it
 does not open input or wrap again. A different request under that UUID refuses, including explicit reuse under a
 new dataset/epoch; a serialized SQL preflight rejects an existing operation or
@@ -78,6 +80,12 @@ whole object on the pinned FD before returning a bounded capability lease.
 Lock/revocation closes registered crypto resources, prevents late output and
 actual commit. A fresh capability/current dataset is required for recovery.
 Dataset switch changes identity; old namespaces/links do not match integer IDs.
+The production reader also checks the current committed dataset/epoch before AND
+after every read (and on size access), even if its caller forgot to revoke an
+old session. A closed DB or caller-held SQL transaction/snapshot is refused;
+rejected output is zeroed and the pinned lease closes. The unchanged crypto-only
+reader is deliberately not a source of current database authority. The original
+return-type counterexample and late-output/snapshot checks are preserved.
 Cancellation after a durable commit cannot undo it; reconcile by UUID.
 Ownership, key or authentication failure returns no plaintext and marks the
 retained version CORRUPT when authority remains valid. Revoked authority cannot

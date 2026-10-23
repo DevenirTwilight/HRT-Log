@@ -140,7 +140,10 @@ class AttachmentPersistentStoreAndroidTest {
             reject {f.store {if(it==AttachmentPersistentStore.Boundary.AUTHENTICATED)f.raw.execSQL("UPDATE attachment_store SET generation=generation+1 WHERE store_state='CURRENT'")}.save(f.scope,f.session.issue(),generationConflict) {ByteArrayInputStream(bytes)}}
             f.store().recover(f.scope,f.session.issue())
             val old=f.scope
+            val live=f.store().open(old,f.session.issue(),r.document)
             f.raw.beginTransaction();try {AttachmentIdentity.replaceStructuredDataset(f.raw);f.raw.setTransactionSuccessful()} finally {f.raw.endTransaction()}
+            val denied=ByteArray(bytes.size) {9}
+            reject {live.readAt(0,denied,0,denied.size)};assertArrayEquals(ByteArray(bytes.size),denied);live.close()
             reject {f.store().open(old,f.session.issue(),r.document)}
             val next=requireNotNull(AttachmentIdentity.current(f.raw));assertNotEquals(old.epoch,next.epoch)
             f.raw.beginTransaction();val nextRecord:UUID
@@ -210,7 +213,7 @@ class AttachmentPersistentStoreAndroidTest {
             write("trailer\n<</Size 4 /Root 1 0 R>>\nstartxref\n$start\n%%EOF\n")
             return output.toByteArray()
         }
-        private fun readFully(reader:AttachmentObjectStreams.Reader,out:ByteArray) {
+        private fun readFully(reader:AttachmentScopedReader,out:ByteArray) {
             var offset=0
             while(offset<out.size) {val n=reader.readAt(offset.toLong(),out,offset,out.size-offset);assertTrue(n>0);offset+=n}
             assertEquals(-1,reader.readAt(out.size.toLong(),ByteArray(1),0,1))

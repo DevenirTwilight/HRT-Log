@@ -1,50 +1,12 @@
-## MED-02 跨数据集 UUID 重试边界 — 2026-10-23
+## MED-02：#104已完成；持久化Draft #106等待最终安全验收 — 2026-10-23
 
-最终合同补齐：操作 UUID 不仅在同一 scope 内比较完整请求；新建前也在原生事务中拒绝已属于其他数据集/旧协议请求的 operation/idempotency UUID，防止恢复后迟到任务换新 scope 复用旧 UUID。仍不猜测整数记录：原生同一合同用 APPOINTMENT整数1的新 typed UUID证明拒绝，源不打开、旧版本/关联保留。未添加跨事务缓存、队列或新表。精确最终源需CI，旧7516996b不能冒充后续源。此后等待真实原生结果，仅修实际失败/必要主线冲突，不继续扩展设计。
-
-## MED-02 复用既有 Gate3 反例补齐进程内门闩 — 2026-10-23
-
-文件锁复核发现必须沿用仓库已有 Gate3 的 POSIX 规则：同进程探测新开再关闭同一锁文件可能释放原 fcntl 锁，仅靠 FileChannel 的 OverlappingFileLockException 不足。生产 AttachmentOwnedFiles 在打开任何锁FD之前先取得非重入 Semaphore，持有至目录/锁真正关闭；所有异常路径只释放一次。不重做原型，不改既有 Gate3 RED/oracle。原生现有“活跃写入排斥恢复”合同复用 Gate2PeerProvider 的另一真实PID，断言同进程失败探测之后 peer 仍看到 HELD_OTHER_PROCESS；测试夹具仅改为其已允许的 synthetic-gate2-* 私有前缀，不新增provider/权限。
-
-此修复尚待最终原生运行证明，#106不转Ready/合并；默认入口OFF。旧eb9f24ae若有结果仅归该源；后续最终SHA独立验收，不复用旧绿。只修具体正确性缺口，不进行性能研究或另建调度系统。
-
-## MED-02 最终迁移集成检查，准备冻结原生验收源 — 2026-10-23
-
-#106补齐应用级两个重启合同中的实际Room版本14（用药跳过撤销、化验panel）；仅修改版本断言，不改其原有业务/数据断言或生产功能。所有源文件扫描已区分业务备份13、旧fixture13与新Room14。App全部原生测试源码编译PASS，附件设计61和发布隔离4 Python检查PASS。reader在父目录/锁关闭异常时也明确关闭已创建读lease，避免返回失败时遗留资源；未改变认证、取消或提交规则。此后生产分支只因真实失败/冲突修根因，不推微小测试元数据触发整套CI。
-
-#104主线4f3c52a5 API26 job120369117416在Gradle测试前adb离线/root关闭失败，已取原始日志；其他主线检查还在运行。按负责人授权，仅待该运行完成后对同源失败API26作业作一次有界重试，不重跑全部，不把该基础设施错误当作代码已验证。旧PR663901f9三API工件已验SHA/CRC并推独立证据分支。#106正式持久化原生尚待自己的精确SHA验收；Draft、入口OFF、外审NOT_REVIEWED_EXTERNALLY。
-
-## #104 已保护合并；持久化 Draft #106 验收中 — 2026-10-23
-
-#104 最终663901f9六必需门PASS、无未解决讨论，2026-10-23T10:34:40Z保护自动合并4f3c52a5；主线Android39940095721在途、Science39940095774已PASS。三API原始ZIP/SHA/CRC、Foundation32+Keystore2各全PASS已推送独立 docs/med02-storage-evidence-20261023（c32ed202），不是本次journal通过证据。
-
-真实持久化Draft #106，首次ca733bac、FD归属修复9c95ea6e，尚未原生通过/合并。本轮静态复核再修两个测试根因：restart目录getter不预先创建目录（由prepare独占创建），合成安全断言按SQLite Long精确比较0L；不删断言、不改生产语义或预算。发现并行PDF团队 #105已占需求§145，本任务改§146，保留对方授权和所有UI/PDF代码；Room14无竞争。同步已合并#104的默认基线后冻结CI，不为微小报告再推生产分支。完整备份为设计，入口OFF/外审NOT_REVIEWED_EXTERNALLY保持。
-
-## MED-02 文件描述符归属复核 — 2026-10-23
-
-持久化首提交 ca733bac 已推送。复核补齐所有 Os.open 产生的持有FD：显式转交 ParcelFileDescriptor，原FD立即关闭，使用 AutoCloseInput/OutputStream；不依赖 Android 对 FileInput/OutputStream(FileDescriptor) 的隐含归属。seal 后写FD确实释放，锁和读channel也有明确owner。最终生产与原生测试源码编译通过，原生执行仍待CI；此为真实资源正确性修复，未削弱任何断言。此前 local-freeze 的文件哈希仍仅归旧工作树，新FD文件哈希见同目录 provenance 的 followup；不借旧源证据冒充最终源通过。#104 原生工件26/29/35均已下载，正在核验并保存在独立证据分支，主机最后检查仍在途。
-
-## MED-02 持久化实现与备份兼容设计待原生验收 — 2026-10-23
-
-独立分支 feature/med02-persistent-store-20261023：候选 Room14 单表 journal、文件归属、一次性包装预算、真实提交/CAS、UUID 重放查询、保守恢复、逻辑 trash/restore 已编码。备份具体字段/状态/兼容矩阵在 persistence-and-backup-compatibility.md，仅 DESIGN_ONLY；PNBAK1/业务备份最高13不变。默认 OFF，旧版本无 journal 仍 UNKNOWN；现有物理 namespace 仍 STAGING，不伪造整库代次 VALIDATED。每尝试2个新alias、失败密文/预算保留，不做危险 GC；全局配额/清理与正式导入/格式准入/AppLock接线仍是启用前工作。
-
-本地最终针对性32+5全部通过，最终原生测试源码编译通过；完整数据层任务先前通过，之后新增 operationState/写前恢复小调整，精确最终提交仍须完整 CI，不能借旧本地结果归源。local-first 保留原548项中1项旧故障注入缺迁移路径 FAIL；修复仅补13→14链，原断言全保留。local-freeze 有日志/XML/生产文件SHA256。原生生产闭环/四强停点尚 NOT_RUN；已接API26/29/35现有CI，不触发额外 P4 专项跑分。
-
-#104 源663901f9的三API及JVM/Science已绿，主机检查一绿一在途，未声称已合并。API26原工件已下载验SHA/CRC：Foundation32/0/0、实际Keystore2/0/0，尚待其他工件和最终保护合并/主线核验。曾短暂401，连接已恢复，不反复重跑。下一步：提交此实现，完成 #104 六门保护合并；持久化PR最终源原生/CI，根因修复后正常保护合并，不开启入口/不签名/不改外审状态。
-
-## MED-02 持久化代码已进入独立工作树，验收在途 — 2026-10-23
-
-#104 修复源663901f9已推送；必需 CI 尚在运行，不提前宣称通过或合并。新分支 feature/med02-persistent-store-20261023 基于该源，已核真实 Room13，暂无其他开放 Schema PR。本轮新增授权见 §146。已编写默认 OFF 的 AttachmentPersistentStore、AttachmentOwnedFiles 和单表 attachment_journal（候选 Room14），复用现有 Tink/Keystore，不接应用入口。预留先于包装、同 UUID 请求承诺、完整认证与真实 SQL CAS 提交、重启隔离/逻辑回收站恢复已编码。旧记录无 journal 仍 UNKNOWN；业务备份最高13/PNBAK1不变。
-
-初轮生产编译、基础32与迁移4通过；全数据层548项有1项失败，原XML保留 local-first：旧12→13故障注入用例缺少新13→14路径，尚未到预期故障点，已补路径且保留原断言。新增13→14回滚/UNKNOWN/旧读者拒绝合同与原生合成闭环、三处外部强停脚本正在编译/验证；尚无原生持久化 PASS 证据。未知/未完成密文保留隔离，不自动删除或提交，别名/预算保留。完整医疗备份具体设计仍待补齐，外审及正式启用未完成。不要重复 P4 跑分或先宣称闭环验收完成。
-
-## MED-02：#104 最终源许可守卫修复，持久化授权已接收 — 2026-10-23
-
-默认分支 d2223c0a，#102/#103 已合并；#104 f86d4a5e 尚未合并。原 PR Android 39854454660：API26 job120089049019 在 adb/emulator 启动阶段失败（测试未运行）；同源 push API26 job120089018775 成功，PR API29/35、JVM 成功。另有真实主机失败 job120089049277：2255 项中 Ui08PdfSummaryUnchangedTest 1 FAIL、492 skip，原因是合法新增的四语 Tink 许可文字进入旧资源整文件哈希，不是 PDF 实现变化。
-
-本次仅在该守卫中精确反归一化 licenses_body 内的一处获准 Tink 插入，再验证全部原冻结哈希；未更新任何期望哈希、PDF 代码、UI-08 逻辑或其他资源。独立 ThirdPartyNoticesTest 仍正向要求四语 Tink/Apache 归属。2026-10-23 本地针对此工作树：UI08 守卫1、许可3、PeriodStability5，合计9/9 PASS。最终提交需完整必需 CI，不把本地或旧源绿色当作新源验收；因需实际源码修复，不额外重跑旧 f86 的 API26 故障作业。
-
-负责人本轮明确授权默认关闭的最小非破坏性 Room/journal 持久化实现；接下来独立分支，先核真实 Schema13 与兼容设计，再实施 PREPARE→STAGE→AUTHENTICATE→COMMIT→RECOVER。完整医疗备份仅设计，不改 PNBAK1，不启用入口、不使用真实原件，外审仍 NOT_REVIEWED_EXTERNALLY。尚无持久化实现或迁移通过证据，不宣称闭环完成。
+- **#104收尾完成**：最终663901f97e6806e217dd0f7066e156fdc88d7b83六必需门PASS，无未解决评审，保护自动合并4f3c52a579ac3304096706093888ef46e37dcc79。主线Android39940095721最终SUCCESS；首轮API26启动前adb离线日志保留，只对job120369117416发起一次同源重试（attempt2成功），没有重跑整套。主线Science39940095774 SUCCESS。三API原始工件及SHA/CRC已推证据分支 docs/med02-storage-evidence-20261023；Foundation32、实际Keystore2各API全PASS，不等于外审。
+- **正式持久化已编码**：独立分支feature/med02-persistent-store-20261023，Draft #106，基线4f3c52a5。当前生产代码包含私有FD归属、先于加密的FULL同步一次性包装预留、Room14单表journal、完整认证后版本/关联/活动指针CAS和真实COMMIT、UUID同请求重放及跨数据集UUID拒绝、幂等隔离恢复、逻辑trash/restore。复用原Tink/Session，不建立验证缓存/任务队列。父目录固定FD、O_EXCL/O_NOFOLLOW、显式PFD归属；进程内非重入门闩先于锁文件open，与跨进程fcntl锁配合。原Gate3 RED/oracle未改，另PID peer验证生产失败探测不释放活跃锁。
+- **发现并修复的实质性缺口**：旧0e02f7e7已通过API26/29/35原生写入/认证/重启恢复，但旧open返回的纯密码reader不检查当前DB epoch；漏撤销session时旧租约可继续读取，因此该绿色源仍NO-GO，不能借它合并。原crypto原样保留为阳性反例基准；新AttachmentScopedReader在读前/后检查当前已提交scope，拒绝旧调用方事务快照/已关闭DB，失效清零并关闭。真实持久化原生合同增加“已有lease→换库→未撤销session→拒绝且清零”。AttachmentTransaction同时拒绝借用任何调用方外层事务，避免嵌套Room返回被误认为原生COMMIT/持久预算。
+- **当前验证范围**：本地Foundation33、ScopedReader3全部0fail/error/skip，包含原reader阳性反例、读中换库晚到输出清零、旧事务快照拒绝、借用外层事务拒绝；新增原生测试源码编译PASS。此前完整数据层任务通过，最终精确提交仍必须独立CI，不能借旧源数据。Schema13→14迁移/中断回滚/旧附件UNKNOWN/旧读者拒绝本地5项PASS；全历史链1→…→14仍在原合同中。local-first保留548项中1项故障注入缺13→14路径的原FAIL，修复只补路径、未删断言；f86的UI08冻结守卫和API26启动失败原日志也保留。
+- **待核验**：最终修复源的API26/29/35原生及四处外部强停（写入中、密文完成、事务内提交前、提交后）、完整必需CI及保护合并/主线检查。不要把旧源绿色、JVM、模拟器或CI替代为真机/外审通过。生产分支只因真实失败或必要主线冲突再改，不继续性能研究、无意义元数据推送或重复跑旧源。
+- **兼容性与边界**：只有新空journal表，旧附件无协议证据仍UNKNOWN，不伪造代次VALIDATED；原STAGING namespace不宣称全库已验证。业务备份最高13/普通用户导出12/PNBAK1不变，旧应用拒绝Room14。完整医疗备份具体字段、状态机、兼容矩阵与验收方案见同日persistence-and-backup-compatibility.md，仅DESIGN_ONLY，未冻结密码学格式。
+- **启用仍禁止**：feature_enabled=0，外审NOT_REVIEWED_EXTERNALLY，未接正式导入/AppLock应用层/文件准入与原生解析发布链；未保存真实原件。失败或未知密文保留隔离、不猜测删除，每尝试两个新alias与预算不回收；总配额/安全GC/保留策略仍需启用前解决。真机、真实卷耗尽/断电NOT_RUN；合成IO异常与提交前后进程强停不冒充这些验证。不改BDPM/P5/P6/PK/医疗UI，不签名、不交付APK、不发布。授权§146（并行PDF #105已占§145，未覆盖对方代码）。
 
 ## #104发现并修复运行依赖许可守卫FAIL，旧失败保留 — 2026-10-22
 

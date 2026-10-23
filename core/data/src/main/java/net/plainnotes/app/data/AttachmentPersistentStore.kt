@@ -275,8 +275,11 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
         }
     }
 
-    fun open(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,document:UUID):AttachmentObjectStreams.Reader =
-        openChecked(scope,cap,document,false)
+    fun open(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,document:UUID):AttachmentScopedReader {
+        val crypto=openChecked(scope,cap,document,false)
+        try {return AttachmentScopedReader(db,scope,cap,crypto)}
+        catch(failure:Throwable) {try {crypto.close()} catch(cleanup:Throwable) {failure.addSuppressed(cleanup)};throw failure}
+    }
     private fun openChecked(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,document:UUID,trashed:Boolean):AttachmentObjectStreams.Reader {
         worker();scopeCheck(scope,cap)
         // Pin/verify inode and full content under the writer lock. Returned read-only descriptor remains pinned.
