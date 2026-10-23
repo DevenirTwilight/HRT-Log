@@ -1,0 +1,87 @@
+{
+  "mainMergedPR": 110,
+  "main": "6bae935c8eefafdfb44161311e6f863cbd303318",
+  "sourceA": "cb51a14383cadbfca9dbd189c53ee221a40b61b4",
+  "sourceAChecks": [
+    {
+      "name": "research-deep",
+      "result": "skipped",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926658/job/120487083606"
+    },
+    {
+      "name": "research-deep",
+      "result": "skipped",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974934437/job/120487045052"
+    },
+    {
+      "name": "science-change-gate",
+      "result": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974934437/job/120486936632"
+    },
+    {
+      "name": "jvm",
+      "result": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974933726/job/120486934361"
+    },
+    {
+      "name": "attachment-poc-compatibility (29)",
+      "result": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974933726/job/120486934314"
+    },
+    {
+      "name": "attachment-poc-compatibility (26)",
+      "result": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974933726/job/120486934062"
+    },
+    {
+      "name": "device-tests",
+      "result": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974933726/job/120486934003"
+    },
+    {
+      "name": "android",
+      "result": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974933726/job/120486933648"
+    },
+    {
+      "name": "device-tests",
+      "result": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926669/job/120486910925"
+    },
+    {
+      "name": "attachment-poc-compatibility (29)",
+      "result": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926669/job/120486910837"
+    },
+    {
+      "name": "android",
+      "result": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926669/job/120486910729"
+    },
+    {
+      "name": "attachment-poc-compatibility (26)",
+      "result": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926669/job/120486910623"
+    },
+    {
+      "name": "jvm",
+      "result": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926669/job/120486910341"
+    },
+    {
+      "name": "science-change-gate",
+      "result": "success",
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/39974926658/job/120486908426"
+    }
+  ],
+  "preparationOriginal": "4991e629df3352e8ab195c0a0a490ba0b65e4d61",
+  "integrated": "5c8068d27f2cd1e78479b97c93b2793c9e2c7f1d",
+  "parents": [
+    "4991e629df3352e8ab195c0a0a490ba0b65e4d61",
+    "6bae935c8eefafdfb44161311e6f863cbd303318"
+  ],
+  "overlap": [
+    "docs/HANDOFF.md"
+  ],
+  "method": "Normal two-parent merge preserving exact source blob union and both handoff texts; branch fast-forward expected head, force=false. Final integrated CI pending."
+}
