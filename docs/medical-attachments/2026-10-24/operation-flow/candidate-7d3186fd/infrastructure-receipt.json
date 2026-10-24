@@ -1,0 +1,9 @@
+{
+  "source_sha": "7d3186fd093cc03f5a4881944773fadeb73c03db",
+  "run": 40104324849,
+  "job": 120902749869,
+  "classification": "INFRASTRUCTURE_FAILURE",
+  "evidence": "adb root: unable to connect for root: closed before Gradle/test execution",
+  "native": "NOT_RUN",
+  "retry": "ONE_FAILED_JOB_ONLY_AFTER_PARENT_COMPLETES"
+}

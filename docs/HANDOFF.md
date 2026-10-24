@@ -1,3 +1,7 @@
+## MED-02 #119 最终7d API35启动基础设施失败，待一次同源作业补验 — 2026-10-24
+
+7d3186fd PR Android40104324849/API35 job120902749869在任何Gradle/测试之前，configure_ansm_native_runtime.py调用adb root返回unable to connect for root: closed；原完整log保留candidate-7d3186fd/api35-infrastructure-first.log，无测试工件（NOT_RUN），不能当生产/测试断言失败或通过。和e474真正SAF交互失败明确分开。源码不改；同源push40104321069 API35仍运行。待PR本轮其他作业结束后，仅对此明确基础设施失败job做一次有界同源码重试；父workflow在进行时不能重跑job，不反复试API，不重触整套CI。若新源出现真实失败先保留原件定位，不借push绿跳过保护。
+
 ## MED-02 #119 真实链API26/29已验；最终7d前置验证API35修正 — 2026-10-24
 
 e474原件核对：push API26 App2/Core3 PASS（art12563439727），PR API29 App2/Core3 PASS（art12564066860），原ZIP SHA/CRC与原HTML保存candidate-e474c53d；PR API35（art12564240662）App2中1FAIL，实际SAF第二次选择未返回，Disconnected nodes及loader二次更新日志保留。不可把26/29结果当35或新SHA验收。低内存e474原件12+8仍真实PASS。
