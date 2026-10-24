@@ -1,3 +1,11 @@
+## MED-02 restored-write admission checkpoint — 2026-10-24
+
+Latest base369267e: #119 **MERGED**, accepted source623fca6e; final main CI Android40116642106 all5SUCCESS / Science40116642050SUCCESS. Exact source/API26/29/35/512MiB/192MiB receipts and merge proof: evidence branch docs/med02-operation-evidence-20261024@6d516523. Older #119 PENDING text below is historical, do not redo it.
+
+Current branch feature/med02-restored-write-admission-20261024: audited real restored import/export boundaries. Nonempty retained libraries cannot be represented by v1; truly empty fallback is a distinct unproven joint-admission case, not an excuse to bypass the guard. Production fix moves existing refusal ahead of typed identity binding and provider reads; store PREPARE recheck retained. Existing native generation case now verifies no provider open or business/metadata/file/alias changes on refusal. Local compile/regression RUNNING; new-source native/CI NOT_RUN. No new restored-write success, no functional-breakthrough claim.
+
+See docs/medical-attachments/2026-10-24/restored-write/decision.md for actual call-chain gaps and concrete **unapproved** PNMEDBK2 compatibility decision. No new crypto/Room/backup/quota/UI changes. feature0 / publicfalse / externalreview NOT_REVIEWED_EXTERNALLY / permanent deletionOFF. Next: finish targeted checks, independent PR, record exact CI; new protocol needs separate owner approval, not the already-granted OFF-development permission.
+
 ## MED-02 #119最终检查发现并收紧并发不同输入回执边界 — 2026-10-24
 
 70584c6f正常PR40112205294五Android jobs/Science/低内存全部SUCCESS，原导航修正通过；仍不直接合并：末次源码审查识别了两个控制器同UUID、不同输入同时越过前置operationState检查的竞争。底层已有request digest/写锁会正确拒绝异载荷，但旧controller通用异常后COMMITTED核对可能自动把另一输入的回执显示为Saved。此为源码导出的反例，尚未在旧生产源码上运行新负向用例，不能伪称已有native RED。

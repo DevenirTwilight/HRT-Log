@@ -107,11 +107,32 @@ class MedicalAttachmentOperationAndroidTest {
                 try {
                     val ops=fresh.forGeneration(current).pinnedTo(Space.PRIMARY).medicalAttachments()
                     val active=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,fresh.forGeneration(current).appointments().first().id)
+                    // A fresh explicit target has no attachment identity yet. Refusal must not
+                    // bind it, read even a failing provider, reserve aliases or append a journal.
+                    val isolated=fresh.forGeneration(current).pinnedTo(Space.PRIMARY)
+                    isolated.saveAppointment(AppointmentEntity(9876,"SYNTHETIC admission target",2000,"UTC",remind_minutes_before=0))
+                    val unbound=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,9876)
+                    val selected=f.access.get(Space.PRIMARY);val sql=selected.openHelper.writableDatabase
+                    val business=selected.runInTransaction(java.util.concurrent.Callable {MeasuredBackupJson.encode(sql,java.time.Instant.EPOCH)})
+                    val legacy=f.facts()
+                    fun count(table:String)=sql.query("SELECT COUNT(*) FROM $table").use {assertTrue(it.moveToFirst());it.getLong(0)}
+                    val tables=listOf("attachment_record_identity","attachment_operation","attachment_journal","attachment_document","attachment_version","attachment_link","attachment_key_envelope")
+                    val metadata=tables.associateWith(::count)
+                    val objects=File(DatabaseAccess.storageContext(selected,f.context).noBackupFilesDir,"attachment-objects-v1").list()?.sorted()
                     val aliases=AttachmentDeviceKeys().retainedAliases(4096)
+                    fun providerOpens()=requireNotNull(app.contentResolver.call(uri("unknown"),"openCount",null,null)).getInt("count")
+                    val opened=providerOpens()
+                    val refusedOperation=UUID.randomUUID()
                     var refused=false
-                    try {ops.import(newCap,MedicalAttachmentOperations.Import(UUID.randomUUID(),UUID.randomUUID(),active,"SYNTHETIC managed refusal"),uri("unknown"))}
+                    try {ops.import(newCap,MedicalAttachmentOperations.Import(refusedOperation,UUID.randomUUID(),unbound,"SYNTHETIC managed refusal"),uri("failure"))}
                     catch(e:IllegalStateException) {assertTrue(e.message.orEmpty().contains("joint generation admission"));refused=true}
                     assertTrue("Restored generations must retain their existing write admission",refused)
+                    assertEquals(opened,providerOpens())
+                    assertEquals(metadata,tables.associateWith(::count))
+                    assertArrayEquals(business,selected.runInTransaction(java.util.concurrent.Callable {MeasuredBackupJson.encode(sql,java.time.Instant.EPOCH)}))
+                    assertArrayEquals(legacy,f.facts())
+                    assertEquals(objects,File(DatabaseAccess.storageContext(selected,f.context).noBackupFilesDir,"attachment-objects-v1").list()?.sorted())
+                    assertEquals(MedicalAttachmentOperations.Phase.NOT_FOUND,ops.reconcile(newCap,refusedOperation).phase)
                     assertEquals(aliases,AttachmentDeviceKeys().retainedAliases(4096))
                     assertEquals(MedicalAttachmentOperations.Export.REFUSED,ops.exportEligibility(newCap))
                     val output=ByteArrayOutputStream();reject {runBlocking {ops.writeArchive(newCap,source.password(),output)}};assertEquals(0,output.size())
