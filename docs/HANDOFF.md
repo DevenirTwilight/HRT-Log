@@ -1,3 +1,9 @@
+## MED-02 retained-write native failure preserved — 2026-10-24
+
+93461e67 API26 low-memory40123862350 actually FAIL, not PASS: new fixture invoked saveAppointment(nonzero nonexistent9876), so existing edit-path validation failed NotesRepository836 before provider/refusal assertions. Official ZIP12572368263 SHAa4dcb02c… and all ZIP CRC verified; raw ZIP/job log/failure receipt now retained under restored-write/evidence-93461e67. No LMK/product inference. Same-class API failures require new fixed-source evidence, not retries of old934.
+
+Original development branch PR120 corrects fixture only in60dc382b (id0/new actual returned ID); local Kotlin test compile PASS, native CI running. All safety assertions and production guard unchanged. PNMEDBK2 OFF protocol approval is separately committed170d78e0; new collection development5213af1d, not yet merged/accepted.
+
 ## MED-02 #120 exact-source local checkpoint — 2026-10-24
 
 PR120 Draft, source93461e672627107413c69e1464930c6d7f5bdf04, base369267e. Local data599/0fail/0error/0skip and Android-test Kotlin/Java compilation PASS. Unit sources and production unchanged from eff55db9 execution; final test task correctly UP-TO-DATE, not claimed second execution. Raw XML/log ZIP + SHA receipt under restored-write/evidence-93461e67.

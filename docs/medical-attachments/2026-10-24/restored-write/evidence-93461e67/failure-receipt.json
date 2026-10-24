@@ -1,0 +1,10 @@
+{
+  "source": "93461e672627107413c69e1464930c6d7f5bdf04",
+  "run": 40123862350,
+  "artifact": 12572368263,
+  "sha256": "a4dcb02ceabbda86086bbc08ca3c6b3789f92339130f97180f9f1ea6869e856b",
+  "CRC": "PASS",
+  "native": "FAIL",
+  "cause": "Added fixture wrongly passed nonexistent nonzero9876 into saveAppointment (edit path), fails NotesRepository:836 before attachment assertions. No product/LMK diagnosis.",
+  "correction": "60dc382bc6982423b3767dde883d756748f07dfd uses id0 and returned real ID; all assertions retained; new native CI pending."
+}
