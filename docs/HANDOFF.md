@@ -1,3 +1,7 @@
+## MED-02 #119 最终7d低内存12+8原件PASS — 2026-10-24
+
+最终7d3186fd独立低内存40104324801 SUCCESS：官方art12564202806 ZIP SHA/CRC已核，原生实际OK12，原库四点+操作四点新PID各OK1，原件/收据/采样保存candidate-7d3186fd/lowmem。512MiB/192MiB未变，viewer低内存/物理真机仍NOT_RUN。最终JVM/Science成功，其他原生仍待；PR API35前测试adb root启动失败保留，待父流程结束后只重试该job一次，不改源/跳检查。#119仍Draft，feature0/外审未做。
+
 ## MED-02 #119 最终7d API35启动基础设施失败，待一次同源作业补验 — 2026-10-24
 
 7d3186fd PR Android40104324849/API35 job120902749869在任何Gradle/测试之前，configure_ansm_native_runtime.py调用adb root返回unable to connect for root: closed；原完整log保留candidate-7d3186fd/api35-infrastructure-first.log，无测试工件（NOT_RUN），不能当生产/测试断言失败或通过。和e474真正SAF交互失败明确分开。源码不改；同源push40104321069 API35仍运行。待PR本轮其他作业结束后，仅对此明确基础设施失败job做一次有界同源码重试；父workflow在进行时不能重跑job，不反复试API，不重触整套CI。若新源出现真实失败先保留原件定位，不借push绿跳过保护。
