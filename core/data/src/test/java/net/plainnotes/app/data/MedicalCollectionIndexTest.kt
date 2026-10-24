@@ -44,6 +44,12 @@ class MedicalCollectionIndexTest {
         reject {i.copy(libraries=List(9) {library(it+1L,it==0)}).encode()}
         reject {i.copy(libraries=listOf(library(1,true).copy(recordBytes=Long.MAX_VALUE))).encode()}
     }
+    @Test fun indexBytesShareTheSameManifestLimitRatherThanAddingAnExtraAllowance() {
+        val i=index();val indexBytes=i.encode().size
+        val exact=i.copy(libraries=listOf(i.libraries[0].copy(manifestBytes=MedicalArchiveCrypto.MAX_MANIFEST-indexBytes-1L),i.libraries[1].copy(manifestBytes=1)))
+        assertEquals(exact,MedicalCollectionIndex.decode(exact.encode()))
+        reject {exact.copy(libraries=listOf(exact.libraries[0].copy(manifestBytes=exact.libraries[0].manifestBytes+1),exact.libraries[1])).encode()}
+    }
     @Test fun duplicateObjectOrVersionUnknownHashNegativeLengthAndPayloadSubstitutionRefuse() {
         val i=index();val member=MedicalCollectionIndex.Member(id(700),id(701),56,"c".repeat(64))
         for(members in listOf(listOf(member,member),listOf(member,member.copy(version=id(702))),listOf(member.copy(bytes=-1)),listOf(member.copy(sha256="C".repeat(64)))))

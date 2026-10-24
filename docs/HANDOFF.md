@@ -1,3 +1,11 @@
+## MED-02 PNMEDBK2 writer/independent reader coded — 2026-10-24
+
+Production MedicalCollectionWriter/Reader now encode and independently authenticate explicit multi-library sets using approved v2 domains and the existing Tink/manifest/business decoder; no new crypto primitive/restore engine. Layout documented collection/layout.md. All inner AEADs/history authenticate before Archive returns; exact scoped source bridge feeds existing staging only. Index + per-library manifests share aggregate8MiB, not separate allowances.
+
+Targeted prior-source 6index+9archive tests passed (v1 frozen KDF vectors preserved; independent authenticated v2 missing/extra/wrong-library/wrong-wrap/inner-corruption cases). Added exact aggregate metadata boundary test; full data regression/new native compilation now RUNNING. Native two-library production writer→source test-alias loss→independent reader→every original hash and typed history comparison is coded, **NOT_RUN** until exact CI. This is codec production implementation only; retained capture/atomic multi-library restore/joint durable import reservation remain disconnected. No restored-write breakthrough yet.
+
+#120 corrected60dc382b independent API26/512MiB/192MiB job40124568449 SUCCESS; official receipt pending download; normal three-API/full required CI still running. Original93461e67 failure retained in evidence branch0c772098. Do not credit new protocol to #120's low-memory pass: new codec has NOT_RUN low-memory/native status. OFF/publicfalse/external-review-not-done/permanent-deleteOFF unchanged.
+
 ## MED-02 PNMEDBK2 first production checkpoint — 2026-10-24
 
 Authorization170d78e0 persisted/pushed. Implemented strict binary collection index (1–8 explicit ACTIVE/RETAINED libraries, exact scoped object membership, independent bounded decoder, aggregate32MiB/8MiB/100000/1000 limits) and v2-specific header/HKDF/AAD plus library-bound portable key wrapping in the existing crypto adapter. Legacy parse/fresh/WrapAttempt remain v1-only; v1 wire meaning unchanged. No public calls, resource admission permit, Room/backup-v1 mutation or activation.

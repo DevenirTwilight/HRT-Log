@@ -20,7 +20,10 @@ internal data class MedicalCollectionIndex(val collection:UUID,val active:UUID,v
         require(libraries.size in 1..8 && libraries.map {it.id}.toSet().size==libraries.size)
         require(libraries.count {it.role==Role.ACTIVE}==1 && libraries.single {it.role==Role.ACTIVE}.id==active)
         require(libraries.zipWithNext().all {(a,b)->a.id.toString()<b.id.toString()}) {"Unordered collection"}
-        var json=0L;var manifests=0L;var rows=0L;var versions=0L;var cipher=0L
+        // The collection index itself is metadata too; it does not get another 8MiB allowance.
+        var json=0L;var manifests=Math.addExact(40L+165L*libraries.size,72L*libraries.sumOf {it.members.size.toLong()})
+        require(manifests<=MedicalArchiveCrypto.MAX_MANIFEST)
+        var rows=0L;var versions=0L;var cipher=0L
         for(l in libraries) {
             require(l.recordBytes in 1..BackupLimits.MAX_JSON_BYTES.toLong() && l.manifestBytes in 1..MedicalArchiveCrypto.MAX_MANIFEST.toLong())
             require(l.businessRows in 0..100000 && l.metadataRows in 0..100000)

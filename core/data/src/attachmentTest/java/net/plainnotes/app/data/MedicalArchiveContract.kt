@@ -148,4 +148,77 @@ abstract class MedicalArchiveContract {
         private const val OUTER_KAT="95fac8296f52be1effaf4b943aac6cd10b026ab41be5a2c4f0b6b2aa8d7f2b20"
         private const val WRAP_KAT="93d9a15599d1d2ceaaf8174835ff5ea9aa4e0ff4d68d4d611666f6cb7e10f10a"
     }
+    /** Independent v2 framing producer; no production collection writer or low-cost KDF. */
+    private fun collectionFixture(cap:AttachmentSession.Capability,fault:String="OK"):ByteArray {
+        val ids=listOf(UUID(0,1),UUID(0,2));val context=AttachmentObjectContext(UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID())
+        val doc=UUID.randomUUID();val dek=ByteArray(32) {23}
+        val ciphers=ids.mapIndexed {i,_->ByteArrayOutputStream().also {output->
+            AttachmentObjectStreams.write(cap,context,dek.copyOf(),ByteArrayInputStream(ByteArray(100+i) {i.toByte()}),output,101)
+        }.toByteArray()}
+        val tables=JSONObject();DOMAIN_TABLES.forEach {tables.put(it,org.json.JSONArray())}
+        val records=JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",12).put("tables",tables).toString().toByteArray()
+        val manifests=ids.mapIndexed {i,_->
+            if(fault=="INNER" && i==0)ciphers[i][ciphers[i].lastIndex]=(ciphers[i].last().toInt() xor 1).toByte()
+            val original=ByteArray(100+i) {i.toByte()}
+            val member=AttachmentObjectStreams.Manifest(context,original.size.toLong(),ciphers[i].size.toLong(),MedicalCollectionIndex.digest(original),MedicalCollectionIndex.digest(ciphers[i]))
+            AttachmentBackupManifest(UUID.randomUUID(),UUID.randomUUID(),context.logicalVault,emptyList(),
+                listOf(AttachmentBackupManifest.Document(doc,1,"SYNTHETIC collection","OTHER","ACTIVE",context.version,null)),
+                listOf(AttachmentBackupManifest.Version(doc,1,context,member,"application/octet-stream")),emptyList())
+        }
+        val dummy=manifests.map {MedicalArchiveManifest.encode(it,mapOf(context.version to "0".repeat(120)))}
+        fun descriptor(i:Int,manifest:ByteArray)=MedicalCollectionIndex.Library(ids[i],if(i==0)MedicalCollectionIndex.Role.ACTIVE else MedicalCollectionIndex.Role.RETAINED,
+            manifests[i].dataset,manifests[i].epoch,context.logicalVault,records.size.toLong(),MedicalCollectionIndex.digest(records),manifest.size.toLong(),MedicalCollectionIndex.digest(manifest),0,2,
+            listOf(MedicalCollectionIndex.Member(context.objectId,context.version,ciphers[i].size.toLong(),MedicalCollectionIndex.digest(ciphers[i]))))
+        val length=MedicalCollectionIndex(UUID(0,99),ids[0],ids.indices.map {descriptor(it,dummy[it])}).encode().size
+        var n=9L+length+73+ids.indices.sumOf {50L+dummy[it].size+records.size+65+ciphers[it].size}
+        if(fault=="MISSING")n-=65+ciphers[0].size
+        if(fault=="EXTRA")n+=65+ciphers[0].size
+        val header=MedicalArchiveCrypto.freshCollection(n);val output=ByteArrayOutputStream();output.write(header.bytes())
+        try {MedicalArchiveCrypto.derive(header,"SYNTHETIC collection password".toCharArray(),cap).use {keys->
+            val wrap=MedicalArchiveCrypto.CollectionWrapAttempt(header,keys.wrapping,ids.map {it to context})
+            val envelopes=ids.map {MedicalArchiveCrypto.hex(wrap.wrap(it,context,dek))}
+            val encoded=manifests.mapIndexed {i,m->MedicalArchiveManifest.encode(m,mapOf(context.version to envelopes[if(fault=="WRAP_SCOPE" && i==0)1 else i]))}
+            val index=MedicalCollectionIndex(header.archive,ids[0],ids.indices.map {descriptor(it,encoded[it])}).encode()
+            val prefix=ByteArrayOutputStream();val body=DataOutputStream(prefix)
+            fun frame(tag:Int,size:Long) {body.writeByte(tag);body.writeLong(size)}
+            frame(1,index.size.toLong());body.write(index)
+            fun member(i:Int) {
+                frame(4,56L+ciphers[i].size);body.write(MedicalArchiveCrypto.uuidBytes(if(fault=="WRONG_LIBRARY" && i==0)ids[1] else ids[i]))
+                body.write(MedicalArchiveCrypto.uuidBytes(context.objectId));body.write(MedicalArchiveCrypto.uuidBytes(context.version));body.writeLong(ciphers[i].size.toLong());body.write(ciphers[i])
+            }
+            for(i in ids.indices) {
+                frame(2,16L+encoded[i].size);body.write(MedicalArchiveCrypto.uuidBytes(ids[i]));body.write(encoded[i])
+                frame(3,16L+records.size);body.write(MedicalArchiveCrypto.uuidBytes(ids[i]));body.write(records)
+                if(fault!="MISSING" || i!=0)member(i)
+                if(fault=="EXTRA" && i==0)member(i)
+            }
+            val sha=MessageDigest.getInstance("SHA-256");sha.update("notes.medical.backup.set.v2\u0000".toByteArray(Charsets.US_ASCII));sha.update(header.bytes());sha.update(prefix.toByteArray())
+            frame(5,64);body.write(sha.digest());body.writeLong(2);body.writeLong(2);body.writeLong(4);body.writeLong(n)
+            assertEquals(n,prefix.size().toLong())
+            AttachmentObjectStreams.primitive(keys.outer).newEncryptingStream(output,header.aad()).use {it.write(prefix.toByteArray())}
+        }}finally {dek.fill(0);records.fill(0);dummy.forEach {it.fill(0)}}
+        return output.toByteArray()
+    }
+    @Test fun independentCollectionPreservesScopedCopiesAndAuthenticatesAllLibraries()=worker {
+        val s=session();try {
+            val wire=collectionFixture(s.issue());val password="SYNTHETIC collection password".toCharArray();val source=memory(wire)
+            MedicalCollectionReader.read(s.issue(),password,source).use {archive->
+                assertTrue(archive.wholeArchiveAuthenticated);assertFalse(archive.activatable);assertEquals(2,archive.index().libraries.size)
+                val a=archive.manifest(UUID(0,1));val b=archive.manifest(UUID(0,2))
+                assertNotEquals(a.dataset,b.dataset);assertEquals(a.versions.single().context,b.versions.single().context)
+                assertNotEquals(a.versions.single().manifest.plaintextSha256,b.versions.single().manifest.plaintextSha256)
+                archive.records(UUID(0,1)) {it[0]=0};archive.records(UUID(0,1)) {assertEquals('{'.code.toByte(),it[0])}
+                val reader=archive.source(UUID(0,2));s.revoke();reject {reader.takeDek(b.versions.single().context.version)}
+            }
+            assertFalse(source.isOpen);assertTrue(password.all {it=='\u0000'})
+        }finally {s.revoke()}
+    }
+    @Test fun authenticatedCollectionMissingExtraCrossLibraryWrapAndInnerCorruptionAllRefuse()=worker {
+        val s=session();try {for(fault in listOf("MISSING","EXTRA","WRONG_LIBRARY","WRAP_SCOPE","INNER")) {
+            val source=memory(collectionFixture(s.issue(),fault));val password="SYNTHETIC collection password".toCharArray()
+            reject {MedicalCollectionReader.read(s.issue(),password,source)}
+            assertFalse("Failed source ownership: $fault",source.isOpen);assertTrue(password.all {it=='\u0000'})
+        }}finally {s.revoke()}
+    }
+
 }
