@@ -106,7 +106,6 @@ class MedicalAttachmentOperationAndroidTest {
                 val newSession=AttachmentSession(UUID.fromString(current.dataset),UUID.fromString(current.epoch));val newCap=newSession.issue()
                 try {
                     val ops=fresh.forGeneration(current).pinnedTo(Space.PRIMARY).medicalAttachments()
-                    val active=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,fresh.forGeneration(current).appointments().first().id)
                     // A fresh explicit target has no attachment identity yet. Refusal must not
                     // bind it, read even a failing provider, reserve aliases or append a journal.
                     val isolated=fresh.forGeneration(current).pinnedTo(Space.PRIMARY)
@@ -115,10 +114,19 @@ class MedicalAttachmentOperationAndroidTest {
                     val selected=f.access.get(Space.PRIMARY);val sql=selected.openHelper.writableDatabase
                     val business=selected.runInTransaction(java.util.concurrent.Callable {MeasuredBackupJson.encode(sql,java.time.Instant.EPOCH)})
                     val legacy=f.facts()
-                    fun count(table:String)=sql.query("SELECT COUNT(*) FROM $table").use {assertTrue(it.moveToFirst());it.getLong(0)}
                     val tables=listOf("attachment_record_identity","attachment_operation","attachment_journal","attachment_document","attachment_version","attachment_link","attachment_key_envelope")
-                    val metadata=tables.associateWith(::count)
-                    val objects=File(DatabaseAccess.storageContext(selected,f.context).noBackupFilesDir,"attachment-objects-v1").list()?.sorted()
+                    fun metadata()=tables.associateWith {table->
+                        val sha=java.security.MessageDigest.getInstance("SHA-256")
+                        sql.query("SELECT * FROM $table ORDER BY rowid").use {c->while(c.moveToNext())for(i in 0 until c.columnCount) {
+                            val bytes=when(c.getType(i)) {android.database.Cursor.FIELD_TYPE_NULL->byteArrayOf();android.database.Cursor.FIELD_TYPE_BLOB->c.getBlob(i);else->c.getString(i).toByteArray(Charsets.UTF_8)}
+                            sha.update(c.getType(i).toByte());sha.update(java.nio.ByteBuffer.allocate(4).putInt(bytes.size).array());sha.update(bytes)
+                        }}
+                        MedicalArchiveCrypto.hex(sha.digest())
+                    }
+                    fun objects()=File(DatabaseAccess.storageContext(selected,f.context).noBackupFilesDir,"attachment-objects-v1").listFiles()?.associate {file->
+                        file.name to MedicalArchiveCrypto.hex(java.security.MessageDigest.getInstance("SHA-256").digest(file.readBytes()))
+                    }
+                    val metadataBefore=metadata();val objectsBefore=objects()
                     val aliases=AttachmentDeviceKeys().retainedAliases(4096)
                     fun providerOpens()=requireNotNull(app.contentResolver.call(uri("unknown"),"openCount",null,null)).getInt("count")
                     val opened=providerOpens()
@@ -128,10 +136,10 @@ class MedicalAttachmentOperationAndroidTest {
                     catch(e:IllegalStateException) {assertTrue(e.message.orEmpty().contains("joint generation admission"));refused=true}
                     assertTrue("Restored generations must retain their existing write admission",refused)
                     assertEquals(opened,providerOpens())
-                    assertEquals(metadata,tables.associateWith(::count))
+                    assertEquals(metadataBefore,metadata())
                     assertArrayEquals(business,selected.runInTransaction(java.util.concurrent.Callable {MeasuredBackupJson.encode(sql,java.time.Instant.EPOCH)}))
                     assertArrayEquals(legacy,f.facts())
-                    assertEquals(objects,File(DatabaseAccess.storageContext(selected,f.context).noBackupFilesDir,"attachment-objects-v1").list()?.sorted())
+                    assertEquals(objectsBefore,objects())
                     assertEquals(MedicalAttachmentOperations.Phase.NOT_FOUND,ops.reconcile(newCap,refusedOperation).phase)
                     assertEquals(aliases,AttachmentDeviceKeys().retainedAliases(4096))
                     assertEquals(MedicalAttachmentOperations.Export.REFUSED,ops.exportEligibility(newCap))
