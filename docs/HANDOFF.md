@@ -1,3 +1,7 @@
+## MED-02 #119 最终7d API26/29原件核验PASS — 2026-10-24
+
+最终7d3186fd：push API26(40104321069/art12564118783)、PR API29(40104324849/art12564432367)实际原件核对App Operation2/Core Operation3/Lifecycle4/迁移7/RuntimeData1/RuntimeUI1/RestoreProtection9各0fail/0skip，八个fresh-PID verify各OK1。App2前置原XML已保存，后续bulk排除同两项没有漏跑；官方ZIP SHA/CRC、原HTML/八点日志/收据在candidate-7d3186fd/push-api26与pr-api29。低内存同源12+8也已核，未借旧SHA。API35 push仍执行，PR35在测试前adb root失败等待父流程结束后一次job补验；主Android尚运行，不合并/不签名。feature0/外审未做，物理与viewer低内存仍NOT_RUN。
+
 ## MED-02 #119 最终7d低内存12+8原件PASS — 2026-10-24
 
 最终7d3186fd独立低内存40104324801 SUCCESS：官方art12564202806 ZIP SHA/CRC已核，原生实际OK12，原库四点+操作四点新PID各OK1，原件/收据/采样保存candidate-7d3186fd/lowmem。512MiB/192MiB未变，viewer低内存/物理真机仍NOT_RUN。最终JVM/Science成功，其他原生仍待；PR API35前测试adb root启动失败保留，待父流程结束后只重试该job一次，不改源/跳检查。#119仍Draft，feature0/外审未做。

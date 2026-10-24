@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="2" failures="0" errors="0" skipped="0" time="13.25" timestamp="2026-10-24T14:55:34" hostname="localhost">
+  <testsuite name="net.plainnotes.app.attachments.AttachmentOperationAndroidTest" tests="2" failures="0" errors="0" skipped="0" time="12.719" timestamp="2026-10-24T14:55:34" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 10" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="realSafPdfPngBinaryCommitReopenAndViewWithExistingAssociations" classname="net.plainnotes.app.attachments.AttachmentOperationAndroidTest" time="12.14" />
+    <testcase name="cancelledFailureWrongRecordAndRevokedViewNeverCreateFalseSuccess" classname="net.plainnotes.app.attachments.AttachmentOperationAndroidTest" time="0.579" />
+  </testsuite>
+</testsuites>

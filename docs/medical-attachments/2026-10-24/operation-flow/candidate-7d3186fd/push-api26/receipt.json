@@ -1,0 +1,45 @@
+{
+  "source_sha": "7d3186fd093cc03f5a4881944773fadeb73c03db",
+  "run": 40104321069,
+  "artifact": 12564118783,
+  "sha256": "f3d25498ccf93de98e65ac31892d6540b94c9bcaf67dd7e92f7a2a14a6a9b7e9",
+  "crc": "PASS",
+  "reports": {
+    "net.plainnotes.app.data.AttachmentSqlCipherMigrationTest.html": {
+      "tests": 7,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.data.RuntimeLibraryRequestAndroidTest.html": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.data.LibraryLifecycleAndroidTest.html": {
+      "tests": 4,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.html": {
+      "tests": 3,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.privacy.RestoreProtectionAndroidTest.html": {
+      "tests": 9,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.shell.RuntimeRequestUiAndroidTest.html": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.attachments.AttachmentOperationAndroidTest.html": {
+      "tests": 2,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "fresh_pid_verifications": 8
+}
