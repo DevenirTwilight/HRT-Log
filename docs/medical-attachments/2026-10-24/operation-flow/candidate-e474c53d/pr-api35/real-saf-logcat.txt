@@ -1,0 +1,337 @@
+10-24 14:37:44.877  6383  6398 I TestRunner: started: realSafPdfPngBinaryCommitReopenAndViewWithExistingAssociations(net.plainnotes.app.attachments.AttachmentOperationAndroidTest)
+10-24 14:37:44.879  6383  6398 D IdlingRegistry: Registering idling resources: [androidx.compose.ui.test.EspressoLink@a4b88f]
+10-24 14:37:44.882  6383  6398 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+10-24 14:37:44.884  2250  2886 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10154, packageName = null, attributionTag = null, token = android.os.Binder@5d34b1, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+10-24 14:37:44.888  2462  2542 D SplashScreenView: Build android.window.SplashScreenView{71b3e50 V.E...... ......ID 0,0-0,0}
+10-24 14:37:44.888  2462  2542 D SplashScreenView: Icon: view: null drawable: null size: 0
+10-24 14:37:44.888  2462  2542 D SplashScreenView: Branding: view: android.view.View{5761849 G.ED..... ......I. 0,0-0,0 #1020503 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+10-24 14:37:44.889  2854  2854 W SplitSelectStateCtor: Missing session instanceIds
+10-24 14:37:44.889  2854  2854 D StatsLog: LAUNCHER_SPLIT_SELECTION_EXIT_INTERRUPTED
+10-24 14:37:44.892  2854  2854 I TopTaskTracker: onTaskMovedToFront: (moved taskInfo to front) taskId=14, baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 cmp=net.plainnotes.app/.debug.attachments.AttachmentOperationTestActivity }
+10-24 14:37:44.901  2171  2171 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-24 14:37:44.908  6383  6383 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9 in: PRE_ON_CREATE
+10-24 14:37:44.909  6383  6383 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+10-24 14:37:44.914  2170  2193 I netd    : tetherGetStats() -> {[]} <2.10ms>
+10-24 14:37:44.916  6383  6383 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9 in: CREATED
+10-24 14:37:44.916  6383  6383 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9
+10-24 14:37:44.916  6383  6383 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9 in: STARTED
+10-24 14:37:44.917  6383  6383 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9
+10-24 14:37:44.917  6383  6383 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9 in: RESUMED
+10-24 14:37:44.917  6383  6383 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9
+10-24 14:37:44.927  6383  6383 D AutofillManager: Fill dialog is enabled:false, hints=[]
+10-24 14:37:44.933  6383  6422 I SQLiteConnection: Database keying operation returned:0
+10-24 14:37:44.945  2854  3013 D EGL_emulation: app_time_stats: avg=4855.49ms min=4855.49ms max=4855.49ms count=1
+10-24 14:37:44.951  2854  2854 D VRI[QuickstepLauncher]: visibilityChanged oldVisibility=true newVisibility=false
+10-24 14:37:44.952  2854  3013 D EGL_emulation: app_time_stats: avg=1222.88ms min=21.10ms max=4445.71ms count=4
+10-24 14:37:44.964  2462  2559 D EGL_emulation: app_time_stats: avg=1255.74ms min=18.83ms max=4870.02ms count=4
+10-24 14:37:44.966  2250  2269 W ziparchive: Unable to open '/data/app/~~tYCK8VUx7tV46ocNcwVx7A==/net.plainnotes.app-HM478fKuRIpn8Wd1inZOOg==/base.dm': No such file or directory
+10-24 14:37:44.966  2250  2269 I ActivityTaskManager: Displayed net.plainnotes.app/.debug.attachments.AttachmentOperationTestActivity for user 0: +83ms
+10-24 14:37:44.971  2854  2854 D BaseDepthController: setSurface:
+10-24 14:37:44.971  2854  2854 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+10-24 14:37:44.971  2854  2854 D BaseDepthController: 	mSurface: null
+10-24 14:37:44.973  2854  2854 D BaseDepthController: mSurface is null and mCurrentBlur is: 0
+10-24 14:37:44.973  2854  2854 D StateManager: goToState - fromState: Normal, toState: Normal, partial trace:
+10-24 14:37:44.973  2854  2854 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:453)
+10-24 14:37:44.973  2854  2854 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:444)
+10-24 14:37:44.973  2854  2854 D StateManager: 	at com.android.launcher3.statemanager.StatefulActivity.onStop(StatefulActivity.java:119)
+10-24 14:37:44.974  2854  2854 D StatsLog: LAUNCHER_ONSTOP
+10-24 14:37:44.976  2462  2541 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@df98a8b
+10-24 14:37:44.977  2250  2886 W InputManager-JNI: Input channel object '814b045 Splash Screen net.plainnotes.app (client)' was disposed without first being removed with the input manager!
+10-24 14:37:44.989  2250  2352 I ImeTracker: net.plainnotes.app:17e95136: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-24 14:37:44.989  2250  2352 I ImeTracker: net.plainnotes.app:17e95136: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-24 14:37:45.139  6383  6406 I SQLiteConnection: Database keying operation returned:0
+10-24 14:37:45.260  6383  6406 W .plainnotes.app: JNI critical lock held for 120.771ms on Thread[23,tid=6406,Runnable,Thread*=0x75d0e14c7520,peer=0x140e5d08,"DefaultDispatcher-worker-4"]
+10-24 14:37:45.506  6383  6398 I UiAutomation: Initialized for user 0 on display 0
+10-24 14:37:45.509  2250  3236 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10062, packageName = null, attributionTag = null, token = android.os.Binder@5d34b1, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+10-24 14:37:45.513  2250  2250 W IPCThreadState: Sending oneway calls to frozen process.
+10-24 14:37:45.513  2250  2250 W IPCThreadState: Sending oneway calls to frozen process.
+10-24 14:37:45.513  2250  2250 W IPCThreadState: Sending oneway calls to frozen process.
+10-24 14:37:45.513  2250  2250 W IPCThreadState: Sending oneway calls to frozen process.
+10-24 14:37:45.513  2250  2250 W IPCThreadState: Sending oneway calls to frozen process.
+10-24 14:37:45.513  2250  2250 W IPCThreadState: Sending oneway calls to frozen process.
+10-24 14:37:45.513  2250  2250 W IPCThreadState: Sending oneway calls to frozen process.
+10-24 14:37:45.513  2250  2250 W IPCThreadState: Sending oneway calls to frozen process.
+10-24 14:37:45.513  2250  2250 W IPCThreadState: Sending oneway calls to frozen process.
+10-24 14:37:45.514  6383  6581 V UiAutomation: Init UiAutomation@938727f[id=1, displayId=0, flags=0]
+10-24 14:37:45.523  6383  6383 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9 in: PAUSED
+10-24 14:37:45.524  6383  6383 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9
+10-24 14:37:45.525  2250  2448 W IPCThreadState: Sending oneway calls to frozen process.
+10-24 14:37:45.535  2171  2171 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-24 14:37:45.543  3673  3673 D AppCompatDelegate: Checking for metadata for AppLocalesMetadataHolderService : Service not found
+10-24 14:37:45.548  3673  3673 D CompatChangeReporter: Compat change id reported: 309578419; UID 10062; state: ENABLED
+10-24 14:37:45.561  3673  3673 D PickActivity: Created new state object: State{action=3, acceptMimes=[application/pdf, image/png, image/jpeg, application/octet-stream], allowMultiple=false, localOnly=false, stack=DocumentStack{root=null, docStack=[], stackTouched=false}, dirConfigs={}, excludedAuthorities=[], openableOnly=true, restrictScopeStorage=true, sortModel=SortModel{dimensions={16908304=SortDimension{id=16908304, labelId=2131886475, dataType=0, sortCapability=0, defaultSortDirection=1, sortDirection=0, visibility=4}, 16908310=SortDimension{id=16908310, labelId=2131886469, dataType=0, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}, 2131296435=SortDimension{id=2131296435, labelId=2131886462, dataType=1, sortCapability=3, defaultSortDirection=2, sortDirection=0, visibility=0}, 2131296507=SortDimension{id=2131296507, labelId=2131886466, dataType=0, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}, 2131296791=SortDimension{id=2131296791, labelId=2131886472, dataType=1, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}}, defaultDimensionId=0, sortedDimension=null}}
+10-24 14:37:45.561  3673  3673 D DrawerController: Calculated drawer width:272.0
+10-24 14:37:45.572  3673  3673 D BaseActivity: Set recents screenshot to enabled
+10-24 14:37:45.580  3673  3673 D AbstractActionHandler: launchToDocument() uri=content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:45.581  3673  3673 D PickerActionHandler: Launched to initial uri.
+10-24 14:37:45.588  3673  3673 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-24 14:37:45.593  3673  6590 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples]
+10-24 14:37:45.594  3673  3673 W HWUI    : Unknown dataspace 0
+10-24 14:37:45.620  3673  3673 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-24 14:37:45.621  3673  3673 D AbstractActionHandler: onLaunchStackLoaded() stack=DocumentStack{root=Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, docStack=[DocumentInfo{docId=samples, userId=0, name=SYNTHETIC samples, mimeType=vnd.android.document/directory, isContainer=true, isDirectory=true, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false, isBlockedFromTree=false} @ content://net.plainnotes.app.test.synthetic-medflow/document/samples], stackTouched=false}
+10-24 14:37:45.621  3673  3673 D DocumentStack: Resetting the whole darn stack to: DocumentStack{root=Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, docStack=[DocumentInfo{docId=samples, userId=0, name=SYNTHETIC samples, mimeType=vnd.android.document/directory, isContainer=true, isDirectory=true, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false, isBlockedFromTree=false} @ content://net.plainnotes.app.test.synthetic-medflow/document/samples], stackTouched=false}
+10-24 14:37:45.621  3673  3673 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-24 14:37:45.621  3673  3673 D DocumentStack: Resetting the whole darn stack to: DocumentStack{root=Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, docStack=[DocumentInfo{docId=samples, userId=0, name=SYNTHETIC samples, mimeType=vnd.android.document/directory, isContainer=true, isDirectory=true, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false, isBlockedFromTree=false} @ content://net.plainnotes.app.test.synthetic-medflow/document/samples], stackTouched=true}
+10-24 14:37:45.621  3673  3673 D DirectoryFragment: Showing directory: content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:45.621  3673  3673 D DirectoryFragment: Creating new fragment for directory: content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:45.622  3673  3673 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-24 14:37:45.622  3673  3673 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-24 14:37:45.631  2171  2234 W ServiceManagerCppClient: Permission failure: android.permission.ACCESS_SURFACE_FLINGER from uid=10062 pid=0
+10-24 14:37:45.631  2171  2234 D PermissionCache: checking android.permission.ACCESS_SURFACE_FLINGER for uid=10062 => denied (151 us)
+10-24 14:37:45.631  2171  2176 W ServiceManagerCppClient: Permission failure: android.permission.ACCESS_SURFACE_FLINGER from uid=10062 pid=3673
+10-24 14:37:45.631  2171  2176 D PermissionCache: checking android.permission.ACCESS_SURFACE_FLINGER for uid=10062 => denied (72 us)
+10-24 14:37:45.631  2171  2234 W ServiceManagerCppClient: Permission failure: android.permission.ROTATE_SURFACE_FLINGER from uid=10062 pid=0
+10-24 14:37:45.631  2171  2234 D PermissionCache: checking android.permission.ROTATE_SURFACE_FLINGER for uid=10062 => denied (242 us)
+10-24 14:37:45.631  2171  2176 W ServiceManagerCppClient: Permission failure: android.permission.ROTATE_SURFACE_FLINGER from uid=10062 pid=3673
+10-24 14:37:45.631  2171  2176 D PermissionCache: checking android.permission.ROTATE_SURFACE_FLINGER for uid=10062 => denied (443 us)
+10-24 14:37:45.632  2171  2176 W ServiceManagerCppClient: Permission failure: android.permission.INTERNAL_SYSTEM_WINDOW from uid=10062 pid=3673
+10-24 14:37:45.632  2171  2176 D PermissionCache: checking android.permission.INTERNAL_SYSTEM_WINDOW for uid=10062 => denied (202 us)
+10-24 14:37:45.632  3673  3673 D AutofillManager: notifyViewReadyInner:1073741824
+10-24 14:37:45.632  3673  3673 D AutofillManager: notifyViewReadyInner:1073741825
+10-24 14:37:45.633  2171  2234 W ServiceManagerCppClient: Permission failure: android.permission.INTERNAL_SYSTEM_WINDOW from uid=10062 pid=0
+10-24 14:37:45.633  2171  2234 D PermissionCache: checking android.permission.INTERNAL_SYSTEM_WINDOW for uid=10062 => denied (2153 us)
+10-24 14:37:45.634  3673  6584 I EGL_emulation: Opening libGLESv1_CM_emulation.so
+10-24 14:37:45.637  3673  6584 I EGL_emulation: Opening libGLESv2_emulation.so
+10-24 14:37:45.640  3673  6584 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+10-24 14:37:45.650   148   148 I hwservicemanager: getTransport: Cannot find entry android.hardware.graphics.mapper@4.0::IMapper/default in either framework or device VINTF manifest.
+10-24 14:37:45.650  3673  6584 I Gralloc4: mapper 4.x is not supported
+10-24 14:37:45.660  3673  3673 D CompatChangeReporter: Compat change id reported: 270674727; UID 10062; state: ENABLED
+10-24 14:37:45.826  2250  2855 W ServiceManagerCppClient: Permission failure: android.permission.ACCESS_SURFACE_FLINGER from uid=10062 pid=0
+10-24 14:37:45.826  2250  2855 D PermissionCache: checking android.permission.ACCESS_SURFACE_FLINGER for uid=10062 => denied (77 us)
+10-24 14:37:45.826  2250  2855 W ServiceManagerCppClient: Permission failure: android.permission.ROTATE_SURFACE_FLINGER from uid=10062 pid=0
+10-24 14:37:45.826  2250  2855 D PermissionCache: checking android.permission.ROTATE_SURFACE_FLINGER for uid=10062 => denied (8 us)
+10-24 14:37:45.826  2250  2855 W ServiceManagerCppClient: Permission failure: android.permission.INTERNAL_SYSTEM_WINDOW from uid=10062 pid=0
+10-24 14:37:45.826  2250  2855 D PermissionCache: checking android.permission.INTERNAL_SYSTEM_WINDOW for uid=10062 => denied (6 us)
+10-24 14:37:45.830  2171  2176 D PermissionCache: checking android.permission.READ_FRAME_BUFFER for uid=10120 => granted (186 us)
+10-24 14:37:45.830  2171  2176 D PermissionCache: checking android.permission.CAPTURE_BLACKOUT_CONTENT for uid=10120 => granted (22 us)
+10-24 14:37:45.833  3673  3673 W SelectionTracker: Setting gestureTooltypes is likely to result in unexpected behavior.
+10-24 14:37:45.833  3673  3673 D AbstractActionHandler: Creating new directory loader for: content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:45.839  2250  2269 I ActivityTaskManager: Displayed com.android.documentsui/.picker.PickActivity for user 0: +318ms
+10-24 14:37:45.845  3673  3673 D CompatChangeReporter: Compat change id reported: 303326708; UID 10062; state: ENABLED
+10-24 14:37:45.847  3673  3673 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-24 14:37:45.855  3673  3881 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples]
+10-24 14:37:45.892  3673  3673 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-24 14:37:46.140  3673  3673 D AbstractActionHandler: Loader has finished for: content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:46.140  3673  3673 I Model   : Updating model with new result set.
+10-24 14:37:46.140  3673  3673 D DirectoryFragment: Received model update. Loading=false
+10-24 14:37:46.141  3673  3673 D DefaultSelectionTracker: Ignoring onDataSetChange. No active selection.
+10-24 14:37:46.143  2462  2559 D EGL_emulation: app_time_stats: avg=235.71ms min=11.37ms max=934.39ms count=5
+10-24 14:37:46.164  3673  3673 V RefreshTask: Provider does not support refresh and did not refresh
+10-24 14:37:46.164  3673  3673 D AbstractActionHandler: Creating new directory loader for: content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:46.175  6383  6383 D VRI[AttachmentOperationTestActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-24 14:37:46.308  6383  6383 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9 in: STOPPED
+10-24 14:37:46.309  6383  6383 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9
+10-24 14:37:46.332  2170  2193 I netd    : tetherGetStats() -> {[]} <0.29ms>
+10-24 14:37:46.401  6383  6398 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-24 14:37:46.405  2250  2352 I ImeTracker: com.android.documentsui:b1145da9: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-24 14:37:46.405  3673  3673 D AbstractActionHandler: Loader has finished for: content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:46.405  3673  3673 I Model   : Updating model with new result set.
+10-24 14:37:46.406  3673  3673 D DirectoryFragment: Received model update. Loading=false
+10-24 14:37:46.406  3673  3673 D DefaultSelectionTracker: Ignoring onDataSetChange. No active selection.
+10-24 14:37:46.406  2250  2352 I ImeTracker: com.android.documentsui:b1145da9: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-24 14:37:46.418  2171  2171 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-24 14:37:46.425  6383  6383 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9 in: RESTARTED
+10-24 14:37:46.426  6383  6383 V ActivityScenario: Update currentActivityStage to RESTARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9
+10-24 14:37:46.426  6383  6383 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9 in: STARTED
+10-24 14:37:46.426  6383  6383 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9
+10-24 14:37:46.427  6383  6383 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9 in: RESUMED
+10-24 14:37:46.427  6383  6383 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9
+10-24 14:37:46.471  3673  3673 D VRI[PickActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-24 14:37:46.472  2250  2352 I ImeTracker: net.plainnotes.app:89790e7b: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-24 14:37:46.473  2250  2352 I ImeTracker: net.plainnotes.app:89790e7b: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-24 14:37:46.495  3673  3673 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@b054027
+10-24 14:37:46.496  2250  2855 W InputManager-JNI: Input channel object 'a754a03 com.android.documentsui/com.android.documentsui.picker.PickActivity (client)' was disposed without first being removed with the input manager!
+10-24 14:37:46.591  2250  2446 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10062, packageName = null, attributionTag = null, token = android.os.Binder@5d34b1, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+10-24 14:37:46.601  2171  2171 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-24 14:37:46.617  6383  6383 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9 in: PAUSED
+10-24 14:37:46.617  6383  6383 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9
+10-24 14:37:46.632  3673  3673 D PickActivity: Created new state object: State{action=3, acceptMimes=[application/pdf, image/png, image/jpeg, application/octet-stream], allowMultiple=false, localOnly=false, stack=DocumentStack{root=null, docStack=[], stackTouched=false}, dirConfigs={}, excludedAuthorities=[], openableOnly=true, restrictScopeStorage=true, sortModel=SortModel{dimensions={16908304=SortDimension{id=16908304, labelId=2131886475, dataType=0, sortCapability=0, defaultSortDirection=1, sortDirection=0, visibility=4}, 16908310=SortDimension{id=16908310, labelId=2131886469, dataType=0, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}, 2131296435=SortDimension{id=2131296435, labelId=2131886462, dataType=1, sortCapability=3, defaultSortDirection=2, sortDirection=0, visibility=0}, 2131296507=SortDimension{id=2131296507, labelId=2131886466, dataType=0, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}, 2131296791=SortDimension{id=2131296791, labelId=2131886472, dataType=1, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}}, defaultDimensionId=0, sortedDimension=null}}
+10-24 14:37:46.632  3673  3673 D DrawerController: Calculated drawer width:272.0
+10-24 14:37:46.635  3673  3673 D AutofillManager: Fill dialog is enabled:false, hints=[]
+10-24 14:37:46.637  3673  3673 D BaseActivity: Set recents screenshot to enabled
+10-24 14:37:46.642  3673  3673 D AbstractActionHandler: launchToDocument() uri=content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:46.642  3673  3673 D PickerActionHandler: Launched to initial uri.
+10-24 14:37:46.645  3673  3673 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-24 14:37:46.650  3673  6605 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples]
+10-24 14:37:46.657  3673  6584 I EGL_emulation: Opening libGLESv1_CM_emulation.so
+10-24 14:37:46.657  3673  6584 I EGL_emulation: Opening libGLESv2_emulation.so
+10-24 14:37:46.658  3673  3673 D AutofillManager: notifyViewReadyInner:1073741824
+10-24 14:37:46.658  3673  3673 D AutofillManager: notifyViewReadyInner:1073741825
+10-24 14:37:46.661  3673  6584 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+10-24 14:37:46.827  3673  3881 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads]
+10-24 14:37:46.831  2250  2269 I ActivityTaskManager: Displayed com.android.documentsui/.picker.PickActivity for user 0: +237ms
+10-24 14:37:46.831  3673  3673 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-24 14:37:46.838  3673  3673 D AbstractActionHandler: onLaunchStackLoaded() stack=DocumentStack{root=Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, docStack=[DocumentInfo{docId=samples, userId=0, name=SYNTHETIC samples, mimeType=vnd.android.document/directory, isContainer=true, isDirectory=true, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false, isBlockedFromTree=false} @ content://net.plainnotes.app.test.synthetic-medflow/document/samples], stackTouched=false}
+10-24 14:37:46.838  3673  3673 D DocumentStack: Resetting the whole darn stack to: DocumentStack{root=Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, docStack=[DocumentInfo{docId=samples, userId=0, name=SYNTHETIC samples, mimeType=vnd.android.document/directory, isContainer=true, isDirectory=true, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false, isBlockedFromTree=false} @ content://net.plainnotes.app.test.synthetic-medflow/document/samples], stackTouched=false}
+10-24 14:37:46.838  3673  3673 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-24 14:37:46.838  3673  3673 D DocumentStack: Resetting the whole darn stack to: DocumentStack{root=Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, docStack=[DocumentInfo{docId=samples, userId=0, name=SYNTHETIC samples, mimeType=vnd.android.document/directory, isContainer=true, isDirectory=true, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false, isBlockedFromTree=false} @ content://net.plainnotes.app.test.synthetic-medflow/document/samples], stackTouched=true}
+10-24 14:37:46.838  3673  3673 D DirectoryFragment: Showing directory: content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:46.838  3673  3673 D DirectoryFragment: Creating new fragment for directory: content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:46.838  3673  3673 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-24 14:37:46.838  3673  3673 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-24 14:37:46.843  3673  3673 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-24 14:37:46.845  3673  3673 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-24 14:37:46.860  3673  3673 W SelectionTracker: Setting gestureTooltypes is likely to result in unexpected behavior.
+10-24 14:37:46.860  3673  3673 D AbstractActionHandler: Creating new directory loader for: content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:46.984  3673  3673 D AbstractActionHandler: Loader has finished for: content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:46.984  3673  3673 I Model   : Updating model with new result set.
+10-24 14:37:46.984  3673  3673 D DirectoryFragment: Received model update. Loading=false
+10-24 14:37:46.984  3673  3673 D DefaultSelectionTracker: Ignoring onDataSetChange. No active selection.
+10-24 14:37:46.985  3673  3673 V RefreshTask: Provider does not support refresh and did not refresh
+10-24 14:37:46.985  3673  3673 D AbstractActionHandler: Creating new directory loader for: content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:47.076  6383  6383 D VRI[AttachmentOperationTestActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-24 14:37:47.078  6383  6383 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9 in: STOPPED
+10-24 14:37:47.078  6383  6383 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9
+10-24 14:37:47.078  6383  6383 E FrameTracker: force finish cuj, time out: J<IME_INSETS_SHOW_ANIMATION::0@1@net.plainnotes.app>
+10-24 14:37:47.270  6383  6398 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-24 14:37:47.273  2250  2352 I ImeTracker: com.android.documentsui:8ccdf11c: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-24 14:37:47.273  2250  2352 I ImeTracker: com.android.documentsui:8ccdf11c: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-24 14:37:47.274  3673  3673 D AbstractActionHandler: Loader has finished for: content://net.plainnotes.app.test.synthetic-medflow/document/samples
+10-24 14:37:47.274  3673  3673 I Model   : Updating model with new result set.
+10-24 14:37:47.274  3673  3673 D DirectoryFragment: Received model update. Loading=false
+10-24 14:37:47.274  3673  3673 D DefaultSelectionTracker: Ignoring onDataSetChange. No active selection.
+10-24 14:37:47.428  6383  6383 E FrameTracker: force finish cuj, time out: J<IME_INSETS_SHOW_ANIMATION::0@1@net.plainnotes.app>
+10-24 14:37:48.245  6383  6383 E FrameTracker: force finish cuj, time out: J<IME_INSETS_HIDE_ANIMATION::1@1@net.plainnotes.app>
+10-24 14:37:49.367  6383  6383 E FrameTracker: force finish cuj, time out: J<IME_INSETS_SHOW_ANIMATION::0@1@net.plainnotes.app>
+10-24 14:37:51.648  2170  2193 I netd    : tetherGetStats() -> {[]} <0.24ms>
+10-24 14:37:53.100  2170  2193 I netd    : tetherGetStats() -> {[]} <0.32ms>
+10-24 14:38:00.006  2462  2559 D EGL_emulation: app_time_stats: avg=2772.73ms min=14.93ms max=13143.80ms count=5
+10-24 14:38:09.478  6446  6452 W nnotes.app.test: Cleared Reference was only reachable from finalizer (only reported once)
+10-24 14:38:17.367  2250  3236 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10155, packageName = null, attributionTag = null, token = android.os.Binder@5d34b1, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+10-24 14:38:17.371  2462  2542 D SplashScreenView: Build android.window.SplashScreenView{a5b75a6 V.E...... ......ID 0,0-0,0}
+10-24 14:38:17.371  2462  2542 D SplashScreenView: Icon: view: null drawable: null size: 0
+10-24 14:38:17.371  2462  2542 D SplashScreenView: Branding: view: android.view.View{b2ddbe7 G.ED..... ......I. 0,0-0,0 #1020503 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+10-24 14:38:17.372  2854  2854 I TopTaskTracker: onTaskMovedToFront: (moved taskInfo to front) taskId=15, baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=net.plainnotes.app.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity }
+10-24 14:38:17.395  2170  2193 I netd    : tetherGetStats() -> {[]} <1.97ms>
+10-24 14:38:17.401  2171  2171 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-24 14:38:17.406  6383  6383 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c95ad9 in: DESTROYED
+10-24 14:38:17.406  6383  6383 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+10-24 14:38:17.407  6446  6464 I EGL_emulation: Opening libGLESv1_CM_emulation.so
+10-24 14:38:17.407  6446  6464 I EGL_emulation: Opening libGLESv2_emulation.so
+10-24 14:38:17.409  6383  6383 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@8165900
+10-24 14:38:17.410  6383  6398 I SQLiteConnection: Database keying operation returned:0
+10-24 14:38:17.414  2250  2448 W InputManager-JNI: Input channel object 'f322243 net.plainnotes.app/net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity (client)' was disposed without first being removed with the input manager!
+10-24 14:38:17.415  6446  6464 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+10-24 14:38:17.426  3673  6584 D EGL_emulation: app_time_stats: avg=2776.82ms min=1.18ms max=29956.83ms count=11
+10-24 14:38:17.439  3673  3673 D VRI[PickActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-24 14:38:17.533  2854  2854 I TopTaskTracker: onTaskMovedToFront: (moved taskInfo to front) taskId=14, baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 cmp=net.plainnotes.app/.debug.attachments.AttachmentOperationTestActivity }
+10-24 14:38:17.535  2171  2171 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-24 14:38:17.541  2250  2269 W ziparchive: Unable to open '/data/app/~~vtBcQq0lv_-2u8Ec6kS7dQ==/net.plainnotes.app.test-VyKSnXdKduA9A12IEOf8oA==/base.dm': No such file or directory
+10-24 14:38:17.542  2250  2269 I ActivityTaskManager: Displayed net.plainnotes.app.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +161ms
+10-24 14:38:17.544  2462  2541 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@6f98139
+10-24 14:38:17.548  2250  2855 W InputManager-JNI: Input channel object '462ae46 Splash Screen net.plainnotes.app.test (client)' was disposed without first being removed with the input manager!
+10-24 14:38:17.548  3673  3673 D VRI[PickActivity]: visibilityChanged oldVisibility=false newVisibility=true
+10-24 14:38:17.550  3673  6627 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads]
+10-24 14:38:17.567  3673  3673 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-24 14:38:17.568  3673  6627 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples]
+10-24 14:38:17.577  3673  3874 E FrameEvents: addRelease: Did not find frame.
+10-24 14:38:17.584  2171  2171 E SurfaceFlinger: Out of order buffers detected for RequestedLayerState{com.android.documentsui/com.android.documentsui.picker.PickActivity#356 parentId=355} producedId=2 frameNumber=13 -> producedId=2 frameNumber=2
+10-24 14:38:17.585  2171  2171 D SurfaceFlinger: TransactionTraceWriter: writing file=/data/misc/wmtrace/out_of_order_buffers_transactions_trace.winscope
+10-24 14:38:17.593  3673  3673 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-24 14:38:17.595  6446  6446 D VRI[InstrumentationActivityInvoker$EmptyActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-24 14:38:17.596  2250  2352 I ImeTracker: com.android.documentsui:2f884bc: onRequestHide at ORIGIN_SERVER reason HIDE_SAME_WINDOW_FOCUSED_WITHOUT_EDITOR fromUser false
+10-24 14:38:17.596  2250  2352 I ImeTracker: com.android.documentsui:2f884bc: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-24 14:38:17.601  2462  2559 D EGL_emulation: app_time_stats: avg=17594.19ms min=17594.19ms max=17594.19ms count=1
+10-24 14:38:17.601  2171  2171 E SurfaceFlinger: Out of order buffers detected for RequestedLayerState{com.android.documentsui/com.android.documentsui.picker.PickActivity#356 parentId=355} producedId=2 frameNumber=13 -> producedId=2 frameNumber=3
+10-24 14:38:17.601  2171  2171 D SurfaceFlinger: TransactionTraceWriter: file=/data/misc/wmtrace/out_of_order_buffers_transactions_trace.winscope already exists
+10-24 14:38:17.617  6446  6446 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@32749b7
+10-24 14:38:17.618  2171  2171 E SurfaceFlinger: Out of order buffers detected for RequestedLayerState{com.android.documentsui/com.android.documentsui.picker.PickActivity#356 parentId=355} producedId=2 frameNumber=13 -> producedId=2 frameNumber=4
+10-24 14:38:17.618  2171  2171 D SurfaceFlinger: TransactionTraceWriter: file=/data/misc/wmtrace/out_of_order_buffers_transactions_trace.winscope already exists
+10-24 14:38:17.623  2250  2448 W InputManager-JNI: Input channel object 'f4f6ecc net.plainnotes.app.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity (client)' was disposed without first being removed with the input manager!
+10-24 14:38:17.626  2854  2854 I TopTaskTracker: onTaskRemoved: taskId=15
+10-24 14:38:17.626  2854  2854 I TopTaskTracker: onTaskRemoved: taskId=15
+10-24 14:38:17.634  2171  2171 E SurfaceFlinger: Out of order buffers detected for RequestedLayerState{com.android.documentsui/com.android.documentsui.picker.PickActivity#356 parentId=355} producedId=2 frameNumber=13 -> producedId=2 frameNumber=5
+10-24 14:38:17.634  2171  2171 D SurfaceFlinger: TransactionTraceWriter: file=/data/misc/wmtrace/out_of_order_buffers_transactions_trace.winscope already exists
+10-24 14:38:17.679  6383  6398 W .plainnotes.app: JNI critical lock held for 150.146ms on Thread[15,tid=6398,Runnable,Thread*=0x75d0e14bb270,peer=0x14038c88,"Instr: androidx.test.runner.AndroidJUnitRunner"]
+10-24 14:38:17.716  6383  6398 D IdlingRegistry: Unregistering idling resources: [androidx.compose.ui.test.EspressoLink@a4b88f]
+10-24 14:38:17.717  6383  6398 E TestRunner: failed: realSafPdfPngBinaryCommitReopenAndViewWithExistingAssociations(net.plainnotes.app.attachments.AttachmentOperationAndroidTest)
+10-24 14:38:17.718  6383  6398 E TestRunner: ----- begin exception -----
+10-24 14:38:17.718  6383  6398 E TestRunner: java.lang.AssertionError: Synthetic timeout: selected; window=com.android.documentsui;
+10-24 14:38:17.718  6383  6398 E TestRunner: android.widget.FrameLayout text=null clickable=false visible=true
+10-24 14:38:17.718  6383  6398 E TestRunner:  android.widget.LinearLayout text=null clickable=false visible=true
+10-24 14:38:17.718  6383  6398 E TestRunner:   android.widget.FrameLayout text=null clickable=false visible=true
+10-24 14:38:17.718  6383  6398 E TestRunner:    android.widget.FrameLayout text=null clickable=false visible=true
+10-24 14:38:17.718  6383  6398 E TestRunner:     android.widget.FrameLayout text=null clickable=false visible=true
+10-24 14:38:17.718  6383  6398 E TestRunner:      android.view.ViewGroup text=null clickable=false visible=true
+10-24 14:38:17.718  6383  6398 E TestRunner:       androidx.drawerlayout.widget.DrawerLayout text=null clickable=false visible=true
+10-24 14:38:17.718  6383  6398 E TestRunner:        android.widget.ScrollView text=null clickable=false visible=true
+10-24 14:38:17.718  6383  6398 E TestRunner:  android.view.View text=null clickable=false visible=true
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.Assert.fail(Assert.java:89)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at net.plainnotes.app.attachments.AttachmentOperationAndroidTest.waitFor(AttachmentOperationAndroidTest.kt:46)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at net.plainnotes.app.attachments.AttachmentOperationAndroidTest.waitFor$default(AttachmentOperationAndroidTest.kt:35)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at net.plainnotes.app.attachments.AttachmentOperationAndroidTest$realSafPdfPngBinaryCommitReopenAndViewWithExistingAssociations$1.invokeSuspend(AttachmentOperationAndroidTest.kt:112)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at net.plainnotes.app.attachments.AttachmentOperationAndroidTest.realSafPdfPngBinaryCommitReopenAndViewWithExistingAssociations(AttachmentOperationAndroidTest.kt:89)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:306)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:318)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(Unknown Source:8)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(Unknown Source:4)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:569)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(Unknown Source:8)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(Unknown Source:2)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:566)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(Unknown Source:8)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(Unknown Source:4)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:99)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source:1)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source:1)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:549)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:318)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+10-24 14:38:17.718  6383  6398 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2594)
+10-24 14:38:17.718  6383  6398 E TestRunner: ----- end exception -----
+10-24 14:38:17.719  6383  6398 I TestRunner: finished: realSafPdfPngBinaryCommitReopenAndViewWithExistingAssociations(net.plainnotes.app.attachments.AttachmentOperationAndroidTest)

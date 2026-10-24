@@ -1,0 +1,405 @@
+10-24 14:43:00.512  7451  7468 I TestRunner: started: realSafPdfPngBinaryCommitReopenAndViewWithExistingAssociations(net.plainnotes.app.attachments.AttachmentOperationAndroidTest)
+10-24 14:43:00.515  7451  7468 D IdlingRegistry: Registering idling resources: [androidx.compose.ui.test.EspressoLink@8303b6a]
+10-24 14:43:00.520  7451  7468 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+10-24 14:43:00.542  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: PRE_ON_CREATE
+10-24 14:43:00.542  7451  7451 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+10-24 14:43:00.546  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: CREATED
+10-24 14:43:00.546  7451  7451 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:00.546  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: STARTED
+10-24 14:43:00.546  7451  7451 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:00.548  1512  1512 I keystore: del USRPKEY_notes.local.3a9cd4ed-98c6-400c-b5d8-9dfe9d59bf5a.notes.wrap 10073
+10-24 14:43:00.548  1512  1512 I keystore: del USRSKEY_notes.local.3a9cd4ed-98c6-400c-b5d8-9dfe9d59bf5a.notes.wrap 10073
+10-24 14:43:00.548  1512  1512 I keystore: del USRCERT_notes.local.3a9cd4ed-98c6-400c-b5d8-9dfe9d59bf5a.notes.wrap 10073
+10-24 14:43:00.548  1512  1512 I keystore: del CACERT_notes.local.3a9cd4ed-98c6-400c-b5d8-9dfe9d59bf5a.notes.wrap 10073
+10-24 14:43:00.550  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: RESUMED
+10-24 14:43:00.550  7451  7451 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:00.560  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:00.574  7451  7470 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:00.576  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:00.577  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-24 14:43:00.578  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:00.582  3402  3494 D EGL_emulation: eglMakeCurrent: 0x7efcc0239aa0: ver 3 0 (tinfo 0x7efcc020d720)
+10-24 14:43:00.585  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:00.645  2902  2928 I ActivityManager: Displayed net.plainnotes.app/.debug.attachments.AttachmentOperationTestActivity: +109ms
+10-24 14:43:01.267  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: PAUSED
+10-24 14:43:01.267  7451  7451 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:01.301  2851  3131 E SurfaceFlinger: ro.sf.lcd_density must be defined as a build property
+10-24 14:43:01.301  4125  7645 D OpenGLRenderer: HWUI GL Pipeline
+10-24 14:43:01.322  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:01.322  4125  7645 D         : HostConnection::get() New Host Connection established 0x7efcc0244540, tid 7645
+10-24 14:43:01.323  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:01.324  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:01.330  4125  7645 I OpenGLRenderer: Initialized EGL, version 1.4
+10-24 14:43:01.330  4125  7645 D OpenGLRenderer: Swap behavior 1
+10-24 14:43:01.331  4125  7645 D EGL_emulation: eglCreateContext: 0x7efcc023a220: maj 3 min 0 rcv 3
+10-24 14:43:01.332  4125  7645 D EGL_emulation: eglMakeCurrent: 0x7efcc023a220: ver 3 0 (tinfo 0x7efcc020d820)
+10-24 14:43:01.345  4125  7645 D EGL_emulation: eglMakeCurrent: 0x7efcc023a220: ver 3 0 (tinfo 0x7efcc020d820)
+10-24 14:43:01.592  2902  2928 I ActivityManager: Displayed com.android.documentsui/.picker.PickActivity: +324ms
+10-24 14:43:01.605  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:01.699  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: STOPPED
+10-24 14:43:01.699  7451  7451 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:01.720  2851  2851 W SurfaceFlinger: couldn't log to binary event log: overflow.
+10-24 14:43:01.790  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: RESTARTED
+10-24 14:43:01.790  7451  7451 V ActivityScenario: Update currentActivityStage to RESTARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:01.790  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: STARTED
+10-24 14:43:01.790  7451  7451 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:01.791  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: RESUMED
+10-24 14:43:01.791  7451  7451 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:01.810  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:01.811  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-24 14:43:01.811  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:01.823  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:01.840  4125  7645 D EGL_emulation: eglMakeCurrent: 0x7efcc023a220: ver 3 0 (tinfo 0x7efcc020d820)
+10-24 14:43:01.891  7451  7456 I zygote64: Compiler allocated 5MB to compile void androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat.populateAccessibilityNodeInfoProperties(int, androidx.core.view.accessibility.AccessibilityNodeInfoCompat, androidx.compose.ui.semantics.SemanticsNode)
+10-24 14:43:01.999  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: PAUSED
+10-24 14:43:01.999  7451  7451 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:01.999  7451  7456 I zygote64: Do partial code cache collection, code=4MB, data=3MB
+10-24 14:43:02.013  7451  7456 I zygote64: After code cache collection, code=4MB, data=3MB
+10-24 14:43:02.014  7451  7456 I zygote64: Increasing code cache capacity to 11MB
+10-24 14:43:02.025  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:02.026  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-24 14:43:02.027  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:02.046  4125  7645 D EGL_emulation: eglMakeCurrent: 0x7efcc023a220: ver 3 0 (tinfo 0x7efcc020d820)
+10-24 14:43:02.050  2902  2928 I ActivityManager: Displayed com.android.documentsui/.picker.PickActivity: +50ms
+10-24 14:43:02.057  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:02.081  4125  4130 I zygote64: Do partial code cache collection, code=27KB, data=25KB
+10-24 14:43:02.081  4125  4130 I zygote64: After code cache collection, code=27KB, data=25KB
+10-24 14:43:02.082  4125  4130 I zygote64: Increasing code cache capacity to 128KB
+10-24 14:43:02.083  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: STOPPED
+10-24 14:43:02.083  7451  7451 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:02.107  2851  2851 W SurfaceFlinger: couldn't log to binary event log: overflow.
+10-24 14:43:02.129  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: RESTARTED
+10-24 14:43:02.129  7451  7451 V ActivityScenario: Update currentActivityStage to RESTARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:02.130  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: STARTED
+10-24 14:43:02.130  7451  7451 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:02.130  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: RESUMED
+10-24 14:43:02.130  7451  7451 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:02.145  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:02.146  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-24 14:43:02.147  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:02.160  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:02.175  4125  7645 D EGL_emulation: eglMakeCurrent: 0x7efcc023a220: ver 3 0 (tinfo 0x7efcc020d820)
+10-24 14:43:02.339  7451  7472 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:02.513  1512  1512 I keystore: del USRPKEY_notes.obj.v1.s.26caf8d8-11d6-486b-b761-ee8780128a3d 10073
+10-24 14:43:02.513  1512  1512 I keystore: del USRSKEY_notes.obj.v1.s.26caf8d8-11d6-486b-b761-ee8780128a3d 10073
+10-24 14:43:02.513  1512  1512 I keystore: del USRCERT_notes.obj.v1.s.26caf8d8-11d6-486b-b761-ee8780128a3d 10073
+10-24 14:43:02.513  1512  1512 I keystore: del CACERT_notes.obj.v1.s.26caf8d8-11d6-486b-b761-ee8780128a3d 10073
+10-24 14:43:02.522  1512  1512 I keystore: del USRPKEY_notes.obj.v1.a.49e11824-b80f-46ba-b3cf-dc0fd13d8595 10073
+10-24 14:43:02.522  1512  1512 I keystore: del USRSKEY_notes.obj.v1.a.49e11824-b80f-46ba-b3cf-dc0fd13d8595 10073
+10-24 14:43:02.522  1512  1512 I keystore: del USRCERT_notes.obj.v1.a.49e11824-b80f-46ba-b3cf-dc0fd13d8595 10073
+10-24 14:43:02.522  1512  1512 I keystore: del CACERT_notes.obj.v1.a.49e11824-b80f-46ba-b3cf-dc0fd13d8595 10073
+10-24 14:43:03.054  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: PAUSED
+10-24 14:43:03.054  7451  7451 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:03.055  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: STOPPED
+10-24 14:43:03.055  7451  7451 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c
+10-24 14:43:03.055  7451  7655 W MessageQueue: Handler (android.os.Handler) {1ea445c} sending message to a Handler on a dead thread
+10-24 14:43:03.055  7451  7655 W MessageQueue: java.lang.IllegalStateException: Handler (android.os.Handler) {1ea445c} sending message to a Handler on a dead thread
+10-24 14:43:03.055  7451  7655 W MessageQueue: 	at android.os.MessageQueue.enqueueMessage(MessageQueue.java:545)
+10-24 14:43:03.055  7451  7655 W MessageQueue: 	at android.os.Handler.enqueueMessage(Handler.java:661)
+10-24 14:43:03.055  7451  7655 W MessageQueue: 	at android.os.Handler.sendMessageAtTime(Handler.java:630)
+10-24 14:43:03.055  7451  7655 W MessageQueue: 	at android.os.Handler.sendMessageDelayed(Handler.java:600)
+10-24 14:43:03.055  7451  7655 W MessageQueue: 	at android.os.Handler.sendMessage(Handler.java:537)
+10-24 14:43:03.055  7451  7655 W MessageQueue: 	at com.android.internal.os.FuseAppLoop.onCommand(FuseAppLoop.java:245)
+10-24 14:43:03.055  7451  7655 W MessageQueue: 	at com.android.internal.os.FuseAppLoop.native_start(Native Method)
+10-24 14:43:03.055  7451  7655 W MessageQueue: 	at com.android.internal.os.FuseAppLoop.lambda$-com_android_internal_os_FuseAppLoop_2801(FuseAppLoop.java:81)
+10-24 14:43:03.055  7451  7655 W MessageQueue: 	at com.android.internal.os.-$Lambda$7ZK-l4tRY1lJoOPMxlJZMSKtyQY.$m$0(Unknown Source:4)
+10-24 14:43:03.055  7451  7655 W MessageQueue: 	at com.android.internal.os.-$Lambda$7ZK-l4tRY1lJoOPMxlJZMSKtyQY.run(Unknown Source:0)
+10-24 14:43:03.055  7451  7655 W MessageQueue: 	at java.lang.Thread.run(Thread.java:764)
+10-24 14:43:03.067  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@4642c3c in: DESTROYED
+10-24 14:43:03.067  7451  7451 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+10-24 14:43:03.071  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@8198a1d in: PRE_ON_CREATE
+10-24 14:43:03.071  7451  7451 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was DESTROYED
+10-24 14:43:03.075  7451  7470 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:03.078  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@8198a1d in: CREATED
+10-24 14:43:03.079  7451  7451 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@8198a1d
+10-24 14:43:03.079  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@8198a1d in: STARTED
+10-24 14:43:03.082  7451  7451 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@8198a1d
+10-24 14:43:03.089  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@8198a1d in: RESUMED
+10-24 14:43:03.089  7451  7451 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@8198a1d
+10-24 14:43:03.675  7451  7470 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:03.977  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@8198a1d in: PAUSED
+10-24 14:43:03.978  7451  7451 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@8198a1d
+10-24 14:43:03.995  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:03.997  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 2 lines
+10-24 14:43:04.008  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:04.008  7495  7515 D EGL_emulation: eglMakeCurrent: 0x7efcc92a71a0: ver 3 0 (tinfo 0x7efcbd53a480)
+10-24 14:43:04.024  3402  3494 W OpenGLRenderer: Incorrectly called buildLayer on View: ShortcutAndWidgetContainer, destroying layer...
+10-24 14:43:04.045  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:04.045  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-24 14:43:04.046  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:04.059  3402  3494 D EGL_emulation: eglMakeCurrent: 0x7efcc0239aa0: ver 3 0 (tinfo 0x7efcc020d720)
+10-24 14:43:04.076  7495  7515 D EGL_emulation: eglMakeCurrent: 0x7efcc92a71a0: ver 3 0 (tinfo 0x7efcbd53a480)
+10-24 14:43:04.077  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:04.078  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:04.083  2902  7512 I OpenGLRenderer: Initialized EGL, version 1.4
+10-24 14:43:04.083  2902  7512 D OpenGLRenderer: Swap behavior 1
+10-24 14:43:04.084  2902  7512 D EGL_emulation: eglCreateContext: 0x7efcab33b640: maj 3 min 0 rcv 3
+10-24 14:43:04.084  2902  7512 D EGL_emulation: eglMakeCurrent: 0x7efcab33b640: ver 3 0 (tinfo 0x7efca825c4c0)
+10-24 14:43:04.086  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:04.087  2902  7512 D EGL_emulation: eglMakeCurrent: 0x7efcab33b640: ver 3 0 (tinfo 0x7efca825c4c0)
+10-24 14:43:04.159  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:04.160  2902  7512 D EGL_emulation: eglMakeCurrent: 0x7efcab33b640: ver 3 0 (tinfo 0x7efca825c4c0)
+10-24 14:43:04.160  2902  2953 E BufferItemConsumer: [unnamed-2902-42] Failed to release buffer: Unknown error -1 (1)
+10-24 14:43:04.168  2902  2917 W zygote64: Long monitor contention with owner Binder:2902_9 (3353) at void com.android.server.am.ActivityManagerService.activityIdle(android.os.IBinder, android.content.res.Configuration, boolean)(ActivityManagerService.java:7033) waiters=0 in void com.android.server.am.ActivityManagerService$MainHandler.handleMessage(android.os.Message) for 104ms
+10-24 14:43:04.171  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@8198a1d in: STOPPED
+10-24 14:43:04.171  7451  7451 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@8198a1d
+10-24 14:43:04.176  7451  7662 W MessageQueue: Handler (android.os.Handler) {4e13e56} sending message to a Handler on a dead thread
+10-24 14:43:04.176  7451  7662 W MessageQueue: java.lang.IllegalStateException: Handler (android.os.Handler) {4e13e56} sending message to a Handler on a dead thread
+10-24 14:43:04.176  7451  7662 W MessageQueue: 	at android.os.MessageQueue.enqueueMessage(MessageQueue.java:545)
+10-24 14:43:04.176  7451  7662 W MessageQueue: 	at android.os.Handler.enqueueMessage(Handler.java:661)
+10-24 14:43:04.176  7451  7662 W MessageQueue: 	at android.os.Handler.sendMessageAtTime(Handler.java:630)
+10-24 14:43:04.176  7451  7662 W MessageQueue: 	at android.os.Handler.sendMessageDelayed(Handler.java:600)
+10-24 14:43:04.176  7451  7662 W MessageQueue: 	at android.os.Handler.sendMessage(Handler.java:537)
+10-24 14:43:04.176  7451  7662 W MessageQueue: 	at com.android.internal.os.FuseAppLoop.onCommand(FuseAppLoop.java:245)
+10-24 14:43:04.176  7451  7662 W MessageQueue: 	at com.android.internal.os.FuseAppLoop.native_start(Native Method)
+10-24 14:43:04.176  7451  7662 W MessageQueue: 	at com.android.internal.os.FuseAppLoop.lambda$-com_android_internal_os_FuseAppLoop_2801(FuseAppLoop.java:81)
+10-24 14:43:04.176  7451  7662 W MessageQueue: 	at com.android.internal.os.-$Lambda$7ZK-l4tRY1lJoOPMxlJZMSKtyQY.$m$0(Unknown Source:4)
+10-24 14:43:04.176  7451  7662 W MessageQueue: 	at com.android.internal.os.-$Lambda$7ZK-l4tRY1lJoOPMxlJZMSKtyQY.run(Unknown Source:0)
+10-24 14:43:04.176  7451  7662 W MessageQueue: 	at java.lang.Thread.run(Thread.java:764)
+10-24 14:43:04.196  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@8198a1d in: DESTROYED
+10-24 14:43:04.196  7451  7451 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+10-24 14:43:04.199  7451  7468 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:04.242  2851  2851 W SurfaceFlinger: couldn't log to binary event log: overflow.
+10-24 14:43:04.497  1512  1512 I keystore: del USRPKEY_notes.local.3a9cd4ed-98c6-400c-b5d8-9dfe9d59bf5a.notes.wrap 10073
+10-24 14:43:04.497  1512  1512 I keystore: del USRSKEY_notes.local.3a9cd4ed-98c6-400c-b5d8-9dfe9d59bf5a.notes.wrap 10073
+10-24 14:43:04.498  1512  1512 I keystore: del USRCERT_notes.local.3a9cd4ed-98c6-400c-b5d8-9dfe9d59bf5a.notes.wrap 10073
+10-24 14:43:04.498  1512  1512 I keystore: del CACERT_notes.local.3a9cd4ed-98c6-400c-b5d8-9dfe9d59bf5a.notes.wrap 10073
+10-24 14:43:04.498  1512  1512 I keystore: del USRPKEY_notes.obj.v1.s.26caf8d8-11d6-486b-b761-ee8780128a3d 10073
+10-24 14:43:04.498  1512  1512 I keystore: del USRSKEY_notes.obj.v1.s.26caf8d8-11d6-486b-b761-ee8780128a3d 10073
+10-24 14:43:04.499  1512  1512 I keystore: del USRCERT_notes.obj.v1.s.26caf8d8-11d6-486b-b761-ee8780128a3d 10073
+10-24 14:43:04.499  1512  1512 I keystore: del CACERT_notes.obj.v1.s.26caf8d8-11d6-486b-b761-ee8780128a3d 10073
+10-24 14:43:04.499  1512  1512 I keystore: del USRPKEY_notes.obj.v1.a.49e11824-b80f-46ba-b3cf-dc0fd13d8595 10073
+10-24 14:43:04.499  1512  1512 I keystore: del USRSKEY_notes.obj.v1.a.49e11824-b80f-46ba-b3cf-dc0fd13d8595 10073
+10-24 14:43:04.499  1512  1512 I keystore: del USRCERT_notes.obj.v1.a.49e11824-b80f-46ba-b3cf-dc0fd13d8595 10073
+10-24 14:43:04.499  1512  1512 I keystore: del CACERT_notes.obj.v1.a.49e11824-b80f-46ba-b3cf-dc0fd13d8595 10073
+10-24 14:43:04.504  7451  7468 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+10-24 14:43:04.516  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48 in: PRE_ON_CREATE
+10-24 14:43:04.516  7451  7451 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+10-24 14:43:04.518  1512  1512 I keystore: del USRPKEY_notes.local.619810d1-29c7-4475-ad5e-3805a8f384c9.notes.wrap 10073
+10-24 14:43:04.519  1512  1512 I keystore: del USRSKEY_notes.local.619810d1-29c7-4475-ad5e-3805a8f384c9.notes.wrap 10073
+10-24 14:43:04.519  1512  1512 I keystore: del USRCERT_notes.local.619810d1-29c7-4475-ad5e-3805a8f384c9.notes.wrap 10073
+10-24 14:43:04.519  1512  1512 I keystore: del CACERT_notes.local.619810d1-29c7-4475-ad5e-3805a8f384c9.notes.wrap 10073
+10-24 14:43:04.520  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48 in: CREATED
+10-24 14:43:04.520  7451  7451 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48
+10-24 14:43:04.520  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48 in: STARTED
+10-24 14:43:04.520  7451  7451 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48
+10-24 14:43:04.522  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48 in: RESUMED
+10-24 14:43:04.522  7451  7451 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48
+10-24 14:43:04.525  7451  7479 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:04.538  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:04.540  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 2 lines
+10-24 14:43:04.548  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:04.550  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:04.557  2902  2928 I ActivityManager: Displayed net.plainnotes.app/.debug.attachments.AttachmentOperationTestActivity: +44ms
+10-24 14:43:04.566  3402  3494 D EGL_emulation: eglMakeCurrent: 0x7efcc0239aa0: ver 3 0 (tinfo 0x7efcc020d720)
+10-24 14:43:04.581  3402  3494 W OpenGLRenderer: Incorrectly called buildLayer on View: ShortcutAndWidgetContainer, destroying layer...
+10-24 14:43:04.619  2902  7512 I OpenGLRenderer: Initialized EGL, version 1.4
+10-24 14:43:04.619  2902  7512 D OpenGLRenderer: Swap behavior 1
+10-24 14:43:04.620  2902  7512 D EGL_emulation: eglCreateContext: 0x7efcab33dd00: maj 3 min 0 rcv 3
+10-24 14:43:04.621  2902  7512 D EGL_emulation: eglMakeCurrent: 0x7efcab33dd00: ver 3 0 (tinfo 0x7efca825c4c0)
+10-24 14:43:04.623  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 208896
+10-24 14:43:05.192  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48 in: PAUSED
+10-24 14:43:05.192  7451  7451 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48
+10-24 14:43:05.208  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:05.209  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-24 14:43:05.209  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:05.221  4125  7645 D EGL_emulation: eglMakeCurrent: 0x7efcc023a220: ver 3 0 (tinfo 0x7efcc020d820)
+10-24 14:43:05.227  2902  2928 I ActivityManager: Displayed com.android.documentsui/.picker.PickActivity: +34ms
+10-24 14:43:05.253  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:05.262  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48 in: STOPPED
+10-24 14:43:05.262  7451  7451 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48
+10-24 14:43:05.285  2851  2851 W SurfaceFlinger: couldn't log to binary event log: overflow.
+10-24 14:43:05.320  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48 in: RESTARTED
+10-24 14:43:05.320  7451  7451 V ActivityScenario: Update currentActivityStage to RESTARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48
+10-24 14:43:05.320  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48 in: STARTED
+10-24 14:43:05.320  7451  7451 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48
+10-24 14:43:05.321  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48 in: RESUMED
+10-24 14:43:05.321  7451  7451 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48
+10-24 14:43:05.340  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:05.341  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-24 14:43:05.341  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:05.355  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:05.358  4125  4130 I zygote64: Do partial code cache collection, code=62KB, data=48KB
+10-24 14:43:05.358  4125  4130 I zygote64: After code cache collection, code=62KB, data=48KB
+10-24 14:43:05.358  4125  4130 I zygote64: Increasing code cache capacity to 256KB
+10-24 14:43:05.371  4125  7645 D EGL_emulation: eglMakeCurrent: 0x7efcc023a220: ver 3 0 (tinfo 0x7efcc020d820)
+10-24 14:43:05.516  7451  7479 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:05.687  7451  7483 W zygote64: Long monitor contention with owner DefaultDispatcher-worker-4 (7479) at long net.zetetic.database.sqlcipher.SQLiteConnection.nativePrepareStatement(long, java.lang.String)(SQLiteConnection.java:-2) waiters=0 in void net.zetetic.database.sqlcipher.SQLiteConnectionPool.releaseConnection(net.zetetic.database.sqlcipher.SQLiteConnection) for 171ms
+10-24 14:43:05.689  1512  1512 I keystore: del USRPKEY_notes.obj.v1.s.40cb5f15-3a66-407a-837c-c9533ed88497 10073
+10-24 14:43:05.689  1512  1512 I keystore: del USRSKEY_notes.obj.v1.s.40cb5f15-3a66-407a-837c-c9533ed88497 10073
+10-24 14:43:05.689  1512  1512 I keystore: del USRCERT_notes.obj.v1.s.40cb5f15-3a66-407a-837c-c9533ed88497 10073
+10-24 14:43:05.689  1512  1512 I keystore: del CACERT_notes.obj.v1.s.40cb5f15-3a66-407a-837c-c9533ed88497 10073
+10-24 14:43:05.697  1512  1512 I keystore: del USRPKEY_notes.obj.v1.a.cd0c6c90-f9d1-4bc3-9b0c-902e4dfb31d8 10073
+10-24 14:43:05.697  1512  1512 I keystore: del USRSKEY_notes.obj.v1.a.cd0c6c90-f9d1-4bc3-9b0c-902e4dfb31d8 10073
+10-24 14:43:05.697  1512  1512 I keystore: del USRCERT_notes.obj.v1.a.cd0c6c90-f9d1-4bc3-9b0c-902e4dfb31d8 10073
+10-24 14:43:05.697  1512  1512 I keystore: del CACERT_notes.obj.v1.a.cd0c6c90-f9d1-4bc3-9b0c-902e4dfb31d8 10073
+10-24 14:43:06.084  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48 in: PAUSED
+10-24 14:43:06.084  7451  7451 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48
+10-24 14:43:06.085  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48 in: STOPPED
+10-24 14:43:06.085  7451  7451 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48
+10-24 14:43:06.094  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@68a9d48 in: DESTROYED
+10-24 14:43:06.094  7451  7451 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+10-24 14:43:06.096  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c9ee8fd in: PRE_ON_CREATE
+10-24 14:43:06.097  7451  7451 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was DESTROYED
+10-24 14:43:06.099  7451  7472 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:06.102  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c9ee8fd in: CREATED
+10-24 14:43:06.102  7451  7451 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c9ee8fd
+10-24 14:43:06.102  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c9ee8fd in: STARTED
+10-24 14:43:06.102  7451  7451 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c9ee8fd
+10-24 14:43:06.103  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c9ee8fd in: RESUMED
+10-24 14:43:06.103  7451  7451 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c9ee8fd
+10-24 14:43:06.704  7451  7472 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:07.004  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c9ee8fd in: PAUSED
+10-24 14:43:07.004  7451  7451 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c9ee8fd
+10-24 14:43:07.023  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:07.024  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-24 14:43:07.025  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:07.035  7495  7515 D EGL_emulation: eglMakeCurrent: 0x7efcc92a71a0: ver 3 0 (tinfo 0x7efcbd53a480)
+10-24 14:43:07.037  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:07.073  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 2 lines
+10-24 14:43:07.073  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:07.086  3402  3494 D EGL_emulation: eglMakeCurrent: 0x7efcc0239aa0: ver 3 0 (tinfo 0x7efcc020d720)
+10-24 14:43:07.102  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:07.102  7495  7515 D EGL_emulation: eglMakeCurrent: 0x7efcc92a71a0: ver 3 0 (tinfo 0x7efcbd53a480)
+10-24 14:43:07.105  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:07.109  2902  7512 I OpenGLRenderer: Initialized EGL, version 1.4
+10-24 14:43:07.109  2902  7512 D OpenGLRenderer: Swap behavior 1
+10-24 14:43:07.110  2902  7512 D EGL_emulation: eglCreateContext: 0x7efcacd618e0: maj 3 min 0 rcv 3
+10-24 14:43:07.111  2902  7512 D EGL_emulation: eglMakeCurrent: 0x7efcacd618e0: ver 3 0 (tinfo 0x7efca825c4c0)
+10-24 14:43:07.112  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:07.113  2902  7512 D EGL_emulation: eglMakeCurrent: 0x7efcacd618e0: ver 3 0 (tinfo 0x7efca825c4c0)
+10-24 14:43:07.189  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:07.190  2902  7512 D EGL_emulation: eglMakeCurrent: 0x7efcacd618e0: ver 3 0 (tinfo 0x7efca825c4c0)
+10-24 14:43:07.191  2902  2953 E BufferItemConsumer: [unnamed-2902-44] Failed to release buffer: Unknown error -1 (1)
+10-24 14:43:07.198  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c9ee8fd in: STOPPED
+10-24 14:43:07.199  7451  7451 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c9ee8fd
+10-24 14:43:07.225  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@c9ee8fd in: DESTROYED
+10-24 14:43:07.225  7451  7451 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+10-24 14:43:07.228  7451  7468 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:07.255  2851  2851 W SurfaceFlinger: couldn't log to binary event log: overflow.
+10-24 14:43:07.523  1512  1512 I keystore: del USRPKEY_notes.local.619810d1-29c7-4475-ad5e-3805a8f384c9.notes.wrap 10073
+10-24 14:43:07.523  1512  1512 I keystore: del USRSKEY_notes.local.619810d1-29c7-4475-ad5e-3805a8f384c9.notes.wrap 10073
+10-24 14:43:07.523  1512  1512 I keystore: del USRCERT_notes.local.619810d1-29c7-4475-ad5e-3805a8f384c9.notes.wrap 10073
+10-24 14:43:07.523  1512  1512 I keystore: del CACERT_notes.local.619810d1-29c7-4475-ad5e-3805a8f384c9.notes.wrap 10073
+10-24 14:43:07.524  1512  1512 I keystore: del USRPKEY_notes.obj.v1.s.40cb5f15-3a66-407a-837c-c9533ed88497 10073
+10-24 14:43:07.524  1512  1512 I keystore: del USRSKEY_notes.obj.v1.s.40cb5f15-3a66-407a-837c-c9533ed88497 10073
+10-24 14:43:07.524  1512  1512 I keystore: del USRCERT_notes.obj.v1.s.40cb5f15-3a66-407a-837c-c9533ed88497 10073
+10-24 14:43:07.525  1512  1512 I keystore: del CACERT_notes.obj.v1.s.40cb5f15-3a66-407a-837c-c9533ed88497 10073
+10-24 14:43:07.525  1512  1512 I keystore: del USRPKEY_notes.obj.v1.a.cd0c6c90-f9d1-4bc3-9b0c-902e4dfb31d8 10073
+10-24 14:43:07.525  1512  1512 I keystore: del USRSKEY_notes.obj.v1.a.cd0c6c90-f9d1-4bc3-9b0c-902e4dfb31d8 10073
+10-24 14:43:07.526  1512  1512 I keystore: del USRCERT_notes.obj.v1.a.cd0c6c90-f9d1-4bc3-9b0c-902e4dfb31d8 10073
+10-24 14:43:07.526  1512  1512 I keystore: del CACERT_notes.obj.v1.a.cd0c6c90-f9d1-4bc3-9b0c-902e4dfb31d8 10073
+10-24 14:43:07.528  7451  7468 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+10-24 14:43:07.536  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a in: PRE_ON_CREATE
+10-24 14:43:07.536  7451  7451 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+10-24 14:43:07.538  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a in: CREATED
+10-24 14:43:07.538  7451  7451 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a
+10-24 14:43:07.539  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a in: STARTED
+10-24 14:43:07.539  7451  7451 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a
+10-24 14:43:07.539  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a in: RESUMED
+10-24 14:43:07.539  7451  7451 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a
+10-24 14:43:07.540  1512  1512 I keystore: del USRPKEY_notes.local.242b440a-e4c6-4637-9efc-c94b4fbdef0f.notes.wrap 10073
+10-24 14:43:07.540  1512  1512 I keystore: del USRSKEY_notes.local.242b440a-e4c6-4637-9efc-c94b4fbdef0f.notes.wrap 10073
+10-24 14:43:07.540  1512  1512 I keystore: del USRCERT_notes.local.242b440a-e4c6-4637-9efc-c94b4fbdef0f.notes.wrap 10073
+10-24 14:43:07.541  1512  1512 I keystore: del CACERT_notes.local.242b440a-e4c6-4637-9efc-c94b4fbdef0f.notes.wrap 10073
+10-24 14:43:07.550  7451  7470 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:07.570  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:07.574  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 2 lines
+10-24 14:43:07.576  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:07.585  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:07.593  2902  2928 I ActivityManager: Displayed net.plainnotes.app/.debug.attachments.AttachmentOperationTestActivity: +59ms
+10-24 14:43:07.594  3402  3494 D EGL_emulation: eglMakeCurrent: 0x7efcc0239aa0: ver 3 0 (tinfo 0x7efcc020d720)
+10-24 14:43:07.613  3402  3494 W OpenGLRenderer: Incorrectly called buildLayer on View: ShortcutAndWidgetContainer, destroying layer...
+10-24 14:43:07.639  2902  7512 I OpenGLRenderer: Initialized EGL, version 1.4
+10-24 14:43:07.639  2902  7512 D OpenGLRenderer: Swap behavior 1
+10-24 14:43:07.641  2902  7512 D EGL_emulation: eglCreateContext: 0x7efcacd62d80: maj 3 min 0 rcv 3
+10-24 14:43:07.642  2902  7512 D EGL_emulation: eglMakeCurrent: 0x7efcacd62d80: ver 3 0 (tinfo 0x7efca825c4c0)
+10-24 14:43:07.645  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 208896
+10-24 14:43:07.923  7451  7479 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:08.353  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a in: PAUSED
+10-24 14:43:08.353  7451  7451 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a
+10-24 14:43:08.369  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:08.370  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-24 14:43:08.371  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:08.381  4125  7645 D EGL_emulation: eglMakeCurrent: 0x7efcc023a220: ver 3 0 (tinfo 0x7efcc020d820)
+10-24 14:43:08.389  2902  2928 I ActivityManager: Displayed com.android.documentsui/.picker.PickActivity: +35ms
+10-24 14:43:08.413  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:08.437  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a in: STOPPED
+10-24 14:43:08.437  7451  7451 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a
+10-24 14:43:08.463  2851  2851 W SurfaceFlinger: couldn't log to binary event log: overflow.
+10-24 14:43:08.483  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a in: RESTARTED
+10-24 14:43:08.483  7451  7451 V ActivityScenario: Update currentActivityStage to RESTARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a
+10-24 14:43:08.484  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a in: STARTED
+10-24 14:43:08.484  7451  7451 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a
+10-24 14:43:08.485  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a in: RESUMED
+10-24 14:43:08.485  7451  7451 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a
+10-24 14:43:08.501  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:08.502  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-24 14:43:08.503  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:08.516  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:08.532  4125  7645 D EGL_emulation: eglMakeCurrent: 0x7efcc023a220: ver 3 0 (tinfo 0x7efcc020d820)
+10-24 14:43:08.680  1512  1512 I keystore: del USRPKEY_notes.obj.v1.s.c9972775-c008-4a0b-b179-f3555cab8887 10073
+10-24 14:43:08.680  1512  1512 I keystore: del USRSKEY_notes.obj.v1.s.c9972775-c008-4a0b-b179-f3555cab8887 10073
+10-24 14:43:08.680  1512  1512 I keystore: del USRCERT_notes.obj.v1.s.c9972775-c008-4a0b-b179-f3555cab8887 10073
+10-24 14:43:08.680  1512  1512 I keystore: del CACERT_notes.obj.v1.s.c9972775-c008-4a0b-b179-f3555cab8887 10073
+10-24 14:43:08.689  1512  1512 I keystore: del USRPKEY_notes.obj.v1.a.3ad17ac8-8d48-4f3c-b0dc-b9eafc86d76b 10073
+10-24 14:43:08.689  1512  1512 I keystore: del USRSKEY_notes.obj.v1.a.3ad17ac8-8d48-4f3c-b0dc-b9eafc86d76b 10073
+10-24 14:43:08.689  1512  1512 I keystore: del USRCERT_notes.obj.v1.a.3ad17ac8-8d48-4f3c-b0dc-b9eafc86d76b 10073
+10-24 14:43:08.690  1512  1512 I keystore: del CACERT_notes.obj.v1.a.3ad17ac8-8d48-4f3c-b0dc-b9eafc86d76b 10073
+10-24 14:43:09.036  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a in: PAUSED
+10-24 14:43:09.036  7451  7451 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a
+10-24 14:43:09.036  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a in: STOPPED
+10-24 14:43:09.037  7451  7451 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a
+10-24 14:43:09.047  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@bb92c9a in: DESTROYED
+10-24 14:43:09.047  7451  7451 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+10-24 14:43:09.049  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@90c9487 in: PRE_ON_CREATE
+10-24 14:43:09.049  7451  7451 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was DESTROYED
+10-24 14:43:09.054  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@90c9487 in: CREATED
+10-24 14:43:09.054  7451  7451 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@90c9487
+10-24 14:43:09.054  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@90c9487 in: STARTED
+10-24 14:43:09.054  7451  7451 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@90c9487
+10-24 14:43:09.055  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@90c9487 in: RESUMED
+10-24 14:43:09.055  7451  7451 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@90c9487
+10-24 14:43:09.065  7451  7470 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:09.730  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@90c9487 in: PAUSED
+10-24 14:43:09.730  7451  7451 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@90c9487
+10-24 14:43:09.746  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:09.747  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 2 lines
+10-24 14:43:09.758  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:09.761  7495  7515 D EGL_emulation: eglMakeCurrent: 0x7efcc92a71a0: ver 3 0 (tinfo 0x7efcbd53a480)
+10-24 14:43:09.795  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:09.796  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-24 14:43:09.797  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:09.810  3402  3494 D EGL_emulation: eglMakeCurrent: 0x7efcc0239aa0: ver 3 0 (tinfo 0x7efcc020d720)
+10-24 14:43:09.826  7495  7515 D EGL_emulation: eglMakeCurrent: 0x7efcc92a71a0: ver 3 0 (tinfo 0x7efcbd53a480)
+10-24 14:43:09.826  7451  7482 D EGL_emulation: eglMakeCurrent: 0x7efcc023a120: ver 3 0 (tinfo 0x7efcc02f6fe0)
+10-24 14:43:09.830  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:09.833  2902  7512 I OpenGLRenderer: Initialized EGL, version 1.4
+10-24 14:43:09.833  2902  7512 D OpenGLRenderer: Swap behavior 1
+10-24 14:43:09.834  2902  7512 D EGL_emulation: eglCreateContext: 0x7efcacd61de0: maj 3 min 0 rcv 3
+10-24 14:43:09.835  2902  7512 D EGL_emulation: eglMakeCurrent: 0x7efcacd61de0: ver 3 0 (tinfo 0x7efca825c4c0)
+10-24 14:43:09.837  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:09.837  2902  7512 D EGL_emulation: eglMakeCurrent: 0x7efcacd61de0: ver 3 0 (tinfo 0x7efca825c4c0)
+10-24 14:43:09.915  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-24 14:43:09.916  2902  7512 D EGL_emulation: eglMakeCurrent: 0x7efcacd61de0: ver 3 0 (tinfo 0x7efca825c4c0)
+10-24 14:43:09.917  2902  2953 E BufferItemConsumer: [unnamed-2902-46] Failed to release buffer: Unknown error -1 (1)
+10-24 14:43:09.924  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@90c9487 in: STOPPED
+10-24 14:43:09.924  7451  7451 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@90c9487
+10-24 14:43:09.958  7451  7451 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity@90c9487 in: DESTROYED
+10-24 14:43:09.958  7451  7451 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+10-24 14:43:09.961  7451  7468 I SQLiteConnection: Database keying operation returned:0
+10-24 14:43:09.986  2851  2851 W SurfaceFlinger: couldn't log to binary event log: overflow.
+10-24 14:43:10.248  1512  1512 I keystore: del USRPKEY_notes.local.242b440a-e4c6-4637-9efc-c94b4fbdef0f.notes.wrap 10073
+10-24 14:43:10.249  1512  1512 I keystore: del USRSKEY_notes.local.242b440a-e4c6-4637-9efc-c94b4fbdef0f.notes.wrap 10073
+10-24 14:43:10.249  1512  1512 I keystore: del USRCERT_notes.local.242b440a-e4c6-4637-9efc-c94b4fbdef0f.notes.wrap 10073
+10-24 14:43:10.249  1512  1512 I keystore: del CACERT_notes.local.242b440a-e4c6-4637-9efc-c94b4fbdef0f.notes.wrap 10073
+10-24 14:43:10.250  1512  1512 I keystore: del USRPKEY_notes.obj.v1.s.c9972775-c008-4a0b-b179-f3555cab8887 10073
+10-24 14:43:10.250  1512  1512 I keystore: del USRSKEY_notes.obj.v1.s.c9972775-c008-4a0b-b179-f3555cab8887 10073
+10-24 14:43:10.250  1512  1512 I keystore: del USRCERT_notes.obj.v1.s.c9972775-c008-4a0b-b179-f3555cab8887 10073
+10-24 14:43:10.251  1512  1512 I keystore: del CACERT_notes.obj.v1.s.c9972775-c008-4a0b-b179-f3555cab8887 10073
+10-24 14:43:10.251  1512  1512 I keystore: del USRPKEY_notes.obj.v1.a.3ad17ac8-8d48-4f3c-b0dc-b9eafc86d76b 10073
+10-24 14:43:10.251  1512  1512 I keystore: del USRSKEY_notes.obj.v1.a.3ad17ac8-8d48-4f3c-b0dc-b9eafc86d76b 10073
+10-24 14:43:10.251  1512  1512 I keystore: del USRCERT_notes.obj.v1.a.3ad17ac8-8d48-4f3c-b0dc-b9eafc86d76b 10073
+10-24 14:43:10.252  1512  1512 I keystore: del CACERT_notes.obj.v1.a.3ad17ac8-8d48-4f3c-b0dc-b9eafc86d76b 10073
+10-24 14:43:10.253  7451  7468 D IdlingRegistry: Unregistering idling resources: [androidx.compose.ui.test.EspressoLink@8303b6a]
+10-24 14:43:10.254  7451  7468 I TestRunner: finished: realSafPdfPngBinaryCommitReopenAndViewWithExistingAssociations(net.plainnotes.app.attachments.AttachmentOperationAndroidTest)

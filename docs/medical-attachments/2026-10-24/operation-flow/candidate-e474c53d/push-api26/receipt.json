@@ -1,0 +1,19 @@
+{
+  "source_sha": "e474c53d41bfa7f846cd98783620951067dbb6e3",
+  "run": 40102496856,
+  "artifact": 12563439727,
+  "sha256": "01808f0c7dfb70cf45e2f3ac433ed625149af3b6a2418d58548460c6d81a0a5a",
+  "crc": "PASS",
+  "reports": {
+    "net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.html": {
+      "tests": 3,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.attachments.AttachmentOperationAndroidTest.html": {
+      "tests": 2,
+      "failures": 0,
+      "skipped": 0
+    }
+  }
+}

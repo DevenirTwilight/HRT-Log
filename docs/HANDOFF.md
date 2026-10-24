@@ -1,3 +1,9 @@
+## MED-02 #119 真实链API26/29已验；最终7d前置验证API35修正 — 2026-10-24
+
+e474原件核对：push API26 App2/Core3 PASS（art12563439727），PR API29 App2/Core3 PASS（art12564066860），原ZIP SHA/CRC与原HTML保存candidate-e474c53d；PR API35（art12564240662）App2中1FAIL，实际SAF第二次选择未返回，Disconnected nodes及loader二次更新日志保留。不可把26/29结果当35或新SHA验收。低内存e474原件12+8仍真实PASS。
+
+最终候选7d3186fd093cc03f5a4881944773fadeb73c03db（d762/e5测试修正汇总）：系统事件静默后refresh实时节点；显式SOURCE_TOUCHSCREEN与TOOL_TYPE_FINGER的标准单指事件（便捷obtain的UNKNOWN经framework bytecode核实）。现有App2前置独立跑且保存原报告，后续bulk仅排除已执行这两项，其余类/原断言/强停runner保留；精确方法名及0skip由runner校验。目的为尽早暴露实际系统选择失败，不新增测试/放宽时限/假返回。生产/调试组件与9d相同。PR Android40104324849、Science40104324702、低内存40104324801，当前仍待实际新源结果，Draft/OFF；失败需读原件，不无限重选或叠加推测。
+
 ## MED-02 #119 最终e474原件低内存核验PASS — 2026-10-24
 
 最终e474c53d41bfa7f846cd98783620951067dbb6e3独立API26/x86/512MiB/192MiB低内存40102500496 SUCCESS；官方artifact12563765836 SHA256=b5d7728909e86831f282eb372e543fe1849640de42ce0d66cc12f7460432cfa7，CRC核验PASS。实际原件OK12、原库四点+新操作四点fresh-PID各OK1（日志/ZIP/采样/收据在operation-flow/candidate-e474c53d/lowmem）。这不是旧SHA借证，不证明App viewer低内存/真机。最终JVM与Science也SUCCESS，三API/App DocumentsUI及主Android仍运行；#119仍Draft/未合并，feature0/NOT_REVIEWED_EXTERNALLY不变。
