@@ -1,0 +1,97 @@
+{
+  "source": "b252ddeb33181b4f40edaa2656ed14151fca4620",
+  "base": "caa2651eacec02a4ddcdd6e1e1f43b76d85372d0",
+  "status": "INTEGRATION_VERIFIED; feature0; NOT_REVIEWED_EXTERNALLY",
+  "requiredChecks": "PASS on both push and PR, plus independent low-memory",
+  "api26_29_35": {
+    "lifecycle": [
+      4,
+      0,
+      0
+    ],
+    "migration": [
+      7,
+      0,
+      0
+    ],
+    "runtimeData": [
+      1,
+      0,
+      0
+    ],
+    "runtimeUI": [
+      1,
+      0,
+      0
+    ],
+    "restoreProtection": [
+      9,
+      0,
+      0
+    ],
+    "order": "tests, failures, skipped",
+    "restart": "PREPARED/OBJECTS_COMMITTED/IN_SWITCH/SWITCHED: real kill and new PID, OK1 each on all APIs"
+  },
+  "lowMemory": {
+    "api": 26,
+    "ramMiB": 512,
+    "heapMiB": 192,
+    "tests": 9,
+    "failures": 0,
+    "skipped": 0,
+    "restartSeams": 4,
+    "sampledNotPeak": true
+  },
+  "artifacts": {
+    "12558035106": "230c9f9a91f9160ef21bd6cb249136261e9386e82514a66b41bde69cfa138ec9",
+    "12557028921": "b6cf3b7c5cb546736d1d57d8e72d9f48ed430ae30f1bad3e719c9730bfd4ca26",
+    "12557870381": "03f122a914c4428a09c582c5361ab78a14a965e663785530f94e4257a7b99610",
+    "12556564924": "9b404db376c7aa1406d07d4ea98d488336d535388e059504b182958fa1bd0be5"
+  },
+  "artifactVerification": "Official ZIP SHA256 + CRC, matching source; API26/29 PR run, API35 push run same exact SHA",
+  "localData": {
+    "tests": 599,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "notRun": [
+    "physical device",
+    "physical power loss",
+    "independent external security review"
+  ],
+  "limitations": [
+    "retained nonempty fallback libraries refuse single-library export",
+    "materialized/legacy/unknown reservations retain budget",
+    "permanent file/key deletion OFF",
+    "real attachment UI OFF"
+  ],
+  "sourceFileSHA256": {
+    ".github/workflows/android.yml": "031b621a1e1b2bc0603856027062466bcc0e235f43e0431ab294f9c83a66db5f",
+    "app/src/androidTest/java/net/plainnotes/app/labs/LabPanelRestartAndroidTest.kt": "ff003e18bb6a81de291966966f9554460c9f70942630b7e8fd8cf020de1af8fb",
+    "app/src/androidTest/java/net/plainnotes/app/stock/UndoSkippedRestartAndroidTest.kt": "d60ef1f8d94203d50827fb641e74b1fbeddc0ba3490df74818a963e65baac0e0",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/AttachmentFoundationRestartAndroidTest.kt": "c9f36c956fbb6e81f1d44df937337c280f75c1747cd1769576e51e0be035acb6",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/LibraryLifecycleAndroidTest.kt": "a5e7128e8610a0eb40fc9dd068b575433b508ec10d06c63f4183df093833f3fd",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/LibraryRestoreRestartAndroidTest.kt": "936ced076d1d053329b747a684912ce04260cd941b7aaa366ede4cfe9a1aa548",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/MigrationBaselineTest.kt": "7031854a9bda1c18f000bb93cec15cd6ba498921eee37d8cda8bbb11cfbe3b39",
+    "core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentFoundationContract.kt": "b2e2966420836710bc303c773f4093a81917975438a64444070618058d9ecd42",
+    "core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentMigrationContract.kt": "4c8f3c47e6be2cc7685289c9b8ced1b4ddcc98da8936f60e47495acad4c6f7d6",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/LabPanelDataContract.kt": "6e67882c91023782049cef00e7bf9a53d345f0f0f6a66e51351f9ea1dc4b3d85",
+    "core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceMigrationContract.kt": "757a07156193edcdd5052ac7f1a5f97100c72e4f94426fe71ac28987aadfa27e",
+    "core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt": "330f7146c10ff48776c183ad1c4537e175cf9a02e82739b9ebc88a7b0bcb4788",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryLifecycle.kt": "42e7ff06f4ec6b560ba7f9f52f80566273a32c1be2736b789f601d5c860f104a",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryLifecycleSchema.kt": "5a28c8871d09271cd2bcf295ec6ffd8c1c9afd41ce92b12f8c79a0cc962b9cb3",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryResourceFacts.kt": "92d5f46787b2186db63028e7b37dbce6201c39d7b79a53278dc23d9799db4771",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreAdmission.kt": "2bee0325847b747397c6bcd8dfe318d6726dc36dd4b5771ca016a3527af09bd5",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt": "142759e6005f27892d12d9f8693e9453edf7d7a1df21be3a82124cf7e4987124",
+    "core/data/src/main/java/net/plainnotes/app/data/Migrations.kt": "cb542ed65b52fd5f33beb2fe4bc986f4ff510e6a8272a36e6a3a2a4d6925b415",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt": "3fa8198d7cb5cf16258081df0398bf0231711cc4c9b2e52bd1c3bf84ae238ed5",
+    "core/data/src/main/java/net/plainnotes/app/data/SchemaGuards.kt": "34d29f7424597466ed9816d4fcd466286e5bd79c04558549025d9d084aad381e",
+    "core/data/src/medicalTest/java/net/plainnotes/app/data/HistoricalVisitContract.kt": "c82fa02559718fb2b086bd5343a43344148ed36968b7a2f8dce7145a0fe66de1",
+    "core/data/src/test/java/net/plainnotes/app/data/LibraryLifecycleSchemaTest.kt": "572ae1ec5a75bc95870f2b6e0f13cad320c8123373f41af0eeec9d9f4c131de6",
+    "core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt": "5afa7c10e3a60429bad16a199d12a084797e76a8259f560a01dbe445b5f00cc0",
+    "scripts/run_library_lifecycle_native.py": "a7ec4d03ff54eb4ff577c1bb1c8c1077366908b7e0422b1e5009111b7af37b59",
+    "scripts/run_library_low_memory_acceptance.sh": "484c406e23d2c4d8a33f0af34802c6d64bafa71997a202ba75c138b15fb7f222",
+    "scripts/run_library_restore_restart.py": "1a86612850c474509c764c19667e80ba551fce06c194987952131ca7cde611a0"
+  }
+}

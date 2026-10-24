@@ -1,3 +1,13 @@
+## MED-02 #118 生产源码b252双CI/三API/低内存完整通过，最终原件入库 — 2026-10-24
+
+b252ddeb33181b4f40edaa2656ed14151fca4620为实际完整验收源码：push40085591769和PR40085595382全部必需六门SUCCESS，Science双触发SUCCESS，独立低内存40085595923 SUCCESS。无冲突/未解决review，基线caa2651e（#116正常合并）。最终原件在lifecycle-evidence/accepted-b252：官方ZIP SHA+CRC、三API原HTML/四freshPID日志、低内存日志/阶段采样、精确run/文件SHA收据。不要据下方历史PENDING/FAIL重复实现旧阶段。
+
+API26/29/35各实际Lifecycle4、迁移7、RuntimeData1、RuntimeUI1、RestoreProtection9，均0fail/0skip；四强停点PREPARED/OBJECTS_COMMITTED/IN_SWITCH/SWITCHED各verify OK1，原断言实际核对PID不同。独立API26/x86/512MiB/192MiB：Heap1+Restore4+Lifecycle4=OK9，四freshPID各OK1。十阶段max观测Java73.60MiB/RSS111.43MiB仅采样，非峰值。完整本地data599/0fail/error/skip与native编译PASS；原8b/531真实失败、NULL守卫RED全部保留，ecba64b6中断仍UNDETERMINED。
+
+已交付真实内部LibraryLifecycle/LibraryResourceFacts、Room15→16非破坏迁移、单root事务owner0/start1/abort+release、持久全局资源清单与未知证据、现有完整snapshot/writer/reader导出准入。实际预算不抬高；仅有严格从未物化证明的预留获得未来余量信用，文件/key不删除。旧/已物化/未知状态保留，非空fallback集合不被单库备份忽略，明确REFUSED；未知返回UNKNOWN。业务Schema和PNBAK1/PNMEDBK1格式/密码学不改。
+
+本次收尾提交只有文档和原件，生产/测试/CI源码与b252完全一致；最终HEAD仍走正常必需检查，再按§106保护规则Ready/合并并核默认分支，不因原件提交绕过检查。合并事实与最终HEAD见PR #118收尾记录。feature_enabled=0、NOT_REVIEWED_EXTERNALLY、真实导入/查看/恢复UI及永久删除OFF；真机/物理断电NOT_RUN。下一步为经审阅的多库保留/完整导出政策、显式删除资格及外审和正式UX，不重建恢复引擎或旧P4研究。
+
 ## MED-02 #118 最终NULL守卫修正与完整隔离runner，待新SHA验收 — 2026-10-24
 
 531a7f68独立低内存40084558757官方ZIP12556567968 SHA/CRC已核：OK9、四freshPID各OK1。阶段观测maxJava73.86MiB/RSS101.80/PSS102.78，非峰值。正常三API四项清单通过，但PREPARED runner在原全套后遇到无关root alias而正确拒绝；此前只隔离类、遗漏runner，已补齐：同一干净合成测试包先跑4项，再重置合成包跑四真实强停seam，然后重置并跑原bulk；所有seam/未知拒绝/旧用例断言保留，低内存原脚本继续原有9+四seam。531失败和低内存原件在second-native，不以绿覆盖失败。
