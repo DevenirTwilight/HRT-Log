@@ -1,0 +1,11 @@
+{
+  "command": ":core:data:testDebugUnitTest :core:data:compileDebugAndroidTestKotlin",
+  "result": "PASS",
+  "counts": {
+    "tests": 599,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "changes": "Persist partial scan as opaque UNKNOWN; native malformed-root then restart assertions compiled, not locally executed. No protocol or schema delta beyond candidate16."
+}

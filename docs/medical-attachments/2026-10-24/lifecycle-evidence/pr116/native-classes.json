@@ -1,0 +1,92 @@
+[
+  {
+    "artifact": 12554372741,
+    "path": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.RuntimeLibraryRequestAndroidTest.html",
+    "counts": {
+      "tests": "1",
+      "failures": "0",
+      "skipped": "0",
+      "duration": "4.893s"
+    }
+  },
+  {
+    "artifact": 12554372741,
+    "path": "app/build/reports/androidTests/connected/debug/flavors/full/net.plainnotes.app.privacy.RestoreProtectionAndroidTest.html",
+    "counts": {
+      "tests": "9",
+      "failures": "0",
+      "skipped": "0",
+      "duration": "23.821s"
+    }
+  },
+  {
+    "artifact": 12554372741,
+    "path": "app/build/reports/androidTests/connected/debug/flavors/full/net.plainnotes.app.shell.RuntimeRequestUiAndroidTest.html",
+    "counts": {
+      "tests": "1",
+      "failures": "0",
+      "skipped": "0",
+      "duration": "2.185s"
+    }
+  },
+  {
+    "artifact": 12554064748,
+    "path": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.RuntimeLibraryRequestAndroidTest.html",
+    "counts": {
+      "tests": "1",
+      "failures": "0",
+      "skipped": "0",
+      "duration": "5.144s"
+    }
+  },
+  {
+    "artifact": 12554064748,
+    "path": "app/build/reports/androidTests/connected/debug/flavors/full/net.plainnotes.app.privacy.RestoreProtectionAndroidTest.html",
+    "counts": {
+      "tests": "9",
+      "failures": "0",
+      "skipped": "0",
+      "duration": "27.947s"
+    }
+  },
+  {
+    "artifact": 12554064748,
+    "path": "app/build/reports/androidTests/connected/debug/flavors/full/net.plainnotes.app.shell.RuntimeRequestUiAndroidTest.html",
+    "counts": {
+      "tests": "1",
+      "failures": "0",
+      "skipped": "0",
+      "duration": "2.767s"
+    }
+  },
+  {
+    "artifact": 12554193925,
+    "path": "core/data/build/reports/androidTests/connected/debug/net.plainnotes.app.data.RuntimeLibraryRequestAndroidTest.html",
+    "counts": {
+      "tests": "1",
+      "failures": "0",
+      "skipped": "0",
+      "duration": "5.017s"
+    }
+  },
+  {
+    "artifact": 12554193925,
+    "path": "app/build/reports/androidTests/connected/debug/flavors/full/net.plainnotes.app.privacy.RestoreProtectionAndroidTest.html",
+    "counts": {
+      "tests": "9",
+      "failures": "0",
+      "skipped": "0",
+      "duration": "35.318s"
+    }
+  },
+  {
+    "artifact": 12554193925,
+    "path": "app/build/reports/androidTests/connected/debug/flavors/full/net.plainnotes.app.shell.RuntimeRequestUiAndroidTest.html",
+    "counts": {
+      "tests": "1",
+      "failures": "0",
+      "skipped": "0",
+      "duration": "2.591s"
+    }
+  }
+]

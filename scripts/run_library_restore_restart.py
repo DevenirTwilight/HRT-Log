@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Three real-process durability seams for internal full-library authority; synthetic emulator only."""
+"""Four real-process durability seams for internal full-library authority; synthetic emulator only."""
 import json
 import subprocess
 import time
@@ -15,7 +15,7 @@ def main():
     assert subprocess.check_output(["adb", "shell", "getprop", "ro.kernel.qemu"], text=True).strip() == "1", "Emulator only"
     REPORT.mkdir(parents=True, exist_ok=True)
     subprocess.run(["adb", "install", "-r", "-t", str(ROOT / "core/data/build/outputs/apk/androidTest/debug/data-debug-androidTest.apk")], check=True)
-    for seam in ("OBJECTS_COMMITTED", "IN_SWITCH", "SWITCHED"):
+    for seam in ("PREPARED", "OBJECTS_COMMITTED", "IN_SWITCH", "SWITCHED"):
         base = ["adb", "shell", "am", "instrument", "-w", "-e", "class",
                 "net.plainnotes.app.data.LibraryRestoreRestartAndroidTest#persistentAuthorityChoosesExactlyOldOrVerifiedNewAfterProcessDeath",
                 "-e", "generation_seam", seam, "-e", "generation_phase"]
