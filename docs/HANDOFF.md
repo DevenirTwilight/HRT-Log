@@ -1,3 +1,9 @@
+## #115主线三API通过；宿主一项既有Compose非确定性失败保留 — 2026-10-24
+
+主线b73dcc61 Android40069934537的API26/29/35和JVM均SUCCESS，android宿主app2335中CausalTimeUiTest.english唯一FAIL（CalledFromWrongThread及SlotTable ArrayIndexOutOfBounds），data无失败；原557skip保留。相同tree的两个PR宿主曾全部通过，不能把这次主线FAIL省略或提前称主线CI_PASS。原job120800980677全部日志入库；只对该失败job补验一次，不改源码/断言、不重跑原生或整workflow。后续若仍失败必须定位根因，不重复挑绿。
+
+Runtime新分支已产生真实RED→GREEN的旧Scope跨generation/epoch读取拒绝；另真实RED证明PI extras被FLAG_UPDATE_CURRENT改写，正在以opaque batch/request URI身份分离修复。UI scope只在首次授权页面绑定，SavedState仅中性scope，未知旧草稿拒绝；入口/四语/提醒接线尚在本地开发，不称CI或Native已通过。基线115未覆盖或重写；历史工作树原型保留不集成。
+
 ## MED-02 #115已正常合并，开始独立Runtime接线 — 2026-10-24
 
 #115最终2fbe072708062ff03526cfa283cbfc84f15494d0，经唯一同源push API29补验120797918499 SUCCESS（14m12s，恢复4/UI13/提醒3全部0fail/skip），六门和低内存/所有原件充足，无冲突或未决review。正常Ready/保护merge于06:22:11完成，主线b73dcc617d9be6c1b35daea4157f093df3ef3313，tree7d95c3ef与验收源一致。主线Android40069934537在途、Science40069934522 SUCCESS，不提前称主线Android通过。原失败、重试、三API/低内存/三个新PID与host原件均已核并保留，本证据分支无生产元数据CI反复推送。
