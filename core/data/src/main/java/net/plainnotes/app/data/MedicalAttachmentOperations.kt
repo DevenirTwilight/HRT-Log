@@ -46,7 +46,14 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
         }
     }
     private fun record(db:NotesDatabase,s:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,t:Target)=
-        AttachmentTransaction.commit(db,s,cap) {permission();AttachmentIdentity.bind(db.openHelper.writableDatabase,s,t.kind.name,t.id)}
+        AttachmentTransaction.commit(db,s,cap) {
+            permission()
+            // Refuse unsupported retained-generation imports BEFORE binding a new target or
+            // opening a hostile provider. This is an early refusal, not a transferable permit:
+            // save() independently rechecks under its own actual PREPARE transaction.
+            DatabaseAccess.requireUnpartitionedStorage(db)
+            AttachmentIdentity.bind(db.openHelper.writableDatabase,s,t.kind.name,t.id)
+        }
     private fun AttachmentPersistentStore.Committed.receipt()=Receipt(operation,document,version,revision)
 
     /** One provider read, bounded memory only; ignore its declared size, name and MIME entirely.

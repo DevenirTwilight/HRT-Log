@@ -1,3 +1,11 @@
+## MED-02 accepted-main sync checkpoint — 2026-10-24
+
+#120 safely MERGED at efb2ff5dd52aea7cad52eec8bd4f042128853a2a (tree1bba7e4d equals accepted source60dc382b). Exact PR40124568442 all5 Android jobs/Science40124568445 and lowmem40124568449 SUCCESS. Official threeAPI ZIP SHA/CRC and actual MedicalAttachmentOperation3/0fail/0skip reports verified; lowmem actualOK12 +8 fresh-PID verifications retained. Older pending/failure notes below are historical. Main postmerge CI separate/pending.
+
+#121 prior source8f890ff7 lowmem40126500283 nowSUCCESS including unchanged baseline12, new heap-probe+3 collection cases and original restart gates; raw new archive pending verification. Earlier57ed0855 process exit remains UNDETERMINED, not retroactively fixed by a passing changed-script run. Owner-approved OFF PNMEDBK2, source code and byte layout are implemented; full local data608 PASS. This is one actual integration sync of accepted #120 main, preserving BOTH requirements147.I and147.J and every safety assertion. Only docs conflicted; accepted guard/tests merged normally, no UI changes. Final merged tree requires exact new-SHA CI; do not count prior8 green as that result. No further speculative source changes or blind native reruns.
+
+Restored writes/collection activation remain NOT_IMPLEMENTED; current v2 is authenticated collection codec only. Next independent integration must add retained capture, durable group restore and joint atomic admission before any functional-breakthrough claim. Publicfalse/feature0/external review NOT_REVIEWED_EXTERNALLY/permanent deletionOFF unchanged.
+
 ## MED-02 #121 first low-memory failure, bounded evidence follow-up — 2026-10-24
 
 57ed0855 native run40125887730 FAIL before new v2 tests: PID3744 exits in original LibraryLifecycleAndroidTest.committedHistoryTrashAndCompleteCurrentArchiveUseExistingWriterAndReader. Official artifact12572632712 SHA8043a84e…/CRC verified; native log stops after original restore4/lifecycle3, new collection gate NOT_RUN. Logcat has target process death (and launcher death), no target Java/native fatal stack or explicit target LMK line. Do NOT diagnose confirmed LMK or v2 failure; cause UNDETERMINED. Earlier current#120 source60dc382b original12+8 restart cases PASS is separate evidence, not a new-codec acceptance.
@@ -33,6 +41,20 @@ PR120 original93461e67 native failure is identified test-fixture misuse of saveA
 Owner explicitly approved the concrete collection proposal from PR120 source93461e67. This authorizes OFF PNMEDBK2 implementation, not public enablement, permanent freeze/deletion, quota changes or real originals. New independent branch feature/med02-collection-archive-20261024 starts from actual merged369267e; PR120 remains separate and running native CI, do not copy its unaccepted code.
 
 First production slice: strict collection membership/index codec and v2 domain-isolated crypto reuse, then writer/independent reader and targeted synthetic tamper/missing/duplicate/cross-library tests. Complete retained capture, atomic collection restore and durable joint write admission remain to connect; no restored-write breakthrough claimed until full end-to-end success. Exact source CI and native evidence must be recorded per checkpoint; do not rerun unrelated P4. Room16/business13/feature0/publicfalse unchanged.
+
+## MED-02 #120 native fixture correction — 2026-10-24
+
+93461e67 native/API26-lowmem40123862350 FAIL before attachment assertions: test called saveAppointment with nonzero nonexistent9876, which correctly means edit existing and fails at NotesRepository:836. Actual native log identifies this precise fixture error; no product/LMK attribution. Original official ZIP SHA a4dcb02c... verified/retained in evidence branch docs/med02-restored-write-evidence-20261024. Fix uses id0 new-record API and its real returned ID; all provider/table-value/ciphertext/alias/refusal assertions remain. Production guard unchanged. Only new fixed SHA can satisfy native gate; no blind old-source rerun.
+
+Owner has separately approved the concrete PNMEDBK2 OFF extension; authorization is committed170d78e0 on independent feature/med02-collection-archive-20261024 (base369267e, not unaccepted PR120 code). Scope remains OFF, v1/PNBAK1/limits preserved, no public enablement/permanent deletion/format freeze.
+
+## MED-02 restored-write admission checkpoint — 2026-10-24
+
+Latest base369267e: #119 **MERGED**, accepted source623fca6e; final main CI Android40116642106 all5SUCCESS / Science40116642050SUCCESS. Exact source/API26/29/35/512MiB/192MiB receipts and merge proof: evidence branch docs/med02-operation-evidence-20261024@6d516523. Older #119 PENDING text below is historical, do not redo it.
+
+Current branch feature/med02-restored-write-admission-20261024: audited real restored import/export boundaries. Nonempty retained libraries cannot be represented by v1; truly empty fallback is a distinct unproven joint-admission case, not an excuse to bypass the guard. Production fix moves existing refusal ahead of typed identity binding and provider reads; store PREPARE recheck retained. Existing native generation case now verifies no provider open or business/complete metadata-value digests/ciphertext-byte hashes/alias changes on refusal. Local compile/regression RUNNING; new-source native/CI NOT_RUN. No new restored-write success, no functional-breakthrough claim.
+
+See docs/medical-attachments/2026-10-24/restored-write/decision.md for actual call-chain gaps and concrete **unapproved** PNMEDBK2 compatibility decision. No new crypto/Room/backup/quota/UI changes. feature0 / publicfalse / externalreview NOT_REVIEWED_EXTERNALLY / permanent deletionOFF. Next: finish targeted checks, independent PR, record exact CI; new protocol needs separate owner approval, not the already-granted OFF-development permission.
 
 ## MED-02 #119最终检查发现并收紧并发不同输入回执边界 — 2026-10-24
 
