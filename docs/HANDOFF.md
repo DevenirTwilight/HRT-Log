@@ -1,3 +1,13 @@
+## MED-02 #120 exact-source local checkpoint — 2026-10-24
+
+PR120 Draft, source93461e672627107413c69e1464930c6d7f5bdf04, base369267e. Local data599/0fail/0error/0skip and Android-test Kotlin/Java compilation PASS. Unit sources and production unchanged from eff55db9 execution; final test task correctly UP-TO-DATE, not claimed second execution. Raw XML/log ZIP + SHA receipt under restored-write/evidence-93461e67.
+
+Final Science40123862369 SUCCESS. Android PR40123862401/push40123858611 and API26 lowmem40123862350 are RUNNING/QUEUED, new native acceptance **not yet proven**. Old eff candidates were cancelled by real test-source update, not rerun for green; no native RED claimed. Final full-value/ciphertext-byte refusal assertions must be checked in these actual artifacts before Ready/merge. Evidence-only branch commits skip CI to avoid rerunning unchanged application source; this never substitutes for required PR CI.
+
+Functional target remains BLOCKED: no restored-write success implemented. Nonempty fallback needs separately approved complete collection protocol; concrete PNMEDBK2 proposal in restored-write/decision.md is NOT_APPROVED/NOT_IMPLEMENTED. A genuinely empty fallback is not format-impossible, but joint reservation/backup closure remains unproven here; do not delete the production guard based on a COMPLETE precheck. All OFF/external-review/deletion boundaries unchanged.
+
+Next: owner decision on new default-OFF collection protocol, then implement actual joint durable reservations and full collection restore/export; in parallel finish exact PR120 checks and merge only the independent safe early-refusal fix under §106 if green/no review conflicts. Do not claim the full user task done from that small PR.
+
 ## MED-02 restored-write admission checkpoint — 2026-10-24
 
 Latest base369267e: #119 **MERGED**, accepted source623fca6e; final main CI Android40116642106 all5SUCCESS / Science40116642050SUCCESS. Exact source/API26/29/35/512MiB/192MiB receipts and merge proof: evidence branch docs/med02-operation-evidence-20261024@6d516523. Older #119 PENDING text below is historical, do not redo it.

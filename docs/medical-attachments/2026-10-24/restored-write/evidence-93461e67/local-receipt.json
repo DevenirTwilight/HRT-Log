@@ -1,0 +1,17 @@
+{
+  "source": "93461e672627107413c69e1464930c6d7f5bdf04",
+  "baseline": "369267e3741fcc3e263f6c51f1f81314abf887be",
+  "pr": 120,
+  "local": {
+    "tests": 599,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "interpretation": "599 tests executed with unchanged production/unit sources at eff55db9; final 93461e67 changes Android-test assertions and docs only. Final Gradle test task UP-TO-DATE, Android-test Kotlin recompiled successfully. Not a second test execution.",
+  "native": "PENDING",
+  "physicalDevice": "NOT_RUN",
+  "externalReview": "NOT_REVIEWED_EXTERNALLY",
+  "restoredWriteSuccess": "NOT_IMPLEMENTED",
+  "archiveSha256": "d3ef85f895a8ad9f56dc35fd729318d4bbb86fbad56033eb43fdbc244b3d19c6"
+}
