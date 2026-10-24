@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "phase": "P2-AK",
+  "source": "Price et al., Obstet Gynecol 1997;89:340-345, Figure 1 and Table 1. User-supplied PDF; scanned source on PDF page 4.",
+  "source_pdf_sha256": "40ecaf3a36b6481bbf2e9fc074066700f141ae3a51959b5bf6138cd920deb70a",
+  "original_crop_sha256": "25ff6138da10a0a7a68d0de36b045c32528d715cf128f61cf3f9794a3aa02db0",
+  "source_evidence": "P2-AJ previously independently traced 1 mg SL; P2-AK examines remaining two SL dose bands. THESE ARE ONE-READER VISUAL CONJECTURE INTERVALS, not independent blinded digitization, certified bounds, SD, or lab error.",
+  "times_postdose_h": [1,2,3,4,6,8,12,18,24],
+  "axis": {
+    "broken": true,
+    "upper_300_y_px": 136,
+    "upper_500_y_px": 49,
+    "lower_0_y_px": 841,
+    "lower_180_y_px": 207,
+    "pixels_1h_x": 222,
+    "pixels_24h_x": 905,
+    "interpretation": "Upper and lower are separate linear segments; trace identities particularly uncertain at 2-4h and low-range overlays at 8-24h."
+  },
+  "dose_arms": {
+    "0.5mg_SL": {
+      "dose_mg": 0.5,
+      "table_auc0_24_pg_h_ml": 970,
+      "table_cmax_mean_pg_ml": 245,
+      "points": [
+        {"hour":1,"center":250,"low":230,"high":270,"visibility":"partially resolved upper-zone center near break; Table Cmax only sanity check, not measurement input"},
+        {"hour":2,"center":123,"low":90,"high":180,"visibility":"strongly overlapped: two SL lines, 1mg solid and SD bars"},
+        {"hour":3,"center":65,"low":50,"high":90,"visibility":"overlapped in lower zone; line-style ambiguous"},
+        {"hour":4,"center":44,"low":35,"high":60,"visibility":"dash/dash-dot near each other"},
+        {"hour":6,"center":30,"low":23,"high":42,"visibility":"partially resolved marker and dashes"},
+        {"hour":8,"center":25,"low":17,"high":36,"visibility":"dashed and dotted lines intersect"},
+        {"hour":12,"center":20,"low":13,"high":27,"visibility":"dashed marker near dotted oral trace"},
+        {"hour":18,"center":11,"low":5,"high":24,"visibility":"overlaps oral baseline-level trajectories"},
+        {"hour":24,"center":9,"low":4,"high":18,"visibility":"overlaps low-range dashed traces"}
+      ]
+    },
+    "0.25mg_SL": {
+      "dose_mg": 0.25,
+      "table_auc0_24_pg_h_ml": 825,
+      "table_cmax_mean_pg_ml": 294,
+      "points": [
+        {"hour":1,"center":295,"low":275,"high":320,"visibility":"partially resolved upper-zone marker at axis break; Table Cmax only sanity check"},
+        {"hour":2,"center":143,"low":80,"high":190,"visibility":"strongly overlapped: SL line styles and SD bars"},
+        {"hour":3,"center":65,"low":40,"high":120,"visibility":"occluded by 0.5mg SL and solid line; central number particularly speculative"},
+        {"hour":4,"center":45,"low":27,"high":77,"visibility":"line-style ambiguous near 0.5mg SL"},
+        {"hour":6,"center":22,"low":10,"high":43,"visibility":"dash-dot and oral dotted trace near 20pg/mL"},
+        {"hour":8,"center":15,"low":6,"high":32,"visibility":"overlapping lower curves"},
+        {"hour":12,"center":11,"low":3,"high":23,"visibility":"near RIA detection limit and oral route curves"},
+        {"hour":18,"center":6,"low":0,"high":18,"visibility":"at/near low assay range; multiple routes unresolved"},
+        {"hour":24,"center":5,"low":0,"high":16,"visibility":"at/near low assay range; multiple routes unresolved"}
+      ]
+    }
+  },
+  "1mg_SL_P2AJ_comparator": {
+    "table_auc0_24_pg_h_ml": 2109,
+    "traced_auc0_baseline_pg_h_ml": 1550.5664,
+    "manual_stress_upper_auc0_baseline_pg_h_ml": 1789.5664,
+    "reference": "P2-AJ original scan re-reading; do not treat one-reader stress upper as error-certified bound"
+  },
+  "baseline_rule": "At t=0 baseline-subtracted concentration = 0. For the digitized postdose absolute group mean and mean predose b, subtract b at all >0h points. This yields AUC_corrected = AUC_traced_with_t0_zero - 23.5*b. b is NOT measured in the Figure. No negative baselines allowed in main scenarios.",
+  "dose_interpretation": "Do NOT derive dosing recommendations. The 0.5 and 0.25 profiles are subjective reading hypotheses with explicit wide intervals, not new empirical human data; published Table AUC is not an independent holdout."
+}

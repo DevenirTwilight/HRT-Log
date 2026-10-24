@@ -1,0 +1,277 @@
+{
+  "phase": "P2-AE",
+  "results": {
+    "early_no_pre__fixed_slow_weight": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 11.645225462737498,
+      "n_span_ge_4x": 15,
+      "n_span_ge_10x": 10,
+      "n_both_rate_boundaries": 5,
+      "n_single_boundary": 15,
+      "min_usable_measurements": 4
+    },
+    "early_no_pre__free_fast_slow_gains": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 28.508758980490857,
+      "n_span_ge_4x": 15,
+      "n_span_ge_10x": 15,
+      "n_both_rate_boundaries": 7,
+      "n_single_boundary": 15,
+      "min_usable_measurements": 4
+    },
+    "early_no_pre__known_background_free_gains": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 6.727171322029717,
+      "n_span_ge_4x": 13,
+      "n_span_ge_10x": 3,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 7,
+      "min_usable_measurements": 4
+    },
+    "through24_no_pre__fixed_slow_weight": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 3.4621462440245723,
+      "n_span_ge_4x": 3,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 6
+    },
+    "through24_no_pre__free_fast_slow_gains": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 4.621410787489092,
+      "n_span_ge_4x": 10,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 6
+    },
+    "through24_no_pre__known_background_free_gains": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.4481070866093106,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 6
+    },
+    "through24_with_pre__fixed_slow_weight": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.6696797083400687,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 7
+    },
+    "through24_with_pre__free_fast_slow_gains": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.911306365684375,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 7
+    },
+    "through24_with_pre__known_background_free_gains": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.4481070866093106,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 7
+    },
+    "through48_with_pre__fixed_slow_weight": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.4481070866093098,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 9
+    },
+    "through48_with_pre__free_fast_slow_gains": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.7479072949161782,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 9
+    },
+    "through48_with_pre__known_background_free_gains": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.3784142300054425,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 9
+    },
+    "through72_with_pre__fixed_slow_weight": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.378414230005442,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 10
+    },
+    "through72_with_pre__free_fast_slow_gains": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.6696797083400683,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 10
+    },
+    "through72_with_pre__known_background_free_gains": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.3784142300054425,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 10
+    }
+  },
+  "sensitivity": {
+    "sdfloor_3__drop_False__through24_with_pre": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.911306365684375,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 7
+    },
+    "sdfloor_3__drop_False__through48_with_pre": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.7479072949161782,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 9
+    },
+    "sdfloor_3__drop_True__through24_with_pre": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.9966141537533626,
+      "n_span_ge_4x": 2,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 6
+    },
+    "sdfloor_3__drop_True__through48_with_pre": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 2.8284271247461907,
+      "n_span_ge_4x": 0,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 7
+    },
+    "sdfloor_5__drop_False__through24_with_pre": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 3.9999999999999987,
+      "n_span_ge_4x": 7,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 1,
+      "min_usable_measurements": 7
+    },
+    "sdfloor_5__drop_False__through48_with_pre": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 3.5635948725613558,
+      "n_span_ge_4x": 3,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 9
+    },
+    "sdfloor_5__drop_True__through24_with_pre": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 4.0,
+      "n_span_ge_4x": 8,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 1,
+      "min_usable_measurements": 6
+    },
+    "sdfloor_5__drop_True__through48_with_pre": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 3.668016172818685,
+      "n_span_ge_4x": 5,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 7
+    },
+    "sdfloor_8__drop_False__through24_with_pre": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 6.924292488049143,
+      "n_span_ge_4x": 15,
+      "n_span_ge_10x": 1,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 2,
+      "min_usable_measurements": 7
+    },
+    "sdfloor_8__drop_False__through48_with_pre": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 5.993228307506725,
+      "n_span_ge_4x": 14,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 0,
+      "min_usable_measurements": 9
+    },
+    "sdfloor_8__drop_True__through24_with_pre": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 7.127189745122715,
+      "n_span_ge_4x": 15,
+      "n_span_ge_10x": 3,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 2,
+      "min_usable_measurements": 6
+    },
+    "sdfloor_8__drop_True__through48_with_pre": {
+      "n": 15,
+      "n_valid": 15,
+      "median_feasible_rate_ratio": 5.993228307506726,
+      "n_span_ge_4x": 14,
+      "n_span_ge_10x": 0,
+      "n_both_rate_boundaries": 0,
+      "n_single_boundary": 1,
+      "min_usable_measurements": 7
+    }
+  }
+}
