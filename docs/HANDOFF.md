@@ -1,3 +1,9 @@
+## MED-02 #119 最终7d三API实际成功；PR35补验仍在执行 — 2026-10-24
+
+7d3186fd push Android40104321069全部作业SUCCESS，包括API35 job120903036414；PR API26/API29/主Android/JVM均已SUCCESS，Science/独立低内存12+8已SUCCESS。API35完整原job log已通过独立GitHub接口保存candidate-7d3186fd/push-api35-native.log：实际App2严格runner完成、Core7及原库四点/操作四点fresh PID各PASS，正式release guard另有host log。此为同源实际原生结果，不是编译推断。
+
+API35官方artifact12565280195已发布，GitHub报告digest sha256:e59644d02efd7d62fe30f48b7b0080184133bc45f81b9f0aa72f1c57eda871ff；云环境离线后未本地解包核SHA/CRC，receipt明确只属provider-reported，不伪报独立校验。全App bulk原phase-gated用例有11 SKIPPED，原生log/receipt逐项保留；不能说全套零skip，MED八个独立强停runner则实际执行通过。PR35一次补验job120907265812仍进行，不再请求第二次，不以push通过绕过PR保护。Draft/OFF/外审未做仍保持。
+
 ## MED-02 #119 主Android成功；API35一次作业补验已请求；环境离线 — 2026-10-24
 
 最终7d3186fd：PR Android40104324849的JVM/API26/API29/主Android均SUCCESS，Science40104324702和独立低内存40104324801也SUCCESS。主Android原完整log保存candidate-7d3186fd/host-android-final.log，实际release identity/无INTERNET/附件release隔离均PASS。API35 job120902749869在任何测试前adb root连接关闭失败，原件已保存；父流程全部结束后已通过GitHub接口仅请求这一个job的一次同源码重试（success:true），不重跑整套/不改源。不得再次重复请求此补验。
