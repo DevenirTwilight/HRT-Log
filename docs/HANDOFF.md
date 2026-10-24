@@ -1,3 +1,9 @@
+## MED-02 #119 真实文件行触摸修正，待新源验收 — 2026-10-24
+
+9d735355独立低内存40101035993已原件核验OK12+原4/新4 fresh-PID各OK1，Core3与运行中核对反例也已越过；但push/PR API26均在真实取消后第二次选择sample.pdf超时（成功用例line91），因此不得合并或称真实链通过。两份官方失败原件/日志与低内存原件保存在独立docs/med02-operation-evidence-20261024分支operation-flow/candidate-9d735355；external-review索引仍NOT_REVIEWED_EXTERNALLY。
+
+当前最小修正只改测试：DocumentsUI RecyclerView文件名不保证提供clickable祖先；仅在真实documentsui窗口找到精确名称/可见/非空坐标后注入一次真实DOWN/UP，仍要求真实SAF返回和原全部提交/读取/关联/重开/撤权断言。超时附有界系统界面树，CI原件补app instrumentation results以免只留下HTML而无法区分系统窗口状态。编译PASS33s，生产代码相对9d735355完全未改；不mock选择、不延长等待、不重试选择/删断言。不声称此假设已原生证实，新精确SHA仍须正常CI。保留Draft/OFF与所有安全边界。
+
 ## MED-02 #119 SAF测试进程依赖已定位；补真实目标选择/重开与运行中核对保护 — 2026-10-24
 
 2797c2a9原生已越过只读篡改准备：三API Core Operation3全部通过；独立低内存40096966198实际OK12，原4+新4真实force-stop各verify OK1。官方ZIP SHA/CRC、原HTML/低内存与8seam日志在operation-flow/second-native。App2仍真实1FAIL：Choose按钮确认超时；API29原log明确测试包独立Provider进程queryRoots抛NoClassDefFoundError kotlin.jvm.internal.Intrinsics，测试APK没有目标App的Kotlin runtime。另API29旧导航用例CREATED状态超时保留UNKNOWN，不删断言或重跑旧源凑绿。

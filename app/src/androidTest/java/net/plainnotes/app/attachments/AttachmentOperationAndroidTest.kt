@@ -3,7 +3,9 @@ package net.plainnotes.app.attachments
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Rect
 import android.os.SystemClock
+import android.view.MotionEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.activity.result.ActivityResult
 import androidx.test.core.app.ActivityScenario
@@ -31,7 +33,16 @@ class AttachmentOperationAndroidTest {
     private val instrumentation get()=InstrumentationRegistry.getInstrumentation()
     private fun waitFor(label:String,timeout:Long=30000,condition:()->Boolean) {
         val end=SystemClock.uptimeMillis()+timeout;while(SystemClock.uptimeMillis()<end) {if(condition())return;Thread.sleep(100)}
-        fail("Synthetic timeout: $label")
+        val root=instrumentation.uiAutomation.rootInActiveWindow
+        val snapshot=StringBuilder()
+        fun describe(node:AccessibilityNodeInfo?,depth:Int) {
+            if(node==null || depth>7 || snapshot.length>6000)return
+            snapshot.append("\n").append(" ".repeat(depth)).append(node.className).append(" text=").append(node.text)
+                .append(" clickable=").append(node.isClickable).append(" visible=").append(node.isVisibleToUser)
+            for(i in 0 until node.childCount)describe(node.getChild(i),depth+1)
+        }
+        describe(root,0)
+        fail("Synthetic timeout: $label; window=${root?.packageName}; $snapshot")
     }
     private fun click(text:String) {
         if(!text.startsWith("SYNTHETIC sample.")) {
@@ -41,17 +52,24 @@ class AttachmentOperationAndroidTest {
         }
         // The picker is the actual system DocumentsUI, not a Compose test fixture. Dispatch
         // exactly one real selection; the caller asserts the actual returned SAF result.
-        var selected:AccessibilityNodeInfo?=null
+        var selected:Rect?=null
         waitFor(text) {
-            val found=instrumentation.uiAutomation.rootInActiveWindow?.findAccessibilityNodeInfosByText(text).orEmpty()
+            val root=instrumentation.uiAutomation.rootInActiveWindow ?: return@waitFor false
+            if(!root.packageName.toString().endsWith(".documentsui"))return@waitFor false
+            val found=root.findAccessibilityNodeInfosByText(text).orEmpty()
             for(n in found) {
-                n.performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SHOW_ON_SCREEN.id)
-                var p:AccessibilityNodeInfo?=n
-                repeat(5) {val node=p;if(node!=null && node.isClickable) {selected=node;return@waitFor true};p=node?.parent}
+                val bounds=Rect();n.getBoundsInScreen(bounds)
+                // DocumentsUI RecyclerView selection can be handled by a touch listener;
+                // a visible filename need not expose a clickable accessibility ancestor.
+                if(n.text?.toString()==text && n.isVisibleToUser && !bounds.isEmpty) {selected=bounds;return@waitFor true}
             }
             false
         }
-        requireNotNull(selected).performAction(AccessibilityNodeInfo.ACTION_CLICK)
+        val bounds=requireNotNull(selected);val down=SystemClock.uptimeMillis()
+        for(action in listOf(MotionEvent.ACTION_DOWN,MotionEvent.ACTION_UP)) {
+            val event=MotionEvent.obtain(down,SystemClock.uptimeMillis(),action,bounds.exactCenterX(),bounds.exactCenterY(),0)
+            try {assertTrue(instrumentation.uiAutomation.injectInputEvent(event,true))}finally {event.recycle()}
+        }
     }
     private fun hash(b:ByteArray)=MessageDigest.getInstance("SHA-256").digest(b).toList()
     private fun cleanup(f:SyntheticAttachmentFixture) {

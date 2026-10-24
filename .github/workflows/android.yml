@@ -190,6 +190,7 @@ jobs:
             core/data/build/reports/med02-generation-restart/
             core/data/build/reports/med02-format-readiness/
             app/build/reports/androidTests/
+            app/build/outputs/androidTest-results/
             app/build/reports/bdpm/
             app/build/reports/unified-device-performance.json
             app/build/reports/pr19-display-performance.json
@@ -275,4 +276,5 @@ jobs:
             core/data/build/reports/med02-generation-restart/
             core/data/build/reports/med02-format-readiness/
             app/build/reports/androidTests/
+            app/build/outputs/androidTest-results/
             app/build/reports/attachment-poc-evidence.json
