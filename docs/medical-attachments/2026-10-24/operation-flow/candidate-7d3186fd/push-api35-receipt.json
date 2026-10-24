@@ -1,0 +1,51 @@
+{
+  "source_sha": "7d3186fd093cc03f5a4881944773fadeb73c03db",
+  "run": 40104321069,
+  "job": 120903036414,
+  "result": "SUCCESS",
+  "artifact": {
+    "id": 12565280195,
+    "name": "device-test-results",
+    "size_in_bytes": 1140937,
+    "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12565280195",
+    "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12565280195/zip",
+    "expired": false,
+    "created_at": "2026-10-24T15:18:23Z",
+    "expires_at": "2027-01-22T14:50:54Z",
+    "updated_at": "2026-10-24T15:18:23Z",
+    "digest": "sha256:e59644d02efd7d62fe30f48b7b0080184133bc45f81b9f0aa72f1c57eda871ff",
+    "workflow_run": {
+      "id": 40104321069,
+      "repository_id": 1406091596,
+      "head_repository_id": 1406091596,
+      "head_branch": "feature/med02-operation-flow-20261024",
+      "head_sha": "7d3186fd093cc03f5a4881944773fadeb73c03db"
+    }
+  },
+  "archive_digest_verification": "GITHUB_REPORTED_ONLY; local SHA/CRC extraction NOT_RUN after cloud environment became unavailable",
+  "native_evidence": "App Operation2 strict runner completes with exact two method names and zero skipped/failure/error; isolated Core7 executes; four authority and four operation fresh-PID PASS lines retained",
+  "bulk_skipped_tests": [
+    "2026-10-24T15:01:30.1000842Z net.plainnotes.app.data.AttachmentRestoreRestartAndroidTest > quarantineNeverActivatesAfterActualProcessDeath[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:04:27.7998545Z net.plainnotes.app.data.LibraryRestoreRestartAndroidTest > persistentAuthorityChoosesExactlyOldOrVerifiedNewAfterProcessDeath[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:06:32.6000719Z net.plainnotes.app.data.MeasuredRestoreDeathProbe > verifyFreshProcessRollsBackExactDataset[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:06:32.6003942Z net.plainnotes.app.data.MeasuredRestoreDeathProbe > prepareAndWaitForExternalKill[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:06:36.6000353Z net.plainnotes.app.data.MeasuredSaveDeathProbe > verifyFreshProcessHasExactDatasetAndNoAutomaticReplay[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:06:36.6003257Z net.plainnotes.app.data.MeasuredSaveDeathProbe > prepareAndWaitForExternalKill[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:06:57.8997521Z net.plainnotes.app.data.MedicalAttachmentOperationRestartAndroidTest > safFacadeReconcilesRealCommitAfterFreshProcess[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:06:59.7998283Z net.plainnotes.app.data.NativeCiHeapProbe > actualProcessHeapMatchesFrozen192MiBBudget[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:08:52.9023871Z net.plainnotes.app.BdpmOfflineRestartAndroidTest > freshOfflineProcessStillReadsInstalledOfficialCatalogue[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:10:24.0023201Z net.plainnotes.app.disguise.ProcessRestartAndroidTest > prepare[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:10:24.0051282Z net.plainnotes.app.disguise.ProcessRestartAndroidTest > verifyFreshProcess[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:10:24.5022344Z net.plainnotes.app.labs.LabPanelRestartAndroidTest > prepare[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:10:24.5056715Z net.plainnotes.app.labs.LabPanelRestartAndroidTest > verifyFreshProcess[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:11:02.9022801Z net.plainnotes.app.privacy.ImportCleanupRestartAndroidTest > prepare[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:11:02.9025943Z net.plainnotes.app.privacy.ImportCleanupRestartAndroidTest > verifyFreshProcess[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:11:12.6024976Z net.plainnotes.app.privacy.RestoreProcessDeathAndroidTest > prepareOpenPasswordAndWaitForExternalKill[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:11:13.1024470Z net.plainnotes.app.privacy.RestoreProcessDeathAndroidTest > freshProcessHasNoPendingRestoreOrPassword[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:16:31.0022629Z net.plainnotes.app.stock.VoidedPackageRestartAndroidTest > prepare[emulator-5554 - 15] SKIPPED ",
+    "2026-10-24T15:16:31.0025492Z net.plainnotes.app.stock.VoidedPackageRestartAndroidTest > verifyFreshProcess[emulator-5554 - 15] SKIPPED "
+  ],
+  "warning": "Phase-gated bulk skips are not passes. MED-02 dedicated eight process runners actually execute; no claim that all historical bulk tests executed without skips.",
+  "physical": "NOT_RUN",
+  "external_review": "NOT_REVIEWED_EXTERNALLY"
+}
