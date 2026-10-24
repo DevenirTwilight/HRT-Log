@@ -1,0 +1,7 @@
+{
+  "source": "app/src/androidTest/java/net/plainnotes/app/attachments/SyntheticDocumentsProvider.java",
+  "source_sha256": "065ae5587565a99ff664ed0af902992792ec8aef89e53131fa79e52a3b54aebc",
+  "class_sha256": "ded8299b7c539dc337a0be90af911b6273270ec1852392cf53a25835a16520a1",
+  "kotlin_runtime_reference_in_class": false,
+  "validation": "javap constant pool; native queryRoots still requires final-source emulator execution"
+}

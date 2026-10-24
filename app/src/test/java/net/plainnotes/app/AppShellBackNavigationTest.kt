@@ -109,8 +109,11 @@ class AppShellBackNavigationTest {
         runBlocking { repo.appointment(AppointmentEntity(at_utc = Instant.now().plus(3, ChronoUnit.DAYS).toEpochMilli(), at_zone = "UTC", type = "CHECKUP", practitioner = "Synthetic clinic", remind_minutes_before = 0)) }
         model.sync()
         show(); open(Destination.VISITS)
-        ui.onNodeWithText(context.getString(R.string.appointment), useUnmergedTree = true).assertExists()  // list FAB
+        // sync() and the destination's loadExtra() publish asynchronously. Until the committed
+        // visit is visible the empty-state action and the list FAB legitimately share this text.
+        // Wait for the actual visit first; keep the exact-one FAB and both Back assertions.
         ui.waitUntil(10_000) { ui.onAllNodesWithText("Synthetic clinic", substring = true).fetchSemanticsNodes().isNotEmpty() }
+        ui.onNodeWithText(context.getString(R.string.appointment), useUnmergedTree = true).assertExists()  // list FAB
         ui.onAllNodesWithText("Synthetic clinic", substring = true).onFirst().performClick(); ui.waitForIdle()
         ui.onNodeWithText(context.getString(R.string.appointment), useUnmergedTree = true).assertDoesNotExist()  // list FAB hidden in the detail
         back()

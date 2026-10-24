@@ -1,0 +1,87 @@
+{
+  "head": "2797c2a949c05aca61339ca1ec95818be34944dd",
+  "run": 40096966248,
+  "lowMemoryRun": 40096966198,
+  "core": "Operation3 PASS on26/29/35; read-only tamper precondition repaired",
+  "lowMemory": "PASS12 plus four old/four operation fresh-process verifies; not viewer low-memory",
+  "app": "FAIL real SAF choose timeout; standalone test-provider NoClassDefFoundError Kotlin Intrinsics confirmed in API29 log; additional API29 navigation lifecycle assertion UNKNOWN",
+  "finalSource": "New explicit target/reopen, provider runtime, and in-flight reconciliation changes still require native verification",
+  "artifacts": [
+    {
+      "api": "26",
+      "artifact": 12561119939,
+      "sha256": "38bc9cea4c201333a58bd1958252fc9d5f1ed888438e7dadff0ae099a21d57a8",
+      "crc": "PASS",
+      "reports": {
+        "net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.html": {
+          "tests": 3,
+          "failures": 0,
+          "skipped": 0
+        },
+        "net.plainnotes.app.attachments.AttachmentOperationAndroidTest.html": {
+          "tests": 2,
+          "failures": 1,
+          "skipped": 0
+        },
+        "net.plainnotes.app.shell.InAppNavigationLockAndroidTest.html": {
+          "tests": 13,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    },
+    {
+      "api": "29",
+      "artifact": 12561697072,
+      "sha256": "239c19af64641c7708b4a1b5c236edbd5f2a0552b7cc9d1f7b92b0448fa65c42",
+      "crc": "PASS",
+      "reports": {
+        "net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.html": {
+          "tests": 3,
+          "failures": 0,
+          "skipped": 0
+        },
+        "net.plainnotes.app.attachments.AttachmentOperationAndroidTest.html": {
+          "tests": 2,
+          "failures": 1,
+          "skipped": 0
+        },
+        "net.plainnotes.app.shell.InAppNavigationLockAndroidTest.html": {
+          "tests": 13,
+          "failures": 1,
+          "skipped": 0
+        }
+      }
+    },
+    {
+      "api": "35",
+      "artifact": 12561359276,
+      "sha256": "afd205480440d46347d58319101eb07e0108c292822e6e13e32a55d2dc6c8377",
+      "crc": "PASS",
+      "reports": {
+        "net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.html": {
+          "tests": 3,
+          "failures": 0,
+          "skipped": 0
+        },
+        "net.plainnotes.app.attachments.AttachmentOperationAndroidTest.html": {
+          "tests": 2,
+          "failures": 1,
+          "skipped": 0
+        },
+        "net.plainnotes.app.shell.InAppNavigationLockAndroidTest.html": {
+          "tests": 13,
+          "failures": 0,
+          "skipped": 0
+        }
+      }
+    },
+    {
+      "api": "lowmem",
+      "artifact": 12561597140,
+      "sha256": "55fbd0e888158aec8bb61d1dfdb2545606666f609d5fb8a3c7c9a62e5d3e7b3f",
+      "crc": "PASS",
+      "reports": {}
+    }
+  ]
+}

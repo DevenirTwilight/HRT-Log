@@ -32,3 +32,14 @@ class ReleaseIsolationTest(unittest.TestCase):
             p=Path(root)/'empty.apk'
             with zipfile.ZipFile(p,'w') as z:z.writestr('AndroidManifest.xml',b'manifest')
             with self.assertRaises(AssertionError):check_apk(p)
+    def test_operation_host_is_debug_only_and_public_entry_stays_off(self):
+        root=Path(__file__).resolve().parent.parent
+        debug=(root/'app/src/debug/AndroidManifest.xml').read_text()
+        self.assertIn('AttachmentOperationTestActivity" android:exported="false"',debug)
+        for source in ('main','release'):
+            for path in (root/f'app/src/{source}').rglob('*.xml'):
+                self.assertNotIn('AttachmentOperationTestActivity',path.read_text())
+        controller=(root/'app/src/main/java/net/plainnotes/app/attachments/AttachmentFlowController.kt').read_text()
+        self.assertIn('PUBLIC_ENTRY_ENABLED=false',controller)
+        self.assertFalse((root/'core/data/src/main/java/net/plainnotes/app/data/SyntheticAttachmentDatabase.kt').exists())
+        self.assertTrue((root/'core/data/src/debug/java/net/plainnotes/app/data/SyntheticAttachmentDatabase.kt').exists())

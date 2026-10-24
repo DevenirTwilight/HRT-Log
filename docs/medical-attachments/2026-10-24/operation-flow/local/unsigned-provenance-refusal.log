@@ -1,0 +1,45 @@
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :importer:processResources NO-SOURCE
+> Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :pk-engine:compileKotlin UP-TO-DATE
+> Task :core:domain:compileKotlin UP-TO-DATE
+> Task :core:domain:compileJava NO-SOURCE
+> Task :pk-engine:compileJava NO-SOURCE
+> Task :core:domain:processResources NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :pk-engine:processResources UP-TO-DATE
+> Task :pk-engine:classes UP-TO-DATE
+> Task :pk-engine:jar UP-TO-DATE
+> Task :core:domain:jar UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:verifyReleaseProvenance FAILED
+> Task :importer:compileKotlin UP-TO-DATE
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:verifyReleaseProvenance'.
+> Release build tree has uncommitted or untracked changes relative to 80c38bcabc7541d77f2c17f9a67d84eb9f574440: commit or clean them first
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 13s
+7 actionable tasks: 1 executed, 6 up-to-date

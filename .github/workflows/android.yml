@@ -20,6 +20,7 @@ jobs:
         run: |
           python3 -m unittest discover -s scripts -p 'test_attachment_design_validation.py'
           python3 -m unittest discover -s scripts -p 'test_attachment_release_isolation.py'
+          python3 -m unittest discover -s scripts -p 'test_configure_ansm_native_runtime.py'
           python3 scripts/generate_unified_model_reference.py --check
           python3 scripts/check_unified_concentration.py
           python3 -m unittest discover -s scripts -p 'test_collect_unified_device_performance.py'
@@ -132,9 +133,11 @@ jobs:
             adb shell input keyevent 82
             adb shell wm dismiss-keyguard
             ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.NativeCiHeapProbe -Pandroid.testInstrumentationRunnerArguments.ansmExpectedHeapMb=192 --no-parallel --max-workers=2
+            # Execute both real SAF operation cases once, before unrelated bulk work.
+            python3 scripts/run_attachment_operation_native.py
             python3 scripts/run_library_lifecycle_native.py
             adb logcat -G 16M
-            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=net.plainnotes.app.data.LibraryLifecycleAndroidTest --no-parallel --max-workers=2
+            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=net.plainnotes.app.data.LibraryLifecycleAndroidTest,net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest --no-parallel --max-workers=2
             python3 scripts/collect_med02_format_readiness.py
             python3 scripts/run_attachment_foundation_restart.py
             python3 scripts/run_attachment_persistent_restart.py
@@ -148,7 +151,8 @@ jobs:
             python3 scripts/run_b3_gate_restart.py AFTER_COMMIT
             python3 scripts/run_b3_gate_red.py
             adb logcat -G 16M
-            ./gradlew :app:connectedFullDebugAndroidTest --no-parallel --max-workers=2
+            # Both operation cases already ran above; retain every other original app case.
+            ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=net.plainnotes.app.attachments.AttachmentOperationAndroidTest --no-parallel --max-workers=2
             # AGP can uninstall target/instrumentation APKs after connected tests (same as existing restart scripts).
             adb install -r -t app/build/outputs/apk/full/debug/app-full-debug.apk
             adb install -r -t app/build/outputs/apk/androidTest/full/debug/app-full-debug-androidTest.apk
@@ -180,6 +184,7 @@ jobs:
           path: |
             core/data/build/reports/androidTests/
             core/data/build/reports/med02-lifecycle-isolated/
+            core/data/build/reports/med02-operation-restart/
             core/data/build/reports/ansm-write-process-death/
             core/data/build/reports/gate2/
             core/data/build/reports/gate3/
@@ -189,6 +194,8 @@ jobs:
             core/data/build/reports/med02-generation-restart/
             core/data/build/reports/med02-format-readiness/
             app/build/reports/androidTests/
+            app/build/reports/med02-operation-isolated/
+            app/build/outputs/androidTest-results/
             app/build/reports/bdpm/
             app/build/reports/unified-device-performance.json
             app/build/reports/pr19-display-performance.json
@@ -232,6 +239,8 @@ jobs:
             adb shell input keyevent 82
             adb shell wm dismiss-keyguard
             ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.NativeCiHeapProbe -Pandroid.testInstrumentationRunnerArguments.ansmExpectedHeapMb=192 --no-parallel --max-workers=2
+            # Execute both real SAF operation cases once, before unrelated bulk work.
+            python3 scripts/run_attachment_operation_native.py
             python3 scripts/run_library_lifecycle_native.py
             adb logcat -G 16M
             ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.AttachmentFoundationAndroidTest,net.plainnotes.app.data.AttachmentSqlCipherMigrationTest,net.plainnotes.app.data.AttachmentKeyAndroidTest,net.plainnotes.app.data.AttachmentPersistentStoreAndroidTest,net.plainnotes.app.data.AttachmentPersistentRestartAndroidTest,net.plainnotes.app.data.AttachmentBackupCandidateAndroidTest,net.plainnotes.app.data.AttachmentBackupPreparationAndroidTest,net.plainnotes.app.data.AttachmentRestorePreflightAndroidTest,net.plainnotes.app.data.AttachmentRestoreStagingAndroidTest,net.plainnotes.app.data.AttachmentBusinessReconstructionAndroidTest,net.plainnotes.app.data.AttachmentBusinessRestoreAndroidTest,net.plainnotes.app.data.AttachmentFormatReadinessAndroidTest,net.plainnotes.app.data.MedicalArchiveAndroidTest,net.plainnotes.app.data.LibraryRestoreAndroidTest,net.plainnotes.app.data.RuntimeLibraryRequestAndroidTest,net.plainnotes.app.data.Gate2StoreAndroidTest,net.plainnotes.app.data.Gate2RestartAndroidTest,net.plainnotes.app.data.Gate2SafAndroidTest,net.plainnotes.app.data.Gate2ContextAndroidTest,net.plainnotes.app.data.Gate3ProcessLockAndroidTest,net.plainnotes.app.data.B3GateAndroidTest,net.plainnotes.app.data.B3RestartAndroidTest,net.plainnotes.app.data.Ansm03b0InventoryAndroidTest,net.plainnotes.app.data.BackupReplacementAndroidTest,net.plainnotes.app.data.ReferencePersistenceAndroidTest,net.plainnotes.app.data.BdpmCatalogueAndroidTest,net.plainnotes.app.data.ReferenceMigrationAndroidTest,net.plainnotes.app.data.MeasuredContainerAndroidTest,net.plainnotes.app.data.MeasuredConsumptionAndroidTest,net.plainnotes.app.data.MeasuredSaveCoordinatorAndroidTest,net.plainnotes.app.data.ReferenceAuditStreamingAndroidTest,net.plainnotes.app.data.P4LifecycleGrowthAndroidTest,net.plainnotes.app.data.DailyTrashCollisionAndroidTest,net.plainnotes.app.data.LabPanelDataAndroidTest --no-parallel --max-workers=2
@@ -264,6 +273,7 @@ jobs:
             app/build/reports/demo/
             core/data/build/reports/androidTests/
             core/data/build/reports/med02-lifecycle-isolated/
+            core/data/build/reports/med02-operation-restart/
             core/data/build/reports/ansm-write-process-death/
             core/data/build/reports/gate2/
             core/data/build/reports/gate3/
@@ -273,4 +283,6 @@ jobs:
             core/data/build/reports/med02-generation-restart/
             core/data/build/reports/med02-format-readiness/
             app/build/reports/androidTests/
+            app/build/reports/med02-operation-isolated/
+            app/build/outputs/androidTest-results/
             app/build/reports/attachment-poc-evidence.json

@@ -1,3 +1,83 @@
+## MED-02 #119最终检查发现并收紧并发不同输入回执边界 — 2026-10-24
+
+70584c6f正常PR40112205294五Android jobs/Science/低内存全部SUCCESS，原导航修正通过；仍不直接合并：末次源码审查识别了两个控制器同UUID、不同输入同时越过前置operationState检查的竞争。底层已有request digest/写锁会正确拒绝异载荷，但旧controller通用异常后COMMITTED核对可能自动把另一输入的回执显示为Saved。此为源码导出的反例，尚未在旧生产源码上运行新负向用例，不能伪称已有native RED。
+
+最小修正仅AttachmentFlowController：真实save返回receipt仍Saved；异常后查到COMMITTED仅ReconcileRequired，明确只读核对后才显示实际操作事实，不自动重开URI/写入。覆盖输入失败/取消后同UUID竞争，不需新store异常、持久队列、crypto或迁移；原store/全部全量审核不变。新负向场景放入既有App失败测试：真实测试Provider管道在journal前有界阻塞第一个worker，让相同UUID/目标/doc的另一内容真实COMMIT，再释放不同字节；要求第一个ReconcileRequired、仅一文档、胜出原字节不变、显式核对同实际receipt。测试provider控制仅test APK且模拟器，超时释放finally；不削弱原App2所有SAF/撤权/取消断言。
+
+当前新候选需精确SHA重新编译/针对性本地与正常必需CI，新增并发native仍NOT_RUN。705原件和此前失败继续保留，不能把705绿冒充新回执规则已验收。外审inventory已更新到具体文件SHA，包仍NOT_REVIEWED_EXTERNALLY。feature0/public entry/真实原件/永久删除/签名发布OFF；未触Room16/协议/配额/前端主题或其他模块。继续原PR119，不新开相同开发分支；只验这次实质安全修正，不重跑旧源挑绿。
+
+## MED-02 #119 导航阻断最小修正与外审材料 — 2026-10-24
+
+接手真实HEAD2a47be6a、主线f5f94238，继续原分支/PR119，无工作树覆盖。官方PR Android40109281652真实FAIL仅JVM AppShellBackNavigationTest:112；原HTML明确两个Appointment文本（异步sync尚未发布就诊时，empty-state+FAB并存），未执行Back。生产AppShell/VisitsScreen/NotesViewModel相对主线无变。仅将原10s真实就诊出现wait前置于原exact-one FAB断言，不减断言/不sleep/不改导航。原源码本地17/17也通过，明确不是本地确定复现；失败HTML、官方ZIP digest/CRC收据和前后本地17/0fail/error/skip均保留navigation-fix。新最终SHA必需CI待验，不以同源push绿掩盖失败。
+
+2a47官方API26/29/35+低内存四ZIP已下载并逐一核对GitHub SHA-256及全CRC，原件和选定HTML/强停日志入accepted-2a47be6a。三API各App2真实DocumentsUI/Core3/0fail/0skip，操作4强停点每点verify OK1；低内存原512MiB/192MiB实际core12及原generation4+operation4新PID核对均通过。独立Science40109281694绿。原生生产/测试/配置未因本次JVM修正改变，不无故重启独立低内存研究；最终正常CI仍须全过。
+
+external-review/README.md和逐文件SHA inventory列明威胁边界、Keystore/Tink/完整备份、原子提交/恢复、SAF/provider/native parser/内存与撤权风险，以及有限剩余工作。NOT_REVIEWED_EXTERNALLY不变；不代表review已做。公共入口/feature0/真实原件/永久删除仍OFF，无Schema/格式/权限/配额/签名或发布变动。完整viewer低内存/物理设备/TalkBack/物理断电NOT_RUN，ecba64b6原因继续UNDETERMINED；managed新写入及非空fallback导出仍按原政策拒绝。下一步核本修正精确SHA正常六门/无冲突无未解决review，再§106正常保护合并并核主线；不重新做旧基础设施。
+
+## MED-02 #119 真实adbd重启确认缺口最小修复，默认OFF — 2026-10-24
+
+cd01 PR API35再次在任何测试之前adb root返回closed而退出，属于明确启动阻断；不再盲重试旧SHA。原配置已有UID=0断言，但check_output先因root确认返回丢失抛错，未达到wait/UID核验。最小CI基础设施改动：记录非零确认，最多30s等待重连，确认仍同一emulator serial且实际UID=0才继续；非root/未知/换设备/超时都在任何setprop前拒绝。原selected emulator/API/qemu、192m heapsize/growthlimit、120s framework重启与原生Runtime.maxMemory探针断言保留，512MiB低内存/业务预算不改。这不是P4性能研究或应用权限变更。
+
+同一原子提交包含4个纯fake-executor合同检查和CI执行命令，覆盖root确认成功/丢失仍须实际root、非root或未知拒绝、设备变更拒绝、重连超时拒绝；不触物理设备。无本地执行环境，全部新行为尚待精确新HEAD正常CI/三API验证。既有伪装测试10s就绪等待与持续PRIMARY/无第二PIN/无重开边界断言保留，原断言不删；AppShell/MainActivity/NotesVM仅阅读未改。
+
+只验此有实质修正候选；如仍有不可解释失败，保留原始工件并停止重复运行/延时叠补。#119继续Draft，feature0/NOT_REVIEWED_EXTERNALLY，正式入口/真实原件/永久删除/签名发布OFF。最新有效原件和交接在docs/med02-operation-evidence-20261024；云环境仍不可用，源通过GitHub原子正常快进提交，恢复环境后先fetch不得覆盖远端。
+
+## MED-02 #119 两项真实操作验收前置，原断言不删 — 2026-10-24
+
+为避免每次在旧全套之后才暴露系统选择失败，原App Operation2在三API先独立实际执行，原HTML/instrumentation输出先拷贝med02-operation-isolated；后续原bulk仅排除这两项已执行用例，其余类/断言/旧runner全部保留。runner严格核对精确两个方法、零skip/failure/error，不把空测试当通过。新增测试数量为零，不修改原业务测试。新源仍须正常六门/三API和低内存，且不得借e474 API26/29通过替代新最终HEAD。外审/真机/正式入口状态不变。
+
+## MED-02 #119 标准finger触摸补齐（测试专用）— 2026-10-24
+
+API35 framework bytecode独立核对：MotionEvent便捷obtain(x,y)调用PointerProperties.clear后只设置id，toolType仍UNKNOWN；之后setSource不会把它变为FINGER。旧API26/29通过不能证明该事件等同真实手指。当前测试使用显式PointerProperties(TOOL_TYPE_FINGER)+坐标/pressure/size和SOURCE_TOUCHSCREEN的标准单指DOWN/UP，并保留d762的事件静默后refresh实时节点。生产代码/全部真实SAF和提交/关联/预览断言不变，不用额外点击或假返回。此修正不声明已经证明API35故障唯一根因，仍须新原生结果；失败则保留具体原件，不筛绿。
+
+## MED-02 #119 API26/29真实链通过，API35过渡节点失败已保留 — 2026-10-24
+
+e474c53d源码：push API26 SUCCESS（40102496856/art12563439727），PR API29 SUCCESS（40102500440/art12564066860）；原HTML核对各App2/Core3均0fail/0skip。真实三类DocumentsUI/明确确认/typed关联/重开DB/认证预览/撤权成功不是仅编译；独立低内存40102500496 OK12+8新PID也已核。PR API35 device-tests真实失败（art12564240662）：第二次选择后等待selected超时，窗口仍DocumentsUI，日志14:37:47.270 Disconnected nodes，14:37:47.274二次directory loader更新，无文件激活/返回；不能归因后端保存，不能把26/29通过冒充35通过。三原ZIP/HTML/SAF logcat和失败job日志在独立证据分支operation-flow/candidate-e474c53d。
+
+最小测试修正：首次看见文件后等真实accessibility事件静默300ms（有界3s），重新获得/refresh实时root与精确可见文件节点及坐标，再只触摸一次；取消旧picker后不使用过渡缓存。原30s等待/真实SAF返回/提交及关联/重开/撤权全部断言保留；有界失败树增加深度以免停在Drawer容器。Kotlin编译PASS32s，生产代码未改。只验这一新候选，不重跑旧SHA筛绿；若仍遇环境未知，保留新原件定位，不继续盲叠点击补丁。Draft/OFF/外审未做/Room16/配额/协议/主导航均不变。
+
+## MED-02 #119 真实文件行触摸修正，待新源验收 — 2026-10-24
+
+9d735355独立低内存40101035993已原件核验OK12+原4/新4 fresh-PID各OK1，Core3与运行中核对反例也已越过；但push/PR API26均在真实取消后第二次选择sample.pdf超时（成功用例line91），因此不得合并或称真实链通过。两份官方失败原件/日志与低内存原件保存在独立docs/med02-operation-evidence-20261024分支operation-flow/candidate-9d735355；external-review索引仍NOT_REVIEWED_EXTERNALLY。
+
+当前最小修正只改测试：DocumentsUI RecyclerView文件名不保证提供clickable祖先；仅在真实documentsui窗口找到精确名称/可见/非空坐标后注入一次真实DOWN/UP，仍要求真实SAF返回和原全部提交/读取/关联/重开/撤权断言。超时附有界系统界面树，CI原件补app instrumentation results以免只留下HTML而无法区分系统窗口状态。编译PASS33s，生产代码相对9d735355完全未改；不mock选择、不延长等待、不重试选择/删断言。不声称此假设已原生证实，新精确SHA仍须正常CI。保留Draft/OFF与所有安全边界。
+
+## MED-02 #119 SAF测试进程依赖已定位；补真实目标选择/重开与运行中核对保护 — 2026-10-24
+
+2797c2a9原生已越过只读篡改准备：三API Core Operation3全部通过；独立低内存40096966198实际OK12，原4+新4真实force-stop各verify OK1。官方ZIP SHA/CRC、原HTML/低内存与8seam日志在operation-flow/second-native。App2仍真实1FAIL：Choose按钮确认超时；API29原log明确测试包独立Provider进程queryRoots抛NoClassDefFoundError kotlin.jvm.internal.Intrinsics，测试APK没有目标App的Kotlin runtime。另API29旧导航用例CREATED状态超时保留UNKNOWN，不删断言或重跑旧源凑绿。
+
+最小修正：仅合成DocumentsProvider改纯Java/framework（同一权限/authority/故意错误MIME及大小/固定样本），javap确认无Kotlin依赖；App内真实点击用已有Compose测试规则，系统DocumentsUI仍真实点击并核实际返回结果，不mock picker。仅debug host新增明确就诊/LAB目标选择，两个记录同时间而非按日期匹配；选择后冻结typed目标，saved scope+UUID+目标在重建时核对。原成功用例现在真实取消一次DocumentsUI、实际销毁/重建Activity并关闭重开SQLCipher连接，再只读核对原UUID/列表/预览，旧reader必须拒绝且清零。3类样本、原全部断言保留。
+
+生产改动仅AttachmentFlowController运行状态：仍有输入/事务worker时NOT_FOUND不能证明失败，显式reconcile/recover保持ReconcileRequired；worker结束后才独立核事实。增加同一原生失败用例内的有界活worker反例，不加新协议/queue/authority。managed恢复库新增写入仍拒绝，native增加真实已有目标+准确准入拒绝+未新增alias断言；四新PID核对补原临床事实摘要不变。上述Core/App Kotlin和Provider Java编译PASS（local/explicit-target-reopen-compile-green.log），实际新源JNI/SAF仍待最终CI，不能借2797结果称通过。继续既有#119/Draft，不改Room16/AppShell/权限/密码学/配额/正式入口，不补跑旧SHA。验收通过后只做正常保护合并及主线核查，再生成NOT_REVIEWED_EXTERNALLY外审索引包；真实原件/永久删除/签名发布OFF。
+
+## MED-02 #119 原生共同失败已定位，保留只读保护修正合成篡改准备 — 2026-10-24
+
+实时核查默认分支仍claude/new-session-1959qb，主线f5f942380184a4548458244c75f24648c4edb27a，#118 MERGED且主线Android40089062393/Science40089062418 SUCCESS；#116早已合并caa，不补跑/重做旧阶段。继续既有#119分支feature/med02-operation-flow-20261024，接手源6c9875bafb67b1a0a9fac4f34d2e1602f1a56893，仍Draft/无冲突/未解决review。
+
+原PR Android40094820302三API实际各Operation3/1FAIL/0skip，共同原因是hostileInput...测试在第72行直接用rw打开生产正确seal为0400的密文，EACCES使篡改/认证断言尚未到达。独立低内存40094820294实际12项/1FAIL，同一前置错误，不是新LMK或基础设施；原4及新4进程seam因前置失败尚未验证。三API及低内存官方ZIP SHA/CRC、原HTML/lowmem日志与API29完整job log保留operation-flow/first-native，不能称原生已通过。
+
+修正仅测试自有合成对象：先证明regular/本UID/0400，临时0600翻转密文末字节并fsync，finally恢复原0400，再确认dev/inode/full mode未变，之后执行原所有认证/旧reader清零/CORRUPT/导出REFUSED及UNKNOWN断言。生产密文权限/代码/Schema16/限额/密码学均未改，不删除或放宽断言。修改后core native Kotlin编译PASS（无本地KVM，实际执行待新最终SHA正常CI）。#119继续Draft；后续只读本轮现有原件/必要定向验收，不重启P4研究或重写Tink。最终成功后按§106保护合并、核主线，再索引既有证据形成外审包，NOT_REVIEWED_EXTERNALLY/feature0和真实入口/永久删除OFF不变。
+
+## MED-02 操作链候选固定，准备独立PR原生验收 — 2026-10-24
+
+正式操作门面/Runtime绑定/受控查看与隔离真实SAF host已编码；Core3+App2+四kill点全部编译通过，Runtime2/旧data599与release隔离5/设计61本地通过。新增JNI实际运行仍NOT_RUN，不能写CI_PASS。最后只补DocumentProvider目录路径协议和完整性状态撤权断言：已标CORRUPT的旧reader不能继续输出，已有UUID重选须显式核对不得伪报新输入成功。默认OFF和受管恢复库新增写入拒绝保持，新增源码固定后只修真实CI阻断。不改Schema16/协议/限额/权限/签名，外审/真机/物理断电/正式入口/永久删除仍OFF或NOT_RUN。先固定最新源，建Draft独立PR；CI实际执行主线全部原断言、三API真实SAF/3core及新4freshPID、低内存12+原4/新4seam；无KVM所以本地只编译不能冒充模拟器。
+
+## MED-02 操作链已编码，真实SAF/重启用例已编译，待CI — 2026-10-24
+
+独立feature/med02-operation-flow-20261024继续基于f5f94238。最短真实链已有：仅debug/模拟器/私有随机SQLCipher namespace的非导出Activity，测试APK MANAGE_DOCUMENTS保护的DocumentsProvider，经真实DocumentsUI选择合成PDF/PNG/二进制，回到页面明确确认后Runtime绑定新授权会话→Repository→单次限额内存读取→既有Tink/journal真实COMMIT→列表/认证Reader/ProxyFD PdfRenderer或限像素图片/受控前缀查看。主导航/release入口没有接入，PUBLIC_ENTRY_ENABLED=false和feature0不变。生产UI不直接触Room/密钥/路径。
+
+读取每次发布重核scope、实际关联、当前版本及PRIMARY；锁/页面关闭撤权并清除持有bitmap/前缀，native renderer在IO释放避免占住Proxy回调/锁屏。已有UUID再次选择须显式核对，不把不同新输入伪报为旧成功；不确定提交用ReconcileRequired，不回放URI。软恢复不自动重关联；归档仍原LibraryLifecycle COMPLETE/REFUSED/UNKNOWN，无多库/协议新设计。
+
+local目录保存第一次namespace可见性编译失败及lab返回Unit误用失败、修正后native编译PASS、原data599/Runtime2绿。内部namespace构造器未放宽：新增core/data/src/debug/SyntheticAttachmentDatabase只产生指定synthetic目录及隔离alias，release无此类。未提交树尝试unsignedRelease被原来源守卫正确拒绝，未绕过；待提交后正常再验。不签名/交付。新模型取消竞争/实际提交前scope检查和typed恢复核对属最终代码仍待最终CI，编译不冒充native运行。
+
+新增Core3用例（真实就诊/LAB/history/trash/正式writer-reader；错误/超限/空间/损坏/unknown；实际generation换库拒旧请求与fallback拒导出）、App2用例（真实三类SAF选择+保存重开查看；取消/失败/UUID冲突/撤权）、四个真实进程kill点PREPARED/STAGED/IN_COMMIT/COMMITTED。复用干净测试UID隔离runner，原用例/断言保留；低内存原512MiB/192MiB增加Core3为12项+原4及新4 fresh-PID，不提高配置，阶段采样仍非峰值且不覆盖App viewer。新增原生场景全为NOT_RUN，下一步创建Draft PR固定SHA验正常六门/适用三API和低内存，仅修真实失败。外审/真机/物理断电NOT_RUN，真实原件/公开UI/永久删除OFF，无Room或备份格式变化。
+
+## MED-02 默认OFF操作链第一代码检查点 — 2026-10-24
+
+重新核查默认claude/new-session-1959qb为f5f94238，#103–118均已合并，主线Android40089062393/Science40089062418 SUCCESS。新独立feature/med02-operation-flow-20261024，worktree /workspace/HRT-Log-med02-flow，不重复Tink/journal/authority，未发现其他活动附件/Schema PR。新MedicalAttachmentOperations经NotesRepository显式scope factory提供真实ContentResolver有界输入、存储/关联/list/读取/重查/软trash/restore和导出准入；App AttachmentFlowController与Runtime资源撤权连接，认证Read+ProxyFD/PdfRenderer/有界PNG/二进制前缀仅内存查看。编译PASS，行为测试NOT_RUN；仍需隔离真实SAF host/合成端到端、取消及实际进程重启验收，不声称接线已验收。
+
+读取/控制器能力在锁定/页面关闭时撤销；不自动持久URI或重放输入；不确定提交要求核对而非假失败。Room16和两备份协议/密码学/资源限额不改。只拥有NotesRepository factory、RuntimeLibrarySession和新attachments文件；AppShell/主题/其他UI不碰。边界矩阵operation-flow/integration-contract.md，最新需求§147.H。feature0/外审未做/正式UI和真实原件/永久删除OFF。下一步补最短合成SAF选择→提交→重开查看→关联/归档准入和3真实kill点；源码尚未PR验收，不可启用或称完成。
+
 ## MED-02 #118 生产源码b252双CI/三API/低内存完整通过，最终原件入库 — 2026-10-24
 
 b252ddeb33181b4f40edaa2656ed14151fca4620为实际完整验收源码：push40085591769和PR40085595382全部必需六门SUCCESS，Science双触发SUCCESS，独立低内存40085595923 SUCCESS。无冲突/未解决review，基线caa2651e（#116正常合并）。最终原件在lifecycle-evidence/accepted-b252：官方ZIP SHA+CRC、三API原HTML/四freshPID日志、低内存日志/阶段采样、精确run/文件SHA收据。不要据下方历史PENDING/FAIL重复实现旧阶段。

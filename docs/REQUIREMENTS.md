@@ -1408,3 +1408,11 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 负责人要求先核实并受保护合并#116精确源码，再独立交付默认OFF资源归属清单、严格从未物化预留的逻辑释放和完整导出准入。复用已有journal、单root authority、held-FD、操作UUID和既定限额；未知对象/别名/旧generation不能当作不存在。只对有真实协议证明、无物化及无有效引用的预留释放未来容量，必须幂等、重启可恢复且不跨generation；旧协议无证明必须保留。不得永久删除文件或Keystore key。完整导出以COMPLETE/REFUSED/UNKNOWN区分；旧版本、历史、回收站、fallback或未知对象不能省略来造完整结论。PNMEDBK1单库格式及密码学不变，不自动承诺长期冻结；必要本地字段按实际Room15做最小非破坏迁移，不争用版本。
 
 #116历史ecba64b6低内存中断仍UNDETERMINED，不因后续通过宣称根因已证明；复用充分的最终源原生/低内存证据，不做P4性能研究。feature_enabled=0、NOT_REVIEWED_EXTERNALLY、真实导入/查看/恢复UI和永久删除OFF；不加网络，不改PK/BDPM/P5P6/PNBAK1/既有密码学/签名/版本/Release。按§106正常受保护合并，不重复申请已授权OFF底座开发。
+
+### 147.H MED-02 默认OFF正式附件操作链（2026-10-24）
+
+负责人授权最小应用架构接线：SAF→既有有界输入→既有认证加密/journal真实提交→明确既有就诊/化验关系→作用域列表/读取/受控查看→取消、撤权、旧generation和进程恢复核对。复用#103–118及Runtime scope，不重写密码学/UUID/authority或恢复引擎，不为UI增加迁移。Compose不得操作Room/密钥/原始路径；不信任提供方长度/MIME，不留明文临时原件或持久URI权限，不以写出文件或提交前回调冒充成功。完整备份COMPLETE/REFUSED/UNKNOWN及非空fallback拒绝保留，不改PNMEDBK1/PNBAK1或资源限额；软删除不等于销毁或自动重关联。
+
+只允许自动化及隔离合成调试入口，不能进入正式release路由或作为审核旁路。feature0、NOT_REVIEWED_EXTERNALLY、正式导入/查看/恢复UI/真实原件测试/永久删除OFF；独立外审、完整备份兼容验收及单独启用授权仍必需。不改PK/P4P5P6/BDPM/签名/权限/Release，不交付APK。最短真实合成PDF/PNG/二进制链先行，针对性失败/三阶段实际进程死亡/适用三API及正常必需CI后按§106保护合并；未证明的查看路径明确阻断，不用明文临时文件绕过。
+
+2026-10-24续：先实时验收并收尾既有#119，不另建重复PR；真实DocumentsUI选择、明确确认、认证提交/关联、重开读取和无明文磁盘查看必须有实际原生证据。相同UUID不同输入不能伪报新成功，不确定提交只核对；保留库/未知集合不完整不得宣称备份完整。只有有证据的真实失败才做最小修正，不反复补跑UNKNOWN环境问题。满足§106和安全关键验收后正常保护合并并核主线；随后以精确源码、已有原件索引和未验证边界形成外部审查交付包，覆盖SAF/恶意Provider、对象与密钥、提交/恢复、完整备份和native解析/内存残留。独立专家未执行仍NOT_REVIEWED_EXTERNALLY；外审通过也不是公开启用授权，仍需负责人另行明确批准。不改Room16/业务备份版本/现有协议或AppShell及无关UI，不增加权限、配额、签名、APK交付或Release。

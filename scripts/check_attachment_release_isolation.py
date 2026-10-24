@@ -11,7 +11,8 @@ FORBIDDEN=(b'net/plainnotes/poc/', b'net.plainnotes.poc.', b'com/google/crypto/t
            b'com.google.crypto.tink.', b'SYNPOC01', b'DRAFT-ONLY-OBJ0!', b'B2-TEST-ONLY',
            b'SyntheticStreamProvider', b'attachmentpoc', b'Gate2StreamProvider', b'B2-SECURITY-GATE2-TEST-ONLY', b'Gate2PeerProvider', b'KernelProxyFdGate3', b'B3Vault', b'HRTLOG-B3-TEST-ONLY',
            b'net/plainnotes/app/debug/demo/', b'MedicalArchiveDemoActivity', b'DemoRepository',
-           b'net/plainnotes/app/debug/catalog/', b'CatalogPrototypeActivity', b'SYNTH-CIS-', b'DraftMedicalArchive', b'MED02-DRAFT-ONLY-V0')
+           b'net/plainnotes/app/debug/catalog/', b'CatalogPrototypeActivity', b'SYNTH-CIS-', b'DraftMedicalArchive', b'MED02-DRAFT-ONLY-V0', b'AttachmentOperationTestActivity', b'SyntheticAttachmentDatabase',
+           b'SyntheticDocumentsProvider', b'synthetic-medflow-', b'net.plainnotes.app.test.synthetic-medflow')
 # MED-02B6: the synthetic document-library demo exists only in the debug build; its resources must not reach release.
 RESOURCE_FORBIDDEN=(b'demo_banner', b'demo_launcher_label', b'SYNTHETIC DEMO', b'cat_synthetic', b'SYNTHETIC EXAMPLES')
 
