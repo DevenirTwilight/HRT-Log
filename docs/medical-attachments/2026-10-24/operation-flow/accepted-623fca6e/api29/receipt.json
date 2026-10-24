@@ -1,0 +1,48 @@
+{
+  "source_sha": "623fca6efdbf8e7bb36ec92f80601e881ae7c25c",
+  "artifact": {
+    "id": 12567409521,
+    "node_id": "MDg6QXJ0aWZhY3QxMjU2NzQwOTUyMQ==",
+    "name": "attachment-poc-api29",
+    "size_in_bytes": 271344,
+    "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12567409521",
+    "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12567409521/zip",
+    "expired": false,
+    "digest": "sha256:3d7e391bde4a58188d6bee7b7aa0c7c35337fee4d843c2547297a5e8cc3aa0cc",
+    "created_at": "2026-10-24T17:23:18Z",
+    "updated_at": "2026-10-24T17:23:18Z",
+    "expires_at": "2027-01-22T17:04:44Z",
+    "workflow_run": {
+      "id": 40114476119,
+      "repository_id": 1406091596,
+      "head_repository_id": 1406091596,
+      "head_branch": "feature/med02-operation-flow-20261024",
+      "head_sha": "623fca6efdbf8e7bb36ec92f80601e881ae7c25c"
+    }
+  },
+  "sha256": "3d7e391bde4a58188d6bee7b7aa0c7c35337fee4d843c2547297a5e8cc3aa0cc",
+  "zip_crc": "PASS",
+  "actual_results": {
+    "net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.html": {
+      "tests": 3,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.shell.InAppNavigationLockAndroidTest.html": {
+      "tests": 13,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.shell.RuntimeRequestUiAndroidTest.html": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.attachments.AttachmentOperationAndroidTest.html": {
+      "tests": 2,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "concurrent_uuid_scenario": "Included in actual cancelledFailureWrongRecordAndRevokedViewNeverCreateFalseSuccess; no skipped methods"
+}
