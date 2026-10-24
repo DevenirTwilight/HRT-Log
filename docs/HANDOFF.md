@@ -1,3 +1,7 @@
+## MED-02 #119最终623低内存原件通过 — 2026-10-24
+
+40114476135 SUCCESS，官方artifact12568390394 SHA与CRC核对通过。原12及generation4/operation4新PID各OK，原ZIP/日志/收据accepted-623fca6e/low-memory。此core-only job不覆盖新App控制器并发反例或完整viewer内存；三API/正常CI继续等待，不能以本结果替代该门。正式入口/外审/真实原件/永久删除OFF。
+
 ## MED-02 #119 623fca6e固定源码本地编译/19项通过 — 2026-10-24
 
 最终623fca6e源码冻结后的独立本地轮native Kotlin+Java编译PASS、导航17+Runtime2共19/0fail/error/skip。原件accepted-623fca6e/local。此前开发中同时修改过store候选又还原的构建不作为最终源码验收；实际最终core/data源码与705完全相同，只接受这次固定源码结果/最终CI。新增真实Provider并发场景仅编译通过，原生仍待CI，不能写PASS。最新普通JVM/Science门通过，三API和低内存运行中；feature0/真实入口/外审/永久删除状态不变。继续原PR119，仅修真实新失败，不补跑旧源。

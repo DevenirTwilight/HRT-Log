@@ -1,0 +1,29 @@
+{
+  "source_sha": "623fca6efdbf8e7bb36ec92f80601e881ae7c25c",
+  "run": 40114476135,
+  "artifact": {
+    "id": 12568390394,
+    "node_id": "MDg6QXJ0aWZhY3QxMjU2ODM5MDM5NA==",
+    "name": "med02-library-api26-512m",
+    "size_in_bytes": 174953,
+    "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12568390394",
+    "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12568390394/zip",
+    "expired": false,
+    "digest": "sha256:520737ac9853081c877ff256780fc29236b029a43badeaf2a1f7f8cd6ba7adca",
+    "created_at": "2026-10-24T17:13:33Z",
+    "updated_at": "2026-10-24T17:13:33Z",
+    "expires_at": "2027-01-22T17:04:44Z",
+    "workflow_run": {
+      "id": 40114476135,
+      "repository_id": 1406091596,
+      "head_repository_id": 1406091596,
+      "head_branch": "feature/med02-operation-flow-20261024",
+      "head_sha": "623fca6efdbf8e7bb36ec92f80601e881ae7c25c"
+    }
+  },
+  "sha256": "520737ac9853081c877ff256780fc29236b029a43badeaf2a1f7f8cd6ba7adca",
+  "zip_crc": "PASS",
+  "actual": "core12 and generation4/operation4 fresh-PID PASS",
+  "viewer_low_memory": "NOT_RUN",
+  "new_controller_race": "not covered by this core-only job; app/native job required"
+}
