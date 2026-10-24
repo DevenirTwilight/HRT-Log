@@ -28,22 +28,23 @@ internal class AttachmentViewer(private val context:Context,private val read:Med
     private var descriptor:ParcelFileDescriptor?=null
     private var pdf:PdfRenderer?=null
     private val images=mutableListOf<Bitmap>()
+    private val prefixes=mutableListOf<ByteArray>()
     private val revocation=read.own(AutoCloseable {
         closed=true
-        synchronized(images) {images.forEach {it.recycle()};images.clear()}
+        synchronized(images) {images.forEach {it.recycle()};images.clear();prefixes.forEach {it.fill(0)};prefixes.clear()}
         // Never block AppLock/publication or the ProxyFD callback thread on native renderer teardown.
         cleanup.launch {dispose()}
     })
     private fun valid() {check(!closed);read.check()}
     private fun retain(bitmap:Bitmap):Bitmap {
-        try {return read.publish {valid();synchronized(images) {images+=bitmap};bitmap}}catch(e:Throwable) {bitmap.recycle();throw e}
+        try {return read.publish {check(!closed);synchronized(images) {images+=bitmap};bitmap}}catch(e:Throwable) {bitmap.recycle();throw e}
     }
     fun pdfPage(index:Int,width:Int=512):Bitmap=synchronized(monitor) {
-        valid();require(width in 1..2048);check(images.isEmpty()) {"Release the previous page"}
+        valid();require(width in 1..2048);check(synchronized(images) {images.isEmpty()}) {"Release the previous page"}
         if(pdf==null) {
             val handler=HandlerThread("attachment-view-reader").apply {start()}.also {thread=it}
             val callbacks=object:ProxyFileDescriptorCallback() {
-                override fun onGetSize():Long=read.size
+                override fun onGetSize():Long=try {read.size}catch(e:Exception) {throw ErrnoException("Revoked attachment size",OsConstants.EIO,e)}
                 override fun onRead(offset:Long,size:Int,data:ByteArray):Int=try {read.readAt(offset,data,0,minOf(size,data.size))}
                     catch(e:Exception) {data.fill(0);throw ErrnoException("Authenticated attachment read",OsConstants.EIO,e)}
                 override fun onRelease() {read.close()}
@@ -61,7 +62,7 @@ internal class AttachmentViewer(private val context:Context,private val read:Med
     }
     /** Decode dimensions before allocating pixels. No provider MIME or filename participates. */
     fun image():Bitmap=synchronized(monitor) {
-        valid();check(images.isEmpty())
+        valid();check(synchronized(images) {images.isEmpty()})
         fun stream():InputStream=object:InputStream() {
             var position=0L
             override fun read():Int {val b=ByteArray(1);return if(read(b,0,1)<0)-1 else b[0].toInt() and 255}
@@ -74,7 +75,7 @@ internal class AttachmentViewer(private val context:Context,private val read:Med
     }
     fun prefix(maximum:Int=256):ByteArray=synchronized(monitor) {
         valid();require(maximum in 1..4096);val b=ByteArray(minOf(read.size,maximum.toLong()).toInt())
-        try {var p=0;while(p<b.size) {val n=read.readAt(p.toLong(),b,p,b.size-p);check(n>0);p+=n};valid();b}
+        try {var p=0;while(p<b.size) {val n=read.readAt(p.toLong(),b,p,b.size-p);check(n>0);p+=n};read.publish {check(!closed);synchronized(images) {prefixes.forEach {it.fill(0)};prefixes.clear();prefixes+=b};b}}
         catch(e:Throwable) {b.fill(0);throw e}
     }
     fun release(bitmap:Bitmap)=synchronized(images) {if(images.remove(bitmap))bitmap.recycle()}

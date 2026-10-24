@@ -28,7 +28,7 @@ def main():
     reset_fixture("before-lifecycle")
     try:
         result = subprocess.run(["./gradlew", ":core:data:connectedDebugAndroidTest",
-            "-Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.LibraryLifecycleAndroidTest",
+            "-Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.LibraryLifecycleAndroidTest,net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest",
             "--no-parallel", "--max-workers=2"], cwd=ROOT)
         assert result.returncode == 0, "Isolated lifecycle native tests failed"
     finally:
@@ -40,6 +40,8 @@ def main():
     # require the same isolation, not the unrelated bulk fixtures' retained keys.
     reset_fixture("before-restart")
     subprocess.run([sys.executable, "scripts/run_library_restore_restart.py"], cwd=ROOT, check=True)
+    reset_fixture("before-operation-restart")
+    subprocess.run([sys.executable,"scripts/run_attachment_operation_restart.py"],cwd=ROOT,check=True)
     reset_fixture("before-bulk")
 
 

@@ -1,0 +1,164 @@
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :attachment-poc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :attachment-poc:processResources NO-SOURCE
+> Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :pk-engine:compileKotlin UP-TO-DATE
+> Task :core:domain:compileKotlin UP-TO-DATE
+> Task :pk-engine:compileJava NO-SOURCE
+> Task :core:domain:compileJava NO-SOURCE
+> Task :pk-engine:processResources UP-TO-DATE
+> Task :core:domain:processResources NO-SOURCE
+> Task :pk-engine:classes UP-TO-DATE
+> Task :core:domain:classes UP-TO-DATE
+> Task :pk-engine:jar UP-TO-DATE
+> Task :core:domain:jar UP-TO-DATE
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :importer:compileKotlin UP-TO-DATE
+> Task :importer:compileJava NO-SOURCE
+> Task :importer:processResources NO-SOURCE
+> Task :importer:classes UP-TO-DATE
+> Task :importer:jar UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preFullDebugBuild UP-TO-DATE
+> Task :app:generateFullDebugBuildConfig
+> Task :app:generateFullDebugResources UP-TO-DATE
+> Task :app:packageFullDebugResources UP-TO-DATE
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preDebugBuild UP-TO-DATE
+> Task :core:data:processDebugNavigationResources UP-TO-DATE
+> Task :core:reminder:preBuild UP-TO-DATE
+> Task :core:reminder:preDebugBuild UP-TO-DATE
+> Task :core:reminder:processDebugNavigationResources UP-TO-DATE
+> Task :core:ui:preBuild UP-TO-DATE
+> Task :core:ui:preDebugBuild UP-TO-DATE
+> Task :core:ui:processDebugNavigationResources UP-TO-DATE
+> Task :app:processFullDebugNavigationResources UP-TO-DATE
+> Task :app:parseFullDebugLocalResources UP-TO-DATE
+> Task :app:generateFullDebugRFile UP-TO-DATE
+> Task :core:data:generateDebugResources UP-TO-DATE
+> Task :core:data:packageDebugResources UP-TO-DATE
+> Task :core:data:parseDebugLocalResources UP-TO-DATE
+> Task :core:data:generateDebugRFile UP-TO-DATE
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :attachment-poc:compileKotlin
+> Task :attachment-poc:compileJava NO-SOURCE
+> Task :attachment-poc:classes UP-TO-DATE
+> Task :attachment-poc:jar
+> Task :core:data:javaPreCompileDebug UP-TO-DATE
+> Task :core:reminder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:reminder:generateDebugResources UP-TO-DATE
+> Task :core:reminder:packageDebugResources UP-TO-DATE
+> Task :core:reminder:parseDebugLocalResources UP-TO-DATE
+> Task :core:reminder:generateDebugRFile UP-TO-DATE
+> Task :core:reminder:javaPreCompileDebug UP-TO-DATE
+> Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:ui:generateDebugResources UP-TO-DATE
+> Task :core:ui:packageDebugResources UP-TO-DATE
+> Task :core:ui:parseDebugLocalResources UP-TO-DATE
+> Task :core:ui:generateDebugRFile UP-TO-DATE
+> Task :core:ui:compileDebugKotlin UP-TO-DATE
+> Task :core:ui:javaPreCompileDebug UP-TO-DATE
+> Task :core:ui:compileDebugJavaWithJavac NO-SOURCE
+> Task :core:ui:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:javaPreCompileFullDebug
+> Task :core:ui:bundleLibRuntimeToJarDebug
+> Task :core:ui:processDebugJavaRes
+> Task :core:ui:createFullJarDebug
+> Task :core:data:writeDebugAarMetadata
+> Task :core:reminder:writeDebugAarMetadata
+> Task :core:ui:writeDebugAarMetadata
+> Task :app:checkFullDebugAarMetadata
+> Task :app:mapFullDebugSourceSetPaths
+> Task :app:compileFullDebugNavigationResources
+
+> Task :app:mergeFullDebugResources
+/workspace/HRT-Log-med02-flow/app/src/main/res/values/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-flow/app/src/main/res/values-fr/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-flow/app/src/main/res/values-b+zh+Hant/strings.xml:549:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-flow/app/src/main/res/values-b+zh+Hant/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-flow/app/src/main/res/values-b+zh+Hant/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-flow/app/src/main/res/values-zh/strings.xml:549:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-flow/app/src/main/res/values-zh/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-flow/app/src/main/res/values-zh/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+
+> Task :app:createFullDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksFullDebug
+> Task :core:data:extractDeepLinksDebug
+> Task :core:data:processDebugManifest
+> Task :core:reminder:extractDeepLinksDebug
+> Task :core:reminder:processDebugManifest
+> Task :core:ui:extractDeepLinksDebug
+> Task :core:ui:processDebugManifest
+> Task :app:processFullDebugMainManifest
+> Task :app:processFullDebugManifest
+> Task :app:processFullDebugManifestForPackage
+> Task :core:data:mapDebugSourceSetPaths
+> Task :core:data:compileDebugLibraryResources
+> Task :core:reminder:mapDebugSourceSetPaths
+> Task :core:reminder:compileDebugLibraryResources
+> Task :core:ui:mapDebugSourceSetPaths
+> Task :core:ui:compileDebugLibraryResources
+> Task :app:processFullDebugResources
+> Task :app:preFullDebugAndroidTestBuild SKIPPED
+> Task :app:processFullDebugAndroidTestManifest
+> Task :app:generateFullDebugAndroidTestBuildConfig
+> Task :app:generateFullDebugAndroidTestResources
+> Task :app:packageFullDebugAndroidTestResources
+> Task :app:processFullDebugAndroidTestNavigationResources
+> Task :app:parseFullDebugAndroidTestLocalResources
+> Task :app:generateFullDebugAndroidTestRFile
+> Task :core:data:kspDebugKotlin
+
+> Task :core:data:compileDebugKotlin
+w: file:///workspace/HRT-Log-med02-flow/core/data/src/main/java/net/plainnotes/app/data/MedicalAttachmentOperations.kt:105:146 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-flow/core/data/src/main/java/net/plainnotes/app/data/MedicalAttachmentOperations.kt:118:21 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-flow/core/data/src/main/java/net/plainnotes/app/data/MedicalAttachmentOperations.kt:105:146 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-flow/core/data/src/main/java/net/plainnotes/app/data/MedicalAttachmentOperations.kt:118:21 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+
+> Task :core:data:compileDebugJavaWithJavac
+> Task :core:data:processDebugJavaRes
+> Task :core:data:transformDebugClassesWithAsm
+> Task :core:data:bundleLibCompileToJarDebug
+> Task :core:data:bundleLibRuntimeToJarDebug
+> Task :core:data:createFullJarDebug
+> Task :core:reminder:kspDebugKotlin
+> Task :core:reminder:compileDebugKotlin
+> Task :core:reminder:compileDebugJavaWithJavac
+> Task :core:reminder:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core:reminder:bundleLibRuntimeToJarDebug
+> Task :core:reminder:processDebugJavaRes
+> Task :core:reminder:createFullJarDebug
+> Task :app:kspFullDebugKotlin
+
+> Task :app:compileFullDebugKotlin FAILED
+e: file:///workspace/HRT-Log-med02-flow/app/src/debug/java/net/plainnotes/app/debug/attachments/SyntheticAttachmentFixture.kt:23:16 Cannot access 'constructor(context: Context, deviceNamespace: UUID?): DatabaseAccess': it is internal in 'net.plainnotes.app.data.DatabaseAccess'.
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileFullDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 45s
+88 actionable tasks: 55 executed, 33 up-to-date

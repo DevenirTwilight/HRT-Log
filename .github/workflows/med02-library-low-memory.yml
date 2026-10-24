@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'core/data/src/**/Library*.kt'
+      - 'core/data/src/**/MedicalAttachmentOperation*.kt'
       - 'core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt'
       - 'core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt'
       - 'core/data/src/main/java/net/plainnotes/app/data/AttachmentTransaction.kt'
@@ -52,4 +53,5 @@ jobs:
             core/data/build/reports/androidTests/
             core/data/build/outputs/androidTest-results/
             core/data/build/reports/med02-generation-restart/
+            core/data/build/reports/med02-operation-restart/
             core/data/build/reports/med02-generation-memory/

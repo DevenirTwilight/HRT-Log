@@ -20,7 +20,7 @@ public final class Gate2StreamProvider extends ContentProvider {
     private String kind(Uri uri) {
         String path = uri.getLastPathSegment();
         if (!"unknown".equals(path) && !"failure".equals(path) && !"mime".equals(path) && !"false".equals(path)
-                && !"pdfclaim".equals(path) && !"badname".equals(path) && !"pdfok".equals(path))
+                && !"oversize".equals(path) && !"pdfclaim".equals(path) && !"badname".equals(path) && !"pdfok".equals(path))
             throw new IllegalArgumentException("Unsupported synthetic source");
         return path;
     }
@@ -53,7 +53,10 @@ public final class Gate2StreamProvider extends ContentProvider {
                 if (signature != null) System.arraycopy(signature, 0, bytes, 0, signature.length);
                 // Keep the reliable descriptor open until closeWithError, so the read side sees the fault.
                 try (ParcelFileDescriptor.AutoCloseOutputStream out = new ParcelFileDescriptor.AutoCloseOutputStream(pipe[1])) {
-                    out.write(bytes); out.flush();
+                    if ("oversize".equals(kind)) {
+                        for (int i=0;i<2049;i++) out.write(bytes); // 16MiB + one chunk, no huge test allocation.
+                    } else out.write(bytes);
+                    out.flush();
                     if (failure) pipe[1].closeWithError("Synthetic provider read failure");
                 }
             } catch (IOException e) {

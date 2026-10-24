@@ -14,11 +14,11 @@ if [ "$result" -eq 0 ]; then
   result=$?
 fi
 if [ "$result" -eq 0 ]; then
-  adb shell am instrument -w -e class net.plainnotes.app.data.NativeCiHeapProbe,net.plainnotes.app.data.LibraryRestoreAndroidTest,net.plainnotes.app.data.LibraryLifecycleAndroidTest -e ansmExpectedHeapMb 192 net.plainnotes.app.data.test/androidx.test.runner.AndroidJUnitRunner > "$report/native-tests.log" 2>&1
+  adb shell am instrument -w -e class net.plainnotes.app.data.NativeCiHeapProbe,net.plainnotes.app.data.LibraryRestoreAndroidTest,net.plainnotes.app.data.LibraryLifecycleAndroidTest,net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest -e ansmExpectedHeapMb 192 net.plainnotes.app.data.test/androidx.test.runner.AndroidJUnitRunner > "$report/native-tests.log" 2>&1
   result=$?
   cat "$report/native-tests.log"
   if [ "$result" -eq 0 ]; then
-    python3 -c 'from pathlib import Path; t=Path("core/data/build/reports/med02-generation-memory/native-tests.log").read_text(); assert "OK (9 tests)" in t and not any(x in t for x in ("FAILURES!!!","INSTRUMENTATION_FAILED","INSTRUMENTATION_STATUS_CODE: -3")), "All nine real native tests must run and pass"'
+    python3 -c 'from pathlib import Path; t=Path("core/data/build/reports/med02-generation-memory/native-tests.log").read_text(); assert "OK (12 tests)" in t and not any(x in t for x in ("FAILURES!!!","INSTRUMENTATION_FAILED","INSTRUMENTATION_STATUS_CODE: -3")), "All twelve real native tests must run and pass"'
     result=$?
   fi
 fi
@@ -33,6 +33,7 @@ if [ "$result" -eq 0 ] && [ "$metrics" -ne 0 ]; then result=1; fi
 if [ "$result" -eq 0 ]; then
   python3 scripts/run_library_restore_restart.py
   result=$?
+  if [ "$result" -eq 0 ]; then python3 scripts/run_attachment_operation_restart.py; result=$?; fi
 fi
 adb logcat -d > "$report/logcat.txt"
 exit "$result"

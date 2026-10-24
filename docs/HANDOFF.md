@@ -1,3 +1,13 @@
+## MED-02 操作链已编码，真实SAF/重启用例已编译，待CI — 2026-10-24
+
+独立feature/med02-operation-flow-20261024继续基于f5f94238。最短真实链已有：仅debug/模拟器/私有随机SQLCipher namespace的非导出Activity，测试APK MANAGE_DOCUMENTS保护的DocumentsProvider，经真实DocumentsUI选择合成PDF/PNG/二进制，回到页面明确确认后Runtime绑定新授权会话→Repository→单次限额内存读取→既有Tink/journal真实COMMIT→列表/认证Reader/ProxyFD PdfRenderer或限像素图片/受控前缀查看。主导航/release入口没有接入，PUBLIC_ENTRY_ENABLED=false和feature0不变。生产UI不直接触Room/密钥/路径。
+
+读取每次发布重核scope、实际关联、当前版本及PRIMARY；锁/页面关闭撤权并清除持有bitmap/前缀，native renderer在IO释放避免占住Proxy回调/锁屏。已有UUID再次选择须显式核对，不把不同新输入伪报为旧成功；不确定提交用ReconcileRequired，不回放URI。软恢复不自动重关联；归档仍原LibraryLifecycle COMPLETE/REFUSED/UNKNOWN，无多库/协议新设计。
+
+local目录保存第一次namespace可见性编译失败及lab返回Unit误用失败、修正后native编译PASS、原data599/Runtime2绿。内部namespace构造器未放宽：新增core/data/src/debug/SyntheticAttachmentDatabase只产生指定synthetic目录及隔离alias，release无此类。未提交树尝试unsignedRelease被原来源守卫正确拒绝，未绕过；待提交后正常再验。不签名/交付。新模型取消竞争/实际提交前scope检查和typed恢复核对属最终代码仍待最终CI，编译不冒充native运行。
+
+新增Core3用例（真实就诊/LAB/history/trash/正式writer-reader；错误/超限/空间/损坏/unknown；实际generation换库拒旧请求与fallback拒导出）、App2用例（真实三类SAF选择+保存重开查看；取消/失败/UUID冲突/撤权）、四个真实进程kill点PREPARED/STAGED/IN_COMMIT/COMMITTED。复用干净测试UID隔离runner，原用例/断言保留；低内存原512MiB/192MiB增加Core3为12项+原4及新4 fresh-PID，不提高配置，阶段采样仍非峰值且不覆盖App viewer。新增原生场景全为NOT_RUN，下一步创建Draft PR固定SHA验正常六门/适用三API和低内存，仅修真实失败。外审/真机/物理断电NOT_RUN，真实原件/公开UI/永久删除OFF，无Room或备份格式变化。
+
 ## MED-02 默认OFF操作链第一代码检查点 — 2026-10-24
 
 重新核查默认claude/new-session-1959qb为f5f94238，#103–118均已合并，主线Android40089062393/Science40089062418 SUCCESS。新独立feature/med02-operation-flow-20261024，worktree /workspace/HRT-Log-med02-flow，不重复Tink/journal/authority，未发现其他活动附件/Schema PR。新MedicalAttachmentOperations经NotesRepository显式scope factory提供真实ContentResolver有界输入、存储/关联/list/读取/重查/软trash/restore和导出准入；App AttachmentFlowController与Runtime资源撤权连接，认证Read+ProxyFD/PdfRenderer/有界PNG/二进制前缀仅内存查看。编译PASS，行为测试NOT_RUN；仍需隔离真实SAF host/合成端到端、取消及实际进程重启验收，不声称接线已验收。

@@ -36,6 +36,7 @@ internal class AttachmentFlowController(
     val state=mutable.asStateFlow()
     private val busy=AtomicBoolean(false)
     private val closed=AtomicBoolean(false)
+    private val cancelled=AtomicBoolean(false)
     @Volatile private var input:AttachmentSession.Capability?=null
     fun pickerIntent()=Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).apply {
         type="*/*";putExtra(Intent.EXTRA_MIME_TYPES,arrayOf("application/pdf","image/png","image/jpeg","application/octet-stream"))
@@ -51,12 +52,17 @@ internal class AttachmentFlowController(
             val intent=requireNotNull(result.data);require((intent.clipData?.itemCount ?: 1)==1)
             val uri=requireNotNull(intent.data);require(uri.scheme=="content")
             val cap=session.issue().also {input=it}
+            if(cancelled.get()) {cap.close();input=null;mutable.value=State.Cancelled;return}
             mutable.value=State.Pending
             try {
                 val receipt=backend.import(cap,request,uri)
                 // No list refresh, reminder, rendering or backup check can reverse this real COMMIT.
                 if(!closed.get())mutable.value=State.Saved(receipt)
-            }catch(_:Exception) {
+            }catch(e:Exception) {
+                if(e is MedicalAttachmentOperations.ExistingOperation) {
+                    if(!closed.get())mutable.value=State.ReconcileRequired
+                    return
+                }
                 // Dispatcher cancellation may happen after SQLite COMMIT. Query facts, never guess.
                 withContext(NonCancellable) {reconcile()}
             }finally {input=null;cap.close()}
@@ -64,13 +70,13 @@ internal class AttachmentFlowController(
         finally {busy.set(false)}
     }
     /** Cancellation revokes only this input attempt; it cannot undo an already committed record. */
-    fun cancel() {input?.close();if(mutable.value==State.Selecting)mutable.value=State.Cancelled}
+    fun cancel() {cancelled.set(true);input?.close();if(mutable.value==State.Selecting)mutable.value=State.Cancelled}
     suspend fun reconcile() {
         if(closed.get())return
         try {
             permission()
             session.issue().let {cap->try {
-                val fact=backend.reconcile(cap,request.operation)
+                val fact=backend.reconcile(cap,request.operation,request.target,request.document)
                 if(!closed.get())mutable.value=when(fact.phase) {
                     MedicalAttachmentOperations.Phase.COMMITTED->State.Saved(requireNotNull(fact.receipt))
                     MedicalAttachmentOperations.Phase.NOT_FOUND,MedicalAttachmentOperations.Phase.ABORTED->State.Failed
@@ -78,6 +84,11 @@ internal class AttachmentFlowController(
                 }
             }finally {cap.close()}}
         }catch(_:Exception) {if(!closed.get())mutable.value=State.ReconcileRequired}
+    }
+    suspend fun recover() {
+        permission();check(!closed.get())
+        session.issue().let {cap->try {backend.recover(cap)}finally {cap.close()}}
+        reconcile()
     }
     suspend fun documents()=session.issue().let {cap->try {permission();backend.documents(cap,request.target)}finally {cap.close()}}
     suspend fun open(document:UUID):MedicalAttachmentOperations.Read {

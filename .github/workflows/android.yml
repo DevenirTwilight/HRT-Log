@@ -134,7 +134,7 @@ jobs:
             ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.NativeCiHeapProbe -Pandroid.testInstrumentationRunnerArguments.ansmExpectedHeapMb=192 --no-parallel --max-workers=2
             python3 scripts/run_library_lifecycle_native.py
             adb logcat -G 16M
-            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=net.plainnotes.app.data.LibraryLifecycleAndroidTest --no-parallel --max-workers=2
+            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=net.plainnotes.app.data.LibraryLifecycleAndroidTest,net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest --no-parallel --max-workers=2
             python3 scripts/collect_med02_format_readiness.py
             python3 scripts/run_attachment_foundation_restart.py
             python3 scripts/run_attachment_persistent_restart.py
@@ -180,6 +180,7 @@ jobs:
           path: |
             core/data/build/reports/androidTests/
             core/data/build/reports/med02-lifecycle-isolated/
+            core/data/build/reports/med02-operation-restart/
             core/data/build/reports/ansm-write-process-death/
             core/data/build/reports/gate2/
             core/data/build/reports/gate3/
@@ -249,7 +250,7 @@ jobs:
             python3 scripts/run_b3_gate_red.py
             ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=net.plainnotes.app.attachmentpoc --no-parallel --max-workers=2
             # China beta P0 regressions on API 26/29 (the full app suite runs on API 35 above).
-            ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.shell.InAppNavigationLockAndroidTest,net.plainnotes.app.shell.ReminderTestDeviceTest,net.plainnotes.app.shell.RuntimeRequestUiAndroidTest,net.plainnotes.app.privacy.RestoreProtectionAndroidTest --no-parallel --max-workers=2
+            ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.shell.InAppNavigationLockAndroidTest,net.plainnotes.app.shell.ReminderTestDeviceTest,net.plainnotes.app.shell.RuntimeRequestUiAndroidTest,net.plainnotes.app.privacy.RestoreProtectionAndroidTest,net.plainnotes.app.attachments.AttachmentOperationAndroidTest --no-parallel --max-workers=2
             python3 scripts/run_attachment_poc_restart.py
             python3 scripts/collect_attachment_poc_evidence.py --output app/build/reports/attachment-poc-evidence.json
             python3 scripts/run_attachment_gate3_red.py
@@ -264,6 +265,7 @@ jobs:
             app/build/reports/demo/
             core/data/build/reports/androidTests/
             core/data/build/reports/med02-lifecycle-isolated/
+            core/data/build/reports/med02-operation-restart/
             core/data/build/reports/ansm-write-process-death/
             core/data/build/reports/gate2/
             core/data/build/reports/gate3/
