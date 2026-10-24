@@ -52,10 +52,27 @@ class RuntimeLibrarySession(private val source:NotesRepository,private val saved
         val expected=frozen ?: return
         if(source.currentGenerationScope()!=expected) {invalidate(R.string.library_scope_changed);throw LibraryScopeMismatch()}
     }
-    fun pause() {allowed=false}
+    private val protectedResources=mutableSetOf<AutoCloseable>()
+    private fun releaseProtected() {
+        val owned=synchronized(protectedResources) {protectedResources.toList().also {protectedResources.clear()}}
+        owned.forEach {runCatching {it.close()}} // Permission is already revoked even if cleanup reports a fault.
+    }
+    internal suspend fun attachments(target:net.plainnotes.app.data.MedicalAttachmentOperations.Target,
+        title:String,operation:java.util.UUID=java.util.UUID.randomUUID(),document:java.util.UUID=java.util.UUID.randomUUID()):net.plainnotes.app.attachments.AttachmentFlowController {
+        val repo=repository();val scope=requireNotNull(frozen)
+        val session=net.plainnotes.app.domain.AttachmentSession(java.util.UUID.fromString(scope.dataset),java.util.UUID.fromString(scope.epoch))
+        val revoke=AutoCloseable {session.revoke()}
+        try {
+            synchronized(protectedResources) {checkRequest();protectedResources+=revoke}
+            val registration=AutoCloseable {synchronized(protectedResources) {protectedResources-=revoke};session.revoke()}
+            return net.plainnotes.app.attachments.AttachmentFlowController(repo.medicalAttachments(),session,registration,
+                net.plainnotes.app.data.MedicalAttachmentOperations.Import(operation,document,target,title),::checkRequest)
+        }catch(e:Throwable) {synchronized(protectedResources) {protectedResources-=revoke};session.revoke();throw e}
+    }
+    fun pause() {allowed=false;releaseProtected()}
     suspend fun resume() {initialized.await();verify();if(!closed)allowed=true}
-    fun invalidate(message:Int=R.string.library_scope_changed) {closed=true;allowed=false;mutable.value=State.Unavailable(message)}
-    fun close() {closed=true;allowed=false}
+    fun invalidate(message:Int=R.string.library_scope_changed) {closed=true;allowed=false;releaseProtected();mutable.value=State.Unavailable(message)}
+    fun close() {closed=true;allowed=false;releaseProtected()}
     companion object {
         const val SAVED_SCOPE="library.request.scope"
         const val RESTORED="library.request.restored"

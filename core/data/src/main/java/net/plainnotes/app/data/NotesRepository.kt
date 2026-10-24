@@ -55,6 +55,13 @@ const val BACKFILL_MAX_DAYS=731L
         DatabaseAccess.withActiveHandle(database) {bindDatabase(space,database);Unit}
     }
     /** Invalidation is a wake-up only; every consumer still queries the sole native authority. */
+    /** Internal OFF attachment integration: only an explicitly bound PRIMARY request may create it. */
+    suspend fun medicalAttachments():MedicalAttachmentOperations=withContext(Dispatchers.IO) {
+        check(space==Space.PRIMARY)
+        val expected=requireNotNull(requestScope) {"Freeze the displayed library before attachment work"}
+        databaseFor(Space.PRIMARY)
+        MedicalAttachmentOperations(access,expected,requestPermission)
+    }
     fun generationChanges():kotlinx.coroutines.flow.Flow<Unit> = kotlinx.coroutines.flow.flow {
         val database=access.get(space);val root=DatabaseAccess.authorityRoot(database)
         val authority=root.invalidationTracker.createFlow("library_authority","library_candidate",emitInitialState=true)

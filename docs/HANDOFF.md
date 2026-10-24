@@ -1,3 +1,9 @@
+## MED-02 默认OFF操作链第一代码检查点 — 2026-10-24
+
+重新核查默认claude/new-session-1959qb为f5f94238，#103–118均已合并，主线Android40089062393/Science40089062418 SUCCESS。新独立feature/med02-operation-flow-20261024，worktree /workspace/HRT-Log-med02-flow，不重复Tink/journal/authority，未发现其他活动附件/Schema PR。新MedicalAttachmentOperations经NotesRepository显式scope factory提供真实ContentResolver有界输入、存储/关联/list/读取/重查/软trash/restore和导出准入；App AttachmentFlowController与Runtime资源撤权连接，认证Read+ProxyFD/PdfRenderer/有界PNG/二进制前缀仅内存查看。编译PASS，行为测试NOT_RUN；仍需隔离真实SAF host/合成端到端、取消及实际进程重启验收，不声称接线已验收。
+
+读取/控制器能力在锁定/页面关闭时撤销；不自动持久URI或重放输入；不确定提交要求核对而非假失败。Room16和两备份协议/密码学/资源限额不改。只拥有NotesRepository factory、RuntimeLibrarySession和新attachments文件；AppShell/主题/其他UI不碰。边界矩阵operation-flow/integration-contract.md，最新需求§147.H。feature0/外审未做/正式UI和真实原件/永久删除OFF。下一步补最短合成SAF选择→提交→重开查看→关联/归档准入和3真实kill点；源码尚未PR验收，不可启用或称完成。
+
 ## MED-02 #118 生产源码b252双CI/三API/低内存完整通过，最终原件入库 — 2026-10-24
 
 b252ddeb33181b4f40edaa2656ed14151fca4620为实际完整验收源码：push40085591769和PR40085595382全部必需六门SUCCESS，Science双触发SUCCESS，独立低内存40085595923 SUCCESS。无冲突/未解决review，基线caa2651e（#116正常合并）。最终原件在lifecycle-evidence/accepted-b252：官方ZIP SHA+CRC、三API原HTML/四freshPID日志、低内存日志/阶段采样、精确run/文件SHA收据。不要据下方历史PENDING/FAIL重复实现旧阶段。
