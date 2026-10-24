@@ -1,0 +1,10 @@
+{
+  "source_sha": "7d3186fd093cc03f5a4881944773fadeb73c03db",
+  "native_compile": "PASS32s",
+  "python_runner_syntax": "PASS",
+  "actual_native": "PENDING",
+  "files_sha256": {
+    "local-native-compile.log": "7ec645c3349f61c285d51ab3ca4da0123261f10501f481e198b3f7f71ac98401",
+    "motion-event-framework-reference.txt": "d0aa9e078aa1b8921229d29df9823d560ee0204a5052c7e3ea19d2ab129fd976"
+  }
+}

@@ -1,0 +1,37 @@
+Android 15 Robolectric instrumented framework method body reference; not native execution or proof of unique failure cause. PointerProperties.clear resets toolType to UNKNOWN; convenience obtain then sets only id.
+
+  private static final android.view.MotionEvent $$robo$$android_view_MotionEvent$obtain(long, long, int, float, float, float, float, int, float, float, int, int, int, int);
+    Code:
+       0: invokestatic  #396                // Method obtain:()Landroid/view/MotionEvent;
+       3: astore        16
+       5: getstatic     #437                // Field gSharedTempLock:Ljava/lang/Object;
+       8: dup
+       9: astore        17
+      11: monitorenter
+      12: iconst_1
+      13: invokestatic  #440                // Method ensureSharedTempPointerCapacity:(I)V
+      16: getstatic     #275                // Field gSharedTempPointerProperties:[Landroid/view/MotionEvent$PointerProperties;
+      19: astore        18
+      21: aload         18
+      23: iconst_0
+      24: aaload
+      25: invokevirtual #443                // Method android/view/MotionEvent$PointerProperties.clear:()V
+      28: aload         18
+      30: iconst_0
+      31: aaload
+      32: iconst_0
+      33: putfield      #446                // Field android/view/MotionEvent$PointerProperties.id:I
+      36: getstatic     #266                // Field gSharedTempPointerCoords:[Landroid/view/MotionEvent$PointerCoords;
+      39: astore        19
+      41: aload         19
+      43: iconst_0
+      44: aaload
+      45: invokevirtual #463                // Method android/view/MotionEvent$PointerCoords.clear:()V
+      48: aload         19
+      50: iconst_0
+      51: aaload
+      52: fload         5
+      54: putfield      #465                // Field android/view/MotionEvent$PointerCoords.x:F
+      57: aload         19
+      59: iconst_0
+      60: aaload
