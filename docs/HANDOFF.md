@@ -1,3 +1,9 @@
+## MED-02 #119 最终源低内存原件核验通过 — 2026-10-24
+
+9d735355精确源：独立低内存40101035993 SUCCESS，官方artifact12562443412 SHA256=88f3be02710a25d11926621b0c3612910c6faf4279e7a688bd42ba2cb85b9c48且ZIP CRC PASS。原件/原日志/采样与收据保存operation-flow/accepted-9d735355/lowmem：实际OK12，原generation四点与operation PREPARED/STAGED/IN_COMMIT/COMMITTED四点各verify OK1，新PID断言含原业务事实摘要不变。512MiB/192MiB未改；不代表App viewer低内存或真机通过。三API/正常Android仍在跑，#119保持Draft，不提前合并。
+
+external-review/scope-guard-receipt.json核对相对主线f5f94238的main manifest/build配置/依赖/AttachmentSchema完全未变，无Room schema文件或AppShell变更。该静态收据不是release运行证明，最终release隔离仍由最终源码正常CI判定。外审未执行/feature0/真实入口OFF不变。
+
 ## MED-02 #119 最终候选与外审交付索引 — 2026-10-24
 
 源码9d735355ca27b969e8b209d00fb78640814d7596已推既有#119，仍Draft。PR Android40101035984、独立低内存40101035993正在实际验收；Science40101036019已SUCCESS，其余不能先写通过。修正范围/原失败见下方历史与operation-flow目录。源分支暂冻结，只对新的真实失败修根因，不补跑旧SHA筛绿。

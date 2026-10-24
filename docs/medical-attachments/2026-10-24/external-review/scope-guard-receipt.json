@@ -1,0 +1,25 @@
+{
+  "source_sha": "9d735355ca27b969e8b209d00fb78640814d7596",
+  "baseline_sha": "f5f942380184a4548458244c75f24648c4edb27a",
+  "unchanged_guards": {
+    "app/src/main/AndroidManifest.xml": {
+      "unchanged": true,
+      "sha256": "2281d7ab5fe4ad4a858133728b40b20035cfb7e49b513bb6428994f14fd4c610"
+    },
+    "app/build.gradle.kts": {
+      "unchanged": true,
+      "sha256": "5abbc643f974b4be80c71730140280a7bc532b4dc4560608ce954bd472e12675"
+    },
+    "gradle/libs.versions.toml": {
+      "unchanged": true,
+      "sha256": "f8a4088548ac7be4bc81e1c4109f86e1203d2d03974b84f5917eef10da0373a3"
+    },
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentSchema.kt": {
+      "unchanged": true,
+      "sha256": "aece4dd8cf9da68da0256cf7d06ec5b741b632f69b7eb075d0bf40dddbc62b53"
+    }
+  },
+  "schema_files_changed": [],
+  "app_shell_changed": false,
+  "note": "Static source comparison only; final release payload acceptance belongs to exact-source required CI. No signed APK produced or delivered."
+}
