@@ -1,0 +1,713 @@
+{
+  "total_count": 5,
+  "jobs": [
+    {
+      "id": 120939184448,
+      "run_id": 40116642106,
+      "workflow_name": "Android and domain checks",
+      "head_branch": "claude/new-session-1959qb",
+      "run_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/runs/40116642106",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU89BTM8AAAAcKImBQA",
+      "head_sha": "369267e3741fcc3e263f6c51f1f81314abf887be",
+      "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/jobs/120939184448",
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/40116642106/job/120939184448",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-24T17:33:13Z",
+      "started_at": "2026-10-24T17:33:16Z",
+      "completed_at": "2026-10-24T17:52:11Z",
+      "name": "attachment-poc-compatibility (29)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-24T17:33:16Z",
+          "completed_at": "2026-10-24T17:33:18Z"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-24T17:33:18Z",
+          "completed_at": "2026-10-24T17:33:24Z"
+        },
+        {
+          "name": "Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-24T17:33:24Z",
+          "completed_at": "2026-10-24T17:33:25Z"
+        },
+        {
+          "name": "Run android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-24T17:33:25Z",
+          "completed_at": "2026-10-24T17:33:30Z"
+        },
+        {
+          "name": "Run sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-24T17:33:30Z",
+          "completed_at": "2026-10-24T17:33:32Z"
+        },
+        {
+          "name": "Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-24T17:33:32Z",
+          "completed_at": "2026-10-24T17:33:41Z"
+        },
+        {
+          "name": "Run sudo chmod a+rw /dev/kvm",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-24T17:33:41Z",
+          "completed_at": "2026-10-24T17:33:41Z"
+        },
+        {
+          "name": "Run ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-24T17:33:41Z",
+          "completed_at": "2026-10-24T17:51:45Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-24T17:51:45Z",
+          "completed_at": "2026-10-24T17:51:46Z"
+        },
+        {
+          "name": "Post Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-24T17:51:46Z",
+          "completed_at": "2026-10-24T17:52:09Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-24T17:52:09Z",
+          "completed_at": "2026-10-24T17:52:09Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-24T17:52:09Z",
+          "completed_at": "2026-10-24T17:52:10Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-24T17:52:10Z",
+          "completed_at": "2026-10-24T17:52:10Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/check-runs/120939184448",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000008743,
+      "runner_name": "GitHub Actions 1000008743",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 120939184531,
+      "run_id": 40116642106,
+      "workflow_name": "Android and domain checks",
+      "head_branch": "claude/new-session-1959qb",
+      "run_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/runs/40116642106",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU89BTM8AAAAcKImBkw",
+      "head_sha": "369267e3741fcc3e263f6c51f1f81314abf887be",
+      "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/jobs/120939184531",
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/40116642106/job/120939184531",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-24T17:33:13Z",
+      "started_at": "2026-10-24T17:33:16Z",
+      "completed_at": "2026-10-24T17:50:41Z",
+      "name": "attachment-poc-compatibility (26)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-24T17:33:17Z",
+          "completed_at": "2026-10-24T17:33:22Z"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-24T17:33:22Z",
+          "completed_at": "2026-10-24T17:33:30Z"
+        },
+        {
+          "name": "Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-24T17:33:30Z",
+          "completed_at": "2026-10-24T17:33:31Z"
+        },
+        {
+          "name": "Run android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-24T17:33:31Z",
+          "completed_at": "2026-10-24T17:33:39Z"
+        },
+        {
+          "name": "Run sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-24T17:33:39Z",
+          "completed_at": "2026-10-24T17:33:41Z"
+        },
+        {
+          "name": "Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-24T17:33:41Z",
+          "completed_at": "2026-10-24T17:33:53Z"
+        },
+        {
+          "name": "Run sudo chmod a+rw /dev/kvm",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-24T17:33:53Z",
+          "completed_at": "2026-10-24T17:33:53Z"
+        },
+        {
+          "name": "Run ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-24T17:33:53Z",
+          "completed_at": "2026-10-24T17:50:08Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-24T17:50:08Z",
+          "completed_at": "2026-10-24T17:50:10Z"
+        },
+        {
+          "name": "Post Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-24T17:50:10Z",
+          "completed_at": "2026-10-24T17:50:38Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-24T17:50:38Z",
+          "completed_at": "2026-10-24T17:50:38Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-24T17:50:38Z",
+          "completed_at": "2026-10-24T17:50:38Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-24T17:50:38Z",
+          "completed_at": "2026-10-24T17:50:38Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/check-runs/120939184531",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000008744,
+      "runner_name": "GitHub Actions 1000008744",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 120939184542,
+      "run_id": 40116642106,
+      "workflow_name": "Android and domain checks",
+      "head_branch": "claude/new-session-1959qb",
+      "run_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/runs/40116642106",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU89BTM8AAAAcKImBng",
+      "head_sha": "369267e3741fcc3e263f6c51f1f81314abf887be",
+      "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/jobs/120939184542",
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/40116642106/job/120939184542",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-24T17:33:13Z",
+      "started_at": "2026-10-24T17:33:16Z",
+      "completed_at": "2026-10-24T17:34:43Z",
+      "name": "jvm",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-24T17:33:17Z",
+          "completed_at": "2026-10-24T17:33:21Z"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-24T17:33:21Z",
+          "completed_at": "2026-10-24T17:33:28Z"
+        },
+        {
+          "name": "Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-24T17:33:28Z",
+          "completed_at": "2026-10-24T17:33:28Z"
+        },
+        {
+          "name": "Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-24T17:33:28Z",
+          "completed_at": "2026-10-24T17:33:36Z"
+        },
+        {
+          "name": "Run ./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test :attachment-poc:test --rerun-tasks --no-parallel --max-workers=2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-24T17:33:36Z",
+          "completed_at": "2026-10-24T17:34:21Z"
+        },
+        {
+          "name": "Lightweight scientific contracts and four-language checks",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-24T17:34:21Z",
+          "completed_at": "2026-10-24T17:34:22Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-24T17:34:22Z",
+          "completed_at": "2026-10-24T17:34:22Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-24T17:34:22Z",
+          "completed_at": "2026-10-24T17:34:24Z"
+        },
+        {
+          "name": "Post Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-24T17:34:24Z",
+          "completed_at": "2026-10-24T17:34:40Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-24T17:34:40Z",
+          "completed_at": "2026-10-24T17:34:41Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-24T17:34:41Z",
+          "completed_at": "2026-10-24T17:34:41Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-24T17:34:41Z",
+          "completed_at": "2026-10-24T17:34:41Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/check-runs/120939184542",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000008745,
+      "runner_name": "GitHub Actions 1000008745",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 120939184591,
+      "run_id": 40116642106,
+      "workflow_name": "Android and domain checks",
+      "head_branch": "claude/new-session-1959qb",
+      "run_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/runs/40116642106",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU89BTM8AAAAcKImBzw",
+      "head_sha": "369267e3741fcc3e263f6c51f1f81314abf887be",
+      "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/jobs/120939184591",
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/40116642106/job/120939184591",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-24T17:33:13Z",
+      "started_at": "2026-10-24T17:33:16Z",
+      "completed_at": "2026-10-24T17:55:34Z",
+      "name": "device-tests",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-24T17:33:16Z",
+          "completed_at": "2026-10-24T17:33:19Z"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-24T17:33:19Z",
+          "completed_at": "2026-10-24T17:33:26Z"
+        },
+        {
+          "name": "Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-24T17:33:26Z",
+          "completed_at": "2026-10-24T17:33:26Z"
+        },
+        {
+          "name": "Run android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-24T17:33:26Z",
+          "completed_at": "2026-10-24T17:33:30Z"
+        },
+        {
+          "name": "Run sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-24T17:33:30Z",
+          "completed_at": "2026-10-24T17:33:32Z"
+        },
+        {
+          "name": "Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-24T17:33:32Z",
+          "completed_at": "2026-10-24T17:33:43Z"
+        },
+        {
+          "name": "Run sudo chmod a+rw /dev/kvm",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-24T17:33:43Z",
+          "completed_at": "2026-10-24T17:33:43Z"
+        },
+        {
+          "name": "Run ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-24T17:33:43Z",
+          "completed_at": "2026-10-24T17:55:09Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-24T17:55:09Z",
+          "completed_at": "2026-10-24T17:55:11Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-24T17:55:11Z",
+          "completed_at": "2026-10-24T17:55:12Z"
+        },
+        {
+          "name": "Post Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-24T17:55:12Z",
+          "completed_at": "2026-10-24T17:55:33Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-24T17:55:33Z",
+          "completed_at": "2026-10-24T17:55:33Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-24T17:55:33Z",
+          "completed_at": "2026-10-24T17:55:33Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-24T17:55:33Z",
+          "completed_at": "2026-10-24T17:55:33Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/check-runs/120939184591",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000008746,
+      "runner_name": "GitHub Actions 1000008746",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 120939184641,
+      "run_id": 40116642106,
+      "workflow_name": "Android and domain checks",
+      "head_branch": "claude/new-session-1959qb",
+      "run_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/runs/40116642106",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU89BTM8AAAAcKImCAQ",
+      "head_sha": "369267e3741fcc3e263f6c51f1f81314abf887be",
+      "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/jobs/120939184641",
+      "html_url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/40116642106/job/120939184641",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-24T17:33:13Z",
+      "started_at": "2026-10-24T17:33:16Z",
+      "completed_at": "2026-10-24T18:03:31Z",
+      "name": "android",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-24T17:33:17Z",
+          "completed_at": "2026-10-24T17:33:20Z"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-24T17:33:20Z",
+          "completed_at": "2026-10-24T17:33:28Z"
+        },
+        {
+          "name": "Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-24T17:33:28Z",
+          "completed_at": "2026-10-24T17:33:29Z"
+        },
+        {
+          "name": "Run android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-24T17:33:29Z",
+          "completed_at": "2026-10-24T17:33:34Z"
+        },
+        {
+          "name": "Run sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-24T17:33:34Z",
+          "completed_at": "2026-10-24T17:33:37Z"
+        },
+        {
+          "name": "Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-24T17:33:37Z",
+          "completed_at": "2026-10-24T17:33:53Z"
+        },
+        {
+          "name": "Resolve Robolectric android-all jars through Gradle (no download at test time)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-24T17:33:53Z",
+          "completed_at": "2026-10-24T17:34:11Z"
+        },
+        {
+          "name": "Run ./gradlew -ProbolectricDir=\"$GITHUB_WORKSPACE/build/robolectric-jars\" :core:data:testDebugUnitTest --rerun :core:reminder:testDebugUnitTest --rerun :app:testFullDebugUnitTest --rerun lintFullDebug :app:assembleFullDebug :app:assembleFullRelease :core:data:assembleDebugAndroidTest :app:assembleFullDebugAndroidTest",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-24T17:34:11Z",
+          "completed_at": "2026-10-24T18:02:16Z"
+        },
+        {
+          "name": "Sublingual immutable P0/P1-A/P1-B/P1-C1 replay and P1-C2 disposition acceptance",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-24T18:02:16Z",
+          "completed_at": "2026-10-24T18:02:38Z"
+        },
+        {
+          "name": "Run python3 scripts/check_release_manifest.py",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-24T18:02:38Z",
+          "completed_at": "2026-10-24T18:02:38Z"
+        },
+        {
+          "name": "Exclude experimental attachment code and providers from release payload",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-24T18:02:38Z",
+          "completed_at": "2026-10-24T18:02:38Z"
+        },
+        {
+          "name": "Exclude ANSM test-only measurement and shadow integration from release",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-24T18:02:38Z",
+          "completed_at": "2026-10-24T18:02:38Z"
+        },
+        {
+          "name": "Release APK source identity and delivery ledger",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-24T18:02:38Z",
+          "completed_at": "2026-10-24T18:02:48Z"
+        },
+        {
+          "name": "Run git diff --exit-code -- core/data/schemas docs/PLAN.md",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-24T18:02:48Z",
+          "completed_at": "2026-10-24T18:02:48Z"
+        },
+        {
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-24T18:02:48Z",
+          "completed_at": "2026-10-24T18:03:00Z"
+        },
+        {
+          "name": "Post Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 28,
+          "started_at": "2026-10-24T18:03:00Z",
+          "completed_at": "2026-10-24T18:03:27Z"
+        },
+        {
+          "name": "Post Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 29,
+          "started_at": "2026-10-24T18:03:27Z",
+          "completed_at": "2026-10-24T18:03:27Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-24T18:03:27Z",
+          "completed_at": "2026-10-24T18:03:28Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-24T18:03:28Z",
+          "completed_at": "2026-10-24T18:03:28Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/check-runs/120939184641",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000008747,
+      "runner_name": "GitHub Actions 1000008747",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

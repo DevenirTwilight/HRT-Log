@@ -12,5 +12,5 @@
   "method": "normal protected squash via auto merge, pinned exact head; no admin bypass",
   "main_android": 40116642106,
   "main_science": 40116642050,
-  "main_ci_at_checkpoint": "Science SUCCESS; Android IN_PROGRESS"
+  "main_ci_at_checkpoint": "Android40116642106 and Science40116642050 SUCCESS on exact merge SHA"
 }

@@ -1,3 +1,13 @@
+## MED-02 #119 完成：已合并且精确主线全部复验通过 — 2026-10-24
+
+#119最终源623fca6efdbf8e7bb36ec92f80601e881ae7c25c，正常保护squash合并369267e3741fcc3e263f6c51f1f81314abf887be；fetch核对默认claude/new-session-1959qb正是369，主线/源tree同6cf90042f5ccfe51229621d4f04c5311565fffae。最终PR/push全部必需门、三API及低内存通过；合并后主线Android40116642106五jobs全SUCCESS、Science40116642050 SUCCESS，均精确369。最终JSON原件/merge收据/完整验收ZIP及HTML/log在本分支accepted-623fca6e。没有未完CI，不要根据下面或源分支历史PENDING重复开发！本证据分支只保存结果，不合并它的旧源码树。
+
+本轮真实完成NotesRepository范围门面→Controller→真实SAF/有界输入→既有Tink/journal COMMIT→显式APPOINTMENT/单项LAB关联→列表/认证Reader/内存PDF/PNG/二进制查看→撤权/重开/实际四强停核对→完整归档准入。生产/测试组件复用#103–118，不重做底座。修复JVM导航就绪竞争，并收紧同UUID不同输入竞争的异常确认：只有真实返回receipt自动Saved，异常COMMITTED须显式核对，不重放URI、不误报为本次新内容成功。三API原App2/Core3/4新PID、低内存12+8新PID和新增竞争场景全过，导航17/Period5/Runtime2全0fail/0skip，data599/reminder22无失败或跳过；App总2339/0fail/557既有skip明确保留。固定源unsigned Release实际payload隔离/来源/No INTERNET守卫通过，无签名或交付。
+
+feature_enabled=0、PUBLIC_ENTRY_ENABLED=false、NOT_REVIEWED_EXTERNALLY、真实原件/正式用户导入查看恢复UI/永久文件与key删除OFF。Room16/业务备份/PNBAK1/PNMEDBK1/crypto/配额/PK/权限未改。外审包和95源码hash已随#119入主线。物理设备/TalkBack/物理断电/完整viewer低内存/恶意解析器语料仍NOT_RUN，不把CI当外审。
+
+本批已结束，可持续下一项最小独立工程交付：恢复后仍保留旧generation时的新增附件联合准入组件及对应合成验证；复用inventory/budget/authority，当前拒绝维持到证据闭合。非空fallback完整导出仍REFUSED、未知仍UNKNOWN，不能私改PNMEDBK1或忽略历史；多库归档协议、正式用户UX、删除政策、parser/硬件验证、外部独立审核与负责人另行启用授权仍为后续明确门槛。没有已知未修复的本批阻断，但不宣称附件已可对真实用户开放。
+
 ## MED-02 #119最终源Release隔离/来源本地实证通过 — 2026-10-24
 
 固定623源码本地unsigned fullRelease构建PASS，原payload守卫PASS（1DEX，无合成入口/Provider或实验/Tink命名空间），正式Manifest守卫PASS/No INTERNET，APK来源guard精确SOURCE_SHA623/SOURCE_DIRTY=false。原日志/unsignedAPK哈希收据accepted-623fca6e/local，APK本体不进库/不交付/无签名。主线369树同源，Science40116642050成功、Android40116642106仍进行；最终状态须核查，不重跑旧研究。外审和公共入口/真实原件/永久删除OFF。
