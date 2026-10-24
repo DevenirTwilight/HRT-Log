@@ -1,0 +1,10 @@
+{
+  "source": "57ed0855798031d4f4db5f083f091b63150e70c0",
+  "run": 40125887730,
+  "artifact": 12572632712,
+  "sha256": "8043a84e51ee26205cd0337565f5fabb02ba6837d7982d12a9a4c8047cb3f429",
+  "crc": "PASS",
+  "result": "FAIL",
+  "stage": "Original lifecycle test, PID3744 process exit; new collection tests NOT_RUN",
+  "cause": "UNDETERMINED. No target fatal stack or explicit target LMK message; no retrospective fix claim."
+}

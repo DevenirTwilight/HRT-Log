@@ -1,0 +1,29 @@
+[
+  {
+    "id": 12573501553,
+    "sha": "28849a7a9ecdf913d9492b24f4805bf4a3f57ca2f7a4c74d044744a7612dd90d",
+    "label": "api26",
+    "zipCRC": "PASS",
+    "report": [
+      "core/data/build/reports/med02-lifecycle-isolated/html/connected/debug/net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.html"
+    ]
+  },
+  {
+    "id": 12573482157,
+    "sha": "caf7129698cbe92bbf5080a1fec83becca57826d1cdc07e0bb922caa60d8752f",
+    "label": "api35",
+    "zipCRC": "PASS",
+    "report": [
+      "core/data/build/reports/med02-lifecycle-isolated/html/connected/debug/net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.html"
+    ]
+  },
+  {
+    "id": 12573225664,
+    "sha": "b97b7e59a64e0a007fef5aa05f0aa346d84f35afd888afb9d9172917539c2845",
+    "label": "api29",
+    "zipCRC": "PASS",
+    "report": [
+      "core/data/build/reports/med02-lifecycle-isolated/html/connected/debug/net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.html"
+    ]
+  }
+]

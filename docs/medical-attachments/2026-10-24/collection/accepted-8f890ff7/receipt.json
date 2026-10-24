@@ -1,0 +1,19 @@
+{
+  "source": "8f890ff7ba1c9aac25a73442c4c5036de94de9ec",
+  "run": 40126500283,
+  "artifact": 12573098862,
+  "sha256": "b2d6df303c21a1ec510e561855ebcb1cbe9725b8ed8fb6e8fd90159eecc95ba4",
+  "crc": "PASS",
+  "nativeBase": "OK (12 tests)",
+  "nativeCollection": "OK (4 tests), 23.002 seconds; heap probe plus 3 actual new tests",
+  "config": "API26/x86 RAM512MiB/ART192MiB",
+  "process": 4026,
+  "measured": "Five stage samples, not complete overall peak. Linux process HWM151240KiB includes process lifetime; no attribution as a specific stage peak.",
+  "javaStageMaximumUsedBytes": 77122496,
+  "nativeStageMaximumAllocatedBytes": 12543616,
+  "rssStageMaximumKiB": 116892,
+  "pssStageMaximumKiB": 107060,
+  "historical57Failure": "UNDETERMINED, not erased by this pass",
+  "restoredCollectionActivation": "NOT_IMPLEMENTED",
+  "currentIntegratedSource": "1a970493, new exact-SHA checks still required"
+}

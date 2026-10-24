@@ -1,3 +1,13 @@
+## MED-02 latest owner-approved code/evidence checkpoint — 2026-10-24
+
+#120 MERGED protected at efb2ff5d, tree matches accepted60dc382b; all required PR checks green and threeAPI operation3/0fail/0skip official HTML plus lowmemOK12/8 freshPID verified, originals saved accepted-60dc382b. Main postmerge CI separate. No repeated approval needed.
+
+#121 implements real OFF PNMEDBK2 writer/independent reader/index/v2 domains. Integrated latest source1a970493 after ONE normal merge of accepted#120; both147.I/J and safety tests preserved, no UI/schema/quotas changed. Exact merged local608/0fail/0error/0skip and Android-test compile PASS; ZIP/XML/log receipt collection/local-1a970493. Final-source standard CI and lowmem still running, Draft.
+
+Prior8f890ff7 actual new codec API26/512MiB/192MiB artifact SHA/CRC verified: baseline12 and new4(probe+3), collection23.002s, baseExit0/collectionExit0. Independent two-library real writer→source test-key loss→reader→all original hashes/typed history passes. Five memory stage observations and process HWM151240KiB are NOT complete peak/max-size/8-library or collection activation evidence. Raw8 artifacts accepted-8f890ff7. Earlier57 process exit original lifecycle beforev2 remains UNDETERMINED; raw original ZIP/log/receipt retained failed-57ed0855, no erased failure/claimed root-cause fix.
+
+Owner approval170d78e0/§147.J covers OFF v2 development, not permanent freeze/public entry/deletion/limits. Remaining real work: retained-snapshot factory, durable complete-group restoration/one authority commit, joint atomic reservations and restored-write/re-export/re-restore E2E. Neither codec nor early-refusal fix is a restored-write breakthrough. Feature0/publicfalse/NOT_REVIEWED_EXTERNALLY/permanent-deleteOFF unchanged.
+
 ## MED-02 retained-write native failure preserved — 2026-10-24
 
 93461e67 API26 low-memory40123862350 actually FAIL, not PASS: new fixture invoked saveAppointment(nonzero nonexistent9876), so existing edit-path validation failed NotesRepository836 before provider/refusal assertions. Official ZIP12572368263 SHAa4dcb02c… and all ZIP CRC verified; raw ZIP/job log/failure receipt now retained under restored-write/evidence-93461e67. No LMK/product inference. Same-class API failures require new fixed-source evidence, not retries of old934.
