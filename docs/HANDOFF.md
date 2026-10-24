@@ -1,3 +1,61 @@
+## MED-02 首次真实低内存全闭环已通过；补持久库后续ID保留 — 2026-10-23
+
+源13a107c6、run40033692189真实API26/x86/512MiB/192MiB SUCCESS：原5项OK5，无skip；三个OBJECTS_COMMITTED/IN_SWITCH/SWITCHED真实force-stop、不同PID重启verify各OK1，已独立下载官方ZIP12535304464，SHA2e3ca49a…/CRC和原始逐项log已核并入native-13a107c6。正式writer→独立reader→新设备本地包装/持久SQLCipher→全业务/全部4版本/历史trash/typed图复验→单Root COMMIT→新PID重开逐字段/哈希比对，首次真实闭环成立，仅对该源码/合成夹具。内存阶段采样最大Java约73.9MiB、RSS约102.6MiB，不是进程峰值；真机/真实双设备/物理断电/极限满库NOT_RUN，外审未做/feature0。
+
+发现持久重建只重放live rows会丢sqlite_sequence高位：例如live2、墓碑3和trash9后，新ID会重用3。新增仅候选调用的LibraryRestoreSequences，从本应用安装schema识别真实AUTOINCREMENT PK，保留全部认证typed墓碑及既有已验证trash snapshots的ID高位；不改历史行、不降低已有seq、不传新字段/更改格式，Long.MAX_VALUE安全拒绝分配不wrap。2项本地实测：真实RawData重建确会next3（回滚观察，不降低计数器造反例），保留后new10且原trash9仍能恢复；高计数不降低、MAX拒绝。编译PASS，原生正向新增恢复后真正新建就诊ID不得落入历史身份范围。此新源尚须CI/native，不能借13a成功直接合并；新原件与此前失败都保留，不签名发布。
+
+## MED-02 重开后输入所有权失败已定位，候选继续严格复验 — 2026-10-23
+
+源9e6db40c低内存run40032689569：5项/2FAIL/0skip。已越过原mmap/FD问题，完成全部对象安装并重开DB，独立verify报invalid JSON；原因是首次BackupJsonReader.indexed拥有传入数组且close清零，协调器错误复用同一frozen records。两次解析现各传copyOf，原parser清零/严格验证和最终独立审计完全保留，原冻结副本仍由cap在所有退出路径擦除；4倍预算未提高。最新native编译PASS，不能提前称原生修复成功。原失败日志和先前Android ELOOP取消记录已保存native-9e6db40c，官方ZIP SHA86b46dee…/CRC已核（不是绿）。
+
+发现connectedDebugAndroidTest结束会卸载测试包，原末尾run-as指标得到unknown package；不把该内容当内存数据。低内存脚本改为assemble同一测试APK→直接安装/原生AndroidJUnitRunner执行原5项（必须OK5、无FAIL/skip）→采样文件JSON验证→原三个真实强停seam，保留同一API26/512MiB/192MiB、全部断言及失败码，无缩夹具/放宽限额。普通CI原生/迁移路径保持原connected任务。以上新源仍需完整CI及真实PID证据，Draft/feature0，不合并发布。
+
+## MED-02 连接/目录和迁移边界合并修正，待精确原生验收 — 2026-10-23
+
+源a4939480原生/低内存在途，不标PASS；本检查点新增候选修正后须由新HEAD重新验收。迁移合同发现13→14故障路径少14→15，可能因“无迁移”假通过；补完整路径，9→10及13→14均增加injected真实到达断言。新增14→15注入，要求原14库/附件scope/day_note和版本保持、两控制表不残留，重试升级15成功且不自动采用generation。最新本地迁移6及旧ID1共7/0fail/error/skip和全部native Kotlin编译PASS，XML/log在pinned-routing。
+
+宿主最小POSIX复现：对bare /proc/self/fd目录用O_NOFOLLOW会ELOOP，fd/.则打开同inode；不是Android证据。LibraryGenerationContext只把noBackup父目录表达改为同held-FD的dot子路径，保留最终leaf nofollow/inode/权限检查，无未知路径adopt。还发现get(PRIMARY)在子Room线程设置root synchronous可能等待其父root writer，路由改纯读；FULL设置仅在新连接未发布前，实际authority COMMIT仍检查FULL。新增恢复后scoped就诊删除/回收站恢复作为真实DAO+rawSQL跨线程路径，不改临床业务算法。Android是否通过仍须当前源码CI，不能用本地7或静态推导代替。入口0/外审未完成/永久删除OFF，旧失败ZIP/log继续保留。
+
+## MED-02 首次真实低内存失败已定位并修复候选 — 2026-10-23
+
+源50204345低内存run40030685177：真实API26/x86、MemTotal508752KiB、ART192MiB，5项2FAIL/0skip。正向在SQLCipher执行PRAGMA mmap_size=0时被拒绝（返回行却用了execSQL）；故障注入后段因同错误未达seam，断言正确失败。改query并要求返回0，未放宽内存/SQL或安全断言。原官方ZIP SHA11d7fa92…/CRC已核并保存native-50204345，连原日志；不是LMK或恢复PASS。新源native Kotlin编译PASS。
+
+另两项app既有化验单/库存撤销重启测试末版本仍写14，现仅改15，完整app native Kotlin编译PASS，无Compose/业务改动。发现emulator-runner逐行启动shell，旧多行set+e/exitstatus无法跨行保留，失败时未采样；同样命令移至一个小bash脚本，确保原测试失败码不被覆盖且always采集logcat/内存文件，不放宽任何断言。新生产仅修PRAGMA调用，全部native/三个fresh-PID仍待这一源实际验收，Draft/OFF。
+
+## MED-02 原生失败回收与夹具修正 — 2026-10-23
+
+PR #115（Draft），此前源852e8ac2的run40027709483原始failed日志已保存generation-evidence/earlier-native-ci，未删失败。确认两个旧native测试仍期待Room14、显式9→14链缺14→15，现仅更新末版本期待/补迁移，保留所有业务/VOIDED/重启断言。新增RootFixture错误地用非零ID调用“编辑已有就诊”接口，导致required null，在进入恢复前失败；改为DAO插入固定id2合成旧记录，继续要求其与新库同ID隔离，未改生产save语义。native Kotlin编译PASS（首次夹具修正误把suspend DAO放同步事务的编译错误同样保留）。cd6fa5fc在途原生/低内存结果仍非PASS；新测试源需重新CI，继续七门Draft/OFF。
+
+## MED-02 候选源码冻结，进入正式原生/低内存CI — 2026-10-23
+
+本地完整data591/0fail/error/skip（随后补owned-copy早登记、关闭lease、严格预算policy与未释放空间保留）；最终相应目标6/0/0/0及全部native Kotlin源码编译PASS，精确生产SHA在generation-evidence/frozen-candidate。最新HEAD必须自己完整CI，不能把旧591归给新源。#114主线ca69ee5a的Android40022686679已SUCCESS；其原三API9项ZIP/HTML/SHA/CRC已存pr114-original。
+
+生产实现/迁移/守卫和内部E2E、AppLock撤权、低空间/alias拒绝、真实强停三seam已提交；预留Root alias/整库quota不提高；旧文件/keys均保留。单一authority实际Native COMMIT为可见点，数据集不同整数ID不能重关联。未完成IO即使ABORTED也不自动释放已预留的DB/WAL/密文余量；保守占用可阻止重试，需后续明确owner-release政策，不能靠假定线程已退出退费。新增普通附件写入在retained generations存在后仍拒绝，显式新scope临床写入独立支持。
+
+三API必需作业加真实LibraryRestoreAndroidTest+三freshPID runner；新独立API26/x86/512MiB/192MiB作业只跑最短合成归档恢复，复用既有AVD配置，不跑P4夹具。内存仅阶段采样Java/native allocated/RSS/PSS，不宣称峰值。真实Native/进程死亡/低内存当前待CI，真机/物理断电及disk-fill NOT_RUN。创建单一Draft PR，七项（原六门+低内存）和原件核验完成前不Ready，不以mock/编译替代。协议不永久冻结、入口OFF/外审未完成、无APK发布。详见durable-library-restore-contract.md（真实入口和启用前边界）。
+
+## MED-02 持久恢复生产路径已编码，尚待原生闭环验收 — 2026-10-23
+
+分支feature/med02-durable-generation-20261023；基于已保护合并#114 ca69ee5a。新增Room15仅本地library_authority/library_candidate，原Room1–14链保留，业务备份Schema13和PNBAK1不变。LibraryRestoreCoordinator实际执行：独立reader→联合预算/持久意图→新held-FD私有SQLCipher及新本地key→精确业务重建→原始内层密文复制/真实双alias预留包装和独立全认证→关闭并新连接/本地key重开逐字段/全历史/全版本复验→单一root authority原生COMMIT。原DB/原件/alias保留，无rename式伪原子。Root存初始来源的加密provenance，不执行archive SQL，不复制源Keystore alias。
+
+旧请求反例已RED→GREEN，现进一步规定：全库切换后，未显式携带LibraryRequestScope的旧UI/后台写接口一律拒绝，即使是重启后的新Repository，也不能凭旧整数ID重新贴标签；内部forGeneration支持明确新scope。所有真实Repository修改（包括导入/普通备份恢复/库存/回收站）经过root native事务与目标事务的共同屏障。旧附件句柄按同一持久authority拒绝。原页面/提醒尚未接新scope，这是公开启用前的真实集成门；本任务不开放UI。额外附件写入/旧quarantine准备在存在retained generation后先拒绝，不能绕过联合256MiB/512alias预算；读取、明确scope的普通事实写入及完整恢复自身另有受控路径。
+
+Root候选PREPARED/READY时普通写入冻结，成功后解除；异常尽量标ABORTED，撤权/进程死亡则必须以新授权显式abort，所有文件/key/预算继续保留，不自动采用/删除/退款。operation state可在新进程核真实提交，重复UUID不创建新库/包装，异载荷拒绝。锁顺序SQLite root→目标→session，完整审计/预检不持session monitor，实际COMMIT仍在授权内；WAL读避免跨库反向等待。
+
+本地原Room15目标45项中间源PASS、native源码编译PASS；首轮完整586项10FAIL均为旧Room14期待/故障链少最后迁移，原XML/log已保存first-full-room15。现在只更新实际末版本期待到15及补migration14To15，保留全部旧业务、回滚、下行拒绝断言；新源未重新验收。已新增真实生产E2E和三个fresh-PID seam，源码未执行原生，当前不能称闭环完成。无本地KVM；将用必需API26/29/35和独立512MiB/192MiB最短合成恢复验收，不跑P4大库/性能攻关。低内存/真机/外审均未获PASS；入口feature0、永久删除OFF、不冻结格式、不签名发布。
+
+## #114 已合并；旧ID真实RED→GREEN，持久authority继续实施 — 2026-10-23
+
+#114精确372b6981六必需门PASS、无冲突/讨论，按保护规则合并ca69ee5a。已下载三API原工件SHA/CRC及MedicalArchiveAndroidTest各9/0fail/skip；新分支正常同步，保留§147.C/D/E双方授权和完整交接。旧Repository反例真实FAIL：显示旧库ID1后切到新库ID1，旧保存误改新数据；当前generation路径绑定及共享pinned绑定、受控事务入口修正后原反例PASS。原RED/新GREEN及#114工件摘要已保存generation-evidence，不称完整恢复实现完成。
+
+正在独占Room15最小本地authority/candidate迁移及DatabaseAccess/NotesRepository共享入口，不改普通业务Schema13/PNBAK1。最终活动指针仅在原SQLCipher root的一个事务提交；候选先独立持久化。迁移/持久恢复/原生/低内存尚未验证，不得激活。入口OFF、外审未完成、旧密文和alias不删除。
+
+## MED-02 持久恢复与单一authority任务已接手 — 2026-10-23
+
+实时起点e6112698，#103/104/106/110–113已合并；#114固定候选372b69812f6f2946c68853be6f1732ab84876915，PR三API/JVM/科学均PASS、主机PASS，push主机仍待结束，不重跑。新独立feature/med02-durable-generation-20261023工作树，未改其他树。负责人§147.E已明确授权必要默认OFF持久化/安全激活，外审、永久冻结格式/删除/公开入口仍未授权。
+
+先审计单一DatabaseAccess及NotesRepository/提醒等真实写入入口，防止旧整数ID跨新库。计划文件所有权：本分支独占新增generation/持久恢复数据层与其测试，必要DatabaseAccess/NotesRepository集成；不修改UI/PK/BDPM/P5P6。当前尚未实现新持久闭环，不先声称PASS。保持入口OFF，任何缺乏完整资源/提交证明的候选不得激活。每个已完成检查点持续提交推送；#114继续按其精确源验收。
+
 ## PR114第一轮原生夹具断言FAIL，保留证据并作最小修正 — 2026-10-23
 
 62c3b92e的API26/29新MedicalArchive9项中8PASS，真实writer导出后唯一FAIL：新场景已将appointment1移入回收站，却误调用简单Fixture.safety()要求该行仍live。官方API26 artifact12529301881 SHA8ef8973c…/CRC已核，HTML明确栈在Fixture.safety:50；不是密码学失败或infra。现不改旧helper/期望、不删保护，改为精确检查该源行已删除、manifest typed记录TRASHED、全表前后相同、FK无错误及feature0。目标库仍沿用旧live行safety。生产密码学/SQL实现未变；最终新提交须自己的全部CI，不能借8PASS或本地585冒充最终端到端通过。

@@ -118,7 +118,7 @@ class MigrationBaselineTest {
             raw.execSQL("CREATE TRIGGER guard_supply_container_update BEFORE UPDATE ON supply_container WHEN NEW.state NOT IN ('SEALED','IN_USE','EMPTY','DISCARDED') BEGIN SELECT RAISE(ABORT,'Old state guard'); END")
         }
         val context=InstrumentationRegistry.getInstrumentation().targetContext
-        fun open()=androidx.room.Room.databaseBuilder(context,NotesDatabase::class.java,name).allowMainThreadQueries().addMigrations(migration9To10,migration10To11,migration11To12,migration12To13,migration13To14).addCallback(SchemaGuards).build()
+        fun open()=androidx.room.Room.databaseBuilder(context,NotesDatabase::class.java,name).allowMainThreadQueries().addMigrations(migration9To10,migration10To11,migration11To12,migration12To13,migration13To14,migration14To15).addCallback(SchemaGuards).build()
         val first=open()
         try { kotlinx.coroutines.runBlocking {
             val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=first})
@@ -131,7 +131,7 @@ class MigrationBaselineTest {
         try { kotlinx.coroutines.runBlocking {
             assertEquals("VOIDED",second.dao().voidedContainers().single().state)
             assertTrue(second.dao().containers().isEmpty())
-            assertEquals(14,second.openHelper.writableDatabase.version);assertEquals("Maximum supported business backup version; user-only exports remain 12",13,RecordBackupCompatibility.SCHEMA)
+            assertEquals(15,second.openHelper.writableDatabase.version);assertEquals("Maximum supported business backup version; user-only exports remain 12",13,RecordBackupCompatibility.SCHEMA)
             assertEquals(InventoryEncoding.LEGACY,second.dao().voidedContainers().single().inventory_encoding)
         }} finally {second.close();context.deleteDatabase(name)}
     }

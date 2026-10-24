@@ -1,0 +1,58 @@
+{
+  "tests": 586,
+  "failures": 10,
+  "errors": 0,
+  "skipped": 0,
+  "failed": [
+    {
+      "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "method": "failedElevenToTwelveFenceRollsBackWithAllReferenceFactsAndEpochIntact",
+      "failure": "java.lang.AssertionError"
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "method": "everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve",
+      "failure": "java.lang.AssertionError: expected:<14> but was:<15>"
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "method": "failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable",
+      "failure": "java.lang.AssertionError"
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "method": "failedMainTwelveToThirteenFenceKeepsPanelLinksLegacyBitsAndEpoch",
+      "failure": "java.lang.AssertionError"
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "method": "roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects",
+      "failure": "java.lang.AssertionError: expected:<14> but was:<15>"
+    },
+    {
+      "class": "net.plainnotes.app.data.HistoricalVisitTest",
+      "method": "encryptedBackupRetainsVisitsAndTrashAcrossAdditiveReferenceSchema",
+      "failure": "java.lang.AssertionError: expected:<14> but was:<15>"
+    },
+    {
+      "class": "net.plainnotes.app.data.LabPanelDataTest",
+      "method": "room11To12KeepsEveryRowAndGroupsNothing",
+      "failure": "java.lang.AssertionError: expected:<14> but was:<15>"
+    },
+    {
+      "class": "net.plainnotes.app.data.LabPanelDataTest",
+      "method": "expandedReportKeepsEveryOriginalUnitPanelContextAndBackupThroughTrash",
+      "failure": "java.lang.AssertionError: expected:<14> but was:<15>"
+    },
+    {
+      "class": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "method": "allOldRoomVersionsUpgradeThenAcceptSeparateCandidateWithoutBackfillingInventory",
+      "failure": "java.lang.AssertionError: expected:<14> but was:<15>"
+    },
+    {
+      "class": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "method": "candidateDDLFailureRollsBackWithoutChangingRoomVersionOrLegacyRows",
+      "failure": "java.lang.AssertionError: expected:<14> but was:<15>"
+    }
+  ]
+}

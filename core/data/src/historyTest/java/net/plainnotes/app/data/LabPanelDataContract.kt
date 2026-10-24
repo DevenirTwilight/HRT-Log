@@ -70,7 +70,7 @@ abstract class LabPanelDataContract {
                 "lab_context_revision" to "*", "trash_item" to "*", "lab_analyte" to "*").associate { (t, c) -> t to rows(db, t, c) } }
         val room = Room.databaseBuilder(context, NotesDatabase::class.java, name).addMigrations(*allMigrations()).addCallback(SchemaGuards).allowMainThreadQueries().build().also { opened += it }
         val raw = room.openHelper.writableDatabase
-        assertEquals(14, raw.version)
+        assertEquals(15, raw.version)
         before.forEach { (t, r) -> assertEquals(t, r, rows(raw, t, if (t == "lab_value") "id,analyte_code,value,unit,sampled_utc,sampled_zone,reference_lower,reference_upper,reference_unit,laboratory,note" else "*")) }
         assertEquals(0, raw.count("SELECT COUNT(*) FROM lab_value WHERE panel_id IS NOT NULL"))
         assertEquals(0, raw.count("SELECT COUNT(*) FROM lab_panel"))
@@ -286,7 +286,7 @@ abstract class LabPanelDataContract {
             repo.restoreBackup(archive,password)
             assertEquals(saved,repo.labs());assertEquals(contexts,repo.labContexts());assertEquals(listOf(panel),repo.labPanels())
             // P4 candidate already advances Room12/business11 to13/12; all raw lab assertions stay intact.
-            assertEquals(14,db.openHelper.writableDatabase.version);assertEquals(13,RecordBackupCompatibility.SCHEMA)
+            assertEquals(15,db.openHelper.writableDatabase.version);assertEquals(13,RecordBackupCompatibility.SCHEMA)
         }finally{password.fill('\u0000');archive.fill(0)}
     }
 

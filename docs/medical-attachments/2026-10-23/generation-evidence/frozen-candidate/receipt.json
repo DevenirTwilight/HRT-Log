@@ -1,0 +1,31 @@
+{
+  "tests": 6,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "scope": "Final source targeted JVM and native Kotlin compilation only; actual native end-to-end and low memory NOT_RUN locally. Full 591 regression preceded final ownership/lease/policy changes; latest CI must run full again.",
+  "production_sha256": {
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentBackupPreparation.kt": "127ac273954749431cfa148a7d433c75469f61eb812d0d75280222ec15ea6730",
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentBusinessRestore.kt": "6557cd85b1aea825fe541622fba11a440a7114f1455ec21d0c29f6c2b456585c",
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentPersistentStore.kt": "41394e0095de3900458725db8b789dac620425f8b194a21053d44b7d14cd4f65",
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentRestoreStaging.kt": "082783f0c8b15016521750722b4119b82495428f4ea1bdf894bf52b6d1b53d86",
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentScopedReader.kt": "07298c88b9bf3603f56e7246674eeec9ae404bc6296926ff7e44d1c840368881",
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentTransaction.kt": "f78451187ec1a5ef3e1875708bd57352123b894cb48f775cbb03ef81db93c8ae",
+    "core/data/src/main/java/net/plainnotes/app/data/DataTransfer.kt": "183514cc86bb7640087ae089ee7ee115a0db651f0d03a405a8abd145de7e2c93",
+    "core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt": "6aaa7ff0e395ca3614e7a52ee97aa858650be9969495268d83547a168c19aa65",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryAuthority.kt": "e62ad3cd90442c51e3e1a4c469fd740418e4cf6762e3a9a96734e1634b2e8b0c",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryGenerationContext.kt": "8ab457b94c793527004090d4f33b12901a942792bb6d4b6ce99d521818312c00",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryGenerationSchema.kt": "4e39cbdf1f7334450872d62d5ef8d9b4e53655e98d10cf7730dc6380effb9534",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryRequestScope.kt": "c1ab16038a936d037533140b8f9ba1ce4e0a23da581304c400748580ef4ce635",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreAdmission.kt": "a8007d01ae0be02a1a9ea3185b25ad62e848288ccf9bf9ca33bf4ba9e5f1db21",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt": "4af4596813fefcdc661baf47da4663be13b51e964f0d142c7e12a731e8630342",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreObjects.kt": "60319d69cf18d9f69af9b8c00035d91ccc38e3b1ff44ac1f8b95e4f21b3863e6",
+    "core/data/src/main/java/net/plainnotes/app/data/LibraryRestorePolicy.kt": "abfbc94f757c2a44da01335e8dc39c1fe7158d60704d0cc10c2ec822de8b66fd",
+    "core/data/src/main/java/net/plainnotes/app/data/LocalDatabaseKey.kt": "24890ad3e7b315b37f2f9f7f44fc715b224f20b18ccb7d51cbf73d4a34cc7467",
+    "core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveReader.kt": "3114d8f2b366716903e2649317dfd82c0cdfbcf1de212a150e17790382cc89b7",
+    "core/data/src/main/java/net/plainnotes/app/data/Migrations.kt": "d4946dd05eef89bce7638154c265e220e746523bcf543d6ccaa2e2d6acc1a7a8",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt": "4e2ea4db1a38625ad6a66d22342d8959b3ab273fbbd0a50d57519d5f2b571e1f",
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "1e1b198b523f23f81b5248a51a14978f4f50391241cc0e523c82add55f3a9751",
+    "core/data/src/main/java/net/plainnotes/app/data/SchemaGuards.kt": "fa74a847903b8a5f4255db4071484ecb9a7cd113e0d30ca38ad77121c5e403a4"
+  }
+}

@@ -1389,3 +1389,10 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 负责人已答复“批准上述整合的 OFF 格式实施范围”，并再次确认“我授权，搞出来”。批准按 review/med02-portable-approval-20261023 的唯一整合方案实现80B头、Argon2id 65536KiB/3/1、Tink64KiB、portable DEK包装、生产writer、独立reader、完整集合认证并接既有预检。该授权覆盖§147–147.C之前对格式特有实现的暂停要求，不需重复确认。
 
 不包含永久格式冻结、全库激活、入口启用或自动提高本地资源限额。保持feature0、NOT_REVIEWED_EXTERNALLY、真实原件/永久删除OFF；PNBAK1及既有数据库/对象密码学不变。后续冻结仍需完整联合资源及互通证据，激活仍需专项方案和批准。生产路径只处理内部合成输入，不提供公共归档入口。
+
+
+### 147.E MED-02 持久新数据集恢复与安全激活（2026-10-23）
+
+负责人明确授权默认OFF的全库恢复持久化基础设施、必要非破坏性迁移、单一持久generation authority、旧请求/旧会话屏障及恢复后独立核验。先验收并按§106合并#114；仅基于已验收组件续作，不重做Tink/输入/审计或隔离业务重建。新库保留完整业务事实/历史/回收站/全部附件版本和typed关系，旧库/密文/key保留；新的设备本地密钥和dataset/epoch/generation不得复制源alias。完整认证、联合容量/alias/存储/内存预算和独立核验通过前不得激活；单一可判定持久提交点，不能把多rename或两独立事务称原子。旧UI/通知/后台/协程的整数ID请求必须绑定旧generation并拒绝跨库重放。资源/兼容/权限不足fail closed，不扩大256MiB密文/512alias预算，不截断历史。
+
+仅内部合成验收：正式归档→独立认证→持久重建→安全切换→实际新进程读取核对，适用API26/29/35和低内存证据区分NOT_RUN。feature_enabled=0、永久删除OFF、NOT_REVIEWED_EXTERNALLY；不永久冻结PNMEDBK1，不开放导入/恢复UI，不用真实原件、不签名交付发布。不改变PNBAK1密码学/PK/BDPM/P5P6。共享DatabaseAccess/NotesRepository/提醒/Schema仅在明确文件所有权的独立集成PR处理，保留其他未合并工作。

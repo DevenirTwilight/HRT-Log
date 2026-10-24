@@ -15,21 +15,47 @@ import javax.inject.Singleton
 val CHECKIN_DEFAULTS=DAILY_KEYS
 const val BACKFILL_MAX_DAYS=731L
 
-@Singleton class NotesRepository(private val access: DatabaseAccess, private val pinned: Space?) {
+@Singleton class NotesRepository private constructor(private val access: DatabaseAccess, private val pinned: Space?,
+    private val generationBindings:java.util.concurrent.ConcurrentHashMap<Space,String>,private val requestScope:LibraryRequestScope?=null) {
+    constructor(access:DatabaseAccess,pinned:Space?):this(access,pinned,java.util.concurrent.ConcurrentHashMap())
     @Inject constructor(access: DatabaseAccess) : this(access, null)
     /** A repository that always works on [space], whatever the UI has selected (used by background reminders). */
-    fun pinnedTo(space: Space) = NotesRepository(access, space)
+    fun pinnedTo(space: Space) = NotesRepository(access, space, generationBindings, requestScope)
     // Coroutine-local transaction routing, not a database-validity cache. Legacy sql()/db()
     // helpers must stay on the same target as their DAO when global UI selection changes.
     private val transactionSpace=ThreadLocal<Space?>()
     val space get() = pinned ?: transactionSpace.get() ?: access.current
     fun select(space: Space) = access.select(space)
-    private fun db() = access.get(space)
+    private fun bindDatabase(target:Space,database:NotesDatabase):NotesDatabase {
+        val identity=DatabaseAccess.handleIdentity(database)
+        val bound=generationBindings.putIfAbsent(target,identity)
+        check(bound==null || bound==identity) {"Request belongs to a retired database generation"}
+        return database
+    }
+    /** Caller must carry this scope with the displayed record/draft; never retag an old ID.
+     * Unscoped legacy UI/background writes fail closed after a full-library switch. */
+    fun forGeneration(scope:LibraryRequestScope)=NotesRepository(access,pinned,java.util.concurrent.ConcurrentHashMap(),scope)
+    suspend fun generationScope():LibraryRequestScope=withContext(Dispatchers.IO) {
+        val database=databaseFor(space);val scope=requireNotNull(AttachmentIdentity.current(database.openHelper.writableDatabase))
+        LibraryRequestScope(DatabaseAccess.handleIdentity(database),scope.dataset,scope.epoch)
+    }
+    private fun writeBinding(target:Space,database:NotesDatabase) {
+        bindDatabase(target,database)
+        if(requestScope!=null || DatabaseAccess.managedGeneration(database)) {
+            val expected=requireNotNull(requestScope) {"A generation-scoped request is required after full restore"}
+            val live=requireNotNull(AttachmentIdentity.current(database.openHelper.writableDatabase))
+            check(expected.generation==DatabaseAccess.handleIdentity(database) && expected.dataset==live.dataset && expected.epoch==live.epoch) {"Retired record request scope"}
+        }
+    }
+    private fun databaseFor(target:Space)=bindDatabase(target,access.get(target))
+    private fun db() = databaseFor(space)
+    private suspend fun <T> boundTransaction(target:Space,block:suspend(NotesDatabase)->T):T =
+        access.withGenerationTransaction(target,{writeBinding(target,it)}) {database->block(database)}
     internal val measuredSaveGate get()=access.measuredSaveGate
     suspend fun <T> transaction(block: suspend (NotesDao) -> T): T {
         val target=space
         return measuredSaveGate.mutation(target) {withContext(Dispatchers.IO+transactionSpace.asContextElement(target)) {
-            val database=access.get(target);database.withTransaction {block(database.dao())}
+            boundTransaction(target) {database->block(database.dao())}
         }}
     }
     /** Capture the database once: changing the selected space cannot redirect a suspended reference transaction. */
@@ -37,8 +63,7 @@ const val BACKFILL_MAX_DAYS=731L
         val target=space
         if(required!=null && target!=required) throw ReferenceFailure(ReferenceError.WRONG_SPACE)
         val action:suspend()->T={withContext(Dispatchers.IO+transactionSpace.asContextElement(target)) {
-            val database=access.get(target)
-            database.withTransaction {block(database.dao(),database.openHelper.writableDatabase)}
+            boundTransaction(target) {database->block(database.dao(),database.openHelper.writableDatabase)}
         }}
         return if(mutation)measuredSaveGate.mutation(target,action) else action()
     }
@@ -92,14 +117,14 @@ const val BACKFILL_MAX_DAYS=731L
         val target=space
         if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
         val frozenDraft=draft.copy(uses=draft.uses.toList())
-        return measuredSaveGate.mutation(target) {withContext(Dispatchers.IO+transactionSpace.asContextElement(target)) {val database=access.get(target);database.withTransaction {
+        return measuredSaveGate.mutation(target) {withContext(Dispatchers.IO+transactionSpace.asContextElement(target)) {boundTransaction(target) {database->
             MeasuredUseIntegration.create(database,ticket,operationUuid,frozenDraft,created,checkpoint)
         }}}
     }
     private suspend fun <T> measuredTransaction(mutation:Boolean=true,block:suspend(NotesDatabase)->T):T {
         val target=space
         if(target!=Space.PRIMARY)throw ReferenceFailure(ReferenceError.WRONG_SPACE)
-        val action:suspend()->T={withContext(Dispatchers.IO+transactionSpace.asContextElement(target)){val database=access.get(target);database.withTransaction{block(database)}}}
+        val action:suspend()->T={withContext(Dispatchers.IO+transactionSpace.asContextElement(target)){boundTransaction(target,block)}}
         return if(mutation)measuredSaveGate.mutation(target,action) else action()
     }
     /** Internal until the runtime owner/conflict gateway is reviewed. No UI entry is enabled. */
@@ -817,7 +842,7 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun importTransMemo(plan:net.plainnotes.app.importer.TransMemo.Plan,overwrite:Boolean,zone:ZoneId=ZoneId.systemDefault()):ImportSummary {
         val target=space
         return measuredSaveGate.mutation(target){withContext(Dispatchers.IO) {
-            val database=access.get(target);database.withTransaction {TransMemoWriter.write(database.dao(),database.openHelper.writableDatabase,plan,overwrite,zone)}
+            boundTransaction(target) {database->TransMemoWriter.write(database.dao(),database.openHelper.writableDatabase,plan,overwrite,zone)}
         }}
     }
     suspend fun importHrtTracker(plan:net.plainnotes.app.importer.HrtTracker.Plan,targets:Map<net.plainnotes.app.importer.HrtTracker.Group,Long?>,
@@ -832,9 +857,9 @@ const val BACKFILL_MAX_DAYS=731L
         return exportBackupFrom(target,password,expectedEpoch)
     }
     private suspend fun exportBackupFrom(target:Space,password:CharArray,measuredEpoch:String?):ByteArray=measuredSaveGate.mutation(target){withContext(Dispatchers.IO) {
-        val db=access.get(target)
+        val db=databaseFor(target)
         BackupPlaintextOwner().use {owner->
-        if(measuredEpoch!=null) db.withTransaction {
+        if(measuredEpoch!=null) boundTransaction(target) {db->
             val raw=db.openHelper.writableDatabase
             if(ReferenceStore.previewEpoch(raw)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
             RegimenHistory.seed(raw)
@@ -843,7 +868,7 @@ const val BACKFILL_MAX_DAYS=731L
             owner.capture(MeasuredBackupJson.encode(raw,Instant.now()))
         } else {
             // Legacy exports retain their existing DOM and validation path.
-            val json=db.withTransaction {
+            val json=boundTransaction(target) {db->
                 val raw=db.openHelper.writableDatabase
                 RegimenHistory.seed(raw)
                 InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw)
@@ -889,8 +914,8 @@ const val BACKFILL_MAX_DAYS=731L
                 // LAB-02: an older backup has no panels; its results are restored ungrouped, never regrouped by time, laboratory or id.
                 require(schema>=11 || ((tables.optJSONArray("lab_panel")?.length() ?: 0)==0 && tables.optJSONArray("lab_value")?.let{a->(0 until a.length()).all{a.getJSONObject(it).isNull("panel_id")}}!=false)) { "Misdeclared lab panel backup version" }
                 restoreCheckpoint(RestoreCheckpoint.INPUT_VALIDATED)
-                val db=access.get(target)
-                db.withTransaction {
+                val db=databaseFor(target)
+                boundTransaction(target) {db->
                     val sql=db.openHelper.writableDatabase
                     if(measuredEpoch!=null && ReferenceStore.previewEpoch(sql)!=measuredEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
                     RawData.restoreRows(access.applicationContext,sql,tables,upgradeRegimens=schema<4,backfillTrash=schema<9,measured=measuredEpoch!=null,checkpoint=restoreCheckpoint)

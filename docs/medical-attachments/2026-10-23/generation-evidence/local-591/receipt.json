@@ -1,0 +1,7 @@
+{
+  "tests": 591,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "scope": "Pre-CI full JVM regression; followed by native-test memory sampling and production borrowed-copy ownership fix. Exact final HEAD must pass its own full CI."
+}

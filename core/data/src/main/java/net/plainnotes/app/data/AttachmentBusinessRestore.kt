@@ -19,7 +19,7 @@ internal class AttachmentBusinessRestore(private val context:Context,private val
         check(Looper.myLooper()!=Looper.getMainLooper()) {"Candidate reconstruction requires a worker"}
         cap.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
             check(currentDb.isOpen && !currentDb.openHelper.writableDatabase.inTransaction())
-            check(AttachmentIdentity.current(currentDb.openHelper.writableDatabase)==scope) {"Current library changed"}
+            DatabaseAccess.assertActiveHandle(currentDb);check(AttachmentIdentity.current(currentDb.openHelper.writableDatabase)==scope) {"Current library changed"}
         }
     }
     inner class Candidate internal constructor(private val db:NotesDatabase,private val cap:AttachmentSession.Capability,
