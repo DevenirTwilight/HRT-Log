@@ -1,3 +1,7 @@
+## MED-02 操作链候选固定，准备独立PR原生验收 — 2026-10-24
+
+正式操作门面/Runtime绑定/受控查看与隔离真实SAF host已编码；Core3+App2+四kill点全部编译通过，Runtime2/旧data599与release隔离5/设计61本地通过。新增JNI实际运行仍NOT_RUN，不能写CI_PASS。最后只补DocumentProvider目录路径协议和完整性状态撤权断言：已标CORRUPT的旧reader不能继续输出，已有UUID重选须显式核对不得伪报新输入成功。默认OFF和受管恢复库新增写入拒绝保持，新增源码固定后只修真实CI阻断。不改Schema16/协议/限额/权限/签名，外审/真机/物理断电/正式入口/永久删除仍OFF或NOT_RUN。先固定最新源，建Draft独立PR；CI实际执行主线全部原断言、三API真实SAF/3core及新4freshPID、低内存12+原4/新4seam；无KVM所以本地只编译不能冒充模拟器。
+
 ## MED-02 操作链已编码，真实SAF/重启用例已编译，待CI — 2026-10-24
 
 独立feature/med02-operation-flow-20261024继续基于f5f94238。最短真实链已有：仅debug/模拟器/私有随机SQLCipher namespace的非导出Activity，测试APK MANAGE_DOCUMENTS保护的DocumentsProvider，经真实DocumentsUI选择合成PDF/PNG/二进制，回到页面明确确认后Runtime绑定新授权会话→Repository→单次限额内存读取→既有Tink/journal真实COMMIT→列表/认证Reader/ProxyFD PdfRenderer或限像素图片/受控前缀查看。主导航/release入口没有接入，PUBLIC_ENTRY_ENABLED=false和feature0不变。生产UI不直接触Room/密钥/路径。

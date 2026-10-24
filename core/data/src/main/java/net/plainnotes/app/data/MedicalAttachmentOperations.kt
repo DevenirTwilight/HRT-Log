@@ -133,7 +133,8 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
                         ON l.store_uuid=r.store_uuid AND l.record_epoch=r.record_epoch AND l.record_uuid=r.record_uuid
                         JOIN attachment_document d ON d.store_uuid=l.store_uuid AND d.document_uuid=l.document_uuid
                         WHERE r.store_uuid=? AND r.record_epoch=? AND r.target_kind=? AND r.legacy_id=? AND r.state='ACTIVE'
-                        AND l.document_uuid=? AND l.state='ACTIVE' AND d.state='ACTIVE' AND d.active_version_uuid=?""",
+                        AND l.document_uuid=? AND l.state='ACTIVE' AND d.state='ACTIVE' AND d.active_version_uuid=?
+                        AND EXISTS(SELECT 1 FROM attachment_version v WHERE v.store_uuid=d.store_uuid AND v.document_uuid=d.document_uuid AND v.version_uuid=d.active_version_uuid AND v.status='VERIFIED')""",
                         arrayOf(s.dataset,s.epoch,target.kind.name,target.id,document.toString(),version)).use {check(it.moveToFirst()) {"Attachment relationship/version revoked"}}
                 }
                 override fun check()=publish {Unit}

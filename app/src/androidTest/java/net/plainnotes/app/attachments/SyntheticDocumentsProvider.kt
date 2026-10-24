@@ -17,13 +17,19 @@ import java.io.ByteArrayOutputStream
 class SyntheticDocumentsProvider:DocumentsProvider() {
     override fun onCreate():Boolean {SyntheticEmulatorGuard.requireEmulator();return true}
     override fun queryRoots(projection:Array<out String>?):Cursor=MatrixCursor(projection ?: ROOTS).apply {
-        val r=newRow();for(c in columnNames)r.add(c,when(c) {Root.COLUMN_ROOT_ID->"samples";Root.COLUMN_DOCUMENT_ID->"samples";Root.COLUMN_TITLE->"SYNTHETIC MED-02";Root.COLUMN_MIME_TYPES->"*/*";Root.COLUMN_FLAGS->Root.FLAG_LOCAL_ONLY;Root.COLUMN_AVAILABLE_BYTES->32L*1024*1024;else->null})
+        val r=newRow();for(c in columnNames)r.add(c,when(c) {Root.COLUMN_ROOT_ID->"samples";Root.COLUMN_DOCUMENT_ID->"samples";Root.COLUMN_TITLE->"SYNTHETIC MED-02";Root.COLUMN_MIME_TYPES->"*/*";Root.COLUMN_FLAGS->Root.FLAG_LOCAL_ONLY or Root.FLAG_SUPPORTS_IS_CHILD;Root.COLUMN_AVAILABLE_BYTES->32L*1024*1024;else->null})
     }
     override fun queryDocument(documentId:String,projection:Array<out String>?):Cursor=MatrixCursor(projection ?: DOCS).apply {row(this,documentId)}
     override fun queryChildDocuments(parentDocumentId:String,projection:Array<out String>?,sortOrder:String?):Cursor {
         require(parentDocumentId=="samples");return MatrixCursor(projection ?: DOCS).apply {listOf("pdf","png","binary").forEach {row(this,it)}}
     }
     override fun isChildDocument(parentDocumentId:String,documentId:String)=parentDocumentId=="samples" && documentId in listOf("pdf","png","binary")
+    override fun findDocumentPath(parentDocumentId:String?,childDocumentId:String):android.provider.DocumentsContract.Path {
+        require(parentDocumentId==null || parentDocumentId=="samples")
+        require(childDocumentId in listOf("samples","pdf","png","binary"))
+        return android.provider.DocumentsContract.Path(if(parentDocumentId==null)"samples" else null,
+            if(childDocumentId=="samples")listOf("samples") else listOf("samples",childDocumentId))
+    }
     private fun row(c:MatrixCursor,id:String) {
         require(id in listOf("samples","pdf","png","binary"));val r=c.newRow()
         for(name in c.columnNames)r.add(name,when(name) {
