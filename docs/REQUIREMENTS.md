@@ -1416,3 +1416,7 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 只允许自动化及隔离合成调试入口，不能进入正式release路由或作为审核旁路。feature0、NOT_REVIEWED_EXTERNALLY、正式导入/查看/恢复UI/真实原件测试/永久删除OFF；独立外审、完整备份兼容验收及单独启用授权仍必需。不改PK/P4P5P6/BDPM/签名/权限/Release，不交付APK。最短真实合成PDF/PNG/二进制链先行，针对性失败/三阶段实际进程死亡/适用三API及正常必需CI后按§106保护合并；未证明的查看路径明确阻断，不用明文临时文件绕过。
 
 2026-10-24续：先实时验收并收尾既有#119，不另建重复PR；真实DocumentsUI选择、明确确认、认证提交/关联、重开读取和无明文磁盘查看必须有实际原生证据。相同UUID不同输入不能伪报新成功，不确定提交只核对；保留库/未知集合不完整不得宣称备份完整。只有有证据的真实失败才做最小修正，不反复补跑UNKNOWN环境问题。满足§106和安全关键验收后正常保护合并并核主线；随后以精确源码、已有原件索引和未验证边界形成外部审查交付包，覆盖SAF/恶意Provider、对象与密钥、提交/恢复、完整备份和native解析/内存残留。独立专家未执行仍NOT_REVIEWED_EXTERNALLY；外审通过也不是公开启用授权，仍需负责人另行明确批准。不改Room16/业务备份版本/现有协议或AppShell及无关UI，不增加权限、配额、签名、APK交付或Release。
+
+### 147.J PNMEDBK2 默认OFF多库归档扩展明确批准（2026-10-24）
+
+负责人对93461e67提出的具体兼容方案明确答复“批准”。授权默认关闭的PNMEDBK2集合协议实现：单一认证集合覆盖ACTIVE及完整RETAINED库（最多8库），稳定类型化身份、不忽略历史/回收站/空库/未知资源；复用Argon2id/Tink/AES-GCM并对新协议做版本域隔离，PNMEDBK1和PNBAK1不改且旧reader拒绝新header。聚合限制仍为业务JSON32MiB、100000行、manifest8MiB、1000版本、wire1GiB/cipher512MiB，本地联合256MiB/512alias不提高。批准继续开发真实集合导出/独立认证/恢复及联合持久预留，不需重复申请此协议实施授权；具体字节布局应可审查，永久格式冻结、功能启用、真实原件、永久删除、签名发布仍未授权。继续feature0/publicfalse/NOT_REVIEWED_EXTERNALLY。

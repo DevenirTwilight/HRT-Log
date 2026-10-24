@@ -1,3 +1,9 @@
+## MED-02 PNMEDBK2 implementation authorization — 2026-10-24
+
+Owner explicitly approved the concrete collection proposal from PR120 source93461e67. This authorizes OFF PNMEDBK2 implementation, not public enablement, permanent freeze/deletion, quota changes or real originals. New independent branch feature/med02-collection-archive-20261024 starts from actual merged369267e; PR120 remains separate and running native CI, do not copy its unaccepted code.
+
+First production slice: strict collection membership/index codec and v2 domain-isolated crypto reuse, then writer/independent reader and targeted synthetic tamper/missing/duplicate/cross-library tests. Complete retained capture, atomic collection restore and durable joint write admission remain to connect; no restored-write breakthrough claimed until full end-to-end success. Exact source CI and native evidence must be recorded per checkpoint; do not rerun unrelated P4. Room16/business13/feature0/publicfalse unchanged.
+
 ## MED-02 #119最终检查发现并收紧并发不同输入回执边界 — 2026-10-24
 
 70584c6f正常PR40112205294五Android jobs/Science/低内存全部SUCCESS，原导航修正通过；仍不直接合并：末次源码审查识别了两个控制器同UUID、不同输入同时越过前置operationState检查的竞争。底层已有request digest/写锁会正确拒绝异载荷，但旧controller通用异常后COMMITTED核对可能自动把另一输入的回执显示为Saved。此为源码导出的反例，尚未在旧生产源码上运行新负向用例，不能伪称已有native RED。
