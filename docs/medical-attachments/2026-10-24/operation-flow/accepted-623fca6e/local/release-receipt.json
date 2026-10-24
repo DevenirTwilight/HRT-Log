@@ -1,0 +1,11 @@
+{
+  "source_sha": "623fca6efdbf8e7bb36ec92f80601e881ae7c25c",
+  "source_dirty": false,
+  "unsigned_apk_sha256": "2691130025e7deb4dddf3c6fbde08d3d79263742d8c336e593793c978ff0a476",
+  "attachment_release_payload_isolation": "PASS",
+  "release_manifest_no_internet": "PASS",
+  "apk_provenance": "PASS",
+  "signed": false,
+  "delivered": false,
+  "release_modified": false
+}
