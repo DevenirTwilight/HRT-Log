@@ -1,3 +1,9 @@
+## MED-02 #115已正常合并，开始独立Runtime接线 — 2026-10-24
+
+#115最终2fbe072708062ff03526cfa283cbfc84f15494d0，经唯一同源push API29补验120797918499 SUCCESS（14m12s，恢复4/UI13/提醒3全部0fail/skip），六门和低内存/所有原件充足，无冲突或未决review。正常Ready/保护merge于06:22:11完成，主线b73dcc617d9be6c1b35daea4157f093df3ef3313，tree7d95c3ef与验收源一致。主线Android40069934537在途、Science40069934522 SUCCESS，不提前称主线Android通过。原失败、重试、三API/低内存/三个新PID与host原件均已核并保留，本证据分支无生产元数据CI反复推送。
+
+独立新worktree/workbranch /workspace/HRT-Log-med02-runtime，feature/med02-runtime-request-scope-20261024，从b73主线起。当前新增两个真实read RED用例（尚待运行）：forGeneration旧scope第一次读取未绑定句柄可读到新库相同整数；同一物理库epoch替换后旧scope可读。先证明错误，再复用原authority加读/写scope与实际UI/后台冻结传递，不建第二authority、不碰旧generation原型或115冻结源。请求创建/恢复无法证明来源时拒绝并四语解释，显示事实/草稿不自动重绑；AppLock/取消守卫仍保留。最新用户授权包括必要UI/提醒接线，但正式附件/真实原件/永久删除/格式冻结/签名发布仍OFF；owner-release/fallback仅独立下一任务。
+
 ## MED-02 #115最终源验收原件已核，等待唯一失败push API29有界补验 — 2026-10-24
 
 主线ca69ee5a（#114已合并）。#115仍Draft，精确源2fbe072708062ff03526cfa283cbfc84f15494d0。PR Android40034667292全5SUCCESS、Science40034667157 SUCCESS、API26/x86/512MiB/192MiB40034667220 SUCCESS。官方四ZIP逐一校SHA/CRC：26/29/35各LibraryRestore4、MedicalArchive9、Migration6全部0fail/skip；低内存原生OK5含heap probe及恢复4，MemTotal508752KiB；OBJECTS_COMMITTED/IN_SWITCH/SWITCHED实际强停新PID各OK1。host官方129533120B SHA842b21f1…核CRC：data594/0/0，app2335/0/557原有skip，Period5/0/0、Sequences2/0/0、reminder21/0/0；不是借13a原件。精选原件在pr115-closeout。
