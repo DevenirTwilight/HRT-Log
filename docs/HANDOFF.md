@@ -1,3 +1,11 @@
+## MED-02 #115最终源验收原件已核，等待唯一失败push API29有界补验 — 2026-10-24
+
+主线ca69ee5a（#114已合并）。#115仍Draft，精确源2fbe072708062ff03526cfa283cbfc84f15494d0。PR Android40034667292全5SUCCESS、Science40034667157 SUCCESS、API26/x86/512MiB/192MiB40034667220 SUCCESS。官方四ZIP逐一校SHA/CRC：26/29/35各LibraryRestore4、MedicalArchive9、Migration6全部0fail/skip；低内存原生OK5含heap probe及恢复4，MemTotal508752KiB；OBJECTS_COMMITTED/IN_SWITCH/SWITCHED实际强停新PID各OK1。host官方129533120B SHA842b21f1…核CRC：data594/0/0，app2335/0/557原有skip，Period5/0/0、Sequences2/0/0、reminder21/0/0；不是借13a原件。精选原件在pr115-closeout。
+
+同源push API29 job120691379735仍FAIL（实际Alarm广播断言+4个窗口失焦/Compose超时），不标infra已证；同源PR API29通过只是对照。已保留原ZIP SHA86b900a1…/CRC和全部原log，仅重试该job一次：新job120797918499在途，其余push作业成功复用，无源码/断言改动或整套重跑。gh required把该失败列为必须，补验前不Ready/merge；保护配置API403不具读取权限，服务器保护和gh required仍正常执行，无admin绕过。无冲突/未解决review thread。
+
+任务已授权Runtime Request Scope真实UI/后台接线，下一步仅从#115保护合并后的最新主线独立分支，不重写底座或复用/workspace/HRT-Log-med02-generation中已过时未提交原型（保留未覆盖）。范围包括显示事实/编辑草稿/SavedState/通知和提醒请求在创建时固定LibraryRequestScope、真正执行时仍经原root authority；四语解释和显式重开，不自动重绑旧整数。未开启附件/永久删除/格式冻结/签名发布。owner-release及fallback导出政策独立后续，禁止顺手做GC。当前仍feature0/NOT_REVIEWED_EXTERNALLY，真机及物理断电/满库未验收。
+
 ## MED-02 首次真实低内存全闭环已通过；补持久库后续ID保留 — 2026-10-23
 
 源13a107c6、run40033692189真实API26/x86/512MiB/192MiB SUCCESS：原5项OK5，无skip；三个OBJECTS_COMMITTED/IN_SWITCH/SWITCHED真实force-stop、不同PID重启verify各OK1，已独立下载官方ZIP12535304464，SHA2e3ca49a…/CRC和原始逐项log已核并入native-13a107c6。正式writer→独立reader→新设备本地包装/持久SQLCipher→全业务/全部4版本/历史trash/typed图复验→单Root COMMIT→新PID重开逐字段/哈希比对，首次真实闭环成立，仅对该源码/合成夹具。内存阶段采样最大Java约73.9MiB、RSS约102.6MiB，不是进程峰值；真机/真实双设备/物理断电/极限满库NOT_RUN，外审未做/feature0。
