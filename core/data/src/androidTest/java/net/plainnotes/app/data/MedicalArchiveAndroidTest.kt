@@ -102,4 +102,82 @@ class MedicalArchiveAndroidTest:MedicalArchiveContract() {
             }
         }
     }
+    @Test fun collectionWriterAndIndependentReaderPreserveTwoTypedLibrariesAfterSourceKeyLoss() {
+        val file=File.createTempFile("synthetic-collection-",".cipher",app.cacheDir)
+        val samples=org.json.JSONArray()
+        fun sample(stage:String) {
+            val vm=Runtime.getRuntime();val memory=android.os.Debug.MemoryInfo();android.os.Debug.getMemoryInfo(memory)
+            val status=File("/proc/self/status").readLines()
+            fun kib(name:String)=status.firstOrNull {it.startsWith("$name:")}?.trim()?.split(Regex("\\s+"))?.getOrNull(1)?.toLongOrNull()
+            samples.put(org.json.JSONObject().put("stage",stage).put("javaUsedBytes",vm.totalMemory()-vm.freeMemory())
+                .put("javaMaxBytes",vm.maxMemory()).put("nativeHeapAllocatedBytes",android.os.Debug.getNativeHeapAllocatedSize())
+                .put("totalPssKiB",memory.totalPss).put("rssKiB",kib("VmRSS") ?: org.json.JSONObject.NULL).put("processHwmKiB",kib("VmHWM") ?: org.json.JSONObject.NULL))
+            File(app.filesDir,"synthetic-collection-memory.json").writeText(org.json.JSONObject().put("api",android.os.Build.VERSION.SDK_INT)
+                .put("pid",android.os.Process.myPid()).put("sampledNotPeak",true).put("samples",samples).toString())
+        }
+        sample("before_export")
+        val active=UUID(0,1);val retained=UUID(0,2)
+        val expected=mutableMapOf<UUID,AttachmentBackupManifest>();val records=mutableMapOf<UUID,ByteArray>();val aliases=mutableListOf<String>()
+        try {
+            AttachmentBackupPreparationAndroidTest.Fixture(app).use {first->
+                AttachmentBackupPreparationAndroidTest.Fixture(app,ByteArray(32) {89}).use {second->
+                    AttachmentBusinessRestoreAndroidTest().build(first) // PDF/PNG/binary, replacement, trash, typed graph.
+                    val bytes=byteArrayOf(8,5,3,2,1)
+                    second.store().save(second.scope,second.session.issue(),second.request(bytes)) {java.io.ByteArrayInputStream(bytes)}
+                    AttachmentBackupPreparation(first.context,first.db).capture(first.scope,first.session.issue(),created=Instant.EPOCH).use {a->
+                        AttachmentBackupPreparation(second.context,second.db).capture(second.scope,second.session.issue(),created=Instant.EPOCH).use {b->
+                            for((id,snapshot) in listOf(active to a,retained to b)) {expected[id]=snapshot.manifest();snapshot.records {records[id]=it.copyOf()}}
+                            for(f in listOf(first,second))f.raw.query("SELECT wrapping_key_alias FROM attachment_key_envelope").use {c->while(c.moveToNext())aliases+=c.getString(0)}
+                            val before=listOf(allRows(first),allRows(second));val password="SYNTHETIC collection 密码".toCharArray()
+                            val receipt=MedicalCollectionWriter.write(listOf(
+                                MedicalCollectionWriter.Source(retained,MedicalCollectionIndex.Role.RETAINED,b),
+                                MedicalCollectionWriter.Source(active,MedicalCollectionIndex.Role.ACTIVE,a)),active,first.session.issue(),password,file.outputStream())
+                            sample("after_export")
+                            assertEquals(2,receipt.libraries);assertEquals(5,receipt.objects);assertEquals(file.length(),receipt.bytes);assertFalse(receipt.activatable)
+                            assertTrue(password.all {it=='\u0000'});assertEquals(before,listOf(allRows(first),allRows(second)))
+                        }
+                    }
+                }
+            }
+            sample("after_source_close")
+            val ks=KeyStore.getInstance("AndroidKeyStore").apply {load(null)};assertTrue(aliases.isNotEmpty());aliases.forEach {assertFalse(ks.containsAlias(it))}
+            val session=session()
+            try {
+                val pass="SYNTHETIC collection 密码".toCharArray()
+                MedicalCollectionReader.read(session.issue(),pass,FileInputStream(file).channel).use {archive->
+                    sample("after_independent_authentication")
+                    assertTrue(pass.all {it=='\u0000'});assertTrue(archive.wholeArchiveAuthenticated);assertFalse(archive.activatable)
+                    assertEquals(active,archive.index().active);assertEquals(2,archive.index().libraries.size)
+                    for(id in listOf(active,retained)) {
+                        val m=archive.manifest(id);assertEquals(AttachmentCandidateMetadata.normalized(expected.getValue(id)),m)
+                        archive.records(id) {assertArrayEquals(records.getValue(id),it)}
+                        val source=archive.source(id)
+                        assertEquals(m.versions.map {it.manifest},source.members())
+                        for(v in m.versions) {
+                            val key=source.takeDek(v.context.version)
+                            try {AttachmentObjectStreams.primitive(key).newDecryptingStream(source.open(v.context.version),v.context.encode()).use {input->
+                                val sha=java.security.MessageDigest.getInstance("SHA-256");val buffer=ByteArray(4096);var count=0L
+                                while(true) {val n=input.read(buffer);if(n<0)break;require(n>0);sha.update(buffer,0,n);count+=n}
+                                assertEquals(v.manifest.plaintextBytes,count);assertEquals(v.manifest.plaintextSha256,MedicalArchiveCrypto.hex(sha.digest()));buffer.fill(0)
+                            }}finally {key.fill(0)}
+                        }
+                    }
+                    sample("after_all_original_hashes")
+                    reject {archive.source(UUID.randomUUID())}
+                }
+                reject {MedicalCollectionReader.read(session.issue(),"wrong password".toCharArray(),FileInputStream(file).channel)}
+                val corrupt=File.createTempFile("synthetic-collection-corrupt-",".cipher",app.cacheDir)
+                try {
+                    val bytes=file.readBytes();bytes[bytes.size-1]=(bytes.last().toInt() xor 1).toByte();corrupt.writeBytes(bytes)
+                    reject {MedicalCollectionReader.read(session.issue(),"SYNTHETIC collection 密码".toCharArray(),FileInputStream(corrupt).channel)}
+                    corrupt.writeBytes(file.readBytes().dropLast(1).toByteArray())
+                    reject {MedicalCollectionReader.read(session.issue(),"SYNTHETIC collection 密码".toCharArray(),FileInputStream(corrupt).channel)}
+                }finally {check(corrupt.delete())}
+                MedicalCollectionReader.read(session.issue(),"SYNTHETIC collection 密码".toCharArray(),FileInputStream(file).channel).use {archive->
+                    val old=archive.source(active);session.revoke();reject {old.takeDek(expected.getValue(active).versions.first().context.version)}
+                }
+            }finally {session.revoke()}
+        }finally {records.values.forEach {it.fill(0)};check(file.delete())}
+    }
+
 }
