@@ -109,8 +109,8 @@ class MedicalAttachmentOperationAndroidTest {
                     // A fresh explicit target has no attachment identity yet. Refusal must not
                     // bind it, read even a failing provider, reserve aliases or append a journal.
                     val isolated=fresh.forGeneration(current).pinnedTo(Space.PRIMARY)
-                    isolated.saveAppointment(AppointmentEntity(9876,"SYNTHETIC admission target",2000,"UTC",remind_minutes_before=0))
-                    val unbound=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,9876)
+                    val targetId=isolated.saveAppointment(AppointmentEntity(0,"SYNTHETIC admission target",2000,"UTC",remind_minutes_before=0))
+                    val unbound=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,targetId)
                     val selected=f.access.get(Space.PRIMARY);val sql=selected.openHelper.writableDatabase
                     val business=selected.runInTransaction(java.util.concurrent.Callable {MeasuredBackupJson.encode(sql,java.time.Instant.EPOCH)})
                     val legacy=f.facts()

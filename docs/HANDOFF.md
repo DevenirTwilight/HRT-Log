@@ -1,3 +1,9 @@
+## MED-02 #120 native fixture correction — 2026-10-24
+
+93461e67 native/API26-lowmem40123862350 FAIL before attachment assertions: test called saveAppointment with nonzero nonexistent9876, which correctly means edit existing and fails at NotesRepository:836. Actual native log identifies this precise fixture error; no product/LMK attribution. Original official ZIP SHA a4dcb02c... verified/retained in evidence branch docs/med02-restored-write-evidence-20261024. Fix uses id0 new-record API and its real returned ID; all provider/table-value/ciphertext/alias/refusal assertions remain. Production guard unchanged. Only new fixed SHA can satisfy native gate; no blind old-source rerun.
+
+Owner has separately approved the concrete PNMEDBK2 OFF extension; authorization is committed170d78e0 on independent feature/med02-collection-archive-20261024 (base369267e, not unaccepted PR120 code). Scope remains OFF, v1/PNBAK1/limits preserved, no public enablement/permanent deletion/format freeze.
+
 ## MED-02 restored-write admission checkpoint — 2026-10-24
 
 Latest base369267e: #119 **MERGED**, accepted source623fca6e; final main CI Android40116642106 all5SUCCESS / Science40116642050SUCCESS. Exact source/API26/29/35/512MiB/192MiB receipts and merge proof: evidence branch docs/med02-operation-evidence-20261024@6d516523. Older #119 PENDING text below is historical, do not redo it.
