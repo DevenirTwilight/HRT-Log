@@ -1,5 +1,9 @@
 ## MED-02 #115 已合并；Runtime Scope 真实接线验收中 — 2026-10-24
 
+本轮接线PR #116已创建，生产源码 `162579c8e003d604b688937b38bbb502e54d9d07`，Draft。测试merge `7a235a185abb1dc05f9796212c9256b4fe197ed5` 与源tree均 `28bdc53b0e1af7940bb1b55c1dae3c1349940608`。修复后的针对性data4（含旧屏障和新晚撤权回滚）/提醒22/App36通过，原生编译通过；最终源完整本地回归和普通三API CI仍在运行。
+
+该最终源独立低内存run40073726424已SUCCESS，官方artifact12552587087 SHA a388bd12e60e1f789ae2652fc4c6113374f0e49177a1737b6f3395eac0dbc7dc/CRC已独立核验。API26/512MiB/192MiB原5项OK5、无skip；OBJECTS_COMMITTED/IN_SWITCH/SWITCHED各原始强停log及新PIDverify OK1保留low-memory-162579c8。采样最大Java77506432B、RSS100576KiB，不是峰值。此低内存轮验证既有restore原5项；新增RuntimeLibraryRequestAndroidTest与Compose用例仍需普通26/29/35原件，不能借低内存绿灯提前解除Draft。本分支仅保存验收原件/交接，不改生产源码，不用[skip ci]绕生产合并门。
+
 #115 source `2fbe072708062ff03526cfa283cbfc84f15494d0` 已按§106解除Draft并正常受保护合并，主线 `b73dcc617d9be6c1b35daea4157f093df3ef3313` 与验收源码tree完全相同。六必需检查、PR三API原件、独立低内存run40034667220（API26/512MiB/192MiB）、三个真实不同PID强停重开点已核验。低内存原5项OK5/无skip（heap1+restore4），各强停verify OK1。原件/SHA/CRC、第一次push API29真实失败和单次失败job重试成功均保存远端分支 `docs/med02-115-evidence-20261024`，目录 `docs/medical-attachments/2026-10-24/pr115-closeout`。不得将早期13a证据当最终源码。
 
 主线Android40069934537最终SUCCESS，Science40069934522 SUCCESS，精确b73。首次API26/29/35及JVM成功；host CausalTimeUiTest.english遇到线程/SlotTable真实失败，原日志已保留，不宣称基础设施根因已证明。仅重试该失败job一次，120805584214 SUCCESS；其他原生成功复用，不重复触发。原始最终状态JSON在runtime-request-evidence/pr115-main-*。

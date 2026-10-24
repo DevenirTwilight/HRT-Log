@@ -1,0 +1,20 @@
+{
+  "sourceHead": "162579c8e003d604b688937b38bbb502e54d9d07",
+  "sourceTree": "28bdc53b0e1af7940bb1b55c1dae3c1349940608",
+  "pullRequestTestMerge": "7a235a185abb1dc05f9796212c9256b4fe197ed5",
+  "testMergeTreeMatches": true,
+  "run": 40073726424,
+  "artifact": 12552587087,
+  "sha256": "a388bd12e60e1f789ae2652fc4c6113374f0e49177a1737b6f3395eac0dbc7dc",
+  "zipCrc": "PASS",
+  "nativeTests": 5,
+  "skipped": 0,
+  "restartSeams": [
+    "OBJECTS_COMMITTED",
+    "IN_SWITCH",
+    "SWITCHED"
+  ],
+  "eachVerifyTests": 1,
+  "physical": "NOT_RUN",
+  "externalReview": "PENDING"
+}
