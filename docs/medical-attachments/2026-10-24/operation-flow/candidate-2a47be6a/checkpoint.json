@@ -1,0 +1,50 @@
+{
+  "source_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895",
+  "pr_android_run": 40109281652,
+  "push_android_run": 40109278568,
+  "science_run": 40109281694,
+  "low_memory_run": 40109281747,
+  "low_memory_job": 120917422318,
+  "low_memory_result": "PASS actual12 plus eight fresh-PID verifications",
+  "ramMiB": 512,
+  "artHeapMiB": 192,
+  "jvm_job": 120917612136,
+  "root_contracts": "4 actual PASS; old61/5 PASS",
+  "artifact": {
+    "id": 12565967745,
+    "name": "med02-library-api26-512m",
+    "size_in_bytes": 158097,
+    "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12565967745",
+    "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12565967745/zip",
+    "expired": false,
+    "created_at": "2026-10-24T16:03:30Z",
+    "expires_at": "2027-01-22T15:56:55Z",
+    "updated_at": "2026-10-24T16:03:30Z",
+    "digest": "sha256:f6b2ddf1cc1f83e02be5cab936c5653824998e004f0056a4f33796b2a1dded80",
+    "workflow_run": {
+      "id": 40109281747,
+      "repository_id": 1406091596,
+      "head_repository_id": 1406091596,
+      "head_branch": "feature/med02-operation-flow-20261024",
+      "head_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895"
+    }
+  },
+  "archive_verification": "GITHUB_REPORTED_DIGEST; local ZIP/CRC NOT_RUN while environment unavailable",
+  "production_freeze_comparison": [
+    ".github/workflows/android.yml",
+    "app/src/androidTest/java/net/plainnotes/app/attachments/AttachmentOperationAndroidTest.kt",
+    "app/src/androidTestFull/java/net/plainnotes/app/disguise/DisguiseFlowAndroidTest.kt",
+    "docs/HANDOFF.md",
+    "docs/medical-attachments/2026-10-24/operation-flow/integration-contract.md",
+    "docs/medical-attachments/2026-10-24/operation-flow/local/stable-picker-compile-green.log",
+    "docs/medical-attachments/2026-10-24/operation-flow/local/system-touch-compile-green.log",
+    "scripts/configure_ansm_native_runtime.py",
+    "scripts/run_attachment_operation_native.py",
+    "scripts/test_configure_ansm_native_runtime.py"
+  ],
+  "production_changed_since_9d735355": false,
+  "current_ci": "PENDING",
+  "physical": "NOT_RUN",
+  "viewer_low_memory": "NOT_RUN",
+  "external_review": "NOT_REVIEWED_EXTERNALLY"
+}

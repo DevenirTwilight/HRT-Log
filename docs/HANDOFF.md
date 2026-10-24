@@ -1,3 +1,11 @@
+## MED-02 #119 当前2a47重连合同4与低内存12+8真实通过 — 2026-10-24
+
+最新源2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895：原子普通快进提交（parent cd01，无force），只改CI模拟器启动、4个对应合同检查、CI命令和本次交接。cd01 PR35测试前再次root transport closed原log已保留candidate-cd01abb7/api35-startup-failed.log。新helper捕获确认返回失败后，最多30s重连，实际同serial+UID0才允许setprop；未知/非root/换设备/超时拒绝。原emulator/API/qemu、192m heap属性、120s framework重启、NativeHeapProbe和512MiB/所有预算保留，不做P4性能研究、不改应用权限。
+
+PR JVM job120917612136 SUCCESS：原61/5合同保持，新增4 root reconnect单元合同实际OK（不是原生替代）；原完整log保存candidate-2a47be6a/jvm-final.log。独立API26低内存40109281747/job120917422318 SUCCESS：原log实际OK12+原4/新4 fresh-PID各PASS，启动参数512MiB/实际192m已核，原完整log/官方artifact12565967745 provider digest记录在同目录；云环境仍不可用，新增ZIP未本地CRC，不冒充独立解包。viewer低内存/物理仍NOT_RUN。
+
+当前PR Android40109281652、Science40109281694、push Android40109278568；Science已SUCCESS，其余原生与主Android尚待，不借7d旧绿合并。原始伪装UI同步修正（cd01）保留全部原断言并在等待Ready期间持续PRIMARY/无第二PIN/无重开边界；当前candidate继续实际验证。AppShell/MainActivity/NotesVM未修改。源冻结，只读本轮结果；若再有不可解释失败，保存原件停止重复运行。#119仍Draft/未合并，feature0/NOT_REVIEWED_EXTERNALLY/正式入口与真实原件OFF。环境恢复后先fetch远端，不覆盖GitHub直接提交。
+
 ## MED-02 #119 一次补验真实旧UI断言失败；仅修就绪同步，最新cd01 — 2026-10-24
 
 7d的API35一次补验120907265812完成，真实附件App2/Core及八强停均已越过，后续DisguiseFlowAndroidTest.realSecretWithOrdinaryPinConfiguredOpensPrimaryWithoutASecondPinAndBackLocks在line103 app_name为空失败；原完整log/官方artifact12565291471及provider digest保存在candidate-7d3186fd/pr-api35-retry-*。不能把这次叫启动infra或通过；同源push全套通过也不抵消PR失败。该SHA不再重跑。
