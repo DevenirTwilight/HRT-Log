@@ -1,0 +1,25 @@
+
+net.plainnotes.app.data.LibraryRestoreRestartAndroidTest:
+Error in persistentAuthorityChoosesExactlyOldOrVerifiedNewAfterProcessDeath(net.plainnotes.app.data.LibraryRestoreRestartAndroidTest):
+java.lang.IllegalStateException: Other resource ownership is not proven
+	at net.plainnotes.app.data.LibraryLifecycle.releaseUnmaterialized$lambda$0(LibraryLifecycle.kt:159)
+	at net.plainnotes.app.data.LibraryLifecycle$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at net.plainnotes.app.data.LibraryLifecycle.rootWork(LibraryLifecycle.kt:34)
+	at net.plainnotes.app.data.LibraryLifecycle.releaseUnmaterialized(LibraryLifecycle.kt:139)
+	at net.plainnotes.app.data.LibraryRestoreRestartAndroidTest.persistentAuthorityChoosesExactlyOldOrVerifiedNewAfterProcessDeath(LibraryRestoreRestartAndroidTest.kt:68)
+
+
+Time: 0.553
+There was 1 failure:
+1) persistentAuthorityChoosesExactlyOldOrVerifiedNewAfterProcessDeath(net.plainnotes.app.data.LibraryRestoreRestartAndroidTest)
+java.lang.IllegalStateException: Other resource ownership is not proven
+	at net.plainnotes.app.data.LibraryLifecycle.releaseUnmaterialized$lambda$0(LibraryLifecycle.kt:159)
+	at net.plainnotes.app.data.LibraryLifecycle$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at net.plainnotes.app.data.LibraryLifecycle.rootWork(LibraryLifecycle.kt:34)
+	at net.plainnotes.app.data.LibraryLifecycle.releaseUnmaterialized(LibraryLifecycle.kt:139)
+	at net.plainnotes.app.data.LibraryRestoreRestartAndroidTest.persistentAuthorityChoosesExactlyOldOrVerifiedNewAfterProcessDeath(LibraryRestoreRestartAndroidTest.kt:68)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
