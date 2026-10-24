@@ -1,5 +1,7 @@
 ## MED-02 #115 已合并；Runtime Scope 真实接线验收中 — 2026-10-24
 
+ecba64b6 PR API35 job120816275150在07:40:59、任何Gradle原生任务前因 `adb: unable to connect for root: closed` 失败（configure_ansm_native_runtime.py 的adb root），没有报告工件；这是环境准备失败/测试NOT_RUN，不是代码断言通过。原完整log已保存api35-ecba64b6-first-setup-failure.log。同源仅计划一次失败job重试；父workflow仍in_progress时gh拒绝“job cannot be rerun”，实际没有启动重试。待父run40074939019结束后只提交该job一次，不重跑其余成功作业、不改源码/断言，失败原件保留。首源162579c8的26/35在新源更新后被workflow并发策略取消，superseded-*原始状态JSON保留，不称通过或基础设施失败。
+
 最新PR #116源码 `ecba64b605092b67bb1538ced6eb54d86a5d4905`，仍Draft。前源162579c8的host CI真实FAIL与本地完整轮一致：app2337/唯一UI09居中守卫失败/557既有skip；原始host job120812505283完整log保留。不删守卫，新源仅将错误页改为左对齐/16dp间距，28项针对性复核（含全部PeriodStability）PASS/无skip。首源API29原始ZIP12551883965 SHA e713da794fdcc18b71ace9578088a95e3ec17ce96fdbf6626276efadaa12a2a0/CRC已核，新SQLCipher runtime及Compose各1/0fail/0skip、restore4/迁移6PASS；与低内存原件分开归属，不能当新源通过。新源PR Android40074939019、低内存40074939096、Science40074939102正在执行；push Android40074937029亦在途。旧同ref作业如因新源并发取消，不重跑旧SHA。环境短暂断线后已恢复，没有丢源码或降低断言。下一步只核最终源六门/低内存/原生工件，再Ready/受保护合并并核主线；仍feature0/外审未做/无真实原件/永久删除OFF/无APK。
 
 本轮接线PR #116已创建，生产源码 `162579c8e003d604b688937b38bbb502e54d9d07`，Draft。测试merge `7a235a185abb1dc05f9796212c9256b4fe197ed5` 与源tree均 `28bdc53b0e1af7940bb1b55c1dae3c1349940608`。修复后的针对性data4（含旧屏障和新晚撤权回滚）/提醒22/App36通过，原生编译通过；最终源完整本地回归和普通三API CI仍在运行。
