@@ -1,3 +1,9 @@
+## MED-02 #119 主Android成功；API35一次作业补验已请求；环境离线 — 2026-10-24
+
+最终7d3186fd：PR Android40104324849的JVM/API26/API29/主Android均SUCCESS，Science40104324702和独立低内存40104324801也SUCCESS。主Android原完整log保存candidate-7d3186fd/host-android-final.log，实际release identity/无INTERNET/附件release隔离均PASS。API35 job120902749869在任何测试前adb root连接关闭失败，原件已保存；父流程全部结束后已通过GitHub接口仅请求这一个job的一次同源码重试（success:true），不重跑整套/不改源。不得再次重复请求此补验。
+
+云执行环境随后不可用（exec-server transport disconnected/recovery timed out），本地新操作停止；有效源码与原件/收据已先推送，无未推代码。继续使用独立GitHub接口核对CI/原日志，后续工件若不能本地解包校验须明确标注，不能假装已核SHA/CRC。PR仍Draft/未合并，正式入口/feature0/OFF与NOT_REVIEWED_EXTERNALLY不变。待API35当前补验及同源push结果，充分后正常保护合并并核主线；若补验再次环境失败，保留UNKNOWN/NOT_RUN，不无限重跑。
+
 ## MED-02 #119 最终7d API26/29原件核验PASS — 2026-10-24
 
 最终7d3186fd：push API26(40104321069/art12564118783)、PR API29(40104324849/art12564432367)实际原件核对App Operation2/Core Operation3/Lifecycle4/迁移7/RuntimeData1/RuntimeUI1/RestoreProtection9各0fail/0skip，八个fresh-PID verify各OK1。App2前置原XML已保存，后续bulk排除同两项没有漏跑；官方ZIP SHA/CRC、原HTML/八点日志/收据在candidate-7d3186fd/push-api26与pr-api29。低内存同源12+8也已核，未借旧SHA。API35 push仍执行，PR35在测试前adb root失败等待父流程结束后一次job补验；主Android尚运行，不合并/不签名。feature0/外审未做，物理与viewer低内存仍NOT_RUN。
