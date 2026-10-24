@@ -53,5 +53,7 @@
     "core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentSession.kt": "6619382e91f4cde89dcc810019204bbbeda9365b9a52bcb19b3477b23d880331",
     "gradle/libs.versions.toml": "f8a4088548ac7be4bc81e1c4109f86e1203d2d03974b84f5917eef10da0373a3"
   },
-  "warning": "Inventory identifies scope; hashes do not prove security or native acceptance."
+  "warning": "Inventory identifies scope; hashes do not prove security or native acceptance.",
+  "latest_test_source_sha": "e474c53d41bfa7f846cd98783620951067dbb6e3",
+  "production_and_debug_identical_between_source_and_latest_test_sha": true
 }
