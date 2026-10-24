@@ -1,0 +1,54 @@
+
+net.plainnotes.app.data.NativeCiHeapProbe:.
+net.plainnotes.app.data.LibraryRestoreAndroidTest:....
+net.plainnotes.app.data.LibraryLifecycleAndroidTest:....
+net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest:..
+Error in hostileInputCapacityUnknownAndLostAuthorityRefuseWithoutFalseCommit(net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest):
+java.io.FileNotFoundException: /data/user/0/net.plainnotes.app.data.test/no_backup/synthetic-library-e3eaa61c-f25b-443e-9fcb-a492bd62198c/attachment-objects-v1/7e071f6c-c60c-4a3a-99b5-434da35605aa: open failed: EACCES (Permission denied)
+	at libcore.io.IoBridge.open(IoBridge.java:512)
+	at java.io.RandomAccessFile.<init>(RandomAccessFile.java:255)
+	at net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest$hostileInputCapacityUnknownAndLostAuthorityRefuseWithoutFalseCommit$1.invokeSuspend(MedicalAttachmentOperationAndroidTest.kt:72)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.hostileInputCapacityUnknownAndLostAuthorityRefuseWithoutFalseCommit(MedicalAttachmentOperationAndroidTest.kt:54)
+	... 31 trimmed
+Caused by: android.system.ErrnoException: open failed: EACCES (Permission denied)
+	at libcore.io.Linux.open(Native Method)
+	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:207)
+	at libcore.io.IoBridge.open(IoBridge.java:498)
+	... 43 more
+
+
+Time: 86.595
+There was 1 failure:
+1) hostileInputCapacityUnknownAndLostAuthorityRefuseWithoutFalseCommit(net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest)
+java.io.FileNotFoundException: /data/user/0/net.plainnotes.app.data.test/no_backup/synthetic-library-e3eaa61c-f25b-443e-9fcb-a492bd62198c/attachment-objects-v1/7e071f6c-c60c-4a3a-99b5-434da35605aa: open failed: EACCES (Permission denied)
+	at libcore.io.IoBridge.open(IoBridge.java:512)
+	at java.io.RandomAccessFile.<init>(RandomAccessFile.java:255)
+	at net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest$hostileInputCapacityUnknownAndLostAuthorityRefuseWithoutFalseCommit$1.invokeSuspend(MedicalAttachmentOperationAndroidTest.kt:72)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.hostileInputCapacityUnknownAndLostAuthorityRefuseWithoutFalseCommit(MedicalAttachmentOperationAndroidTest.kt:54)
+	... 31 trimmed
+Caused by: android.system.ErrnoException: open failed: EACCES (Permission denied)
+	at libcore.io.Linux.open(Native Method)
+	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:207)
+	at libcore.io.IoBridge.open(IoBridge.java:498)
+	... 43 more
+
+FAILURES!!!
+Tests run: 12,  Failures: 1
+
+

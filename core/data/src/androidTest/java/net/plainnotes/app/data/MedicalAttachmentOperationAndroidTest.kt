@@ -69,7 +69,18 @@ class MedicalAttachmentOperationAndroidTest {
                 val committed=service.import(cap,r.copy(operation=UUID.randomUUID()),uri("unknown"))
                 val previous=service.open(cap,target,committed.document)
                 val objectId=f.raw.query("SELECT object_uuid FROM attachment_journal WHERE operation_uuid=?",arrayOf(committed.operation.toString())).use {it.moveToFirst();it.getString(0)}
-                java.io.RandomAccessFile(File(f.directory,"attachment-objects-v1/$objectId"),"rw").use {file->val at=file.length()-1;file.seek(at);val b=file.read();file.seek(at);file.write(b xor 1)}
+                val objectFile=File(f.directory,"attachment-objects-v1/$objectId")
+                val sealed=android.system.Os.lstat(objectFile.path)
+                assertTrue(android.system.OsConstants.S_ISREG(sealed.st_mode));assertEquals(android.os.Process.myUid(),sealed.st_uid)
+                assertEquals("Production ciphertext remains sealed read-only",256,sealed.st_mode and 511)
+                // Deliberate attacker mutation of this test-owned object only. Restore the exact
+                // production mode before testing authentication, without replacing its inode.
+                android.system.Os.chmod(objectFile.path,384)
+                try {java.io.RandomAccessFile(objectFile,"rw").use {file->val at=file.length()-1;file.seek(at);val b=file.read();file.seek(at);file.write(b xor 1);file.fd.sync()}}
+                finally {android.system.Os.chmod(objectFile.path,sealed.st_mode and 511)}
+                val changed=android.system.Os.lstat(objectFile.path)
+                assertEquals(sealed.st_dev,changed.st_dev);assertEquals(sealed.st_ino,changed.st_ino)
+                assertEquals(sealed.st_mode,changed.st_mode)
                 reject {runBlocking {service.open(cap,target,committed.document)}}
                 val blocked=ByteArray(16) {7};reject {previous.readAt(0,blocked,0,blocked.size)};assertTrue(blocked.all {it==0.toByte()});previous.close()
                 assertEquals(MedicalAttachmentOperations.Export.REFUSED,service.exportEligibility(cap))

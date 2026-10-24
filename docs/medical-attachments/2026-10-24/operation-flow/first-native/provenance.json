@@ -1,0 +1,51 @@
+{
+  "head": "6c9875bafb67b1a0a9fac4f34d2e1602f1a56893",
+  "main": "f5f942380184a4548458244c75f24648c4edb27a",
+  "run": 40094820302,
+  "lowMemoryRun": 40094820294,
+  "result": "FAIL: test attempted rw mutation of sealed 0400 synthetic ciphertext; authentication assertion not reached",
+  "productionReadOnlyMode": "PRESERVED",
+  "retry": "No old-source retry; minimal test fixture fix required",
+  "artifacts": [
+    {
+      "api": "26",
+      "artifact": 12560144605,
+      "sha256": "41050434dee925a15917c681191d81602f72749bf914ed82f398d0113a79270b",
+      "crc": "PASS",
+      "operationReports": {
+        "tests": 3,
+        "failures": 1,
+        "skipped": 0
+      }
+    },
+    {
+      "api": "29",
+      "artifact": 12560303455,
+      "sha256": "a023fde553978b86010c71dfca77a87d423f6e788bbfb1cba4466e99e236eac3",
+      "crc": "PASS",
+      "operationReports": {
+        "tests": 3,
+        "failures": 1,
+        "skipped": 0
+      }
+    },
+    {
+      "api": "35",
+      "artifact": 12560761409,
+      "sha256": "62249468979f3bc9ca615b5f872a2aed22e1426c4d62ef0bbfd3a066c57c23e8",
+      "crc": "PASS",
+      "operationReports": {
+        "tests": 3,
+        "failures": 1,
+        "skipped": 0
+      }
+    },
+    {
+      "api": "lowmem",
+      "artifact": 12561050448,
+      "sha256": "ffebd48fb859606053803f1cbbca37f3ebd1e1a8bd26f648b1752c6442997e2c",
+      "crc": "PASS",
+      "operationReports": {}
+    }
+  ]
+}

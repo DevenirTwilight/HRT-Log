@@ -1,3 +1,11 @@
+## MED-02 #119 原生共同失败已定位，保留只读保护修正合成篡改准备 — 2026-10-24
+
+实时核查默认分支仍claude/new-session-1959qb，主线f5f942380184a4548458244c75f24648c4edb27a，#118 MERGED且主线Android40089062393/Science40089062418 SUCCESS；#116早已合并caa，不补跑/重做旧阶段。继续既有#119分支feature/med02-operation-flow-20261024，接手源6c9875bafb67b1a0a9fac4f34d2e1602f1a56893，仍Draft/无冲突/未解决review。
+
+原PR Android40094820302三API实际各Operation3/1FAIL/0skip，共同原因是hostileInput...测试在第72行直接用rw打开生产正确seal为0400的密文，EACCES使篡改/认证断言尚未到达。独立低内存40094820294实际12项/1FAIL，同一前置错误，不是新LMK或基础设施；原4及新4进程seam因前置失败尚未验证。三API及低内存官方ZIP SHA/CRC、原HTML/lowmem日志与API29完整job log保留operation-flow/first-native，不能称原生已通过。
+
+修正仅测试自有合成对象：先证明regular/本UID/0400，临时0600翻转密文末字节并fsync，finally恢复原0400，再确认dev/inode/full mode未变，之后执行原所有认证/旧reader清零/CORRUPT/导出REFUSED及UNKNOWN断言。生产密文权限/代码/Schema16/限额/密码学均未改，不删除或放宽断言。修改后core native Kotlin编译PASS（无本地KVM，实际执行待新最终SHA正常CI）。#119继续Draft；后续只读本轮现有原件/必要定向验收，不重启P4研究或重写Tink。最终成功后按§106保护合并、核主线，再索引既有证据形成外审包，NOT_REVIEWED_EXTERNALLY/feature0和真实入口/永久删除OFF不变。
+
 ## MED-02 操作链候选固定，准备独立PR原生验收 — 2026-10-24
 
 正式操作门面/Runtime绑定/受控查看与隔离真实SAF host已编码；Core3+App2+四kill点全部编译通过，Runtime2/旧data599与release隔离5/设计61本地通过。新增JNI实际运行仍NOT_RUN，不能写CI_PASS。最后只补DocumentProvider目录路径协议和完整性状态撤权断言：已标CORRUPT的旧reader不能继续输出，已有UUID重选须显式核对不得伪报新输入成功。默认OFF和受管恢复库新增写入拒绝保持，新增源码固定后只修真实CI阻断。不改Schema16/协议/限额/权限/签名，外审/真机/物理断电/正式入口/永久删除仍OFF或NOT_RUN。先固定最新源，建Draft独立PR；CI实际执行主线全部原断言、三API真实SAF/3core及新4freshPID、低内存12+原4/新4seam；无KVM所以本地只编译不能冒充模拟器。
