@@ -98,6 +98,12 @@ class DisguiseFlowAndroidTest {
     @Test fun realSecretWithOrdinaryPinConfiguredOpensPrimaryWithoutASecondPinAndBackLocks() {
         AppLock(context).setPin("8642");configure(Disguise.Shell.CALCULATOR)
         launch(CalculatorActivity::class.java);await(CalculatorActivity::class.java);pressCode(real);await(MainActivity::class.java)
+        // Activity RESUMED/Compose idle does not await RuntimeLibrarySession's database IO.
+        // Keep every original security assertion, but evaluate against the actual ready screen.
+        ui.waitUntil(10_000) {
+            ui.onAllNodesWithText(context.getString(R.string.library_scope_reopen)).assertCountEquals(0)
+            ui.onAllNodesWithText(context.getString(R.string.app_name)).fetchSemanticsNodes().isNotEmpty()
+        }
         assertEquals(UnlockTarget.PRIMARY,Session.target)
         ui.onAllNodesWithText(context.getString(R.string.lock_title)).assertCountEquals(0)
         ui.onAllNodesWithText(context.getString(R.string.app_name)).fetchSemanticsNodes().let{assertTrue(it.isNotEmpty())}
