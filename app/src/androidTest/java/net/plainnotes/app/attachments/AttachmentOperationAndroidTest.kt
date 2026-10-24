@@ -164,6 +164,29 @@ class AttachmentOperationAndroidTest {
         val app=ApplicationProvider.getApplicationContext<android.content.Context>();val f=SyntheticAttachmentFixture(app)
         try {
             f.initialize()
+            // Both importers observe no journal before either prepares. Hold the first actual
+            // provider read, let the second COMMIT, then release different bytes for the same UUID.
+            val provider=android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-attachments/race")
+            val resolver=app.contentResolver
+            resolver.call(provider,"race_arm",null,null)
+            val operation=UUID.randomUUID();val document=UUID.randomUUID()
+            val first=f.runtime.attachments(f.labTarget,"SYNTHETIC concurrent",operation,document)
+            val winner=f.runtime.attachments(f.labTarget,"SYNTHETIC concurrent",operation,document)
+            val racing=async(Dispatchers.Default) {first.selected(ActivityResult(Activity.RESULT_OK,Intent().setData(provider)))}
+            try {
+                waitFor("provider held before journal") {resolver.call(provider,"race_entered",null,null)?.getBoolean("entered")==true}
+                assertEquals(AttachmentFlowController.State.Pending,first.state.value)
+                winner.selected(ActivityResult(Activity.RESULT_OK,Intent().setData(android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-attachments/mime"))))
+                val receipt=(winner.state.value as AttachmentFlowController.State.Saved).receipt
+                resolver.call(provider,"race_release",null,null)
+                withTimeout(30000) {racing.await()}
+                assertEquals("A different winning payload is not this import's acknowledgement",AttachmentFlowController.State.ReconcileRequired,first.state.value)
+                assertEquals(1,winner.documents().size)
+                winner.open(document).use {read->val b=ByteArray(1);assertEquals(1,read.readAt(0,b,0,1));assertEquals(17,b[0].toInt())}
+                first.reconcile();assertEquals(receipt,(first.state.value as AttachmentFlowController.State.Saved).receipt)
+            }finally {
+                resolver.call(provider,"race_release",null,null);racing.cancelAndJoin();first.close();winner.close()
+            }
             val cancel=f.runtime.attachments(f.target,"SYNTHETIC");cancel.selected(ActivityResult(Activity.RESULT_CANCELED,null));assertEquals(AttachmentFlowController.State.Cancelled,cancel.state.value);assertTrue(cancel.documents().isEmpty());cancel.close()
             val failed=f.runtime.attachments(f.target,"SYNTHETIC")
             failed.selected(ActivityResult(Activity.RESULT_OK,Intent().setData(android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-attachments/failure"))))

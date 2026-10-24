@@ -1,3 +1,11 @@
+## MED-02 #119最终检查发现并收紧并发不同输入回执边界 — 2026-10-24
+
+70584c6f正常PR40112205294五Android jobs/Science/低内存全部SUCCESS，原导航修正通过；仍不直接合并：末次源码审查识别了两个控制器同UUID、不同输入同时越过前置operationState检查的竞争。底层已有request digest/写锁会正确拒绝异载荷，但旧controller通用异常后COMMITTED核对可能自动把另一输入的回执显示为Saved。此为源码导出的反例，尚未在旧生产源码上运行新负向用例，不能伪称已有native RED。
+
+最小修正仅AttachmentFlowController：真实save返回receipt仍Saved；异常后查到COMMITTED仅ReconcileRequired，明确只读核对后才显示实际操作事实，不自动重开URI/写入。覆盖输入失败/取消后同UUID竞争，不需新store异常、持久队列、crypto或迁移；原store/全部全量审核不变。新负向场景放入既有App失败测试：真实测试Provider管道在journal前有界阻塞第一个worker，让相同UUID/目标/doc的另一内容真实COMMIT，再释放不同字节；要求第一个ReconcileRequired、仅一文档、胜出原字节不变、显式核对同实际receipt。测试provider控制仅test APK且模拟器，超时释放finally；不削弱原App2所有SAF/撤权/取消断言。
+
+当前新候选需精确SHA重新编译/针对性本地与正常必需CI，新增并发native仍NOT_RUN。705原件和此前失败继续保留，不能把705绿冒充新回执规则已验收。外审inventory已更新到具体文件SHA，包仍NOT_REVIEWED_EXTERNALLY。feature0/public entry/真实原件/永久删除/签名发布OFF；未触Room16/协议/配额/前端主题或其他模块。继续原PR119，不新开相同开发分支；只验这次实质安全修正，不重跑旧源挑绿。
+
 ## MED-02 #119 导航阻断最小修正与外审材料 — 2026-10-24
 
 接手真实HEAD2a47be6a、主线f5f94238，继续原分支/PR119，无工作树覆盖。官方PR Android40109281652真实FAIL仅JVM AppShellBackNavigationTest:112；原HTML明确两个Appointment文本（异步sync尚未发布就诊时，empty-state+FAB并存），未执行Back。生产AppShell/VisitsScreen/NotesViewModel相对主线无变。仅将原10s真实就诊出现wait前置于原exact-one FAB断言，不减断言/不sleep/不改导航。原源码本地17/17也通过，明确不是本地确定复现；失败HTML、官方ZIP digest/CRC收据和前后本地17/0fail/error/skip均保留navigation-fix。新最终SHA必需CI待验，不以同源push绿掩盖失败。

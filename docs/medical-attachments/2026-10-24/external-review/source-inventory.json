@@ -1,7 +1,6 @@
 {
   "status": "NOT_REVIEWED_EXTERNALLY",
-  "production_source_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895",
-  "note": "closeout only changes JVM navigation test/docs; these source bytes remain identical",
+  "note": "Final controller exception acknowledgement change is included in these exact file hashes; final full commit is recorded in PR #119 acceptance receipts.",
   "files_sha256": {
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/AttachmentCapabilityAndroidTest.kt": "5e43f4bf6b298b956e7b18912983ab100c9faebee7380b475a473e5045ae4f2a",
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/AttachmentCapabilityPreviewAndroidTest.kt": "810da2d8817e2ceb52d5bc18f14ce86d20f345abdcc1a254417a9057749906e5",
@@ -21,14 +20,14 @@
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/LargeSyntheticPdf.kt": "e00e1430cd9b5ffc2b6edab24abcb22f478edd63d469dd7df7e821d13a52d2af",
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/SampledMemory.kt": "517d6dc7d90efdde2ca422d3f99f81ef645295e8235329a6dc1cdb3377a6bf93",
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/SyntheticEmulatorGuard.java": "a054fd8128c7e77bc177833c823c7aa21b16335f1013e726b76f3d95618de249",
-    "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/SyntheticStreamProvider.java": "f8938c3af8b6f5781cbf05d0eec77724dfa20905bf179bb55b4c0c59eaccbc43",
+    "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/SyntheticStreamProvider.java": "d047b0d9e6b545ec6f9062c86ad1aac6cf80663cb42efa2d76d90f3e9d973fbe",
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/TinkPdfGate2AndroidTest.kt": "d6c8dec7d66bf421d64782e235192a5a21540a940823c52320f0627bf3c66e88",
-    "app/src/androidTest/java/net/plainnotes/app/attachments/AttachmentOperationAndroidTest.kt": "36bb70eb026b6f9a70dc7ba1ef794ee19df5ed912996d529196329dedc8f3a60",
+    "app/src/androidTest/java/net/plainnotes/app/attachments/AttachmentOperationAndroidTest.kt": "9fe0e5bee35d44a99d37b9c2ddc0bed2c66030b4f89653769b0da49e48afdb06",
     "app/src/androidTest/java/net/plainnotes/app/attachments/SyntheticDocumentsProvider.java": "065ae5587565a99ff664ed0af902992792ec8aef89e53131fa79e52a3b54aebc",
     "app/src/debug/java/net/plainnotes/app/debug/SyntheticLibraryScope.kt": "74d538b5ed450449779954f4776b70807b035b7ea573ca34609b7f8ea0b54c39",
     "app/src/debug/java/net/plainnotes/app/debug/attachments/AttachmentOperationTestActivity.kt": "a513974451b059f9d0e7da89e6b63a816c901ea0604fd6a2aa57a713b72cf6d9",
     "app/src/debug/java/net/plainnotes/app/debug/attachments/SyntheticAttachmentFixture.kt": "009c1e7a5c8dbab6541a65af57c0b16ca48c9b0d55b44f531277c3cfa146b9e5",
-    "app/src/main/java/net/plainnotes/app/attachments/AttachmentFlowController.kt": "90a16ace2d7c12186e9327524f848e9921adff809dcd8f0ec1526646d1a18e20",
+    "app/src/main/java/net/plainnotes/app/attachments/AttachmentFlowController.kt": "f475ca209de7ad939b779d3b8a79f19abeece3a8e79a557ccaee622b410b3c00",
     "app/src/main/java/net/plainnotes/app/attachments/AttachmentViewer.kt": "9cb03a61cfee2834faa1848dbcfa993ea37fd56b044a5f6fcd3912b6120dd282",
     "app/src/main/java/net/plainnotes/app/runtime/RuntimeLibrarySession.kt": "66f071befc84870ddc927ddd1cea6baebac66ec3ee4cf0f689e4e0f8e3c16a97",
     "core/data/src/androidTest/java/net/plainnotes/app/data/AttachmentBackupCandidateAndroidTest.kt": "bf57c4854d9b243db2c57973d3290b93ce04f676d3f52a6fcce99e4bbc217d92",
@@ -98,5 +97,7 @@
     "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "21390fbae83deacfdeea72514c8e4987813d161732fa1669c886b49e89d91300",
     "core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentInputStream.kt": "f997cead5d471bb886e8c0829610aea99286d243285f803f88054106f4a39266",
     "core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentSession.kt": "6619382e91f4cde89dcc810019204bbbeda9365b9a52bcb19b3477b23d880331"
-  }
+  },
+  "production_base_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895",
+  "acknowledgement_fix_base_sha": "70584c6f00ba167e77f2406e87d301b329db1acc"
 }

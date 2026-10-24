@@ -64,7 +64,10 @@ internal class AttachmentFlowController(
                     return
                 }
                 // Dispatcher cancellation may happen after SQLite COMMIT. Query facts, never guess.
-                withContext(NonCancellable) {reconcileFact()}
+                // A concurrently committed UUID may belong to a different input that won while
+                // this provider was being read. Only the returned receipt acknowledges this
+                // attempt. A queried COMMIT after an exception needs explicit reconciliation.
+                withContext(NonCancellable) {reconcileFact(acknowledgeCommit=false)}
             }finally {input=null;cap.close()}
         }catch(_:Exception) {if(!closed.get() && mutable.value==State.Selecting)mutable.value=State.Failed}
         finally {busy.set(false)}
@@ -77,14 +80,14 @@ internal class AttachmentFlowController(
         if(busy.get()) {mutable.value=State.ReconcileRequired;return}
         reconcileFact()
     }
-    private suspend fun reconcileFact() {
+    private suspend fun reconcileFact(acknowledgeCommit:Boolean=true) {
         if(closed.get())return
         try {
             permission()
             session.issue().let {cap->try {
                 val fact=backend.reconcile(cap,request.operation,request.target,request.document)
                 if(!closed.get())mutable.value=when(fact.phase) {
-                    MedicalAttachmentOperations.Phase.COMMITTED->State.Saved(requireNotNull(fact.receipt))
+                    MedicalAttachmentOperations.Phase.COMMITTED->if(acknowledgeCommit)State.Saved(requireNotNull(fact.receipt))else State.ReconcileRequired
                     MedicalAttachmentOperations.Phase.NOT_FOUND,MedicalAttachmentOperations.Phase.ABORTED->State.Failed
                     MedicalAttachmentOperations.Phase.PENDING->State.ReconcileRequired
                 }
