@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Three real-process durability seams for internal full-library authority; synthetic emulator only."""
+"""Four real-process durability seams for internal full-library authority; synthetic emulator only."""
 import json
 import subprocess
 import time

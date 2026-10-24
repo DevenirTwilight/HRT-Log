@@ -32,6 +32,7 @@ class LibraryLifecycleSchemaTest {
             refused {r.execSQL("UPDATE library_resource_owner SET released=1,release_digest=zeroblob(32) WHERE operation_uuid=?",arrayOf(op))}
             val fresh=UUID.randomUUID().toString();candidate(fresh,UUID.randomUUID().toString())
             r.execSQL("UPDATE library_candidate SET state='ABORTED' WHERE operation_uuid=?",arrayOf(fresh))
+            refused {r.execSQL("UPDATE library_resource_owner SET released=1,release_digest=NULL WHERE operation_uuid=?",arrayOf(fresh))}
             r.execSQL("UPDATE library_resource_owner SET released=1,release_digest=zeroblob(32) WHERE operation_uuid=?",arrayOf(fresh))
             refused {r.execSQL("UPDATE library_resource_owner SET started=1 WHERE operation_uuid=?",arrayOf(fresh))}
             refused {r.execSQL("UPDATE library_resource_owner SET released=0,release_digest=NULL WHERE operation_uuid=?",arrayOf(fresh))}

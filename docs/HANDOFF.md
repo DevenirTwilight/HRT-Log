@@ -1,3 +1,9 @@
+## MED-02 #118 最终NULL守卫修正与完整隔离runner，待新SHA验收 — 2026-10-24
+
+531a7f68独立低内存40084558757官方ZIP12556567968 SHA/CRC已核：OK9、四freshPID各OK1。阶段观测maxJava73.86MiB/RSS101.80/PSS102.78，非峰值。正常三API四项清单通过，但PREPARED runner在原全套后遇到无关root alias而正确拒绝；此前只隔离类、遗漏runner，已补齐：同一干净合成测试包先跑4项，再重置合成包跑四真实强停seam，然后重置并跑原bulk；所有seam/未知拒绝/旧用例断言保留，低内存原脚本继续原有9+四seam。531失败和低内存原件在second-native，不以绿覆盖失败。
+
+最后SQL复核实际RED：SQLite length(NULL)不触发拒绝，允许缺摘要的release行。新增NULL负向用例在531谓词上真实FAIL（null-proof-red），生产谓词加显式IS NULL后完整data599/0fail/error/skip、native编译PASS（null-proof-green）。不新增机制/版本/协议/权限/UI/删除API。当前候选应冻结，仅验最新SHA六门+低内存和三API实际原件，成功才Ready/按§106保护合并。feature0、NOT_REVIEWED_EXTERNALLY、真实UI/永久删除OFF；物理真机/断电NOT_RUN。#116已合并caa，不重复。
+
 ## MED-02 #118 部分扫描失败持久证据修正，最终本地599 PASS — 2026-10-24
 
 在源码复核发现真实安全边界：扫描中途失败可能已观察过无法归属的对象，不能在下一次空扫描后消失。fresh失败现在保存opaque UNKNOWN，重启后仍保留，不以随后缺失自动消解。原生未知用例加入真实0755 generation root扫描拒绝/测试自有目录移除/重启仍保留UNKNOWN断言，不改正式删除策略或加密参数。本地完整data599/0fail/error/skip及native Kotlin编译再次PASS，原件final-scan-local；native新增断言尚待精确候选CI。此前8b三API失败及低内存OK9证据保留。测试隔离只重置模拟器合成测试包，每API单独完整跑4项再跑原套件，额外真实未知alias断言确认拒绝未放宽。接下来冻结源码，仅验必需CI/原生/低内存/四freshPID；不另开性能研究。#118保持Draft直到真实门槛通过，入口feature0/外审NOT_REVIEWED_EXTERNALLY/真实原件/永久文件key删除OFF。

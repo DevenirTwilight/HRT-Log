@@ -8,19 +8,24 @@ Keep these four tests' reports independently of the subsequent full native suite
 """
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 REPORT = ROOT / "core/data/build/reports/med02-lifecycle-isolated"
 
 
+def reset_fixture(label):
+    removed = subprocess.run(["adb", "uninstall", "net.plainnotes.app.data.test"], capture_output=True, text=True)
+    (REPORT / f"synthetic-package-reset-{label}.log").write_text(removed.stdout + removed.stderr)
+    packages = subprocess.check_output(["adb", "shell", "pm", "list", "packages", "net.plainnotes.app.data.test"], text=True).splitlines()
+    assert "package:net.plainnotes.app.data.test" not in packages, "Synthetic package must be absent before whole-UID inventory"
+
+
 def main():
     assert subprocess.check_output(["adb", "shell", "getprop", "ro.kernel.qemu"], text=True).strip() == "1", "Synthetic emulator only"
     REPORT.mkdir(parents=True, exist_ok=True)
-    removed = subprocess.run(["adb", "uninstall", "net.plainnotes.app.data.test"], capture_output=True, text=True)
-    (REPORT / "synthetic-package-reset.log").write_text(removed.stdout + removed.stderr)
-    packages = subprocess.check_output(["adb", "shell", "pm", "list", "packages", "net.plainnotes.app.data.test"], text=True).splitlines()
-    assert "package:net.plainnotes.app.data.test" not in packages, "Synthetic package must be absent before whole-UID inventory"
+    reset_fixture("before-lifecycle")
     try:
         result = subprocess.run(["./gradlew", ":core:data:connectedDebugAndroidTest",
             "-Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.LibraryLifecycleAndroidTest",
@@ -31,6 +36,11 @@ def main():
             path = ROOT / "core/data/build" / source
             if path.exists():
                 shutil.copytree(path, REPORT / name, dirs_exist_ok=True)
+    # PREPARED release also inventories the entire UID, so its real restart seams
+    # require the same isolation, not the unrelated bulk fixtures' retained keys.
+    reset_fixture("before-restart")
+    subprocess.run([sys.executable, "scripts/run_library_restore_restart.py"], cwd=ROOT, check=True)
+    reset_fixture("before-bulk")
 
 
 if __name__ == "__main__":

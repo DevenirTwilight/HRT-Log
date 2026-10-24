@@ -1,0 +1,10 @@
+{
+  "counts": {
+    "tests": 599,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "result": "PASS",
+  "red": "New NULL-release proof assertion fails against 531a7f68 SQL predicate; original XML/log in null-proof-red. Fixed by explicit IS NULL refusal; no new mechanism, format or version."
+}

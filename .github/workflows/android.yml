@@ -139,7 +139,6 @@ jobs:
             python3 scripts/run_attachment_foundation_restart.py
             python3 scripts/run_attachment_persistent_restart.py
             python3 scripts/run_attachment_restore_restart.py
-            python3 scripts/run_library_restore_restart.py
             python3 scripts/run_attachment_gate2_red.py
             python3 scripts/run_attachment_gate2_restart.py AFTER_CREATE
             python3 scripts/run_attachment_gate2_restart.py WRITE
@@ -240,7 +239,6 @@ jobs:
             python3 scripts/run_attachment_foundation_restart.py
             python3 scripts/run_attachment_persistent_restart.py
             python3 scripts/run_attachment_restore_restart.py
-            python3 scripts/run_library_restore_restart.py
             python3 scripts/run_attachment_gate2_red.py
             python3 scripts/run_attachment_gate2_restart.py AFTER_CREATE
             python3 scripts/run_attachment_gate2_restart.py WRITE

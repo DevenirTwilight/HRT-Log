@@ -1,0 +1,12 @@
+{
+  "source": "531a7f681e78b76202ead7581d99a9cbb87fd7d8",
+  "androidPRRun": 40084558700,
+  "result": "FAIL after dedicated lifecycle4 and original bulk passed: PREPARED release rejects other unrelated roots keys (Other resource ownership is not proven). Whole-UID restart fixture must run beside isolated lifecycle, before bulk. No assertion removed.",
+  "lowMemoryRun": 40084558757,
+  "lowMemory": "PASS: OK9, 4 real fresh PID seams OK1 each; sampledNotPeak",
+  "artifacts": {
+    "12556767793": "af3f48ca5f5cee7c3dc2c24370158ac0e38cb9a5267277b7161cb8e008dad777",
+    "12556832413": "deff808a6325f5871e48e6ee9a48fb9828d34d1950eeb15836048c67dc2a01a5",
+    "12556567968": "9d1dacfde41aaebe97cfbb368b400fcb5b72262b849fd0db8c7300b866284c68"
+  }
+}
