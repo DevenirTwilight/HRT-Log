@@ -1,0 +1,17 @@
+{
+  "core-data": {
+    "tests": 599,
+    "failures": 0,
+    "skipped": 0
+  },
+  "app": {
+    "tests": 2339,
+    "failures": 0,
+    "skipped": 557
+  },
+  "reminder": {
+    "tests": 22,
+    "failures": 0,
+    "skipped": 0
+  }
+}

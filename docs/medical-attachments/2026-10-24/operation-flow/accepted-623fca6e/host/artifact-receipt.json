@@ -1,0 +1,27 @@
+{
+  "source_sha": "623fca6efdbf8e7bb36ec92f80601e881ae7c25c",
+  "run": 40114476119,
+  "artifact": {
+    "id": 12569735163,
+    "node_id": "MDg6QXJ0aWZhY3QxMjU2OTczNTE2Mw==",
+    "name": "build-results",
+    "size_in_bytes": 129540751,
+    "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12569735163",
+    "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12569735163/zip",
+    "expired": false,
+    "digest": "sha256:f09bb478f156affe1453cb283f9488852e24676205ef3a7f532aa41816bd8957",
+    "created_at": "2026-10-24T17:32:13Z",
+    "updated_at": "2026-10-24T17:32:13Z",
+    "expires_at": "2027-01-22T17:04:44Z",
+    "workflow_run": {
+      "id": 40114476119,
+      "repository_id": 1406091596,
+      "head_repository_id": 1406091596,
+      "head_branch": "feature/med02-operation-flow-20261024",
+      "head_sha": "623fca6efdbf8e7bb36ec92f80601e881ae7c25c"
+    }
+  },
+  "sha256": "f09bb478f156affe1453cb283f9488852e24676205ef3a7f532aa41816bd8957",
+  "zip_crc": "PASS",
+  "large_zip": "GitHub original retained; selected original HTML extracted"
+}

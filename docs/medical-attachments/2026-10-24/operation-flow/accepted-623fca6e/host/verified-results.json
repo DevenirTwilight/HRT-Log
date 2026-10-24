@@ -1,0 +1,17 @@
+{
+  "net.plainnotes.app.PeriodStabilityTest": {
+    "tests": 5,
+    "failures": 0,
+    "skipped": 0
+  },
+  "net.plainnotes.app.RuntimeLibrarySessionTest": {
+    "tests": 2,
+    "failures": 0,
+    "skipped": 0
+  },
+  "net.plainnotes.app.AppShellBackNavigationTest": {
+    "tests": 17,
+    "failures": 0,
+    "skipped": 0
+  }
+}

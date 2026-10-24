@@ -1,3 +1,11 @@
+## MED-02 #119 已受保护合并，主线复验中 — 2026-10-24
+
+最终生产源623fca6efdbf8e7bb36ec92f80601e881ae7c25c，PR40114476119与push40114473651五项Android全SUCCESS，Science门和独立低内存40114476135 SUCCESS，无冲突/未解决review，固定HEAD按§106 Ready+正常auto squash合并369267e3741fcc3e263f6c51f1f81314abf887be（17:33:10Z）。主线fetch后tree与源tree同为6cf90042f5ccfe51229621d4f04c5311565fffae。没有admin/force/跳保护。不要据源分支HANDOFF旧PENDING重复实现！本证据分支accepted-623fca6e保存最终原件/merge收据和准确后续状态，不是另一生产实现。
+
+三API真实SAF App2/Core3均0fail/0skip，包含实际Provider并发不同内容同UUID反例；四个操作seam实际新PID各OK1。低内存原512/192核心12及generation4/operation4新PID全通过，viewer低内存/真机/TalkBack/物理断电NOT_RUN。最终官方host129540751字节ZIP已核SHA/CRC，提取原HTML与log；data599/0fail/0skip、reminder22/0fail/0skip，app报告2339总项/0fail/557原有skip，明确不是2339全部执行。导航17/Period5/Runtime2均0fail/0skip，不删断言，原2a导航两文本失败保留。
+
+主线Science40116642050 SUCCESS，Android40116642106运行中，仍须核最终结果。最后补本地固定源unsignedRelease payload/来源收据（无签名/交付），完成后保存日志；不能把构建当作真实设备验证。外审包已随#119入主线，95源码hash保持一致，NOT_REVIEWED_EXTERNALLY。feature_enabled=0/PUBLIC_ENTRY_ENABLED=false/真实用户入口、真实原件和永久删除OFF。没有Room16/业务备份/密码学/限额/PK/权限变更。下一项最小独立工程任务：保留generation共同存在时的新增附件联合准入；当前旧限制必须继续拒绝，非空fallback单库导出仍REFUSED，不发明新协议。
+
 ## MED-02 #119最终623三API原始报告全核验通过 — 2026-10-24
 
 最新PR API29/35官方artifact12567409521/12568620808已下载核GitHub SHA与全ZIP CRC，连同API26：各真实SAF App2/0fail/0skip（含新并发异载荷反例）及Core3/操作四freshPID全过，原始报告/日志/ZIP/收据accepted-623fca6e。低内存12+8新PID、JVM和Science均过。仍等完整Android/JVM构建job结束，未提前Ready/合并，未伪称Release隔离或所有host测试已过；如真实失败按日志最小处理，不重跑旧源。外审/真实原件/公共入口/永久删除OFF。
