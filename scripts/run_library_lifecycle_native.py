@@ -19,7 +19,8 @@ def main():
     REPORT.mkdir(parents=True, exist_ok=True)
     removed = subprocess.run(["adb", "uninstall", "net.plainnotes.app.data.test"], capture_output=True, text=True)
     (REPORT / "synthetic-package-reset.log").write_text(removed.stdout + removed.stderr)
-    assert not subprocess.check_output(["adb", "shell", "pm", "path", "net.plainnotes.app.data.test"], text=True).strip(), "Synthetic package must be absent before whole-UID inventory"
+    packages = subprocess.check_output(["adb", "shell", "pm", "list", "packages", "net.plainnotes.app.data.test"], text=True).splitlines()
+    assert "package:net.plainnotes.app.data.test" not in packages, "Synthetic package must be absent before whole-UID inventory"
     try:
         result = subprocess.run(["./gradlew", ":core:data:connectedDebugAndroidTest",
             "-Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.LibraryLifecycleAndroidTest",
