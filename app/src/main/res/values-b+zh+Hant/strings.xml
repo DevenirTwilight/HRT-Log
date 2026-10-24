@@ -1351,4 +1351,5 @@
 <string name="library_scope_loading">正在核對資料庫…</string>
 <string name="library_restore_pending">正在還原資料庫，請先完成還原或取消後再修改。</string>
 <string name="library_request_locked">請先解鎖並重新開啟應用程式，再進行修改。</string>
+<string name="library_change_committed">資料庫更換已提交。請重新開啟查看，請勿重複提交。</string>
 </resources>

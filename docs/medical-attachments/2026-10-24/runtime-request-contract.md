@@ -19,6 +19,10 @@ Two REDs reproduce the actual baseline defects: a new Repository with old saved 
 
 Cancellation, authorization loss and post-commit refresh failure never cause automatic retry. UI permission checks are revocation checks, not a replacement for the attachment session's existing commit/publication capability protocol. A commit already completed remains a fact even if its old owner cannot publish into a newer page.
 
+An originating ordinary PNBAK1 restore or replacing TransMemo import deliberately retires its own epoch. Its private commit acknowledgement is created only after the real Repository transaction returns, before reminder replanning. The originating operation retains that historical success even if replanning, cancellation or an old-page read subsequently fails. The old screen still becomes unavailable and must be explicitly reopened; this never rebinds its DTOs or allows a second mutation. No acknowledgement exists on a failed or unknown commit. Existing RestoreProtectionAndroidTest assertions are retained and selected on API26/29 as well as the full API35 suite.
+
+Pure DAO helpers are not a new global snapshot API. Actual UI publishers check the frozen scope after their final suspended read (including editor profile and imported-record candidates); reminder detail/stock publishers recheck the original root before displaying derived content. Existing transaction snapshots and full semantic validation remain unchanged.
+
 ## Boundaries and next slice
 
 MED-02 remains `feature_enabled=0`, `NOT_REVIEWED_EXTERNALLY`; no real originals, public import/open/restore, permanent cleanup, public protocol freeze, signing or release. Existing OFF P4 process writer and P5/P6 are not redesigned. No new persistent task queue or clinical mutation replay exists here.

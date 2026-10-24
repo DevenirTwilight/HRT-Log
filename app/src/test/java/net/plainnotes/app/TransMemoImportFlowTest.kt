@@ -77,6 +77,20 @@ class TransMemoImportFlowTest {
         assertTrue(model.dataJob.value is NotesViewModel.DataJob.Idle)
         assertNoCopy()
     }
+    @Test fun replacingImportKeepsItsRealCommitAndRevokesTheOldScreen() {
+        val original=input.readBytes()
+        model.openTransMemo(Uri.fromFile(input))
+        await {model.dataJob.value is NotesViewModel.DataJob.ImportReady}
+        val ready=model.dataJob.value as NotesViewModel.DataJob.ImportReady
+        model.runImport(ready.export,TransMemo.Choices(mapOf(1L to 120,2L to 60,3L to 60,4L to 60),
+            TransMemo.LateHandling.AS_MISSED,TransMemo.WellbeingScale.ONE_TO_FIVE),true)
+        await {model.dataJob.value is NotesViewModel.DataJob.Imported || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        assertTrue("A replacing import committed but was reported as failed",model.dataJob.value is NotesViewModel.DataJob.Imported)
+        assertEquals(9,runBlocking {repo.records()}.size)
+        assertTrue(model.librarySession.value is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Unavailable)
+        assertEquals(net.plainnotes.app.runtime.RuntimeLibrarySession.State.Unavailable(R.string.library_change_committed),model.librarySession.value)
+        assertArrayEquals(original,input.readBytes());assertNoCopy()
+    }
     @Test fun switchingToHrtTrackerCancelsTheTransMemoRead() {
         val tracker=File(context.cacheDir,"b2-synthetic-ht.json")
         try {

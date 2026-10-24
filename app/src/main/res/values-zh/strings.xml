@@ -1351,4 +1351,5 @@
 <string name="library_scope_loading">正在核对资料库…</string>
 <string name="library_restore_pending">正在恢复资料库，请先完成恢复或取消后再修改。</string>
 <string name="library_request_locked">请先解锁并重新打开应用，再进行修改。</string>
+<string name="library_change_committed">资料库更换已提交。请重新打开查看，不要重复提交。</string>
 </resources>

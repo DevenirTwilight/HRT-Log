@@ -1,5 +1,9 @@
 ## MED-02 #115 已合并；Runtime Scope 真实接线验收中 — 2026-10-24
 
+最后提交确认/发布边界修正已完成本地App20、提醒22/0fail/error/skip，以及full原生Kotlin编译。绿色原件/源码逐文件SHA保留commit-ack-and-publication-green，两个真实RED分别restore-ack-red-ecba64b6与replacing-import-ack-red。页面四语明确说明“更换已提交、重开查看、勿重复提交”；其他未知/失败不能产生此确认。编辑器先读完profile再核scope后发布、导入记录候选发布前复核、提醒detail/库存提醒在最终读取后核原authority，避免读取过程中普通epoch替换造成混用。没有第二authority/迁移/临床计算变动。最新源须正常新CI，旧ecba35的真实恢复回归/启动失败不再补跑；不重跑旧SHA求绿。#116在最终CI及独立低内存故障结论前继续Draft，入口OFF，前一次低内存真实崩溃不因普通原生通过而消失。
+
+ecba64b6 host push/PR均SUCCESS，普通26/29及新SQLCipher/Compose scope在35也均通过；但push API35真实FAIL：原RestoreProtectionAndroidTest 9项中1项失败——PNBAK1已经实际提交、旧owner随后因自己主动换epoch过期，dataOp误报失败。保留该断言/完整原生原件，禁止重试旧SHA掩盖真实回归。新增实际Room/PNBAK1 JVM RED复现，并发现TransMemo覆盖导入同类RED。当前修正仅在Repository实际返回后建立私有提交确认，保留历史成功、关闭旧owner并要求明确重开；重规划/后续读取失败不能改变已提交事实，不给未知提交确认，也不重绑旧整数。普通追加导入维持原行为。原9项恢复保护追加进26/29显式CI选择（35原已全跑），没有改其断言。最新本地针对性回归/native编译在验，尚不写新源CI通过；修正提交后须新SHA正常CI。ecba低内存进程崩溃仍为独立BLOCKED，无盲目重跑、无改KDF/配额/夹具；原件与最新交接在远端docs/med02-runtime-evidence-20261024。#116仍Draft，不合并、不开放入口/永久删除/外审/发布。
+
 接线PR #116，首源162579c8已完成完整本地data597/提醒22均0失败，App2337/1失败/557原有skip：唯一失败为新错误页居中违反不变UI09源守卫。修正仅该页左对齐/16dp间距，不修改守卫；完整原日志/XML/Period5通过原件保留full-162579c8。修正后的最终SHA仍须正常必需CI，不借首源绿灯合并。首源API29原件已独立下载核验：新增SQLCipher旧请求及Compose各1通过/0skip，原restore4/迁移6通过；首源低内存原5项及三强停点均通过，官方原件和交接已推送 `docs/med02-runtime-evidence-20261024`。该证据分支持续记录实际最终验收；只是原件/交接保存，不绕过生产PR检查。环境曾短暂断开，已恢复；没有丢失已提交源码/证据，没有因此重跑原生作业。
 
 #115 source `2fbe072708062ff03526cfa283cbfc84f15494d0` 已按§106解除Draft并正常受保护合并，主线 `b73dcc617d9be6c1b35daea4157f093df3ef3313` 与验收源码tree完全相同。六必需检查、PR三API原件、独立低内存run40034667220（API26/512MiB/192MiB）、三个真实不同PID强停重开点已核验。低内存原5项OK5/无skip（heap1+restore4），各强停verify OK1。原件/SHA/CRC、第一次push API29真实失败和单次失败job重试成功均保存远端分支 `docs/med02-115-evidence-20261024`，目录 `docs/medical-attachments/2026-10-24/pr115-closeout`。不得将早期13a证据当最终源码。

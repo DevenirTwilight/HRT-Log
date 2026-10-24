@@ -119,7 +119,8 @@ import javax.inject.Singleton
         runCatching {
             val today=java.time.LocalDate.now()
             // Same input and rule as the stock page and calendar (B4): the shared forecast over the open-dose window.
-            StockAlerts.post(context,StockAlerts.due(repo.medications(),repo.containers(),repo.stockForecasts(now),today),today)
+            val due=StockAlerts.due(repo.medications(),repo.containers(),repo.stockForecasts(now),today)
+            repo.validateGeneration();StockAlerts.post(context,due,today)
         }
     }
     private fun scheduleCached() {
@@ -168,6 +169,7 @@ import javax.inject.Singleton
         if(!NotificationPrefs(context).details)return null
         return runCatching { val slot=repo.reminderSlot(id,generation) ?: return null
             val m=repo.medications().firstOrNull{it.id==slot.medicationId} ?: return null
+            repo.validateGeneration()
             "${m.name} · ${java.text.NumberFormat.getNumberInstance().apply{maximumFractionDigits=3}.format(slot.dose)} ${m.unit.lowercase()}" }.getOrNull()
     }
     private fun channel(nm:NotificationManager)=nm.createNotificationChannel(NotificationChannel("reminders",context.getString(R.string.reminder_channel),NotificationManager.IMPORTANCE_HIGH))
