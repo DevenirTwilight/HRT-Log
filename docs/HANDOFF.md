@@ -1,3 +1,9 @@
+## MED-02 #119 最终候选与外审交付索引 — 2026-10-24
+
+源码9d735355ca27b969e8b209d00fb78640814d7596已推既有#119，仍Draft。PR Android40101035984、独立低内存40101035993正在实际验收；Science40101036019已SUCCESS，其余不能先写通过。修正范围/原失败见下方历史与operation-flow目录。源分支暂冻结，只对新的真实失败修根因，不补跑旧SHA筛绿。
+
+独立docs/med02-operation-evidence-20261024分支保存external-review/README.md和50文件SHA清单，状态NOT_REVIEWED_EXTERNALLY，索引现有契约/原件并列明真实设备、恶意解析、viewer低内存和issue117未定根因；候选验收/合并尚待，包不是外审通过或启用许可。下一步只读取本轮最终CI/原件，满足安全及§106才Ready/正常保护合并并核主线，然后更新同一证据分支最终收据，避免文档修改触发重复大库验证。feature0/正式入口/真实原件/永久删除/签名发布OFF。
+
 ## MED-02 #119 SAF测试进程依赖已定位；补真实目标选择/重开与运行中核对保护 — 2026-10-24
 
 2797c2a9原生已越过只读篡改准备：三API Core Operation3全部通过；独立低内存40096966198实际OK12，原4+新4真实force-stop各verify OK1。官方ZIP SHA/CRC、原HTML/低内存与8seam日志在operation-flow/second-native。App2仍真实1FAIL：Choose按钮确认超时；API29原log明确测试包独立Provider进程queryRoots抛NoClassDefFoundError kotlin.jvm.internal.Intrinsics，测试APK没有目标App的Kotlin runtime。另API29旧导航用例CREATED状态超时保留UNKNOWN，不删断言或重跑旧源凑绿。
