@@ -1,3 +1,7 @@
+## MED-02 #118 部分扫描失败持久证据修正，最终本地599 PASS — 2026-10-24
+
+在源码复核发现真实安全边界：扫描中途失败可能已观察过无法归属的对象，不能在下一次空扫描后消失。fresh失败现在保存opaque UNKNOWN，重启后仍保留，不以随后缺失自动消解。原生未知用例加入真实0755 generation root扫描拒绝/测试自有目录移除/重启仍保留UNKNOWN断言，不改正式删除策略或加密参数。本地完整data599/0fail/error/skip及native Kotlin编译再次PASS，原件final-scan-local；native新增断言尚待精确候选CI。此前8b三API失败及低内存OK9证据保留。测试隔离只重置模拟器合成测试包，每API单独完整跑4项再跑原套件，额外真实未知alias断言确认拒绝未放宽。接下来冻结源码，仅验必需CI/原生/低内存/四freshPID；不另开性能研究。#118保持Draft直到真实门槛通过，入口feature0/外审NOT_REVIEWED_EXTERNALLY/真实原件/永久文件key删除OFF。
+
 ## MED-02 #118 原生真实失败保留；隔离全UID合成清单测试 — 2026-10-24
 
 源码8b80cc2f的PR Android40082952798，三API生命周期4项中3项真实FAIL，原HTML/26/29/35 ZIP SHA/CRC及API29原日志保留lifecycle-evidence/first-native。相同源码独立低内存40082952739 SUCCESS，官方ZIP12555729351已核SHA/CRC：OK9、0skip、四真实强停新PID各OK1；阶段Java/native/RSS/PSS仅采样不称峰值。其他原断言未放宽。

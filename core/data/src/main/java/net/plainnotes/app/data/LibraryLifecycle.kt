@@ -42,7 +42,9 @@ internal class LibraryLifecycle(private val access:DatabaseAccess) {
         LibraryResourceFacts.scan(context,root.openHelper.writableDatabase,DatabaseAccess.handleIdentity(current),checkActive=checkActive)
     }catch(e:Exception) {
         checkActive()
-        LibraryResourceFacts.Scan(listOf(LibraryResourceFacts.Item("scan-unavailable",DatabaseAccess.handleIdentity(current),"SCAN_UNAVAILABLE","NO_COMPLETE_OBSERVATION")),false,emptySet(),false)
+        // A partial scan may already have encountered unowned resources before failing.
+        // Preserve an opaque UNKNOWN across restart; a later empty scan cannot resolve it.
+        LibraryResourceFacts.Scan(listOf(LibraryResourceFacts.Item("scan-unavailable",DatabaseAccess.handleIdentity(current),"UNKNOWN","PARTIAL_RESOURCE_SET_NOT_PROVEN")),false,emptySet(),false)
     }
     /** Rebuild on every call. Historical UNKNOWN evidence survives a missing/replaced leaf. */
     fun inventory(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,operation:UUID)=rootWork(scope,cap) {current,root,active->

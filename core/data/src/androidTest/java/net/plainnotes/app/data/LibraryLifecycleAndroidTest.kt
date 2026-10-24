@@ -77,6 +77,13 @@ class LibraryLifecycleAndroidTest {
             assertEquals(LibraryLifecycle.Eligibility.UNKNOWN,lifecycle.exportEligibility(f.scope,f.session.issue(),UUID.randomUUID()).eligibility)
             val output=ByteArrayOutputStream();reject {lifecycle.writeArchive(f.scope,f.session.issue(),UUID.randomUUID(),"synthetic".toCharArray(),output)};assertEquals(0,output.size())
             assertArrayEquals(before,f.facts())
+            // A partial scan must also retain opaque evidence, not become an empty successful set.
+            val unsafe=File(f.directory,"library-generations-v1");check(unsafe.mkdir())
+            android.system.Os.chmod(unsafe.path,493) // Test-owned unsafe 0755 root forces a real scan refusal.
+            assertTrue(lifecycle.inventory(f.scope,f.session.issue(),UUID.randomUUID()).items.any {it.key=="scan-unavailable" && it.category=="UNKNOWN"})
+            check(unsafe.delete());f.reopen();f.session=AttachmentSession(UUID.fromString(f.scope.dataset),UUID.fromString(f.scope.epoch))
+            assertTrue(LibraryLifecycle(f.access).inventory(f.scope,f.session.issue(),UUID.randomUUID()).items.any {it.key=="scan-unavailable" && it.category=="UNKNOWN"})
+            assertArrayEquals(before,f.facts())
         }
     }
     @Test fun liveNeverStartedOwnerCanBeAtomicallyAbortedAndReleasedAndCannotResume() {
