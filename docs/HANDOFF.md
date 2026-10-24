@@ -1,3 +1,7 @@
+## MED-02 #119 623fca6e固定源码本地编译/19项通过 — 2026-10-24
+
+最终623fca6e源码冻结后的独立本地轮native Kotlin+Java编译PASS、导航17+Runtime2共19/0fail/error/skip。原件accepted-623fca6e/local。此前开发中同时修改过store候选又还原的构建不作为最终源码验收；实际最终core/data源码与705完全相同，只接受这次固定源码结果/最终CI。新增真实Provider并发场景仅编译通过，原生仍待CI，不能写PASS。最新普通JVM/Science门通过，三API和低内存运行中；feature0/真实入口/外审/永久删除状态不变。继续原PR119，仅修真实新失败，不补跑旧源。
+
 ## MED-02 #119 705全必需门绿但被并发确认修正取代 — 2026-10-24
 
 705 PR40112205294最终SUCCESS：原JVM导航阻断已修好；三API/低内存均通过。API35官方artifact12567523369核SHA/CRC、App2/Core3/原lock13/runtime1等0fail/0skip与四操作新PID原件已保留accepted-70584c6f。不能据705全绿自动合并：最终审查发现同UUID不同输入竞争后通用异常核对会自动展示别人的提交。最新生产候选623fca6efdbf8e7bb36ec92f80601e881ae7c25c仅改controller异常确认规则，COMMITTED须显式核对、真实receipt仍Saved；底层store/digest/crypto/schema原样。真实Provider latch并发反例已加入原App失败用例，新候选完整CI正在跑。旧源上未执行该新测试，不伪报RED。外审与正式入口/真实原件/永久删除仍OFF，不签名发布。

@@ -1,0 +1,12 @@
+{
+  "source_sha": "623fca6efdbf8e7bb36ec92f80601e881ae7c25c",
+  "app_navigation_and_runtime": {
+    "tests": 19,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "native_compile": "PASS Kotlin + Java",
+  "new_provider_race_native_execution": "NOT_RUN locally; no KVM",
+  "external_review": "NOT_REVIEWED_EXTERNALLY"
+}
