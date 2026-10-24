@@ -1,0 +1,114 @@
+{
+  "source_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895",
+  "artifacts": [
+    {
+      "label": "api26",
+      "artifact": {
+        "id": 12566836262,
+        "node_id": "MDg6QXJ0aWZhY3QxMjU2NjgzNjI2Mg==",
+        "name": "attachment-poc-api26",
+        "size_in_bytes": 238340,
+        "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12566836262",
+        "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12566836262/zip",
+        "expired": false,
+        "digest": "sha256:ac5532efd828b912dc9784b0d430da91f21cead1ec5f6f56a3e6d538129c4b93",
+        "created_at": "2026-10-24T16:19:51Z",
+        "updated_at": "2026-10-24T16:19:51Z",
+        "expires_at": "2027-01-22T15:56:55Z",
+        "workflow_run": {
+          "id": 40109281652,
+          "repository_id": 1406091596,
+          "head_repository_id": 1406091596,
+          "head_branch": "feature/med02-operation-flow-20261024",
+          "head_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895"
+        }
+      },
+      "verified_sha256": "ac5532efd828b912dc9784b0d430da91f21cead1ec5f6f56a3e6d538129c4b93",
+      "zip_crc": "PASS"
+    },
+    {
+      "label": "api29",
+      "artifact": {
+        "id": 12567030215,
+        "node_id": "MDg6QXJ0aWZhY3QxMjU2NzAzMDIxNQ==",
+        "name": "attachment-poc-api29",
+        "size_in_bytes": 273146,
+        "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12567030215",
+        "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12567030215/zip",
+        "expired": false,
+        "digest": "sha256:3f7c3a340049c3399a0ef4a86180c0032a3d5092aaf804eab880b8bb02dd49eb",
+        "created_at": "2026-10-24T16:18:06Z",
+        "updated_at": "2026-10-24T16:18:06Z",
+        "expires_at": "2027-01-22T15:56:55Z",
+        "workflow_run": {
+          "id": 40109281652,
+          "repository_id": 1406091596,
+          "head_repository_id": 1406091596,
+          "head_branch": "feature/med02-operation-flow-20261024",
+          "head_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895"
+        }
+      },
+      "verified_sha256": "3f7c3a340049c3399a0ef4a86180c0032a3d5092aaf804eab880b8bb02dd49eb",
+      "zip_crc": "PASS"
+    },
+    {
+      "label": "api35",
+      "artifact": {
+        "id": 12566313492,
+        "node_id": "MDg6QXJ0aWZhY3QxMjU2NjMxMzQ5Mg==",
+        "name": "device-test-results",
+        "size_in_bytes": 1120255,
+        "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12566313492",
+        "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12566313492/zip",
+        "expired": false,
+        "digest": "sha256:b096f9dfe1ca6c9cc02a0c6b6c0ec97b5a77adeaaa49b2e10e59308733e607f7",
+        "created_at": "2026-10-24T16:18:43Z",
+        "updated_at": "2026-10-24T16:18:43Z",
+        "expires_at": "2027-01-22T15:56:55Z",
+        "workflow_run": {
+          "id": 40109281652,
+          "repository_id": 1406091596,
+          "head_repository_id": 1406091596,
+          "head_branch": "feature/med02-operation-flow-20261024",
+          "head_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895"
+        }
+      },
+      "verified_sha256": "b096f9dfe1ca6c9cc02a0c6b6c0ec97b5a77adeaaa49b2e10e59308733e607f7",
+      "zip_crc": "PASS"
+    },
+    {
+      "label": "low-memory",
+      "artifact": {
+        "id": 12565967745,
+        "node_id": "MDg6QXJ0aWZhY3QxMjU2NTk2Nzc0NQ==",
+        "name": "med02-library-api26-512m",
+        "size_in_bytes": 158097,
+        "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12565967745",
+        "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12565967745/zip",
+        "expired": false,
+        "digest": "sha256:f6b2ddf1cc1f83e02be5cab936c5653824998e004f0056a4f33796b2a1dded80",
+        "created_at": "2026-10-24T16:03:30Z",
+        "updated_at": "2026-10-24T16:03:30Z",
+        "expires_at": "2027-01-22T15:56:55Z",
+        "workflow_run": {
+          "id": 40109281747,
+          "repository_id": 1406091596,
+          "head_repository_id": 1406091596,
+          "head_branch": "feature/med02-operation-flow-20261024",
+          "head_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895"
+        }
+      },
+      "verified_sha256": "f6b2ddf1cc1f83e02be5cab936c5653824998e004f0056a4f33796b2a1dded80",
+      "zip_crc": "PASS"
+    }
+  ],
+  "android_run": 40109281652,
+  "android_conclusion": "FAILURE: JVM navigation assertion; other four jobs SUCCESS",
+  "science_run": 40109281694,
+  "science": "SUCCESS",
+  "low_memory_run": 40109281747,
+  "low_memory": "PASS:12 tests plus generation4/operation4 fresh-PID; all originals retained",
+  "physical_device": "NOT_RUN",
+  "viewer_low_memory": "NOT_RUN",
+  "external_review": "NOT_REVIEWED_EXTERNALLY"
+}

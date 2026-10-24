@@ -1,3 +1,11 @@
+## MED-02 #119 导航阻断最小修正与外审材料 — 2026-10-24
+
+接手真实HEAD2a47be6a、主线f5f94238，继续原分支/PR119，无工作树覆盖。官方PR Android40109281652真实FAIL仅JVM AppShellBackNavigationTest:112；原HTML明确两个Appointment文本（异步sync尚未发布就诊时，empty-state+FAB并存），未执行Back。生产AppShell/VisitsScreen/NotesViewModel相对主线无变。仅将原10s真实就诊出现wait前置于原exact-one FAB断言，不减断言/不sleep/不改导航。原源码本地17/17也通过，明确不是本地确定复现；失败HTML、官方ZIP digest/CRC收据和前后本地17/0fail/error/skip均保留navigation-fix。新最终SHA必需CI待验，不以同源push绿掩盖失败。
+
+2a47官方API26/29/35+低内存四ZIP已下载并逐一核对GitHub SHA-256及全CRC，原件和选定HTML/强停日志入accepted-2a47be6a。三API各App2真实DocumentsUI/Core3/0fail/0skip，操作4强停点每点verify OK1；低内存原512MiB/192MiB实际core12及原generation4+operation4新PID核对均通过。独立Science40109281694绿。原生生产/测试/配置未因本次JVM修正改变，不无故重启独立低内存研究；最终正常CI仍须全过。
+
+external-review/README.md和逐文件SHA inventory列明威胁边界、Keystore/Tink/完整备份、原子提交/恢复、SAF/provider/native parser/内存与撤权风险，以及有限剩余工作。NOT_REVIEWED_EXTERNALLY不变；不代表review已做。公共入口/feature0/真实原件/永久删除仍OFF，无Schema/格式/权限/配额/签名或发布变动。完整viewer低内存/物理设备/TalkBack/物理断电NOT_RUN，ecba64b6原因继续UNDETERMINED；managed新写入及非空fallback导出仍按原政策拒绝。下一步核本修正精确SHA正常六门/无冲突无未解决review，再§106正常保护合并并核主线；不重新做旧基础设施。
+
 ## MED-02 #119 真实adbd重启确认缺口最小修复，默认OFF — 2026-10-24
 
 cd01 PR API35再次在任何测试之前adb root返回closed而退出，属于明确启动阻断；不再盲重试旧SHA。原配置已有UID=0断言，但check_output先因root确认返回丢失抛错，未达到wait/UID核验。最小CI基础设施改动：记录非零确认，最多30s等待重连，确认仍同一emulator serial且实际UID=0才继续；非root/未知/换设备/超时都在任何setprop前拒绝。原selected emulator/API/qemu、192m heapsize/growthlimit、120s framework重启与原生Runtime.maxMemory探针断言保留，512MiB低内存/业务预算不改。这不是P4性能研究或应用权限变更。
