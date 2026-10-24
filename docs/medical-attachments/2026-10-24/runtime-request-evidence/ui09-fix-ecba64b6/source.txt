@@ -1,0 +1,1 @@
+Final source ecba64b605092b67bb1538ced6eb54d86a5d4905. 28 targeted tests, zero failures/errors/skips. Compiled with corrected AppShell start alignment. Does not replace final-source full CI/native.

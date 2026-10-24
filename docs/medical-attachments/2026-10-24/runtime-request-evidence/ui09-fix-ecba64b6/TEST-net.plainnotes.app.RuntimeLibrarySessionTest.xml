@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.RuntimeLibrarySessionTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-24T07:38:21.017Z" hostname="5eca99f7498b" time="0.293">
+  <properties/>
+  <testcase name="restoredUnknownDraftRefusesBeforeReadingOrBindingANewLibrary" classname="net.plainnotes.app.RuntimeLibrarySessionTest" time="0.098"/>
+  <testcase name="screenAndSavedDraftKeepOldIdentityWhileExplicitFreshOwnerCanUseNewLibrary" classname="net.plainnotes.app.RuntimeLibrarySessionTest" time="0.19"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

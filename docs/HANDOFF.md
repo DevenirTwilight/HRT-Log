@@ -1,5 +1,7 @@
 ## MED-02 #115 已合并；Runtime Scope 真实接线验收中 — 2026-10-24
 
+最新PR #116源码 `ecba64b605092b67bb1538ced6eb54d86a5d4905`，仍Draft。前源162579c8的host CI真实FAIL与本地完整轮一致：app2337/唯一UI09居中守卫失败/557既有skip；原始host job120812505283完整log保留。不删守卫，新源仅将错误页改为左对齐/16dp间距，28项针对性复核（含全部PeriodStability）PASS/无skip。首源API29原始ZIP12551883965 SHA e713da794fdcc18b71ace9578088a95e3ec17ce96fdbf6626276efadaa12a2a0/CRC已核，新SQLCipher runtime及Compose各1/0fail/0skip、restore4/迁移6PASS；与低内存原件分开归属，不能当新源通过。新源PR Android40074939019、低内存40074939096、Science40074939102正在执行；push Android40074937029亦在途。旧同ref作业如因新源并发取消，不重跑旧SHA。环境短暂断线后已恢复，没有丢源码或降低断言。下一步只核最终源六门/低内存/原生工件，再Ready/受保护合并并核主线；仍feature0/外审未做/无真实原件/永久删除OFF/无APK。
+
 本轮接线PR #116已创建，生产源码 `162579c8e003d604b688937b38bbb502e54d9d07`，Draft。测试merge `7a235a185abb1dc05f9796212c9256b4fe197ed5` 与源tree均 `28bdc53b0e1af7940bb1b55c1dae3c1349940608`。修复后的针对性data4（含旧屏障和新晚撤权回滚）/提醒22/App36通过，原生编译通过；最终源完整本地回归和普通三API CI仍在运行。
 
 该最终源独立低内存run40073726424已SUCCESS，官方artifact12552587087 SHA a388bd12e60e1f789ae2652fc4c6113374f0e49177a1737b6f3395eac0dbc7dc/CRC已独立核验。API26/512MiB/192MiB原5项OK5、无skip；OBJECTS_COMMITTED/IN_SWITCH/SWITCHED各原始强停log及新PIDverify OK1保留low-memory-162579c8。采样最大Java77506432B、RSS100576KiB，不是峰值。此低内存轮验证既有restore原5项；新增RuntimeLibraryRequestAndroidTest与Compose用例仍需普通26/29/35原件，不能借低内存绿灯提前解除Draft。本分支仅保存验收原件/交接，不改生产源码，不用[skip ci]绕生产合并门。

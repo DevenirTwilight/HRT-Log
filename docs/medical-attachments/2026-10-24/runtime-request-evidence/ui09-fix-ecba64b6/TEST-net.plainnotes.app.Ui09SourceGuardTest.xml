@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.Ui09SourceGuardTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-24T07:36:55.660Z" hostname="5eca99f7498b" time="0.16">
+  <properties/>
+  <testcase name="visitDetailUsesNumberedSections" classname="net.plainnotes.app.Ui09SourceGuardTest" time="0.051"/>
+  <testcase name="exportCodeIsTheBase" classname="net.plainnotes.app.Ui09SourceGuardTest" time="0.009"/>
+  <testcase name="spacingOnTheTouchedPagesIsOnTheFourDpGrid" classname="net.plainnotes.app.Ui09SourceGuardTest" time="0.041"/>
+  <testcase name="onlyTheListedExceptionsStayCentred" classname="net.plainnotes.app.Ui09SourceGuardTest" time="0.053"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
