@@ -119,6 +119,7 @@ internal class LibraryLifecycle(private val access:DatabaseAccess) {
         }
     }
     fun writeArchive(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,operation:UUID,password:CharArray,output:OutputStream) {
+        try {
         val before=inventory(scope,cap,operation)
         check(before.reason=="FULL_SNAPSHOT_AUTHENTICATION_REQUIRED") {"Complete export refused: ${before.reason}"}
         val current=access.get(Space.PRIMARY)
@@ -128,6 +129,7 @@ internal class LibraryLifecycle(private val access:DatabaseAccess) {
             val after=inventory(scope,cap,operation);snapshot.manifest()
             check(after.reason=="FULL_SNAPSHOT_AUTHENTICATION_REQUIRED" && matches(manifest,after,DatabaseAccess.handleIdentity(current))) {"Export cannot claim the complete retained set"}
         }
+        }finally {password.fill('\u0000')}
     }
     /** Exact target namespace and original request identity. Legacy/started/unknown owners retain
      * their full budget. Native abort + release is ONE commit, excluding a racing start-marker. */

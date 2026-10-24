@@ -1,3 +1,7 @@
+## MED-02 生命周期候选冻结，完整本地回归PASS — 2026-10-24
+
+最终本地data 599/0fail/error/skip（含原迁移/库存/PK隔离等合同）及全部native Kotlin编译PASS，原XML/摘要/log在lifecycle-evidence/local；原生、低内存、真实进程死亡待精确源码CI，不把编译当执行。唯一小补充是writeArchive在前置拒绝/所有退出路径同样擦除其接收密码，不改密码学。创建独立Draft PR，原六门+新生命周期四项/四freshPID及低内存9项必须真实验收才Ready；没有新UI、真实原件、永久删除、签名发布。
+
 ## MED-02 #116已受保护合并，生命周期生产底座进入验收 — 2026-10-24
 
 #116最终a11955bf六必需门全部SUCCESS、三API/独立低内存SUCCESS、无冲突/未解决review，正常squash合并caa2651eacec02a4ddcdd6e1e1f43b76d85372d0。主线Android40080087086和Science40080087098均SUCCESS。三API官方ZIP SHA/CRC核实RuntimeLibraryRequest各1、RuntimeRequestUi各1、RestoreProtection各9，0fail/0skip；收据和原HTML在lifecycle-evidence/pr116。低内存只覆盖原Heap+LibraryRestore5项和三个fresh-PID，未冒充runtime UI/通知全低内存；原ecba64b6中断原因继续UNDETERMINED，原件在docs/med02-runtime-evidence-20261024保留。
