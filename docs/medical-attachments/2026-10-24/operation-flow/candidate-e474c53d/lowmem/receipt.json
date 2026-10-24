@@ -1,0 +1,12 @@
+{
+  "source_sha": "e474c53d41bfa7f846cd98783620951067dbb6e3",
+  "run": 40102500496,
+  "artifact": 12563765836,
+  "sha256": "b5d7728909e86831f282eb372e543fe1849640de42ce0d66cc12f7460432cfa7",
+  "crc": "PASS",
+  "native": "12 tests /0 failures, four library plus four operation fresh PID verify each OK1",
+  "ramMiB": 512,
+  "artHeapMiB": 192,
+  "viewer_low_memory": "NOT_RUN",
+  "physical": "NOT_RUN"
+}

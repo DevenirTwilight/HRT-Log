@@ -1,3 +1,7 @@
+## MED-02 #119 最终e474原件低内存核验PASS — 2026-10-24
+
+最终e474c53d41bfa7f846cd98783620951067dbb6e3独立API26/x86/512MiB/192MiB低内存40102500496 SUCCESS；官方artifact12563765836 SHA256=b5d7728909e86831f282eb372e543fe1849640de42ce0d66cc12f7460432cfa7，CRC核验PASS。实际原件OK12、原库四点+新操作四点fresh-PID各OK1（日志/ZIP/采样/收据在operation-flow/candidate-e474c53d/lowmem）。这不是旧SHA借证，不证明App viewer低内存/真机。最终JVM与Science也SUCCESS，三API/App DocumentsUI及主Android仍运行；#119仍Draft/未合并，feature0/NOT_REVIEWED_EXTERNALLY不变。
+
 ## MED-02 #119 当前最终源e474c53d已运行，生产代码未再改 — 2026-10-24
 
 最终HEAD e474c53d41bfa7f846cd98783620951067dbb6e3，在90f测试修正上明确注入事件SOURCE_TOUCHSCREEN。正常PR Android40102500440、独立低内存40102500496、Science40102500459正在执行；源码分支保持Draft，无合并。9d→最终源生产/调试代码逐路径diff为空，仅测试/日志工件收集与文档变化，source-inventory已记录这个等价范围；不可把旧测试通过当新最终必需CI通过。旧90f工作流由既有concurrency自动取消，不手动补跑或绕过保护。下一步只核对当前最终原始报告；若文件行仍超时，使用新有界界面树/原instrumentation定位，不无限盲改/重跑。
