@@ -55,5 +55,25 @@
   },
   "warning": "Inventory identifies scope; hashes do not prove security or native acceptance.",
   "latest_test_source_sha": "7d3186fd093cc03f5a4881944773fadeb73c03db",
-  "production_and_debug_identical_between_source_and_latest_test_sha": true
+  "production_and_debug_identical_between_source_and_latest_test_sha": true,
+  "review_source_sha": "7d3186fd093cc03f5a4881944773fadeb73c03db",
+  "hashes_computed_at_source_sha": "9d735355ca27b969e8b209d00fb78640814d7596",
+  "additional_entrypoint_git_blob_sha": {
+    "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "f93b57e47fa1a44080a1f7312ca020df864dd787",
+    "core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt": "e776ca915016918715021da85d187fe295e844f7"
+  },
+  "production_unchanged_comparison": {
+    "base": "9d735355ca27b969e8b209d00fb78640814d7596",
+    "head": "7d3186fd093cc03f5a4881944773fadeb73c03db",
+    "changed_production_or_debug_files": [],
+    "changed_files": [
+      ".github/workflows/android.yml",
+      "app/src/androidTest/java/net/plainnotes/app/attachments/AttachmentOperationAndroidTest.kt",
+      "docs/HANDOFF.md",
+      "docs/medical-attachments/2026-10-24/operation-flow/integration-contract.md",
+      "docs/medical-attachments/2026-10-24/operation-flow/local/stable-picker-compile-green.log",
+      "docs/medical-attachments/2026-10-24/operation-flow/local/system-touch-compile-green.log",
+      "scripts/run_attachment_operation_native.py"
+    ]
+  }
 }
