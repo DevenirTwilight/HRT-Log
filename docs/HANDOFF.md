@@ -1,3 +1,9 @@
+## MED-02 remaining integration proof recorded — 2026-10-24
+
+Collection next-integration-contract.md records a concrete old-client counterexample: Room16 admission cannot see newly introduced managed-child unmaterialized journal reservations, so merely opening the guard is unsafe even with a root gate. A version fence and explicit persisted group membership are proposed for the next actual integration, not implemented/reserved here; ordinary business schema13/PNBAK1 and original source data stay unchanged. Required retained-snapshot data/auth scopes, real read-only transactions, one authority commit, no double charging, and the exact remaining E2E are enumerated without a second validation/restore engine.
+
+PR121 final integrated1a970493 low-memory job has SUCCESS; its exact raw receipt still to collect, standard host/threeAPI checks running. No production changes after fixed candidate. Approval is already recorded147.J; no further request for OFF protocol implementation. Current default main#120efb2ff5d postmerge CI separate. All originals/progress persisted here and on implementation branch.
+
 ## MED-02 latest owner-approved code/evidence checkpoint — 2026-10-24
 
 #120 MERGED protected at efb2ff5d, tree matches accepted60dc382b; all required PR checks green and threeAPI operation3/0fail/0skip official HTML plus lowmemOK12/8 freshPID verified, originals saved accepted-60dc382b. Main postmerge CI separate. No repeated approval needed.
