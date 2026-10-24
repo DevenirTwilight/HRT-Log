@@ -1,3 +1,7 @@
+## MED-02 #119 标准finger触摸补齐（测试专用）— 2026-10-24
+
+API35 framework bytecode独立核对：MotionEvent便捷obtain(x,y)调用PointerProperties.clear后只设置id，toolType仍UNKNOWN；之后setSource不会把它变为FINGER。旧API26/29通过不能证明该事件等同真实手指。当前测试使用显式PointerProperties(TOOL_TYPE_FINGER)+坐标/pressure/size和SOURCE_TOUCHSCREEN的标准单指DOWN/UP，并保留d762的事件静默后refresh实时节点。生产代码/全部真实SAF和提交/关联/预览断言不变，不用额外点击或假返回。此修正不声明已经证明API35故障唯一根因，仍须新原生结果；失败则保留具体原件，不筛绿。
+
 ## MED-02 #119 API26/29真实链通过，API35过渡节点失败已保留 — 2026-10-24
 
 e474c53d源码：push API26 SUCCESS（40102496856/art12563439727），PR API29 SUCCESS（40102500440/art12564066860）；原HTML核对各App2/Core3均0fail/0skip。真实三类DocumentsUI/明确确认/typed关联/重开DB/认证预览/撤权成功不是仅编译；独立低内存40102500496 OK12+8新PID也已核。PR API35 device-tests真实失败（art12564240662）：第二次选择后等待selected超时，窗口仍DocumentsUI，日志14:37:47.270 Disconnected nodes，14:37:47.274二次directory loader更新，无文件激活/返回；不能归因后端保存，不能把26/29通过冒充35通过。三原ZIP/HTML/SAF logcat和失败job日志在独立证据分支operation-flow/candidate-e474c53d。

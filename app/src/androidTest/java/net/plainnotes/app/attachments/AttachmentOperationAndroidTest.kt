@@ -74,9 +74,13 @@ class AttachmentOperationAndroidTest {
             false
         }
         val bounds=requireNotNull(selected);val down=SystemClock.uptimeMillis()
+        val pointer=MotionEvent.PointerProperties().apply {id=0;toolType=MotionEvent.TOOL_TYPE_FINGER}
+        val coordinates=MotionEvent.PointerCoords().apply {x=bounds.exactCenterX();y=bounds.exactCenterY();pressure=1f;size=1f}
         for(action in listOf(MotionEvent.ACTION_DOWN,MotionEvent.ACTION_UP)) {
-            val event=MotionEvent.obtain(down,SystemClock.uptimeMillis(),action,bounds.exactCenterX(),bounds.exactCenterY(),0)
-            event.source=InputDevice.SOURCE_TOUCHSCREEN
+            // The convenience obtain(x,y) leaves TOOL_TYPE_UNKNOWN even after setSource.
+            // Modern DocumentsUI selection routes finger events by tool type as well as source.
+            val event=MotionEvent.obtain(down,SystemClock.uptimeMillis(),action,1,arrayOf(pointer),arrayOf(coordinates),
+                0,0,1f,1f,0,0,InputDevice.SOURCE_TOUCHSCREEN,0)
             try {assertTrue(instrumentation.uiAutomation.injectInputEvent(event,true))}finally {event.recycle()}
         }
     }
