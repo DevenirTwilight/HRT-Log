@@ -1344,4 +1344,12 @@
 <string name="wb_recent_note">只顯示你自己記下的數值，沒有記錄的日子留空。</string>
 <string name="wb_trend_spoken">%1$s，最近 %2$d 天記錄了 %3$d 天</string>
 <string name="wb_trend_spoken_all">%1$s，記錄了 %2$d 天</string>
+
+<string name="library_scope_changed">資料庫已變更。請重新開啟並核對操作結果，不要自動重複上一操作。</string>
+<string name="library_scope_unknown">無法確認恢復的頁面或提醒屬於目前資料庫。修改前請重新開啟資料庫。</string>
+<string name="library_scope_reopen">重新開啟資料庫</string>
+<string name="library_scope_loading">正在核對資料庫…</string>
+<string name="library_restore_pending">正在還原資料庫，請先完成還原或取消後再修改。</string>
+<string name="library_request_locked">請先解鎖並重新開啟應用程式，再進行修改。</string>
+<string name="library_change_committed">資料庫更換已提交。請重新開啟查看，請勿重複提交。</string>
 </resources>

@@ -20,7 +20,7 @@ internal object LibraryAuthority {
     }
     fun requireNoPending(db:SupportSQLiteDatabase) {
         db.query("SELECT 1 FROM library_candidate WHERE state IN('PREPARED','READY') LIMIT 1").use {
-            check(!it.moveToFirst()) {"A library restore requires completion or authorized abort"}
+            if(it.moveToFirst())throw LibraryRestorePending()
         }
     }
     fun identity(db:SupportSQLiteDatabase)=current(db)?.generation?.toString() ?: "LEGACY"

@@ -1,0 +1,1 @@
+Same runtime acknowledgement defect: TransMemo overwrite uses RawData.clear, which deliberately replaces dataset/epoch. Real synthetic import commits, then old owner post-check reports Failed. No business rows, original input, or assertions altered.

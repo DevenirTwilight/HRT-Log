@@ -115,8 +115,8 @@ class Ui03ShellTitleTest(private val locale: String) {
     @Before fun open() {
         RuntimeEnvironment.setQualifiers("$locale-w411dp-h891dp")
         db = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
-        val repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = db })
-        model = NotesViewModel(repo, ReminderCoordinator(context, repo), context)
+        val repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = net.plainnotes.app.syntheticLibrary(db) })
+        model = NotesViewModel(repo, ReminderCoordinator(context, repo), context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         UiPrefs(context).disclaimerAccepted = true
     }
     @After fun close() { androidx.lifecycle.ViewModelStore().apply { put("model", model); clear() }; db.close() }

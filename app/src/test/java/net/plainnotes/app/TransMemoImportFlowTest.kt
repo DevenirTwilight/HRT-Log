@@ -34,8 +34,8 @@ class TransMemoImportFlowTest {
         context=ApplicationProvider.getApplicationContext()
         db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
         db.openHelper.writableDatabase
-        repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
-        model=NotesViewModel(repo,ReminderCoordinator(context,repo),context)
+        repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=net.plainnotes.app.syntheticLibrary(db)})
+        model=NotesViewModel(repo,ReminderCoordinator(context,repo),context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         input=File.createTempFile("synthetic-tm-", ".db", context.cacheDir)
         val sql=File("../importer/src/test/resources/transmemo_v8_synthetic.sql").readText()
         SQLiteDatabase.openOrCreateDatabase(input,null).use { d ->
@@ -76,6 +76,20 @@ class TransMemoImportFlowTest {
         model.cancelImport()
         assertTrue(model.dataJob.value is NotesViewModel.DataJob.Idle)
         assertNoCopy()
+    }
+    @Test fun replacingImportKeepsItsRealCommitAndRevokesTheOldScreen() {
+        val original=input.readBytes()
+        model.openTransMemo(Uri.fromFile(input))
+        await {model.dataJob.value is NotesViewModel.DataJob.ImportReady}
+        val ready=model.dataJob.value as NotesViewModel.DataJob.ImportReady
+        model.runImport(ready.export,TransMemo.Choices(mapOf(1L to 120,2L to 60,3L to 60,4L to 60),
+            TransMemo.LateHandling.AS_MISSED,TransMemo.WellbeingScale.ONE_TO_FIVE),true)
+        await {model.dataJob.value is NotesViewModel.DataJob.Imported || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        assertTrue("A replacing import committed but was reported as failed",model.dataJob.value is NotesViewModel.DataJob.Imported)
+        assertEquals(9,runBlocking {repo.records()}.size)
+        assertTrue(model.librarySession.value is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Unavailable)
+        assertEquals(net.plainnotes.app.runtime.RuntimeLibrarySession.State.Unavailable(R.string.library_change_committed),model.librarySession.value)
+        assertArrayEquals(original,input.readBytes());assertNoCopy()
     }
     @Test fun switchingToHrtTrackerCancelsTheTransMemoRead() {
         val tracker=File(context.cacheDir,"b2-synthetic-ht.json")

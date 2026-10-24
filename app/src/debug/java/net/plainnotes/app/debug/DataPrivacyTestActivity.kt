@@ -35,7 +35,7 @@ class DataPrivacyTestActivity:ComponentActivity() {
     }
 }
 private class PrivacyFixture(context:Context):ViewModel() {
-    private val database=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build().also{it.openHelper.writableDatabase}
+    private val database=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build().also{it.openHelper.writableDatabase;syntheticLibraryScope(it)}
     val repository=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=database})
     private val children=ViewModelStore()
     private val owner=object:ViewModelStoreOwner{override val viewModelStore=children}

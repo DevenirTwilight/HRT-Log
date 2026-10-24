@@ -12,8 +12,9 @@ class AlarmReceiver:BroadcastReceiver() {
     override fun onReceive(context:Context,intent:Intent) {
         if(intent.action !in setOf("net.plainnotes.app.REMINDER","net.plainnotes.app.SNOOZE","net.plainnotes.app.COMPLETE"))return
         val generation=intent.getStringExtra("generation") ?: return;val id=intent.getStringExtra("id") ?: return
+        val scope=net.plainnotes.app.data.LibraryRequestScope.decode(runCatching {intent.getStringArrayListExtra(ReminderCoordinator.SCOPE_EXTRA)}.getOrNull())
         val pending=goAsync();CoroutineScope(SupervisorJob()+Dispatchers.IO).launch {
-            try { when(intent.action){"net.plainnotes.app.SNOOZE"->coordinator(context).snooze(generation,id);"net.plainnotes.app.COMPLETE"->coordinator(context).complete(generation,id);else->coordinator(context).dispatch(generation,id)} } catch(_:Exception) { /* no health data in logs */ } finally { pending.finish() }
+            try { when(intent.action){"net.plainnotes.app.SNOOZE"->coordinator(context).snooze(generation,id,scope);"net.plainnotes.app.COMPLETE"->coordinator(context).complete(generation,id,scope);else->coordinator(context).dispatch(generation,id,scope)} } catch(_:net.plainnotes.app.data.LibraryScopeMismatch) {coordinator(context).requestRejected()} catch(_:Exception) { /* no health data in logs */ } finally { pending.finish() }
         }
     }
 }

@@ -22,10 +22,29 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                           val recognized:net.plainnotes.app.timeline.RecognizedSchedule?=null)
 @HiltViewModel class NotesViewModel @Inject constructor(repository:NotesRepository,private val reminders:ReminderCoordinator,
     @dagger.hilt.android.qualifiers.ApplicationContext private val app:android.content.Context,
-    private val measuredSaves:MeasuredSaveCoordinator=MeasuredSaveCoordinator(repository)):ViewModel() {
+    private val measuredSaves:MeasuredSaveCoordinator=MeasuredSaveCoordinator(repository),
+    private val savedState:androidx.lifecycle.SavedStateHandle=androidx.lifecycle.SavedStateHandle()):ViewModel() {
     // One activity owns one data space; an old activity must never follow a shell switch.
-    private val repo=repository.pinnedTo(Space.PRIMARY)
-    val medicationReferences=net.plainnotes.app.reference.MedicationReferenceController(repo,viewModelScope)
+    private val bootstrapRepository=repository.pinnedTo(Space.PRIMARY)
+    private val runtime=net.plainnotes.app.runtime.RuntimeLibrarySession(bootstrapRepository,savedState)
+    private val repo get()=runtime.currentRepository()
+    val librarySession=runtime.state
+    private var referenceController:net.plainnotes.app.reference.MedicationReferenceController?=null
+    val medicationReferences get()=requireNotNull(referenceController)
+    private var runtimeVisible=true
+    private var runtimePause:Job?=null
+    fun runtimeStopped(graceMillis:Long?) {
+        runtimeVisible=false;refreshJob?.cancel();concJob?.cancel();runtimePause?.cancel()
+        if(graceMillis!=null)runtimePause=viewModelScope.launch {if(graceMillis>0)delay(graceMillis);runtime.pause()}
+    }
+    fun runtimeResumed() {runtimeVisible=true;runtimePause?.cancel();viewModelScope.launch {try {runtime.resume();refresh()}catch(e:CancellationException){throw e}catch(e:Exception){runtimeFailure(e)}}}
+    private fun runtimeFailure(e:Exception) {
+        if(e is LibraryScopeMismatch || e is KeyRecoveryRequired || e is DataLockedException) {
+            if(librarySession.value !is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Unavailable)runtime.invalidate(if(e is LibraryScopeMismatch)R.string.library_scope_changed else R.string.data_error);editor.value=null;override.value=null;importedLink.value=null;notificationSlot.value=null
+            referenceController?.close();mutable.value=NotesState(error=R.string.library_scope_changed,loading=false);extra.value=ExtraState()
+        }
+    }
+    override fun onCleared() {runtime.close();super.onCleared()}
     @OptIn(ExperimentalCoroutinesApi::class)
     val measuredWriteProgress=measuredSaves.latestTask.flatMapLatest { task ->
         task?.progress ?: flowOf(null)
@@ -35,12 +54,22 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     private var refreshRevision=0L
     private var concJob:Job?=null
     private var readFailureShown=false
-    private suspend fun <T> mutate(block:suspend()->T):T = reminders.mutate(block)
-    private fun readFailure(cause:Exception) { if(!readFailureShown){readFailureShown=true;mutable.value=mutable.value.copy(error=if(cause is KeyRecoveryRequired || cause is DataLockedException) R.string.data_error else R.string.operation_error,loading=false)} }
+    private suspend fun <T> mutate(block:suspend()->T):T {
+        runtime.repository()
+        return reminders.mutate((librarySession.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope ?: throw LibraryScopeMismatch(),permission=runtime::checkRequest,operation=block)
+    }
+    private fun readFailure(cause:Exception) {runtimeFailure(cause); if(!readFailureShown){readFailureShown=true;mutable.value=mutable.value.copy(error=if(cause is KeyRecoveryRequired || cause is DataLockedException) R.string.data_error else if(cause is LibraryScopeMismatch)R.string.library_scope_changed else if(cause is LibraryRestorePending)R.string.library_restore_pending else R.string.operation_error,loading=false)} }
     val notificationSlot=MutableStateFlow<Slot?>(null)
-    fun notification(id:String)=viewModelScope.launch {
-        runCatching { val mapping=repo.transaction{it.mappings().firstOrNull{m->m.opaque_id==id}} ?: return@runCatching
-            notificationSlot.value=repo.calendar(displayFrom=LocalDate.now().minusDays(1)).firstOrNull{mapping.identity=="${it.slot.key}:SOON"||mapping.identity=="${it.slot.key}:DUE"||mapping.identity=="${it.slot.key}:LATE"}?.slot }
+    fun libraryRequestRejected() {mutable.value=mutable.value.copy(error=R.string.library_scope_unknown)}
+    fun notification(id:String,expected:LibraryRequestScope?=null)=viewModelScope.launch {
+        runCatching {runtime.repository()
+            if(expected==null || (librarySession.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope!=expected) {
+                mutable.value=mutable.value.copy(error=R.string.library_scope_unknown);return@runCatching
+            }
+            val mapping=repo.transaction{it.mappings().firstOrNull{m->m.opaque_id==id}} ?: return@runCatching
+            val slot=repo.calendar(displayFrom=LocalDate.now().minusDays(1)).firstOrNull{mapping.identity=="${it.slot.key}:SOON"||mapping.identity=="${it.slot.key}:DUE"||mapping.identity=="${it.slot.key}:LATE"}?.slot
+            runtime.verify();runtime.checkRequest();notificationSlot.value=slot
+        }.onFailure {e->if(e is CancellationException)throw e;if(e is Exception)readFailure(e)}
     }
     private val mutable=MutableStateFlow(NotesState());val state=mutable.asStateFlow()
     var editor=MutableStateFlow<EditMedication?>(null);private set
@@ -48,17 +77,24 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     private var calendarStart=LocalDate.now()
     fun calendarFrom(value:LocalDate?){calendarStart=value ?: LocalDate.now();refresh()}
     init {
-        refresh()
+        viewModelScope.launch {
+            try {
+                runtime.initialize {referenceController=net.plainnotes.app.reference.MedicationReferenceController(it,viewModelScope)}
+                refresh()
+                bootstrapRepository.generationChanges().collect {runtime.verify();if(runtimeVisible && readFailureShown)refresh()}
+            } catch(e:CancellationException){throw e}catch(e:Exception){readFailure(e)}
+        }
         viewModelScope.launch { measuredSaves.latestTask.filterNotNull().collectLatest { task ->
             task.progress.first{it.status!=net.plainnotes.app.domain.write.WriteStatus.PENDING}
             if(task.progress.value.status==net.plainnotes.app.domain.write.WriteStatus.SUCCESS)refresh().join()
         }}
-        viewModelScope.launch{while(isActive){delay(30000);if(!readFailureShown)refresh()}}
+        viewModelScope.launch{while(isActive){delay(30000);if(runtimeVisible && !readFailureShown)refresh()}}
     }
     /** All pages read the same committed snapshot; a newer refresh cancels older work. */
     fun refresh():Job {
         refreshJob?.cancel();concJob?.cancel()
         return viewModelScope.launch { try {
+            runtime.repository()
             val today=LocalDate.now();val now=Instant.now();val start=calendarStart
             val snapshot=try { repo.transaction { dao ->
                 val slots=repo.calendar(now,displayFrom=start)
@@ -80,7 +116,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             }}catch(_:MeasuredSaveBusyException) {
                 displaySnapshot(repo.readNotesSnapshot(now,ZoneId.systemDefault(),start,today),start)
             }
-            ensureActive()
+            ensureActive();runtime.verify();runtime.checkRequest()
             mutable.value=snapshot.first.copy(error=mutable.value.error);extra.value=snapshot.second;refreshRevision++;readFailureShown=false
             loadConcentration()
         }catch(e:CancellationException){throw e}catch(e:Exception){readFailure(e)} }.also{refreshJob=it}
@@ -101,12 +137,14 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     suspend fun recordedReferenceHistory(epoch:String,record:Long)=repo.recordedReferenceHistory(epoch,record)
     fun clearError(){mutable.value=mutable.value.copy(error=null)}
     private fun change(block:suspend()->Unit)=guarded{mutate(block);refresh().join()}
-    fun edit(m:MedicationEntity?)=viewModelScope.launch {try {
+    fun edit(m:MedicationEntity?)=viewModelScope.launch {try {runtime.repository()
         val r=m?.let{repo.rules().lastOrNull{r->r.medication_id==it.id&&r.effective_until_utc==null}}
         val t=if(r==null)emptyList()else repo.transaction{it.times(r.id)}
         val recognized=if(m?.needs_review!=null && r==null)net.plainnotes.app.timeline.ScheduleRecognition.of(extra.value.records.filter{it.medication_id==m.id},java.time.ZoneId.systemDefault()) else null
-        editor.value=EditMedication(m,m?.let{repo.profile(it.id)},r,t,recognized)
-    }catch(e:CancellationException){throw e}catch(_:Exception){mutable.value=mutable.value.copy(error=R.string.operation_error)} }
+        val profile=m?.let{repo.profile(it.id)}
+        runtime.verify();runtime.checkRequest()
+        editor.value=EditMedication(m,profile,r,t,recognized)
+    }catch(e:CancellationException){throw e}catch(e:Exception){readFailure(e)} }
     fun closeEditor(){editor.value=null}
     fun save(d:net.plainnotes.app.ui.MedicationDraft)=change {repo.saveMedication(d.medication,d.ester,d.kind,d.interval,d.times,d.weekdays,pk=d.pk,resizeContainers=d.resizeContainers,timeDoses=d.timeDoses);editor.value=null}
     fun confirmHistoricalContext(m:MedicationEntity,p:ProfileEntity?,from:LocalDate,to:LocalDate)=change{repo.confirmHistoricalContext(m,p,from,to)}
@@ -117,7 +155,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     val conc=MutableStateFlow(ConcState())
     private var concSettings=Pair(true,CalibrationMode.RETROSPECTIVE)
     fun concentrationSettings(calibrate:Boolean,mode:CalibrationMode){if(concSettings!=calibrate to mode){concSettings=calibrate to mode;loadConcentration()}}
-    fun loadConcentration():Job { concJob?.cancel(); return viewModelScope.launch { try {
+    fun loadConcentration():Job { concJob?.cancel(); return viewModelScope.launch { try {runtime.repository()
         conc.value=conc.value.copy(loading=true)
         val now=Instant.now()
         data class Inputs(val meds:List<MedicationEntity>,val profiles:Map<Long,ProfileEntity>,val records:List<RecordEntity>,val labs:List<LabValueEntity>,val weight:Double?,val planned:List<TimelineEntry>,val snapshots:Map<Long,String>)
@@ -133,7 +171,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         val settings=concSettings
         val result=withContext(Dispatchers.Default){ConcentrationCalculator.compute(meds,profiles,records,planned,labs,weight,now,settings.first,settings.second,snapshots,net.plainnotes.app.conc.HistoryRead(true,ConcentrationCalculator.hours(now)),checkCancelled={ensureActive()})}
         val doseTimes=records.filter{MedicationSnapshot.decode(it.config_snapshot,it.medication_id)?.molecule=="E2" && it.deleted_at_utc==null && it.status in listOf("ON_TIME","LATE") && it.taken_utc!=null}.map{Instant.ofEpochMilli(it.taken_utc!!)}.sorted()
-        ensureActive();conc.value=ConcState(false,result,weight,labs,doseTimes)
+        ensureActive();runtime.verify();runtime.checkRequest();conc.value=ConcState(false,result,weight,labs,doseTimes)
     }catch(e:CancellationException){throw e}catch(e:Exception){conc.value=conc.value.copy(loading=false);readFailure(e)} }.also{concJob=it} }
     // History, stock and well-being
     data class ExtraState(val records:List<RecordEntity> = emptyList(),val containers:List<ContainerEntity> = emptyList(),val items:List<CheckinItemEntity> = emptyList(),
@@ -154,7 +192,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                           val containersWithConsumption:Set<Long> = emptySet(),val referenceEpoch:String?=null,
                           /** LAB-02 lab panels (one blood draw each). */ val labPanels:List<LabPanelEntity> = emptyList())
     val extra=MutableStateFlow(ExtraState())
-    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(e:Exception){mutable.value=mutable.value.copy(error=when(e){is MedicalVisitConflict->R.string.medical_stale;is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;is SkipUndoStale->R.string.history_skip_stale;is SkipUndoUnavailable->R.string.history_skip_unavailable;is SkipUndoUnitConflict->R.string.history_skip_unit_changed;else->R.string.operation_error})}}
+    private fun guarded(block:suspend()->Unit)=viewModelScope.launch{try{runtime.repository();block()}catch(e:kotlinx.coroutines.CancellationException){throw e}catch(e:Exception){runtimeFailure(e);mutable.value=mutable.value.copy(error=when(e){is LibraryScopeMismatch->R.string.library_scope_changed;is LibraryRequestRevoked->R.string.library_request_locked;is LibraryRestorePending->R.string.library_restore_pending;is MedicalVisitConflict->R.string.medical_stale;is PeriodRestoreConflict->R.string.period_restore_overlap;is PackageRestoreConflict->R.string.pkg_restore_conflict;is PackageConsumptionConflict->R.string.pkg_undo_locked;is SkipUndoStale->R.string.history_skip_stale;is SkipUndoUnavailable->R.string.history_skip_unavailable;is SkipUndoUnitConflict->R.string.history_skip_unit_changed;else->R.string.operation_error})}}
     fun loadExtra():Job=refresh()
     private fun mutateExtra(block:suspend()->Unit)=change(block)
     data class ImportedLink(val record:RecordEntity,val candidates:List<TimelineEntry>)
@@ -162,7 +200,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     private var importedLinkJob:Job?=null
     fun prepareImportedLink(record:RecordEntity) {
         importedLinkJob?.cancel()
-        importedLinkJob=guarded{val candidates=repo.importedCandidates(record.id);importedLink.value=ImportedLink(record,candidates)}
+        importedLinkJob=guarded{val candidates=repo.importedCandidates(record.id);runtime.verify();runtime.checkRequest();importedLink.value=ImportedLink(record,candidates)}
     }
     fun closeImportedLink(){importedLinkJob?.cancel();importedLink.value=null}
     fun linkImported(id:Long,key:String)=change{repo.linkImported(id,key);importedLink.value=null}
@@ -220,10 +258,19 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     val dataJob=MutableStateFlow<DataJob>(DataJob.Idle)
     private var importReadJob:Job?=null
     fun clearDataJob(){importReadJob?.cancel();importReadJob=null;dataJob.value=DataJob.Idle}
-    private fun dataOp(block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;val result=try{block()}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
+    // Only an actual Repository return may acknowledge a replacing restore. A later scheduling
+    // error or deliberate epoch change cannot turn that historical COMMIT into a failed save.
+    private class CommittedLibraryChange(val result:DataJob)
+    private fun acknowledgeCommittedLibrary(receipt:CommittedLibraryChange) {
+        runtimeFailure(LibraryScopeMismatch());runtime.invalidate(R.string.library_change_committed);dataJob.value=receipt.result
+    }
+    private fun dataOp(committed:()->CommittedLibraryChange?={null},block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;val result=try{runtime.repository();block().also {if(committed()==null){runtime.verify();runtime.checkRequest()}}}catch(e:LibraryScopeMismatch){runtimeFailure(e);DataJob.Failed(R.string.library_scope_changed)}catch(e:LibraryRequestRevoked){DataJob.Failed(R.string.library_request_locked)}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
         catch(e:BackupCodec.TooLarge){DataJob.Failed(R.string.backup_too_large)}
         catch(e:BackupCodec.NewerBackup){DataJob.Failed(R.string.backup_newer_version)}
-        catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(e:CancellationException){throw e}catch(_:Exception){DataJob.Failed(R.string.operation_error)};ensureActive();dataJob.value=result}
+        catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(e:CancellationException){committed()?.let(::acknowledgeCommittedLibrary);throw e}catch(_:Exception){DataJob.Failed(R.string.operation_error)}
+        val receipt=committed()
+        if(receipt!=null)acknowledgeCommittedLibrary(receipt)else{ensureActive();dataJob.value=result}
+    }
     private fun importRead(block:suspend()->DataJob):Job {
         val previous=importReadJob
         previous?.cancel()
@@ -238,10 +285,13 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             DataJob.ImportReady(export,net.plainnotes.app.importer.TransMemo.preview(export,ZoneId.systemDefault()))
         }
     }
-    fun runImport(export:net.plainnotes.app.importer.TmExport,choices:net.plainnotes.app.importer.TransMemo.Choices,overwrite:Boolean)=dataOp {
+    fun runImport(export:net.plainnotes.app.importer.TmExport,choices:net.plainnotes.app.importer.TransMemo.Choices,overwrite:Boolean):Job {
+        var committed:CommittedLibraryChange?=null
+        return dataOp(committed={committed}) {
         val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.TransMemo.plan(export,ZoneId.systemDefault(),choices)}
-        val summary=mutate{repo.importTransMemo(plan,overwrite)}
-        refresh().join();DataJob.Imported(summary)
+        val summary=mutate{repo.importTransMemo(plan,overwrite).also {if(overwrite)committed=CommittedLibraryChange(DataJob.Imported(it))}}
+        if(!overwrite)refresh().join();DataJob.Imported(summary)
+        }
     }
     fun openHrtTracker(uri:android.net.Uri)=importRead {
         val limit=32*1024*1024
@@ -267,15 +317,19 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     }.also{job->job.invokeOnCompletion{password.fill('\u0000')}}
     /** Main encrypted export used as a gate; cancellation never becomes a success. */
     suspend fun backupTo(uri:android.net.Uri,password:CharArray):Boolean=try {
+        runtime.repository()
         backupWriter.write(password,repo::exportBackup){app.contentResolver.openOutputStream(uri,"wt")};true
     }catch(e:CancellationException){throw e}catch(_:Exception){false}finally{password.fill('\u0000')}
-    fun restoreBackup(uri:android.net.Uri,password:CharArray)=dataOp {
+    fun restoreBackup(uri:android.net.Uri,password:CharArray):Job {
+        var committed:CommittedLibraryChange?=null
+        return dataOp(committed={committed}) {
         try {
             val bytes=withContext(Dispatchers.IO){app.contentResolver.openInputStream(uri)!!.use{BackupLimits.read(it)}}
-            mutate{repo.restoreBackup(bytes,password)}
+            mutate{repo.restoreBackup(bytes,password);committed=CommittedLibraryChange(DataJob.Done(R.string.backup_restored))}
         }finally{password.fill('\u0000')}
-        refresh().join();DataJob.Done(R.string.backup_restored)
-    }.also{job->job.invokeOnCompletion{password.fill('\u0000')}}
+        requireNotNull(committed).result
+        }.also{job->job.invokeOnCompletion{password.fill('\u0000')}}
+    }
     private suspend fun exportData(labels:(CheckinItemEntity)->String,schedules:Map<Long,String>):net.plainnotes.app.export.ExportData {
         val meds=repo.medications();val today=LocalDate.now()
         return net.plainnotes.app.export.ExportData(meds,meds.mapNotNull{m->repo.profile(m.id)?.let{m.id to it}}.toMap(),repo.records(),repo.labs(),repo.checkinItems(),
@@ -306,6 +360,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun wipeAll(onDone:()->Unit)=viewModelScope.launch {
         dataJob.value=DataJob.Working
         try {
+        runtime.repository();runtime.verify();runtime.checkRequest()
         withContext(Dispatchers.IO){
             // Stock-alert markers go first, so an interrupted wipe never leaves them behind a fresh database (ids restart).
             check(net.plainnotes.app.reminder.StockAlerts.clear(app)){"stock alerts not cleared"}
@@ -369,7 +424,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             p.raw.any{it.span.medicationId==r.medication_id && it.kind!=net.plainnotes.app.domain.SpanKind.USER && it.kind!=net.plainnotes.app.domain.SpanKind.FILL &&
                 it.span.from<until && (it.span.until ?: Instant.MAX)>from}}
     }
-    fun loadOverride(key:String)=viewModelScope.launch{override.value=repo.currentOverride(key)}
+    fun loadOverride(key:String)=guarded{val value=repo.currentOverride(key);runtime.verify();runtime.checkRequest();override.value=value}
     fun changeOverride(s:Slot,o:SlotOverride)=change{repo.override(s,o);override.value=null}
     private val medicalSaving=net.plainnotes.app.medical.MedicalVisitSaving(viewModelScope,{draft,committed->
         mutate {

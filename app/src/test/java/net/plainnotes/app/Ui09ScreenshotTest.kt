@@ -66,8 +66,8 @@ class Ui09ScreenshotTest(private val locale: String, private val width: Int, pri
         val context = rule.activity
         val db = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
         db.openHelper.writableDatabase
-        val repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = db })
-        val model = NotesViewModel(repo, ReminderCoordinator(context, repo), context)
+        val repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = net.plainnotes.app.syntheticLibrary(db) })
+        val model = NotesViewModel(repo, ReminderCoordinator(context, repo), context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         try {
             // The visit detail reads its rows from the state passed in; the model is only there for callbacks.
             val id = visit.id

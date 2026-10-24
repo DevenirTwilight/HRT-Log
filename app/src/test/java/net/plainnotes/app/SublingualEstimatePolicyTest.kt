@@ -35,7 +35,7 @@ class SublingualEstimatePolicyTest {
 
     @Before fun open() {
         db = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
-        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = db })
+        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = net.plainnotes.app.syntheticLibrary(db) })
     }
     @After fun close() = db.close()
 
@@ -127,7 +127,7 @@ class SublingualEstimatePolicyTest {
 
     @Test fun viewModelSavesNewEstimatesThroughThePolicy() = runBlocking {
         take(med("SL", "E2", "SUBLINGUAL", "sublingual"), 3)
-        val model = NotesViewModel(repo, ReminderCoordinator(context, repo), context)
+        val model = NotesViewModel(repo, ReminderCoordinator(context, repo), context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         try {
             model.saveLab(lab, includeEstimate = true)
             val end = System.currentTimeMillis() + 20_000

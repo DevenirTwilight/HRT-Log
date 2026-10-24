@@ -8,4 +8,6 @@
 <string name="stock_low_detail">%1$s：庫存不夠接下來一週了</string>
 <string name="neutral_done">完成</string>
 <string name="test_notification_body">這是一則測試通知，表示提醒可以送達。</string>
+
+<string name="reminder_scope_expired">無法確認此提醒的歸屬，請開啟並解鎖應用程式後核對。</string>
 </resources>

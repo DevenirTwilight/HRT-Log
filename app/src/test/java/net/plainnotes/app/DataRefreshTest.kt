@@ -35,11 +35,11 @@ class DataRefreshTest {
         val context=ApplicationProvider.getApplicationContext<Context>()
         db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
         db.openHelper.writableDatabase
-        repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+        repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=net.plainnotes.app.syntheticLibrary(db)})
         id=runBlocking { repo.saveMedication(MedicationEntity(name="Synthetic daily",molecule="OTHER",unit="MG",dose_per_intake=2.0,container_capacity=84.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0),null,
             RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.of(8,0),LocalTime.of(20,0)),emptySet(),today.atStartOfDay(zone).toInstant()) }
         runBlocking { repo.addContainers(id,84.0,1,true) }
-        model=NotesViewModel(repo,ReminderCoordinator(context,repo),context)
+        model=NotesViewModel(repo,ReminderCoordinator(context,repo),context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         await{model.extra.value.containers.size==1 && model.state.value.schedules[id]!=null}
     }
     @After fun cleanup(){ androidx.lifecycle.ViewModelStore().apply{put("model",model);clear()};db.close() }

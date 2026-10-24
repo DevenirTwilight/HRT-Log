@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.asContextElement
 import net.plainnotes.app.data.*
 import net.plainnotes.app.domain.*
 import java.time.Instant
@@ -23,27 +24,52 @@ import javax.inject.Singleton
 
 @Singleton class ReminderCoordinator @Inject constructor(@ApplicationContext private val context:Context,repository:NotesRepository) {
     // Reminders belong to the real data only, never to the decoy space the UI may have open.
-    private val repo=repository.pinnedTo(Space.PRIMARY)
+    private val source=repository.pinnedTo(Space.PRIMARY)
+    private val boundRepo=ThreadLocal<NotesRepository?>()
+    private val boundScope=ThreadLocal<LibraryRequestScope?>()
+    private val repo get()=requireNotNull(boundRepo.get())
+    private suspend fun <T> inLibrary(expected:LibraryRequestScope?=null,permission:()->Unit={},block:suspend()->T):T {
+        val captured=source.currentGenerationScope()
+        if(expected!=null && expected!=captured)throw LibraryScopeMismatch()
+        return withContext(boundRepo.asContextElement(source.forGeneration(captured,permission))+boundScope.asContextElement(captured)) {block()}
+    }
+    private fun scoped(intent:Intent,scope:LibraryRequestScope?=boundScope.get())=intent.apply {
+        scope?.let {putStringArrayListExtra(SCOPE_EXTRA,it.encoded())}
+        val batch=getStringExtra("generation");val id=getStringExtra("id") ?: getStringExtra("reminder_id")
+        if(batch!=null && id!=null)data=android.net.Uri.Builder().scheme("notes-request").authority("reminder").appendPath(batch).appendPath(id).build()
+    }
+    private fun clinicalActionAllowed()=unlocked() && !java.io.File(context.noBackupFilesDir,"lock.bin").exists() && !NotificationPrefs(context).disguised
     private val store=CacheStore(context)
     private val manager=context.getSystemService(AlarmManager::class.java)
     private val testLog=ReminderTestLog(context)
     companion object {
         private val lock=Mutex()
         const val TEST_NOTIFICATION=101
+        const val SCOPE_EXTRA=LibraryRequestScope.INTENT_EXTRA
         /** A test that could not fire within this time after its trigger (device off) is dropped instead of arriving hours late. */
         private const val TEST_GRACE=15*60_000L
     }
     fun canExact()=Build.VERSION.SDK_INT<31 || manager.canScheduleExactAlarms()
     private fun request(generation:String,id:String)=PendingIntent.getBroadcast(context,0,
-        Intent(context,AlarmReceiver::class.java).setAction("net.plainnotes.app.REMINDER").putExtra("generation",generation).putExtra("id",id),
+        scoped(Intent(context,AlarmReceiver::class.java).setAction("net.plainnotes.app.REMINDER").putExtra("generation",generation).putExtra("id",id)),
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-    private fun cancel() { manager.cancel(request("", "")) }
-    suspend fun <T> mutate(operation:suspend()->T):T=withContext(Dispatchers.IO) { lock.withLock {
+    private fun cancel() {
+        val legacy=PendingIntent.getBroadcast(context,0,Intent(context,AlarmReceiver::class.java).setAction("net.plainnotes.app.REMINDER"),PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE)
+        legacy?.let {manager.cancel(it)}
+        store.read()?.let {cache->cache.alarms.forEach {alarm->
+            val intent=scoped(Intent(context,AlarmReceiver::class.java).setAction("net.plainnotes.app.REMINDER").putExtra("generation",cache.generation).putExtra("id",alarm.opaqueId))
+            PendingIntent.getBroadcast(context,0,intent,PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE)?.let {manager.cancel(it)}
+        }}
+    }
+    suspend fun <T> mutate(operation:suspend()->T):T=mutate(null,operation=operation)
+    suspend fun <T> mutate(expected:LibraryRequestScope?,permission:()->Unit={},operation:suspend()->T):T=withContext(Dispatchers.IO) { lock.withLock {inLibrary(expected,permission) {
         reconcileConsumed(); invalidate()
-        try { operation() } finally { rebuild() }
-    } }
+        // Replanning is a NEW scheduling batch, including after an explicit ordinary wipe/restore.
+        // The clinical operation above retains its original scoped Repository throughout.
+        try { operation() } finally { inLibrary {rebuild()} }
+    }} }
     suspend fun sync()=withContext(Dispatchers.IO) { lock.withLock {
-        if(!unlocked())scheduleCached() else { reconcileConsumed();invalidate();rebuild() }
+        if(!unlocked())scheduleCached() else inLibrary { reconcileConsumed();invalidate();rebuild() }
     } }
     private fun unlocked()=context.getSystemService(UserManager::class.java).isUserUnlocked
     private suspend fun reconcileConsumed() {
@@ -55,7 +81,7 @@ import javax.inject.Singleton
     private fun pendingTests(now:Long)=store.read()?.alarms.orEmpty().filter{it.test && !it.consumed && it.triggerMillis>=now-TEST_GRACE}
     private fun invalidate() {
         val now=System.currentTimeMillis();val tests=pendingTests(now)
-        store.write(AlarmCache(UUID.randomUUID().toString(),maxOf(now,tests.maxOfOrNull{it.triggerMillis} ?: 0L),tests));cancel()
+        cancel();store.write(AlarmCache(UUID.randomUUID().toString(),maxOf(now,tests.maxOfOrNull{it.triggerMillis} ?: 0L),tests))
     }
     private suspend fun rebuild() {
         if(!unlocked())return
@@ -93,7 +119,8 @@ import javax.inject.Singleton
         runCatching {
             val today=java.time.LocalDate.now()
             // Same input and rule as the stock page and calendar (B4): the shared forecast over the open-dose window.
-            StockAlerts.post(context,StockAlerts.due(repo.medications(),repo.containers(),repo.stockForecasts(now),today),today)
+            val due=StockAlerts.due(repo.medications(),repo.containers(),repo.stockForecasts(now),today)
+            repo.validateGeneration();StockAlerts.post(context,due,today)
         }
     }
     private fun scheduleCached() {
@@ -110,80 +137,110 @@ import javax.inject.Singleton
             } else manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,trigger,operation)
         } catch(_:SecurityException) { manager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,trigger,operation) }
     }
-    suspend fun dispatch(generation:String,id:String)=withContext(Dispatchers.IO) { lock.withLock {
-        val current=store.read() ?: return@withLock
-        val event=current.alarms.firstOrNull{it.opaqueId==id && !it.consumed} ?: return@withLock
-        if(current.generation!=generation || System.currentTimeMillis()>current.expiresMillis || event.triggerMillis>System.currentTimeMillis()+1000)return@withLock
-        current.consume(id,generation) ?: return@withLock
+    suspend fun dispatch(generation:String,id:String,expected:LibraryRequestScope?=null)=withContext(Dispatchers.IO) { lock.withLock {
+        // Neutral test reminders need no credential database or clinical identity.
+        val cache=store.read()
+        if(cache!=null && cache.alarms.all {it.test}) {
+            if(cache.generation==generation && cache.alarms.any {it.opaqueId==id && !it.consumed && it.triggerMillis<=System.currentTimeMillis()+1000} && System.currentTimeMillis()<=cache.expiresMillis) {
+                store.write(requireNotNull(cache.consume(id,generation)));testLog.received(System.currentTimeMillis(),postTest());scheduleCached()
+            }
+            return@withLock
+        }
+        if(!unlocked()) {dispatchBound(generation,id,false);return@withLock}
+        inLibrary(expected) {dispatchBound(generation,id,expected!=null)}
+    } }
+    private suspend fun dispatchBound(generation:String,id:String,verifiedOrigin:Boolean) {
+        val current=store.read() ?: return
+        val event=current.alarms.firstOrNull{it.opaqueId==id && !it.consumed} ?: return
+        if(current.generation!=generation || System.currentTimeMillis()>current.expiresMillis || event.triggerMillis>System.currentTimeMillis()+1000)return
+        current.consume(id,generation) ?: return
         val now=System.currentTimeMillis()
         val due=current.alarms.filter{!it.consumed && (it.opaqueId==id || it.triggerMillis<=now+1000)}
         val batch=current.copy(alarms=current.alarms.map{if(it in due)it.copy(consumed=true)else it})
         // Persist before sending: after a crash we prefer no duplicate to an uncertain resend.
         store.write(batch)
         // A test never replaces or swallows a real reminder that falls due in the same batch, and vice versa.
-        due.firstOrNull{!it.test}?.let{real->notifyNeutral(generation,real.opaqueId,if(unlocked())detailText(real.opaqueId,generation) else null)}
+        due.firstOrNull{!it.test}?.let{real->notifyNeutral(generation,real.opaqueId,if(unlocked())detailText(real.opaqueId,generation) else null,verifiedOrigin)}
         if(due.any{it.test})testLog.received(now,postTest())
         if(unlocked()) { reconcileConsumed();invalidate();rebuild() } else scheduleCached()
-    } }
+    }
     /** "Name · dose" for the notification body, only when the user opted in and the device is unlocked. */
     private suspend fun detailText(id:String,generation:String):String? {
         if(!NotificationPrefs(context).details)return null
         return runCatching { val slot=repo.reminderSlot(id,generation) ?: return null
             val m=repo.medications().firstOrNull{it.id==slot.medicationId} ?: return null
+            repo.validateGeneration()
             "${m.name} · ${java.text.NumberFormat.getNumberInstance().apply{maximumFractionDigits=3}.format(slot.dose)} ${m.unit.lowercase()}" }.getOrNull()
     }
     private fun channel(nm:NotificationManager)=nm.createNotificationChannel(NotificationChannel("reminders",context.getString(R.string.reminder_channel),NotificationManager.IMPORTANCE_HIGH))
-    private fun notifyNeutral(generation:String,id:String,detail:String?=null) {
+    private fun notifyNeutral(generation:String,id:String,detail:String?=null,verifiedOrigin:Boolean=false) {
         val text=NotificationPrefs(context)
         val nm=context.getSystemService(NotificationManager::class.java)
         channel(nm)
         if(Build.VERSION.SDK_INT>=33 && ContextCompat.checkSelfPermission(context,Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)return
         val launch=context.packageManager.getLaunchIntentForPackage(context.packageName)
-        val open=launch?.let{PendingIntent.getActivity(context,1,it,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)}
-        val complete=PendingIntent.getBroadcast(context,2,Intent(context,AlarmReceiver::class.java).setAction("net.plainnotes.app.COMPLETE").putExtra("generation",generation).putExtra("id",id),PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        val snooze=PendingIntent.getBroadcast(context,3,Intent(context,AlarmReceiver::class.java).setAction("net.plainnotes.app.SNOOZE").putExtra("generation",generation).putExtra("id",id),PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val open=launch?.let{PendingIntent.getActivity(context,1,scoped(it.putExtra("reminder_id",id).putExtra("generation",generation)),PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)}
+        val complete=PendingIntent.getBroadcast(context,2,scoped(Intent(context,AlarmReceiver::class.java).setAction("net.plainnotes.app.COMPLETE").putExtra("generation",generation).putExtra("id",id)),PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val snooze=PendingIntent.getBroadcast(context,3,scoped(Intent(context,AlarmReceiver::class.java).setAction("net.plainnotes.app.SNOOZE").putExtra("generation",generation).putExtra("id",id)),PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val builder=NotificationCompat.Builder(context,"reminders").setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
             .setContentTitle(text.title ?: context.getString(R.string.neutral_reminder)).setContentText(detail ?: text.body ?: context.getString(R.string.neutral_open))
             .setVisibility(NotificationCompat.VISIBILITY_SECRET).setContentIntent(open).setAutoCancel(true)
             .addAction(0,context.getString(R.string.snooze_action),snooze)
-        if(unlocked())builder.addAction(0,context.getString(if(text.disguised)R.string.neutral_done else R.string.record_action),complete)
+        if(verifiedOrigin && clinicalActionAllowed())builder.addAction(0,context.getString(if(text.disguised)R.string.neutral_done else R.string.record_action),complete)
         NotificationManagerCompat.from(context).notify(100,builder.build())
     }
-    suspend fun complete(generation:String,id:String) {
-        if(!unlocked())return
-        mutate {
+    /** Explain rejection without resolving a clinical integer or opening credential storage. */
+    fun requestRejected() {
+        val manager=context.getSystemService(NotificationManager::class.java);channel(manager)
+        if(Build.VERSION.SDK_INT>=33 && ContextCompat.checkSelfPermission(context,Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)return
+        val intent=context.packageManager.getLaunchIntentForPackage(context.packageName)?.putExtra(LibraryRequestScope.REJECTED_EXTRA,true)
+            ?.setData(android.net.Uri.parse("notes-request://review-library"))
+        val open=intent?.let {PendingIntent.getActivity(context,4,it,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)}
+        NotificationManagerCompat.from(context).notify(100,NotificationCompat.Builder(context,"reminders").setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+            .setContentTitle(context.getString(R.string.neutral_reminder)).setContentText(context.getString(R.string.reminder_scope_expired))
+            .setVisibility(NotificationCompat.VISIBILITY_SECRET).setContentIntent(open).setAutoCancel(true).build())
+    }
+    suspend fun complete(generation:String,id:String,expected:LibraryRequestScope?=null) {
+        if(expected==null || !clinicalActionAllowed()) {requestRejected();return}
+        mutate(expected,permission={if(!clinicalActionAllowed())throw LibraryRequestRevoked()},operation=operation@{
         val sent=repo.transaction{dao->dao.mappings().any{it.opaque_id==id && it.generation==generation && it.sent}}
-        if(!sent)return@mutate
-        val slot=repo.reminderSlot(id,generation) ?: return@mutate
+        if(!sent)return@operation
+        val slot=repo.reminderSlot(id,generation) ?: return@operation
         repo.complete(slot,Instant.now(),slot.dose)
         context.getSystemService(NotificationManager::class.java).cancel(100)
-        }
+        })
     }
-    suspend fun snooze(generation:String,id:String)=withContext(Dispatchers.IO) { lock.withLock {
-        val current=store.read() ?: return@withLock
+    suspend fun snooze(generation:String,id:String,expected:LibraryRequestScope?=null)=withContext(Dispatchers.IO) { lock.withLock {
+        if(unlocked()) {if(expected==null) {requestRejected();return@withLock};inLibrary(expected) {snoozeBound(generation,id)}} else snoozeBound(generation,id)
+    } }
+    private suspend fun snoozeBound(generation:String,id:String) {
+        val current=store.read() ?: return
         val trigger=System.currentTimeMillis()+10*60000
         if(unlocked()) {
-            val source=repo.transaction{dao->dao.mappings().firstOrNull{it.opaque_id==id&&it.generation==generation&&it.sent}} ?: return@withLock
-            if(!source.identity.startsWith("appointment:") && repo.reminderSlot(id,generation)==null)return@withLock
+            val source=repo.transaction{dao->dao.mappings().firstOrNull{it.opaque_id==id&&it.generation==generation&&it.sent}} ?: return
+            if(!source.identity.startsWith("appointment:") && repo.reminderSlot(id,generation)==null)return
             val next=repo.transaction { dao ->
                 val source=dao.mappings().firstOrNull{it.opaque_id==id&&it.generation==generation&&it.sent} ?: return@transaction null
                 if(dao.mappings().any{it.identity=="snooze:$id"})return@transaction null
                 val opaque=UUID.randomUUID().toString();dao.mapping(ReminderMappingEntity(opaque,current.generation,"snooze:$id",trigger,false))
                 CachedAlarm(opaque,trigger,"NORMAL")
-            } ?: return@withLock
+            } ?: return
             store.write(current.copy(expiresMillis=maxOf(current.expiresMillis,trigger),alarms=current.alarms+next))
         } else {
-            if(current.generation!=generation || current.alarms.none{it.opaqueId==id&&it.consumed})return@withLock
+            if(current.generation!=generation || current.alarms.none{it.opaqueId==id&&it.consumed})return
             store.write(current.copy(expiresMillis=maxOf(current.expiresMillis,trigger),alarms=current.alarms.map{if(it.opaqueId==id)it.copy(triggerMillis=trigger,consumed=false)else it}))
         }
         context.getSystemService(NotificationManager::class.java).cancel(100);scheduleCached()
-    } }
+    }
     /**
      * Scheduled test: the real AlarmManager → AlarmReceiver → dispatch → NotificationManager path, in the mode the user chose
      * (HIGH uses the system alarm clock). A repeated tap replaces the pending test; real reminders are untouched.
      */
     suspend fun testReminder(delayMillis:Long=60_000)=withContext(Dispatchers.IO){lock.withLock {
-        if(unlocked())reconcileConsumed()
+        if(unlocked() && store.read()?.alarms?.any { !it.test }==true)inLibrary {testReminderBound(delayMillis)} else testReminderBound(delayMillis)
+    }}
+    private suspend fun testReminderBound(delayMillis:Long):ReminderTestStatus {
+        if(unlocked() && store.read()?.alarms?.any { !it.test }==true)reconcileConsumed()
         val now=System.currentTimeMillis()
         val current=store.read() ?: AlarmCache(UUID.randomUUID().toString(),now+48*3600000L,emptyList())
         val mode=if(context.getSharedPreferences("prefs",Context.MODE_PRIVATE).getBoolean("high_reliability",false))"HIGH" else "NORMAL"
@@ -191,8 +248,8 @@ import javax.inject.Singleton
         store.write(current.copy(expiresMillis=maxOf(current.expiresMillis,a.triggerMillis),alarms=current.alarms.filterNot{it.test}+a))
         testLog.scheduled(now,a.triggerMillis,mode,canExact(),blocked(context.getSystemService(NotificationManager::class.java).also(::channel)))
         scheduleCached()
-        testLog.read()
-    }}
+        return testLog.read()
+    }
     fun testStatus()=testLog.read()
     /** What would stop a notification right now, read from the system without posting anything (null: nothing blocks it). */
     private fun blocked(nm:NotificationManager):TestOutcome? = when {

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.reminder.ReminderRequestScopeTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-24T08:22:44.461Z" hostname="5eca99f7498b" time="0.029">
+  <properties/>
+  <testcase name="creatingNewActionCannotRetagAnAlreadyIssuedPendingIntent" classname="net.plainnotes.app.reminder.ReminderRequestScopeTest" time="0.027"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

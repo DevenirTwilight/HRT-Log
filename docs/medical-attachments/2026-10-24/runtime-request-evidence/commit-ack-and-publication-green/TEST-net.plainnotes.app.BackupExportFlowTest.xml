@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.BackupExportFlowTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-24T08:23:02.280Z" hostname="5eca99f7498b" time="5.429">
+  <properties/>
+  <testcase name="cancellationBeforeDispatchStillClearsTheSubmittedPassword" classname="net.plainnotes.app.BackupExportFlowTest" time="3.386"/>
+  <testcase name="disguiseGateBackupAlsoRecordsTheCompletedExport" classname="net.plainnotes.app.BackupExportFlowTest" time="0.61"/>
+  <testcase name="committedOrdinaryRestoreAcknowledgesCommitWhileOldOwnerCannotWriteAgain" classname="net.plainnotes.app.BackupExportFlowTest" time="0.909"/>
+  <testcase name="exportBackupRecordsOnlyACompletedEncryptedExport" classname="net.plainnotes.app.BackupExportFlowTest" time="0.267"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

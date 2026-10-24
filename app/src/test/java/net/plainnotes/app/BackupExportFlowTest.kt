@@ -31,8 +31,8 @@ class BackupExportFlowTest {
         context=ApplicationProvider.getApplicationContext()
         context.getSharedPreferences("prefs",0).edit().clear().commit()
         db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build();db.openHelper.writableDatabase
-        val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
-        model=NotesViewModel(repo,ReminderCoordinator(context,repo),context)
+        val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=net.plainnotes.app.syntheticLibrary(db)})
+        model=NotesViewModel(repo,ReminderCoordinator(context,repo),context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         file=File.createTempFile("b2-synthetic-export-",".pnbak",context.cacheDir)
     }
     @After fun close(){ViewModelStore().apply{put("model",model);clear()};db.close();file.delete();context.getSharedPreferences("prefs",0).edit().clear().commit()}
@@ -54,5 +54,22 @@ class BackupExportFlowTest {
         val password="synthetic-only-password".toCharArray()
         assertTrue(runBlocking{model.backupTo(Uri.fromFile(file),password)})
         recorded()
+    }
+    @Test fun committedOrdinaryRestoreAcknowledgesCommitWhileOldOwnerCannotWriteAgain(){
+        val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=syntheticLibrary(db)})
+        val day=java.time.LocalDate.of(2026,1,1)
+        val source=File.createTempFile("synthetic-restore-ack-",".pnbak",context.cacheDir)
+        try {
+            runBlocking {repo.setNote(day,"SYNTHETIC archived");source.writeBytes(repo.exportBackup("synthetic-only-password".toCharArray()));repo.setNote(day,"SYNTHETIC current")}
+            model.restoreBackup(Uri.fromFile(source),"synthetic-only-password".toCharArray())
+            await {model.dataJob.value is NotesViewModel.DataJob.Done || model.dataJob.value is NotesViewModel.DataJob.Failed}
+            assertTrue("A real committed restore must not be reported as a failed save",model.dataJob.value is NotesViewModel.DataJob.Done)
+            assertEquals("SYNTHETIC archived",runBlocking {repo.notes(day,day)}.single().text)
+            assertTrue(model.librarySession.value is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Unavailable)
+            assertEquals(net.plainnotes.app.runtime.RuntimeLibrarySession.State.Unavailable(R.string.library_change_committed),model.librarySession.value)
+            val stale=model.setNote(day,"SYNTHETIC stale edit")
+            await {stale.isCompleted}
+            assertEquals("SYNTHETIC archived",runBlocking {repo.notes(day,day)}.single().text)
+        }finally {source.delete()}
     }
 }

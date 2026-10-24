@@ -1,0 +1,21 @@
+{
+  "app": {
+    "tests": 20,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reminder": {
+    "tests": 22,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sourceFileSHA256": {
+    "app/src/main/java/net/plainnotes/app/NotesViewModel.kt": "e06eb93e7c55f144d8b59c7b19aa5e4946e2e34156f52f7c11b98689d20a1bad",
+    "core/reminder/src/main/java/net/plainnotes/app/reminder/ReminderCoordinator.kt": "e86731722ef09f3c65e6df1a8aa37229f2cb2b28d1aca508ccb3dafc9350f0ff",
+    ".github/workflows/android.yml": "2ee2f31908b41b052482286e3ff7285f4d9c36e1bfdb0ba5ae86b3f17ed1ef09"
+  },
+  "parent": "ecba64b605092b67bb1538ced6eb54d86a5d4905",
+  "native": "COMPILED_ONLY; final-source CI pending"
+}
