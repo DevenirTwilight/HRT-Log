@@ -1,0 +1,32 @@
+{
+  "source_sha": "7d3186fd093cc03f5a4881944773fadeb73c03db",
+  "run": 40104324849,
+  "job": 120907265812,
+  "attempt": 2,
+  "retry_count": 1,
+  "result": "FAILURE",
+  "failure": "DisguiseFlowAndroidTest.realSecretWithOrdinaryPinConfiguredOpensPrimaryWithoutASecondPinAndBackLocks line103: app_name semantic nodes empty",
+  "failed_test_blob_sha": "f4a1017d193d5b045a96da819e99cf071a0bc452",
+  "artifact": {
+    "id": 12565291471,
+    "name": "device-test-results",
+    "size_in_bytes": 1112455,
+    "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12565291471",
+    "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12565291471/zip",
+    "expired": false,
+    "created_at": "2026-10-24T15:28:47Z",
+    "expires_at": "2027-01-22T15:11:42Z",
+    "updated_at": "2026-10-24T15:28:47Z",
+    "digest": "sha256:2670a860bb1a09ff2323d8b4454586078c83b35f9885b196beaba0c9fe108953",
+    "workflow_run": {
+      "id": 40104324849,
+      "repository_id": 1406091596,
+      "head_repository_id": 1406091596,
+      "head_branch": "feature/med02-operation-flow-20261024",
+      "head_sha": "7d3186fd093cc03f5a4881944773fadeb73c03db"
+    }
+  },
+  "archive_validation": "GITHUB_DIGEST_ONLY; local extraction NOT_RUN after environment unavailable",
+  "scope": "App operation strict2 and eight MED process seams passed before full App suite; failure is not labeled infrastructure or waived",
+  "next": "Minimal test readiness synchronization; production PIN/disguise/AppShell untouched; no further rerun of this SHA"
+}
