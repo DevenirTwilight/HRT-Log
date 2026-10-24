@@ -1,3 +1,11 @@
+## MED-02 #121 first low-memory failure, bounded evidence follow-up — 2026-10-24
+
+57ed0855 native run40125887730 FAIL before new v2 tests: PID3744 exits in original LibraryLifecycleAndroidTest.committedHistoryTrashAndCompleteCurrentArchiveUseExistingWriterAndReader. Official artifact12572632712 SHA8043a84e…/CRC verified; native log stops after original restore4/lifecycle3, new collection gate NOT_RUN. Logcat has target process death (and launcher death), no target Java/native fatal stack or explicit target LMK line. Do NOT diagnose confirmed LMK or v2 failure; cause UNDETERMINED. Earlier current#120 source60dc382b original12+8 restart cases PASS is separate evidence, not a new-codec acceptance.
+
+One bounded changed-script follow-up: capture kernel/meminfo immediately after baseline and after collection; independently execute new heap-probe+3 collection cases even if original baseline process exits. Preserve baseExit AND collectionExit; any original failure keeps overallFAIL and skips restart gates. No production change, GC, heap/RAM/fixture/count/limit reduction or blind same-source rerun. Exact new source must collect evidence; if repeated unknown environment failure, retain original evidence and keepDraft rather than infinite reruns.
+
+Full local data608 PASS and Android-test sources compile. PNMEDBK2 public entry/restore integration/joint write permission still OFF, external review NOT_REVIEWED_EXTERNALLY. Continue component verification; no final functional-breakthrough claim.
+
 ## MED-02 PNMEDBK2 codec local regression complete; new native memory gate — 2026-10-24
 
 PR121 codec sourcee11f2f2b local complete core:data608/0fail/0error/0skip PASS; Android native test sources compile. Added independent fresh-process low-memory gate for heap probe + three actual collection tests (writer/key-loss roundtrip, independent reader scoped copies, authenticated malformed sets); original12-test gate and8 restart checks remain unchanged. API26 RAM512MiB/heap192MiB unchanged, no GC/fixture reduction. New5-stage Java/native/PSS/RSS/process-HWM samples are observations, not a complete peak or large-library restore acceptance. New exact source must pass this gate; cannot credit old v1 restore memory success as v2 coverage.
