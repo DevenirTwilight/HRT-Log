@@ -4,18 +4,25 @@ import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.runBlocking
 import net.plainnotes.app.domain.AttachmentSession
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.security.MessageDigest
+import java.security.KeyStore
 import java.time.Instant
 import java.util.UUID
 
 /** Production components, synthetic data; no public attachment UI or permanent cleanup API. */
 class LibraryLifecycleAndroidTest {
     private val app get()=InstrumentationRegistry.getInstrumentation().targetContext
+    @Before fun wholeUidFixtureStartsWithoutUnownedAliases() {
+        val keys=KeyStore.getInstance("AndroidKeyStore").apply {load(null)}
+        val names=keys.aliases().toList().filter {it.startsWith("notes.obj.v1.") || it.startsWith("notes.gen.db.")}
+        assertTrue("Run the whole-UID inventory fixture in its own synthetic package, not among independent roots: $names",names.isEmpty())
+    }
     private fun reject(action:()->Unit) {try {action();fail("Unsafe lifecycle action accepted")}catch(_:Exception){}}
     private fun save(f:LibraryRestoreAndroidTest.RootFixture):UUID {
         val bytes=byteArrayOf(9,8,7,6)
@@ -46,6 +53,14 @@ class LibraryLifecycleAndroidTest {
             val old=f.facts();f.reopen();f.session=AttachmentSession(UUID.fromString(f.scope.dataset),UUID.fromString(f.scope.epoch))
             assertTrue(LibraryLifecycle(f.access).inventory(f.scope,f.session.issue(),UUID.randomUUID()).revision>after.revision)
             assertArrayEquals(old,f.facts())
+            // One explicitly test-owned orphan proves isolation does not relax production refusal.
+            val orphan=AttachmentDeviceKeys.Alias(UUID.randomUUID(),AttachmentDeviceKeys.Role.ACTIVE)
+            try {
+                AttachmentDeviceKeys().provisionNew(orphan)
+                val unknown=LibraryLifecycle(f.access).inventory(f.scope,f.session.issue(),UUID.randomUUID())
+                assertTrue(unknown.items.any {it.alias==orphan.value && it.category=="UNKNOWN" && it.reason=="UNKNOWN_ALIAS"})
+                assertEquals(LibraryLifecycle.Eligibility.UNKNOWN,LibraryLifecycle(f.access).exportEligibility(f.scope,f.session.issue(),UUID.randomUUID()).eligibility)
+            }finally {KeyStore.getInstance("AndroidKeyStore").apply {load(null)}.deleteEntry(orphan.value)} // Only this test's alias.
         }
     }
     @Test fun unknownFileNeverBecomesAbsentAfterRestartAndPreventsCompleteExport() {

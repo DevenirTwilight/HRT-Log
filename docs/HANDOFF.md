@@ -1,3 +1,9 @@
+## MED-02 #118 原生真实失败保留；隔离全UID合成清单测试 — 2026-10-24
+
+源码8b80cc2f的PR Android40082952798，三API生命周期4项中3项真实FAIL，原HTML/26/29/35 ZIP SHA/CRC及API29原日志保留lifecycle-evidence/first-native。相同源码独立低内存40082952739 SUCCESS，官方ZIP12555729351已核SHA/CRC：OK9、0skip、四真实强停新PID各OK1；阶段Java/native/RSS/PSS仅采样不称峰值。其他原断言未放宽。
+
+普通大套件内多个独立合成root留有同UID全局alias，清单正确不能替当前root确认其归属。当前修正仅测试隔离：每API先在重置的模拟器测试包完整跑4项并独立保存报告，再跑原全套（仅排除已单跑的该类），不删除生产UNKNOWN检查或未知key。新增@Before明确干净全UID前置和显式单个测试自有未知alias拒绝断言。生产代码仍8b80不变。本地native Kotlin重编译PASS。最新源码必需CI/低内存待正常新轮，#118保持Draft；下一步核精确HEAD原件及四真实seam，无未解决review才正常合并。没有永久删除API/临床UI/协议变动或公开发布。
+
 ## MED-02 生命周期候选冻结，完整本地回归PASS — 2026-10-24
 
 最终本地data 599/0fail/error/skip（含原迁移/库存/PK隔离等合同）及全部native Kotlin编译PASS，原XML/摘要/log在lifecycle-evidence/local；原生、低内存、真实进程死亡待精确源码CI，不把编译当执行。唯一小补充是writeArchive在前置拒绝/所有退出路径同样擦除其接收密码，不改密码学。创建独立Draft PR，原六门+新生命周期四项/四freshPID及低内存9项必须真实验收才Ready；没有新UI、真实原件、永久删除、签名发布。

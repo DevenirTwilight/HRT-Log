@@ -1,0 +1,13 @@
+{
+  "source": "8b80cc2f356917fb90bb6d8a8b4e4545bace0519",
+  "prAndroidRun": 40082952798,
+  "native": "FAIL: lifecycle 3/4 in bulk suite; original report retained on all three APIs",
+  "lowMemoryRun": 40082952739,
+  "lowMemory": "PASS: OK9, no skip; 4 real killed/reopened seams OK1 each. Stage samples, not peaks.",
+  "artifacts": {
+    "12556146325": "3289d08683edf97f8937a3742bf47351716b838b358baf065e99a5f149b41c86",
+    "12556013761": "d636be75cc29bf579ac700a4d61d70aa2ab63e49b1af8a9128297f124b31b640",
+    "12555653091": "bc176583b5b76145e5776fc24824cb67c52967afb128d08c8693852d6ce8bf92",
+    "12555729351": "3e4412bb28c19e15c9a3ea45daf71b7a517cce4c2fcd06c911d62e6378c6aed7"
+  }
+}
