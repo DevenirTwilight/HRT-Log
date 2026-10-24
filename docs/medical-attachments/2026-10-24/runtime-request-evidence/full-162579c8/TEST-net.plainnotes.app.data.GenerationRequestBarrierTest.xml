@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.GenerationRequestBarrierTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-24T07:21:11.191Z" hostname="5eca99f7498b" time="0.117">
+  <properties/>
+  <testcase name="oldDisplayedIdCannotUpdateSameIntegerInNewDatabase" classname="net.plainnotes.app.data.GenerationRequestBarrierTest" time="0.115"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

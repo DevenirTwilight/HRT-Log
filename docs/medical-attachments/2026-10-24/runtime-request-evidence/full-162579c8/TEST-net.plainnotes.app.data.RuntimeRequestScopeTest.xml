@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.RuntimeRequestScopeTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-24T07:22:36.806Z" hostname="5eca99f7498b" time="0.206">
+  <properties/>
+  <testcase name="restoredOldEpochCannotReadReplacedFactsInsideTheSamePhysicalDatabase" classname="net.plainnotes.app.data.RuntimeRequestScopeTest" time="0.052"/>
+  <testcase name="revokedRequestRefusesBeforeOpeningStorageAndLateRevocationRollsBack" classname="net.plainnotes.app.data.RuntimeRequestScopeTest" time="0.053"/>
+  <testcase name="restoredOldScopeCannotReadNewLibraryBeforeAnyPriorHandleBinding" classname="net.plainnotes.app.data.RuntimeRequestScopeTest" time="0.097"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -78,7 +78,7 @@ class UiPrefs(context: Context) {
     if(library !is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready) {
         androidx.compose.material3.Surface(Modifier.fillMaxSize()) {
             Column(Modifier.fillMaxSize().padding(24.dp).testTag("library-request-boundary"),
-                verticalArrangement=Arrangement.Center,horizontalAlignment=Alignment.CenterHorizontally) {
+                verticalArrangement=Arrangement.spacedBy(16.dp),horizontalAlignment=Alignment.Start) {
                 when(val status=library) {
                     net.plainnotes.app.runtime.RuntimeLibrarySession.State.Loading->{
                         androidx.compose.material3.CircularProgressIndicator()

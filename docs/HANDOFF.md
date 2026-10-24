@@ -1,5 +1,7 @@
 ## MED-02 #115 已合并；Runtime Scope 真实接线验收中 — 2026-10-24
 
+接线PR #116，首源162579c8已完成完整本地data597/提醒22均0失败，App2337/1失败/557原有skip：唯一失败为新错误页居中违反不变UI09源守卫。修正仅该页左对齐/16dp间距，不修改守卫；完整原日志/XML/Period5通过原件保留full-162579c8。修正后的最终SHA仍须正常必需CI，不借首源绿灯合并。首源API29原件已独立下载核验：新增SQLCipher旧请求及Compose各1通过/0skip，原restore4/迁移6通过；首源低内存原5项及三强停点均通过，官方原件和交接已推送 `docs/med02-runtime-evidence-20261024`。该证据分支持续记录实际最终验收；只是原件/交接保存，不绕过生产PR检查。环境曾短暂断开，已恢复；没有丢失已提交源码/证据，没有因此重跑原生作业。
+
 #115 source `2fbe072708062ff03526cfa283cbfc84f15494d0` 已按§106解除Draft并正常受保护合并，主线 `b73dcc617d9be6c1b35daea4157f093df3ef3313` 与验收源码tree完全相同。六必需检查、PR三API原件、独立低内存run40034667220（API26/512MiB/192MiB）、三个真实不同PID强停重开点已核验。低内存原5项OK5/无skip（heap1+restore4），各强停verify OK1。原件/SHA/CRC、第一次push API29真实失败和单次失败job重试成功均保存远端分支 `docs/med02-115-evidence-20261024`，目录 `docs/medical-attachments/2026-10-24/pr115-closeout`。不得将早期13a证据当最终源码。
 
 主线Android40069934537最终SUCCESS，Science40069934522 SUCCESS，精确b73。首次API26/29/35及JVM成功；host CausalTimeUiTest.english遇到线程/SlotTable真实失败，原日志已保留，不宣称基础设施根因已证明。仅重试该失败job一次，120805584214 SUCCESS；其他原生成功复用，不重复触发。原始最终状态JSON在runtime-request-evidence/pr115-main-*。
