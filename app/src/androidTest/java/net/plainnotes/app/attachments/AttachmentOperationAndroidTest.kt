@@ -37,7 +37,7 @@ class AttachmentOperationAndroidTest {
         val root=instrumentation.uiAutomation.rootInActiveWindow
         val snapshot=StringBuilder()
         fun describe(node:AccessibilityNodeInfo?,depth:Int) {
-            if(node==null || depth>7 || snapshot.length>6000)return
+            if(node==null || depth>20 || snapshot.length>6000)return
             snapshot.append("\n").append(" ".repeat(depth)).append(node.className).append(" text=").append(node.text)
                 .append(" clickable=").append(node.isClickable).append(" visible=").append(node.isVisibleToUser)
             for(i in 0 until node.childCount)describe(node.getChild(i),depth+1)
@@ -57,8 +57,15 @@ class AttachmentOperationAndroidTest {
         waitFor(text) {
             val root=instrumentation.uiAutomation.rootInActiveWindow ?: return@waitFor false
             if(!root.packageName.toString().endsWith(".documentsui"))return@waitFor false
-            val found=root.findAccessibilityNodeInfosByText(text).orEmpty()
+            if(root.findAccessibilityNodeInfosByText(text).isEmpty())return@waitFor false
+            // A cancelled picker may leave nodes from a directory loader/window transition.
+            // Settle real accessibility events, then reacquire live geometry before ONE touch.
+            try {instrumentation.uiAutomation.waitForIdle(300,3000)}catch(_:java.util.concurrent.TimeoutException) {return@waitFor false}
+            val current=instrumentation.uiAutomation.rootInActiveWindow ?: return@waitFor false
+            if(!current.refresh() || !current.packageName.toString().endsWith(".documentsui"))return@waitFor false
+            val found=current.findAccessibilityNodeInfosByText(text).orEmpty()
             for(n in found) {
+                if(!n.refresh())continue
                 val bounds=Rect();n.getBoundsInScreen(bounds)
                 // DocumentsUI RecyclerView selection can be handled by a touch listener;
                 // a visible filename need not expose a clickable accessibility ancestor.

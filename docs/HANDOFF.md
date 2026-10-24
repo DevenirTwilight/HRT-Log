@@ -1,3 +1,9 @@
+## MED-02 #119 API26/29真实链通过，API35过渡节点失败已保留 — 2026-10-24
+
+e474c53d源码：push API26 SUCCESS（40102496856/art12563439727），PR API29 SUCCESS（40102500440/art12564066860）；原HTML核对各App2/Core3均0fail/0skip。真实三类DocumentsUI/明确确认/typed关联/重开DB/认证预览/撤权成功不是仅编译；独立低内存40102500496 OK12+8新PID也已核。PR API35 device-tests真实失败（art12564240662）：第二次选择后等待selected超时，窗口仍DocumentsUI，日志14:37:47.270 Disconnected nodes，14:37:47.274二次directory loader更新，无文件激活/返回；不能归因后端保存，不能把26/29通过冒充35通过。三原ZIP/HTML/SAF logcat和失败job日志在独立证据分支operation-flow/candidate-e474c53d。
+
+最小测试修正：首次看见文件后等真实accessibility事件静默300ms（有界3s），重新获得/refresh实时root与精确可见文件节点及坐标，再只触摸一次；取消旧picker后不使用过渡缓存。原30s等待/真实SAF返回/提交及关联/重开/撤权全部断言保留；有界失败树增加深度以免停在Drawer容器。Kotlin编译PASS32s，生产代码未改。只验这一新候选，不重跑旧SHA筛绿；若仍遇环境未知，保留新原件定位，不继续盲叠点击补丁。Draft/OFF/外审未做/Room16/配额/协议/主导航均不变。
+
 ## MED-02 #119 真实文件行触摸修正，待新源验收 — 2026-10-24
 
 9d735355独立低内存40101035993已原件核验OK12+原4/新4 fresh-PID各OK1，Core3与运行中核对反例也已越过；但push/PR API26均在真实取消后第二次选择sample.pdf超时（成功用例line91），因此不得合并或称真实链通过。两份官方失败原件/日志与低内存原件保存在独立docs/med02-operation-evidence-20261024分支operation-flow/candidate-9d735355；external-review索引仍NOT_REVIEWED_EXTERNALLY。
