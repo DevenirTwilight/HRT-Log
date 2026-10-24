@@ -106,6 +106,13 @@ class MedicalAttachmentOperationAndroidTest {
                 val newSession=AttachmentSession(UUID.fromString(current.dataset),UUID.fromString(current.epoch));val newCap=newSession.issue()
                 try {
                     val ops=fresh.forGeneration(current).pinnedTo(Space.PRIMARY).medicalAttachments()
+                    val active=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,fresh.forGeneration(current).appointments().first().id)
+                    val aliases=AttachmentDeviceKeys().retainedAliases(4096)
+                    var refused=false
+                    try {ops.import(newCap,MedicalAttachmentOperations.Import(UUID.randomUUID(),UUID.randomUUID(),active,"SYNTHETIC managed refusal"),uri("unknown"))}
+                    catch(e:IllegalStateException) {assertTrue(e.message.orEmpty().contains("joint generation admission"));refused=true}
+                    assertTrue("Restored generations must retain their existing write admission",refused)
+                    assertEquals(aliases,AttachmentDeviceKeys().retainedAliases(4096))
                     assertEquals(MedicalAttachmentOperations.Export.REFUSED,ops.exportEligibility(newCap))
                     val output=ByteArrayOutputStream();reject {runBlocking {ops.writeArchive(newCap,source.password(),output)}};assertEquals(0,output.size())
                 }finally {newCap.close();newSession.revoke()}

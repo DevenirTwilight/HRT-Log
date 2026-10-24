@@ -13,6 +13,8 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -22,6 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.*
 import net.plainnotes.app.attachments.AttachmentFlowController
 import net.plainnotes.app.attachments.AttachmentViewer
+import net.plainnotes.app.data.MedicalAttachmentOperations
 import java.util.UUID
 
 /** No launcher/exported entry. Test DocumentsProvider ONLY, no arbitrary original-file switch. */
@@ -33,6 +36,8 @@ class AttachmentOperationTestActivity:ComponentActivity() {
     private var waiting=false
     private var operation=UUID.randomUUID()
     private var document=UUID.randomUUID()
+    private var target by mutableStateOf<MedicalAttachmentOperations.Target?>(null)
+    private var targetLocked by mutableStateOf(false)
     private var ready by mutableStateOf(false)
     internal var message by mutableStateOf("SYNTHETIC loading")
     private var image by mutableStateOf<Bitmap?>(null)
@@ -50,16 +55,28 @@ class AttachmentOperationTestActivity:ComponentActivity() {
         fixture=SyntheticAttachmentFixture(this,state?.getString("fixture")?.let(UUID::fromString) ?: UUID.randomUUID(),restored)
         operation=state?.getString("operation")?.let(UUID::fromString) ?: operation
         document=state?.getString("document")?.let(UUID::fromString) ?: document
-        lifecycleScope.launch {try {fixture.initialize();ready=true;message="SYNTHETIC ready"}catch(_:Exception){message="SYNTHETIC refused"}}
-        setContent {MaterialTheme {Column(Modifier.padding(16.dp).fillMaxWidth()) {
+        targetLocked=state?.getBoolean("target_locked") ?: false
+        lifecycleScope.launch {try {
+            fixture.initialize()
+            if(state!=null) {
+                val kind=state.getString("target_kind")
+                if(kind!=null)target=listOf(fixture.target,fixture.labTarget).single {it.kind.name==kind && it.id==state.getLong("target_id")}
+                check(!targetLocked || target!=null) {"Saved operation has no proven target"}
+            }
+            ready=true;message="SYNTHETIC ready"
+        }catch(_:Exception){ready=false;message="SYNTHETIC refused"}}
+        setContent {MaterialTheme {Column(Modifier.padding(16.dp).fillMaxWidth().verticalScroll(rememberScrollState())) {
             Text("MED-02 SYNTHETIC / PUBLIC OFF")
             Text(message)
-            Button(enabled=ready,onClick={lifecycleScope.launch {
-                fresh();waiting=true
+            Button(enabled=ready && !targetLocked,onClick={target=fixture.target}) {Text("Use synthetic appointment")}
+            Button(enabled=ready && !targetLocked,onClick={target=fixture.labTarget}) {Text("Use synthetic lab result")}
+            Text(target?.let {"SYNTHETIC explicit target: ${it.kind} ${it.id}"} ?: "SYNTHETIC select an existing record first")
+            Button(enabled=ready && target!=null,onClick={lifecycleScope.launch {
+                targetLocked=true;fresh();waiting=true
                 select.launch(requireNotNull(flow).pickerIntent().putExtra(DocumentsContract.EXTRA_INITIAL_URI,DocumentsContract.buildDocumentUri(AUTHORITY,"samples")))
             }}) {Text("Choose synthetic attachment")}
-            Button(enabled=ready && chosen!=null,onClick={lifecycleScope.launch {val result=chosen ?: return@launch;chosen=null;fresh();requireNotNull(flow).selected(result);message="SYNTHETIC ${requireNotNull(flow).state.value}"}}) {Text("Confirm synthetic import")}
-            Button(enabled=ready,onClick={lifecycleScope.launch {try {
+            Button(enabled=ready && chosen!=null && target!=null,onClick={lifecycleScope.launch {val result=chosen ?: return@launch;chosen=null;fresh();requireNotNull(flow).selected(result);message="SYNTHETIC ${requireNotNull(flow).state.value::class.simpleName}"}}) {Text("Confirm synthetic import")}
+            Button(enabled=ready && target!=null,onClick={lifecycleScope.launch {try {
                 if(flow==null)fresh()
                 val rows=requireNotNull(flow).documents();val saved=rows.single {it.document==document && it.state=="ACTIVE" && it.linkState=="ACTIVE"}
                 val bitmap=withContext(Dispatchers.IO) {
@@ -68,16 +85,16 @@ class AttachmentOperationTestActivity:ComponentActivity() {
                 }
                 fixture.runtime.checkRequest();image=bitmap;message="SYNTHETIC read verified"
             }catch(_:Exception) {image=null;message="SYNTHETIC view refused"}}}) {Text("Read saved attachment")}
-            Button(enabled=ready,onClick={lifecycleScope.launch {try {if(flow==null)fresh();message="SYNTHETIC backup ${requireNotNull(flow).backupEligibility()}"}catch(_:Exception){message="SYNTHETIC backup refused"}}}) {Text("Check backup")}
-            Button(enabled=ready,onClick={lifecycleScope.launch {if(flow==null)fresh();requireNotNull(flow).reconcile();message="SYNTHETIC ${requireNotNull(flow).state.value}"}}) {Text("Reconcile operation")}
-            Button(enabled=ready,onClick={lifecycleScope.launch {try {if(flow==null)fresh();requireNotNull(flow).recover();message="SYNTHETIC ${requireNotNull(flow).state.value}"}catch(_:Exception){message="SYNTHETIC recovery refused"}}}) {Text("Recover incomplete operation")}
+            Button(enabled=ready && target!=null,onClick={lifecycleScope.launch {try {if(flow==null)fresh();message="SYNTHETIC backup ${requireNotNull(flow).backupEligibility()}"}catch(_:Exception){message="SYNTHETIC backup refused"}}}) {Text("Check backup")}
+            Button(enabled=ready && target!=null,onClick={lifecycleScope.launch {if(flow==null)fresh();requireNotNull(flow).reconcile();message="SYNTHETIC ${requireNotNull(flow).state.value::class.simpleName}"}}) {Text("Reconcile operation")}
+            Button(enabled=ready && target!=null,onClick={lifecycleScope.launch {try {if(flow==null)fresh();requireNotNull(flow).recover();message="SYNTHETIC ${requireNotNull(flow).state.value::class.simpleName}"}catch(_:Exception){message="SYNTHETIC recovery refused"}}}) {Text("Recover incomplete operation")}
             image?.takeUnless {it.isRecycled}?.let {Image(it.asImageBitmap(),"Synthetic authenticated attachment")}
         }}}
     }
-    private suspend fun fresh() {flow?.close();flow=fixture.runtime.attachments(fixture.target,"SYNTHETIC report",operation,document)}
+    private suspend fun fresh() {flow?.close();flow=fixture.runtime.attachments(requireNotNull(target),"SYNTHETIC report",operation,document)}
     override fun onResume() {super.onResume();if(::fixture.isInitialized)lifecycleScope.launch {try {fixture.runtime.resume();ready=true}catch(_:Exception){ready=false}}}
     override fun onStop() {ready=false;image=null;viewer?.close();viewer=null;if(::fixture.isInitialized)fixture.runtime.pause();super.onStop()}
-    override fun onSaveInstanceState(out:Bundle) {out.putString("fixture",fixture.id.toString());out.putString("operation",operation.toString());out.putString("document",document.toString());(fixture.runtime.state.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope?.let {out.putStringArrayList("scope",it.encoded())};super.onSaveInstanceState(out)}
+    override fun onSaveInstanceState(out:Bundle) {out.putString("fixture",fixture.id.toString());out.putString("operation",operation.toString());out.putString("document",document.toString());out.putBoolean("target_locked",targetLocked);target?.let {out.putString("target_kind",it.kind.name);out.putLong("target_id",it.id)};(fixture.runtime.state.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope?.let {out.putStringArrayList("scope",it.encoded())};super.onSaveInstanceState(out)}
     override fun onDestroy() {flow?.close();if(::fixture.isInitialized)fixture.close();super.onDestroy()}
     companion object {const val AUTHORITY="net.plainnotes.app.test.synthetic-medflow"}
 }

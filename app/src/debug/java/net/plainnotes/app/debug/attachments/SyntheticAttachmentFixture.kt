@@ -24,9 +24,12 @@ internal class SyntheticAttachmentFixture(app:Context,val id:UUID=UUID.randomUUI
     val repository=NotesRepository(access).pinnedTo(Space.PRIMARY)
     val runtime=RuntimeLibrarySession(repository,saved)
     lateinit var target:MedicalAttachmentOperations.Target
+    lateinit var labTarget:MedicalAttachmentOperations.Target
     suspend fun initialize() {
         if(repository.appointments().isEmpty())repository.saveAppointment(AppointmentEntity(type="SYNTHETIC",at_utc=1000,at_zone="UTC",note="SYNTHETIC operation flow",remind_minutes_before=0))
         target=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,repository.appointments().single().id)
+        if(repository.labs().isEmpty())repository.saveLab(LabValueEntity(analyte_code="E2",value=120.0,unit="pg/mL",sampled_utc=1000,sampled_zone="UTC"))
+        labTarget=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.LAB,repository.labs().single().id)
         runtime.initialize()
     }
     fun close() {runtime.close();access.close(Space.PRIMARY)}

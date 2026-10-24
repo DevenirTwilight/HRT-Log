@@ -20,10 +20,12 @@ class MedicalAttachmentOperationRestartAndroidTest {
         val helper=MedicalAttachmentOperationAndroidTest()
         if(phase=="prepare") {
             check(!marker.exists());val f=LibraryRestoreAndroidTest.RootFixture(app)
+            val original=f.facts()
+            val originalDigest=try {MedicalArchiveCrypto.hex(java.security.MessageDigest.getInstance("SHA-256").digest(original))}finally {original.fill(0)}
             val target=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,2)
             val request=MedicalAttachmentOperations.Import(UUID.randomUUID(),UUID.randomUUID(),target,"SYNTHETIC operation")
             val service=MedicalAttachmentOperations(f.access,helper.scope(f),{},checkpoint={at->if(at.name==seam) {
-                val m=JSONObject().put("seam",seam).put("pid",Process.myPid()).put("root",f.id.toString()).put("operation",request.operation.toString()).put("document",request.document.toString())
+                val m=JSONObject().put("seam",seam).put("pid",Process.myPid()).put("root",f.id.toString()).put("operation",request.operation.toString()).put("document",request.document.toString()).put("original_facts_digest",originalDigest)
                 marker.outputStream().use {out->out.write(m.toString().toByteArray());out.fd.sync()}
                 check(!CountDownLatch(1).await(90,TimeUnit.SECONDS));error("Expected real process termination")
             }})
@@ -46,6 +48,8 @@ class MedicalAttachmentOperationRestartAndroidTest {
                         assertEquals(MedicalAttachmentOperations.Phase.ABORTED,service.reconcile(cap,op,target,doc).phase)
                     }
                     f.raw.query("PRAGMA foreign_key_check").use {assertEquals(0,it.count)}
+                    val original=f.facts()
+                    try {assertEquals("Import/recovery must preserve original clinical facts",m.getString("original_facts_digest"),MedicalArchiveCrypto.hex(java.security.MessageDigest.getInstance("SHA-256").digest(original)))}finally {original.fill(0)}
                 }finally {cap.close()}
             }
             check(marker.delete())

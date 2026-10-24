@@ -64,7 +64,7 @@ internal class AttachmentFlowController(
                     return
                 }
                 // Dispatcher cancellation may happen after SQLite COMMIT. Query facts, never guess.
-                withContext(NonCancellable) {reconcile()}
+                withContext(NonCancellable) {reconcileFact()}
             }finally {input=null;cap.close()}
         }catch(_:Exception) {if(!closed.get() && mutable.value==State.Selecting)mutable.value=State.Failed}
         finally {busy.set(false)}
@@ -72,6 +72,12 @@ internal class AttachmentFlowController(
     /** Cancellation revokes only this input attempt; it cannot undo an already committed record. */
     fun cancel() {cancelled.set(true);input?.close();if(mutable.value==State.Selecting)mutable.value=State.Cancelled}
     suspend fun reconcile() {
+        if(closed.get())return
+        // NOT_FOUND cannot establish failure while our provider read/transaction is still live.
+        if(busy.get()) {mutable.value=State.ReconcileRequired;return}
+        reconcileFact()
+    }
+    private suspend fun reconcileFact() {
         if(closed.get())return
         try {
             permission()
@@ -87,6 +93,7 @@ internal class AttachmentFlowController(
     }
     suspend fun recover() {
         permission();check(!closed.get())
+        if(busy.get()) {mutable.value=State.ReconcileRequired;return}
         session.issue().let {cap->try {backend.recover(cap)}finally {cap.close()}}
         reconcile()
     }

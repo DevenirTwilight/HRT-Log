@@ -9,6 +9,8 @@ import androidx.activity.result.ActivityResult
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.compose.ui.test.*
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import kotlinx.coroutines.*
 import net.plainnotes.app.data.*
 import net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity
@@ -18,23 +20,38 @@ import org.junit.Test
 import java.security.KeyStore
 import java.security.MessageDigest
 import java.util.UUID
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
+import net.plainnotes.app.domain.AttachmentSession
 
 /** Real DocumentsUI selection, real application controller, SQLCipher, Keystore and authorized viewer. */
 class AttachmentOperationAndroidTest {
+    @get:org.junit.Rule val ui=createEmptyComposeRule()
     private val instrumentation get()=InstrumentationRegistry.getInstrumentation()
     private fun waitFor(label:String,timeout:Long=30000,condition:()->Boolean) {
         val end=SystemClock.uptimeMillis()+timeout;while(SystemClock.uptimeMillis()<end) {if(condition())return;Thread.sleep(100)}
         fail("Synthetic timeout: $label")
     }
     private fun click(text:String) {
+        if(!text.startsWith("SYNTHETIC sample.")) {
+            ui.waitUntil(30000) {ui.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty()}
+            ui.onNodeWithText(text).performScrollTo().assertIsEnabled().performClick()
+            return
+        }
+        // The picker is the actual system DocumentsUI, not a Compose test fixture. Dispatch
+        // exactly one real selection; the caller asserts the actual returned SAF result.
+        var selected:AccessibilityNodeInfo?=null
         waitFor(text) {
             val found=instrumentation.uiAutomation.rootInActiveWindow?.findAccessibilityNodeInfosByText(text).orEmpty()
             for(n in found) {
+                n.performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SHOW_ON_SCREEN.id)
                 var p:AccessibilityNodeInfo?=n
-                repeat(5) {val node=p;if(node!=null && node.isClickable && node.performAction(AccessibilityNodeInfo.ACTION_CLICK))return@waitFor true;p=node?.parent}
+                repeat(5) {val node=p;if(node!=null && node.isClickable) {selected=node;return@waitFor true};p=node?.parent}
             }
             false
         }
+        requireNotNull(selected).performAction(AccessibilityNodeInfo.ACTION_CLICK)
     }
     private fun hash(b:ByteArray)=MessageDigest.getInstance("SHA-256").digest(b).toList()
     private fun cleanup(f:SyntheticAttachmentFixture) {
@@ -57,6 +74,19 @@ class AttachmentOperationAndroidTest {
             try {
                 scenario.onActivity {activity=it}
                 waitFor("fixture") {activity?.message=="SYNTHETIC ready"}
+                val lab=kind=="png"
+                click(if(lab)"Use synthetic lab result" else "Use synthetic appointment")
+                if(kind=="pdf") {
+                    click("Choose synthetic attachment")
+                    waitFor("real DocumentsUI") {instrumentation.uiAutomation.rootInActiveWindow?.findAccessibilityNodeInfosByText("SYNTHETIC sample.pdf").orEmpty().isNotEmpty()}
+                    assertTrue(instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK))
+                    waitFor("actual SAF cancellation") {activity?.message=="SYNTHETIC cancelled or refused"}
+                    val cancelled=requireNotNull(activity?.flow)
+                    waitFor("resumed cancellation owner") {runCatching {requireNotNull(activity).fixture.runtime.checkRequest()}.isSuccess}
+                    requireNotNull(activity).fixture.runtime.attachments(cancelled.request.target,"SYNTHETIC cancelled request",cancelled.request.operation,cancelled.request.document).use {
+                        assertTrue(it.documents().isEmpty())
+                    }
+                }
                 click("Choose synthetic attachment")
                 click("SYNTHETIC sample.${if(kind=="binary")"bin" else kind}")
                 waitFor("selected") {activity?.message=="SYNTHETIC selected; confirm"}
@@ -64,8 +94,11 @@ class AttachmentOperationAndroidTest {
                 waitFor("real commit") {activity?.flow?.state?.value is AttachmentFlowController.State.Saved}
                 val a=requireNotNull(activity);val flow=requireNotNull(a.flow)
                 val receipt=(flow.state.value as AttachmentFlowController.State.Saved).receipt
+                assertEquals(if(lab)MedicalAttachmentOperations.Kind.LAB else MedicalAttachmentOperations.Kind.APPOINTMENT,flow.request.target.kind)
                 val entries=flow.documents();assertEquals(1,entries.size);assertEquals(receipt.document,entries.single().document)
                 assertEquals("ACTIVE",entries.single().linkState)
+                val otherTarget=if(lab)a.fixture.target else a.fixture.labTarget
+                a.fixture.runtime.attachments(otherTarget,"SYNTHETIC other record").use {assertTrue("Equal timestamps must not auto-associate",it.documents().isEmpty())}
                 val expected=SyntheticDocumentsProvider.sample(kind)
                 withContext(Dispatchers.IO) {
                     flow.open(receipt.document).use {r->
@@ -76,11 +109,23 @@ class AttachmentOperationAndroidTest {
                 expected.fill(0)
                 click("Read saved attachment");waitFor("authorized view") {a.message=="SYNTHETIC read verified"}
                 assertEquals(MedicalAttachmentOperations.Export.COMPLETE,flow.backupEligibility())
-                // A new page/controller reads committed facts rather than replaying the provider.
-                val reopened=a.fixture.runtime.attachments(a.fixture.target,"SYNTHETIC report",receipt.operation,receipt.document)
-                reopened.reconcile();assertTrue(reopened.state.value is AttachmentFlowController.State.Saved)
-                assertEquals(1,reopened.documents().size);reopened.close()
-                assertEquals(0,a.fixture.access.get(Space.PRIMARY).openHelper.writableDatabase.query("SELECT feature_enabled FROM attachment_store WHERE store_state='CURRENT'").use {it.moveToFirst();it.getInt(0)})
+                // Actually destroy/recreate the page and close/reopen its encrypted connection.
+                // Only neutral scope/operation/typed target survive; no URI/provider replay.
+                val oldRead=flow.open(receipt.document)
+                try {
+                    scenario.recreate();scenario.onActivity {activity=it}
+                    val next=requireNotNull(activity)
+                    assertNotSame(a,next);waitFor("reopened fixture") {next.message=="SYNTHETIC ready"}
+                    val revoked=ByteArray(16) {7}
+                    try {oldRead.readAt(0,revoked,0,revoked.size);fail("Closed page retained read access")}catch(_:IllegalStateException){}
+                    assertTrue(revoked.all {it==0.toByte()})
+                    click("Reconcile operation");waitFor("read-only committed reconciliation") {next.flow?.state?.value is AttachmentFlowController.State.Saved}
+                    val reopened=requireNotNull(next.flow)
+                    assertEquals(receipt,(reopened.state.value as AttachmentFlowController.State.Saved).receipt)
+                    assertEquals(flow.request.target,reopened.request.target);assertEquals(1,reopened.documents().size)
+                    click("Read saved attachment");waitFor("view after database reopen") {next.message=="SYNTHETIC read verified"}
+                    assertEquals(0,next.fixture.access.get(Space.PRIMARY).openHelper.writableDatabase.query("SELECT feature_enabled FROM attachment_store WHERE store_state='CURRENT'").use {it.moveToFirst();it.getInt(0)})
+                }finally {oldRead.close()}
             }finally {scenario.close();activity?.fixture?.let(::cleanup)}
         }
     }
@@ -92,6 +137,26 @@ class AttachmentOperationAndroidTest {
             val failed=f.runtime.attachments(f.target,"SYNTHETIC")
             failed.selected(ActivityResult(Activity.RESULT_OK,Intent().setData(android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-attachments/failure"))))
             assertEquals(AttachmentFlowController.State.Failed,failed.state.value);assertTrue(failed.documents().isEmpty());failed.close()
+            // Freeze an actual worker before journal preparation. A concurrent status/recovery
+            // action must not call NOT_FOUND a failed attempt or recover a still-live write.
+            val scope=f.repository.currentGenerationScope();val armed=AtomicBoolean(false)
+            val entered=CountDownLatch(1);val release=CountDownLatch(1)
+            val backend=f.repository.forGeneration(scope) {
+                f.runtime.checkRequest()
+                if(armed.compareAndSet(true,false)) {entered.countDown();check(release.await(30,TimeUnit.SECONDS))}
+            }.medicalAttachments()
+            val session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
+            val pending=AttachmentFlowController(backend,session,AutoCloseable {session.revoke()},
+                MedicalAttachmentOperations.Import(UUID.randomUUID(),UUID.randomUUID(),f.target,"SYNTHETIC live attempt"),f.runtime::checkRequest)
+            armed.set(true)
+            val worker=async(Dispatchers.Default) {pending.selected(ActivityResult(Activity.RESULT_OK,Intent().setData(android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-attachments/failure"))))}
+            try {
+                assertTrue(entered.await(30,TimeUnit.SECONDS));assertEquals(AttachmentFlowController.State.Pending,pending.state.value)
+                pending.reconcile();assertEquals(AttachmentFlowController.State.ReconcileRequired,pending.state.value)
+                pending.recover();assertEquals(AttachmentFlowController.State.ReconcileRequired,pending.state.value)
+                release.countDown();worker.await();assertEquals(AttachmentFlowController.State.Failed,pending.state.value)
+                assertTrue(pending.documents().isEmpty())
+            }finally {release.countDown();worker.cancelAndJoin();pending.close()}
             val flow=f.runtime.attachments(f.target,"SYNTHETIC")
             flow.selected(ActivityResult(Activity.RESULT_OK,Intent().setData(android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-attachments/mime"))))
             val saved=(flow.state.value as AttachmentFlowController.State.Saved).receipt

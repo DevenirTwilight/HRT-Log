@@ -1,3 +1,11 @@
+## MED-02 #119 SAF测试进程依赖已定位；补真实目标选择/重开与运行中核对保护 — 2026-10-24
+
+2797c2a9原生已越过只读篡改准备：三API Core Operation3全部通过；独立低内存40096966198实际OK12，原4+新4真实force-stop各verify OK1。官方ZIP SHA/CRC、原HTML/低内存与8seam日志在operation-flow/second-native。App2仍真实1FAIL：Choose按钮确认超时；API29原log明确测试包独立Provider进程queryRoots抛NoClassDefFoundError kotlin.jvm.internal.Intrinsics，测试APK没有目标App的Kotlin runtime。另API29旧导航用例CREATED状态超时保留UNKNOWN，不删断言或重跑旧源凑绿。
+
+最小修正：仅合成DocumentsProvider改纯Java/framework（同一权限/authority/故意错误MIME及大小/固定样本），javap确认无Kotlin依赖；App内真实点击用已有Compose测试规则，系统DocumentsUI仍真实点击并核实际返回结果，不mock picker。仅debug host新增明确就诊/LAB目标选择，两个记录同时间而非按日期匹配；选择后冻结typed目标，saved scope+UUID+目标在重建时核对。原成功用例现在真实取消一次DocumentsUI、实际销毁/重建Activity并关闭重开SQLCipher连接，再只读核对原UUID/列表/预览，旧reader必须拒绝且清零。3类样本、原全部断言保留。
+
+生产改动仅AttachmentFlowController运行状态：仍有输入/事务worker时NOT_FOUND不能证明失败，显式reconcile/recover保持ReconcileRequired；worker结束后才独立核事实。增加同一原生失败用例内的有界活worker反例，不加新协议/queue/authority。managed恢复库新增写入仍拒绝，native增加真实已有目标+准确准入拒绝+未新增alias断言；四新PID核对补原临床事实摘要不变。上述Core/App Kotlin和Provider Java编译PASS（local/explicit-target-reopen-compile-green.log），实际新源JNI/SAF仍待最终CI，不能借2797结果称通过。继续既有#119/Draft，不改Room16/AppShell/权限/密码学/配额/正式入口，不补跑旧SHA。验收通过后只做正常保护合并及主线核查，再生成NOT_REVIEWED_EXTERNALLY外审索引包；真实原件/永久删除/签名发布OFF。
+
 ## MED-02 #119 原生共同失败已定位，保留只读保护修正合成篡改准备 — 2026-10-24
 
 实时核查默认分支仍claude/new-session-1959qb，主线f5f942380184a4548458244c75f24648c4edb27a，#118 MERGED且主线Android40089062393/Science40089062418 SUCCESS；#116早已合并caa，不补跑/重做旧阶段。继续既有#119分支feature/med02-operation-flow-20261024，接手源6c9875bafb67b1a0a9fac4f34d2e1602f1a56893，仍Draft/无冲突/未解决review。
