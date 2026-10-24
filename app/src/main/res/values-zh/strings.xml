@@ -1344,4 +1344,11 @@
 <string name="wb_recent_note">只显示你自己记下的数值，没有记录的日子留空。</string>
 <string name="wb_trend_spoken">%1$s，最近 %2$d 天记录了 %3$d 天</string>
 <string name="wb_trend_spoken_all">%1$s，记录了 %2$d 天</string>
+
+<string name="library_scope_changed">资料库已变更。请重新打开并核对操作结果，不要自动重复上一操作。</string>
+<string name="library_scope_unknown">无法确认恢复的页面或提醒属于当前资料库。修改前请重新打开资料库。</string>
+<string name="library_scope_reopen">重新打开资料库</string>
+<string name="library_scope_loading">正在核对资料库…</string>
+<string name="library_restore_pending">正在恢复资料库，请先完成恢复或取消后再修改。</string>
+<string name="library_request_locked">请先解锁并重新打开应用，再进行修改。</string>
 </resources>

@@ -5,6 +5,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.asContextElement
+import kotlinx.coroutines.flow.*
 import net.plainnotes.app.domain.*
 import org.json.JSONObject
 import java.time.*
@@ -16,25 +17,50 @@ val CHECKIN_DEFAULTS=DAILY_KEYS
 const val BACKFILL_MAX_DAYS=731L
 
 @Singleton class NotesRepository private constructor(private val access: DatabaseAccess, private val pinned: Space?,
-    private val generationBindings:java.util.concurrent.ConcurrentHashMap<Space,String>,private val requestScope:LibraryRequestScope?=null) {
+    private val generationBindings:java.util.concurrent.ConcurrentHashMap<Space,String>,private val requestScope:LibraryRequestScope?=null,
+    private val requestPermission:()->Unit={}) {
     constructor(access:DatabaseAccess,pinned:Space?):this(access,pinned,java.util.concurrent.ConcurrentHashMap())
     @Inject constructor(access: DatabaseAccess) : this(access, null)
     /** A repository that always works on [space], whatever the UI has selected (used by background reminders). */
-    fun pinnedTo(space: Space) = NotesRepository(access, space, generationBindings, requestScope)
+    fun pinnedTo(space: Space) = NotesRepository(access, space, generationBindings, requestScope,requestPermission)
     // Coroutine-local transaction routing, not a database-validity cache. Legacy sql()/db()
     // helpers must stay on the same target as their DAO when global UI selection changes.
     private val transactionSpace=ThreadLocal<Space?>()
     val space get() = pinned ?: transactionSpace.get() ?: access.current
     fun select(space: Space) = access.select(space)
     private fun bindDatabase(target:Space,database:NotesDatabase):NotesDatabase {
+        requestPermission()
         val identity=DatabaseAccess.handleIdentity(database)
+        requestScope?.let {expected->
+            val live=AttachmentIdentity.current(database.openHelper.writableDatabase)
+            if(live==null || expected.generation!=identity || expected.dataset!=live.dataset || expected.epoch!=live.epoch)throw LibraryScopeMismatch()
+        }
         val bound=generationBindings.putIfAbsent(target,identity)
-        check(bound==null || bound==identity) {"Request belongs to a retired database generation"}
+        if(bound!=null && bound!=identity)throw LibraryScopeMismatch()
         return database
     }
     /** Caller must carry this scope with the displayed record/draft; never retag an old ID.
      * Unscoped legacy UI/background writes fail closed after a full-library switch. */
-    fun forGeneration(scope:LibraryRequestScope)=NotesRepository(access,pinned,java.util.concurrent.ConcurrentHashMap(),scope)
+    fun forGeneration(scope:LibraryRequestScope,permission:()->Unit={})=NotesRepository(access,pinned,java.util.concurrent.ConcurrentHashMap(),scope,permission)
+    /** Fresh metadata capture for a NEW screen or scheduling batch, never for retagging old IDs. */
+    suspend fun currentGenerationScope():LibraryRequestScope=withContext(Dispatchers.IO) {
+        val database=access.get(space)
+        DatabaseAccess.withActiveHandle(database) {
+            val live=requireNotNull(AttachmentIdentity.current(database.openHelper.writableDatabase))
+            LibraryRequestScope(DatabaseAccess.handleIdentity(database),live.dataset,live.epoch)
+        }
+    }
+    suspend fun validateGeneration()=withContext(Dispatchers.IO) {
+        val database=databaseFor(space)
+        DatabaseAccess.withActiveHandle(database) {bindDatabase(space,database);Unit}
+    }
+    /** Invalidation is a wake-up only; every consumer still queries the sole native authority. */
+    fun generationChanges():kotlinx.coroutines.flow.Flow<Unit> = kotlinx.coroutines.flow.flow {
+        val database=access.get(space);val root=DatabaseAccess.authorityRoot(database)
+        val authority=root.invalidationTracker.createFlow("library_authority","library_candidate",emitInitialState=true)
+        val local=database.invalidationTracker.createFlow("attachment_store",emitInitialState=true)
+        kotlinx.coroutines.flow.merge(authority,local).collect {emit(Unit)}
+    }.flowOn(Dispatchers.IO)
     suspend fun generationScope():LibraryRequestScope=withContext(Dispatchers.IO) {
         val database=databaseFor(space);val scope=requireNotNull(AttachmentIdentity.current(database.openHelper.writableDatabase))
         LibraryRequestScope(DatabaseAccess.handleIdentity(database),scope.dataset,scope.epoch)
@@ -42,15 +68,17 @@ const val BACKFILL_MAX_DAYS=731L
     private fun writeBinding(target:Space,database:NotesDatabase) {
         bindDatabase(target,database)
         if(requestScope!=null || DatabaseAccess.managedGeneration(database)) {
-            val expected=requireNotNull(requestScope) {"A generation-scoped request is required after full restore"}
+            val expected=requestScope ?: throw LibraryScopeMismatch()
             val live=requireNotNull(AttachmentIdentity.current(database.openHelper.writableDatabase))
-            check(expected.generation==DatabaseAccess.handleIdentity(database) && expected.dataset==live.dataset && expected.epoch==live.epoch) {"Retired record request scope"}
+            if(expected.generation!=DatabaseAccess.handleIdentity(database) || expected.dataset!=live.dataset || expected.epoch!=live.epoch)throw LibraryScopeMismatch()
         }
     }
-    private fun databaseFor(target:Space)=bindDatabase(target,access.get(target))
+    private fun databaseFor(target:Space):NotesDatabase {requestPermission();return bindDatabase(target,access.get(target))}
     private fun db() = databaseFor(space)
-    private suspend fun <T> boundTransaction(target:Space,block:suspend(NotesDatabase)->T):T =
-        access.withGenerationTransaction(target,{writeBinding(target,it)}) {database->block(database)}
+    private suspend fun <T> boundTransaction(target:Space,block:suspend(NotesDatabase)->T):T {
+        requestPermission()
+        return access.withGenerationTransaction(target,{writeBinding(target,it)},requestPermission) {database->block(database)}
+    }
     internal val measuredSaveGate get()=access.measuredSaveGate
     suspend fun <T> transaction(block: suspend (NotesDao) -> T): T {
         val target=space
@@ -929,8 +957,8 @@ const val BACKFILL_MAX_DAYS=731L
         }
     }}
     /** Irreversibly deletes the database, its key file and Keystore key. */
-    fun destroyAll()=access.destroy(space)
-    fun destroy(space: Space)=access.destroy(space)
+    fun destroyAll()=destroy(space)
+    fun destroy(space: Space)=access.destroy(space) {requestPermission();if(space==this.space)writeBinding(space,databaseFor(space))}
 
     // --- History edits (stock is corrected through REVERSE + new CONSUME entries) ---
     /** Changes time and/or amount of a recorded intake, or turns a missed slot into a backfilled intake. */

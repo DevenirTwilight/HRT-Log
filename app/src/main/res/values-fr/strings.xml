@@ -1344,4 +1344,11 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="wb_recent_note">Seules les valeurs que vous avez saisies sont affichées ; les jours sans saisie restent vides.</string>
 <string name="wb_trend_spoken">%1$s, renseigné %3$d jours sur les %2$d derniers</string>
 <string name="wb_trend_spoken_all">%1$s, renseigné %2$d jours</string>
+
+<string name="library_scope_changed">La bibliothèque a changé. Rouvrez-la pour vérifier le résultat, sans répéter automatiquement la dernière opération.</string>
+<string name="library_scope_unknown">Impossible de rattacher cette page restaurée ou ce rappel à la bibliothèque actuelle. Rouvrez-la avant toute modification.</string>
+<string name="library_scope_reopen">Rouvrir la bibliothèque</string>
+<string name="library_scope_loading">Vérification de la bibliothèque…</string>
+<string name="library_restore_pending">Une restauration est en cours. Terminez-la ou annulez-la avant toute modification.</string>
+<string name="library_request_locked">Déverrouillez puis rouvrez l’application avant toute modification.</string>
 </resources>

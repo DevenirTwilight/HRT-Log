@@ -33,8 +33,8 @@ class NonBlockingWriteShellTest {
     private lateinit var model:NotesViewModel
     @Before fun open() {
         db=Room.inMemoryDatabaseBuilder(ui.activity,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
-        val repo=NotesRepository(object:DatabaseAccess(ui.activity){override fun get(space:Space)=db})
-        model=NotesViewModel(repo,ReminderCoordinator(ui.activity,repo),ui.activity)
+        val repo=NotesRepository(object:DatabaseAccess(ui.activity){override fun get(space:Space)=net.plainnotes.app.syntheticLibrary(db)})
+        model=NotesViewModel(repo,ReminderCoordinator(ui.activity,repo),ui.activity).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         UiPrefs(ui.activity).disclaimerAccepted=true
     }
     @After fun close(){ViewModelStore().apply{put("model",model);clear()};db.close()}

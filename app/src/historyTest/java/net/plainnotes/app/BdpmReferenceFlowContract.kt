@@ -28,7 +28,7 @@ abstract class BdpmReferenceFlowContract {
     @Before fun setup(){configureHost()
         val builder=Room.inMemoryDatabaseBuilder(ui.activity,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards)
         helperFactory()?.let{builder.openHelperFactory(it)}
-        db=builder.build()
+        db=builder.build();net.plainnotes.app.debug.syntheticLibraryScope(db)
         repo=NotesRepository(object:DatabaseAccess(ui.activity){override fun get(space:Space)=db})}
     @After fun cleanup(){db.close()}
     private fun click(tag:String) {ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).performClick()}

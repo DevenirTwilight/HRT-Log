@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
@@ -37,20 +38,25 @@ class CalendarTestActivity : ComponentActivity() {
             @Suppress("UNCHECKED_CAST") override fun <T : ViewModel> create(modelClass: Class<T>): T = CalendarFixture(applicationContext) as T
         })[CalendarFixture::class.java]
         val appearance = UiPrefs(this).appearance
-        setContent { NotesTheme(ThemeMode.LIGHT) { NotesApp(fixture.model, appearance, {}) } }
+        setContent {
+            var requestOwner by remember {mutableStateOf(fixture.model)}
+            NotesTheme(ThemeMode.LIGHT) {key(requestOwner) {NotesApp(requestOwner,appearance,{},onLibraryReopen={fixture.reopenLibrary();requestOwner=fixture.model})}}
+        }
         // Same order as MainActivity: registered before composition, so Compose handlers take precedence.
         onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) { override fun handleOnBackPressed() { activityBacks++ } })
     }
 }
-private class CalendarFixture(context: Context) : ViewModel() {
-    private val database = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build().also { it.openHelper.writableDatabase }
+private class CalendarFixture(private val context: Context) : ViewModel() {
+    private val database = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build().also { it.openHelper.writableDatabase;syntheticLibraryScope(it) }
     val repository = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = database })
     private val children = ViewModelStore()
     private val owner = object : ViewModelStoreOwner { override val viewModelStore = children }
-    val model = ViewModelProvider(owner, object : ViewModelProvider.Factory {
+    private fun createModel() = ViewModelProvider(owner, object : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST") override fun <T : ViewModel> create(modelClass: Class<T>): T =
             NotesViewModel(repository, ReminderCoordinator(context, repository), context) as T
     })[NotesViewModel::class.java]
+    @Volatile var model=createModel()
+        private set
     init {
         runBlocking {
             val m = MedicationEntity(name = "Synthetic Estradiol", molecule = "E2", route = "ORAL", unit = "MG", dose_per_intake = 2.0, container_capacity = 40.0,
@@ -59,5 +65,6 @@ private class CalendarFixture(context: Context) : ViewModel() {
         }
         model.sync()
     }
+    fun reopenLibrary() {children.clear();model=createModel()}
     override fun onCleared() { children.clear(); database.close() }
 }

@@ -48,8 +48,8 @@ class UnifiedConcentrationDataPathTest {
         val context=ApplicationProvider.getApplicationContext<Context>()
         db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
         db.openHelper.writableDatabase
-        repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
-        model=NotesViewModel(repo,ReminderCoordinator(context,repo),context)
+        repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=net.plainnotes.app.syntheticLibrary(db)})
+        model=NotesViewModel(repo,ReminderCoordinator(context,repo),context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
     }
     @After fun cleanup(){ androidx.lifecycle.ViewModelStore().apply{put("model",model);clear()};db.close() }
 

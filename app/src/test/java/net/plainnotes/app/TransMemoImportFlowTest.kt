@@ -34,8 +34,8 @@ class TransMemoImportFlowTest {
         context=ApplicationProvider.getApplicationContext()
         db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
         db.openHelper.writableDatabase
-        repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
-        model=NotesViewModel(repo,ReminderCoordinator(context,repo),context)
+        repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=net.plainnotes.app.syntheticLibrary(db)})
+        model=NotesViewModel(repo,ReminderCoordinator(context,repo),context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         input=File.createTempFile("synthetic-tm-", ".db", context.cacheDir)
         val sql=File("../importer/src/test/resources/transmemo_v8_synthetic.sql").readText()
         SQLiteDatabase.openOrCreateDatabase(input,null).use { d ->

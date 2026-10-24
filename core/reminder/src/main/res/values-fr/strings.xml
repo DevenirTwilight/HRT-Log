@@ -8,4 +8,6 @@
 <string name="stock_low_detail">%1$s : le stock ne suffira pas pour la semaine</string>
 <string name="neutral_done">Terminé</string>
 <string name="test_notification_body">Ceci est une notification de test : les rappels peuvent vous parvenir.</string>
+
+<string name="reminder_scope_expired">Ce rappel ne peut plus être vérifié. Ouvrez et déverrouillez l’application pour le vérifier.</string>
 </resources>

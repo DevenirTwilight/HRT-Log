@@ -37,8 +37,8 @@ class AppShellBackNavigationTest {
 
     @Before fun open() {
         db = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
-        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = db })
-        model = NotesViewModel(repo, ReminderCoordinator(context, repo), context)
+        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = net.plainnotes.app.syntheticLibrary(db) })
+        model = NotesViewModel(repo, ReminderCoordinator(context, repo), context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         UiPrefs(context).disclaimerAccepted = true
         // Stands in for MainActivity's callback (finish, or exit to the disguise shell); registered before any Compose handler.
         ui.runOnUiThread { context.onBackPressedDispatcher.addCallback(context, object : OnBackPressedCallback(true) { override fun handleOnBackPressed() { activityBacks++ } }) }

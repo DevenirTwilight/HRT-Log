@@ -1396,3 +1396,9 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 负责人明确授权默认OFF的全库恢复持久化基础设施、必要非破坏性迁移、单一持久generation authority、旧请求/旧会话屏障及恢复后独立核验。先验收并按§106合并#114；仅基于已验收组件续作，不重做Tink/输入/审计或隔离业务重建。新库保留完整业务事实/历史/回收站/全部附件版本和typed关系，旧库/密文/key保留；新的设备本地密钥和dataset/epoch/generation不得复制源alias。完整认证、联合容量/alias/存储/内存预算和独立核验通过前不得激活；单一可判定持久提交点，不能把多rename或两独立事务称原子。旧UI/通知/后台/协程的整数ID请求必须绑定旧generation并拒绝跨库重放。资源/兼容/权限不足fail closed，不扩大256MiB密文/512alias预算，不截断历史。
 
 仅内部合成验收：正式归档→独立认证→持久重建→安全切换→实际新进程读取核对，适用API26/29/35和低内存证据区分NOT_RUN。feature_enabled=0、永久删除OFF、NOT_REVIEWED_EXTERNALLY；不永久冻结PNMEDBK1，不开放导入/恢复UI，不用真实原件、不签名交付发布。不改变PNBAK1密码学/PK/BDPM/P5P6。共享DatabaseAccess/NotesRepository/提醒/Schema仅在明确文件所有权的独立集成PR处理，保留其他未合并工作。
+
+### 147.F MED-02 Runtime Request Scope 实际接线（2026-10-24）
+
+负责人授权先完成#115精确源码六门、三API、独立低内存和三个真实强停点验收，再从已合并主线独立实现页面、编辑/恢复草稿、提醒及后台请求的身份传递。请求随显示事实冻结generation/dataset/epoch，在实际数据库访问与提交边界核对，不能把旧整数ID自动重绑新库。旧SavedState或通知不能证明身份时明确拒绝；旧页面移除可编辑内容，只有明确重新打开产生新owner。提交事实不能随页面重建自动重放；保留提醒调度与中性通知，新有效提醒按现有机制重建。四语解释完整，不把UNKNOWN当空数据/成功，不无限加载。
+
+复用唯一root authority，不增加第二个authority/Schema/密码学协议。共享文件范围限本独立集成分支中的NotesViewModel/MainActivity/AppShell、Repository/DatabaseAccess、提醒协调器/接收器和对应测试；不覆盖其他未合并UI/库存改动。默认feature0、NOT_REVIEWED_EXTERNALLY、真实原件/正式文件选择器/永久删除OFF；不改PNBAK1、PK、BDPM、P5/P6、配额、网络权限，不冻结公开格式、不签名发布。owner-release、fallback保留库完整导出/释放独立后续任务。本轮授权PR满足§106和必需验收后正常受保护合并。

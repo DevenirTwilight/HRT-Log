@@ -53,7 +53,7 @@ class ProcessMeasuredWriteShellTest {
     }
     @Before fun open() {
         db=Room.inMemoryDatabaseBuilder(ui.activity,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
-        repo=NotesRepository(object:DatabaseAccess(ui.activity){override fun get(space:Space)=db})
+        repo=NotesRepository(object:DatabaseAccess(ui.activity){override fun get(space:Space)=net.plainnotes.app.syntheticLibrary(db)})
         runBlocking {
             medication=db.dao().insertMedication(MedicationEntity(name="SYNTHETIC process save",molecule="OTHER",unit="MG",dose_per_intake=0.1,
                 container_capacity=28.0,site_rotation=false,notifications_on=false,active=false,sort_order=0))
@@ -68,7 +68,7 @@ class ProcessMeasuredWriteShellTest {
         model=newModel();UiPrefs(ui.activity).disclaimerAccepted=true
         ui.waitUntil(30000){shadowOf(android.os.Looper.getMainLooper()).idle();!model.state.value.loading && !model.conc.value.loading}
     }
-    private fun newModel()=NotesViewModel(repo,ReminderCoordinator(ui.activity,repo),ui.activity,owner)
+    private fun newModel()=NotesViewModel(repo,ReminderCoordinator(ui.activity,repo),ui.activity,owner).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
     private fun clearModel(){ViewModelStore().apply{put("model",model);clear()}}
     @After fun close(){clearModel();process.cancel();dispatcher.runAll();runBlocking{process.coroutineContext[Job]!!.join()};db.close()}
     private fun await(check:()->Boolean) {

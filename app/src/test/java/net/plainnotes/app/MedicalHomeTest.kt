@@ -89,8 +89,8 @@ class MedicalHomeConfirmFlowTest {
     @Test fun confirmThenUndoInDetail() {
         val context = ui.activity
         val db = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
-        val repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = db })
-        val model = NotesViewModel(repo, ReminderCoordinator(context, repo), context)
+        val repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = net.plainnotes.app.syntheticLibrary(db) })
+        val model = NotesViewModel(repo, ReminderCoordinator(context, repo), context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         UiPrefs(context).disclaimerAccepted = true
         val at = Instant.now().minusSeconds(3 * 86400)
         runBlocking { repo.appointment(AppointmentEntity(type = "ENDO", at_utc = at.toEpochMilli(), at_zone = ZoneId.systemDefault().id, practitioner = "Synthetic doctor",

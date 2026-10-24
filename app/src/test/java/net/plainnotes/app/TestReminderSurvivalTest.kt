@@ -30,7 +30,7 @@ class TestReminderSurvivalTest {
 
     @Before fun open() {
         db = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
-        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = db })
+        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = net.plainnotes.app.syntheticLibrary(db) })
     }
     @After fun close() = db.close()
 

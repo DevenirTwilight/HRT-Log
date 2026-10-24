@@ -43,7 +43,7 @@ class ReminderTestChainTest {
 
     @Before fun open() {
         db = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
-        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = db })
+        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = net.plainnotes.app.syntheticLibrary(db) })
         coordinator = ReminderCoordinator(context, repo)
         shadowOf(context as Application).grantPermissions(Manifest.permission.POST_NOTIFICATIONS)
         ShadowAlarmManager.setCanScheduleExactAlarms(true)

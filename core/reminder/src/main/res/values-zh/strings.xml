@@ -8,4 +8,6 @@
 <string name="stock_low_detail">%1$s：库存不够接下来一周了</string>
 <string name="neutral_done">完成</string>
 <string name="test_notification_body">这是一条测试通知，说明提醒可以送达。</string>
+
+<string name="reminder_scope_expired">无法确认此提醒的归属，请打开并解锁应用后核对。</string>
 </resources>

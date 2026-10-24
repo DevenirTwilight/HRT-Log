@@ -8,4 +8,6 @@
 <string name="stock_low_detail">%1$s: stock will not last the coming week</string>
 <string name="neutral_done">Done</string>
 <string name="test_notification_body">This is a test notification. Reminders can reach you.</string>
+
+<string name="reminder_scope_expired">This reminder can no longer be verified. Open and unlock the app to review it.</string>
 </resources>

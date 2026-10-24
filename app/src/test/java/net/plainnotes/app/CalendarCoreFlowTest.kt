@@ -45,8 +45,8 @@ class CalendarCoreFlowTest {
 
     @Before fun open() {
         db = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
-        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = db })
-        model = NotesViewModel(repo, ReminderCoordinator(context, repo), context)
+        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = net.plainnotes.app.syntheticLibrary(db) })
+        model = NotesViewModel(repo, ReminderCoordinator(context, repo), context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         UiPrefs(context).disclaimerAccepted = true
         runBlocking {
             val m = MedicationEntity(name = medName, molecule = "E2", route = "ORAL", unit = "MG", dose_per_intake = 2.0, container_capacity = 40.0,

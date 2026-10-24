@@ -30,7 +30,7 @@ class RecordedReferenceUiTest(private val locale:String) {
     private val at=Instant.parse("2026-03-28T12:00:00Z")
     private val original=UserReferenceProduct("SYNTHETIC original reference",listOf("SYNTHETIC ingredient A"),"2 mg / tablet","tablet",listOf("oral"),sourceVersion="historical-v1",recordedOn="2026-10-16")
     @Before fun setup(){RuntimeEnvironment.setQualifiers("$locale-w320dp-h640dp-xxhdpi");RuntimeEnvironment.setFontScale(2f)
-        db=Room.inMemoryDatabaseBuilder(ui.activity,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build();repo=NotesRepository(object:DatabaseAccess(ui.activity){override fun get(space:Space)=db})}
+        db=Room.inMemoryDatabaseBuilder(ui.activity,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build();repo=NotesRepository(object:DatabaseAccess(ui.activity){override fun get(space:Space)=net.plainnotes.app.syntheticLibrary(db)})}
     @After fun cleanup(){model?.let{ViewModelStore().apply{put("source-model",it);clear()}};db.close()}
     private suspend fun medication(active:Boolean=true)=repo.saveMedication(MedicationEntity(name="SYNTHETIC logged medication",molecule="OTHER",unit="TABLET",dose_per_intake=1.0,container_capacity=28.0,soon_alert_minutes=0,late_after_minutes=60,site_rotation=false,notifications_on=false,active=active,sort_order=0),null,RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),at)
     private suspend fun link(id:Long)=repo.associateInitialMedication(id,UUID.randomUUID().toString(),original,repo.referencePreviewEpoch())
@@ -68,7 +68,7 @@ class RecordedReferenceUiTest(private val locale:String) {
     @Test fun actualHistoryEditEntryOpensReadOnlySourceWithoutSavingTheRecord() {
         // A history-only fixture has no scheduled rule: ViewModel refresh must not reconcile unrelated missed slots.
         val pair=runBlocking{val id=medication(active=false);repo.unscheduled(id,at,1.0);repo.records().single() to repo.referencePreviewEpoch()}
-        val vm=NotesViewModel(repo,ReminderCoordinator(ui.activity,repo),ui.activity).also{model=it}
+        val vm=NotesViewModel(repo,ReminderCoordinator(ui.activity,repo),ui.activity).also {net.plainnotes.app.awaitRuntimeLibrary(it)}.also{model=it}
         val dialogs=HistoryDialogs().apply{editRecord=pair.first;referenceEpoch=pair.second}
         val meds=runBlocking{repo.medications().associateBy{it.id}}
         ui.setContent{NotesTheme(ThemeMode.LIGHT){HistoryRecordDialogs(dialogs,vm,meds)}}

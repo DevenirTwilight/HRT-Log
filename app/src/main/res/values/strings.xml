@@ -1344,4 +1344,11 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="wb_recent_note">Only values you noted are shown; days without an entry are left blank.</string>
 <string name="wb_trend_spoken">%1$s, noted on %3$d of the last %2$d days</string>
 <string name="wb_trend_spoken_all">%1$s, noted on %2$d days</string>
+
+<string name="library_scope_changed">The library has changed. Reopen it to review the result; do not repeat the previous operation automatically.</string>
+<string name="library_scope_unknown">This restored page or reminder cannot be matched to the current library. Reopen the library before making changes.</string>
+<string name="library_scope_reopen">Reopen library</string>
+<string name="library_scope_loading">Checking library…</string>
+<string name="library_restore_pending">A library restore is in progress. Finish it or cancel it before making changes.</string>
+<string name="library_request_locked">Unlock and reopen the app before making changes.</string>
 </resources>

@@ -41,8 +41,8 @@ class Ui03ScreenshotTest(private val locale: String, private val width: Int, pri
         RuntimeEnvironment.setQualifiers("$locale-w${width}dp-h${if (width == 320) 640 else 891}dp-xxhdpi"); RuntimeEnvironment.setFontScale(font)
         val context = ui.activity
         val db = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
-        val repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = db })
-        val model = NotesViewModel(repo, ReminderCoordinator(context, repo), context)
+        val repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = net.plainnotes.app.syntheticLibrary(db) })
+        val model = NotesViewModel(repo, ReminderCoordinator(context, repo), context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         UiPrefs(context).disclaimerAccepted = true
         try {
             runBlocking {

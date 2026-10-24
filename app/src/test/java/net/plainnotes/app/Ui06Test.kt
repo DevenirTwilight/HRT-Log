@@ -281,8 +281,8 @@ class Ui06ConfirmCardShellTest {
 
     @org.junit.Before fun open() {
         db = androidx.room.Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
-        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = db })
-        model = NotesViewModel(repo, net.plainnotes.app.reminder.ReminderCoordinator(context, repo), context)
+        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = net.plainnotes.app.syntheticLibrary(db) })
+        model = NotesViewModel(repo, net.plainnotes.app.reminder.ReminderCoordinator(context, repo), context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         UiPrefs(context).disclaimerAccepted = true
     }
     @org.junit.After fun close() { androidx.lifecycle.ViewModelStore().apply { put("model", model); clear() }; db.close() }

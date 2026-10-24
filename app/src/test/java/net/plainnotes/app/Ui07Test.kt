@@ -356,8 +356,8 @@ class Ui07UndoShellTest {
 
     @Before fun open() {
         db = Room.inMemoryDatabaseBuilder(context, NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
-        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = db })
-        model = NotesViewModel(repo, ReminderCoordinator(context, repo), context)
+        repo = NotesRepository(object : DatabaseAccess(context) { override fun get(space: Space) = net.plainnotes.app.syntheticLibrary(db) })
+        model = NotesViewModel(repo, ReminderCoordinator(context, repo), context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         UiPrefs(context).disclaimerAccepted = true
     }
     @After fun close() { androidx.lifecycle.ViewModelStore().apply { put("model", model); clear() }; db.close() }

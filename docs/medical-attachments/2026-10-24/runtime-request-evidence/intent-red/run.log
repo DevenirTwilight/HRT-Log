@@ -1,0 +1,113 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:compileKotlin UP-TO-DATE
+> Task :core:domain:compileJava NO-SOURCE
+> Task :core:domain:processResources NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :core:domain:jar UP-TO-DATE
+> Task :importer:compileKotlin UP-TO-DATE
+> Task :importer:compileJava NO-SOURCE
+> Task :importer:processResources NO-SOURCE
+> Task :importer:classes UP-TO-DATE
+> Task :importer:jar UP-TO-DATE
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preDebugBuild UP-TO-DATE
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:data:generateDebugResources UP-TO-DATE
+> Task :core:data:packageDebugResources UP-TO-DATE
+> Task :core:data:processDebugNavigationResources UP-TO-DATE
+> Task :core:data:parseDebugLocalResources UP-TO-DATE
+> Task :core:data:generateDebugRFile UP-TO-DATE
+> Task :core:data:kspDebugKotlin UP-TO-DATE
+> Task :core:data:compileDebugKotlin UP-TO-DATE
+> Task :core:data:javaPreCompileDebug UP-TO-DATE
+> Task :core:data:compileDebugJavaWithJavac UP-TO-DATE
+> Task :core:data:transformDebugClassesWithAsm UP-TO-DATE
+> Task :core:data:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :core:data:processDebugJavaRes UP-TO-DATE
+> Task :core:data:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core:reminder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:reminder:preBuild UP-TO-DATE
+> Task :core:reminder:preDebugBuild UP-TO-DATE
+> Task :core:reminder:generateDebugResources UP-TO-DATE
+> Task :core:reminder:packageDebugResources UP-TO-DATE
+> Task :core:reminder:processDebugNavigationResources UP-TO-DATE
+> Task :core:reminder:parseDebugLocalResources UP-TO-DATE
+> Task :core:reminder:generateDebugRFile UP-TO-DATE
+> Task :core:reminder:kspDebugKotlin UP-TO-DATE
+> Task :core:reminder:compileDebugKotlin UP-TO-DATE
+> Task :core:reminder:javaPreCompileDebug UP-TO-DATE
+> Task :core:reminder:compileDebugJavaWithJavac UP-TO-DATE
+> Task :core:reminder:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core:data:mapDebugSourceSetPaths UP-TO-DATE
+> Task :core:data:compileDebugLibraryResources UP-TO-DATE
+> Task :core:data:writeDebugAarMetadata UP-TO-DATE
+> Task :core:reminder:preDebugUnitTestBuild UP-TO-DATE
+> Task :core:reminder:writeDebugAarMetadata
+> Task :core:reminder:bundleLibRuntimeToJarDebug
+> Task :core:reminder:checkDebugUnitTestAarMetadata
+> Task :core:reminder:mapDebugSourceSetPaths
+> Task :core:reminder:mapDebugUnitTestSourceSetPaths
+> Task :core:reminder:generateDebugUnitTestResources
+> Task :core:reminder:compileDebugLibraryResources
+> Task :core:data:extractDeepLinksDebug UP-TO-DATE
+> Task :core:data:processDebugManifest UP-TO-DATE
+> Task :core:reminder:extractDeepLinksDebug
+> Task :core:reminder:processDebugManifest
+> Task :core:reminder:mergeDebugUnitTestResources
+> Task :core:reminder:processDebugUnitTestManifest
+> Task :core:reminder:javaPreCompileDebugUnitTest
+> Task :core:data:generateDebugAssets UP-TO-DATE
+> Task :core:data:mergeDebugAssets UP-TO-DATE
+> Task :core:reminder:generateDebugUnitTestAssets UP-TO-DATE
+> Task :core:reminder:generateDebugAssets UP-TO-DATE
+> Task :core:reminder:mergeDebugAssets
+> Task :core:reminder:mergeDebugUnitTestAssets
+> Task :core:reminder:processDebugJavaRes
+> Task :core:reminder:processDebugUnitTestResources
+> Task :core:reminder:packageDebugUnitTestForUnitTest
+> Task :core:reminder:generateDebugUnitTestConfig
+> Task :core:reminder:kspDebugUnitTestKotlin
+
+> Task :core:reminder:compileDebugUnitTestKotlin
+w: file:///workspace/HRT-Log-med02-runtime/core/reminder/src/test/java/net/plainnotes/app/reminder/ExactAlarmTest.kt:26:253 'val nextScheduledAlarm: ShadowAlarmManager.ScheduledAlarm?' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-med02-runtime/core/reminder/src/test/java/net/plainnotes/app/reminder/ExactAlarmTest.kt:28:347 'val nextScheduledAlarm: ShadowAlarmManager.ScheduledAlarm?' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-med02-runtime/core/reminder/src/test/java/net/plainnotes/app/reminder/LockedBootAlarmTest.kt:29:161 'val nextScheduledAlarm: ShadowAlarmManager.ScheduledAlarm?' is deprecated. Deprecated in Java.
+
+> Task :core:reminder:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :core:reminder:processDebugUnitTestJavaRes
+
+> Task :core:reminder:testDebugUnitTest
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+
+ReminderRequestScopeTest > creatingNewActionCannotRetagAnAlreadyIssuedPendingIntent FAILED
+    java.lang.AssertionError at ReminderRequestScopeTest.kt:33
+
+1 test completed, 1 failed
+
+> Task :core:reminder:testDebugUnitTest FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':core:reminder:testDebugUnitTest'.
+> There were failing tests. See the report at: file:///workspace/HRT-Log-med02-runtime/core/reminder/build/reports/tests/testDebugUnitTest/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 28s
+55 actionable tasks: 22 executed, 33 up-to-date

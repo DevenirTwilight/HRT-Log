@@ -31,8 +31,8 @@ class BackupExportFlowTest {
         context=ApplicationProvider.getApplicationContext()
         context.getSharedPreferences("prefs",0).edit().clear().commit()
         db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build();db.openHelper.writableDatabase
-        val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
-        model=NotesViewModel(repo,ReminderCoordinator(context,repo),context)
+        val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=net.plainnotes.app.syntheticLibrary(db)})
+        model=NotesViewModel(repo,ReminderCoordinator(context,repo),context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         file=File.createTempFile("b2-synthetic-export-",".pnbak",context.cacheDir)
     }
     @After fun close(){ViewModelStore().apply{put("model",model);clear()};db.close();file.delete();context.getSharedPreferences("prefs",0).edit().clear().commit()}

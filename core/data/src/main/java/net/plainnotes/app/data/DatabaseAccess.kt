@@ -111,7 +111,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
     }
     /** One root native transaction serializes the final authority switch with the ENTIRE
      * selected database transaction (including its commit). No untrusted callback selects a path. */
-    internal suspend fun <T> withGenerationTransaction(space:Space,checkBinding:(NotesDatabase)->Unit,
+    internal suspend fun <T> withGenerationTransaction(space:Space,checkBinding:(NotesDatabase)->Unit,beforeCommit:()->Unit={},
         action:suspend(NotesDatabase)->T):T = holdGeneration().use {
         val selected=get(space)
         val root=synchronized(this) {instances[space]} ?: selected // overridden in-memory test access
@@ -119,7 +119,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
             val current=get(space)
             if(space==Space.PRIMARY)LibraryAuthority.requireNoPending(root.openHelper.writableDatabase)
             checkBinding(current)
-            if(current===root) action(current) else current.withTransaction {action(current)}
+            if(current===root) action(current).also {beforeCommit()} else current.withTransaction {action(current).also {beforeCommit()}}
         }
     }
     companion object {
@@ -133,12 +133,13 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
             check(handle.root.isOpen && db.isOpen)
             return handle.owner.holdGeneration().use {
                 handle.root.runInTransaction(java.util.concurrent.Callable {
-                    check(LibraryAuthority.identity(handle.root.openHelper.writableDatabase)==handle.identity) {"Retired database handle"}
+                    if(LibraryAuthority.identity(handle.root.openHelper.writableDatabase)!=handle.identity)throw LibraryScopeMismatch()
                     block()
                 })
             }
         }
         internal fun storageContext(db:NotesDatabase,fallback:Context):Context=synchronized(handles) {handles[db]?.context ?: fallback}
+        internal fun authorityRoot(db:NotesDatabase):NotesDatabase=synchronized(handles) {handles[db]?.root ?: db}
         internal fun managedGeneration(db:NotesDatabase)=synchronized(handles) {handles[db]?.identity?.let {it!="LEGACY"} ?: false}
         internal fun assertActiveHandle(db:NotesDatabase) {
             val h=synchronized(handles) {handles[db]} ?: return
@@ -206,9 +207,10 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
         }
     }
     /** Closes and deletes one space's database, wrapped key and Keystore alias ("delete all data"). */
-    @Synchronized fun destroy(space:Space=current) {
+    @Synchronized fun destroy(space:Space=current,checkRequest:()->Unit={}) {
         check(liveGenerationLeases==0) {"Database generation work is still running"}
         measuredSaveGate.synchronousMutation(space) {
+            checkRequest()
             if(space==Space.PRIMARY) {
                 val root=legacyRoot(space).openHelper.writableDatabase
                 root.query("SELECT 1 FROM library_candidate LIMIT 1").use {check(!it.moveToFirst()) {"Retained generations require an approved deletion policy"}}

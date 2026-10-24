@@ -25,8 +25,8 @@ class UnifiedConcentrationNavigationTest {
         val context=ui.activity
         val db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
         db.openHelper.writableDatabase
-        val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
-        val model=NotesViewModel(repo,ReminderCoordinator(context,repo),context)
+        val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=net.plainnotes.app.syntheticLibrary(db)})
+        val model=NotesViewModel(repo,ReminderCoordinator(context,repo),context).also {net.plainnotes.app.awaitRuntimeLibrary(it)}
         try {
             UiPrefs(context).disclaimerAccepted=true
             val prefs=UiPrefs(context)

@@ -73,7 +73,27 @@ class UiPrefs(context: Context) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun NotesApp(model: NotesViewModel, appearance: Appearance, onAppearance: (Appearance) -> Unit, backToCalendar: Boolean = true,
     writeProgress:net.plainnotes.app.domain.write.WriteProgressSummary?=null,
-    onWriteResultCheck:(()->Unit)?=null,onWriteRetry:(()->Unit)?=null) {
+    onWriteResultCheck:(()->Unit)?=null,onWriteRetry:(()->Unit)?=null,onLibraryReopen:()->Unit={}) {
+    val library by model.librarySession.collectAsStateWithLifecycle()
+    if(library !is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready) {
+        androidx.compose.material3.Surface(Modifier.fillMaxSize()) {
+            Column(Modifier.fillMaxSize().padding(24.dp).testTag("library-request-boundary"),
+                verticalArrangement=Arrangement.Center,horizontalAlignment=Alignment.CenterHorizontally) {
+                when(val status=library) {
+                    net.plainnotes.app.runtime.RuntimeLibrarySession.State.Loading->{
+                        androidx.compose.material3.CircularProgressIndicator()
+                        Text(stringResource(R.string.library_scope_loading))
+                    }
+                    is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Unavailable->{
+                        Text(stringResource(status.message))
+                        androidx.compose.material3.FilledTonalButton(onClick=onLibraryReopen) {Text(stringResource(R.string.library_scope_reopen))}
+                    }
+                    else->Unit
+                }
+            }
+        }
+        return
+    }
     val ownedWriteProgress by model.measuredWriteProgress.collectAsStateWithLifecycle()
     val effectiveWriteProgress=writeProgress ?: ownedWriteProgress
     val checkWriteResult=onWriteResultCheck ?: {model.checkMeasuredSave();Unit}
