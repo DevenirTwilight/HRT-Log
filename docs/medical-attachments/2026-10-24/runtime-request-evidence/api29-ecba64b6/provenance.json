@@ -1,0 +1,41 @@
+{
+  "head": "ecba64b605092b67bb1538ced6eb54d86a5d4905",
+  "tree": "4e13c6d63dfff4f2096f4de2ef58ea86dd65062d",
+  "run": 40074939019,
+  "job": 120816275165,
+  "artifact": 12552956855,
+  "sha256": "e935a272e79b6d51f23cb95428f7352080c66b7f1829ce9860c59e0c30393088",
+  "crc": "PASS",
+  "reports": {
+    "net.plainnotes.app.data.AttachmentSqlCipherMigrationTest.html": {
+      "tests": 6,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.data.LibraryRestoreAndroidTest.html": {
+      "tests": 4,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.data.RuntimeLibraryRequestAndroidTest.html": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.shell.InAppNavigationLockAndroidTest.html": {
+      "tests": 13,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.shell.ReminderTestDeviceTest.html": {
+      "tests": 3,
+      "failures": 0,
+      "skipped": 0
+    },
+    "net.plainnotes.app.shell.RuntimeRequestUiAndroidTest.html": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    }
+  }
+}

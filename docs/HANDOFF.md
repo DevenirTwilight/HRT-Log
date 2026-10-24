@@ -1,5 +1,7 @@
 ## MED-02 #115 已合并；Runtime Scope 真实接线验收中 — 2026-10-24
 
+ecba64b6普通原生API26/29均SUCCESS且官方ZIP/SHA/CRC已核：新SQLCipher runtime1、Compose1、旧导航13/提醒3/restore4/迁移6各API全部0fail/0skip，原件分别api26-ecba64b6和api29-ecba64b6。push host job120816200083已SUCCESS；PR host仍在途。由于随后出现真实低内存安全阻塞，API35失败job暂不再请求补跑，避免为已被阻塞的源码额外消耗整轮测试；此前gh请求未被接受，实际重试次数0。仅继续读取已经运行的同源push API35（run40074937029/job120816200318）原件。#116保持Draft/不合并，不把普通26/29或旧源512MiB通过变成最终源低内存PASS。下一实际阻断是这次正式参数/原规模512MiB的进程退出与恢复证据，不重新研究Tink或降低KDF/夹具/内存限制。
+
 **新增独立安全阻塞：最终源ecba64b6低内存40074939096真实FAIL_PROCESS_CRASH，不重跑求绿。** 官方ZIP12553195595 SHA1c58e959bcb4a40f26ad3182f47c2e7ca1835b4e3b3820fe06efb1604f5ac60d/CRC已核并保留完整原件。目标PID3892，heap探针+正向全恢复+撤权共3项完成，第三个restore用例jointAliasAndStrictHeadroom...执行中进程消失，剩余2项未完成，三强停点因前置失败NOT_RUN。logcat有广泛系统内存压力和多进程退出，但原件无匹配目标的kernel kill行/应用fatal栈，直接终止机制UNDETERMINED，不冒称Java OOM或已证实kernel LMK。首源162低内存PASS不能覆盖此FAIL；ecba相对162只改错误页布局，core/data与reminder无diff，尚不能由此推断长期资源可靠性。MED完整低内存验收仍BLOCKED，feature0/真实入口OFF。此子项不允许改KDF参数、降低夹具、扩大内存或重跑挑绿；保留并定位为独立后续最小资源/恢复问题，其他已授权scope验收继续。PR #116最终源API29已SUCCESS，26/35和host仍需准确收尾。
 
 ecba64b6 PR API35 job120816275150在07:40:59、任何Gradle原生任务前因 `adb: unable to connect for root: closed` 失败（configure_ansm_native_runtime.py 的adb root），没有报告工件；这是环境准备失败/测试NOT_RUN，不是代码断言通过。原完整log已保存api35-ecba64b6-first-setup-failure.log。同源仅计划一次失败job重试；父workflow仍in_progress时gh拒绝“job cannot be rerun”，实际没有启动重试。待父run40074939019结束后只提交该job一次，不重跑其余成功作业、不改源码/断言，失败原件保留。首源162579c8的26/35在新源更新后被workflow并发策略取消，superseded-*原始状态JSON保留，不称通过或基础设施失败。
