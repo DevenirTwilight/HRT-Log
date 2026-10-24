@@ -1,3 +1,11 @@
+## MED-02 #119 一次补验真实旧UI断言失败；仅修就绪同步，最新cd01 — 2026-10-24
+
+7d的API35一次补验120907265812完成，真实附件App2/Core及八强停均已越过，后续DisguiseFlowAndroidTest.realSecretWithOrdinaryPinConfiguredOpensPrimaryWithoutASecondPinAndBackLocks在line103 app_name为空失败；原完整log/官方artifact12565291471及provider digest保存在candidate-7d3186fd/pr-api35-retry-*。不能把这次叫启动infra或通过；同源push全套通过也不抵消PR失败。该SHA不再重跑。
+
+源码核对：原test await只等Activity RESUMED和Compose idle；NotesViewModel.runtimeResumed用viewModelScope异步IO，AppShell在library非Ready时只显示边界/Loading并return，标题尚不存在。仅新增测试就绪等待（10s，沿既有UI测试惯例），等待每次持续断言PRIMARY/无第二PIN/无library_scope_reopen，随后原全部身份/无锁/标题/返回即锁断言逐字保留。未知/Unavailable立即失败，不以延时掩盖边界错误。没有改AppShell/MainActivity/NotesVM或生产权限逻辑；不能断言失败当时唯一原因已证明，需新源实际验证。
+
+最新源cd01abb708ca472af194035700f7b351880104ba（0636+cd01两次仅此测试同步与即时guard补齐），无本地编译条件：云环境仍不可用，实际新源CI尚待。正常GitHub CI会验最终SHA，不借7d绿灯合并；若仍失败，保留新原件，不继续盲延时或重跑凑绿。#119继续Draft，feature0/OFF/NOT_REVIEWED_EXTERNALLY。源码已通过GitHub按blob SHA顺序更新、证据分支继续通过接口保存；环境恢复后先fetch，不能用旧本地分支覆盖远端。
+
 ## MED-02 #119 最终7d三API实际成功；PR35补验仍在执行 — 2026-10-24
 
 7d3186fd push Android40104321069全部作业SUCCESS，包括API35 job120903036414；PR API26/API29/主Android/JVM均已SUCCESS，Science/独立低内存12+8已SUCCESS。API35完整原job log已通过独立GitHub接口保存candidate-7d3186fd/push-api35-native.log：实际App2严格runner完成、Core7及原库四点/操作四点fresh PID各PASS，正式release guard另有host log。此为同源实际原生结果，不是编译推断。
