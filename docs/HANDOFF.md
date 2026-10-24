@@ -1,6 +1,12 @@
+## MED-02 #119 DocumentsUI选择仍未通过，最小测试修正已推90f04f08 — 2026-10-24
+
+9d735355低内存原件12+8全部通过，但push40101033110/PR40101035984 API26均在真实取消后第二次选择sample.pdf超时；成功路径未提交，不能宣称真实SAF链通过。push官方ZIP12563525569/原HTML与PR完整job log保留operation-flow/candidate-9d735355，CRC/SHA已核；此目录含成功与失败，不代表全源已验收。运行中核对反例实际通过，生产组件未由该超时证明有缺陷。
+
+90f04f08仅测试以真实DocumentsUI精确可见文件行坐标注入DOWN/UP替换clickable祖先假设，并保存有界窗口树和app instrumentation原件；编译33s PASS，生产代码与9d完全一致。仍需实际验假设，未放宽时限/原断言，未mock SAF。新PR Android40102417999、低内存40102417982和Science40102417976已自动排队，#119保持Draft/未合并，不补跑旧SHA；旧运行继续保留已执行原件。
+
 ## MED-02 #119 最终源低内存原件核验通过 — 2026-10-24
 
-9d735355精确源：独立低内存40101035993 SUCCESS，官方artifact12562443412 SHA256=88f3be02710a25d11926621b0c3612910c6faf4279e7a688bd42ba2cb85b9c48且ZIP CRC PASS。原件/原日志/采样与收据保存operation-flow/accepted-9d735355/lowmem：实际OK12，原generation四点与operation PREPARED/STAGED/IN_COMMIT/COMMITTED四点各verify OK1，新PID断言含原业务事实摘要不变。512MiB/192MiB未改；不代表App viewer低内存或真机通过。三API/正常Android仍在跑，#119保持Draft，不提前合并。
+9d735355精确源：独立低内存40101035993 SUCCESS，官方artifact12562443412 SHA256=88f3be02710a25d11926621b0c3612910c6faf4279e7a688bd42ba2cb85b9c48且ZIP CRC PASS。原件/原日志/采样与收据保存operation-flow/candidate-9d735355/lowmem：实际OK12，原generation四点与operation PREPARED/STAGED/IN_COMMIT/COMMITTED四点各verify OK1，新PID断言含原业务事实摘要不变。512MiB/192MiB未改；不代表App viewer低内存或真机通过。三API/正常Android仍在跑，#119保持Draft，不提前合并。
 
 external-review/scope-guard-receipt.json核对相对主线f5f94238的main manifest/build配置/依赖/AttachmentSchema完全未变，无Room schema文件或AppShell变更。该静态收据不是release运行证明，最终release隔离仍由最终源码正常CI判定。外审未执行/feature0/真实入口OFF不变。
 

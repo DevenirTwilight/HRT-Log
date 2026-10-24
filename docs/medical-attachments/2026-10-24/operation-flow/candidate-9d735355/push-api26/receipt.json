@@ -1,0 +1,10 @@
+{
+  "source_sha": "9d735355ca27b969e8b209d00fb78640814d7596",
+  "run": 40101033110,
+  "artifact": 12563525569,
+  "sha256": "dd3b43e67707efd9760b53c0d9b1a35f3705db0d0990da9542bc3b559db20536",
+  "crc": "PASS",
+  "core": "Operation3 PASS",
+  "app": "2 tests, 1 failure; actual DocumentsUI cancelled then second filename selection timeout at line91; no green inference",
+  "note": "candidate-9d735355 directory initially held successful low-memory only; this API failure is retained alongside it, not accepted as success"
+}
