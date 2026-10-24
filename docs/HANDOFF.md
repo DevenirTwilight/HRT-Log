@@ -1,3 +1,11 @@
+## MED-02 PNMEDBK2 first production checkpoint — 2026-10-24
+
+Authorization170d78e0 persisted/pushed. Implemented strict binary collection index (1–8 explicit ACTIVE/RETAINED libraries, exact scoped object membership, independent bounded decoder, aggregate32MiB/8MiB/100000/1000 limits) and v2-specific header/HKDF/AAD plus library-bound portable key wrapping in the existing crypto adapter. Legacy parse/fresh/WrapAttempt remain v1-only; v1 wire meaning unchanged. No public calls, resource admission permit, Room/backup-v1 mutation or activation.
+
+Local production compilation PASS. Targeted existing MedicalArchiveTest and new MedicalCollectionIndexTest PASS; exact XML counts pending receipt extraction. New native collection evidence NOT_RUN. First layer is membership/crypto plumbing only, NOT a complete writer/reader or restored-write breakthrough. Next: collection writer + independent authenticated reader reusing mature Tink/manifest/oracle, then retained snapshots, atomic collection recovery and real durable joint admission.
+
+PR120 original93461e67 native failure is identified test-fixture misuse of saveAppointment(nonzero absent ID), not a production attachment failure. Minimal fixture correction60dc382b on its original branch uses id0/returned ID; new native CI pending. Failure ZIP SHA/CRC preserved in independent evidence branch; do not merge old failing source.
+
 ## MED-02 PNMEDBK2 implementation authorization — 2026-10-24
 
 Owner explicitly approved the concrete collection proposal from PR120 source93461e67. This authorizes OFF PNMEDBK2 implementation, not public enablement, permanent freeze/deletion, quota changes or real originals. New independent branch feature/med02-collection-archive-20261024 starts from actual merged369267e; PR120 remains separate and running native CI, do not copy its unaccepted code.
