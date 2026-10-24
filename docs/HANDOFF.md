@@ -1,3 +1,7 @@
+## MED-02 #119最终705 API26-push/API29-PR原件核验通过 — 2026-10-24
+
+官方artifact12566974703/12567028278逐一核GitHub SHA与全ZIP CRC，真实SAF App2/Core3各0fail/0skip及操作四freshPID每点OK1，原件入accepted-70584c6f，仍需正常Android其余作业结束。此处不冒充PR API26/API35或完整host已结束，不改生产候选。
+
 ## MED-02 #119最终70584c6f专项通过，正常CI仍待结束 — 2026-10-24
 
 本分支仅保存原件/交接，不是另一套生产候选，不合并本证据分支绕过#119。生产源70584c6f00ba167e77f2406e87d301b329db1acc修正唯一JVM就诊列表异步就绪断言；完整本地导航17/0fail/error/skip，原CI两Appointment失败已在生产分支保留。相对2a47生产/原生/配置未变。外审材料和2a47三API/低内存官方SHA+CRC原件已入#119。

@@ -1,0 +1,22 @@
+{
+  "net.plainnotes.app.shell.RuntimeRequestUiAndroidTest.html": {
+    "tests": 1,
+    "failures": 0,
+    "skipped": 0
+  },
+  "net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.html": {
+    "tests": 3,
+    "failures": 0,
+    "skipped": 0
+  },
+  "net.plainnotes.app.shell.InAppNavigationLockAndroidTest.html": {
+    "tests": 13,
+    "failures": 0,
+    "skipped": 0
+  },
+  "net.plainnotes.app.attachments.AttachmentOperationAndroidTest.html": {
+    "tests": 2,
+    "failures": 0,
+    "skipped": 0
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "source_sha": "70584c6f00ba167e77f2406e87d301b329db1acc",
+  "artifact": {
+    "id": 12567028278,
+    "node_id": "MDg6QXJ0aWZhY3QxMjU2NzAyODI3OA==",
+    "name": "attachment-poc-api29",
+    "size_in_bytes": 272042,
+    "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12567028278",
+    "archive_download_url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/actions/artifacts/12567028278/zip",
+    "expired": false,
+    "digest": "sha256:885e7b2ccd60ce28c6e8aeb214896ac124cbff204fa28d45c8456c37b7cfd9e0",
+    "created_at": "2026-10-24T16:53:44Z",
+    "updated_at": "2026-10-24T16:53:44Z",
+    "expires_at": "2027-01-22T16:34:44Z",
+    "workflow_run": {
+      "id": 40112205294,
+      "repository_id": 1406091596,
+      "head_repository_id": 1406091596,
+      "head_branch": "feature/med02-operation-flow-20261024",
+      "head_sha": "70584c6f00ba167e77f2406e87d301b329db1acc"
+    }
+  },
+  "sha256": "885e7b2ccd60ce28c6e8aeb214896ac124cbff204fa28d45c8456c37b7cfd9e0",
+  "zip_crc": "PASS"
+}
