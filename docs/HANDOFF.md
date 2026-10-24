@@ -1,3 +1,9 @@
+## MED-02 #119最终70584c6f专项通过，正常CI仍待结束 — 2026-10-24
+
+本分支仅保存原件/交接，不是另一套生产候选，不合并本证据分支绕过#119。生产源70584c6f00ba167e77f2406e87d301b329db1acc修正唯一JVM就诊列表异步就绪断言；完整本地导航17/0fail/error/skip，原CI两Appointment失败已在生产分支保留。相对2a47生产/原生/配置未变。外审材料和2a47三API/低内存官方SHA+CRC原件已入#119。
+
+最终705低内存40112205306 SUCCESS，官方artifact12566958837已下载SHA/全CRC通过，原12及generation4/operation4 fresh-PID逐一OK；原ZIP和收据accepted-70584c6f/low-memory。本次阶段采样不是峰值/全viewer低内存/真机；外审未做、feature0/公共入口和永久删除OFF。正常最终Science/JVM绿，Android其他作业仍在运行；不合并/不重跑旧源。下一步验#119最终六门无冲突无review后正常合并核主线，本证据分支继续保存最终状态，不能据旧PENDING重复实现底座。
+
 ## MED-02 #119 当前2a47重连合同4与低内存12+8真实通过 — 2026-10-24
 
 最新源2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895：原子普通快进提交（parent cd01，无force），只改CI模拟器启动、4个对应合同检查、CI命令和本次交接。cd01 PR35测试前再次root transport closed原log已保留candidate-cd01abb7/api35-startup-failed.log。新helper捕获确认返回失败后，最多30s重连，实际同serial+UID0才允许setprop；未知/非root/换设备/超时拒绝。原emulator/API/qemu、192m heap属性、120s framework重启、NativeHeapProbe和512MiB/所有预算保留，不做P4性能研究、不改应用权限。
