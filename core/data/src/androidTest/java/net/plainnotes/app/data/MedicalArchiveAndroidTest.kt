@@ -104,6 +104,18 @@ class MedicalArchiveAndroidTest:MedicalArchiveContract() {
     }
     @Test fun collectionWriterAndIndependentReaderPreserveTwoTypedLibrariesAfterSourceKeyLoss() {
         val file=File.createTempFile("synthetic-collection-",".cipher",app.cacheDir)
+        val samples=org.json.JSONArray()
+        fun sample(stage:String) {
+            val vm=Runtime.getRuntime();val memory=android.os.Debug.MemoryInfo();android.os.Debug.getMemoryInfo(memory)
+            val status=File("/proc/self/status").readLines()
+            fun kib(name:String)=status.firstOrNull {it.startsWith("$name:")}?.trim()?.split(Regex("\\s+"))?.getOrNull(1)?.toLongOrNull()
+            samples.put(org.json.JSONObject().put("stage",stage).put("javaUsedBytes",vm.totalMemory()-vm.freeMemory())
+                .put("javaMaxBytes",vm.maxMemory()).put("nativeHeapAllocatedBytes",android.os.Debug.getNativeHeapAllocatedSize())
+                .put("totalPssKiB",memory.totalPss).put("rssKiB",kib("VmRSS") ?: org.json.JSONObject.NULL).put("processHwmKiB",kib("VmHWM") ?: org.json.JSONObject.NULL))
+            File(app.filesDir,"synthetic-collection-memory.json").writeText(org.json.JSONObject().put("api",android.os.Build.VERSION.SDK_INT)
+                .put("pid",android.os.Process.myPid()).put("sampledNotPeak",true).put("samples",samples).toString())
+        }
+        sample("before_export")
         val active=UUID(0,1);val retained=UUID(0,2)
         val expected=mutableMapOf<UUID,AttachmentBackupManifest>();val records=mutableMapOf<UUID,ByteArray>();val aliases=mutableListOf<String>()
         try {
@@ -120,17 +132,20 @@ class MedicalArchiveAndroidTest:MedicalArchiveContract() {
                             val receipt=MedicalCollectionWriter.write(listOf(
                                 MedicalCollectionWriter.Source(retained,MedicalCollectionIndex.Role.RETAINED,b),
                                 MedicalCollectionWriter.Source(active,MedicalCollectionIndex.Role.ACTIVE,a)),active,first.session.issue(),password,file.outputStream())
+                            sample("after_export")
                             assertEquals(2,receipt.libraries);assertEquals(5,receipt.objects);assertEquals(file.length(),receipt.bytes);assertFalse(receipt.activatable)
                             assertTrue(password.all {it=='\u0000'});assertEquals(before,listOf(allRows(first),allRows(second)))
                         }
                     }
                 }
             }
+            sample("after_source_close")
             val ks=KeyStore.getInstance("AndroidKeyStore").apply {load(null)};assertTrue(aliases.isNotEmpty());aliases.forEach {assertFalse(ks.containsAlias(it))}
             val session=session()
             try {
                 val pass="SYNTHETIC collection 密码".toCharArray()
                 MedicalCollectionReader.read(session.issue(),pass,FileInputStream(file).channel).use {archive->
+                    sample("after_independent_authentication")
                     assertTrue(pass.all {it=='\u0000'});assertTrue(archive.wholeArchiveAuthenticated);assertFalse(archive.activatable)
                     assertEquals(active,archive.index().active);assertEquals(2,archive.index().libraries.size)
                     for(id in listOf(active,retained)) {
@@ -147,6 +162,7 @@ class MedicalArchiveAndroidTest:MedicalArchiveContract() {
                             }}finally {key.fill(0)}
                         }
                     }
+                    sample("after_all_original_hashes")
                     reject {archive.source(UUID.randomUUID())}
                 }
                 reject {MedicalCollectionReader.read(session.issue(),"wrong password".toCharArray(),FileInputStream(file).channel)}

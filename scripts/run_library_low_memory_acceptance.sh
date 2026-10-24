@@ -30,6 +30,25 @@ if [ "$metrics" -eq 0 ]; then
   metrics=$?
 fi
 if [ "$result" -eq 0 ] && [ "$metrics" -ne 0 ]; then result=1; fi
+# Independent fresh instrumentation process: retain the original twelve-test gate above.
+# The heap probe + three new collection cases exercise actual new codec paths, not old v1 only.
+if [ "$result" -eq 0 ]; then
+  collection_classes=net.plainnotes.app.data.NativeCiHeapProbe,net.plainnotes.app.data.MedicalArchiveAndroidTest#collectionWriterAndIndependentReaderPreserveTwoTypedLibrariesAfterSourceKeyLoss,net.plainnotes.app.data.MedicalArchiveAndroidTest#independentCollectionPreservesScopedCopiesAndAuthenticatesAllLibraries,net.plainnotes.app.data.MedicalArchiveAndroidTest#authenticatedCollectionMissingExtraCrossLibraryWrapAndInnerCorruptionAllRefuse
+  adb shell am instrument -w -e class "$collection_classes" -e ansmExpectedHeapMb 192 net.plainnotes.app.data.test/androidx.test.runner.AndroidJUnitRunner > "$report/native-collection.log" 2>&1
+  result=$?
+  cat "$report/native-collection.log"
+  if [ "$result" -eq 0 ]; then
+    python3 -c 'from pathlib import Path; t=Path("core/data/build/reports/med02-generation-memory/native-collection.log").read_text(); assert "OK (4 tests)" in t and not any(x in t for x in ("FAILURES!!!","INSTRUMENTATION_FAILED","INSTRUMENTATION_STATUS_CODE: -3")), "Heap probe and all three real collection tests must pass"'
+    result=$?
+  fi
+  adb exec-out run-as net.plainnotes.app.data.test cat files/synthetic-collection-memory.json > "$report/sampled-collection-memory.json"
+  collection_metrics=$?
+  if [ "$result" -eq 0 ] && [ "$collection_metrics" -eq 0 ]; then
+    python3 -c 'import json; from pathlib import Path; m=json.loads(Path("core/data/build/reports/med02-generation-memory/sampled-collection-memory.json").read_text()); assert m["api"]==26 and m["sampledNotPeak"] is True and len(m["samples"])==5 and all(180*1024*1024 <= s["javaMaxBytes"] <= 192*1024*1024 for s in m["samples"])'
+    collection_metrics=$?
+  fi
+  if [ "$result" -eq 0 ] && [ "$collection_metrics" -ne 0 ]; then result=1; fi
+fi
 if [ "$result" -eq 0 ]; then
   python3 scripts/run_library_restore_restart.py
   result=$?

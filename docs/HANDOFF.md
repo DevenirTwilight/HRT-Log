@@ -1,3 +1,9 @@
+## MED-02 PNMEDBK2 codec local regression complete; new native memory gate — 2026-10-24
+
+PR121 codec sourcee11f2f2b local complete core:data608/0fail/0error/0skip PASS; Android native test sources compile. Added independent fresh-process low-memory gate for heap probe + three actual collection tests (writer/key-loss roundtrip, independent reader scoped copies, authenticated malformed sets); original12-test gate and8 restart checks remain unchanged. API26 RAM512MiB/heap192MiB unchanged, no GC/fixture reduction. New5-stage Java/native/PSS/RSS/process-HWM samples are observations, not a complete peak or large-library restore acceptance. New exact source must pass this gate; cannot credit old v1 restore memory success as v2 coverage.
+
+No additional production changes aftere11f2f2b. CI/script and native sampling are the only new code changes; new-source native result PENDING. #120 fixed60dc382b low-memory40124568449 raw artifact12572529344 SHA6053d334… CRC verified: actualOK12 and4 generation+4 operation fresh-PID verifyOK1. Final host/threeAPI checks still pending; do not merge until green. Approval already recorded, do not re-request PNMEDBK2 OFF implementation. Codec does not yet enable restored writes or multi-library activation.
+
 ## MED-02 PNMEDBK2 writer/independent reader coded — 2026-10-24
 
 Production MedicalCollectionWriter/Reader now encode and independently authenticate explicit multi-library sets using approved v2 domains and the existing Tink/manifest/business decoder; no new crypto primitive/restore engine. Layout documented collection/layout.md. All inner AEADs/history authenticate before Archive returns; exact scoped source bridge feeds existing staging only. Index + per-library manifests share aggregate8MiB, not separate allowances.
