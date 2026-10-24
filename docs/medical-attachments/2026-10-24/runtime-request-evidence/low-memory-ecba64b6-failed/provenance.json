@@ -1,0 +1,20 @@
+{
+  "head": "ecba64b605092b67bb1538ced6eb54d86a5d4905",
+  "sourceTree": "4e13c6d63dfff4f2096f4de2ef58ea86dd65062d",
+  "testMerge": "dcb1630c04dd9bde4a099996437c4541d2d61be3",
+  "testTreeMatches": true,
+  "run": 40074939096,
+  "job": 120816167802,
+  "artifact": 12553195595,
+  "sha256": "1c58e959bcb4a40f26ad3182f47c2e7ca1835b4e3b3820fe06efb1604f5ac60d",
+  "crc": "PASS",
+  "result": "FAIL_PROCESS_CRASH",
+  "pid": 3892,
+  "completedTests": 3,
+  "incompleteTests": 2,
+  "restartSeams": "NOT_RUN_AFTER_FAILURE",
+  "memoryPressure": "OBSERVED_IN_LOGCAT",
+  "directKillMechanism": "UNDETERMINED: no matching kernel kill line or application fatal stack in artifact",
+  "retry": "NOT_REQUESTED; no repeated run to obtain green",
+  "scope": "Synthetic API26/512MiB/192MiB; prior source PASS does not replace final-source failure"
+}
