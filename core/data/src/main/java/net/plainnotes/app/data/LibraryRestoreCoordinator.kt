@@ -90,10 +90,13 @@ internal class LibraryRestoreCoordinator(private val access:DatabaseAccess,
                     put("archive_sha256",digest);put("manifest",provenance);put("structured_sha256",hash(records));put("structured_source",records);put("alias_plan",aliasPlan)
                     put("database_alias","notes.gen.db.${ns.generation}");put("reserved_aliases",slots.size*2L+1);put("reserved_ciphertext",reserved);put("created_utc",System.currentTimeMillis())
                 }
-                check(raw.insert("library_candidate",SQLiteDatabase.CONFLICT_ABORT,values)!=-1L);p
+                check(raw.insert("library_candidate",SQLiteDatabase.CONFLICT_ABORT,values)!=-1L)
+                raw.execSQL("INSERT INTO library_resource_owner VALUES(?,?,?,?,?,0,0,NULL)",arrayOf(operation.toString(),ns.generation.toString(),base,scope.dataset,scope.epoch));p
             }
             reservedByThisCall=true
             checkpoint(Boundary.PREPARED);checkCurrent()
+            // Durable irreversible marker BEFORE the first directory/key/database primitive.
+            rootTransaction {root.openHelper.writableDatabase.execSQL("UPDATE library_resource_owner SET started=1 WHERE operation_uuid=? AND released=0",arrayOf(operation.toString()))}
             val owned=LibraryGenerationContext.open(context,ns.generation,true).also {directory=it}
             val key=LocalDatabaseKey(owned).open("notes.db","key.wrap",owned.databaseAlias,freshAlias=true).also {password=it}
             val db=open(owned,key).also {candidateDb=it}

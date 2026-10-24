@@ -1,3 +1,13 @@
+## MED-02 #116已受保护合并，生命周期生产底座进入验收 — 2026-10-24
+
+#116最终a11955bf六必需门全部SUCCESS、三API/独立低内存SUCCESS、无冲突/未解决review，正常squash合并caa2651eacec02a4ddcdd6e1e1f43b76d85372d0。主线Android40080087086和Science40080087098均SUCCESS。三API官方ZIP SHA/CRC核实RuntimeLibraryRequest各1、RuntimeRequestUi各1、RestoreProtection各9，0fail/0skip；收据和原HTML在lifecycle-evidence/pr116。低内存只覆盖原Heap+LibraryRestore5项和三个fresh-PID，未冒充runtime UI/通知全低内存；原ecba64b6中断原因继续UNDETERMINED，原件在docs/med02-runtime-evidence-20261024保留。
+
+独立feature/med02-owner-lifecycle-20261024基于已验收caa，当前新增真实LibraryLifecycle/LibraryResourceFacts和Room16两本地控制表（owner不可逆start/release、单条有界inventory）。不改业务备份Schema13或PNMEDBK1/PNBAK1。新的restore预留与owner0同一root提交，在任何目录/key/DB原语之前提交started1。逻辑释放在同一原生root事务证明owner0+确切namespace/原scope+目录/alias缺失+全引用核对后置ABORTED及release，和竞争start串行；无内存指纹、PID信任、物理删除。旧协议缺owner及started1一律保留。预算仅对已证从未物化者释放未来alias/DB/WAL/密文余量，旧输入元数据和身份不删除，重现文件/alias拒绝。
+
+清单重扫Root/active/retained、journal/信封/真实inode/Keystore、quarantine/unknown。保留未知观察，文件后来消失仍UNKNOWN；超限记录opaque UNKNOWN而非截断后COMPLETE，旧清单不授权释放。retained DB仅已有key/read-only，无临时明文DB或旧文件/key删除。完整单库导出必须复用既有全snapshot认证，并前后核完整对象集；非空fallback/旧namespace或未知/缺失明确REFUSED/UNKNOWN，不声称PNMEDBK1已支持多库。普通destroy在医疗journal/清单存在时拒绝，不能借旧入口删除资源归属证据。
+
+本地SQL状态/迁移8项PASS、native Kotlin编译PASS（后有小范围改进仍需最终CI），新原生4项+新增PREPARED真实强停恢复释放已编码NOT_RUN；原3seam全部保留，低内存脚本扩为Heap1+Restore4+Lifecycle4=9及4新PID，未降配/缩断言。下一步跑完整data及适用原生CI，只修真实失败。源码未经验收，不可提前称INTEGRATION_VERIFIED/可合并。feature0/外审未完成/真实原件/永久删除OFF，无APK签名发布。
+
 ## MED-02 #115 已合并；Runtime Scope 真实接线验收中 — 2026-10-24
 
 最后提交确认/发布边界修正已完成本地App20、提醒22/0fail/error/skip，以及full原生Kotlin编译。绿色原件/源码逐文件SHA保留commit-ack-and-publication-green，两个真实RED分别restore-ack-red-ecba64b6与replacing-import-ack-red。页面四语明确说明“更换已提交、重开查看、勿重复提交”；其他未知/失败不能产生此确认。编辑器先读完profile再核scope后发布、导入记录候选发布前复核、提醒detail/库存提醒在最终读取后核原authority，避免读取过程中普通epoch替换造成混用。没有第二authority/迁移/临床计算变动。最新源须正常新CI，旧ecba35的真实恢复回归/启动失败不再补跑；不重跑旧SHA求绿。#116在最终CI及独立低内存故障结论前继续Draft，入口OFF，前一次低内存真实崩溃不因普通原生通过而消失。

@@ -1,0 +1,252 @@
+[
+  {
+    "id": 12554171872,
+    "sha256": "403f7c9b133af7fd7c984c96ef99568c1c238161c8968fb4cf127ec8255de85f",
+    "crc": "PASS",
+    "results": [
+      {
+        "path": "reports/med02-generation-restart/IN_SWITCH-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "reports/med02-generation-restart/OBJECTS_COMMITTED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "reports/med02-generation-restart/SWITCHED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "reports/med02-generation-memory/native-tests.log",
+        "nativeOK": [
+          "OK (5 tests)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 12554372741,
+    "sha256": "d21c6d649cfb752f80426f131d3418edc18a343e19ed6a911f4801466b1d5a77",
+    "crc": "PASS",
+    "results": [
+      {
+        "path": "core/data/build/reports/ansm-write-process-death/write-death-AFTER_COMMIT-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/ansm-write-process-death/write-death-STOCK_CAPTURED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-persistent-restart/COMMITTED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-persistent-restart/IN_COMMIT-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-persistent-restart/STAGED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-persistent-restart/WRITE-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-restore-restart/COPY-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-restore-restart/VERIFIED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-generation-restart/IN_SWITCH-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-generation-restart/OBJECTS_COMMITTED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-generation-restart/SWITCHED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 12554064748,
+    "sha256": "43ce7d5711c364b7defe7b34b29049ceddc08dce6bc8c72de8e46c638e38725e",
+    "crc": "PASS",
+    "results": [
+      {
+        "path": "core/data/build/reports/ansm-write-process-death/write-death-AFTER_COMMIT-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/ansm-write-process-death/write-death-STOCK_CAPTURED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-persistent-restart/COMMITTED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-persistent-restart/IN_COMMIT-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-persistent-restart/STAGED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-persistent-restart/WRITE-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-restore-restart/COPY-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-restore-restart/VERIFIED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-generation-restart/IN_SWITCH-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-generation-restart/OBJECTS_COMMITTED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-generation-restart/SWITCHED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 12554193925,
+    "sha256": "7d315e82249e01c24fd8313a6785cf78df869608ada041d433a8ca4fa164aa8a",
+    "crc": "PASS",
+    "results": [
+      {
+        "path": "core/data/build/reports/ansm-write-process-death/write-death-AFTER_COMMIT-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/ansm-write-process-death/write-death-STOCK_CAPTURED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-persistent-restart/COMMITTED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-persistent-restart/IN_COMMIT-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-persistent-restart/STAGED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-persistent-restart/WRITE-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-restore-restart/COPY-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-restore-restart/VERIFIED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-generation-restart/IN_SWITCH-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-generation-restart/OBJECTS_COMMITTED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      },
+      {
+        "path": "core/data/build/reports/med02-generation-restart/SWITCHED-verify.log",
+        "nativeOK": [
+          "OK (1 test)"
+        ]
+      }
+    ]
+  }
+]

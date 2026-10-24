@@ -213,7 +213,7 @@ enum class Space(val file:String,val wrap:String,val alias:String) {
             checkRequest()
             if(space==Space.PRIMARY) {
                 val root=legacyRoot(space).openHelper.writableDatabase
-                root.query("SELECT 1 FROM library_candidate LIMIT 1").use {check(!it.moveToFirst()) {"Retained generations require an approved deletion policy"}}
+                root.query("SELECT 1 FROM library_candidate UNION ALL SELECT 1 FROM library_resource_inventory UNION ALL SELECT 1 FROM attachment_journal LIMIT 1").use {check(!it.moveToFirst()) {"Retained generations require an approved deletion policy"}}
             }
             close(space)
             listOf("","-wal","-shm","-journal").forEach { context.getDatabasePath(space.file+it).delete() }

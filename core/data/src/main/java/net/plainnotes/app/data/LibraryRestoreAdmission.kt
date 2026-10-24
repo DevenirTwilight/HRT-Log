@@ -41,12 +41,22 @@ internal object LibraryRestoreAdmission {
             charged=Math.addExact(charged,i.entries.fold(i.overheadBytes) {n,e->Math.addExact(n,e.chargedBytes)})
         }
         val known=HashSet<String>();var retainedMetadata=0L
-        root.query("SELECT generation_uuid,database_alias,alias_plan,reserved_ciphertext,length(manifest),length(structured_source),state FROM library_candidate").use {c->while(c.moveToNext()) {
+        root.query("SELECT generation_uuid,database_alias,alias_plan,reserved_ciphertext,length(manifest),length(structured_source),state,operation_uuid FROM library_candidate").use {c->while(c.moveToNext()) {
             checkActive();val gen=UUID.fromString(c.getString(0));known+=gen.toString()
-            require(c.getString(1)=="notes.gen.db.$gen");aliases+=c.getString(1)
+            require(c.getString(1)=="notes.gen.db.$gen")
             val slots=LibraryRestoreObjects.decode(c.getBlob(2))
-            slots.forEach {s->aliases+=AttachmentDeviceKeys.Alias(s.staging,AttachmentDeviceKeys.Role.STAGING).value;aliases+=AttachmentDeviceKeys.Alias(s.active,AttachmentDeviceKeys.Role.ACTIVE).value}
             retainedMetadata=Math.addExact(retainedMetadata,Math.addExact(c.getLong(4),c.getLong(5)));require(retainedMetadata<=METADATA_BYTES)
+            if(LibraryLifecycleSchema.released(root,c.getString(7))) {
+                require(c.getString(6)=="ABORTED")
+                val path=File(LibraryGenerationContext.directory(context),gen.toString())
+                require(!Files.exists(path.toPath(),java.nio.file.LinkOption.NOFOLLOW_LINKS)) {"Released namespace reappeared"}
+                val ks=KeyStore.getInstance("AndroidKeyStore").apply {load(null)}
+                val names=slots.flatMap {s->listOf(AttachmentDeviceKeys.Alias(s.staging,AttachmentDeviceKeys.Role.STAGING).value,AttachmentDeviceKeys.Alias(s.active,AttachmentDeviceKeys.Role.ACTIVE).value)}+c.getString(1)
+                require(names.none {ks.containsAlias(it)}) {"Released key identity reappeared"}
+                continue // Only never-materialized future allowances; metadata/identities stay retained.
+            }
+            aliases+=c.getString(1)
+            slots.forEach {s->aliases+=AttachmentDeviceKeys.Alias(s.staging,AttachmentDeviceKeys.Role.STAGING).value;aliases+=AttachmentDeviceKeys.Alias(s.active,AttachmentDeviceKeys.Role.ACTIVE).value}
             var actual=0L;var databaseAllocation=0L
             val directory=File(LibraryGenerationContext.directory(context),gen.toString())
             if(Files.exists(directory.toPath(),java.nio.file.LinkOption.NOFOLLOW_LINKS)) {

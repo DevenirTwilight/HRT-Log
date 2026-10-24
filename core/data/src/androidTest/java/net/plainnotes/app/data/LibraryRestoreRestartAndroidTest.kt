@@ -22,7 +22,7 @@ class LibraryRestoreRestartAndroidTest {
         val args=InstrumentationRegistry.getArguments();val phase=args.getString("generation_phase")
         assumeTrue(phase in listOf("prepare","verify"))
         val seam=requireNotNull(args.getString("generation_seam"))
-        require(seam in setOf("OBJECTS_COMMITTED","IN_SWITCH","SWITCHED"))
+        require(seam in setOf("PREPARED","OBJECTS_COMMITTED","IN_SWITCH","SWITCHED"))
         val app=InstrumentationRegistry.getInstrumentation().targetContext
         val marker=File(app.filesDir,"synthetic-generation-restart-ready")
         if(phase=="prepare") {
@@ -64,9 +64,15 @@ class LibraryRestoreRestartAndroidTest {
                     assertNull(active);assertEquals(m.getString("dataset"),target.scope.dataset)
                     val expected=if(seam=="IN_SWITCH")"READY" else "PREPARED"
                     target.raw.query("SELECT state FROM library_candidate WHERE operation_uuid=?",arrayOf(m.getString("operation"))).use {assertTrue(it.moveToFirst());assertEquals(expected,it.getString(0))}
+                    if(seam=="PREPARED") {
+                        val release=LibraryLifecycle(target.access).releaseUnmaterialized(target.scope,target.session.issue(),UUID.fromString(m.getString("operation")),UUID.fromString(m.getString("generation")))
+                        assertFalse(release.alreadyReleased)
+                        assertTrue(LibraryLifecycle(target.access).releaseUnmaterialized(target.scope,target.session.issue(),release.operation,release.generation).alreadyReleased)
+                        assertFalse(File(target.directory,"library-generations-v1/${release.generation}").exists())
+                    }
                     assertTrue(LibraryRestoreCoordinator(target.access).abort(target.scope,target.session.issue(),UUID.fromString(m.getString("operation"))))
                     assertEquals(m.getString("oldHash"),hash(target.facts()))
-                    assertTrue(File(target.directory,"library-generations-v1/${m.getString("generation")}").isDirectory)
+                    assertEquals(seam!="PREPARED",File(target.directory,"library-generations-v1/${m.getString("generation")}").isDirectory)
                 }
             }
             check(archiveFile.delete());check(marker.delete())

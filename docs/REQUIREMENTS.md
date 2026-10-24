@@ -1402,3 +1402,9 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 负责人授权先完成#115精确源码六门、三API、独立低内存和三个真实强停点验收，再从已合并主线独立实现页面、编辑/恢复草稿、提醒及后台请求的身份传递。请求随显示事实冻结generation/dataset/epoch，在实际数据库访问与提交边界核对，不能把旧整数ID自动重绑新库。旧SavedState或通知不能证明身份时明确拒绝；旧页面移除可编辑内容，只有明确重新打开产生新owner。提交事实不能随页面重建自动重放；保留提醒调度与中性通知，新有效提醒按现有机制重建。四语解释完整，不把UNKNOWN当空数据/成功，不无限加载。
 
 复用唯一root authority，不增加第二个authority/Schema/密码学协议。共享文件范围限本独立集成分支中的NotesViewModel/MainActivity/AppShell、Repository/DatabaseAccess、提醒协调器/接收器和对应测试；不覆盖其他未合并UI/库存改动。默认feature0、NOT_REVIEWED_EXTERNALLY、真实原件/正式文件选择器/永久删除OFF；不改PNBAK1、PK、BDPM、P5/P6、配额、网络权限，不冻结公开格式、不签名发布。owner-release、fallback保留库完整导出/释放独立后续任务。本轮授权PR满足§106和必需验收后正常受保护合并。
+
+### 147.G MED-02 生命周期与保留库导出判定（2026-10-24）
+
+负责人要求先核实并受保护合并#116精确源码，再独立交付默认OFF资源归属清单、严格从未物化预留的逻辑释放和完整导出准入。复用已有journal、单root authority、held-FD、操作UUID和既定限额；未知对象/别名/旧generation不能当作不存在。只对有真实协议证明、无物化及无有效引用的预留释放未来容量，必须幂等、重启可恢复且不跨generation；旧协议无证明必须保留。不得永久删除文件或Keystore key。完整导出以COMPLETE/REFUSED/UNKNOWN区分；旧版本、历史、回收站、fallback或未知对象不能省略来造完整结论。PNMEDBK1单库格式及密码学不变，不自动承诺长期冻结；必要本地字段按实际Room15做最小非破坏迁移，不争用版本。
+
+#116历史ecba64b6低内存中断仍UNDETERMINED，不因后续通过宣称根因已证明；复用充分的最终源原生/低内存证据，不做P4性能研究。feature_enabled=0、NOT_REVIEWED_EXTERNALLY、真实导入/查看/恢复UI和永久删除OFF；不加网络，不改PK/BDPM/P5P6/PNBAK1/既有密码学/签名/版本/Release。按§106正常受保护合并，不重复申请已授权OFF底座开发。

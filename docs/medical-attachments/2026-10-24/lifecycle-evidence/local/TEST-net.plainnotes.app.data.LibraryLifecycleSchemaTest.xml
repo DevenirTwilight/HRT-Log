@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.LibraryLifecycleSchemaTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-24T09:33:14.233Z" hostname="bec8493a6fc7" time="0.088">
+  <properties/>
+  <testcase name="markerIsIrreversibleAndOnlyNeverStartedAbortedOwnerCanReceiveCredit" classname="net.plainnotes.app.data.LibraryLifecycleSchemaTest" time="0.085"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
