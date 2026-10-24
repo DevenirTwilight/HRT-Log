@@ -1,3 +1,7 @@
+## MED-02 #119 两项真实操作验收前置，原断言不删 — 2026-10-24
+
+为避免每次在旧全套之后才暴露系统选择失败，原App Operation2在三API先独立实际执行，原HTML/instrumentation输出先拷贝med02-operation-isolated；后续原bulk仅排除这两项已执行用例，其余类/断言/旧runner全部保留。runner严格核对精确两个方法、零skip/failure/error，不把空测试当通过。新增测试数量为零，不修改原业务测试。新源仍须正常六门/三API和低内存，且不得借e474 API26/29通过替代新最终HEAD。外审/真机/正式入口状态不变。
+
 ## MED-02 #119 标准finger触摸补齐（测试专用）— 2026-10-24
 
 API35 framework bytecode独立核对：MotionEvent便捷obtain(x,y)调用PointerProperties.clear后只设置id，toolType仍UNKNOWN；之后setSource不会把它变为FINGER。旧API26/29通过不能证明该事件等同真实手指。当前测试使用显式PointerProperties(TOOL_TYPE_FINGER)+坐标/pressure/size和SOURCE_TOUCHSCREEN的标准单指DOWN/UP，并保留d762的事件静默后refresh实时节点。生产代码/全部真实SAF和提交/关联/预览断言不变，不用额外点击或假返回。此修正不声明已经证明API35故障唯一根因，仍须新原生结果；失败则保留具体原件，不筛绿。
