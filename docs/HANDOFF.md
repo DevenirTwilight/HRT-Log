@@ -1,3 +1,11 @@
+## MED-02 #119 真实adbd重启确认缺口最小修复，默认OFF — 2026-10-24
+
+cd01 PR API35再次在任何测试之前adb root返回closed而退出，属于明确启动阻断；不再盲重试旧SHA。原配置已有UID=0断言，但check_output先因root确认返回丢失抛错，未达到wait/UID核验。最小CI基础设施改动：记录非零确认，最多30s等待重连，确认仍同一emulator serial且实际UID=0才继续；非root/未知/换设备/超时都在任何setprop前拒绝。原selected emulator/API/qemu、192m heapsize/growthlimit、120s framework重启与原生Runtime.maxMemory探针断言保留，512MiB低内存/业务预算不改。这不是P4性能研究或应用权限变更。
+
+同一原子提交包含4个纯fake-executor合同检查和CI执行命令，覆盖root确认成功/丢失仍须实际root、非root或未知拒绝、设备变更拒绝、重连超时拒绝；不触物理设备。无本地执行环境，全部新行为尚待精确新HEAD正常CI/三API验证。既有伪装测试10s就绪等待与持续PRIMARY/无第二PIN/无重开边界断言保留，原断言不删；AppShell/MainActivity/NotesVM仅阅读未改。
+
+只验此有实质修正候选；如仍有不可解释失败，保留原始工件并停止重复运行/延时叠补。#119继续Draft，feature0/NOT_REVIEWED_EXTERNALLY，正式入口/真实原件/永久删除/签名发布OFF。最新有效原件和交接在docs/med02-operation-evidence-20261024；云环境仍不可用，源通过GitHub原子正常快进提交，恢复环境后先fetch不得覆盖远端。
+
 ## MED-02 #119 两项真实操作验收前置，原断言不删 — 2026-10-24
 
 为避免每次在旧全套之后才暴露系统选择失败，原App Operation2在三API先独立实际执行，原HTML/instrumentation输出先拷贝med02-operation-isolated；后续原bulk仅排除这两项已执行用例，其余类/断言/旧runner全部保留。runner严格核对精确两个方法、零skip/failure/error，不把空测试当通过。新增测试数量为零，不修改原业务测试。新源仍须正常六门/三API和低内存，且不得借e474 API26/29通过替代新最终HEAD。外审/真机/正式入口状态不变。

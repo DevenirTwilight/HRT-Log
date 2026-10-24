@@ -20,6 +20,7 @@ jobs:
         run: |
           python3 -m unittest discover -s scripts -p 'test_attachment_design_validation.py'
           python3 -m unittest discover -s scripts -p 'test_attachment_release_isolation.py'
+          python3 -m unittest discover -s scripts -p 'test_configure_ansm_native_runtime.py'
           python3 scripts/generate_unified_model_reference.py --check
           python3 scripts/check_unified_concentration.py
           python3 -m unittest discover -s scripts -p 'test_collect_unified_device_performance.py'
