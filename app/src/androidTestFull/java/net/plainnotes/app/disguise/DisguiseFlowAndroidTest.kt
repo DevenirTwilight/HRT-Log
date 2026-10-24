@@ -101,6 +101,8 @@ class DisguiseFlowAndroidTest {
         // Activity RESUMED/Compose idle does not await RuntimeLibrarySession's database IO.
         // Keep every original security assertion, but evaluate against the actual ready screen.
         ui.waitUntil(10_000) {
+            assertEquals(UnlockTarget.PRIMARY,Session.target)
+            ui.onAllNodesWithText(context.getString(R.string.lock_title)).assertCountEquals(0)
             ui.onAllNodesWithText(context.getString(R.string.library_scope_reopen)).assertCountEquals(0)
             ui.onAllNodesWithText(context.getString(R.string.app_name)).fetchSemanticsNodes().isNotEmpty()
         }
