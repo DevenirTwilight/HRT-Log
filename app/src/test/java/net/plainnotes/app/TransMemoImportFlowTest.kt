@@ -122,10 +122,18 @@ class TransMemoImportFlowTest {
             assertEquals(9,runBlocking {repo.records()}.size)
         }
     }
-    @Test fun stalePickerAndUnknownInputCannotMutateOrPublishPreview() {
+    @Test fun stalePickerCannotMutateOrPublishPreview() {
         model.openImport(Uri.fromFile(input),null)
         await {model.dataJob.value is NotesViewModel.DataJob.Failed}
         assertEquals(R.string.library_scope_changed,(model.dataJob.value as NotesViewModel.DataJob.Failed).message)
+        assertTrue(runBlocking {repo.records()}.isEmpty());assertNoCopy()
+    }
+
+    @Test fun unknownAutomaticInputDoesNotChangeCurrentData() {
+        input.writeText("{}")
+        model.openImport(Uri.fromFile(input))
+        await {model.dataJob.value is NotesViewModel.DataJob.Failed}
+        assertEquals(R.string.import_format_unknown,(model.dataJob.value as NotesViewModel.DataJob.Failed).message)
         assertTrue(runBlocking {repo.records()}.isEmpty());assertNoCopy()
     }
 }

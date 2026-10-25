@@ -93,7 +93,9 @@ class AutomaticImportAndroidTest {
         ui.onNodeWithText(context.getString(R.string.import_identified,"HRT Tracker")).assertExists()
         click(R.string.ht_dup_merge);click(R.string.import_action,false)
         ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.HtImported || model.dataJob.value is NotesViewModel.DataJob.Failed}
-        assertTrue(model.dataJob.value is NotesViewModel.DataJob.HtImported);click(R.string.ok,false)
+        assertTrue(model.dataJob.value is NotesViewModel.DataJob.HtImported)
+        assertEquals(7,(model.dataJob.value as NotesViewModel.DataJob.HtImported).summary.intakes)
+        click(R.string.ok,false)
         choose("memo")
         ui.onNodeWithText(context.getString(R.string.import_identified,"Trans Memo")).assertExists()
         // Original per-product late delay, late-state handling, wellbeing scale and mode choices.
@@ -104,9 +106,12 @@ class AutomaticImportAndroidTest {
         assertTrue(model.dataJob.value is NotesViewModel.DataJob.Imported)
         assertEquals(9,(model.dataJob.value as NotesViewModel.DataJob.Imported).summary.intakes)
         click(R.string.ok,false)
+        val imported=model.extra.value.records.filter{it.origin in setOf("IMPORT_HT","IMPORT_TM")}.sortedBy{it.id}
+        assertEquals(16,imported.size)
         scenario!!.close();launch();open(Destination.HISTORY)
         ui.onNodeWithTag("top-title").assertTextEquals(text(R.string.history))
-        ui.waitUntil(30000){model.state.value.medications.any{it.name=="Synthetic gel"}}
+        ui.waitUntil(30000){model.state.value.medications.any{it.name=="Synthetic gel"} && model.extra.value.records.isNotEmpty()}
+        assertEquals(imported,model.extra.value.records.filter{it.origin in setOf("IMPORT_HT","IMPORT_TM")}.sortedBy{it.id})
         data();click(R.string.import_other_apps)
         waitSystem("cancel DocumentsUI"){instrumentation.uiAutomation.rootInActiveWindow?.packageName?.toString()?.endsWith(".documentsui")==true}
         instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK)

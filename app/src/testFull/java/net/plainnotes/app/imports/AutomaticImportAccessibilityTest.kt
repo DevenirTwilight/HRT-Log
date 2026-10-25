@@ -29,7 +29,7 @@ class AutomaticImportAccessibilityTest(private val locale:String,private val nig
         fun params()=listOf("en","zh-rCN","zh-rTW","fr-rFR").flatMap{l->listOf("night","notnight").map{arrayOf(l,it)}}
     }
     private val setup=TestRule {base,_->object:org.junit.runners.model.Statement(){override fun evaluate(){
-        RuntimeEnvironment.setQualifiers("$locale-w320dp-h640dp-xxhdpi-$night");RuntimeEnvironment.setFontScale(2f);base.evaluate()
+        RuntimeEnvironment.setQualifiers("$locale-w320dp-h640dp-$night-xxhdpi");RuntimeEnvironment.setFontScale(2f);base.evaluate()
     }}}
     private val ui=createAndroidComposeRule<DataPrivacyTestActivity>()
     @get:Rule val chain:RuleChain=RuleChain.outerRule(setup).around(ui)
@@ -43,7 +43,15 @@ class AutomaticImportAccessibilityTest(private val locale:String,private val nig
             it.config.getOrNull(SemanticsActions.GetTextLayoutResult)?.action?.invoke(layouts)
         }
         assertTrue(layouts.isNotEmpty())
-        layouts.forEach{assertFalse(it.hasVisualOverflow);assertFalse(it.isLineEllipsized(it.lineCount-1))}
+        // Match the established settings audit: Robolectric's aggregate overflow flag has
+        // known CJK false positives; verify every actual line and visible character instead.
+        layouts.forEach {layout->
+            val last=layout.lineCount-1
+            assertFalse(layout.isLineEllipsized(last))
+            assertEquals(label.length,layout.getLineEnd(last,visibleEnd=false))
+            assertTrue("bottom clipping",layout.getLineBottom(last)-layout.size.height<=2*density)
+            assertTrue("horizontal clipping",(0..last).maxOf{layout.getLineRight(it)-layout.getLineLeft(it)}-layout.size.width<=density)
+        }
         ui.onNodeWithText(ui.activity.getString(R.string.import_ht)).assertDoesNotExist()
         ui.onNodeWithText(ui.activity.getString(R.string.import_tm)).assertDoesNotExist()
         ui.onNodeWithText(ui.activity.getString(R.string.backup_restore)).performScrollTo().assertHasClickAction()

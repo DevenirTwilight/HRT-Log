@@ -293,7 +293,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         if(expected==null || current!=expected)throw LibraryScopeMismatch()
         dataJob.value=DataJob.ImportDetecting
         val parsed=net.plainnotes.app.imports.AutomaticImportReader.read(app.noBackupFilesDir,
-            {app.contentResolver.openInputStream(uri)},runtime::checkRequest) {source->dataJob.value=DataJob.ImportParsing(source)}
+            {app.contentResolver.openInputStream(uri)},runtime::checkRequest) {source->dataJob.compareAndSet(DataJob.ImportDetecting,DataJob.ImportParsing(source))}
         withContext(Dispatchers.Default) {when(parsed) {
             is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Tracker->DataJob.HtReady(parsed.export,net.plainnotes.app.importer.HrtTracker.preview(parsed.export))
             is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Memo->DataJob.ImportReady(parsed.export,net.plainnotes.app.importer.TransMemo.preview(parsed.export,ZoneId.systemDefault()))
