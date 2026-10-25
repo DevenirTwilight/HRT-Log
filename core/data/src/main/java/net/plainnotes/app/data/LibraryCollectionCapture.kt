@@ -15,7 +15,7 @@ internal class LibraryCollectionCapture(private val access:DatabaseAccess) {
         try {return lifecycle.rootWork(scope,cap) {current,root,active->
             val raw=root.openHelper.writableDatabase
             val thread=Thread.currentThread()
-            fun fence() {check(Thread.currentThread()===thread && raw.inTransaction());active();LibraryAuthority.requireNoPending(raw)}
+            fun fence() {check(Thread.currentThread()===thread && raw.inTransaction());active();LibraryAuthority.requireNoPending(raw);LibraryCollectionSchema.requireNoWrites(raw)}
             fence()
             val before=lifecycle.persist(root,current,scope,operation,lifecycle.fresh(root,current,::fence),collection=true)
             check(before.reason=="FULL_SNAPSHOT_AUTHENTICATION_REQUIRED") {"Collection export refused: ${before.reason}"}
@@ -51,9 +51,10 @@ internal class LibraryCollectionCapture(private val access:DatabaseAccess) {
                         // Never recover a backup envelope or create a missing key during export.
                         check(!File(directory.noBackupFilesDir,"key.wrap.bak").exists())
                         val key=LocalDatabaseKey(directory).open("notes.db","key.wrap",c.getString(2),allowCreate=false)
-                        val db=try {SQLiteDatabase.openDatabase(directory.getDatabasePath("notes.db").path,key,null,SQLiteDatabase.OPEN_READONLY,null)}finally {key.fill(0)}
+                        close+=AutoCloseable {key.fill(0)} // SQLCipher retains this array for later WAL connections.
+                        val db=SQLiteDatabase.openDatabase(directory.getDatabasePath("notes.db").path,key,null,SQLiteDatabase.OPEN_READONLY,null)
                         close+=AutoCloseable {db.close()}
-                        require(db.version in 15..16)
+                        require(db.version in 15..17)
                         db.execSQL("PRAGMA temp_store=MEMORY");db.execSQL("PRAGMA cache_size=-2048")
                         db.query("PRAGMA mmap_size=0").use {check(it.moveToFirst() && it.getLong(0)==0L)}
                         source(id.toString(),directory,db,directory::checkCurrent)

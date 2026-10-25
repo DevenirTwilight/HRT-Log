@@ -18,7 +18,7 @@ import java.util.UUID
 /** Genuine production archive -> independent reader -> durable SQLCipher -> authority -> reopen.
  * Only synthetic originals and isolated local-device key identities. Physical phone is NOT_RUN. */
 class LibraryRestoreAndroidTest {
-    internal class RootFixture(val app:Context,val id:UUID=UUID.randomUUID(),create:Boolean=true):AutoCloseable {
+    internal class RootFixture(val app:Context,val id:UUID=UUID.randomUUID(),create:Boolean=true,seed:Boolean=true):AutoCloseable {
         val directory=File(app.noBackupFilesDir,"synthetic-library-$id")
         val context=object:ContextWrapper(app) {
             override fun getApplicationContext():Context=this
@@ -34,7 +34,7 @@ class LibraryRestoreAndroidTest {
             if(create)Os.mkdir(directory.path,448)
             scope=requireNotNull(AttachmentIdentity.current(access.get(Space.PRIMARY).openHelper.writableDatabase))
             session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
-            if(create)runBlocking {
+            if(create && seed)runBlocking {
                 root.dao().appointment(AppointmentEntity(2,"SYNTHETIC old recipient",999,"UTC",note="Retain original dataset",remind_minutes_before=0))
             }
         }
@@ -51,6 +51,10 @@ class LibraryRestoreAndroidTest {
                     }
                 }}
                 raw.query("SELECT stage_alias_uuid,active_alias_uuid FROM attachment_journal").use {c->while(c.moveToNext()) {
+                    aliases+=AttachmentDeviceKeys.Alias(UUID.fromString(c.getString(0)),AttachmentDeviceKeys.Role.STAGING).value
+                    aliases+=AttachmentDeviceKeys.Alias(UUID.fromString(c.getString(1)),AttachmentDeviceKeys.Role.ACTIVE).value
+                }}
+                access.get(Space.PRIMARY).openHelper.writableDatabase.query("SELECT stage_alias_uuid,active_alias_uuid FROM attachment_journal").use {c->while(c.moveToNext()) {
                     aliases+=AttachmentDeviceKeys.Alias(UUID.fromString(c.getString(0)),AttachmentDeviceKeys.Role.STAGING).value
                     aliases+=AttachmentDeviceKeys.Alias(UUID.fromString(c.getString(1)),AttachmentDeviceKeys.Role.ACTIVE).value
                 }}

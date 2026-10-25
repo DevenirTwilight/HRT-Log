@@ -39,7 +39,7 @@ internal class LibraryLifecycle(private val access:DatabaseAccess) {
         }finally {owner.close()}
     }
     internal fun fresh(root:NotesDatabase,current:NotesDatabase,checkActive:()->Unit):LibraryResourceFacts.Scan = try {
-        LibraryResourceFacts.scan(context,root.openHelper.writableDatabase,DatabaseAccess.handleIdentity(current),checkActive=checkActive)
+        LibraryResourceFacts.scan(context,root.openHelper.writableDatabase,DatabaseAccess.handleIdentity(current),checkActive=checkActive,live=DatabaseAccess.storageContext(current,context) to current.openHelper.writableDatabase)
     }catch(e:Exception) {
         checkActive()
         // A partial scan may already have encountered unowned resources before failing.
@@ -48,6 +48,7 @@ internal class LibraryLifecycle(private val access:DatabaseAccess) {
     }
     /** Rebuild on every call. Historical UNKNOWN evidence survives a missing/replaced leaf. */
     fun inventory(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,operation:UUID)=rootWork(scope,cap) {current,root,active->
+        LibraryCollectionSchema.requireNoWrites(root.openHelper.writableDatabase)
         val scan=fresh(root,current,active)
         persist(root,current,scope,operation,scan)
     }
@@ -138,6 +139,7 @@ internal class LibraryLifecycle(private val access:DatabaseAccess) {
     fun releaseUnmaterialized(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,operation:UUID,generation:UUID):Release=
         rootWork(scope,cap) {current,root,active->
             val raw=root.openHelper.writableDatabase
+            raw.query("SELECT 1 FROM library_collection_member m JOIN library_collection c ON c.operation_uuid=m.collection_uuid WHERE m.operation_uuid=? AND c.state!='ABORTED' LIMIT 1",arrayOf(operation.toString())).use {check(!it.moveToFirst()) {"A live collection member cannot be independently released"}}
             val owner=raw.query("SELECT generation_uuid,origin_generation,origin_dataset,origin_epoch,started,released,release_digest FROM library_resource_owner WHERE operation_uuid=?",arrayOf(operation.toString())).use {c->
                 check(c.moveToFirst()) {"Legacy reservation has no never-materialized proof"}
                 check(c.getString(0)==generation.toString()) {"Wrong resource generation"}

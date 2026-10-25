@@ -20,9 +20,8 @@ internal class AttachmentSnapshotDatabase private constructor(
         checkAuthority()
         if(notes!=null)return notes.runInTransaction(block)
         if(raw.inTransaction()) {check(ownedTransaction);return block.call()}
-        // Retained databases are opened READONLY and are immutable while the root fence is
-        // held. As in LibraryResourceFacts, no Room open callback may modify their schema.
-        if(raw.isReadOnly)return block.call().also {checkAuthority()}
+        // Even READONLY sources must establish a real SQLite transaction: the frozen full
+        // audit checks inTransaction and total_changes. Never fake that oracle precondition.
         raw.beginTransaction()
         try {val result=block.call();checkAuthority();raw.setTransactionSuccessful();return result}
         finally {raw.endTransaction()}

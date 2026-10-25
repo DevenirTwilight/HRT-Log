@@ -1,0 +1,29 @@
+# OFF collection integration — 2026-10-25
+
+Status: IMPLEMENTED_OFF candidate; native acceptance PENDING. This does not freeze a public format or enable a user entry. #121 codec accepted/merged at4f3cddff; its native results are not results for this integration.
+
+## Durable local metadata and compatibility
+
+Room16→17 adds only `library_collection` (immutable operation/request hash, origin generation/dataset/epoch, selected new generation, member count, state, time), `library_collection_member` (explicit archive library UUID→fresh candidate operation and role), and `library_write_reservation` (immutable operation/generation/dataset/epoch/request hash, worst-case ciphertext allowance, state/time). No clinical table, old identity, device key, PNBAK1, business Schema13, PNMEDBK1 or PNMEDBK2 bytes change. Existing rows receive no invented VERIFIED evidence. All historical upgrade chains append16→17; injected DDL failure must roll back the whole migration. Room16 readers reject17 rather than ignore the reservation ledger. No destructive fallback.
+
+## Export and restore
+
+Collection capture owns a native root transaction for membership, retained/current snapshots, v2 output, and final inventory closure. Every source uses the original full business oracle and inner AEAD authentication. Retained SQLCipher sources stay READONLY but establish a real SQLite transaction for that oracle; directory FD/inode and source scope remain checked. Source sessions are owned by the current authorized capability. No raw retained handle or snapshot leaves the fence. Empty libraries are members. Missing/unknown/unrepresentable namespaces refuse the entire output; only normal return acknowledges it.
+
+Collection PREPARE atomically inserts all child candidates, owner markers and explicit member mappings in the encrypted root, after aggregate old/new/cipher/DB-WAL/metadata/alias/space checks. Existing per-generation reconstruction, typed mapping, ciphertext copy, key wrapping, reopen and full independent verification are shared with v1. READY requires every member READY. The ONLY visibility decision is one root COMMIT containing authority pointer, selected ACTIVE, imported RETAINED, old active retirement and parent COMMITTED. No rename, overwrite, two-DB activation or auto-adoption. Real force-stop gates cover PREPARED/OBJECTS_COMMITTED/IN_SWITCH/SWITCHED. Lost reply uses read-only state. Logical abort retains all materialized resources; live group children cannot be independently aborted/released through v1 APIs.
+
+## Restored writes and uncertain results
+
+Managed facade writes perform early fresh joint admission before provider access/binding. After bounded input identity is known, typed binding and immutable STARTED root reservation commit before file/key IO. Existing store validates the exact permit/request inside every real native transaction; bare managed-store allocation still refuses. The fixed allowance covers the existing maximum ciphertext, allocation and two aliases, not merely declared input bytes. All retained actual and future allowances stay charged; the root DB key is now explicitly counted in the unchanged512 limit.
+
+One object still commits through its existing child SQLCipher transaction. STARTED continues to exclude competing imports/restore until the directory lease ends and a separate root confirmation rechecks the complete global inventory/budget. That confirmation is NOT a second collection activation. A lost root confirmation cannot roll back an already committed object: reconciliation checks the exact committed request journal, full existing snapshot/AEAD authentication, and global inventory before marking the reservation COMMITTED. It never reopens the provider or repeats encryption. A reservation with no conclusive committed journal remains PENDING/charged; failed or unknown files are never refunded/deleted. This deliberately refuses subsequent allocation/export/restore until safe disposition is proved, instead of presenting NOT_FOUND as permission to retry.
+
+## Limits and remaining refusal
+
+No limit increases:8 libraries, aggregate32MiB business,8MiB index+manifests,100000 rows/1000 versions,1GiB wire/512MiB archive ciphertext, local256MiB/512 aliases. Root key inclusion and conservative pending-versus-actual overlap can refuse near-limit cases earlier; no history is dropped. Unknown aliases/files, missing originals, unreleased interrupted candidates/reservations, multiple unsupported retired attachment namespaces inside one physical business DB, and insufficient local space/heap/alias budget refuse. Restoring eight archive libraries while retaining an existing local root also refuses at the eight-library ceiling. No automatic permanent cleanup.
+
+## Acceptance scope
+
+Synthetic production-facade test covers A history/PDF-signature/PNG-signature/binary/trash/typed appointment+lab → v2 → B retaining A → new B original → reopened handles → whole export → source-owned key loss → independent C namespace/keys → whole collection restore → re-export/independent reader + exact business/normalized history/typed relationship/cipher hash comparison, including C's empty retained root. Existing source bundle adds soft-deleted DOSE_RECORD and clinical LAB/APPOINTMENT trash semantics at process-death seams. Codec wrong-password/tamper/missing-set tests remain mandatory. Synthetic signatures are opaque encrypted inputs, not parser-safety evidence.
+
+Existing v1 baseline12 and codec4 low-memory gates remain separate mandatory stages; new integration2 (heap probe+roundtrip) and four collection fresh-PID seams are additional results, never substitutes. Local JVM/compilation does not prove native success. PHYSICAL_NOT_RUN; EXTERNAL_REVIEW_PENDING. All public switches remain OFF and no true medical originals are accepted.

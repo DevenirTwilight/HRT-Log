@@ -10,6 +10,7 @@ on:
       - 'core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt'
       - 'core/data/src/main/java/net/plainnotes/app/data/AttachmentTransaction.kt'
       - 'scripts/run_library_restore_restart.py'
+      - 'scripts/run_library_collection_restart.py'
       - 'scripts/run_library_low_memory_acceptance.sh'
       - '.github/workflows/med02-library-low-memory.yml'
   workflow_dispatch:

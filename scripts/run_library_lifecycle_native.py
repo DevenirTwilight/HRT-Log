@@ -36,6 +36,19 @@ def main():
             path = ROOT / "core/data/build" / source
             if path.exists():
                 shutil.copytree(path, REPORT / name, dirs_exist_ok=True)
+    reset_fixture("before-collection-integration")
+    result = subprocess.run(["./gradlew", ":core:data:connectedDebugAndroidTest",
+        "-Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.LibraryCollectionAndroidTest",
+        "--no-parallel", "--max-workers=2"], cwd=ROOT)
+    try:
+        assert result.returncode == 0, "Complete collection business roundtrip failed"
+    finally:
+        for name, source in (("html", "reports/androidTests"), ("results", "outputs/androidTest-results")):
+            path = ROOT / "core/data/build" / source
+            if path.exists():
+                shutil.copytree(path, REPORT / "collection" / name, dirs_exist_ok=True)
+    reset_fixture("before-collection-restart")
+    subprocess.run([sys.executable, "scripts/run_library_collection_restart.py"], cwd=ROOT, check=True)
     # PREPARED release also inventories the entire UID, so its real restart seams
     # require the same isolation, not the unrelated bulk fixtures' retained keys.
     reset_fixture("before-restart")

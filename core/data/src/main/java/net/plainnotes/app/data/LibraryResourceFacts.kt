@@ -24,7 +24,7 @@ internal object LibraryResourceFacts {
         val missing get()=items.any {it.category=="MISSING"}
     }
     private data class Fact(val name:String,val identity:AttachmentOwnedFiles.Identity?,val category:String)
-    fun scan(context:Context,root:SupportSQLiteDatabase,active:String,excludeReservation:String?=null,checkActive:()->Unit):Scan {
+    fun scan(context:Context,root:SupportSQLiteDatabase,active:String,excludeReservation:String?=null,checkActive:()->Unit,live:Pair<Context,SupportSQLiteDatabase>?=null):Scan {
         check(root.inTransaction());checkActive()
         val items=mutableListOf<Item>();val refs=mutableSetOf<String>();val knownAliases=mutableSetOf<String>();val requiredAliases=mutableSetOf<String>();val releasedAliases=mutableSetOf<String>()
         var retained=false;var complete=true
@@ -101,12 +101,17 @@ internal object LibraryResourceFacts {
                     }}
                     // A read must not recover/rename a .bak or create a local key.
                     require(!File(owned.noBackupFilesDir,"key.wrap.bak").exists())
+                    if(id.toString()==active && live!=null) {
+                        checkActive();source(id.toString(),live.first,live.second,false)
+                    } else {
                     val key=LocalDatabaseKey(owned).open("notes.db","key.wrap",c.getString(3),allowCreate=false).also {password=it}
                     val read=net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(owned.getDatabasePath("notes.db").path,key,null,net.zetetic.database.sqlcipher.SQLiteDatabase.OPEN_READONLY,null).also {db=it}
-                    require(read.version in 15..16)
+                    require(read.version in 15..17)
                     read.execSQL("PRAGMA temp_store=MEMORY");read.execSQL("PRAGMA cache_size=-2048")
                     read.query("PRAGMA mmap_size=0").use {require(it.moveToFirst() && it.getLong(0)==0L)}
                     source(id.toString(),owned,read,id.toString()!=active)
+                    }
+
                 }catch(t:Exception) {checkActive();complete=false;add(Item("$id/unreadable",id.toString(),"UNKNOWN","RETAINED_DATABASE_NOT_PROVEN"))}
                 finally {try {db?.close()}finally {password?.fill(0);ctx?.close()}}
             }else if(exists) {

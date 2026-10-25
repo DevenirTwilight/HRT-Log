@@ -108,4 +108,6 @@ val migration14To15=object:Migration(14,15) {
 
 val migration15To16=object:Migration(15,16) { override fun migrate(db:SupportSQLiteDatabase)=LibraryLifecycleSchema.migrate(db) }
 
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16)
+val migration16To17=object:Migration(16,17) { override fun migrate(db:SupportSQLiteDatabase)=LibraryCollectionSchema.migrate(db) }
+
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17)

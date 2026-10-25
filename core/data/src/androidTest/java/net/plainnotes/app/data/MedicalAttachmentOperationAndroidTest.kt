@@ -106,12 +106,14 @@ class MedicalAttachmentOperationAndroidTest {
                 val newSession=AttachmentSession(UUID.fromString(current.dataset),UUID.fromString(current.epoch));val newCap=newSession.issue()
                 try {
                     val ops=fresh.forGeneration(current).pinnedTo(Space.PRIMARY).medicalAttachments()
-                    // A fresh explicit target has no attachment identity yet. Refusal must not
+                    // An UNKNOWN resource cannot earn joint admission. Refusal must not
                     // bind it, read even a failing provider, reserve aliases or append a journal.
                     val isolated=fresh.forGeneration(current).pinnedTo(Space.PRIMARY)
                     val targetId=isolated.saveAppointment(AppointmentEntity(0,"SYNTHETIC admission target",2000,"UTC",remind_minutes_before=0))
                     val unbound=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,targetId)
                     val selected=f.access.get(Space.PRIMARY);val sql=selected.openHelper.writableDatabase
+                    val unknown=File(DatabaseAccess.storageContext(selected,f.context).noBackupFilesDir,"attachment-objects-v1/${UUID.randomUUID()}")
+                    unknown.writeBytes(byteArrayOf(19,20)) // Only this fixture's deliberately unowned leaf.
                     val business=selected.runInTransaction(java.util.concurrent.Callable {MeasuredBackupJson.encode(sql,java.time.Instant.EPOCH)})
                     val legacy=f.facts()
                     val tables=listOf("attachment_record_identity","attachment_operation","attachment_journal","attachment_document","attachment_version","attachment_link","attachment_key_envelope")
@@ -133,8 +135,8 @@ class MedicalAttachmentOperationAndroidTest {
                     val refusedOperation=UUID.randomUUID()
                     var refused=false
                     try {ops.import(newCap,MedicalAttachmentOperations.Import(refusedOperation,UUID.randomUUID(),unbound,"SYNTHETIC managed refusal"),uri("failure"))}
-                    catch(e:IllegalStateException) {assertTrue(e.message.orEmpty().contains("joint generation admission"));refused=true}
-                    assertTrue("Restored generations must retain their existing write admission",refused)
+                    catch(e:IllegalStateException) {assertTrue(e.message.orEmpty().contains("Joint resources not proven"));refused=true}
+                    assertTrue("Unknown managed resources must be refused before provider access",refused)
                     assertEquals(opened,providerOpens())
                     assertEquals(metadataBefore,metadata())
                     assertArrayEquals(business,selected.runInTransaction(java.util.concurrent.Callable {MeasuredBackupJson.encode(sql,java.time.Instant.EPOCH)}))

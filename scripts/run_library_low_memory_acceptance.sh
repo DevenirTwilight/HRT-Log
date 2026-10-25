@@ -57,14 +57,26 @@ if [ "$collection_installed" -eq 1 ]; then
   if [ "$result" -eq 0 ] && [ "$collection_metrics" -ne 0 ]; then result=1; fi
   collection_result=$result
 fi
+# New business integration runs independently; neither old baseline nor codec failures are masked.
+integration_result=1
+if [ "$collection_installed" -eq 1 ]; then
+  adb shell am instrument -w -e class net.plainnotes.app.data.NativeCiHeapProbe,net.plainnotes.app.data.LibraryCollectionAndroidTest -e ansmExpectedHeapMb 192 net.plainnotes.app.data.test/androidx.test.runner.AndroidJUnitRunner > "$report/native-integration.log" 2>&1
+  integration_result=$?
+  cat "$report/native-integration.log"
+  if [ "$integration_result" -eq 0 ]; then
+    python3 -c 'from pathlib import Path; t=Path("core/data/build/reports/med02-generation-memory/native-integration.log").read_text(); assert "OK (2 tests)" in t and not any(x in t for x in ("FAILURES!!!","INSTRUMENTATION_FAILED","INSTRUMENTATION_STATUS_CODE: -3")), "Heap probe and complete independent-device collection roundtrip must pass"'
+    integration_result=$?
+  fi
+fi
 adb shell dmesg > "$report/kernel-after-collection.txt" 2>&1
 adb shell cat /proc/meminfo > "$report/guest-meminfo-after-collection.txt" 2>&1
-printf '{"baseExit":%s,"collectionExit":%s}\n' "$base_result" "$collection_result" > "$report/native-stage-results.json"
-if [ "$base_result" -ne 0 ]; then result=$base_result; else result=$collection_result; fi
+printf '{"baseExit":%s,"collectionExit":%s,"integrationExit":%s}\n' "$base_result" "$collection_result" "$integration_result" > "$report/native-stage-results.json"
+if [ "$base_result" -ne 0 ]; then result=$base_result; elif [ "$collection_result" -ne 0 ]; then result=$collection_result; else result=$integration_result; fi
 if [ "$result" -eq 0 ]; then
   python3 scripts/run_library_restore_restart.py
   result=$?
   if [ "$result" -eq 0 ]; then python3 scripts/run_attachment_operation_restart.py; result=$?; fi
+  if [ "$result" -eq 0 ]; then python3 scripts/run_library_collection_restart.py; result=$?; fi
 fi
 adb logcat -d > "$report/logcat.txt"
 exit "$result"

@@ -64,7 +64,10 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
         require(request.title.isNotBlank() && request.title.length<=256)
         val store=AttachmentPersistentStore(access.applicationContext,db,checkpoint=::boundary,storageBudget=storageBudget)
         if(store.operationState(s,cap,request.operation)!=null)throw ExistingOperation()
-        val record=record(db,s,cap,request.target)
+        val joint=DatabaseAccess.managedGeneration(db)
+        val admission=LibraryAttachmentAdmission(access)
+        if(joint)admission.preflight(db,s,cap)
+        val record=if(joint)null else record(db,s,cap,request.target)
         val maximum=AttachmentObjectStreams.MAXIMUM_BYTES.toInt()
         val scratch=ByteArray(maximum)
         cap.ownBytes(scratch).use {
@@ -87,7 +90,15 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
                 }
                 val hash=MedicalArchiveCrypto.hex(MessageDigest.getInstance("SHA-256").digest(bytes))
                 permission()
-                val saved=store.save(s,cap,AttachmentPersistentStore.Request(request.operation,request.document,UUID.fromString(record),request.revision,request.title,"REPORT",mime,used.toLong(),hash)) {ByteArrayInputStream(bytes)}
+                fun value(record:String)=AttachmentPersistentStore.Request(request.operation,request.document,UUID.fromString(record),request.revision,request.title,"REPORT",mime,used.toLong(),hash)
+                val prepared=if(joint)admission.prepare(db,s,cap) {
+                    permission();value(AttachmentIdentity.bind(db.openHelper.writableDatabase,s,request.target.kind.name,request.target.id))
+                } else null
+                val saver=if(prepared==null)store else AttachmentPersistentStore(access.applicationContext,db,checkpoint=::boundary,storageBudget=storageBudget,allocation=prepared.second)
+                val saved=saver.save(s,cap,prepared?.first ?: value(requireNotNull(record))) {ByteArrayInputStream(bytes)}
+                // The per-object directory lease has ended. STARTED still blocks competing
+                // restore/import until the complete root inventory is checked and committed.
+                prepared?.second?.finish(cap)
                 // The store returned only after real COMMIT and independent full authentication.
                 // Do not turn later list/preview/backup failure into a false save failure.
                 saved.receipt()
@@ -105,7 +116,8 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
                 check(it.moveToFirst() && it.getString(0)==target.kind.name && it.getLong(1)==target.id && it.getString(2)==document.toString()) {"Conflicting operation identity"}
             }
         }
-        Status(when {state==null->Phase.NOT_FOUND;state.committed!=null->Phase.COMMITTED;state.phase=="ABORTED"->Phase.ABORTED;else->Phase.PENDING},state?.committed?.receipt())
+        val reserved=if(DatabaseAccess.managedGeneration(db))LibraryAttachmentAdmission(access).reconcile(db,s,cap,operation) else null
+        Status(when {state==null && reserved!=null->Phase.PENDING;state==null->Phase.NOT_FOUND;state.committed!=null->Phase.COMMITTED;state.phase=="ABORTED"->Phase.ABORTED;else->Phase.PENDING},state?.committed?.receipt())
     }
     suspend fun recover(cap:AttachmentSession.Capability):Int=work(cap) {db,s->AttachmentPersistentStore(access.applicationContext,db,checkpoint=::boundary,storageBudget=storageBudget).recover(s,cap)}
     suspend fun documents(cap:AttachmentSession.Capability,target:Target):List<Document> =work(cap) {db,s->

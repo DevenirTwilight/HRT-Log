@@ -70,7 +70,7 @@ class AttachmentFoundationRestartAndroidTest {
         try {
             if (fresh) assertNotEquals(state.getInt("pid"), android.os.Process.myPid())
             val raw = db.openHelper.writableDatabase
-            assertEquals(16, raw.version)
+            assertEquals(17, raw.version)
             val scope = requireNotNull(AttachmentIdentity.current(raw))
             assertEquals(state.getString("dataset"), scope.dataset)
             assertEquals(state.getString("vault"), scope.logicalVault)
