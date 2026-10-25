@@ -1,6 +1,6 @@
 # MED-02 independent review delta — PR122
 
-NOT_REVIEWED_EXTERNALLY. Reviewed-source candidate `e5fa2404ddd4174888f7510477498f4d0f2af84a`; this is an evidence package, not an external review result or public-enable approval. See [prior threat model](../../2026-10-24/external-review/README.md), [exact file inventory](source-inventory.json), [current acceptance receipt](../collection-integration/current.json) and [collection contract](../collection-integration/contract.md). Evidence-branch code is not the build target: checkout the exact source SHA in the inventory.
+NOT_REVIEWED_EXTERNALLY. PR122 merged at `1ddcf431558e0e90662b4a9ab931a9a6ec437209`, identical file tree to the accepted source; main CI separately tracked in current.json. Reviewed source `e5fa2404ddd4174888f7510477498f4d0f2af84a`; this is an evidence package, not an external review result or public-enable approval. See [prior threat model](../../2026-10-24/external-review/README.md), [exact file inventory](source-inventory.json), [current acceptance receipt](../collection-integration/current.json) and [collection contract](../collection-integration/contract.md). Evidence-branch code is not the build target: checkout the exact source SHA in the inventory.
 
 ## Added production capabilities and questions
 

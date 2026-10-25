@@ -1,8 +1,8 @@
 {
-  "main": "4f3cddff49e2bdfb139fa936a03bffee47a24601",
+  "main": "1ddcf431558e0e90662b4a9ab931a9a6ec437209",
   "pr": 122,
   "source": "e5fa2404ddd4174888f7510477498f4d0f2af84a",
-  "status": "ACCEPTED_READY_FOR_PROTECTED_MERGE",
+  "status": "MERGED_MAIN_CI_RUNNING",
   "ci": {
     "pr": 40182479995,
     "science": 40182479990,
@@ -14,5 +14,12 @@
   "publicEnabled": false,
   "lowmem": "PASS_FINAL_SOURCE_FRESH_C",
   "requiredCI": "PASS_FINAL_SOURCE_SIX_GATES",
-  "native": "PASS_API26_29_35"
+  "native": "PASS_API26_29_35",
+  "merge": "1ddcf431558e0e90662b4a9ab931a9a6ec437209",
+  "mainTree": "EXACTLY_EQUAL_TO_ACCEPTED_e5fa2404",
+  "mainCI": {
+    "android": 40184646056,
+    "science": 40184646043,
+    "status": "RUNNING"
+  }
 }

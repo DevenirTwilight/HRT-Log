@@ -216,5 +216,15 @@
     "requiredAndroidJobs": "5_SUCCESS",
     "scienceRun": 40182479990,
     "science": "SUCCESS"
+  },
+  "merge": {
+    "sha": "1ddcf431558e0e90662b4a9ab931a9a6ec437209",
+    "at": "2026-10-25T10:24:28Z",
+    "method": "NORMAL_PROTECTED_SQUASH_MATCH_EXACT_HEAD",
+    "unresolvedThreads": 0,
+    "mainTreeDiff": "EMPTY",
+    "mainCI": "RUNNING",
+    "androidRun": 40184646056,
+    "scienceRun": 40184646043
   }
 }
