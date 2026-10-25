@@ -2,7 +2,7 @@
   "main": "4f3cddff49e2bdfb139fa936a03bffee47a24601",
   "pr": 122,
   "source": "e5fa2404ddd4174888f7510477498f4d0f2af84a",
-  "status": "DRAFT_FINAL_ANDROID_PENDING_LOWMEM_PASS",
+  "status": "ACCEPTED_READY_FOR_PROTECTED_MERGE",
   "ci": {
     "pr": 40182479995,
     "science": 40182479990,
@@ -12,5 +12,7 @@
   "physical": "NOT_RUN",
   "external": "NOT_REVIEWED_EXTERNALLY",
   "publicEnabled": false,
-  "lowmem": "PASS_FINAL_SOURCE"
+  "lowmem": "PASS_FINAL_SOURCE_FRESH_C",
+  "requiredCI": "PASS_FINAL_SOURCE_SIX_GATES",
+  "native": "PASS_API26_29_35"
 }

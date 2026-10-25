@@ -36,7 +36,7 @@
     }
   ],
   "androidTestCompilation": "PASS",
-  "finalNative": "PENDING",
+  "finalNative": "PASS_API26_29_35_AND_LOWMEM_FRESH_C",
   "physical": "NOT_RUN",
   "external": "NOT_REVIEWED_EXTERNALLY",
   "finalLowmem": {
@@ -201,5 +201,20 @@
     "migration16To17": "PASS_ORIGINAL_HTML",
     "LabPanelRestart": "PASS prepare+freshProcess explicit log",
     "UndoSkippedRestart": "PASS prepare+persistedCorrection explicit log"
+  },
+  "finalHost": {
+    "run": 40182479995,
+    "artifact": 12595336972,
+    "sha256": "ff299e7a6c58d351f8d1b0011a5fe7c8a637711499f5494dc2680dc3a68eb669",
+    "zipCRC": "PASS",
+    "selectedOriginals": [
+      "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.RuntimeLibrarySessionTest/index.html",
+      "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.TransMemoImportFlowTest/index.html",
+      "app/build/reports/tests/testFullDebugUnitTest/net.plainnotes.app.PeriodStabilityTest/index.html"
+    ],
+    "wholeZip": "129MiB official artifact SHA/CRC checked; not committed as >100MiB blob",
+    "requiredAndroidJobs": "5_SUCCESS",
+    "scienceRun": 40182479990,
+    "science": "SUCCESS"
   }
 }
