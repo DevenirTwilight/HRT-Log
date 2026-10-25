@@ -1446,3 +1446,7 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 有界读取同一份内容：JSON 内存快照；SQLite 复用现有 noBackup 私有副本、只读表/版本校验和清理，不再次打开不可信 provider。普通导入上限32MiB、SQLite总读取行100000；JSON深度64、容器/分隔项各250000防止解析分配攻击。新增上限只影响跨应用输入，不改变现有备份协议或MED资源限额。选择时冻结RuntimeLibrarySession作用域，解析/确认保留既有检查；取消、撤权、换库、损坏、超限不能写入。
 
 四语、320dp/2倍字号、可访问语义、真实AppShell/SAF接线及最终精确SHA CI必须验证，保留TransMemoImportFlowTest和时期稳定性断言。仅实现首批两来源及可扩展规则；PR-B Mona待本阶段完成后单独开展，不复制GPL/AGPL实现。不改MED/PNBAK1/PNMEDBK1/2/PK/BDPM/精确库存、权限、版本号、签名或Release；正式附件继续OFF。按§106受保护PR流程验收和合并。
+
+### 148.A Mona PR-B（2026-10-25）
+
+负责人授权在PR123验收合并后独立接入Mona JSON当前已核实版本，复用单次有界快照与统一入口，独立实现解析、服药/化验预览及安全事务；区分计划/实际时间，takenDateTime为空不造服药或漏服。保留单位、时区、稳定应用隔离来源身份及必要快照；重复幂等、同ID异内容拒绝覆盖、取消/失败无部分提交、撤权生效、COMMIT事实不被刷新错误覆盖。未知计划/库存明确计入未支持项，不启用提醒或制造精确库存。按官方schema逐版本验证，不复制Mona AGPL源码。四语、真实SAF及原导入/时期稳定性回归必需；不改MED、备份协议、PK、BDPM、版本/签名/发布。PR-C Featherline不在本轮实施。

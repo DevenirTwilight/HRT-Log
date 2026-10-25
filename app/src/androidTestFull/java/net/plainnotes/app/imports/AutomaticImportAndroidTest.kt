@@ -136,7 +136,7 @@ class AutomaticImportAndroidTest {
         val imported=model.extra.value.records.filter{it.origin in setOf("IMPORT_HT","IMPORT_TM")}.sortedBy{it.id}
         assertEquals(16,imported.size)
         scenario!!.close();launch();open(Destination.HISTORY)
-        ui.onNodeWithTag("top-title").assertTextEquals(text(R.string.history))
+        ui.onNodeWithTag("top-title").assertTextEquals(text(Destination.HISTORY.title))
         ui.waitUntil(30000){model.state.value.medications.any{it.name=="Synthetic gel"} && model.extra.value.records.isNotEmpty()}
         assertEquals(imported,model.extra.value.records.filter{it.origin in setOf("IMPORT_HT","IMPORT_TM")}.sortedBy{it.id})
         data();click(R.string.import_other_apps)

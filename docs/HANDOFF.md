@@ -1,3 +1,9 @@
+## PR-A #123 / PR-B Mona 接续 — 2026-10-25
+
+8e07bc2f真实API29已经通过两种SAF文件、原专用预览及7条HT/9条TM提交、合计16条断言；随后失败于历史页标题：测试错误使用history（History），真实Destination.HISTORY.title为nav_history（Dose log）。修正为实际导航资源，保留后续逐字段重开一致性与取消断言。原运行40197810759/job121182370872，不能将尚未执行的后续断言标PASS。PR仍Draft，最终源码CI尚待通过。
+
+负责人新增PR-B Mona授权：必须先收尾#123并核主线，再在独立分支实现Mona当前真实版本JSON的实际服药与化验预览/事务/幂等/冲突保护；计划/库存不安全部分明确报告，不伪造服药或库存事实。官方源码只作格式依据，不复制AGPL实现。参考仓库已在工作树外/workspace/mona-format-reference取得，SHA8bc965fd340ee0758608be047039e79ea056b2eb，版本及字段尚待完成核对。Mona尚未实现，不宣称交付。
+
 ## PR-A #123：第二次原生定位 — 2026-10-25
 
 85209475 API26/29仍FAIL，不宣称完成。API29工件12599860719原始logcat已存native-852：12:57:10.746实际进入synthetic-imports，12:57:11.325文件坐标点击却切到synthetic-medflow；因此不是解析超时，而是roots侧栏仍覆盖文件列表。测试现在仅在MED-02侧栏项仍可见时用系统Back关闭侧栏，确认消失后才点文件；保留真实SAF和全部提交/重开/取消断言。下一SHA原生仍待验证，PR Draft；生产代码未因此修改。
