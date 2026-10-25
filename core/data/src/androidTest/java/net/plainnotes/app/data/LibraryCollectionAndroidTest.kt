@@ -2,6 +2,9 @@ package net.plainnotes.app.data
 
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.Dispatchers
 import net.plainnotes.app.domain.AttachmentSession
 import org.junit.Assert.*
 import org.junit.Before
@@ -57,7 +60,14 @@ class LibraryCollectionAndroidTest {
                     val newCap=session.issue()
                     reject {runBlocking {ops.import(cap,MedicalAttachmentOperations.Import(UUID.randomUUID(),UUID.randomUUID(),appointment,"SYNTHETIC stale"),uri("unknown"))}}
                     val request=MedicalAttachmentOperations.Import(UUID.randomUUID(),UUID.randomUUID(),appointment,"SYNTHETIC after restore")
-                    val receipt=newOps.import(newCap,request,uri("unknown"))
+                    val attempts=coroutineScope {
+                        listOf(request,request.copy(title="SYNTHETIC conflicting concurrent payload")).map {r->
+                            async(Dispatchers.IO) {runCatching {newOps.import(newCap,r,uri("unknown"))}}
+                        }.map {it.await()}
+                    }
+                    assertEquals("One UUID cannot produce two committed versions",1,attempts.count {it.isSuccess})
+                    val receipt=attempts.single {it.isSuccess}.getOrThrow()
+                    f.access.get(Space.PRIMARY).openHelper.writableDatabase.query("SELECT COUNT(*) FROM attachment_journal WHERE operation_uuid=?",arrayOf(request.operation.toString())).use {assertTrue(it.moveToFirst());assertEquals(1,it.getInt(0))}
                     assertEquals(receipt,newOps.reconcile(newCap,request.operation,appointment,request.document).receipt)
                     reject {runBlocking {newOps.import(newCap,request.copy(title="changed"),uri("failure"))}}
                     newOps.open(newCap,appointment,request.document).use {read->val bytes=ByteArray(8192);assertEquals(bytes.size,read.readAt(0,bytes,0,bytes.size));assertEquals(17,bytes[0].toInt())}

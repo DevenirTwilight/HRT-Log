@@ -38,6 +38,10 @@ class LibraryCollectionRestartAndroidTest {
             val target=LibraryRestoreAndroidTest.RootFixture(app);val original=hash(target.facts());val operation=UUID.randomUUID()
             MedicalCollectionReader.read(target.session.issue(),password(),FileInputStream(file).channel).use {archive->
                 LibraryCollectionRestore(target.access,checkpoint={boundary->if(boundary.name==seam) {
+                    // An empty retained member also has this boundary. Stop only after an
+                    // actual original-bearing child committed its objects, not the empty child.
+                    val hasObjects=target.raw.query("SELECT 1 FROM library_candidate c JOIN library_resource_owner o USING(operation_uuid) WHERE c.reserved_aliases>1 AND o.started=1 AND c.directory_inode IS NOT NULL LIMIT 1").use {it.moveToFirst()}
+                    if(seam=="OBJECTS_COMMITTED" && !hasObjects)return@LibraryCollectionRestore
                     val json=JSONObject().put("seam",seam).put("pid",Process.myPid()).put("root",target.id.toString())
                         .put("archive",file.name).put("operation",operation.toString()).put("oldHash",original)
                     marker.outputStream().use {out->out.write(json.toString().toByteArray(Charsets.UTF_8));out.fd.sync()}

@@ -112,6 +112,7 @@ class MedicalAttachmentOperationAndroidTest {
                     val targetId=isolated.saveAppointment(AppointmentEntity(0,"SYNTHETIC admission target",2000,"UTC",remind_minutes_before=0))
                     val unbound=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,targetId)
                     val selected=f.access.get(Space.PRIMARY);val sql=selected.openHelper.writableDatabase
+                    assertEquals("A clean retained library remains unsupported by v1",MedicalAttachmentOperations.Export.REFUSED,ops.exportEligibility(newCap))
                     val unknown=File(DatabaseAccess.storageContext(selected,f.context).noBackupFilesDir,"attachment-objects-v1/${UUID.randomUUID()}")
                     unknown.writeBytes(byteArrayOf(19,20)) // Only this fixture's deliberately unowned leaf.
                     val business=selected.runInTransaction(java.util.concurrent.Callable {MeasuredBackupJson.encode(sql,java.time.Instant.EPOCH)})
@@ -144,7 +145,7 @@ class MedicalAttachmentOperationAndroidTest {
                     assertEquals(objectsBefore,objects())
                     assertEquals(MedicalAttachmentOperations.Phase.NOT_FOUND,ops.reconcile(newCap,refusedOperation).phase)
                     assertEquals(aliases,AttachmentDeviceKeys().retainedAliases(4096))
-                    assertEquals(MedicalAttachmentOperations.Export.REFUSED,ops.exportEligibility(newCap))
+                    assertEquals(MedicalAttachmentOperations.Export.UNKNOWN,ops.exportEligibility(newCap))
                     val output=ByteArrayOutputStream();reject {runBlocking {ops.writeArchive(newCap,source.password(),output)}};assertEquals(0,output.size())
                 }finally {newCap.close();newSession.revoke()}
             }finally {cap.close()}

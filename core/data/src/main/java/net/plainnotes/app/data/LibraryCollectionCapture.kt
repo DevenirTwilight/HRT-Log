@@ -17,8 +17,9 @@ internal class LibraryCollectionCapture(private val access:DatabaseAccess) {
             val thread=Thread.currentThread()
             fun fence() {check(Thread.currentThread()===thread && raw.inTransaction());active();LibraryAuthority.requireNoPending(raw);LibraryCollectionSchema.requireNoWrites(raw)}
             fence()
-            val before=lifecycle.persist(root,current,scope,operation,lifecycle.fresh(root,current,::fence),collection=true)
-            check(before.reason=="FULL_SNAPSHOT_AUTHENTICATION_REQUIRED") {"Collection export refused: ${before.reason}"}
+            val initial=lifecycle.persist(root,current,scope,operation,lifecycle.fresh(root,current,::fence),collection=true)
+            check(initial.reason=="FULL_SNAPSHOT_AUTHENTICATION_REQUIRED") {"Collection export refused: ${initial.reason}"}
+            LibraryRestoreAdmission.inspect(access.applicationContext,raw,::fence) // Whole retained local limits, not per-library limits.
             val close=ArrayList<AutoCloseable>()
             try {
                 val sources=ArrayList<MedicalCollectionWriter.Source>()
@@ -32,7 +33,7 @@ internal class LibraryCollectionCapture(private val access:DatabaseAccess) {
                         .capture(sourceScope,session.issue()).also {close+=it}
                     val manifest=snapshot.manifest()
                     val expected=manifest.versions.map {it.context.objectId.toString()}.toSet()
-                    val actual=before.items.filter {it.library==identity && "/objects/" in it.key}
+                    val actual=initial.items.filter {it.library==identity && "/objects/" in it.key}
                         .map {it.key.substringAfter("/objects/").substringBefore('/')}.toSet()
                     check(expected==actual) {"Inventory and authenticated library differ"}
                     covered+=identity
@@ -60,11 +61,22 @@ internal class LibraryCollectionCapture(private val access:DatabaseAccess) {
                         source(id.toString(),directory,db,directory::checkCurrent)
                     }
                 }
+                check(initial.items.filter {it.category in setOf("CURRENT_BUSINESS","RETAINED_BUSINESS")}.map {it.library}.toSet()==covered)
+                // Opening/authenticating SQLCipher read adapters may materialize legitimate
+                // SQLite sidecars. Freeze the output baseline AFTER all adapters are prepared;
+                // the same root fence still covers discovery and full independent audit.
+                val before=lifecycle.persist(root,current,scope,operation,lifecycle.fresh(root,current,::fence),collection=true)
+                check(before.reason=="FULL_SNAPSHOT_AUTHENTICATION_REQUIRED") {"Prepared collection not closed: ${before.reason}"}
                 check(before.items.filter {it.category in setOf("CURRENT_BUSINESS","RETAINED_BUSINESS")}.map {it.library}.toSet()==covered)
+                LibraryRestoreAdmission.inspect(access.applicationContext,raw,::fence)
                 val receipt=MedicalCollectionWriter.write(sources,UUID.fromString(scope.dataset),cap,password,output)
                 fence()
                 val after=lifecycle.persist(root,current,scope,operation,lifecycle.fresh(root,current,::fence),collection=true)
-                check(after.reason=="FULL_SNAPSHOT_AUTHENTICATION_REQUIRED" && before.items==after.items) {"Complete resource set changed during export"}
+                check(after.reason=="FULL_SNAPSHOT_AUTHENTICATION_REQUIRED" && before.items==after.items) {
+                    val changed=(before.items.toSet()-after.items.toSet())+(after.items.toSet()-before.items.toSet())
+                    "Complete resource set changed during export: ${after.reason}; "+changed.take(8).joinToString {"${it.key}:${it.category}:${it.bytes}"}
+                }
+                LibraryRestoreAdmission.inspect(access.applicationContext,raw,::fence)
                 sources.forEach {it.snapshot.manifest()}
                 receipt
             }finally {

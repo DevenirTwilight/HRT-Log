@@ -70,6 +70,7 @@ internal class LibraryAttachmentAdmission(private val access:DatabaseAccess) {
             // Binding and reservation share this native root gate. An ENOSPC/root commit failure
             // may retain a harmless typed identity in the child, but never authorizes object IO.
             val value=request();val raw=access.legacyRoot().openHelper.writableDatabase
+            raw.query("SELECT 1 FROM attachment_operation WHERE operation_uuid=? OR idempotency_uuid=? LIMIT 1",arrayOf(value.operation.toString(),value.operation.toString())).use {check(!it.moveToFirst()) {"Operation UUID retained in the legacy library"}}
             raw.query("SELECT 1 FROM library_write_reservation WHERE operation_uuid=?",arrayOf(value.operation.toString())).use {check(!it.moveToFirst()) {"Reconcile existing operation; never reopen changed input"}}
             val fs=android.system.Os.statvfs(access.applicationContext.noBackupFilesDir.path)
             raw.execSQL("INSERT INTO library_write_reservation VALUES(?,?,?,?,?,?,'STARTED',?)",arrayOf(value.operation.toString(),DatabaseAccess.handleIdentity(db),scope.dataset,scope.epoch,value.digest(scope),reserve(fs.f_frsize),System.currentTimeMillis()))
