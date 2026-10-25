@@ -60,7 +60,13 @@ class LibraryCollectionRestartAndroidTest {
                 if(seam=="SWITCHED") {
                     assertEquals("COMMITTED",state.phase);assertTrue(state.currentlyActive)
                     MedicalCollectionReader.read(target.session.issue(),password(),FileInputStream(file).channel).use {source->
-                        source.records(source.index().active) {records->LibraryRestoreAndroidTest().verify(target,source.manifest(source.index().active),records,state.generation)}
+                        source.records(source.index().active) {records->
+                            // The indexed production view intentionally removes export-only created.
+                            // This tiny synthetic test reads the strict source header explicitly;
+                            // existing v1 fixtures keep their unchanged EPOCH default/assertions.
+                            val created=java.time.Instant.parse(BackupJsonReader.read(records).getString("created"))
+                            LibraryRestoreAndroidTest().verify(target,source.manifest(source.index().active),records,state.generation,created)
+                        }
                         target.raw.query("SELECT role,c.state FROM library_collection_member m JOIN library_candidate c USING(operation_uuid) WHERE collection_uuid=?",arrayOf(operation.toString())).use {c->
                             assertEquals(2,c.count);while(c.moveToNext())assertEquals(if(c.getString(0)=="ACTIVE")"ACTIVE" else "RETIRED",c.getString(1))
                         }

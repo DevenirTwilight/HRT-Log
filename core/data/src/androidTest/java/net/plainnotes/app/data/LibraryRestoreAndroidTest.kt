@@ -84,14 +84,13 @@ class LibraryRestoreAndroidTest {
         override fun close() {records.fill(0);check(file.delete())}
     }
     internal fun verify(f:RootFixture,b:SourceBundle,expectedGeneration:UUID)=verify(f,b.manifest,b.records,expectedGeneration)
-    internal fun verify(f:RootFixture,manifest:AttachmentBackupManifest,records:ByteArray,expectedGeneration:UUID) {
+    internal fun verify(f:RootFixture,manifest:AttachmentBackupManifest,records:ByteArray,expectedGeneration:UUID,created:Instant=Instant.EPOCH) {
         val db=f.access.get(Space.PRIMARY);assertEquals(expectedGeneration.toString(),DatabaseAccess.handleIdentity(db))
         val scope=requireNotNull(AttachmentIdentity.current(db.openHelper.writableDatabase))
         assertNotEquals(manifest.dataset.toString(),scope.dataset)
         assertNotEquals(manifest.epoch.toString(),scope.epoch)
         val session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
         try {
-            val created=BackupJsonReader.indexed(records.copyOf()).use {Instant.parse(it.metadata.getString("created"))}
             AttachmentBackupPreparation(f.context,db).capture(scope,session.issue(),created=created).use {snapshot->
                 assertEquals(AttachmentCandidateMetadata.normalized(manifest.copy(dataset=UUID.fromString(scope.dataset),epoch=UUID.fromString(scope.epoch))),AttachmentCandidateMetadata.normalized(snapshot.manifest()))
                 snapshot.records {assertArrayEquals(records,it)}
