@@ -1,0 +1,32 @@
+# MED-02 independent review delta — PR122
+
+NOT_REVIEWED_EXTERNALLY. Reviewed-source candidate `e5fa2404ddd4174888f7510477498f4d0f2af84a`; this is an evidence package, not an external review result or public-enable approval. See [prior threat model](../../2026-10-24/external-review/README.md), [exact file inventory](source-inventory.json), [current acceptance receipt](../collection-integration/current.json) and [collection contract](../collection-integration/contract.md). Evidence-branch code is not the build target: checkout the exact source SHA in the inventory.
+
+## Added production capabilities and questions
+
+| Boundary | Implementation and independent review obligation |
+|---|---|
+| Entire retained collection → archive | LibraryCollectionCapture holds the native root fence and verifies ACTIVE, RETAINED and genuinely empty libraries with full business oracle and inner AEAD; source scopes, directory FD/inode, exact pre/post resource closure. Review concurrent writers, indirect sidecars, unsupported namespaces and UNKNOWN handling. No missing library may become empty. |
+| Archive → fresh device | Approved PNMEDBK2 independent reader authenticates the complete index/member set and scoped identities. Existing per-library reconstruction/validation is reused; new dataset/epoch/device-local keys and explicit typed mapping, never source aliases. Review missing/duplicate/extra members, index quotas, malformed type/value boundaries, key loss, password errors and retained members. PNMEDBK1 and PNBAK1 meanings remain unchanged. |
+| New collection visibility | Room17 local collection/member rows reserve all children before materialization; all independently reopened/verified before READY. One encrypted root transaction updates authority and collection state. No rename or independent child COMMIT is represented as the activation point. Review all four real process-death seams, startup resolution, rollback and old-generation retention. |
+| Restored library new import | LibraryAttachmentAdmission early refusal precedes provider access; exact immutable STARTED request reservation precedes file/key IO; permit checked in real child/root transactions. Child object COMMIT and later root confirmation are distinct. Unknown/lost confirmation requires read-only reconciliation, not input/encryption replay. Review concurrent UUID payloads, stale scope, cancellation, permission loss, transaction nesting and conservative resource double charging. |
+| Resource ownership | All current/retained/unknown files, aliases, pending reservations and root database key remain charged under unchanged256MiB/512alias budgets. READONLY retained inventory avoids unnecessary live Room overlap. Review low-space/WAL/sidecar bounds and native-memory ownership. No permanent file/key destruction, guessed refund, alias recreation or silent history truncation. |
+| Compatibility | Room16→17 adds only local control tables; historical full upgrade chain, injected DDL rollback16, current17 and old16 reader rejection are separate assertions. Clinical business backup schema13 unchanged. Review trigger protection and restoration of local-only control state; imported business must not counterfeit authority. |
+| Old screen and post-COMMIT result | RuntimeLibrarySession keeps old access revoked and never retags IDs. Late invalidation cannot replace the already acknowledged real COMMIT explanation. This is a status rule, not permission restoration. Review actual import, refresh failure, queued callbacks, app lock/disguise and notification requests. |
+
+## Reproduction and evidence
+
+Use repository AGENTS/CLAUDE and JDK21/full flavor. `source /workspace/scratch/ansm-tools/gradle-env.sh` is this workspace helper, not a portable dependency. Standard Gradle/SDK setup is documented in the pinned workflows.
+
+- Host: `./gradlew :app:testFullDebugUnitTest --tests '*RuntimeLibrarySessionTest' --tests '*TransMemoImportFlowTest' --tests '*PeriodStabilityTest' :app:compileFullDebugAndroidTestKotlin --no-parallel --max-workers=2`.
+- Full required CI: `.github/workflows/android.yml` and Science workflow. Native API26/29/35 uses the pinned runners and original assertions.
+- Independent low-memory: `.github/workflows/med02-library-low-memory.yml`; API26/x86512MiB/192MiB, original v1 baseline12 + codec4 + collection2, existing generation/operation seams and four new collection seams. Source guest terminated, AVD recreated with wipe-data, only ciphertext copied; target Android ID differs and UID starts with no aliases. Source/target neutral receipts fix exact source and transferred SHA.
+- Original `65cc87fe` failures and verified prior-source success remain in `collection-integration/closeout-e5fa2404`. Deterministic status-regression RED then GREEN13 is distinct from native acceptance. New final-source acceptance is PENDING until current.json and raw receipts say otherwise; prior-source results cannot substitute.
+
+## Explicit limits and remaining enablement gates
+
+No independent expert review has occurred. PHYSICAL_DEVICE, TalkBack/manual UX and physical power-loss: NOT_RUN. Emulator force-stop is not a hardware power-loss guarantee. PDF/PNG/binary signature roundtrip demonstrates encrypted bytes and typed relationships, not parser safety; malicious parser/provider corpus, viewer peak memory and physical devices still need targeted review/testing. Native parser exploit resistance and complete forensic memory erasure are not claimed. Host OS/UID/Keystore and mature cryptographic libraries remain the trusted base.
+
+Public entry `feature_enabled=0`, `PUBLIC_ENTRY_ENABLED=false`; real medical originals, real-user import/view/restore UI, permanent destruction and signing/release remain OFF. Collection format implementation is owner-approved but not a permanent public format freeze. Unknown/interrupted ownership safely refuses and can require a later independently approved disposition policy; completeness is never inferred by ignoring it.
+
+Before public enablement: resolve independent reviewer findings; complete applicable parser/viewer/physical-device validation; deliver localized real-user UX on the scoped facade; verify full backup compatibility against the final reviewed source; obtain separate owner enablement approval. Deletion UX and permanent destruction policy are separate decisions. No AI/internal review counts as external acceptance.

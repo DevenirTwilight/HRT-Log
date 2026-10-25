@@ -1,0 +1,95 @@
+{
+  "source": "e5fa2404ddd4174888f7510477498f4d0f2af84a",
+  "mainBase": "4f3cddff49e2bdfb139fa936a03bffee47a24601",
+  "status": "NOT_REVIEWED_EXTERNALLY",
+  "files": [
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionCapture.kt",
+      "sha256": "f557dcc5ef096447aaea7b1af3101ad1c9d32a385fbbaf5bd900fc84faea9ff5"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionRestore.kt",
+      "sha256": "3ce0396e52bd1aca7c535797d1b2c0650d4ad5595babd6fb05b1b0e18b6df2b1"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionSchema.kt",
+      "sha256": "dc16a1ad0e73409cb94036ecba2f457ea5da155e77f7de460e44b9c4403b178d"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/LibraryAttachmentAdmission.kt",
+      "sha256": "f4e80adca75acbbcf7f43e2c97f85f34149d00adbb3108045a173a24bb8b0c5a"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/LibraryLifecycle.kt",
+      "sha256": "2c4db1d6c24c16a6247b3e1276c84d05b9f7f24965128217fa4c5d3999817314"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/LibraryResourceFacts.kt",
+      "sha256": "88ee029ba667c8d0771f1bc5ec94d5c816b16326d4270b2b21f9e437d72ace3f"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreAdmission.kt",
+      "sha256": "3964d3113a26c2c647699e3150fc10c8947f2671b8a99b63a00f7a6621c50703"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt",
+      "sha256": "f214fb132a9a230b253359430f757e0a8478d1594e3b817f5d31e9c6f11d9ec2"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/MedicalCollectionReader.kt",
+      "sha256": "0294fba60431323ae81e60c1d9b53d428a65b44888c50ade1940af9bf2b027c3"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveCrypto.kt",
+      "sha256": "b5310efc19f11ee6cc29b3b969bb80f8ffbb5db2d70a10faf784c3339d8cc454"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveWriter.kt",
+      "sha256": "0b94581143c40e336dde2ae220e089535be7da1e233f47bf5b1e64c70970246f"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveReader.kt",
+      "sha256": "3114d8f2b366716903e2649317dfd82c0cdfbcf1de212a150e17790382cc89b7"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/AttachmentPersistentStore.kt",
+      "sha256": "edc40fc6468c75503104d0bf926d1ad05202c7bf5fd548b86ec5163babef8925"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/AttachmentDeviceKeys.kt",
+      "sha256": "da5b61fb95d6a089b94ff6a036fcbde538e91a06567d4956a35b5bb379704444"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/AttachmentObjectStreams.kt",
+      "sha256": "1b8df6394042319b83c0212d5736cce9150bdad18d7b839fa49c1cfb89dd45e5"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/MedicalAttachmentOperations.kt",
+      "sha256": "e2d0e4253113668b86f71260e91e4d99e44da96ee62395d82fc2a16dbadc33ff"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/Migrations.kt",
+      "sha256": "254515c49a75debdc8e11f1a25f7eeed201744fc176fcfb4b012e28d8082ddbe"
+    },
+    {
+      "path": "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt",
+      "sha256": "bc57606dee43a8fa3b12a4b7224df8d22e99d8d843c2089c9b5cbc1cfa323a6d"
+    },
+    {
+      "path": "app/src/main/java/net/plainnotes/app/runtime/RuntimeLibrarySession.kt",
+      "sha256": "ba61b88c26a03bd40b4adb5852519578e043c3fe75363f83861bedde4cc60972"
+    },
+    {
+      "path": "core/data/src/androidTest/java/net/plainnotes/app/data/LibraryCollectionAndroidTest.kt",
+      "sha256": "7f3dbf6ba02c3e6a4181dfd5bf67e48049ddf3ae7c42a8cb797faedbfa05f015"
+    },
+    {
+      "path": ".github/workflows/med02-library-low-memory.yml",
+      "sha256": "566812921f7ff40430cc7853e13b25d68fca39cd1c0558595c18cba6e3408314"
+    },
+    {
+      "path": "scripts/run_library_collection_transfer.py",
+      "sha256": "a0dc841a38f7e0781e7ef736d10c233137da0ce82406f9b6102bfeba32972dcf"
+    }
+  ]
+}
