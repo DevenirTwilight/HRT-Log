@@ -37,7 +37,7 @@ object Mona {
         val route: String?, val ester: String?, val dosingBasis: String?, val deliveryForm: String?,
         val totalDoseOriginal: String?, val usedDoseOriginal: String?, val dosePerUnitOriginal: String?,
         val amount: String?, val genericSupplyType: String?)
-    data class Export(val metadata: Metadata, val intakes: List<Intake>, val bloodTests: List<BloodTest>,
+    class Export internal constructor(val metadata: Metadata, val intakes: List<Intake>, val bloodTests: List<BloodTest>,
         val schedules: List<Schedule>, val supplies: List<Supply>, val issues: List<Issue>, val sourceRows: Map<String,String>)
 
     private val routes = setOf("injection", "oral", "sublingual", "patch", "gel", "implant", "suppository", "transdermalSpray", "transdermalDrops")
@@ -58,22 +58,22 @@ object Mona {
         val metadata = root.opt("metadata") as? JSONObject ?: throw InvalidExport("MISSING_METADATA")
         val version = metadata.opt("database_version")
         if (version !is Number || version.toString() != DATABASE_VERSION.toString()) throw InvalidExport("UNSUPPORTED_DATABASE_VERSION")
-        val appVersion = (metadata.opt("app_version") as? String)?.takeIf { it.isNotBlank() && it.length<=128 } ?: throw InvalidExport("MISSING_APP_VERSION")
+        val appVersion = (metadata.opt("app_version") as? String)?.takeIf { it.isNotBlank() && it.length<=128 && validUnicode(it) } ?: throw InvalidExport("MISSING_APP_VERSION")
         val exported = (metadata.opt("export_date") as? String)?.takeIf { s ->
             runCatching { OffsetDateTime.parse(s) }.isSuccess || runCatching { LocalDateTime.parse(s) }.isSuccess
         } ?: throw InvalidExport("INVALID_EXPORT_DATE")
         val data = root.opt("data") as? JSONObject ?: throw InvalidExport("MISSING_DATA")
         val arrays = tables.associateWith { data.opt(it) as? JSONArray ?: throw InvalidExport("MISSING_TABLE") }
         var rows = 0L
-        data.keySet().forEach { key ->
+        data.fields().forEach { key ->
             val list = data.opt(key) as? JSONArray ?: throw InvalidExport("INVALID_TABLE")
             rows += list.length()
         }
         if (rows > 100000) throw InvalidExport("TOO_MANY_ROWS")
         val issues = mutableListOf<Issue>()
-        root.keySet().filter { it !in setOf("metadata", "data") }.forEach { issues += Issue("export", null, it, Reason.UNSUPPORTED_FIELD) }
-        metadata.keySet().filter { it !in setOf("app_version", "database_version", "export_date") }.forEach { issues += Issue("metadata", null, it, Reason.UNSUPPORTED_FIELD) }
-        data.keySet().filter { it !in tables }.forEach { key ->
+        root.fields().filter { it !in setOf("metadata", "data") }.forEach { issues += Issue("export", null, it, Reason.UNSUPPORTED_FIELD) }
+        metadata.fields().filter { it !in setOf("app_version", "database_version", "export_date") }.forEach { issues += Issue("metadata", null, it, Reason.UNSUPPORTED_FIELD) }
+        data.fields().filter { it !in tables }.forEach { key ->
             issues += Issue(key, null, "", Reason.UNSUPPORTED_COLLECTION, (data.get(key) as JSONArray).length())
         }
         val sourceRows=linkedMapOf<String,String>()
@@ -120,15 +120,18 @@ object Mona {
                 reader.lab(row.string("testosteroneLevels"), "T", setOf("ng/dL", "ng/mL", "nmol/L"), type, id))
             BloodTest(id, at?.let { reader.timing(it, row.string("timeZone"), type, id) }, values, row.string("notes"))
         }
-        return Export(Metadata(appVersion, DATABASE_VERSION, exported), intakes, bloodTests, schedules, supplies, issues.toList(),sourceRows.toMap())
+        return Export(Metadata(appVersion, DATABASE_VERSION, exported), frozen(intakes), frozen(bloodTests.map{it.copy(values=frozen(it.values))}),
+            frozen(schedules), frozen(supplies), frozen(issues),java.util.Collections.unmodifiableMap(LinkedHashMap(sourceRows)))
     }
 
+    private fun <T> frozen(values:List<T>):List<T> = java.util.Collections.unmodifiableList(ArrayList(values))
+    private fun JSONObject.fields():Set<String> = keys().asSequence().toSet()
     private fun JSONObject.string(key: String): String? = opt(key).let { if (it == null || it == JSONObject.NULL) null else it as? String }
     /** Evidence digest input, independently encoded identically on JVM/API26/29/35.
      * Clinical decimals in Mona are strings. Numeric JSON IDs remain integers. */
     fun canonical(value:Any?):String=when(value) {
         null,JSONObject.NULL->"null"
-        is JSONObject->value.keySet().sorted().joinToString(",","{","}"){quote(it)+":"+canonical(value.get(it))}
+        is JSONObject->value.fields().sorted().joinToString(",","{","}"){quote(it)+":"+canonical(value.get(it))}
         is JSONArray->(0 until value.length()).joinToString(",","[","]"){canonical(value.get(it))}
         is String->quote(value)
         is Boolean->value.toString()
@@ -167,10 +170,10 @@ object Mona {
             }
         }
         fun known(row: JSONObject, type: String, id: String, keys: Set<String>) {
-            if(row.keySet().any {it.length>256})throw InvalidExport("FIELD_NAME_LIMIT")
-            if(row.keySet().any {key->(row.opt(key) as? String)?.let{it.length>16384 || !validUnicode(it)}==true})throw InvalidExport("STRING_LIMIT_OR_ENCODING")
-            row.keySet().filter { it !in keys }.forEach { issues += Issue(type, id, it, Reason.UNSUPPORTED_FIELD) }
-            for (key in row.keySet().filter { it in keys }) {
+            if(row.fields().any {it.length>256})throw InvalidExport("FIELD_NAME_LIMIT")
+            if(row.fields().any {key->(row.opt(key) as? String)?.let{it.length>16384 || !validUnicode(it)}==true})throw InvalidExport("STRING_LIMIT_OR_ENCODING")
+            row.fields().filter { it !in keys }.forEach { issues += Issue(type, id, it, Reason.UNSUPPORTED_FIELD) }
+            for (key in row.fields().filter { it in keys }) {
                 val value = row.opt(key)
                 if (value == null || value == JSONObject.NULL) continue
                 val number = key in setOf("id", "scheduleId", "medicationSupplyItemId", "amount")
@@ -193,7 +196,7 @@ object Mona {
         }
         fun molecule(row: JSONObject, type: String, id: String): Molecule? {
             val value = row.string("molecule")?.let { embedded(it, type, id, "molecule") }
-            value?.keySet()?.filter { it !in setOf("name", "massUnit", "rateUnit") }?.forEach { issues += Issue(type, id, "molecule.$it", Reason.UNSUPPORTED_FIELD) }
+            value?.fields()?.filter { it !in setOf("name", "massUnit", "rateUnit") }?.forEach { issues += Issue(type, id, "molecule.$it", Reason.UNSUPPORTED_FIELD) }
             value?.let { obj ->
                 for(key in listOf("name","massUnit","rateUnit")) {
                     val raw=obj.opt(key)
@@ -229,7 +232,7 @@ object Mona {
         fun lab(raw: String?, analyte: String, units: Set<String>, type: String, id: String): LabValue? {
             if (raw == null) return null
             val row = embedded(raw, type, id, analyte) ?: return LabValue(analyte, raw, null, null)
-            row.keySet().filter { it !in setOf("value", "unit") }.forEach { issues += Issue(type, id, "$analyte.$it", Reason.UNSUPPORTED_FIELD) }
+            row.fields().filter { it !in setOf("value", "unit") }.forEach { issues += Issue(type, id, "$analyte.$it", Reason.UNSUPPORTED_FIELD) }
             val original = row.string("value"); val unit = row.string("unit")
             if (unit !in units) issues += Issue(type, id, analyte + ".unit", Reason.UNKNOWN_VALUE)
             return LabValue(analyte, original, decimal(original, type, id, analyte + ".value", allowZero = true), unit)

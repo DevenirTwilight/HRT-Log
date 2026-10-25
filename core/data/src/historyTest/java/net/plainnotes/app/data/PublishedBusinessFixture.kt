@@ -10,6 +10,7 @@ internal object PublishedBusinessFixture {
     fun dump(db:SupportSQLiteDatabase,tables:List<String> = DOMAIN_TABLES,schema:Int=10):JSONObject = JSONObject().apply {
         for(table in tables) {
             if(schema<11 && table=="lab_panel")continue
+            if(schema<14 && table=="external_import_item")continue
             val columns=RecordBackupCompatibility.columns.getValue(table).filterNot{(table=="supply_container" && it=="inventory_encoding") || (schema<11 && table=="lab_value" && it=="panel_id")}
             val rows=JSONArray()
             db.query("SELECT ${columns.joinToString(","){"`$it`"}} FROM `$table`").use { c ->while(c.moveToNext())rows.put(JSONObject().apply {

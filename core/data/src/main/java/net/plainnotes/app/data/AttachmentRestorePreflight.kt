@@ -63,7 +63,7 @@ internal object AttachmentRestorePreflight {
                 val schema=RecordBackupCompatibility.readVersion(input.metadata)
                 require(schema in 12..RecordBackupCompatibility.SCHEMA) {"Full restore needs current structured record semantics"}
                 val tables=input.tables
-                require(tables.keys()==DOMAIN_TABLES.toSet()) {"Incomplete or unknown structured table set"}
+                require(tables.keys()==RecordBackupCompatibility.tables(schema).toSet()) {"Incomplete or unknown structured table set"}
                 RecordBackupCompatibility.validateInventoryVersion(schema,tables)
                 RecordBackupCompatibility.validateReferenceVersion(schema,tables)
                 var rows=m.records.size.toLong()+m.documents.size+m.versions.size+m.links.size

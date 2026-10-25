@@ -2,10 +2,18 @@ package net.plainnotes.app.data
 
 /** PNBAK1 business serialization has an independent version from Room; crypto framing is unchanged. */
 internal object RecordBackupCompatibility {
-    const val SCHEMA = 13
+    const val SCHEMA = 14
     /** Official format-2 snapshots require a newer reader. User-only backups retain schema 12. */
-    fun exportSchema(db:androidx.sqlite.db.SupportSQLiteDatabase):Int = db.query("SELECT 1 FROM reference_snapshot WHERE namespace='BDPM_FR' LIMIT 1").use{if(it.moveToFirst())13 else 12}
+    fun exportSchema(db:androidx.sqlite.db.SupportSQLiteDatabase):Int {
+        if(db.query("SELECT 1 FROM external_import_item LIMIT 1").use{it.moveToFirst()} ||
+            db.query("SELECT 1 FROM dose_record WHERE origin='IMPORT_MONA' LIMIT 1").use{it.moveToFirst()})return 14
+        return db.query("SELECT 1 FROM reference_snapshot WHERE namespace='BDPM_FR' LIMIT 1").use{if(it.moveToFirst())13 else 12}
+    }
+    /** Empty new tables must not make an otherwise old-compatible backup unreadable. */
+    fun tables(schema:Int):List<String> = if(schema>=14)DOMAIN_TABLES else DOMAIN_TABLES.filterNot{it==ExternalImportSchema.TABLE}
+    fun exportTables(db:androidx.sqlite.db.SupportSQLiteDatabase)=tables(exportSchema(db))
     fun validateReferenceVersion(schema:Int,tables:BackupTables) {
+        ExternalImportSchema.validateVersion(schema,tables)
         if(schema>=13)return
         val snapshots=tables.optJSONArray("reference_snapshot") ?: return
         for(index in 0 until snapshots.length())require(snapshots.getJSONObject(index).getString("namespace")!="BDPM_FR") {"Misdeclared BDPM backup version"}
@@ -65,5 +73,5 @@ internal object RecordBackupCompatibility {
         "history_period_revision" to listOf("id","period_key","revision","state","medication_id","identity_json","standard_json","from_date","until_date","zone","evidence_json","origin","created_utc","kind","group_key"),
         "record_annotation" to listOf("record_id","kind","created_utc"),
         "trash_item" to listOf("id","kind","ref","item_date","deleted_utc","payload_json","state")
-    ) + ReferenceSchema.columns
+    ) + ReferenceSchema.columns + mapOf(ExternalImportSchema.TABLE to ExternalImportSchema.columns)
 }
