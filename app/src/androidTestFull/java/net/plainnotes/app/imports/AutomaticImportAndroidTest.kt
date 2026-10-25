@@ -48,7 +48,16 @@ class AutomaticImportAndroidTest {
     private fun waitSystem(label:String,predicate:()->Boolean) {
         val end=SystemClock.uptimeMillis()+30000
         while(SystemClock.uptimeMillis()<end){if(predicate())return;Thread.sleep(100)}
-        fail("System picker did not reach $label")
+        val root=instrumentation.uiAutomation.rootInActiveWindow
+        val tree=StringBuilder()
+        fun snapshot(node:AccessibilityNodeInfo?,depth:Int) {
+            if(node==null || depth>16 || tree.length>6000)return
+            tree.append("\n").append(" ".repeat(depth)).append(node.className).append(" text=").append(node.text)
+                .append(" clickable=").append(node.isClickable).append(" visible=").append(node.isVisibleToUser)
+            for(i in 0 until node.childCount)snapshot(node.getChild(i),depth+1)
+        }
+        snapshot(root,0)
+        fail("System picker did not reach $label; window=${root?.packageName}; $tree")
     }
     private fun touch(node:AccessibilityNodeInfo) {
         val b=Rect();node.getBoundsInScreen(b);assertFalse(b.isEmpty)
@@ -75,7 +84,19 @@ class AutomaticImportAndroidTest {
                 }
                 button=find(instrumentation.uiAutomation.rootInActiveWindow);button!=null
             }
-            touch(requireNotNull(button));waitSystem("synthetic root"){systemNode("SYNTHETIC IMPORT")!=null};touch(requireNotNull(systemNode("SYNTHETIC IMPORT")))
+            assertTrue(requireNotNull(button).performAction(AccessibilityNodeInfo.ACTION_CLICK))
+            var rootAction:AccessibilityNodeInfo?=null
+            waitSystem("settled synthetic root") {
+                try {instrumentation.uiAutomation.waitForIdle(300,3000)}catch(_:java.util.concurrent.TimeoutException){return@waitSystem false}
+                val current=instrumentation.uiAutomation.rootInActiveWindow ?: return@waitSystem false
+                if(!current.refresh())return@waitSystem false
+                var node=systemNode("SYNTHETIC IMPORT")
+                while(node!=null && !node.isClickable)node=node.parent
+                rootAction=node?.takeIf{it.isVisibleToUser};rootAction!=null
+            }
+            // Root drawer navigation has a real accessible click action. A finger at a
+            // label's pre-layout coordinates can miss while that drawer is being attached.
+            assertTrue(requireNotNull(rootAction).performAction(AccessibilityNodeInfo.ACTION_CLICK))
         }
         val name=if(kind=="tracker")"SYNTHETIC tracker.db" else "SYNTHETIC memo.json"
         waitSystem(name){systemNode(name)!=null}

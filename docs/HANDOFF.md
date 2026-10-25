@@ -1,3 +1,9 @@
+## PR-A #123：保留首轮原生失败，修正真实选择器测试 — 2026-10-25
+
+41373b61精确源码的PR运行40193377789：JVM/science通过；API26/29均实际执行原27项，26通过，新MainActivity跨应用流程1失败（未找到SYNTHETIC tracker.db），不是导入成功。官方工件12599043088/12599117894的SHA256和CRC已核，原始本测试logcat与收据在`docs/cross-app-import/2026-10-25/native-413/`。API29显示两合成root注册成功，但DocumentStack仍Recent，未进入真实导入器；侧栏触摸命中了布局过渡坐标是当前测试层假设，不宣称已证明生产通过。
+
+本次仅修系统UI测试：侧栏使用稳定后的真实可访问点击，文件仍通过真实DocumentsUI选择，无替身结果；超时保留有界树快照。将此新测试前置到三API正常矩阵并保存其原始报告，后续大套仅排除这一个已执行的新用例，全部旧断言保留。无需再等旧大型矩阵跑完才发现新路径错误；不改生产导入规则/预算/权限。最终新SHA仍须自身CI和真实流程验证，PR保持Draft。既有MED OFF/协议/PK/库存不动。
+
 ## PR-A 跨应用统一导入：实现与首轮定向验证 — 2026-10-25
 
 当前任务已转为跨应用迁移，勿继续MED研发。实时远端#122已MERGED，主线1ddcf431558e0e90662b4a9ab931a9a6ec437209，合并源e5fa2404；下方旧PENDING是历史。独立worktree `/workspace/HRT-Log-import-a`，分支`feature/import-auto-detection-20261025`，未复制旧MED工作树修改。

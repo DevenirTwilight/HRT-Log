@@ -1,0 +1,134 @@
+10-25 12:45:11.796  8436  8453 I TestRunner: started: realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(net.plainnotes.app.imports.AutomaticImportAndroidTest)
+10-25 12:45:11.799  8436  8453 D IdlingRegistry: Registering idling resources: [androidx.compose.ui.test.EspressoLink@9b65654]
+10-25 12:45:11.805  1516  1516 I keystore: del USRPKEY_notes.private 10077
+10-25 12:45:11.805  1516  1516 I keystore: del USRSKEY_notes.private 10077
+10-25 12:45:11.805  1516  1516 I keystore: del USRCERT_notes.private 10077
+10-25 12:45:11.805  1516  1516 I keystore: del CACERT_notes.private 10077
+10-25 12:45:11.805  1516  1516 I keystore: del USRPKEY_notes.disguise 10077
+10-25 12:45:11.805  1516  1516 I keystore: del USRSKEY_notes.disguise 10077
+10-25 12:45:11.805  1516  1516 I keystore: del USRCERT_notes.disguise 10077
+10-25 12:45:11.805  1516  1516 I keystore: del CACERT_notes.disguise 10077
+10-25 12:45:11.806  1516  1516 I keystore: del USRPKEY_notes.decoy 10077
+10-25 12:45:11.806  1516  1516 I keystore: del USRSKEY_notes.decoy 10077
+10-25 12:45:11.806  1516  1516 I keystore: del USRCERT_notes.decoy 10077
+10-25 12:45:11.806  1516  1516 I keystore: del CACERT_notes.decoy 10077
+10-25 12:45:11.806  1516  1516 I keystore: del USRPKEY_notes.lock 10077
+10-25 12:45:11.806  1516  1516 I keystore: del USRSKEY_notes.lock 10077
+10-25 12:45:11.806  1516  1516 I keystore: del USRCERT_notes.lock 10077
+10-25 12:45:11.806  1516  1516 I keystore: del CACERT_notes.lock 10077
+10-25 12:45:11.808  8436  8453 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+10-25 12:45:11.831  8436  8436 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@e759e31 in: PRE_ON_CREATE
+10-25 12:45:11.831  8436  8436 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+10-25 12:45:11.839  8436  8436 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@e759e31 in: CREATED
+10-25 12:45:11.839  8436  8436 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=net.plainnotes.app.MainActivity@e759e31
+10-25 12:45:11.840  8436  8436 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@e759e31 in: STARTED
+10-25 12:45:11.840  8436  8436 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.MainActivity@e759e31
+10-25 12:45:11.845  8436  8436 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@e759e31 in: RESUMED
+10-25 12:45:11.845  8436  8436 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.MainActivity@e759e31
+10-25 12:45:11.846  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:45:11.858  3456  3524 D EGL_emulation: eglMakeCurrent: 0x71df2063cd20: ver 3 0 (tinfo 0x71df2060d720)
+10-25 12:45:11.862  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:45:11.865  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-25 12:45:11.865  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:45:11.868  8436  8466 D EGL_emulation: eglMakeCurrent: 0x71df0c734fc0: ver 3 0 (tinfo 0x71df0c67d800)
+10-25 12:45:11.873  2918  2940 I ActivityManager: Displayed net.plainnotes.app/.MainActivity: +52ms
+10-25 12:45:12.382  8436  8436 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@e759e31 in: PAUSED
+10-25 12:45:12.382  8436  8436 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.MainActivity@e759e31
+10-25 12:45:12.403  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:45:12.404  1392  1392 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-25 12:45:12.405  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:45:12.419  4162  4401 D EGL_emulation: eglMakeCurrent: 0x71df297cf4a0: ver 3 0 (tinfo 0x71df1dbf0640)
+10-25 12:45:12.424  2918  2940 I ActivityManager: Displayed com.android.documentsui/.picker.PickActivity: +40ms
+10-25 12:45:12.440  4162  4162 I zygote64: Deoptimizing int com.android.documentsui.sorting.SortingCursorWrapper.getCount() due to JIT inline cache
+10-25 12:45:12.448  8436  8466 D EGL_emulation: eglMakeCurrent: 0x71df0c734fc0: ver 3 0 (tinfo 0x71df0c67d800)
+10-25 12:45:12.456  8436  8436 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@e759e31 in: STOPPED
+10-25 12:45:12.456  8436  8436 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.MainActivity@e759e31
+10-25 12:45:12.500  2918  3007 I AudioTrack: AUDIO_OUTPUT_FLAG_FAST successful; frameCount 4512 -> 4512
+10-25 12:45:12.505  1387  8594 W audio_hw_generic: Not supplying enough data to HAL, expected position 140564 , only wrote 140400
+10-25 12:45:15.730  1387  3009 W audio_hw_generic: Not supplying enough data to HAL, expected position 447965 , only wrote 295200
+10-25 12:45:42.715  2918  2932 E memtrack: Couldn't load memtrack module
+10-25 12:45:42.716  2918  2932 W android.os.Debug: failed to get memory consumption info: -1
+10-25 12:45:42.722  1393  1421 D hwcomposer: hw_composer sent 46 syncs in 67s
+10-25 12:45:42.723  8436  8436 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@e759e31 in: DESTROYED
+10-25 12:45:42.723  8436  8436 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+10-25 12:45:42.728  2918  2932 E memtrack: Couldn't load memtrack module
+10-25 12:45:42.728  2918  2932 W android.os.Debug: failed to get memory consumption info: -1
+10-25 12:45:42.730  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:45:42.731  8436  8453 D IdlingRegistry: Unregistering idling resources: [androidx.compose.ui.test.EspressoLink@9b65654]
+10-25 12:45:42.731  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:45:42.732  1392  1392 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:45:42.733  8436  8453 E TestRunner: failed: realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(net.plainnotes.app.imports.AutomaticImportAndroidTest)
+10-25 12:45:42.733  8436  8453 E TestRunner: ----- begin exception -----
+10-25 12:45:42.733  8436  8453 E TestRunner: java.lang.AssertionError: System picker did not reach SYNTHETIC tracker.db
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.Assert.fail(Assert.java:89)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at net.plainnotes.app.imports.AutomaticImportAndroidTest.waitSystem(AutomaticImportAndroidTest.kt:51)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at net.plainnotes.app.imports.AutomaticImportAndroidTest.choose(AutomaticImportAndroidTest.kt:81)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:92)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:306)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:318)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(Unknown Source:8)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(Unknown Source:4)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:569)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(Unknown Source:8)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(Unknown Source:2)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:566)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(Unknown Source:8)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(Unknown Source:4)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:99)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source:1)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source:1)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:549)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:318)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+10-25 12:45:42.733  8436  8453 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2074)
+10-25 12:45:42.733  8436  8453 E TestRunner: ----- end exception -----
+10-25 12:45:42.734  8436  8453 I TestRunner: finished: realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(net.plainnotes.app.imports.AutomaticImportAndroidTest)

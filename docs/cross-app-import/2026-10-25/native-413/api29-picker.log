@@ -1,0 +1,183 @@
+10-25 12:44:26.761 25519 25539 I TestRunner: started: realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(net.plainnotes.app.imports.AutomaticImportAndroidTest)
+10-25 12:44:26.764 25519 25539 D IdlingRegistry: Registering idling resources: [androidx.compose.ui.test.EspressoLink@59d45b]
+10-25 12:44:26.772  1758  1758 I keystore: del USRPKEY_notes.private 10128
+10-25 12:44:26.772  1758  1758 I keystore: del USRSKEY_notes.private 10128
+10-25 12:44:26.773  1758  1758 I keystore: del USRCERT_notes.private 10128
+10-25 12:44:26.773  1758  1758 I keystore: del CACERT_notes.private 10128
+10-25 12:44:26.774  1758  1758 I keystore: del USRPKEY_notes.disguise 10128
+10-25 12:44:26.775  1758  1758 I keystore: del USRSKEY_notes.disguise 10128
+10-25 12:44:26.775  1758  1758 I keystore: del USRCERT_notes.disguise 10128
+10-25 12:44:26.775  1758  1758 I keystore: del CACERT_notes.disguise 10128
+10-25 12:44:26.775  1758  1758 I keystore: del USRPKEY_notes.decoy 10128
+10-25 12:44:26.775  1758  1758 I keystore: del USRSKEY_notes.decoy 10128
+10-25 12:44:26.775  1758  1758 I keystore: del USRCERT_notes.decoy 10128
+10-25 12:44:26.775  1758  1758 I keystore: del CACERT_notes.decoy 10128
+10-25 12:44:26.776  1758  1758 I keystore: del USRPKEY_notes.lock 10128
+10-25 12:44:26.776  1758  1758 I keystore: del USRSKEY_notes.lock 10128
+10-25 12:44:26.776  1758  1758 I keystore: del USRCERT_notes.lock 10128
+10-25 12:44:26.776  1758  1758 I keystore: del CACERT_notes.lock 10128
+10-25 12:44:26.776 25519 25539 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+10-25 12:44:26.781  3542  3558 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:26.782  3542  3558 I chatty  : uid=1000(system) Binder:3542_2 identical 38 lines
+10-25 12:44:26.782  3542  3558 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:26.782  3542  3563 E system_server: Invalid ID 0x00000000.
+10-25 12:44:26.785 25519 25519 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@d06c8a4
+10-25 12:44:26.791  1697  1697 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:44:26.795  3542  3563 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:26.795  3542  3563 I chatty  : uid=1000(system) android.anim identical 8 lines
+10-25 12:44:26.795  3542  3563 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:26.809 25519 25519 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@8d07a2f in: PRE_ON_CREATE
+10-25 12:44:26.809 25519 25519 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+10-25 12:44:26.815 25519 25519 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@8d07a2f in: CREATED
+10-25 12:44:26.815 25519 25519 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=net.plainnotes.app.MainActivity@8d07a2f
+10-25 12:44:26.816 25519 25519 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@8d07a2f in: STARTED
+10-25 12:44:26.816 25519 25519 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.MainActivity@8d07a2f
+10-25 12:44:26.821  3878  4491 D EGL_emulation: eglMakeCurrent: 0x7a8d3746f2c0: ver 3 0 (tinfo 0x7a8d37418a60)
+10-25 12:44:26.822 25519 25519 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@8d07a2f in: RESUMED
+10-25 12:44:26.822 25519 25519 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.MainActivity@8d07a2f
+10-25 12:44:26.865  1697  1697 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:44:26.866  1697  1697 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-25 12:44:26.866  1697  1697 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:44:26.872 25519 25559 D EGL_emulation: eglMakeCurrent: 0x7a8cee1cd460: ver 3 0 (tinfo 0x7a8dc772ccc0)
+10-25 12:44:26.877  3542  3567 I ActivityTaskManager: Displayed net.plainnotes.app/.MainActivity: +98ms
+10-25 12:44:27.291 25519 25519 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@8d07a2f in: PAUSED
+10-25 12:44:27.292 25519 25519 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.MainActivity@8d07a2f
+10-25 12:44:27.292  3542 25976 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:27.293  3542 25976 I chatty  : uid=1000(system) Binder:3542_17 identical 48 lines
+10-25 12:44:27.293  3542 25976 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:27.293  5104  5104 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@d87b15d
+10-25 12:44:27.306  5104  5104 D PickActivity: Created new state object: State{action=3, acceptMimes=[*/*], allowMultiple=false, localOnly=false, showDeviceStorageOption=true, showAdvanced=false, stack=DocumentStack{root=null, docStack=[], stackTouched=false}, dirConfigs={}, excludedAuthorities=[], openableOnly=false, sortModel=SortModel{dimensions={16908304=SortDimension{id=16908304, labelId=2131755268, dataType=0, sortCapability=0, defaultSortDirection=1, sortDirection=0, visibility=4}, 16908310=SortDimension{id=16908310, labelId=2131755262, dataType=0, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}, 2131296377=SortDimension{id=2131296377, labelId=2131755255, dataType=1, sortCapability=3, defaultSortDirection=2, sortDirection=0, visibility=0}, 2131296425=SortDimension{id=2131296425, labelId=2131755259, dataType=0, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}, 2131296571=SortDimension{id=2131296571, labelId=2131755265, dataType=1, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}}, defaultDimensionId=0, sortedDimension=null}}
+10-25 12:44:27.308  5104  5104 D DrawerController: Calculated drawer width:272.0
+10-25 12:44:27.318  5104  5104 D PickerActionHandler: Load last accessed stack.
+10-25 12:44:27.318  5104  5104 D PickerActionHandler: Attempting to load last used stack for calling package.
+10-25 12:44:27.320  5104 23543 D ProvidersAccess: Matched roots: [Root{authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, Root{authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, Root{authority=com.android.externalstorage.documents, rootId=home, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/home]
+10-25 12:44:27.324  5104 23543 D ProvidersAccess: Matched roots: [Root{authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, Root{authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, Root{authority=com.android.externalstorage.documents, rootId=home, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/home]
+10-25 12:44:27.325  5104  5104 D DocumentStack: Root changed to: Root{authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null
+10-25 12:44:27.325  5104  5104 D DocumentStack: Adding doc to stack: DocumentInfo{docId=null, name=null, mimeType=null, isContainer=false, isDirectory=false, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false} @ content:/document/null
+10-25 12:44:27.325  5104  5104 D DirectoryFragment: Creating new fragment null directory
+10-25 12:44:27.345  1697  1697 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:44:27.346  1697  1697 I chatty  : uid=1000(system) allocator@2.0-s identical 1 line
+10-25 12:44:27.347  1697  1697 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:44:27.349  5104  5296 D EGL_emulation: eglMakeCurrent: 0x7a8d37457340: ver 3 0 (tinfo 0x7a8d3742b280)
+10-25 12:44:27.357  3542  3563 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:27.358  3542  3563 I chatty  : uid=1000(system) android.anim identical 18 lines
+10-25 12:44:27.358  3542  3563 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:27.362  5104  5104 D AbstractActionHandler: Creating new loader recents.
+10-25 12:44:27.370  5104 23543 D ProvidersAccess: Matched roots: [Root{authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, Root{authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, Root{authority=com.android.externalstorage.documents, rootId=home, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/home]
+10-25 12:44:27.370  3542  3567 I ActivityTaskManager: Displayed com.android.documentsui/.picker.PickActivity: +87ms
+10-25 12:44:27.383  5104  5130 I oid.documentsu: Waiting for a blocking GC ProfileSaver
+10-25 12:44:27.394 25519 25559 D EGL_emulation: eglMakeCurrent: 0x7a8cee1cd460: ver 3 0 (tinfo 0x7a8dc772ccc0)
+10-25 12:44:27.407 25519 25519 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@8d07a2f in: STOPPED
+10-25 12:44:27.407 25519 25519 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.MainActivity@8d07a2f
+10-25 12:44:27.415  5104 23543 D Documents: Found 1 of 1 queries done
+10-25 12:44:27.416  5104  5104 D AbstractActionHandler: Loader has finished for: content:/document/null
+10-25 12:44:27.416  5104  5104 I Model   : Updating model with new result set.
+10-25 12:44:27.416  5104  5104 D DirectoryFragment: Received model update. Loading=false
+10-25 12:44:27.418  5104  5130 I oid.documentsu: WaitForGcToComplete blocked ProfileSaver on HeapTrim for 34.692ms
+10-25 12:44:27.444  3493  3493 D AF::TrackHandle: OpPlayAudio: track:56 usage:13 not muted
+10-25 12:44:27.446  3542  3661 W AudioTrack: createTrack_l(0): AUDIO_OUTPUT_FLAG_FAST denied by server; frameCount 0 -> 4512
+10-25 12:44:27.448  3497 25784 W audio_hw_generic: Not supplying enough data to HAL, expected position 216152 , only wrote 216147
+10-25 12:44:27.478 25519 25539 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-25 12:44:27.540 25519 25539 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-25 12:44:30.595  3497  3501 W audio_hw_generic: Not supplying enough data to HAL, expected position 491856 , only wrote 354957
+10-25 12:44:31.751  1819  1819 E wifi_forwarder: RemoteConnection failed to initialize: RemoteConnection failed to open pipe
+10-25 12:44:31.765  1809  1809 E netmgr  : Failed to open QEMU pipe 'qemud:network': Invalid argument
+10-25 12:44:57.599  3542 25822 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:57.599  3542 25822 I chatty  : uid=1000(system) Binder:3542_15 identical 38 lines
+10-25 12:44:57.599  3542 25822 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:57.600 25578 25578 W ActivityThread: handleWindowVisibility: no activity for token android.os.BinderProxy@dc22d87
+10-25 12:44:57.600  3542 25822 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:57.600  3542 25822 I chatty  : uid=1000(system) Binder:3542_15 identical 8 lines
+10-25 12:44:57.600  3542 25822 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:57.609  1697  1697 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:44:57.617  3542 25756 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:57.617  3542 25756 I chatty  : uid=1000(system) Binder:3542_12 identical 18 lines
+10-25 12:44:57.617  3542 25756 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:57.618  1697  1697 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:44:57.618  3542  3567 E memtrack: Couldn't load memtrack module
+10-25 12:44:57.618  3542  3567 W android.os.Debug: failed to get memory consumption info: -1
+10-25 12:44:57.629  1697  1697 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:44:57.630  1697  1821 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:44:57.631  1697  1821 D gralloc_ranchu: gralloc_alloc: Creating ashmem region of size 823296
+10-25 12:44:57.631 25578 25601 D EGL_emulation: eglMakeCurrent: 0x7a8d3748a5e0: ver 3 0 (tinfo 0x7a8d37418e80)
+10-25 12:44:57.634 25519 25519 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@8d07a2f in: DESTROYED
+10-25 12:44:57.634 25519 25519 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+10-25 12:44:57.634  3542 25756 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:57.634  3542 25756 I chatty  : uid=1000(system) Binder:3542_12 identical 8 lines
+10-25 12:44:57.634  3542 25756 W InputReader: Device has associated, but no associated display id.
+10-25 12:44:57.643 25519 25539 D IdlingRegistry: Unregistering idling resources: [androidx.compose.ui.test.EspressoLink@59d45b]
+10-25 12:44:57.644 25519 25539 E TestRunner: failed: realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(net.plainnotes.app.imports.AutomaticImportAndroidTest)
+10-25 12:44:57.644 25519 25539 E TestRunner: ----- begin exception -----
+10-25 12:44:57.644 25519 25539 E TestRunner: java.lang.AssertionError: System picker did not reach SYNTHETIC tracker.db
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.Assert.fail(Assert.java:89)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at net.plainnotes.app.imports.AutomaticImportAndroidTest.waitSystem(AutomaticImportAndroidTest.kt:51)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at net.plainnotes.app.imports.AutomaticImportAndroidTest.choose(AutomaticImportAndroidTest.kt:81)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:92)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.test.internal.runner.junit4.statement.RunBefores.evaluate(RunBefores.java:80)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.test.internal.runner.junit4.statement.RunAfters.evaluate(RunAfters.java:61)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:306)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:318)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(Unknown Source:8)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(Unknown Source:4)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:569)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(Unknown Source:8)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(Unknown Source:2)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.EspressoLink.withStrategy(EspressoLink.android.kt:69)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:566)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(Unknown Source:8)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(Unknown Source:4)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:99)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source:1)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source:1)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:549)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:318)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:467)
+10-25 12:44:57.644 25519 25539 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2189)
+10-25 12:44:57.644 25519 25539 E TestRunner: ----- end exception -----
+10-25 12:44:57.645 25519 25539 I TestRunner: finished: realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(net.plainnotes.app.imports.AutomaticImportAndroidTest)
