@@ -1,3 +1,7 @@
+## PR123 real SAF native checkpoint — 2026-10-25
+
+Exact276ee752 PR40207907781 API26/29/35 jobs SUCCESS. All three official artifact SHA256 + ZIP CRC verified; actual AutomaticImportAndroidTest XML each1test/0fail/error/skip saved in docs/cross-app-import/2026-10-25/native-276. Each executes MainActivity→real DocumentsUI→both source previews/options→7HT+9TM real COMMIT→new Activity history16row equality→picker cancel. Android job still pending, no merge yet, no Mona production. Push API26/29 also SUCCESS; remaining jobs pending. Main old1ddcf431 green; no unreviewed branch copied. Earlier actual failures remain FAIL. Proposed Mona compatibility approved in REQUIREMENTS148.C, implementation still after PR123 accepted protected merge.
+
 ## Mona compatibility owner approval — 2026-10-25
 
 Owner replied “批准该最小兼容扩展”: concrete Mona receipt/true origin, Room17→18 and business Schema14 when Mona present are authorized; native PNBAK1/PNMED crypto/envelopes unchanged. Recorded in REQUIREMENTS148.C. No production PR-B started before PR123 acceptance/merge. Current A276ee752 native/Android CI still running. Source proposal status is APPROVED_FOR_IMPLEMENTATION_AFTER_PR_A, not implemented/tested/merged.
