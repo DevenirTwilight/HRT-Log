@@ -98,11 +98,23 @@ class AutomaticImportAndroidTest {
             // label's pre-layout coordinates can miss while that drawer is being attached.
             assertTrue(requireNotNull(rootAction).performAction(AccessibilityNodeInfo.ACTION_CLICK))
         }
-        // Some DocumentsUI versions keep the roots drawer over the loaded directory
-        // after an accessibility root action. Do not tap a filename through that overlay.
+        // Root selection can leave the DocumentsUI drawer above the selected directory.
+        // Toggle its own navigation button; system Back would dismiss the picker on API26.
         if(systemNode("SYNTHETIC MED-02")!=null) {
-            assertTrue(instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK))
-            waitSystem("closed roots drawer"){systemNode("SYNTHETIC MED-02")==null}
+            var toggle:AccessibilityNodeInfo?=null
+            waitSystem("drawer toggle") {
+                val root=instrumentation.uiAutomation.rootInActiveWindow ?: return@waitSystem false
+                fun find(n:AccessibilityNodeInfo?):AccessibilityNodeInfo? {
+                    if(n==null)return null
+                    if(n.className=="android.widget.ImageButton"&&n.isClickable&&n.isVisibleToUser)return n
+                    for(i in 0 until n.childCount)find(n.getChild(i))?.let{return it};return null
+                }
+                toggle=find(root);toggle!=null
+            }
+            assertTrue(requireNotNull(toggle).performAction(AccessibilityNodeInfo.ACTION_CLICK))
+            waitSystem("closed roots drawer") {
+                systemNode("SYNTHETIC MED-02")==null && instrumentation.uiAutomation.rootInActiveWindow?.packageName?.toString()?.endsWith(".documentsui")==true
+            }
         }
         val name=if(kind=="tracker")"SYNTHETIC tracker.db" else "SYNTHETIC memo.json"
         waitSystem(name){systemNode(name)!=null}
