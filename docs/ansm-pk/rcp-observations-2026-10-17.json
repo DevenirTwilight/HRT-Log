@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "scope": "MAINTAINER_EVIDENCE_NOT_APP_CONTENT",
+  "raw_html_redistributed": false,
+  "observations": [
+    {
+      "cis": "63071975",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63071975/extrait",
+      "retrieved_at_utc": "2026-10-17T15:36:38.624886+00:00",
+      "http_status": 200,
+      "final_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63071975/extrait",
+      "sha256": "a785ad450b4e1b01dec6224d76c67cea9ea5a37c162346fa3aa9977639a43f14",
+      "bytes": 231429,
+      "section_5_2_offsets": [
+        45546
+      ],
+      "identity": "OESTRODOSE 0,06 POUR CENT, gel pour application cutanée en flacon avec pompe doseuse",
+      "compound": "estradiol",
+      "route": "cutaneous gel",
+      "population": "postmenopausal women (explicit in section5.2)",
+      "dose_context": "two pump actuations per day in the reported concentration statement; not a dose recommendation",
+      "observations": [
+        {
+          "metric": "reported_plasma_mean_not_cmax",
+          "value": "80",
+          "unit": "pg/mL",
+          "sampling_times": null,
+          "assay": null,
+          "steady_state_verified": false
+        },
+        {
+          "metric": "approximate_absorbed_fraction_label_statement",
+          "value": "10",
+          "unit": "percent of applied dose",
+          "individual_conversion_authorized": false
+        },
+        {
+          "metric": "approximate_absorbed_mass_label_statement",
+          "value": "75",
+          "unit": "ug per actuation",
+          "individual_conversion_authorized": false
+        }
+      ],
+      "tmax": null,
+      "auc": null,
+      "half_life": null,
+      "model_relation": "No CIS mapping in Engine. Gel product-id1/3 routes to EstroGel/Oestrogel model; otherwise OTHER. Oestrodose must not be automatically declared equivalent.",
+      "section": "RCP5.2",
+      "section_locator": "last rendered heading5.2 before heading5.3 (TOC excluded)",
+      "document_version": null,
+      "independent_scientific_review": "PENDING",
+      "reuse_for_apk": "BLOCKED",
+      "interpretation": "SOURCE_FACTS_ONLY_NOT_A_MODEL_OR_TREATMENT_RECOMMENDATION",
+      "identity_locator": "h3[aria-labelledby=tabs-extrait-medicament]",
+      "identity_review": "PAGE_HEADING_MATCHES_CATALOG_PRODUCT",
+      "section_text_sha256": "92529bb21689d55ca464ac2586410fad02a5a95d3dd02ae88a32222f07db3966",
+      "section_text_characters": 534
+    },
+    {
+      "cis": "60940721",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60940721/extrait",
+      "retrieved_at_utc": "2026-10-17T15:36:38.625424+00:00",
+      "http_status": 200,
+      "final_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60940721/extrait",
+      "sha256": "39317970284ce383f501337b44333cd71c053925ba18f4359605ab40a0ee6922",
+      "bytes": 231305,
+      "section_5_2_offsets": [
+        48157
+      ],
+      "identity": "PROGYNOVA 2 mg, comprimé enrobé",
+      "compound": "estradiol valerate (ester) followed by estradiol",
+      "route": "oral",
+      "population": "not specified in section5.2; do not infer individual applicability",
+      "dose_context": "2mg product; section distinguishes single versus repeated administration without a complete study protocol",
+      "observations": [
+        {
+          "metric": "estradiol_tmax_range",
+          "min": "4",
+          "max": "6",
+          "unit": "h"
+        },
+        {
+          "metric": "metabolite_excretion_half_life_approximate",
+          "value": "1",
+          "unit": "day",
+          "parent_elimination_half_life": false
+        }
+      ],
+      "cmax": null,
+      "auc": null,
+      "parent_half_life": null,
+      "model_relation": "EV_ORAL derives from Zhang2024, a different study. Existing model check tmax6.222h versus label4–6h is a source-condition discrepancy, not authorization to refit.",
+      "section": "RCP5.2",
+      "section_locator": "last rendered heading5.2 before heading5.3 (TOC excluded)",
+      "document_version": null,
+      "independent_scientific_review": "PENDING",
+      "reuse_for_apk": "BLOCKED",
+      "interpretation": "SOURCE_FACTS_ONLY_NOT_A_MODEL_OR_TREATMENT_RECOMMENDATION",
+      "identity_locator": "h3[aria-labelledby=tabs-extrait-medicament]",
+      "identity_review": "PAGE_HEADING_MATCHES_CATALOG_PRODUCT",
+      "section_text_sha256": "0270ad50e78be4ec29b3c16acdf8cf3ff73ab91e58dfb0a9d7a8ba1b6cd0915b",
+      "section_text_characters": 1487
+    },
+    {
+      "cis": "65421374",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65421374/extrait",
+      "retrieved_at_utc": "2026-10-17T15:36:38.625779+00:00",
+      "http_status": 200,
+      "final_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65421374/extrait",
+      "sha256": "576d71dd4802018df70df27bcec2168c35211975c09227907f1dd8ef92aa4ec2",
+      "bytes": 213623,
+      "section_5_2_offsets": [
+        41485
+      ],
+      "identity": "PROVAMES 2 mg, comprimé pelliculé",
+      "compound": "micronized 17beta-estradiol",
+      "route": "oral",
+      "population": "not specified in section5.2; do not infer from indications",
+      "dose_context": "2mg oral 17beta-estradiol",
+      "observations": [
+        {
+          "metric": "plasma_peak_time_range",
+          "min": "3",
+          "max": "6",
+          "unit": "h"
+        }
+      ],
+      "cmax": null,
+      "auc": null,
+      "half_life": null,
+      "model_relation": "E2_ORAL is based on FDA ACTIVELLA with model check tmax7.026h. A generic model does not establish product-specific agreement; preserve as an independent scientific review item.",
+      "section": "RCP5.2",
+      "section_locator": "last rendered heading5.2 before heading5.3 (TOC excluded)",
+      "document_version": null,
+      "independent_scientific_review": "PENDING",
+      "reuse_for_apk": "BLOCKED",
+      "interpretation": "SOURCE_FACTS_ONLY_NOT_A_MODEL_OR_TREATMENT_RECOMMENDATION",
+      "identity_locator": "h3[aria-labelledby=tabs-extrait-medicament]",
+      "identity_review": "PAGE_HEADING_MATCHES_CATALOG_PRODUCT",
+      "section_text_sha256": "1a05bf5cf3eb7ca541d511f1f1c8b4585aa3b70d3b9f583beff3e130502a58bb",
+      "section_text_characters": 365
+    }
+  ]
+}

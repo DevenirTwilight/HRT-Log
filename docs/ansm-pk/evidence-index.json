@@ -1,0 +1,651 @@
+{
+  "baseline": "f1e9b4de1c97e73966b4af8900b78391eada5c43",
+  "clinical_accuracy_established": false,
+  "current_model_loading": {
+    "actual_consumer": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt: Engine.choose uses PkParams.models",
+    "actual_loader": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/FittedModels.kt: PkParams.models reads root.models",
+    "legacy_top_level_status": "Literature values only (M4a). Not used by the engine yet; awaiting review.",
+    "models_note": "Fitted by tools/pk-fit/fit.py from the literature entries named in each model's basis; 'checks' are model outputs for comparison with the literature, recomputed by the engine's validation tests.",
+    "status": "LEGACY_STATUS_TEXT_IS_NOT_A_RUNTIME_GATE"
+  },
+  "human_research_acquisition": {
+    "classification": "REPOSITORY_RESEARCH_NOT_ANSM_CONCLUSIONS",
+    "cohort_ledger_source": "docs/pk-research/p2/p2r-cohort-evidence-ledger.json",
+    "existing_locked_external_sl_cohorts": 0,
+    "exposed_cohorts_are_not_new_holdouts": true,
+    "original_policy": "No full text redistributed. HTTP success alone does not establish full-text access. Cached P0 source explicitly identified. URLs/hashes are retrieval evidence, not portable article copies.",
+    "requests": [
+      {
+        "access_date": "2026-10-09",
+        "bytes": 6479,
+        "content_level": "primary_metadata_and_abstract",
+        "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:34781041%20AND%20SRC:MED&format=json&resultType=core",
+        "full_text_urls": {
+          "fullTextUrl": [
+            {
+              "availability": "Subscription required",
+              "availabilityCode": "S",
+              "documentStyle": "doi",
+              "site": "DOI",
+              "url": "https://doi.org/10.1016/j.eprac.2021.11.081"
+            }
+          ]
+        },
+        "http_status": 200,
+        "pmcid": null,
+        "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:34781041%20AND%20SRC:MED&format=json&resultType=core",
+        "sha256": "1573f7f48a84b85bc13c9dfd736624a010f95354753ce177fa8068df169d78ca",
+        "study_id": "Doll2022"
+      },
+      {
+        "access_date": "2026-10-09",
+        "bytes": 5654,
+        "content_level": "primary_metadata_and_abstract",
+        "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:9052581%20AND%20SRC:MED&format=json&resultType=core",
+        "full_text_urls": {
+          "fullTextUrl": [
+            {
+              "availability": "Subscription required",
+              "availabilityCode": "S",
+              "documentStyle": "doi",
+              "site": "DOI",
+              "url": "https://doi.org/10.1016/S0029-7844(96)00513-3"
+            }
+          ]
+        },
+        "http_status": 200,
+        "pmcid": null,
+        "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:9052581%20AND%20SRC:MED&format=json&resultType=core",
+        "sha256": "a03578590c74f69dcdc9644a0f24aa88121208b203150e2ab03d831ad7b4223f",
+        "study_id": "Price1997"
+      },
+      {
+        "access_date": "2026-10-09",
+        "bytes": 3497,
+        "content_level": "primary_metadata_and_abstract",
+        "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:7454177%20AND%20SRC:MED&format=json&resultType=core",
+        "full_text_urls": {
+          "fullTextUrl": [
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "abs",
+              "site": "intl.greenjournal.org",
+              "url": "http://intl.greenjournal.org/cgi/content/abstract/57/1/62"
+            }
+          ]
+        },
+        "http_status": 200,
+        "pmcid": null,
+        "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:7454177%20AND%20SRC:MED&format=json&resultType=core",
+        "sha256": "f932eb430e8a94a974aabf0d4b8d4a3f134b9c369f0be1bcacd50e6449717f90",
+        "study_id": "Casper1981"
+      },
+      {
+        "access_date": "2026-10-09",
+        "bytes": 7337,
+        "content_level": "primary_metadata_and_abstract",
+        "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:9689200%20AND%20SRC:MED&format=json&resultType=core",
+        "full_text_urls": {
+          "fullTextUrl": [
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "doi",
+              "site": "OpenAlex",
+              "url": "https://doi.org/10.1097/00042192-199805020-00004"
+            }
+          ]
+        },
+        "http_status": 200,
+        "pmcid": null,
+        "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:9689200%20AND%20SRC:MED&format=json&resultType=core",
+        "sha256": "62187f2b50f5322ecde57665acf138d51e77d03f5cc51fbb6cfa88772d166d6e",
+        "study_id": "Pines1998"
+      },
+      {
+        "access_date": "2026-10-09",
+        "bytes": 8072,
+        "content_level": "primary_metadata_and_abstract",
+        "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:38962490%20AND%20SRC:MED&format=json&resultType=core",
+        "full_text_urls": {
+          "fullTextUrl": [
+            {
+              "availability": "Subscription required",
+              "availabilityCode": "S",
+              "documentStyle": "doi",
+              "site": "DOI",
+              "url": "https://doi.org/10.1210/jendso/bvae108"
+            },
+            {
+              "availability": "Open access",
+              "availabilityCode": "OA",
+              "documentStyle": "html",
+              "site": "Europe_PMC",
+              "url": "https://europepmc.org/articles/PMC11220669"
+            },
+            {
+              "availability": "Open access",
+              "availabilityCode": "OA",
+              "documentStyle": "pdf",
+              "site": "Europe_PMC",
+              "url": "https://europepmc.org/articles/PMC11220669?pdf=render"
+            }
+          ]
+        },
+        "http_status": 200,
+        "pmcid": "PMC11220669",
+        "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:38962490%20AND%20SRC:MED&format=json&resultType=core",
+        "sha256": "0d8bb3d81743f2f43a476e4e91bc2efd8e935e3195c644f2ea2ac7463123a688",
+        "study_id": "Cortez2024"
+      },
+      {
+        "access_date": "2026-10-09",
+        "bytes": 7388,
+        "content_level": "primary_metadata_and_abstract",
+        "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:38130980%20AND%20SRC:MED&format=json&resultType=core",
+        "full_text_urls": {
+          "fullTextUrl": [
+            {
+              "availability": "Subscription required",
+              "availabilityCode": "S",
+              "documentStyle": "doi",
+              "site": "DOI",
+              "url": "https://doi.org/10.1089/trgh.2023.0022"
+            },
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "html",
+              "site": "Europe_PMC",
+              "url": "https://europepmc.org/articles/PMC10732161"
+            },
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "pdf",
+              "site": "Europe_PMC",
+              "url": "https://europepmc.org/articles/PMC10732161?pdf=render"
+            },
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "doi",
+              "site": "DOI",
+              "url": "https://doi.org/10.1089/trgh.2023.0022"
+            }
+          ]
+        },
+        "http_status": 200,
+        "pmcid": "PMC10732161",
+        "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:38130980%20AND%20SRC:MED&format=json&resultType=core",
+        "sha256": "0967bb0275aaa4533c73e3ba8765b18e5e6557db769d08cad3e466e00ee5dd88",
+        "study_id": "Yaish2023"
+      },
+      {
+        "access_date": "2026-10-09",
+        "bytes": 5152,
+        "content_level": "primary_metadata_and_abstract",
+        "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:6786097%20AND%20SRC:MED&format=json&resultType=core",
+        "full_text_urls": {
+          "fullTextUrl": [
+            {
+              "availability": "Subscription required",
+              "availabilityCode": "S",
+              "documentStyle": "doi",
+              "site": "DOI",
+              "url": "https://doi.org/10.1016/0002-9378(81)90101-0"
+            }
+          ]
+        },
+        "http_status": 200,
+        "pmcid": null,
+        "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:6786097%20AND%20SRC:MED&format=json&resultType=core",
+        "sha256": "722e65fa1af9b8e772f34690a19fd5c8b4c3d2212b607bba1ab57179a49215a9",
+        "study_id": "Burnier1981"
+      },
+      {
+        "access_date": "2026-10-09T15:26:03.341425+00:00",
+        "bytes": 76622,
+        "content_level": "primary_full_text_xml",
+        "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11220669/fullTextXML",
+        "http_status": 200,
+        "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11220669/fullTextXML",
+        "sha256": "111ba9fddd6ff4fea9c84ecac0a1d3da6fca48cdf24157bbd1cad9d45d07308b",
+        "study_id": "Cortez2024-full"
+      },
+      {
+        "access_date": "2026-10-09T15:26:03.341917+00:00",
+        "bytes": 21312,
+        "content_level": "browser_challenge_not_article",
+        "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10732161/",
+        "http_status": 200,
+        "requested_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10732161/",
+        "sha256": "15837c498d16f93f3d7ac813a4e9b73cb109cbe790c4a7412b60202dbe2a07dc",
+        "study_id": "Yaish2023-full"
+      },
+      {
+        "access_date": "2026-10-09T15:26:03.342297+00:00",
+        "bytes": 2777,
+        "content_level": "bibliographic_metadata",
+        "final_url": "https://api.crossref.org/works/10.1097/00042192-199805020-00004",
+        "http_status": 200,
+        "requested_url": "https://api.crossref.org/works/10.1097/00042192-199805020-00004",
+        "sha256": "7b69128e45a324be6eaf8de5aee442047ab831879fa1ef08464c2500bd621c8d",
+        "study_id": "Pines1998-crossref"
+      },
+      {
+        "access_date": "2026-10-09T15:26:03.342557+00:00",
+        "bytes": 2586,
+        "content_level": "bibliographic_metadata",
+        "final_url": "https://api.crossref.org/works/10.1097/00042192-199822010-00004",
+        "http_status": 200,
+        "requested_url": "https://api.crossref.org/works/10.1097/00042192-199822010-00004",
+        "sha256": "950e24e58de4c5f5018329fe093ab3bc6877fece805520eeffb6dd654af809e6",
+        "study_id": "Pines1998-old-doi"
+      },
+      {
+        "access_date": "2026-10-09T15:26:03.342830+00:00",
+        "bytes": 694759,
+        "content_level": "search_metadata_and_abstracts",
+        "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=%22sublingual%22%20AND%20%22estradiol%22%20AND%20%22pharmacokinetics%22&format=json&resultType=core&pageSize=100",
+        "http_status": 200,
+        "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=%22sublingual%22%20AND%20%22estradiol%22%20AND%20%22pharmacokinetics%22&format=json&resultType=core&pageSize=100",
+        "sha256": "3dca401a78363ad2d0a00cf48f329bf5956a9f8b3f7f040133940e64a1c4f27d",
+        "study_id": "related-search"
+      },
+      {
+        "access_date": "2026-10-09T15:26:04.490629+00:00",
+        "content_level": "not_obtained",
+        "error": "URLError",
+        "http_status": null,
+        "requested_url": "https://doi.org/10.1016/j.eprac.2021.11.081",
+        "study_id": "Doll2022-publisher"
+      },
+      {
+        "access_date": "2026-10-09T15:26:04.652067+00:00",
+        "content_level": "not_obtained",
+        "error": "HTTPError",
+        "http_status": 402,
+        "requested_url": "https://doi.org/10.1016/s0029-7844(96)00513-3",
+        "study_id": "Price1997-publisher"
+      },
+      {
+        "access_date": "2026-10-09T15:26:04.861609+00:00",
+        "bytes": 5590,
+        "content_level": "browser_challenge_not_article",
+        "final_url": "https://pubmed.ncbi.nlm.nih.gov/7454177/",
+        "http_status": 203,
+        "requested_url": "https://pubmed.ncbi.nlm.nih.gov/7454177/",
+        "sha256": "3c52af86d6e01e7383bdb289c51b21595285df2323761addf56a79bf531435d0",
+        "study_id": "Casper1981-publisher"
+      },
+      {
+        "access_date": "2026-10-09T15:26:04.962402+00:00",
+        "bytes": 158728,
+        "content_level": "publisher_abstract_only",
+        "final_url": "https://www.ovid.com/jnls/menopausejournal/abstract/00042192-199805020-00004~the-effects-of-sublingual-estradiol-on-left-ventricular?redirectionsource=fulltextview",
+        "http_status": 200,
+        "requested_url": "https://doi.org/10.1097/00042192-199805020-00004",
+        "sha256": "7537c13b7aa4090ad5df3a7811dd5487f5d448fe263b7f7f52c085c0d82cf6ed",
+        "study_id": "Pines1998-publisher"
+      },
+      {
+        "access_date": "2026-10-09T15:26:05.589429+00:00",
+        "content_level": "not_obtained",
+        "error": "URLError",
+        "http_status": null,
+        "requested_url": "https://doi.org/10.1016/0002-9378(81)90101-0",
+        "study_id": "Burnier1981-publisher"
+      },
+      {
+        "access_date": "2026-10-09",
+        "content_level": "not_obtained",
+        "error": "HTTPError",
+        "http_status": 403,
+        "requested_url": "https://europepmc.org/articles/PMC10732161",
+        "study_id": "Yaish2023-epmc"
+      },
+      {
+        "access_date": "2026-10-09",
+        "content_level": "not_obtained",
+        "error": "HTTPError",
+        "http_status": 500,
+        "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10732161/fullTextXML",
+        "study_id": "Yaish2023-xml"
+      },
+      {
+        "access_date": "2026-10-09",
+        "acquired_during": "P0",
+        "bytes": 183999,
+        "content_level": "primary_full_text_html_cached_and_rechecked",
+        "http_status": null,
+        "not_redistributed": true,
+        "requested_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10732161/",
+        "sha256": "112c2d1bad753555e9cb21321ca6e0e623d8e342b70ab1fd130064be0d52e135",
+        "study_id": "Yaish2023"
+      }
+    ],
+    "this_audit_full_text_reverification": "NOT_RUN"
+  },
+  "model_change_authorized": false,
+  "official_distribution_approved": false,
+  "official_label_references": [
+    {
+      "cis": "60940721",
+      "direct_model_basis": [],
+      "evidence_class": "OFFICIAL_PRODUCT_LABEL_NOT_ANSM_MODEL_VALIDATION",
+      "original_reference_title": "PROGYNOVA 2 mg, comprimé enrobé - Résumé des caractéristiques du produit (RCP), section 5.2 (ANSM mis à jour 30/05/2024; authorization archived)",
+      "original_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60940721/extrait#tab-rcp",
+      "reference_id": "estradiol_oral_sl_im:ANSM_PROGYNOVA2",
+      "this_audit": {
+        "auc": null,
+        "bytes": 231305,
+        "cis": "60940721",
+        "cmax": null,
+        "compound": "estradiol valerate (ester) followed by estradiol",
+        "document_version": null,
+        "dose_context": "2mg product; section distinguishes single versus repeated administration without a complete study protocol",
+        "final_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60940721/extrait",
+        "http_status": 200,
+        "identity": "PROGYNOVA 2 mg, comprimé enrobé",
+        "identity_locator": "h3[aria-labelledby=tabs-extrait-medicament]",
+        "identity_review": "PAGE_HEADING_MATCHES_CATALOG_PRODUCT",
+        "independent_scientific_review": "PENDING",
+        "interpretation": "SOURCE_FACTS_ONLY_NOT_A_MODEL_OR_TREATMENT_RECOMMENDATION",
+        "model_relation": "EV_ORAL derives from Zhang2024, a different study. Existing model check tmax6.222h versus label4–6h is a source-condition discrepancy, not authorization to refit.",
+        "observations": [
+          {
+            "max": "6",
+            "metric": "estradiol_tmax_range",
+            "min": "4",
+            "unit": "h"
+          },
+          {
+            "metric": "metabolite_excretion_half_life_approximate",
+            "parent_elimination_half_life": false,
+            "unit": "day",
+            "value": "1"
+          }
+        ],
+        "parent_half_life": null,
+        "population": "not specified in section5.2; do not infer individual applicability",
+        "retrieved_at_utc": "2026-10-17T15:36:38.625424+00:00",
+        "reuse_for_apk": "BLOCKED",
+        "route": "oral",
+        "section": "RCP5.2",
+        "section_5_2_offsets": [
+          48157
+        ],
+        "section_locator": "last rendered heading5.2 before heading5.3 (TOC excluded)",
+        "section_text_characters": 1487,
+        "section_text_sha256": "0270ad50e78be4ec29b3c16acdf8cf3ff73ab91e58dfb0a9d7a8ba1b6cd0915b",
+        "sha256": "39317970284ce383f501337b44333cd71c053925ba18f4359605ab40a0ee6922",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60940721/extrait"
+      }
+    },
+    {
+      "cis": "60071379",
+      "direct_model_basis": [],
+      "evidence_class": "OFFICIAL_PRODUCT_LABEL_NOT_ANSM_MODEL_VALIDATION",
+      "original_reference_title": "OROMONE 2 mg, comprimé pelliculé - RCP, section 5.2 (ANSM mis à jour 18/07/2025)",
+      "original_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60071379/extrait#tab-rcp",
+      "reference_id": "estradiol_oral_sl_im:ANSM_OROMONE2",
+      "this_audit": {
+        "content_review": "UNVERIFIED",
+        "retrieval_status": "NOT_RETRIEVED_THIS_AUDIT"
+      }
+    },
+    {
+      "cis": "65421374",
+      "direct_model_basis": [],
+      "evidence_class": "OFFICIAL_PRODUCT_LABEL_NOT_ANSM_MODEL_VALIDATION",
+      "original_reference_title": "PROVAMES 2 mg, comprimé pelliculé - RCP, section 5.2 (ANSM mis à jour 05/12/2023)",
+      "original_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65421374/extrait#tab-rcp",
+      "reference_id": "estradiol_oral_sl_im:ANSM_PROVAMES2",
+      "this_audit": {
+        "auc": null,
+        "bytes": 213623,
+        "cis": "65421374",
+        "cmax": null,
+        "compound": "micronized 17beta-estradiol",
+        "document_version": null,
+        "dose_context": "2mg oral 17beta-estradiol",
+        "final_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65421374/extrait",
+        "half_life": null,
+        "http_status": 200,
+        "identity": "PROVAMES 2 mg, comprimé pelliculé",
+        "identity_locator": "h3[aria-labelledby=tabs-extrait-medicament]",
+        "identity_review": "PAGE_HEADING_MATCHES_CATALOG_PRODUCT",
+        "independent_scientific_review": "PENDING",
+        "interpretation": "SOURCE_FACTS_ONLY_NOT_A_MODEL_OR_TREATMENT_RECOMMENDATION",
+        "model_relation": "E2_ORAL is based on FDA ACTIVELLA with model check tmax7.026h. A generic model does not establish product-specific agreement; preserve as an independent scientific review item.",
+        "observations": [
+          {
+            "max": "6",
+            "metric": "plasma_peak_time_range",
+            "min": "3",
+            "unit": "h"
+          }
+        ],
+        "population": "not specified in section5.2; do not infer from indications",
+        "retrieved_at_utc": "2026-10-17T15:36:38.625779+00:00",
+        "reuse_for_apk": "BLOCKED",
+        "route": "oral",
+        "section": "RCP5.2",
+        "section_5_2_offsets": [
+          41485
+        ],
+        "section_locator": "last rendered heading5.2 before heading5.3 (TOC excluded)",
+        "section_text_characters": 365,
+        "section_text_sha256": "1a05bf5cf3eb7ca541d511f1f1c8b4585aa3b70d3b9f583beff3e130502a58bb",
+        "sha256": "576d71dd4802018df70df27bcec2168c35211975c09227907f1dd8ef92aa4ec2",
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65421374/extrait"
+      }
+    },
+    {
+      "cis": "64183183",
+      "direct_model_basis": [],
+      "evidence_class": "OFFICIAL_PRODUCT_LABEL_NOT_ANSM_MODEL_VALIDATION",
+      "original_reference_title": "ESTROFEM 2 mg, comprimé pelliculé - RCP, section 5.2 (ANSM mis à jour 07/12/2023; authorization archived)",
+      "original_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64183183/extrait#tab-rcp",
+      "reference_id": "estradiol_oral_sl_im:ANSM_ESTROFEM2",
+      "this_audit": {
+        "content_review": "UNVERIFIED",
+        "retrieval_status": "NOT_RETRIEVED_THIS_AUDIT"
+      }
+    },
+    {
+      "cis": "63216075",
+      "direct_model_basis": [],
+      "evidence_class": "OFFICIAL_PRODUCT_LABEL_NOT_ANSM_MODEL_VALIDATION",
+      "original_reference_title": "ESTREVA 0,1 %, gel - RCP (CIS 63216075)",
+      "original_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63216075/extrait",
+      "reference_id": "transdermal_cpa:RCP_ESTREVA",
+      "this_audit": {
+        "content_review": "UNVERIFIED",
+        "retrieval_status": "NOT_RETRIEVED_THIS_AUDIT"
+      }
+    },
+    {
+      "cis": "63071975",
+      "direct_model_basis": [],
+      "evidence_class": "OFFICIAL_PRODUCT_LABEL_NOT_ANSM_MODEL_VALIDATION",
+      "original_reference_title": "OESTRODOSE 0,06 POUR CENT, gel pour application cutanée en flacon avec pompe doseuse - RCP (CIS 63071975)",
+      "original_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63071975/extrait",
+      "reference_id": "transdermal_cpa:RCP_OESTRODOSE",
+      "this_audit": {
+        "auc": null,
+        "bytes": 231429,
+        "cis": "63071975",
+        "compound": "estradiol",
+        "document_version": null,
+        "dose_context": "two pump actuations per day in the reported concentration statement; not a dose recommendation",
+        "final_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63071975/extrait",
+        "half_life": null,
+        "http_status": 200,
+        "identity": "OESTRODOSE 0,06 POUR CENT, gel pour application cutanée en flacon avec pompe doseuse",
+        "identity_locator": "h3[aria-labelledby=tabs-extrait-medicament]",
+        "identity_review": "PAGE_HEADING_MATCHES_CATALOG_PRODUCT",
+        "independent_scientific_review": "PENDING",
+        "interpretation": "SOURCE_FACTS_ONLY_NOT_A_MODEL_OR_TREATMENT_RECOMMENDATION",
+        "model_relation": "No CIS mapping in Engine. Gel product-id1/3 routes to EstroGel/Oestrogel model; otherwise OTHER. Oestrodose must not be automatically declared equivalent.",
+        "observations": [
+          {
+            "assay": null,
+            "metric": "reported_plasma_mean_not_cmax",
+            "sampling_times": null,
+            "steady_state_verified": false,
+            "unit": "pg/mL",
+            "value": "80"
+          },
+          {
+            "individual_conversion_authorized": false,
+            "metric": "approximate_absorbed_fraction_label_statement",
+            "unit": "percent of applied dose",
+            "value": "10"
+          },
+          {
+            "individual_conversion_authorized": false,
+            "metric": "approximate_absorbed_mass_label_statement",
+            "unit": "ug per actuation",
+            "value": "75"
+          }
+        ],
+        "population": "postmenopausal women (explicit in section5.2)",
+        "retrieved_at_utc": "2026-10-17T15:36:38.624886+00:00",
+        "reuse_for_apk": "BLOCKED",
+        "route": "cutaneous gel",
+        "section": "RCP5.2",
+        "section_5_2_offsets": [
+          45546
+        ],
+        "section_locator": "last rendered heading5.2 before heading5.3 (TOC excluded)",
+        "section_text_characters": 534,
+        "section_text_sha256": "92529bb21689d55ca464ac2586410fad02a5a95d3dd02ae88a32222f07db3966",
+        "sha256": "a785ad450b4e1b01dec6224d76c67cea9ea5a37c162346fa3aa9977639a43f14",
+        "tmax": null,
+        "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63071975/extrait"
+      }
+    },
+    {
+      "cis": "66501802",
+      "direct_model_basis": [
+        "E2_PATCH"
+      ],
+      "evidence_class": "OFFICIAL_PRODUCT_LABEL_NOT_ANSM_MODEL_VALIDATION",
+      "original_reference_title": "DERMESTRIL 25/50/100 microgrammes/24 heures, dispositif transdermique - RCP (CIS 66501802)",
+      "original_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66501802/extrait",
+      "reference_id": "transdermal_cpa:RCP_DERMESTRIL",
+      "this_audit": {
+        "content_review": "UNVERIFIED",
+        "retrieval_status": "NOT_RETRIEVED_THIS_AUDIT"
+      }
+    },
+    {
+      "cis": "66283307",
+      "direct_model_basis": [],
+      "evidence_class": "OFFICIAL_PRODUCT_LABEL_NOT_ANSM_MODEL_VALIDATION",
+      "original_reference_title": "THAIS 25 microgrammes/24 heures, dispositif transdermique - RCP (CIS 66283307)",
+      "original_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66283307/extrait",
+      "reference_id": "transdermal_cpa:RCP_THAIS",
+      "this_audit": {
+        "content_review": "UNVERIFIED",
+        "retrieval_status": "NOT_RETRIEVED_THIS_AUDIT"
+      }
+    },
+    {
+      "cis": "67144004",
+      "direct_model_basis": [],
+      "evidence_class": "OFFICIAL_PRODUCT_LABEL_NOT_ANSM_MODEL_VALIDATION",
+      "original_reference_title": "FEMSEPT 100 microgrammes/24 heures, dispositif transdermique - RCP (CIS 67144004)",
+      "original_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/67144004/extrait",
+      "reference_id": "transdermal_cpa:RCP_FEMSEPT",
+      "this_audit": {
+        "content_review": "UNVERIFIED",
+        "retrieval_status": "NOT_RETRIEVED_THIS_AUDIT"
+      }
+    },
+    {
+      "cis": "61255738",
+      "direct_model_basis": [],
+      "evidence_class": "OFFICIAL_PRODUCT_LABEL_NOT_ANSM_MODEL_VALIDATION",
+      "original_reference_title": "ANDROCUR 50 mg, comprimé sécable - RCP (CIS 61255738)",
+      "original_url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61255738/extrait",
+      "reference_id": "transdermal_cpa:RCP_ANDROCUR",
+      "this_audit": {
+        "content_review": "UNVERIFIED",
+        "retrieval_status": "NOT_RETRIEVED_THIS_AUDIT"
+      }
+    },
+    {
+      "cis": "61673424",
+      "direct_model_basis": [],
+      "evidence_class": "OFFICIAL_PRODUCT_LABEL_NOT_ANSM_MODEL_VALIDATION",
+      "original_reference_title": "UTROGESTAN 100 mg, capsule molle orale ou vaginale - Résumé des Caractéristiques du Produit (mis à jour 13/03/2026)",
+      "original_url": "https://base-donnees-publique.medicaments.gouv.fr/affichageDoc.php?specid=61673424&typedoc=R",
+      "reference_id": "spironolactone_progesterone:ANSM_Utrogestan_2026",
+      "this_audit": {
+        "content_review": "UNVERIFIED",
+        "retrieval_status": "NOT_RETRIEVED_THIS_AUDIT"
+      }
+    }
+  ],
+  "production_file_sha256": {
+    "app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt": "9a0ca71e55a49b05b614d247773a0c694716ce92f7272f79c5644a39e45e417e",
+    "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt": "29c09d46f0b300eeb6ba6abdb030577a6cb70ddbff06f404fe441e9ce807def5",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt": "51ce72f3b4b2c4fbca0185c78a333df9a9e7877daf5d9630e5140a15a686e89e",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/FittedModels.kt": "9794a2442ebee0b22fe4727dc9dd9e5d872b06fe5d6a29930ca57ac205cab354",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/LabFit.kt": "c26b79e8ab337f5be094545dc604167a1b25d6069799d01b2aa1c02c83cb9d4d",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Types.kt": "2e0fde51c1e94266553861a03d34cd10fcfa823f1eee05b52048308f5b94bb5f",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Units.kt": "90853ee84beb663a6c4d0b086fbce5bdfabf0f06eb3a3759b0a1f875d260e6bc",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ConcentrationModelComparison.kt": "e17a9c943defb7b46247ec8a80a76b9c354512850e7dacb6b978c59256a55719",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ExperimentalSlModelView.kt": "123a64d2e21ebe2de92a0b8f62664ef4bf71db9c750c20f67c4f1a9b2918635e",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/PreparedResearchHistory.kt": "9d595566ebe3ae21912c446daa0b999ce5002fa21b96e9cb7fc1b9fdf0eecfca",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchDisplayProtocol.kt": "0c1c6dee428764a459240a74a4314b653705667839e4c6fd7e6f21d27c226c32",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchExtrema.kt": "de68283793249988cc3ead591afd74afed296084d3f06d012486443d71b032e3",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchM1Catalog.kt": "82ffdd2f627742dfc2648da95e69d547f14d198f5c91214fbeca73e38d888f5d",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchShapeComparisonV01.kt": "9cdebb2b1377c993833ae592b88f41e5e684867f9a5d6de7a6d357b5daf6dd95",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/ResearchSublingualV01.kt": "55c62670dac37d9c44a370ea10406d66c21654ba330b7e967c61840a101ec527",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/StudyAnchors.kt": "93f746293efa12866bee1e5f740643de217ed64cd93d4a40bb5fc8f8808235c8",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/experimental/UnifiedModelComparison.kt": "bdb5364170b6b7d17079247c90e98ce14cd3133b336479cf075ac1326dcb0b93",
+    "pk-engine/src/main/resources/pk-params.json": "b2768a6947d29d65f272b1d20e31fd59b9661acf8166b437f2a3b179f235b16b"
+  },
+  "raw_clinical_text_redistributed": false,
+  "remaining": [
+    "Eight other pre-existing official label references not retrieved in this audit.",
+    "The full58-product RCP5.2 review is incomplete.",
+    "Independent scientific, reuse and translation review remains pending.",
+    "PK_DISPLAY_REVIEW and scientific validation are required before any model/display/frozen-result change."
+  ],
+  "schema_version": 1,
+  "scientific_follow_up": [
+    {
+      "current_generic_model": "E2_ORAL",
+      "id": "PROVAMES_ORAL_PEAK_CONDITIONS",
+      "label_range_h": [
+        "3",
+        "6"
+      ],
+      "limitation": "Different reference product/study conditions; a discrepancy does not identify a replacement parameter or prove model invalidity.",
+      "model_check_tmax_h": 7.026034463112554,
+      "status": "REQUIRES_INDEPENDENT_SCIENTIFIC_REVIEW"
+    },
+    {
+      "id": "GEL_EXPOSURE_AND_ABSORPTION",
+      "limitation": "Mean plasma concentration is not Cmax. Approximate label absorption is not a patient conversion. Oestrodose CIS must not select a gel model automatically.",
+      "status": "PRODUCT_SPECIFIC_VALIDATION_BLOCKED"
+    },
+    {
+      "id": "PROGYNOVA_METABOLITE_HALF_LIFE",
+      "limitation": "Metabolite excretion half-life is not parent estradiol elimination or a complete curve.",
+      "status": "SEMANTIC_BOUNDARY_RECORDED"
+    }
+  ],
+  "source_file_sha256": {
+    "docs/ansm-pk/rcp-observations-2026-10-17.json": "ad5cea61071cb04fb57ebd2a02d3bfb489621f91bf365c7bb9aff453faa3bea3",
+    "docs/pk-research/p2/p2r-cohort-evidence-ledger.json": "1d9dcf6ebabeb25c4faaeb3cea4a6e395bbca649123398e358b54635b3c2ca58",
+    "docs/pk-research/p2/source-manifest.json": "5e11999133ed3fdb90930cc653b147e553a64dc9a23e3f143bee7a55de55abcd"
+  },
+  "status": "EVIDENCE_ARCHIVED_PARTIAL_REVIEW_MODEL_CHANGE_BLOCKED"
+}
