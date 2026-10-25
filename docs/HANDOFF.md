@@ -1,3 +1,9 @@
+## PR124 MERGED and native accepted — 2026-10-25
+
+PR124 normal protected merge8f8761d0; accepted sourcef86ec077; identical treef13b3609. Final PR Android40221820638 all5/Science40221820688 and lowmem40221820669 PASS. Real SAF API26/29/35 XML1/0/0/0 each, original HT/TM plus Mona cancel/commit/reopen/replay/malformed checks verified; original ZIP hashes/receipts in mona/accepted. Default Science40224222949 PASS; default Android40224222960 stillIN_PROGRESS at this record, not falsely green. No remaining implementation blocker for PR-B. Physical device/manual TalkBack NOT_RUN. MED OFF. No Featherline implementation started.
+
+This evidence-only branch archives final facts without rewriting the accepted production HEAD. Prior PENDING entries below are historical. Next verify the default Android run result; then stop this task. PR-C starting contract is docs/cross-app-import/featherline-pr-c-handoff.md; future implementation remains separate.
+
 ## PR124 final host assertion corrected — 2026-10-25
 
 87c69213 actual current-source lowmem40220073502 SUCCESS; official artifact12608964305 SHA2560e1333355cbed8fcd8898125027c303edee1cce393baf3dadf5ad6ca65003c04 CRC verified,12 fresh-PID verification logs eachOK1. JVM/Science PASS. Full host run40220070894 job121249639555 actual app2371/1fail/557skipped; only PrivacyNoticeFactsTest still hardcoded maximum business13, contradicting approved148.C/business14. Raw log retained host-87c-failure.log. Corrected expected14 and ADDED Mona conditional14 assertion; all original KDF/cipher/12/13 output checks retained. Targeted PrivacyNoticeFactsTest3 PASS in39s. This test-only correction does not change production source, but final-source mandatory CI must still be checked. ThreeAPI87 native matrices were still in progress at this checkpoint, not marked PASS. PR124 Draft. No merge before final checks/native evidence; no Featherline/MED enable/sign/release.
