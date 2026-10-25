@@ -20,7 +20,8 @@ class PrivacyNoticeFactsTest {
         for (l in locales) { val body = string(l, "privacy_notice_backup_body")
             assertTrue(l, body.contains("Argon2id") && body.contains("32 Mi") && body.contains("AES-256-GCM") && body.contains("3")) }
         val compatibility = src("core/data/src/main/java/net/plainnotes/app/data/RecordBackupCompatibility.kt")
-        assertTrue("Maximum business backup version is 13, independent of Room13", compatibility.contains("const val SCHEMA = 13"))
+        assertTrue("Maximum business backup version is 14, independent of Room18", compatibility.contains("const val SCHEMA = 14"))
+        assertTrue("Mona source evidence requires business14", compatibility.contains("external_import_item") && compatibility.contains("origin='IMPORT_MONA'") && compatibility.contains("return 14"))
         assertTrue("User-only exports remain 12; official historical snapshots require 13", compatibility.contains("namespace='BDPM_FR'") && compatibility.contains("if(it.moveToFirst())13 else 12"))
     }
 

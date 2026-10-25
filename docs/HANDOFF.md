@@ -1,3 +1,7 @@
+## PR124 final host assertion corrected — 2026-10-25
+
+87c69213 actual current-source lowmem40220073502 SUCCESS; official artifact12608964305 SHA2560e1333355cbed8fcd8898125027c303edee1cce393baf3dadf5ad6ca65003c04 CRC verified,12 fresh-PID verification logs eachOK1. JVM/Science PASS. Full host run40220070894 job121249639555 actual app2371/1fail/557skipped; only PrivacyNoticeFactsTest still hardcoded maximum business13, contradicting approved148.C/business14. Raw log retained host-87c-failure.log. Corrected expected14 and ADDED Mona conditional14 assertion; all original KDF/cipher/12/13 output checks retained. Targeted PrivacyNoticeFactsTest3 PASS in39s. This test-only correction does not change production source, but final-source mandatory CI must still be checked. ThreeAPI87 native matrices were still in progress at this checkpoint, not marked PASS. PR124 Draft. No merge before final checks/native evidence; no Featherline/MED enable/sign/release.
+
 ## PR124 local acceptance and native Room18 follow-up — 2026-10-25
 
 5ba714fa is pushed. Local affected core180/0fail/0skip, app38/0fail/0skip (Mona8/TransMemo8/Period5/HtWizard1/four-language a11y16), native Kotlin+Java compilation and lintFullDebug PASS. Full prior core626 had601pass/25fail; the affected three groups now pass all180, original failure retained. No physical TalkBack/device claim.
