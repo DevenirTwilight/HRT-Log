@@ -45,7 +45,7 @@ class AutomaticImportReaderTest {
             catch(e:Throwable){assertTrue("Expected ${type.simpleName}, actual ${e.javaClass.simpleName}",type.isInstance(e))}
             clean()
         }
-        fails(Detector.Damaged::class.java,"HRTBKP1not-a-native-backup".toByteArray())
+        fails(Detector.Unsupported::class.java,"HRTBKP1not-a-native-backup".toByteArray())
         fails(Detector.Unknown::class.java,"unknown.json".toByteArray())
         fails(Detector.Damaged::class.java,"{broken".toByteArray())
         fails(Detector.Damaged::class.java,"SQLite format 3\u0000broken".toByteArray())

@@ -56,7 +56,7 @@ internal object FeatherlineImportSchema {
             if(kind=="RESULT")require(uuid(text("source_panel_uuid")) && uuid(text("panel_uuid")))
             if(text("retention")=="REMOVED")continue
             if(c.isNull(c.getColumnIndexOrThrow(if(kind=="LOG")"record_id" else "lab_id")))require(FeatherlineReceiptStore.Key(kind,id) in retained)
-            val raw=text("source_json");BackupLimits.checkJson(raw);val obj=JSONObject(raw)
+            val raw=text("source_json");require(raw.toByteArray(Charsets.UTF_8).size<=131072);BackupLimits.checkJson(raw);val obj=JSONObject(raw)
             require(Mona.canonical(obj)==raw && MonaMigration.digest(raw)==text("source_digest"))
             val projected=Featherline.evidence(kind,raw)
             if(kind=="LOG")require(projected.doses.singleOrNull()?.id==id && projected.issues.isEmpty())

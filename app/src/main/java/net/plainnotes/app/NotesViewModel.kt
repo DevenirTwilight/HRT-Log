@@ -392,6 +392,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 val preview=repo.previewFeatherline(export)
                 releaseFeatherline();dataJob.value=DataJob.FeatherlineReady(preview,ready.scope)
             }catch(_:FeatherlineContainer.Authentication){dataJob.value=DataJob.FeatherlinePassword(ready.archive,ready.scope,R.string.featherline_auth_failed)}
+            catch(_:net.plainnotes.app.importer.ImportFormatDetector.TooLarge){releaseFeatherline();dataJob.value=DataJob.Failed(R.string.import_file_too_large)}
+            catch(_:FeatherlineContainer.TooLarge){releaseFeatherline();dataJob.value=DataJob.Failed(R.string.import_file_too_large)}
             catch(_:net.plainnotes.app.importer.Featherline.Unsupported){releaseFeatherline();dataJob.value=DataJob.Failed(R.string.import_version_unsupported)}
             catch(e:CancellationException){releaseFeatherline();dataJob.value=DataJob.ImportCancelled;throw e}
             catch(e:LibraryScopeMismatch){releaseFeatherline();runtimeFailure(e);dataJob.value=DataJob.Failed(R.string.library_scope_changed)}

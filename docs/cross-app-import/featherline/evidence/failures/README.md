@@ -1,0 +1,9 @@
+# Preserved real failures
+
+bf8a947a run40232853011: original low-memory job failed at AttachmentCandidateMetadata.compareBusiness requiring newly added empty table in an old business snapshot. Known structural cause; fixed by permitting ONLY the two versioned source tables to be absent after preflight version gates, while actual rebuilt rows must be empty. Original clinical comparison remains exact. Compressed original failed-job log retained; this is FAIL, not superseded PASS.
+
+7196b0b9 PR Android40233589349/job121290518338 API26: original unified SAF test failed before reading Tracker because fifth synthetic file was below DocumentsUI grid viewport. Original hierarchy shows scrollable dir_list and 2-column grid; no scope/clinical write occurred. Test-only bounded real accessibility list scrolling added; no direct URI, removed assertion, changed fixture budget or viewport. Other pending/failed jobs remain separate; final changed-source results required. Logs are original GH decoded output, synthetic only.
+
+Original history identity RED retained backend/red-history-identity.xml: source EV was hidden by absent PK profile. Correction reads source-only frozen chemical context for Featherline periods; no PK profile/parameters are created and old sources retain identical period rules. GREEN has PeriodStability unchanged.
+
+The initial new password a11y host test timed out in the paused Robolectric looper while waiting for an IO dispatcher return. Five actual failures were observed before cancelling the remaining redundant configurations; partial console retained (not a full matrix PASS). Draining the actual Android main looper, as the existing scoped import flow tests do, fixed the English single case; all32 a11y cases then passed with the SAME real reader/controls/cancellation assertions. No production workaround, long sleep or direct fake SAF result was used. Host rendering is distinct from the required real DocumentsUI native acceptance.

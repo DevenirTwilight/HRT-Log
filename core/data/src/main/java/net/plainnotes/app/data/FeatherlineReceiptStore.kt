@@ -51,6 +51,7 @@ internal object FeatherlineReceiptStore {
         val rows=payload.get("featherline_sources");require(rows is JSONArray && rows.length()<=BackupLimits.MAX_ROWS){"Unknown source retention metadata"}
         for(i in 0 until rows.length()) {
             val r=rows.getJSONObject(i)
+            require(r.getString("part").isEmpty())
             require(r.keys().asSequence().toSet()==setOf("kind","id","part","digest","target","target_id","target_digest"))
             for(key in listOf("kind","id","part","digest","target","target_digest"))require(r.opt(key) is String)
             require(r.opt("target_id") is Int || r.opt("target_id") is Long)

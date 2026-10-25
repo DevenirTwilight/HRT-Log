@@ -136,7 +136,24 @@ class AutomaticImportAndroidTest {
             }
             selectImportRoot()
         }
-        waitSystem(name){!rootsOpen() && systemNode(name)!=null}
+        // The fifth synthetic file can be below the viewport in DocumentsUI grid mode.
+        // Navigate the real RecyclerView using advertised accessibility actions, not a
+        // larger display, fixed coordinates, direct URI, or a changed source fixture.
+        waitSystem("loaded synthetic directory"){!rootsOpen() && (systemId("dir_list")?.childCount ?: 0)>0}
+        var backwards=true;var scrolls=0
+        waitSystem(name){
+            if(rootsOpen())false
+            else if(systemNode(name)!=null)true
+            else {
+                val list=systemId("dir_list")
+                if(list!=null && scrolls<24) {
+                    var moved=list.performAction(if(backwards)AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD else AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
+                    if(!moved && backwards){backwards=false;moved=list.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)}
+                    if(moved){scrolls++;settlePicker()}
+                }
+                false
+            }
+        }
         settlePicker()
         // Reacquire after navigation/layout; never touch coordinates from the covered list.
         assertFalse("Drawer must not cover the document",rootsOpen())

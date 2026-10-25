@@ -55,9 +55,13 @@ internal object FeatherlineImportWriter {
             val uuids=siblings.mapNotNull{it.panel}.distinct()
             val allLive=siblings.all{it.retention=="COMMITTED" && it.lab!=null && current["lab_value" to it.lab]==it.targetDigest}
             val first=values.first()
+            val incomingParent=Mona.canonical(JSONObject(first.sourceJson).getJSONObject("panel"))
+            val sameSourceParent=db.query("SELECT source_json FROM featherline_import_item WHERE source_kind='RESULT' AND source_panel_uuid=?",arrayOf(sourceId)).use{c->
+                var same=true;while(c.moveToNext())if(c.isNull(0) || Mona.canonical(JSONObject(c.getString(0)).getJSONObject("panel"))!=incomingParent)same=false;same
+            }
             var target:Long?=null
-            if(allLive && uuids.size==1)db.query("SELECT id,sampled_utc,sampled_zone,note FROM lab_panel WHERE uuid=?",arrayOf(uuids.single())).use{c->
-                if(c.moveToFirst() && c.getLong(1)==first.at && c.getString(2)==first.zone && (if(c.isNull(3))null else c.getString(3))==first.note)target=c.getLong(0)
+            if(allLive && sameSourceParent && uuids.size==1)db.query("SELECT id,sampled_utc,sampled_zone,note,laboratory FROM lab_panel WHERE uuid=?",arrayOf(uuids.single())).use{c->
+                if(c.moveToFirst() && c.getLong(1)==first.at && c.getString(2)==first.zone && (if(c.isNull(3))null else c.getString(3))==first.note && c.isNull(4))target=c.getLong(0)
             }
             val t=target
             if(t==null || db.query("SELECT COUNT(*) FROM lab_value WHERE panel_id=?",arrayOf(t)).use{it.moveToFirst();it.getInt(0)}!=siblings.size)changed+=sourceId
@@ -83,13 +87,13 @@ internal object FeatherlineImportWriter {
                 .mapNotNull{scanned.heads[FeatherlineReceiptStore.Key("LOG",it.id)]?.record?.let{r->dao.recordById(r)?.medication_id}}.distinct().singleOrNull()
             val reusable=previous?.let{dao.medication(it)}?.takeIf{it.molecule==medicine.molecule && it.route==medicine.route && it.unit=="MG" && dao.profile(it.id)==null}
             if(reusable!=null){medIds[medicine]=reusable.id;continue}
-            val review=JSONObject().put("source","featherline").put("raw",JSONObject().put("capacity","").put("featherline_ester",medicine.ester ?: JSONObject.NULL))
+            val review=JSONObject().put("source","featherline").put("raw",JSONObject().put("capacity","").put("featherline_ester",medicine.ester ?: if(medicine.molecule=="E2")"E2" else JSONObject.NULL))
             medIds[medicine]=dao.insertMedication(MedicationEntity(name=label(medicine),molecule=medicine.molecule,route=medicine.route,unit="MG",dose_per_intake=rows.first().amount,
                 container_capacity=rows.first().amount,site_rotation=false,notifications_on=false,active=false,sort_order=base+created,needs_review=review.toString()));created++
         }
         for(d in doses) {
             active();val med=dao.medication(medIds.getValue(d.medicine))
-            val frozen=JSONObject(MedicationSnapshot.encode(med,null)).put("external_context",JSONObject().put("source","FEATHERLINE").put("ester",d.medicine.ester ?: JSONObject.NULL).put("source_medicine",d.medicine.sourceId))
+            val frozen=JSONObject(MedicationSnapshot.encode(med.copy(name=label(d.medicine),molecule=d.medicine.molecule,route=d.medicine.route,unit="MG"),null)).put("external_context",JSONObject().put("source","FEATHERLINE").put("ester",d.medicine.ester ?: if(d.medicine.molecule=="E2")"E2" else JSONObject.NULL).put("source_medicine",d.medicine.sourceId))
             val id=dao.record(RecordEntity(medication_id=med.id,taken_utc=d.at,taken_zone=d.zone,actual_dose=d.amount,status="ON_TIME",origin="IMPORT_FEATHERLINE",source_record_key="featherline:log:${d.id}",revision=1,config_snapshot=frozen.toString()))
             val row=Trash.rows(db,"dose_record","id=?",arrayOf(id)).getJSONObject(0)
             dao.featherlineImport(FeatherlineImportEntity("LOG",d.id,source_digest=MonaMigration.digest(d.sourceJson),source_json=d.sourceJson,target_digest=FeatherlineReceiptStore.fingerprint("dose_record",row),record_id=id,imported_utc=now.toEpochMilli()))

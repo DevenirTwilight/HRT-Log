@@ -142,5 +142,25 @@ abstract class AttachmentBusinessReconstructionContract {
                 assertArrayEquals(bytes,source.runInTransaction(Callable {MeasuredBackupJson.encode(source.openHelper.writableDatabase,Instant.EPOCH)}))
             } finally {bytes.fill(0)}
         }
+    }    @Test fun featherlineReceiptsSurviveFullBusinessReconstructionAndPreventReplay() {
+        val export=FeatherlineSynthetic.export()
+        database().use {source->
+            val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=source})
+            runBlocking {assertEquals(1,repo.importFeatherline(export).doses)}
+            val bytes=source.runInTransaction(Callable {MeasuredBackupJson.encode(source.openHelper.writableDatabase,Instant.EPOCH)})
+            try {
+                assertEquals(15,JSONObject(String(bytes)).getInt("schema"))
+                val m=AttachmentBackupManifest(UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),emptyList(),emptyList(),emptyList(),emptyList())
+                val prepared=plan(m,bytes)
+                database().use {candidate->
+                    candidate.runInTransaction {AttachmentCandidateMetadata.reconstruct(candidate.openHelper.writableDatabase,tables(bytes),prepared) {}}
+                    candidate.runInTransaction {AttachmentCandidateMetadata.compareBusiness(candidate.openHelper.writableDatabase,tables(bytes)) {}}
+                    val restored=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=candidate})
+                    runBlocking {val replay=restored.importFeatherline(export);assertEquals(0,replay.doses);assertEquals(3,replay.existing)}
+                    assertArrayEquals(bytes,candidate.runInTransaction(Callable {MeasuredBackupJson.encode(candidate.openHelper.writableDatabase,Instant.EPOCH)}))
+                }
+                assertArrayEquals(bytes,source.runInTransaction(Callable {MeasuredBackupJson.encode(source.openHelper.writableDatabase,Instant.EPOCH)}))
+            } finally {bytes.fill(0)}
+        }
     }
 }

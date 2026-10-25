@@ -26,11 +26,12 @@ class FeatherlineContainer private constructor(private val bytes:ByteArray,val j
     @Synchronized override fun close(){closed=true;if(!busy)bytes.fill(0)}
     /** Never publishes unauthenticated plaintext, including providers that stream before doFinal. */
     override fun authenticate(password:CharArray,checkActive:()->Unit):ByteArray {
-        fun active(){check(!closed);checkActive()}
-        synchronized(this){check(!closed && !busy);busy=true}
+        fun active(){checkActive();check(!closed)}
+        var started=false
         val key=ByteArray(32);var utf8:ByteArray?=null;var compressed:ByteArray?=null
         var salt:ByteArray?=null
         try {
+            synchronized(this){check(!closed && !busy);busy=true;started=true}
             active();if(password.size>4096)throw TooLarge()
             val encoded=Charsets.UTF_8.newEncoder().onMalformedInput(CodingErrorAction.REPORT)
                 .onUnmappableCharacter(CodingErrorAction.REPORT).encode(java.nio.CharBuffer.wrap(password))
@@ -58,7 +59,7 @@ class FeatherlineContainer private constructor(private val bytes:ByteArray,val j
                 if(output.size()!=jsonBytes)throw Invalid()
                 active();return output.toByteArray()
             } finally {block.fill(0);output.clear()}
-        } finally {password.fill('\u0000');key.fill(0);utf8?.fill(0);compressed?.fill(0);salt?.fill(0);synchronized(this){busy=false;if(closed)bytes.fill(0)}}
+        } finally {password.fill('\u0000');key.fill(0);utf8?.fill(0);compressed?.fill(0);salt?.fill(0);synchronized(this){if(started){busy=false;if(closed)bytes.fill(0)}}}
     }
     companion object {
         const val MAXIMUM_BYTES=32*1024*1024
@@ -66,15 +67,17 @@ class FeatherlineContainer private constructor(private val bytes:ByteArray,val j
         const val MAXIMUM_JSON_BYTES=8*1024*1024
         /** Exact supported v3 profile. Header costs are checked BEFORE KDF/allocation.
          * Different profiles/legacy versions remain unsupported, rather than silently normalized. */
-        fun read(input:ByteArray):FeatherlineContainer=takeOwnership(input.copyOf())
+        fun read(input:ByteArray):FeatherlineContainer {if(input.size>MAXIMUM_BYTES)throw TooLarge();return takeOwnership(input.copyOf())}
         /** Ownership transfers even on rejection. The caller must not retain or reuse input. */
         fun takeOwnership(input:ByteArray):FeatherlineContainer = try {
             if(input.size>MAXIMUM_BYTES)throw TooLarge()
-            if(input.size<81)throw Invalid()
+            if(input.size<8)throw Invalid()
             val h=ByteBuffer.wrap(input)
             val magic=ByteArray(7);h.get(magic)
             if(!magic.contentEquals("HRTBKP1".toByteArray(Charsets.US_ASCII)))throw Invalid()
-            if(h.get().toInt()!=3 || h.get().toInt()!=2 || h.get().toInt()!=1 || h.get().toInt()!=1)throw Unsupported()
+            if(h.get().toInt()!=3)throw Unsupported()
+            if(input.size<81)throw Invalid()
+            if(h.get().toInt()!=2 || h.get().toInt()!=1 || h.get().toInt()!=1)throw Unsupported()
             val length=h.long
             if(length<=0)throw Invalid()
             if(length>MAXIMUM_JSON_BYTES)throw TooLarge()

@@ -83,4 +83,28 @@ class FeatherlineImportTest {
         try{write(receipt=receipt);fail("Receipt reused")}catch(_:IllegalStateException){}
         assertEquals(before,dump())
     }
+    @Test fun purgedDoseSourceIsNotRecreatedAndReceiptCannotBePhysicallyRemoved()=runBlocking {
+        write();repo.deleteRecord(repo.records().single().id,now);assertTrue(repo.purgeTrash(db.dao().trash().single().id))
+        FeatherlineImportSchema.validate(raw);assertEquals(0,write().doses);assertEquals(0,repo.records().size)
+        var refused=false;try{raw.execSQL("DELETE FROM featherline_import_item WHERE source_kind='LOG'")}catch(_:android.database.SQLException){refused=true}
+        assertTrue(refused);assertEquals(3,count("featherline_import_item"))
+    }
+
+    @Test fun newlySupportedResultJoinsOnlyItsUnmodifiedExplicitSourcePanel()=runBlocking {
+        val first=root();first.getJSONArray("bloodTestPanels").getJSONObject(0).getJSONArray("results").remove(1)
+        assertEquals(1,write(first).labs);val panel=repo.labPanels().single()
+        val later=write();assertEquals(1,later.labs);assertEquals(0,later.panels);assertEquals(panel.id,repo.labPanels().single().id)
+        assertTrue(repo.labs().all{it.panel_id==panel.id});FeatherlineImportSchema.validate(raw)
+    }
+
+    @Test fun currentTagAndDoseCannotReplaceNewHistoricalSourceFacts()=runBlocking {
+        write();val med=repo.medications().single();raw.execSQL("UPDATE medication SET name='SYNTHETIC local tag',dose_per_intake=99 WHERE id=?",arrayOf(med.id))
+        val next=root();val rows=next.getJSONArray("medicationLogs")
+        rows.put(JSONObject(rows.getJSONObject(0).toString()).put("uuid","00000000-0000-4000-8000-000000000099").put("count",2))
+        val summary=write(next);assertEquals(1,summary.doses);assertEquals(0,summary.medicines)
+        val actual=repo.records().single{it.source_record_key!!.endsWith("099")}
+        assertEquals(2.0,actual.actual_dose!!,0.0);assertTrue(JSONObject(actual.config_snapshot).getString("name").contains("ESTRADIOL_VALERATE"))
+        assertEquals("SYNTHETIC local tag",repo.medications().single().name)
+    }
+
 }

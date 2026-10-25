@@ -53,4 +53,33 @@ class FeatherlineTest {
         val missing=fixture();missing.getJSONArray("medicationLogs").getJSONObject(0).remove("appliedAtTimeZoneId")
         assertThrows(Featherline.Invalid::class.java){read(missing)}
     }
+    @Test fun repeatedAnalyteInOneSourcePanelIsReportedWithoutAmbiguousGrouping() {
+        val r=fixture();val values=r.getJSONArray("bloodTestPanels").getJSONObject(0).getJSONArray("results")
+        values.put(JSONObject(values.getJSONObject(0).toString()).put("uuid","00000000-0000-4000-8000-000000000019"))
+        val e=read(r);assertTrue(e.labs.isEmpty());assertEquals(2,e.issues.count{it.reason=="DUPLICATE_ANALYTE"})
+    }
+
+    @Test fun unknownClinicalOverrideIsNotIgnoredOrTurnedIntoAnAssumedDose() {
+        val r=fixture();r.getJSONArray("medicationLogs").getJSONObject(0).put("futureActualDose",9)
+        val result=read(r);assertTrue(result.doses.isEmpty());assertEquals("UNSUPPORTED_FIELD",result.issues.single().reason);assertEquals(1,result.labs.size)
+        assertThrows(Featherline.Unsupported::class.java){read(fixture().put("futureClinicalTable",JSONArray()))}
+    }
+
+    @Test fun verifiedCapsuleAndSublingualPillUseActualMassAndRoute() {
+        val capsule=fixture();capsule.getJSONArray("medicines").getJSONObject(0).put("preparationType","CAPSULE").put("medicationKey","SPIRONOLACTONE").put("category","ANTIANDROGEN").put("strengthMgPerTablet",25)
+        capsule.getJSONArray("medicationLogs").getJSONObject(0).put("doseInstructionKind","WHOLE_UNIT").put("category","ANTIANDROGEN").put("count",2)
+        val c=read(capsule).doses.single();assertEquals("SPI",c.medicine.molecule);assertEquals("ORAL",c.medicine.route);assertEquals(50.0,c.amount)
+        val sub=fixture();sub.getJSONArray("medicationLogs").getJSONObject(0).put("applicationType","SUBLINGUAL")
+        val s=read(sub).doses.single();assertEquals("SUBLINGUAL",s.medicine.route);assertEquals("EV",s.medicine.ester);assertEquals(1.0,s.amount)
+    }
+
+    @Test fun repeatedLargeMedicineEvidenceHasAnAggregateMemoryBound() {
+        val r=fixture();r.getJSONArray("medicines").getJSONObject(0).put("displayName","é".repeat(10000))
+        val logs=r.getJSONArray("medicationLogs");val first=logs.getJSONObject(0).toString()
+        for(i in 2..1000)logs.put(JSONObject(first).put("uuid",java.util.UUID(0,i.toLong()+100).toString()))
+        val e=read(r);assertTrue(e.doses.size in 1..999);assertTrue(e.issues.any{it.reason=="INPUT_LIMIT"})
+        assertTrue(e.doses.sumOf{it.sourceJson.toByteArray(Charsets.UTF_8).size.toLong()}+e.labs.sumOf{it.sourceJson.toByteArray(Charsets.UTF_8).size.toLong()}<=8*1024*1024)
+        assertEquals(e.doses.first().sourceJson,Mona.canonical(JSONObject(e.doses.first().sourceJson)))
+    }
+
 }

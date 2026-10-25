@@ -114,4 +114,26 @@ class AutomaticImportAccessibilityTest(private val locale:String,private val nig
         ui.onNodeWithText(ui.activity.getString(R.string.featherline_preview)).assertDoesNotExist()
         assertTrue(model.dataJob.value is net.plainnotes.app.NotesViewModel.DataJob.ImportCancelled)
     }
+    @Test fun featherlinePasswordHasAccessibleControlsAndCancellation() {
+        val model=ui.activity.model
+        ui.waitUntil(30000){model.librarySession.value is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready}
+        val file=java.io.File.createTempFile("synthetic-featherline-ui-",".json",ui.activity.cacheDir)
+        try {
+            file.writeBytes(java.io.File("../core/data/src/test/resources/featherline/clinical-v3.cipher").readBytes())
+            ui.runOnUiThread{model.openImport(android.net.Uri.fromFile(file))}
+            ui.waitUntil(30000){
+                // This host fixture has a paused Android looper; explicitly drain the
+                // real dispatcher return just as the scoped import flow tests do.
+                org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle()
+                model.dataJob.value is net.plainnotes.app.NotesViewModel.DataJob.FeatherlinePassword || model.dataJob.value is net.plainnotes.app.NotesViewModel.DataJob.Failed
+            }
+            assertTrue(model.dataJob.value is net.plainnotes.app.NotesViewModel.DataJob.FeatherlinePassword)
+            val confirm=ui.onNodeWithText(ui.activity.getString(R.string.featherline_unlock)).assertIsDisplayed().assertHasClickAction()
+            assertTrue(confirm.fetchSemanticsNode().touchBoundsInRoot.height>=48*ui.activity.resources.displayMetrics.density-1)
+            ui.onNode(hasSetTextAction()).performScrollTo().assertIsDisplayed().assertHasClickAction()
+            ui.onNodeWithText(ui.activity.getString(R.string.cancel)).assertIsDisplayed().performClick()
+            assertTrue(model.dataJob.value is net.plainnotes.app.NotesViewModel.DataJob.ImportCancelled)
+        }finally{file.delete()}
+    }
+
 }

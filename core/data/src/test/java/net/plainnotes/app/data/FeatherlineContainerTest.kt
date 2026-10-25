@@ -46,4 +46,22 @@ class FeatherlineContainerTest {
             rejects<FeatherlineContainer.Invalid>{it.authenticate(password())}
         }
     }
+    @Test fun closeDoesNotWaitForAuthenticationAndClosedAttemptsClearPasswords() {
+        val reader=FeatherlineContainer.read(bytes());val started=java.util.concurrent.CountDownLatch(1);val release=java.util.concurrent.CountDownLatch(1)
+        val executor=java.util.concurrent.Executors.newFixedThreadPool(2)
+        val first=password()
+        try {
+            val auth=executor.submit<Boolean>{try{reader.authenticate(first){started.countDown();check(release.await(10,java.util.concurrent.TimeUnit.SECONDS))};false}catch(_:IllegalStateException){true}}
+            assertTrue(started.await(5,java.util.concurrent.TimeUnit.SECONDS))
+            executor.submit{reader.close()}.get(2,java.util.concurrent.TimeUnit.SECONDS)
+            release.countDown();assertTrue(auth.get(5,java.util.concurrent.TimeUnit.SECONDS));assertTrue(first.all{it=='\u0000'})
+            val pw=password();rejects<IllegalStateException>{reader.authenticate(pw)};assertTrue(pw.all{it=='\u0000'})
+        }finally{release.countDown();reader.close();executor.shutdownNow()}
+    }
+
+    @Test fun anUnsupportedEnvelopeVersionIsIdentifiedBeforeApplyingV3LengthRules() {
+        rejects<FeatherlineContainer.Unsupported>{FeatherlineContainer.read("HRTBKP1".toByteArray()+byteArrayOf(2))}
+        rejects<FeatherlineContainer.Invalid>{FeatherlineContainer.read("HRTBKP1".toByteArray()+byteArrayOf(3))}
+    }
+
 }

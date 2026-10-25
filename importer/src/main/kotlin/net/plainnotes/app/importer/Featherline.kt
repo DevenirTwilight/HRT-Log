@@ -18,6 +18,11 @@ object Featherline {
     data class Lab(val id:String,val panel:String,val analyte:String,val value:Double,val unit:String,val at:Long,val zone:String,val note:String?,val sourceJson:String)
     data class Issue(val kind:String,val id:String,val reason:String)
     class Export internal constructor(val doses:List<Dose>,val labs:List<Lab>,val issues:List<Issue>,val counts:Map<String,Int>,val exportedAt:Long)
+    private val medicineFields=setOf("uuid","selectionKind","medicationKey","customMedicationName","customMedicationNameNormalized","category","preparationType","strengthMgPerTablet","strengthMgPerVial","concentrationMgPerMl","vialVolumeMl","concentrationPercent","sachetWeightGrams","containerWeightGrams","patchTotalMg","patchReleaseRateMcgPerDay","displayName","identityKey","createdAtEpochMillis","updatedAtEpochMillis","archivedAtEpochMillis","displayDoseUnit","importedFromExternalTracker","stock")
+    private val logFields=setOf("uuid","category","medicineUuid","applicationType","doseInstructionKind","tabletFractionNumerator","tabletFractionDenominator","doseVolumeMl","doseWeightGrams","gelApplicationArea","equivalentE2Mg","doseAmountDelta","sourceGroupUuid","scheduleTimeUuid","appliedAtEpochMillis","appliedAtTimeZoneId","scheduledForIso","count","importSourceApp","importExternalId")
+    private val panelFields=setOf("uuid","collectedAtInstantEpochMillis","collectedAtTimeZoneId","notes","timeSinceLastEstradiolDoseMillis","timeSinceLastTestosteroneDoseMillis","createdAtEpochMillis","updatedAtEpochMillis","importSourceApp","importPanelKey","results")
+    private val resultFields=setOf("uuid","createdAtEpochMillis","displayOrder","builtinAnalyteKey","customAnalyteUuid","value","unitSnapshot","canonicalValue","importSourceApp","importExternalId","calibrationDisposition","calibrationMetadataUpdatedAtEpochMillis")
+    private fun known(row:JSONObject,fields:Set<String>)=row.keys().asSequence().all{it in fields}
     private val catalog=mapOf("ESTRADIOL" to Pair("E2",null),"ESTRADIOL_VALERATE" to Pair("E2","EV"),
         "SPIRONOLACTONE" to Pair("SPI",null),"CYPROTERONE_ACETATE" to Pair("CPA",null),
         "BICALUTAMIDE" to Pair("BICA",null),"FINASTERIDE" to Pair("FIN",null),"DUTASTERIDE" to Pair("DUT",null))
@@ -37,10 +42,11 @@ object Featherline {
     private fun decimal(row:JSONObject,key:String):BigDecimal? = (row.opt(key) as? Number)?.let{runCatching{BigDecimal(it.toString())}.getOrNull()}
     fun read(text:String):Export {
         if(text.toByteArray(Charsets.UTF_8).size>8*1024*1024)throw Invalid()
-        ImportFormatDetector.bounds(text)
+        ImportFormatDetector.bounds(text,maximumContainers=100000)
         val tok=JSONTokener(text);val root=try {tok.nextValue() as? JSONObject ?: throw Invalid()}catch(_:org.json.JSONException){throw Invalid()}
         if(tok.nextClean()!='\u0000')throw Invalid()
         if(root.opt("snapshotVersion")!=7)throw Unsupported()
+        if(!known(root,setOf("snapshotVersion","exportedAtEpochMillis","app","settings","userProfile","medicines","medicationGroups","medicationLogs","customBloodAnalytes","bloodTestPanels","trackedDates","notes")))throw Unsupported()
         if(root.optJSONObject("app")?.opt("packageName")!="com.mkx.hrttracker")throw Invalid()
         val at=integer(root,"exportedAtEpochMillis");Instant.ofEpochMilli(at)
         if(root.opt("settings") !is JSONObject || root.opt("userProfile") !is JSONObject)throw Invalid()
@@ -55,18 +61,21 @@ object Featherline {
         val groupTimes=hashMapOf<String,Set<String>>()
         for((gid,g) in groups) {
             val schedule=g.optJSONObject("schedule") ?: throw Invalid()
-            val times=array(schedule,"times");val timeIds=hashSetOf<String>()
+            val times=array(schedule,"times");val timeIds=hashSetOf<String>();total+=times.length();if(total>100000)throw Invalid()
             for(i in 0 until times.length()) {
                 val row=times.optJSONObject(i) ?: throw Invalid()
                 if(!row.isNull("uuid"))if(!timeIds.add(id(row)))throw Invalid()
             }
             groupTimes[gid]=timeIds
-            for(r in rows(array(g,"medications"))) {
+            val members=rows(array(g,"medications"));total+=members.size;if(total>100000)throw Invalid()
+            for(r in members) {
                 val med=r.optString("medicineUuid","")
                 if(med !in meds && !(r.opt("applicationType")=="PATCH_OFF" && r.isNull("medicineUuid")))throw Invalid()
             }
         }
         val doses=mutableListOf<Dose>();val labs=mutableListOf<Lab>();val issues=mutableListOf<Issue>()
+        var evidenceBytes=0L
+        val medicineEvidence=hashMapOf<String,Pair<String,Int>>()
         for(log in source.getValue("medicationLogs")) {
             val lid=id(log);val route=log.opt("applicationType") as? String ?: throw Invalid()
             val time=integer(log,"appliedAtEpochMillis");val tz=zone(log,"appliedAtTimeZoneId");Instant.ofEpochMilli(time)
@@ -76,6 +85,7 @@ object Featherline {
             } else if(!log.isNull("scheduleTimeUuid"))throw Invalid()
             if(route=="PATCH_OFF" && log.isNull("medicineUuid")){issues+=Issue("LOG",lid,"PATCH_REMOVAL");continue}
             val med=meds[id(log,"medicineUuid")] ?: throw Invalid()
+            if(!known(log,logFields) || !known(med,medicineFields)){issues+=Issue("LOG",lid,"UNSUPPORTED_FIELD");continue}
             val key=med.opt("medicationKey") as? String
             val identity=if(med.opt("selectionKind")=="CATALOG")catalog[key] else null
             if(identity==null){issues+=Issue("LOG",lid,"UNSUPPORTED_MEDICINE");continue}
@@ -98,7 +108,19 @@ object Featherline {
             }
             val value=amount?.toDouble()
             if(value==null || !value.isFinite() || value<=0 || BigDecimal.valueOf(value).compareTo(amount)!=0){issues+=Issue("LOG",lid,"UNREPRESENTABLE_DOSE");continue}
-            val evidence=Mona.canonical(JSONObject().put("medicine",med).put("log",log))
+            // A shared large medicine must not amplify an8MiB snapshot into gigabytes
+            // of per-log evidence. Canonicalize that component once, and bound the total
+            // BEFORE allocating each combined immutable source fragment.
+            val encodedMed=medicineEvidence.getOrPut(id(med)) {
+                val text=Mona.canonical(med);val size=text.toByteArray(Charsets.UTF_8).size
+                (if(size<=131072)text else "") to size
+            }
+            if(encodedMed.second>131072){issues+=Issue("LOG",lid,"INPUT_LIMIT");continue}
+            val encodedLog=Mona.canonical(log)
+            val bytes=encodedMed.second.toLong()+encodedLog.toByteArray(Charsets.UTF_8).size+20
+            if(bytes>131072 || bytes>8*1024*1024-evidenceBytes){issues+=Issue("LOG",lid,"INPUT_LIMIT");continue}
+            val evidence="{\"log\":"+encodedLog+",\"medicine\":"+encodedMed.first+"}"
+            evidenceBytes+=bytes
             doses+=Dose(lid,Medicine(id(med),key!!,identity.first,route,identity.second),time,tz,value,evidence)
         }
         val resultIds=hashSetOf<String>()
@@ -106,19 +128,26 @@ object Featherline {
             val pid=id(panel);val time=integer(panel,"collectedAtInstantEpochMillis");val tz=zone(panel,"collectedAtTimeZoneId")
             val note=panel.opt("notes").let{if(it==null || it==JSONObject.NULL)null else it as? String ?: throw Invalid()}
             val results=rows(array(panel,"results"));total+=results.size;if(total>100000)throw Invalid()
+            val ambiguous=results.mapNotNull{it.opt("builtinAnalyteKey") as? String}.groupingBy{it}.eachCount().filterValues{it>1}.keys
             for(result in results) {
                 val rid=id(result);if(!resultIds.add(rid))throw Invalid()
+                if(!known(panel,panelFields) || !known(result,resultFields)){issues+=Issue("RESULT",rid,"UNSUPPORTED_FIELD");continue}
                 val key=result.opt("builtinAnalyteKey") as? String
                 if(!result.isNull("customAnalyteUuid") && id(result,"customAnalyteUuid") !in custom)throw Invalid()
                 val code=when(key){"e2"->"E2";"t"->"T";else->null}
                 if(code==null || !result.isNull("customAnalyteUuid")){issues+=Issue("RESULT",rid,"UNSUPPORTED_ANALYTE");continue}
+                if(key in ambiguous){issues+=Issue("RESULT",rid,"DUPLICATE_ANALYTE");continue}
                 val rawUnit=result.opt("unitSnapshot") as? String ?: throw Invalid()
                 val unit=mapOf("pg_ml" to "pg/mL","pmol_l" to "pmol/L","ng_dl" to "ng/dL","ng_ml" to "ng/mL","nmol_l" to "nmol/L")[rawUnit]
                 val allowed=if(code=="E2")setOf("pg/mL","pmol/L") else setOf("ng/dL","ng/mL","nmol/L")
                 val original=decimal(result,"value");val v=original?.toDouble()
                 if(unit !in allowed || v==null || !v.isFinite() || v<0 || BigDecimal.valueOf(v).compareTo(original)!=0){issues+=Issue("RESULT",rid,"UNSUPPORTED_RESULT");continue}
                 val p=JSONObject(panel.toString());p.remove("results")
-                labs+=Lab(rid,pid,code,v,requireNotNull(unit),time,tz,note,Mona.canonical(JSONObject().put("panel",p).put("result",result)))
+                val evidence=Mona.canonical(JSONObject().put("panel",p).put("result",result))
+                val bytes=evidence.toByteArray(Charsets.UTF_8).size.toLong()
+                if(bytes>131072 || bytes>8*1024*1024-evidenceBytes){issues+=Issue("RESULT",rid,"INPUT_LIMIT");continue}
+                evidenceBytes+=bytes
+                labs+=Lab(rid,pid,code,v,requireNotNull(unit),time,tz,note,evidence)
             }
         }
         return Export(java.util.Collections.unmodifiableList(doses),java.util.Collections.unmodifiableList(labs),java.util.Collections.unmodifiableList(issues),

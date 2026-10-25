@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.importer.FeatherlineTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-25T21:23:24.727Z" hostname="68e3ecace23d" time="0.625">
+  <properties/>
+  <testcase name="actualMassIsIndependentOfPkEquivalentAndOriginalLabIndependentOfCanonical()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.133"/>
+  <testcase name="unknownUnitIsReportedWithoutSubstitutingCanonical()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.003"/>
+  <testcase name="repeatedAnalyteInOneSourcePanelIsReportedWithoutAmbiguousGrouping()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.008"/>
+  <testcase name="duplicateRowsAndMissingTimeZoneRefuse()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.002"/>
+  <testcase name="verifiedCapsuleAndSublingualPillUseActualMassAndRoute()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.006"/>
+  <testcase name="unsupportedReleaseRateCustomAndActualDeltaNeverBecomeAssumedDoses()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.009"/>
+  <testcase name="invalidVersionAppUuidOrOrphanRefuses()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.004"/>
+  <testcase name="unknownClinicalOverrideIsNotIgnoredOrTurnedIntoAnAssumedDose()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.006"/>
+  <testcase name="repeatedLargeMedicineEvidenceHasAnAggregateMemoryBound()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.404"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

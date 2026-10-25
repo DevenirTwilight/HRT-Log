@@ -12,4 +12,8 @@
     <string name="featherline_ignored">Non transférés : %1$d groupes de planification, %2$d stocks, %3$d notes, %4$d champs de paramètres/profil.</string>
     <string name="featherline_item">%1$s · %2$s\n%3$s</string>
     <string name="featherline_confirm">Importer les données compatibles</string>
+    <string name="featherline_other">Non transférés : %1$d dates suivies et %2$d définitions personnalisées. %3$d définitions de médicaments servent uniquement à interpréter les prises réelles.</string>
+    <string name="featherline_delta">Corrections de dose non prises en charge ; aucune dose supposée.</string>
+    <string name="featherline_group">Regroupement ambigu ; vérification manuelle nécessaire.</string>
+    <string name="featherline_limit">Les données sources dépassent la limite par entrée ou par lot.</string>
 </resources>

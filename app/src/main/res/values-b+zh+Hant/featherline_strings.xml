@@ -12,4 +12,8 @@
     <string name="featherline_ignored">不遷移：%1$d 個計畫組、%2$d 項庫存、%3$d 筆記事、%4$d 個設定或個人資料欄位。</string>
     <string name="featherline_item">%1$s · %2$s\n%3$s</string>
     <string name="featherline_confirm">匯入可支援的紀錄</string>
+    <string name="featherline_other">不遷移：%1$d 個紀念日期、%2$d 項自訂化驗定義。%3$d 項藥物定義僅用於解釋實際紀錄，不建立歷史處方。</string>
+    <string name="featherline_delta">暫不支援劑量修正，沒有推測實際劑量。</string>
+    <string name="featherline_group">同組化驗項目存在歧義，需人工核對。</string>
+    <string name="featherline_limit">來源證據超過本版單筆紀錄或批次限制。</string>
 </resources>

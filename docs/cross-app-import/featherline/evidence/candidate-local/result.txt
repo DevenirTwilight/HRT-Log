@@ -1,0 +1,4 @@
+importer/build/test-results/test: tests/failures/errors/skipped = [55, 0, 0, 0]
+core/data/build/test-results/testDebugUnitTest: tests/failures/errors/skipped = [27, 0, 0, 0]
+app/build/test-results/testFullDebugUnitTest: tests/failures/errors/skipped = [51, 0, 0, 0]
+Native source compilation PASS; lintFullDebug PASS in earlier full local run. Final exact-source required CI/native/low-memory PENDING. Physical phone/manual TalkBack NOT_RUN.

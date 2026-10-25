@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-25T21:35:27.877Z" hostname="68e3ecace23d" time="6.115">
+  <properties/>
+  <testcase name="monaReceiptsSurviveFullBusinessReconstructionAndPreventReplay" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="3.848"/>
+  <testcase name="featherlineReceiptsSurviveFullBusinessReconstructionAndPreventReplay" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="0.451"/>
+  <testcase name="reconstructionRejectsExistingBusinessRowsInsteadOfReplacingThem" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="0.225"/>
+  <testcase name="cancellationRollsBackWholeCandidateAndSourceRemainsBitForBitUnchanged" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="0.337"/>
+  <testcase name="sameCountsChangedFactsAreRejectedByIndependentComparison" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="0.298"/>
+  <testcase name="admittedTypedClosureCannotReplaceOriginalFullBusinessIntegrityAudit" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="0.265"/>
+  <testcase name="fullBusinessHistoryAndThreeTrashRepresentationsAreReconstructedAndIndependentlyCompared" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="0.244"/>
+  <testcase name="missingTypedTrashDuplicateIdentityAndBrokenRelationshipRefuseWholePlan" classname="net.plainnotes.app.data.AttachmentBusinessReconstructionTest" time="0.155"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

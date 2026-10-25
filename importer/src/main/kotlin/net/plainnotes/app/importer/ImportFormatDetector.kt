@@ -95,14 +95,14 @@ object ImportFormatDetector {
         return try {Parsed.Memo(TransMemo.read(source))}catch(_:InvalidExport){throw Damaged()}
     }
     /** Allocation/recursion guard before the existing JSON parser. This is not a second parser. */
-    internal fun bounds(text:String) {
+    internal fun bounds(text:String,maximumContainers:Int=250000) {
         var depth=0;var containers=0;var entries=0;var quoted=false;var escaped=false
         for(c in text) {
             if(quoted) {if(escaped)escaped=false else if(c=='\\')escaped=true else if(c=='"')quoted=false}
             else when(c) {
                 '"'->quoted=true
                 ','->{entries++;if(entries>250000)throw TooLarge()}
-                '[','{'->{depth++;containers++;if(depth>64 || containers>250000)throw TooLarge()}
+                '[','{'->{depth++;containers++;if(depth>64 || containers>maximumContainers)throw TooLarge()}
                 ']', '}'->{depth--;if(depth<0)throw Damaged()}
             }
         }

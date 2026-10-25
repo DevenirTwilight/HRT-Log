@@ -12,4 +12,8 @@
     <string name="featherline_ignored">Not migrated: %1$d schedule groups, %2$d stock items, %3$d notes, %4$d settings/profile fields.</string>
     <string name="featherline_item">%1$s · %2$s\n%3$s</string>
     <string name="featherline_confirm">Import supported records</string>
+    <string name="featherline_other">Not migrated: %1$d tracked dates and %2$d custom analyte definitions. %3$d medicine definitions are used only to interpret actual records.</string>
+    <string name="featherline_delta">Dose corrections are not supported; no dose was assumed.</string>
+    <string name="featherline_group">Ambiguous result grouping; manual review required.</string>
+    <string name="featherline_limit">Source evidence exceeds the supported record or batch limit.</string>
 </resources>

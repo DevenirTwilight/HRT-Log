@@ -1,6 +1,8 @@
 package net.plainnotes.app.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
@@ -15,7 +17,7 @@ import net.plainnotes.app.data.*
 @Composable internal fun FeatherlinePasswordDialog(error:Int?,onCancel:()->Unit,onConfirm:(CharArray)->Unit) {
     var password by remember{mutableStateOf("")}
     AlertDialog(onDismissRequest={password="";onCancel()},title={Text(stringResource(R.string.featherline_password_title))},
-        text={Column(verticalArrangement=Arrangement.spacedBy(12.dp)) {
+        text={Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.featherline_password_note))
             OutlinedTextField(password,{if(it.length<=4096)password=it},Modifier.fillMaxWidth(),label={Text(stringResource(R.string.featherline_password))},
                 visualTransformation=PasswordVisualTransformation(),singleLine=true,isError=error!=null)
@@ -34,6 +36,7 @@ import net.plainnotes.app.data.*
             item{Text(stringResource(R.string.featherline_counts,summary?.doses ?: preview.newDoses,summary?.labs ?: preview.newLabs,summary?.existing ?: preview.existing,summary?.conflicts ?: preview.conflicts,export.issues.size))}
             item{Text(stringResource(R.string.featherline_safety))}
             item{Text(stringResource(R.string.featherline_ignored,export.counts["medicationGroups"] ?: 0,export.counts["stock"] ?: 0,export.counts["notes"] ?: 0,(export.counts["settings"] ?: 0)+(export.counts["userProfile"] ?: 0)))}
+            item{Text(stringResource(R.string.featherline_other,export.counts["trackedDates"] ?: 0,export.counts["customBloodAnalytes"] ?: 0,export.counts["medicines"] ?: 0))}
             items(items){row->Column(verticalArrangement=Arrangement.spacedBy(4.dp)) {
                 Text(stringResource(R.string.featherline_item,stringResource(if(row.kind=="LOG")R.string.mona_intake else R.string.mona_blood),row.id,
                     stringResource(when(row.status){
@@ -52,7 +55,10 @@ import net.plainnotes.app.data.*
                 "UNSUPPORTED_MEDICINE"->R.string.mona_identity
                 "UNSUPPORTED_ROUTE","PATCH_REMOVAL"->R.string.mona_route
                 "UNSUPPORTED_UNIT"->R.string.mona_unit
-                "UNREPRESENTABLE_DOSE","ACTUAL_DELTA"->R.string.mona_quantity
+                "UNREPRESENTABLE_DOSE"->R.string.mona_quantity
+                "ACTUAL_DELTA"->R.string.featherline_delta
+                "DUPLICATE_ANALYTE"->R.string.featherline_group
+                "INPUT_LIMIT"->R.string.featherline_limit
                 "UNSUPPORTED_ANALYTE","UNSUPPORTED_RESULT"->R.string.mona_lab
                 else->R.string.mona_field
             })))}

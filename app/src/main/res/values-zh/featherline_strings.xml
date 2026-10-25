@@ -12,4 +12,8 @@
     <string name="featherline_ignored">不迁移：%1$d 个计划组、%2$d 项库存、%3$d 条笔记、%4$d 个设置或个人资料字段。</string>
     <string name="featherline_item">%1$s · %2$s\n%3$s</string>
     <string name="featherline_confirm">导入可支持的记录</string>
+    <string name="featherline_other">不迁移：%1$d 个纪念日期、%2$d 项自定义化验定义。%3$d 项药物定义仅用于解释实际记录，不创建历史处方。</string>
+    <string name="featherline_delta">暂不支持剂量修正，没有推测实际剂量。</string>
+    <string name="featherline_group">同组化验项目存在歧义，需人工核对。</string>
+    <string name="featherline_limit">来源证据超过本版单条记录或批次限制。</string>
 </resources>

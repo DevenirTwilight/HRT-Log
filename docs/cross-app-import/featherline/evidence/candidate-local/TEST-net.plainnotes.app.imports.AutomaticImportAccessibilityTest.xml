@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" tests="32" skipped="0" failures="0" errors="0" timestamp="2026-10-25T21:35:08.413Z" hostname="68e3ecace23d" time="14.429">
+  <properties/>
+  <testcase name="featherlinePasswordHasAccessibleControlsAndCancellation[en/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="5.619"/>
+  <testcase name="featherlineReviewKeepsExplicitConfirmationAndReadableReasons[en/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.457"/>
+  <testcase name="monaReviewKeepsExplicitConfirmationAndReadableReasons[en/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.324"/>
+  <testcase name="oneImportActionRemainsReadableAndRestoreIsSeparate[en/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.317"/>
+  <testcase name="featherlinePasswordHasAccessibleControlsAndCancellation[en/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.311"/>
+  <testcase name="featherlineReviewKeepsExplicitConfirmationAndReadableReasons[en/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.371"/>
+  <testcase name="monaReviewKeepsExplicitConfirmationAndReadableReasons[en/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.368"/>
+  <testcase name="oneImportActionRemainsReadableAndRestoreIsSeparate[en/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.218"/>
+  <testcase name="featherlinePasswordHasAccessibleControlsAndCancellation[zh-rCN/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.373"/>
+  <testcase name="featherlineReviewKeepsExplicitConfirmationAndReadableReasons[zh-rCN/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.3"/>
+  <testcase name="monaReviewKeepsExplicitConfirmationAndReadableReasons[zh-rCN/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.255"/>
+  <testcase name="oneImportActionRemainsReadableAndRestoreIsSeparate[zh-rCN/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.25"/>
+  <testcase name="featherlinePasswordHasAccessibleControlsAndCancellation[zh-rCN/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.314"/>
+  <testcase name="featherlineReviewKeepsExplicitConfirmationAndReadableReasons[zh-rCN/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.25"/>
+  <testcase name="monaReviewKeepsExplicitConfirmationAndReadableReasons[zh-rCN/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.273"/>
+  <testcase name="oneImportActionRemainsReadableAndRestoreIsSeparate[zh-rCN/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.211"/>
+  <testcase name="featherlinePasswordHasAccessibleControlsAndCancellation[zh-rTW/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.356"/>
+  <testcase name="featherlineReviewKeepsExplicitConfirmationAndReadableReasons[zh-rTW/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.339"/>
+  <testcase name="monaReviewKeepsExplicitConfirmationAndReadableReasons[zh-rTW/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.352"/>
+  <testcase name="oneImportActionRemainsReadableAndRestoreIsSeparate[zh-rTW/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.173"/>
+  <testcase name="featherlinePasswordHasAccessibleControlsAndCancellation[zh-rTW/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.282"/>
+  <testcase name="featherlineReviewKeepsExplicitConfirmationAndReadableReasons[zh-rTW/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.214"/>
+  <testcase name="monaReviewKeepsExplicitConfirmationAndReadableReasons[zh-rTW/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.273"/>
+  <testcase name="oneImportActionRemainsReadableAndRestoreIsSeparate[zh-rTW/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.2"/>
+  <testcase name="featherlinePasswordHasAccessibleControlsAndCancellation[fr-rFR/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.307"/>
+  <testcase name="featherlineReviewKeepsExplicitConfirmationAndReadableReasons[fr-rFR/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.214"/>
+  <testcase name="monaReviewKeepsExplicitConfirmationAndReadableReasons[fr-rFR/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.171"/>
+  <testcase name="oneImportActionRemainsReadableAndRestoreIsSeparate[fr-rFR/320dp/2x/night]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.27"/>
+  <testcase name="featherlinePasswordHasAccessibleControlsAndCancellation[fr-rFR/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.385"/>
+  <testcase name="featherlineReviewKeepsExplicitConfirmationAndReadableReasons[fr-rFR/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.158"/>
+  <testcase name="monaReviewKeepsExplicitConfirmationAndReadableReasons[fr-rFR/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.177"/>
+  <testcase name="oneImportActionRemainsReadableAndRestoreIsSeparate[fr-rFR/320dp/2x/notnight]" classname="net.plainnotes.app.imports.AutomaticImportAccessibilityTest" time="0.193"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
