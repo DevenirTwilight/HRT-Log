@@ -1,0 +1,24 @@
+{
+  "source": "2bf822e0cb4de8b2dd97b99c8ac41ff892653711",
+  "run": 40199164557,
+  "result": "FAIL_THREE_API_REAL_SAF_DRAWER",
+  "artifacts": [
+    {
+      "api": 26,
+      "id": 12601981146,
+      "sha256": "245e6b9a108fbf7a4ef40297a5a137771f2537cbd29d7c36ba7ec33bcc17e608"
+    },
+    {
+      "api": 29,
+      "id": 12601091492,
+      "sha256": "2f6dd36ec5a88ad83de7c9785d30ec7db684789aa51f70451d49d2d93d921606"
+    },
+    {
+      "api": 35,
+      "id": 12600901826,
+      "sha256": "0a715d35482317e419c3d6ef9b00131270962b0fd3171c9f8e20d1e1d8dda320"
+    }
+  ],
+  "allArtifactSHAAndZipCRC": "PASS",
+  "physical": "NOT_RUN"
+}

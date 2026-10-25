@@ -1,6 +1,7 @@
 package net.plainnotes.app.imports
 
 import android.content.Intent
+import android.accessibilityservice.AccessibilityServiceInfo
 import android.graphics.Rect
 import android.os.SystemClock
 import android.view.InputDevice
@@ -30,9 +31,19 @@ class AutomaticImportAndroidTest {
     private val context get()=instrumentation.targetContext
     private var scenario:ActivityScenario<MainActivity>?=null
     private lateinit var model:NotesViewModel
+    private var originalAccessibilityFlags=0
     private fun text(id:Int)=context.getString(id)
-    @Before fun setup() {net.plainnotes.app.attachmentpoc.SyntheticEmulatorGuard.requireEmulator();Disguise.disable(context);AppLock(context).disable();Session.reset();UiPrefs(context).disclaimerAccepted=true}
-    @After fun close(){scenario?.close();Session.reset()}
+    @Before fun setup() {
+        net.plainnotes.app.attachmentpoc.SyntheticEmulatorGuard.requireEmulator()
+        val service=instrumentation.uiAutomation.serviceInfo
+        originalAccessibilityFlags=service.flags
+        service.flags=service.flags or AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS
+        instrumentation.uiAutomation.serviceInfo=service
+        Disguise.disable(context);AppLock(context).disable();Session.reset();UiPrefs(context).disclaimerAccepted=true
+    }
+    @After fun close(){scenario?.close();Session.reset()
+        val service=instrumentation.uiAutomation.serviceInfo;service.flags=originalAccessibilityFlags;instrumentation.uiAutomation.serviceInfo=service
+    }
     private fun launch() {
         scenario=ActivityScenario.launch<MainActivity>(Intent(context,MainActivity::class.java))
         scenario!!.onActivity{model=ViewModelProvider(it)[NotesViewModel::class.java]}
@@ -54,6 +65,8 @@ class AutomaticImportAndroidTest {
             if(node==null || depth>16 || tree.length>6000)return
             tree.append("\n").append(" ".repeat(depth)).append(node.className).append(" text=").append(node.text)
                 .append(" clickable=").append(node.isClickable).append(" visible=").append(node.isVisibleToUser)
+                .append(" id=").append(node.viewIdResourceName).append(" bounds=").append(Rect().also(node::getBoundsInScreen))
+                .append(" actions=").append(node.actionList.map{it.id})
             for(i in 0 until node.childCount)snapshot(node.getChild(i),depth+1)
         }
         snapshot(root,0)
@@ -69,57 +82,74 @@ class AutomaticImportAndroidTest {
             try{assertTrue(instrumentation.uiAutomation.injectInputEvent(event,true))}finally{event.recycle()}
         }
     }
-    private fun systemNode(label:String):AccessibilityNodeInfo?=instrumentation.uiAutomation.rootInActiveWindow?.findAccessibilityNodeInfosByText(label)?.firstOrNull{it.isVisibleToUser&&it.text?.toString()==label}
+    private fun pickerRoot():AccessibilityNodeInfo? = instrumentation.uiAutomation.rootInActiveWindow?.takeIf {
+        it.packageName?.toString()?.endsWith(".documentsui")==true && it.refresh()
+    }
+    private fun shown(node:AccessibilityNodeInfo):Boolean {
+        if(!node.refresh() || !node.isVisibleToUser)return false
+        val screen=Rect();pickerRoot()?.getBoundsInScreen(screen) ?: return false
+        val bounds=Rect();node.getBoundsInScreen(bounds)
+        return !bounds.isEmpty && Rect.intersects(screen,bounds)
+    }
+    private fun systemNode(label:String):AccessibilityNodeInfo?=pickerRoot()?.findAccessibilityNodeInfosByText(label)
+        ?.firstOrNull{it.text?.toString()==label && shown(it)}
+    private fun systemId(id:String):AccessibilityNodeInfo? {
+        val root=pickerRoot() ?: return null
+        return root.findAccessibilityNodeInfosByViewId("${root.packageName}:id/$id").firstOrNull(::shown)
+    }
+    private fun rootsOpen()=systemId("drawer_roots")!=null
+    private fun settlePicker() {instrumentation.uiAutomation.waitForIdle(300,3000)}
+    private fun closeRoots() {
+        settlePicker()
+        if(rootsOpen()) {
+            // The main navigation button OPENS roots; it is not a toggle. Back is sent
+            // only for a fresh, on-screen drawer_roots pane, never for a retained label.
+            assertTrue(instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK))
+            waitSystem("closed roots pane, picker still active"){pickerRoot()!=null && !rootsOpen()}
+        }
+    }
     private fun choose(kind:String) {
+        val name=if(kind=="tracker")"SYNTHETIC tracker.db" else "SYNTHETIC memo.json"
         click(R.string.import_other_apps)
-        waitSystem("DocumentsUI"){instrumentation.uiAutomation.rootInActiveWindow?.packageName?.toString()?.endsWith(".documentsui")==true}
-        if(systemNode("SYNTHETIC tracker.db")==null) {
-            // Navigate the real picker drawer without depending on translated content descriptions.
-            var button:AccessibilityNodeInfo?=null
-            waitSystem("navigation button") {
-                fun find(n:AccessibilityNodeInfo?):AccessibilityNodeInfo? {
-                    if(n==null)return null
-                    if(n.className=="android.widget.ImageButton"&&n.isClickable&&n.isVisibleToUser)return n
-                    for(i in 0 until n.childCount)find(n.getChild(i))?.let{return it};return null
+        waitSystem("DocumentsUI"){pickerRoot()!=null}
+        settlePicker()
+        if(systemNode(name)==null) {
+            if(!rootsOpen()) {
+                var navigation:AccessibilityNodeInfo?=null
+                waitSystem("main toolbar navigation") {
+                    fun find(n:AccessibilityNodeInfo?):AccessibilityNodeInfo? {
+                        if(n==null)return null
+                        if(n.className=="android.widget.ImageButton" && n.isClickable && shown(n))return n
+                        for(i in 0 until n.childCount)find(n.getChild(i))?.let{return it}
+                        return null
+                    }
+                    navigation=find(systemId("toolbar"));navigation!=null
                 }
-                button=find(instrumentation.uiAutomation.rootInActiveWindow);button!=null
+                assertTrue(requireNotNull(navigation).performAction(AccessibilityNodeInfo.ACTION_CLICK))
             }
-            assertTrue(requireNotNull(button).performAction(AccessibilityNodeInfo.ACTION_CLICK))
             var rootAction:AccessibilityNodeInfo?=null
             waitSystem("settled synthetic root") {
-                try {instrumentation.uiAutomation.waitForIdle(300,3000)}catch(_:java.util.concurrent.TimeoutException){return@waitSystem false}
-                val current=instrumentation.uiAutomation.rootInActiveWindow ?: return@waitSystem false
-                if(!current.refresh())return@waitSystem false
+                settlePicker()
                 var node=systemNode("SYNTHETIC IMPORT")
                 while(node!=null && !node.isClickable)node=node.parent
-                rootAction=node?.takeIf{it.isVisibleToUser};rootAction!=null
+                rootAction=node?.takeIf(::shown);rootAction!=null
             }
-            // Root drawer navigation has a real accessible click action. A finger at a
-            // label's pre-layout coordinates can miss while that drawer is being attached.
             assertTrue(requireNotNull(rootAction).performAction(AccessibilityNodeInfo.ACTION_CLICK))
         }
-        // Root selection can leave the DocumentsUI drawer above the selected directory.
-        // Toggle its own navigation button; system Back would dismiss the picker on API26.
-        if(systemNode("SYNTHETIC MED-02")!=null) {
-            var toggle:AccessibilityNodeInfo?=null
-            waitSystem("drawer toggle") {
-                val root=instrumentation.uiAutomation.rootInActiveWindow ?: return@waitSystem false
-                fun find(n:AccessibilityNodeInfo?):AccessibilityNodeInfo? {
-                    if(n==null)return null
-                    if(n.className=="android.widget.ImageButton"&&n.isClickable&&n.isVisibleToUser)return n
-                    for(i in 0 until n.childCount)find(n.getChild(i))?.let{return it};return null
-                }
-                toggle=find(root);toggle!=null
-            }
-            assertTrue(requireNotNull(toggle).performAction(AccessibilityNodeInfo.ACTION_CLICK))
-            waitSystem("closed roots drawer") {
-                systemNode("SYNTHETIC MED-02")==null && instrumentation.uiAutomation.rootInActiveWindow?.packageName?.toString()?.endsWith(".documentsui")==true
-            }
+        closeRoots()
+        waitSystem(name){!rootsOpen() && systemNode(name)!=null}
+        settlePicker()
+        // Reacquire after navigation/layout; never touch coordinates from the covered list.
+        assertFalse("Drawer must not cover the document",rootsOpen())
+        val file=requireNotNull(systemNode(name))
+        var parent:AccessibilityNodeInfo?=file;var inDirectory=false
+        while(parent!=null) {
+            check(parent.viewIdResourceName?.endsWith(":id/drawer_roots")!=true)
+            if(parent.viewIdResourceName?.endsWith(":id/dir_list")==true){inDirectory=true;break}
+            parent=parent.parent
         }
-        val name=if(kind=="tracker")"SYNTHETIC tracker.db" else "SYNTHETIC memo.json"
-        waitSystem(name){systemNode(name)!=null}
-        try{instrumentation.uiAutomation.waitForIdle(300,3000)}catch(_:java.util.concurrent.TimeoutException){}
-        touch(requireNotNull(systemNode(name)))
+        assertTrue("Synthetic file must belong to the real directory list",inDirectory)
+        touch(file)
         ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.HtReady || model.dataJob.value is NotesViewModel.DataJob.ImportReady || model.dataJob.value is NotesViewModel.DataJob.Failed}
         assertFalse("Detection or parsing failed",model.dataJob.value is NotesViewModel.DataJob.Failed)
     }
@@ -153,6 +183,7 @@ class AutomaticImportAndroidTest {
         assertEquals(imported,model.extra.value.records.filter{it.origin in setOf("IMPORT_HT","IMPORT_TM")}.sortedBy{it.id})
         data();click(R.string.import_other_apps)
         waitSystem("cancel DocumentsUI"){instrumentation.uiAutomation.rootInActiveWindow?.packageName?.toString()?.endsWith(".documentsui")==true}
+        closeRoots()
         instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK)
         ui.waitUntil(10000){model.dataJob.value is NotesViewModel.DataJob.ImportCancelled}
         ui.onNodeWithText(text(R.string.import_cancelled)).assertExists()
