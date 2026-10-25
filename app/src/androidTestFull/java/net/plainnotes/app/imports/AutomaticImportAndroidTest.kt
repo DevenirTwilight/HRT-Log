@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
@@ -150,22 +151,37 @@ class AutomaticImportAndroidTest {
         }
         assertTrue("Synthetic file must belong to the real directory list",inDirectory)
         touch(file)
+        // ActivityResult can update the model while DocumentsUI is still finishing.
+        // Compose assertions require the host's lifecycle-controlled frame clock to
+        // be resumed as well as the data to be ready; neither implies the other.
+        waitSystem("resumed application after document result") {
+            scenario?.state==Lifecycle.State.RESUMED && pickerRoot()==null
+        }
         ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.HtReady || model.dataJob.value is NotesViewModel.DataJob.ImportReady || model.dataJob.value is NotesViewModel.DataJob.Failed}
         assertFalse("Detection or parsing failed",model.dataJob.value is NotesViewModel.DataJob.Failed)
     }
     @Test fun realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory() {
-        launch();data()
+        try { exerciseImport() } catch(failure:Throwable) {
+            // Activity destruction may itself fail after a failed composition. Keep
+            // the original failure/line before @After can mask it. Synthetic only.
+            android.util.Log.e("SyntheticImport", "Primary unified import test failure", failure)
+            throw failure
+        }
+    }
+    private fun stage(value:String) {android.util.Log.i("SyntheticImport",value)}
+    private fun exerciseImport() {
+        stage("launch/settings");launch();data()
         ui.onNodeWithText(text(R.string.import_other_apps)).assertHasClickAction()
         ui.onNodeWithText(text(R.string.import_ht)).assertDoesNotExist();ui.onNodeWithText(text(R.string.import_tm)).assertDoesNotExist()
         ui.onNodeWithText(text(R.string.backup_restore)).assertExists()
-        choose("tracker")
+        stage("select tracker");choose("tracker");stage("tracker preview")
         ui.onNodeWithText(context.getString(R.string.import_identified,"HRT Tracker")).assertExists()
-        click(R.string.ht_dup_merge);click(R.string.import_action,false)
+        click(R.string.ht_dup_merge);stage("tracker choices");click(R.string.import_action,false)
         ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.HtImported || model.dataJob.value is NotesViewModel.DataJob.Failed}
         assertTrue(model.dataJob.value is NotesViewModel.DataJob.HtImported)
         assertEquals(7,(model.dataJob.value as NotesViewModel.DataJob.HtImported).summary.intakes)
         click(R.string.ok,false)
-        choose("memo")
+        stage("tracker committed; select memo");choose("memo");stage("memo preview")
         ui.onNodeWithText(context.getString(R.string.import_identified,"Trans Memo")).assertExists()
         // Original per-product late delay, late-state handling, wellbeing scale and mode choices.
         val fields=ui.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().size
@@ -177,11 +193,11 @@ class AutomaticImportAndroidTest {
         click(R.string.ok,false)
         val imported=model.extra.value.records.filter{it.origin in setOf("IMPORT_HT","IMPORT_TM")}.sortedBy{it.id}
         assertEquals(16,imported.size)
-        scenario!!.close();launch();open(Destination.HISTORY)
+        stage("both committed; reopen");ui.waitForIdle();scenario!!.close();launch();open(Destination.HISTORY)
         ui.onNodeWithTag("top-title").assertTextEquals(text(Destination.HISTORY.title))
         ui.waitUntil(30000){model.state.value.medications.any{it.name=="Synthetic gel"} && model.extra.value.records.isNotEmpty()}
         assertEquals(imported,model.extra.value.records.filter{it.origin in setOf("IMPORT_HT","IMPORT_TM")}.sortedBy{it.id})
-        data();click(R.string.import_other_apps)
+        stage("reopened history verified; cancel picker");data();click(R.string.import_other_apps)
         waitSystem("cancel DocumentsUI"){instrumentation.uiAutomation.rootInActiveWindow?.packageName?.toString()?.endsWith(".documentsui")==true}
         closeRoots()
         instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK)

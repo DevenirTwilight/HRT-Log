@@ -1,5 +1,7 @@
 ## PR123接手：真实抽屉状态修正，Mona仍未启动 — 2026-10-25
 
+2026-10-25 PR123 checkpoint: exact57567c91 PR workflow40204515855 all jobs green, but push40204512843 API26 FAIL (Compose idle then teardown SlotWriter crash); acceptance remains BLOCKED, no merge/Mona production. Original verified ZIP/evidence in docs/cross-app-import/2026-10-25/native-575. Next test-only correction awaits host RESUMED after SAF result and preserves first failure before teardown; new exact-SHA CI required. No test assertions removed; no unchanged rerun.
+
 实时PR123仍Draft/HEAD2bf822e0；主线1ddcf431。新独立工作树HRT-Log-import-auto跟踪原feature/import-auto-detection-20261025，未覆盖旧HRT-Log-cross-import及Featherline未提交实验。原2bf PR40199164557 Android host/JVM/ScienceSUCCESS、三API真实SAF在closed roots drawer FAIL。三官方ZIP SHA/CRC和API26原始job保留native-2bf，旧失败仍FAIL。
 
 已证实测试把主导航当toggle；AOSP NavigationViewManager明确setOpen(true)。测试现在报告view IDs/边界，以fresh drawer_roots可见交集判断，只在真实展开时Back关闭且picker仍须存在；主toolbar仅用于打开，触摸文件前重取dir_list内节点，保留全部双源提交/重开/取消断言。UiAutomation标志恢复，不改生产代码。原生测试源码编译PASS(2m38s)，新SHA实际API26/29/35/六门PENDING。下一步提交本最小修复→CI前置本用例→完整门槛，无新大型诊断或旧源重跑。通过§106合并且核主线后才独立Mona PR-B；当前§148.B仅Mona，Featherline/其他格式停止。未启用MED、不签名发布。
