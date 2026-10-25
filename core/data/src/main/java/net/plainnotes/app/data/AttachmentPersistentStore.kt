@@ -20,7 +20,8 @@ import java.util.UUID
 internal class AttachmentPersistentStore(context: Context, private val db: NotesDatabase,
     private val keys: AttachmentDeviceKeys = AttachmentDeviceKeys(),
     private val storageBudget: AttachmentStorageBudget = AttachmentStorageBudget(),
-    private val checkpoint: (Boundary) -> Unit = {}) {
+    private val checkpoint: (Boundary) -> Unit = {},
+    private val allocation:LibraryAttachmentAdmission.Permit?=null) {
     enum class Boundary { PREPARED, STAGED, AUTHENTICATED, IN_COMMIT, COMMITTED }
     data class Request(val operation: UUID, val document: UUID, val record: UUID,
         val expectedRevision: Long, val title: String, val category: String,
@@ -55,7 +56,8 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
     private fun <T> transaction(scope: AttachmentIdentity.Scope, cap: AttachmentSession.Capability, block: () -> T) =
         AttachmentTransaction.commit(db, scope, cap) {
             raw.query("PRAGMA synchronous").use { check(it.moveToFirst() && it.getInt(0)>=2) { "Durable journal requires FULL synchronization" } }
-            val result=block(); cap.check(); result
+            allocation?.check()
+            val result=block(); allocation?.check(); cap.check(); result
         }
     private fun uuid() = UUID.randomUUID().toString()
     private fun insert(table: String, values: ContentValues) { check(raw.insert(table, SQLiteDatabase.CONFLICT_ABORT, values) != -1L) }
@@ -100,7 +102,7 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
      */
     fun save(scope: AttachmentIdentity.Scope, cap: AttachmentSession.Capability, request: Request,
         source: () -> InputStream): Committed {
-        worker(); scopeCheck(scope, cap)
+        worker(); scopeCheck(scope, cap);allocation?.request(request)
         files.locked().use { directory ->
             recoverLocked(scope,cap)
             val digest=request.digest(scope)
@@ -113,7 +115,7 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
                     replay=Committed(request.operation,request.document,prior.context.version,request.expectedRevision+1)
                     prior
                 } else {
-                    DatabaseAccess.requireUnpartitionedStorage(db)
+                    if(allocation==null)DatabaseAccess.requireUnpartitionedStorage(db) else allocation.check()
                     // A late retry must not reuse an old UUID under a restored dataset/epoch.
                     raw.query("SELECT 1 FROM attachment_operation WHERE operation_uuid=? OR idempotency_uuid=? LIMIT 1",arrayOf(request.operation.toString(),request.operation.toString())).use {
                         check(!it.moveToFirst()) {"Operation UUID belongs to another request or dataset"}

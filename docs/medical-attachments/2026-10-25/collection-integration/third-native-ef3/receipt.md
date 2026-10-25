@@ -1,0 +1,7 @@
+# ef3a424df9619c602b2f71f3ed0e9863b3e240bf actual partial acceptance
+
+Independent API26/512MiB/192MiB40176914362 artifact12593112097 SHA256 989b816a9408eeba036e930c7474d092c4d88d78b8d237856f0689107a1fdf98; original ZIP CRC checked. New integration actual **OK2** in29.055s: production A→B new concurrent scoped original→all-library export→source-owned key/file loss→independent C namespace restore→reopen/re-export→full row multiset/history/link/cipher comparison. This is still ONE guest; the fresh-guest C action was SKIPPED because baseline gate was red.
+
+Base12 all executed,11PASS/1 test-helper JSONException (`No value for created`), no reported target LMK in this run. IndexedBackupDocument intentionally removes export-only created. Test helper must keep the original v1 EPOCH default; only the new v2 process-death case reads the strict synthetic source header and supplies that timestamp. This preserves the existing exact whole-record byte assertion instead of deleting it. No production/archive/KDF change is needed for this error.
+
+API35 push40176911182 job121119691567 artifact12592157922 ZIP SHA256 a755891c505b35e583a45bf5cb515b7e10f1a6ef55415a315e965849502ea284 /CRC verified. Original isolated7 and new complete business1 PASS. Collection real fresh-PID PREPARED/OBJECTS_COMMITTED/IN_SWITCH verified PASS; SWITCHED verified FAIL in the same created test-helper, after the actual single-root switch. All four raw verification logs retained. Current full CI remains red; no merge or full-native success claim.

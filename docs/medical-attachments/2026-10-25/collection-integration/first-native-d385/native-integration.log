@@ -1,0 +1,46 @@
+
+net.plainnotes.app.data.NativeCiHeapProbe:.
+net.plainnotes.app.data.LibraryCollectionAndroidTest:
+Error in restoredLibraryAddsOriginalAndExportsAllLibrariesToIndependentNewDevice(net.plainnotes.app.data.LibraryCollectionAndroidTest):
+java.lang.IllegalStateException: Complete resource set changed during export
+	at net.plainnotes.app.data.LibraryCollectionCapture.write$lambda$0(LibraryCollectionCapture.kt:67)
+	at net.plainnotes.app.data.LibraryCollectionCapture$$ExternalSyntheticLambda6.invoke(D8$$SyntheticClass:0)
+	at net.plainnotes.app.data.LibraryLifecycle.rootWork$data_debug(LibraryLifecycle.kt:34)
+	at net.plainnotes.app.data.LibraryCollectionCapture.write(LibraryCollectionCapture.kt:15)
+	at net.plainnotes.app.data.MedicalAttachmentOperations.writeCollection$lambda$0(MedicalAttachmentOperations.kt:180)
+	at net.plainnotes.app.data.MedicalAttachmentOperations$$ExternalSyntheticLambda7.invoke(D8$$SyntheticClass:0)
+	at net.plainnotes.app.data.MedicalAttachmentOperations$work$2.invokeSuspend(MedicalAttachmentOperations.kt:45)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:820)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+
+
+Time: 23.216
+There was 1 failure:
+1) restoredLibraryAddsOriginalAndExportsAllLibrariesToIndependentNewDevice(net.plainnotes.app.data.LibraryCollectionAndroidTest)
+java.lang.IllegalStateException: Complete resource set changed during export
+	at net.plainnotes.app.data.LibraryCollectionCapture.write$lambda$0(LibraryCollectionCapture.kt:67)
+	at net.plainnotes.app.data.LibraryCollectionCapture$$ExternalSyntheticLambda6.invoke(D8$$SyntheticClass:0)
+	at net.plainnotes.app.data.LibraryLifecycle.rootWork$data_debug(LibraryLifecycle.kt:34)
+	at net.plainnotes.app.data.LibraryCollectionCapture.write(LibraryCollectionCapture.kt:15)
+	at net.plainnotes.app.data.MedicalAttachmentOperations.writeCollection$lambda$0(MedicalAttachmentOperations.kt:180)
+	at net.plainnotes.app.data.MedicalAttachmentOperations$$ExternalSyntheticLambda7.invoke(D8$$SyntheticClass:0)
+	at net.plainnotes.app.data.MedicalAttachmentOperations$work$2.invokeSuspend(MedicalAttachmentOperations.kt:45)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:820)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1
+
+

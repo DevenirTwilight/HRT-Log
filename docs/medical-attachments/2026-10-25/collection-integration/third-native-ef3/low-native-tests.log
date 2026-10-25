@@ -1,0 +1,28 @@
+
+net.plainnotes.app.data.NativeCiHeapProbe:.
+net.plainnotes.app.data.LibraryRestoreAndroidTest:
+Error in realArchiveActivatesFreshPersistentLibraryAndRejectsOldRequestsAndReaders(net.plainnotes.app.data.LibraryRestoreAndroidTest):
+org.json.JSONException: No value for created
+	at org.json.JSONObject.get(JSONObject.java:392)
+	at org.json.JSONObject.getString(JSONObject.java:553)
+	at net.plainnotes.app.data.LibraryRestoreAndroidTest.verify$data_debugAndroidTest(LibraryRestoreAndroidTest.kt:94)
+	at net.plainnotes.app.data.LibraryRestoreAndroidTest.verify$data_debugAndroidTest(LibraryRestoreAndroidTest.kt:86)
+	at net.plainnotes.app.data.LibraryRestoreAndroidTest.realArchiveActivatesFreshPersistentLibraryAndRejectsOldRequestsAndReaders(LibraryRestoreAndroidTest.kt:140)
+...
+net.plainnotes.app.data.LibraryLifecycleAndroidTest:....
+net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest:...
+
+Time: 121.75
+There was 1 failure:
+1) realArchiveActivatesFreshPersistentLibraryAndRejectsOldRequestsAndReaders(net.plainnotes.app.data.LibraryRestoreAndroidTest)
+org.json.JSONException: No value for created
+	at org.json.JSONObject.get(JSONObject.java:392)
+	at org.json.JSONObject.getString(JSONObject.java:553)
+	at net.plainnotes.app.data.LibraryRestoreAndroidTest.verify$data_debugAndroidTest(LibraryRestoreAndroidTest.kt:94)
+	at net.plainnotes.app.data.LibraryRestoreAndroidTest.verify$data_debugAndroidTest(LibraryRestoreAndroidTest.kt:86)
+	at net.plainnotes.app.data.LibraryRestoreAndroidTest.realArchiveActivatesFreshPersistentLibraryAndRejectsOldRequestsAndReaders(LibraryRestoreAndroidTest.kt:140)
+
+FAILURES!!!
+Tests run: 12,  Failures: 1
+
+

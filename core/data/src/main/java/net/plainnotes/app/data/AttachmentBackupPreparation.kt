@@ -13,26 +13,28 @@ import java.io.InputStream
 import java.nio.channels.Channels
 
 /** Read-only preparation. No portable cipher, archive writer, restore SQL or application entry. */
-internal class AttachmentBackupPreparation(context:Context,private val db:NotesDatabase,
-    private val keys:AttachmentDeviceKeys=AttachmentDeviceKeys(),private val beforeRecordTransfer:()->Unit={}) {
-    private val files=AttachmentOwnedFiles(DatabaseAccess.storageContext(db,context))
-    private val raw get()=db.openHelper.writableDatabase
-    class Snapshot internal constructor(private val db:NotesDatabase,private val scope:AttachmentIdentity.Scope,
+internal class AttachmentBackupPreparation private constructor(private val database:AttachmentSnapshotDatabase,
+    private val keys:AttachmentDeviceKeys,private val beforeRecordTransfer:()->Unit) {
+    constructor(context:Context,db:NotesDatabase,keys:AttachmentDeviceKeys=AttachmentDeviceKeys(),beforeRecordTransfer:()->Unit={}):
+        this(AttachmentSnapshotDatabase.current(context,db),keys,beforeRecordTransfer)
+    private val files=AttachmentOwnedFiles(database.context)
+    private val raw get()=database.raw
+    class Snapshot internal constructor(private val database:AttachmentSnapshotDatabase,private val scope:AttachmentIdentity.Scope,
         private val cap:AttachmentSession.Capability,private val owner:BackupPlaintextOwner,
         private val value:AttachmentBackupManifest,private val files:AttachmentOwnedFiles,
         private val keys:AttachmentDeviceKeys,private val sources:Map<UUID,Source>,private val recordCommitment:String):AutoCloseable {
         private fun checkCurrent() {
             check(Looper.myLooper()!=Looper.getMainLooper()) {"Backup snapshot requires a worker"}
-            check(db.isOpen && !db.openHelper.writableDatabase.inTransaction())
-            DatabaseAccess.assertActiveHandle(db);check(AttachmentIdentity.current(db.openHelper.writableDatabase)==scope) {"Snapshot dataset changed"}
+            check(database.raw.isOpen && (!database.raw.inTransaction() || database.ownedTransaction))
+            database.checkAuthority();check(AttachmentIdentity.current(database.raw)==scope) {"Snapshot dataset changed"}
         }
         private fun <T> current(block:()->T):T = try {
             checkCurrent()
-            DatabaseAccess.withActiveHandle(db) {
+            database.guard {
                 cap.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
-                    check(AttachmentIdentity.current(db.openHelper.writableDatabase)==scope)
+                    check(AttachmentIdentity.current(database.raw)==scope)
                     val result=block()
-                    check(AttachmentIdentity.current(db.openHelper.writableDatabase)==scope)
+                    check(AttachmentIdentity.current(database.raw)==scope)
                     result
                 }
             }
@@ -73,16 +75,17 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
     fun capture(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,
         limits:AttachmentBackupManifest.Limits=AttachmentBackupManifest.Limits(),created:Instant=Instant.now()):Snapshot {
         check(Looper.myLooper()!=Looper.getMainLooper()) {"Backup preparation requires a worker"}
-        check(!raw.inTransaction()) {"Cannot borrow a stale caller snapshot"}
+        check(!raw.inTransaction() || database.ownedTransaction) {"Cannot borrow a stale caller snapshot"}
+        database.checkAuthority()
         val child=cap.fork();val owner=BackupPlaintextOwner();val sources=ArrayList<Source>();var transferred=false
         try {
             child.own(owner)
             return files.locked().use {directory->
                 // This transaction is READ ONLY, with no result visible until final publication.
                 // Do not hold the write-COMMIT authorization monitor across full audit/encoding.
-                val manifest=db.runInTransaction(Callable {
+                val manifest=database.transaction(Callable {
                     child.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
-                        DatabaseAccess.assertActiveHandle(db);check(AttachmentIdentity.current(raw)==scope) {"Dataset changed"}
+                        database.checkAuthority();check(AttachmentIdentity.current(raw)==scope) {"Dataset changed"}
                     }
                     // A single-current-dataset preparation must never silently omit retired originals.
                     raw.query("""SELECT 1 FROM attachment_store s WHERE s.store_uuid!=? AND (
@@ -175,9 +178,9 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
                 }
                 val recordCommitment=MessageDigest.getInstance("SHA-256").digest(owner.bytes()).joinToString("") {"%02x".format(it.toInt() and 255)}
                 child.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {
-                    DatabaseAccess.assertActiveHandle(db);check(db.isOpen && AttachmentIdentity.current(raw)==scope) {"Dataset changed during snapshot authentication"}
+                    database.checkAuthority();check(raw.isOpen && AttachmentIdentity.current(raw)==scope) {"Dataset changed during snapshot authentication"}
                     child.own(AutoCloseable {sources.forEach {it.wrapped.fill(0)}})
-                    Snapshot(db,scope,child,owner,manifest,files,keys,sources.associateBy {it.version.context.version},recordCommitment).also {transferred=true}
+                    Snapshot(database,scope,child,owner,manifest,files,keys,sources.associateBy {it.version.context.version},recordCommitment).also {transferred=true}
                 }
             }
         } catch(failure:Throwable) {
@@ -185,4 +188,9 @@ internal class AttachmentBackupPreparation(context:Context,private val db:NotesD
             throw failure
         } finally {if(!transferred)sources.forEach {it.wrapped.fill(0)}}
     }
+    companion object {
+        fun fenced(context:Context,raw:androidx.sqlite.db.SupportSQLiteDatabase,authority:()->Unit)=
+            AttachmentBackupPreparation(AttachmentSnapshotDatabase.fenced(context,raw,authority),AttachmentDeviceKeys(),{})
+    }
+
 }

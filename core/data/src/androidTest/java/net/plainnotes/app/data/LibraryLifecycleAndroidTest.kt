@@ -104,7 +104,7 @@ class LibraryLifecycleAndroidTest {
             f.raw.query("SELECT started,released FROM library_resource_owner").use {assertTrue(it.moveToFirst());assertEquals(0,it.getInt(0));assertEquals(1,it.getInt(1))}
             assertArrayEquals(before,f.facts());f.reopen();f.session=AttachmentSession(UUID.fromString(f.scope.dataset),UUID.fromString(f.scope.epoch))
             assertTrue(LibraryLifecycle(f.access).releaseUnmaterialized(f.scope,f.session.issue(),operation,saved.generation).alreadyReleased)
-            f.root.runInTransaction {val budget=LibraryRestoreAdmission.inspect(f.context,f.raw) {};assertEquals(512,budget.aliases)}
+            f.root.runInTransaction {val budget=LibraryRestoreAdmission.inspect(f.context,f.raw) {};assertEquals("The root database key remains charged after releasing only an unmaterialized candidate",511,budget.aliases)}
         }}
     }
     @Test fun materializedAndRetainedLibrariesCannotBeReleasedOrIgnoredByExport() {

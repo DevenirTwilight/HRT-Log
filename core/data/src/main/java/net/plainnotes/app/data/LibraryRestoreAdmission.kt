@@ -81,13 +81,18 @@ internal object LibraryRestoreAdmission {
             // Without an approved owner-release protocol, retain its bounded DB/WAL allowance.
             if(c.getString(6)!in setOf("ACTIVE","RETIRED"))unresolvedSpace=Math.addExact(unresolvedSpace,maxOf(0L,DATABASE_BYTES*3-databaseAllocation))
         }}
+        root.query("SELECT reserved_ciphertext FROM library_write_reservation WHERE state!='COMMITTED'").use {c->while(c.moveToNext()) {
+            checkActive();charged=Math.addExact(charged,c.getLong(0));unresolvedSpace=Math.addExact(unresolvedSpace,c.getLong(0))
+            // Two future aliases remain consumed even if a crash preceded journal materialization.
+            aliases+="pending-write-stage-${c.position}";aliases+="pending-write-active-${c.position}"
+        }}
         val directory=LibraryGenerationContext.directory(context)
         if(Files.exists(directory.toPath(),java.nio.file.LinkOption.NOFOLLOW_LINKS)) {
             val stat=Os.lstat(directory.path);require(S_ISDIR(stat.st_mode) && stat.st_uid==Os.getuid() && stat.st_mode and 63==0)
             Files.newDirectoryStream(directory.toPath()).use {entries->for(e in entries)require(e.fileName.toString() in known) {"Unknown generation retained; admission refused"}}
         }
         val store=KeyStore.getInstance("AndroidKeyStore").apply {load(null)};val names=store.aliases()
-        while(names.hasMoreElements()) {checkActive();val a=names.nextElement();if(a.startsWith("notes.obj.v1.") || a.startsWith("notes.gen.db."))aliases+=a;require(aliases.size<=ALIASES)}
+        while(names.hasMoreElements()) {checkActive();val a=names.nextElement();if(a.startsWith("notes.obj.v1.") || a.startsWith("notes.gen.db.") || a in setOf("notes.wrap","notes_b.wrap") || (a.startsWith("notes.local.") && (a.endsWith(".notes.wrap") || a.endsWith(".notes_b.wrap"))))aliases+=a;require(aliases.size<=ALIASES)}
         val fs=Os.statvfs(context.noBackupFilesDir.path);require(fs.f_bavail>=0 && fs.f_frsize>0)
         require(charged<=CIPHER_BYTES)
         return Available(ALIASES-aliases.size,CIPHER_BYTES-charged,maxOf(0L,Math.multiplyExact(fs.f_bavail,fs.f_frsize)-unresolvedSpace),fs.f_frsize)

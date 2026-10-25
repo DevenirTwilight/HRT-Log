@@ -18,7 +18,7 @@ import java.util.UUID
 /** Genuine production archive -> independent reader -> durable SQLCipher -> authority -> reopen.
  * Only synthetic originals and isolated local-device key identities. Physical phone is NOT_RUN. */
 class LibraryRestoreAndroidTest {
-    internal class RootFixture(val app:Context,val id:UUID=UUID.randomUUID(),create:Boolean=true):AutoCloseable {
+    internal class RootFixture(val app:Context,val id:UUID=UUID.randomUUID(),create:Boolean=true,seed:Boolean=true):AutoCloseable {
         val directory=File(app.noBackupFilesDir,"synthetic-library-$id")
         val context=object:ContextWrapper(app) {
             override fun getApplicationContext():Context=this
@@ -34,7 +34,7 @@ class LibraryRestoreAndroidTest {
             if(create)Os.mkdir(directory.path,448)
             scope=requireNotNull(AttachmentIdentity.current(access.get(Space.PRIMARY).openHelper.writableDatabase))
             session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
-            if(create)runBlocking {
+            if(create && seed)runBlocking {
                 root.dao().appointment(AppointmentEntity(2,"SYNTHETIC old recipient",999,"UTC",note="Retain original dataset",remind_minutes_before=0))
             }
         }
@@ -51,6 +51,10 @@ class LibraryRestoreAndroidTest {
                     }
                 }}
                 raw.query("SELECT stage_alias_uuid,active_alias_uuid FROM attachment_journal").use {c->while(c.moveToNext()) {
+                    aliases+=AttachmentDeviceKeys.Alias(UUID.fromString(c.getString(0)),AttachmentDeviceKeys.Role.STAGING).value
+                    aliases+=AttachmentDeviceKeys.Alias(UUID.fromString(c.getString(1)),AttachmentDeviceKeys.Role.ACTIVE).value
+                }}
+                access.get(Space.PRIMARY).openHelper.writableDatabase.query("SELECT stage_alias_uuid,active_alias_uuid FROM attachment_journal").use {c->while(c.moveToNext()) {
                     aliases+=AttachmentDeviceKeys.Alias(UUID.fromString(c.getString(0)),AttachmentDeviceKeys.Role.STAGING).value
                     aliases+=AttachmentDeviceKeys.Alias(UUID.fromString(c.getString(1)),AttachmentDeviceKeys.Role.ACTIVE).value
                 }}
@@ -80,14 +84,14 @@ class LibraryRestoreAndroidTest {
         override fun close() {records.fill(0);check(file.delete())}
     }
     internal fun verify(f:RootFixture,b:SourceBundle,expectedGeneration:UUID)=verify(f,b.manifest,b.records,expectedGeneration)
-    internal fun verify(f:RootFixture,manifest:AttachmentBackupManifest,records:ByteArray,expectedGeneration:UUID) {
+    internal fun verify(f:RootFixture,manifest:AttachmentBackupManifest,records:ByteArray,expectedGeneration:UUID,created:Instant=Instant.EPOCH) {
         val db=f.access.get(Space.PRIMARY);assertEquals(expectedGeneration.toString(),DatabaseAccess.handleIdentity(db))
         val scope=requireNotNull(AttachmentIdentity.current(db.openHelper.writableDatabase))
         assertNotEquals(manifest.dataset.toString(),scope.dataset)
         assertNotEquals(manifest.epoch.toString(),scope.epoch)
         val session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
         try {
-            AttachmentBackupPreparation(f.context,db).capture(scope,session.issue(),created=Instant.EPOCH).use {snapshot->
+            AttachmentBackupPreparation(f.context,db).capture(scope,session.issue(),created=created).use {snapshot->
                 assertEquals(AttachmentCandidateMetadata.normalized(manifest.copy(dataset=UUID.fromString(scope.dataset),epoch=UUID.fromString(scope.epoch))),AttachmentCandidateMetadata.normalized(snapshot.manifest()))
                 snapshot.records {assertArrayEquals(records,it)}
             }

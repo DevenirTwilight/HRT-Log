@@ -33,6 +33,17 @@ internal object MedicalCollectionReader {
             val copy=records.getValue(library).copyOf();val lease=cap.ownBytes(copy)
             try {consume(copy)}finally {lease.close()}
         }
+        /** Canonical source provenance, independently checked against the authenticated index.
+         * Does not change or re-approve wire bytes; a codec mismatch refuses restoration. */
+        fun provenance(library:UUID):ByteArray=guarded {
+            val decoded=manifests.getValue(library)
+            val bytes=MedicalArchiveManifest.encode(decoded.manifest,decoded.envelopes,cap::check)
+            try {
+                val descriptor=index.libraries.single {it.id==library}
+                require(bytes.size.toLong()==descriptor.manifestBytes && MedicalCollectionIndex.digest(bytes)==descriptor.manifestSha256)
+                bytes
+            }catch(e:Throwable) {bytes.fill(0);throw e}
+        }
         /** Internal bridge for existing member staging/reconstruction, never a UI key API. */
         fun source(library:UUID):AttachmentRestoreStaging.CiphertextSource=guarded {
             require(library in manifests)

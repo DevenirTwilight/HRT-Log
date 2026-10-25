@@ -21,7 +21,7 @@ internal class LibraryLifecycle(private val access:DatabaseAccess) {
     data class Release(val operation:UUID,val generation:UUID,val digest:ByteArray,val alreadyReleased:Boolean)
     private val context get()=access.applicationContext
     private fun hash(b:ByteArray)=MessageDigest.getInstance("SHA-256").digest(b)
-    private fun <T> rootWork(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,block:(NotesDatabase,NotesDatabase,()->Unit)->T):T=access.holdGeneration().use {
+    internal fun <T> rootWork(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,block:(NotesDatabase,NotesDatabase,()->Unit)->T):T=access.holdGeneration().use {
         check(Looper.myLooper()!=Looper.getMainLooper())
         val current=access.get(Space.PRIMARY);val root=access.legacyRoot()
         check(!root.openHelper.writableDatabase.inTransaction() && !current.openHelper.writableDatabase.inTransaction())
@@ -38,8 +38,10 @@ internal class LibraryLifecycle(private val access:DatabaseAccess) {
             }finally {if(root.isOpen && root.openHelper.writableDatabase.inTransaction())root.endTransaction()}
         }finally {owner.close()}
     }
-    private fun fresh(root:NotesDatabase,current:NotesDatabase,checkActive:()->Unit):LibraryResourceFacts.Scan = try {
-        LibraryResourceFacts.scan(context,root.openHelper.writableDatabase,DatabaseAccess.handleIdentity(current),checkActive=checkActive)
+    internal fun fresh(root:NotesDatabase,current:NotesDatabase,checkActive:()->Unit):LibraryResourceFacts.Scan = try {
+        // Borrow a live writer only to observe its uncommitted facts. Ordinary lifecycle
+        // reads retain the accepted short-lived READONLY/cache-bounded path, not a Room reader pool.
+        LibraryResourceFacts.scan(context,root.openHelper.writableDatabase,DatabaseAccess.handleIdentity(current),checkActive=checkActive,live=if(current.openHelper.writableDatabase.inTransaction())DatabaseAccess.storageContext(current,context) to current.openHelper.writableDatabase else null)
     }catch(e:Exception) {
         checkActive()
         // A partial scan may already have encountered unowned resources before failing.
@@ -48,10 +50,11 @@ internal class LibraryLifecycle(private val access:DatabaseAccess) {
     }
     /** Rebuild on every call. Historical UNKNOWN evidence survives a missing/replaced leaf. */
     fun inventory(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,operation:UUID)=rootWork(scope,cap) {current,root,active->
+        LibraryCollectionSchema.requireNoWrites(root.openHelper.writableDatabase)
         val scan=fresh(root,current,active)
         persist(root,current,scope,operation,scan)
     }
-    private fun persist(root:NotesDatabase,current:NotesDatabase,scope:AttachmentIdentity.Scope,operation:UUID,scan:LibraryResourceFacts.Scan):Inventory {
+    internal fun persist(root:NotesDatabase,current:NotesDatabase,scope:AttachmentIdentity.Scope,operation:UUID,scan:LibraryResourceFacts.Scan,collection:Boolean=false):Inventory {
         val raw=root.openHelper.writableDatabase;val entries=scan.items.associateBy {it.key}.toMutableMap();val historicalUnknown=mutableListOf<LibraryResourceFacts.Item>();var revision=0L
         raw.query("SELECT revision,payload,sha256 FROM library_resource_inventory WHERE singleton=1").use {c->if(c.moveToFirst()) {
             revision=c.getLong(0);val bytes=c.getBlob(1);require(MessageDigest.isEqual(hash(bytes),c.getBlob(2))) {"Inventory evidence damaged"}
@@ -80,7 +83,7 @@ internal class LibraryLifecycle(private val access:DatabaseAccess) {
         when {
             ordered.any {it.category=="MISSING"}->{eligibility=Eligibility.REFUSED;reason="REQUIRED_MEMBER_MISSING"}
             ordered.any {it.category=="UNKNOWN"} || !scan.complete->{eligibility=Eligibility.UNKNOWN;reason="OWNER_OR_SET_NOT_PROVEN"}
-            scan.retainedBusiness || ordered.any {it.category=="RETAINED_COMMITTED"}->{eligibility=Eligibility.REFUSED;reason="RETAINED_LIBRARIES_REQUIRE_SEPARATE_EXPORT_POLICY"}
+            !collection && (scan.retainedBusiness || ordered.any {it.category=="RETAINED_COMMITTED"})->{eligibility=Eligibility.REFUSED;reason="RETAINED_LIBRARIES_REQUIRE_SEPARATE_EXPORT_POLICY"}
             ordered.any {it.category in setOf("RESERVED_UNMATERIALIZED","RETAINED_RESERVATION","IN_FLIGHT")}->{eligibility=Eligibility.REFUSED;reason="UNFINISHED_RESOURCES_RETAINED"}
             else->{eligibility=Eligibility.UNKNOWN;reason="FULL_SNAPSHOT_AUTHENTICATION_REQUIRED"}
         }
@@ -138,6 +141,7 @@ internal class LibraryLifecycle(private val access:DatabaseAccess) {
     fun releaseUnmaterialized(scope:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,operation:UUID,generation:UUID):Release=
         rootWork(scope,cap) {current,root,active->
             val raw=root.openHelper.writableDatabase
+            raw.query("SELECT 1 FROM library_collection_member m JOIN library_collection c ON c.operation_uuid=m.collection_uuid WHERE m.operation_uuid=? AND c.state!='ABORTED' LIMIT 1",arrayOf(operation.toString())).use {check(!it.moveToFirst()) {"A live collection member cannot be independently released"}}
             val owner=raw.query("SELECT generation_uuid,origin_generation,origin_dataset,origin_epoch,started,released,release_digest FROM library_resource_owner WHERE operation_uuid=?",arrayOf(operation.toString())).use {c->
                 check(c.moveToFirst()) {"Legacy reservation has no never-materialized proof"}
                 check(c.getString(0)==generation.toString()) {"Wrong resource generation"}
