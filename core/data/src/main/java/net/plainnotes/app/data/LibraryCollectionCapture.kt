@@ -55,7 +55,7 @@ internal class LibraryCollectionCapture(private val access:DatabaseAccess) {
                         close+=AutoCloseable {key.fill(0)} // SQLCipher retains this array for later WAL connections.
                         val db=SQLiteDatabase.openDatabase(directory.getDatabasePath("notes.db").path,key,null,SQLiteDatabase.OPEN_READONLY,null)
                         close+=AutoCloseable {db.close()}
-                        require(db.version in 15..18)
+                        require(db.version in 15..19)
                         db.execSQL("PRAGMA temp_store=MEMORY");db.execSQL("PRAGMA cache_size=-2048")
                         db.query("PRAGMA mmap_size=0").use {check(it.moveToFirst() && it.getLong(0)==0L)}
                         source(id.toString(),directory,db,directory::checkCurrent)

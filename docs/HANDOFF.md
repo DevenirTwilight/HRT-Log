@@ -1,3 +1,11 @@
+## PR125 source-specific persistence checkpoint — 2026-10-25
+
+Resumed exact remote ee0973c6 in independent worktree HRT-Log-featherline-final; PR124 already MERGED8f8761d0. Superseded local Mona UI edits preserved on archive/mona-local-pre-handoff-20261025/c21317a0, never applied over accepted main. PR125 remains Draft; original ee CI green is parser-only evidence, not final acceptance.
+
+Approved148.E now implemented: separate Featherline UUID receipt table/IMPORT_FEATHERLINE, additive Room19, conditional business15 and same native crypto envelopes. Scoped writer preserves actual source time/zone/mass and E2/T original units/panel identities, no equivalentE2Mg/canonicalValue substitution. Same source UUID/hash is duplicate; changed/local/deleted/missing targets never overwritten or recreated. Ordinary trash capture/restore/purge retains source tombstones and per-result evidence. Source preview rescanned in real transaction; one-use commit receipt acknowledges after actual COMMIT. Local Featherline persistence2+writer7+crypto5 and original Mona11 PASS (25 total); raw new XML and original persistence RED2 retained featherline/evidence/backend. Independent parser suite PASS. Not yet final integrated support.
+
+Next complete latest-target migration contracts + Room18→19 failure/downgrade tests; old12/13/14/native collection compatibility; same SAF encrypted snapshot/password retry/preview/report and four-language UI; actual threeAPI/lowmem/exactSHA CI. No new format/crypto/PK/P4/permission/signing/release changes, MED OFF. Existing helper only validates source clinical fragments and retained grouping provenance; full source FK checks still run on initial whole-snapshot parser. No PR-D.
+
 ## Featherline PR-C started; owner approved persistence scope — 2026-10-25
 
 Base8f8761d0, independent feature/featherline-import-20261025 at /workspace/HRT-Log-featherline. Default Mona Android40224222960 was still in progress at start; do not mistake that for failure or repeat it. Owner explicitly approved Room18→19/separate Featherline UUID receipts/IMPORT_FEATHERLINE/conditional business15 + trash/tombstone/full backup compatibility; REQUIREMENTS148.E and featherline/persistence-proposal.md. Do not ask again for this scope. No other schema changes have been implemented in this slice.

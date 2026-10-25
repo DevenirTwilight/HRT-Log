@@ -16,7 +16,7 @@ object Featherline {
     data class Dose(val id:String,val medicine:Medicine,val at:Long,val zone:String,val amount:Double,val sourceJson:String)
     data class Lab(val id:String,val panel:String,val analyte:String,val value:Double,val unit:String,val at:Long,val zone:String,val note:String?,val sourceJson:String)
     data class Issue(val kind:String,val id:String,val reason:String)
-    data class Export(val doses:List<Dose>,val labs:List<Lab>,val issues:List<Issue>,val counts:Map<String,Int>,val exportedAt:Long)
+    class Export internal constructor(val doses:List<Dose>,val labs:List<Lab>,val issues:List<Issue>,val counts:Map<String,Int>,val exportedAt:Long)
     private val catalog=mapOf("ESTRADIOL" to Pair("E2",null),"ESTRADIOL_VALERATE" to Pair("E2","EV"),
         "SPIRONOLACTONE" to Pair("SPI",null),"CYPROTERONE_ACETATE" to Pair("CPA",null),
         "BICALUTAMIDE" to Pair("BICA",null),"FINASTERIDE" to Pair("FIN",null),"DUTASTERIDE" to Pair("DUT",null))
@@ -35,6 +35,7 @@ object Featherline {
     }
     private fun decimal(row:JSONObject,key:String):BigDecimal? = (row.opt(key) as? Number)?.let{runCatching{BigDecimal(it.toString())}.getOrNull()}
     fun read(text:String):Export {
+        if(text.toByteArray(Charsets.UTF_8).size>8*1024*1024)throw Invalid()
         ImportFormatDetector.bounds(text)
         val tok=JSONTokener(text);val root=try {tok.nextValue() as? JSONObject ?: throw Invalid()}catch(_:org.json.JSONException){throw Invalid()}
         if(tok.nextClean()!='\u0000')throw Invalid()
@@ -113,12 +114,34 @@ object Featherline {
                 val rawUnit=result.opt("unitSnapshot") as? String ?: throw Invalid()
                 val unit=mapOf("pg_ml" to "pg/mL","pmol_l" to "pmol/L","ng_dl" to "ng/dL","ng_ml" to "ng/mL","nmol_l" to "nmol/L")[rawUnit]
                 val allowed=if(code=="E2")setOf("pg/mL","pmol/L") else setOf("ng/dL","ng/mL","nmol/L")
-                val v=decimal(result,"value")?.toDouble()
-                if(unit !in allowed || v==null || !v.isFinite() || v<0){issues+=Issue("RESULT",rid,"UNSUPPORTED_RESULT");continue}
+                val original=decimal(result,"value");val v=original?.toDouble()
+                if(unit !in allowed || v==null || !v.isFinite() || v<0 || BigDecimal.valueOf(v).compareTo(original)!=0){issues+=Issue("RESULT",rid,"UNSUPPORTED_RESULT");continue}
                 val p=JSONObject(panel.toString());p.remove("results")
                 labs+=Lab(rid,pid,code,v,requireNotNull(unit),time,tz,note,Mona.canonical(JSONObject().put("panel",p).put("result",result)))
             }
         }
-        return Export(doses.toList(),labs.toList(),issues.toList(),source.mapValues{it.value.size}+mapOf("stock" to meds.values.count{!it.isNull("stock")}),at)
+        return Export(java.util.Collections.unmodifiableList(doses),java.util.Collections.unmodifiableList(labs),java.util.Collections.unmodifiableList(issues),
+            java.util.Collections.unmodifiableMap(source.mapValues{it.value.size}+mapOf("stock" to meds.values.count{!it.isNull("stock")},"settings" to root.getJSONObject("settings").length(),"userProfile" to root.getJSONObject("userProfile").length())),at)
     }
+    /** Re-evaluate one immutable receipt with the SAME source clinical conversion rules.
+     * Parent schedule references are validated at initial full-snapshot import. They are
+     * retained as provenance only, never restored as an active schedule or clinical fact. */
+    fun evidence(kind:String,raw:String):Export {
+        val evidence=JSONObject(raw)
+        val root=JSONObject().put("snapshotVersion",7).put("app",JSONObject().put("packageName","com.mkx.hrttracker"))
+            .put("exportedAtEpochMillis",0).put("settings",JSONObject()).put("userProfile",JSONObject())
+        for(key in listOf("medicines","medicationGroups","medicationLogs","customBloodAnalytes","bloodTestPanels"))root.put(key,JSONArray())
+        if(kind=="LOG") {
+            val log=JSONObject(evidence.getJSONObject("log").toString())
+            for(key in listOf("sourceGroupUuid","scheduleTimeUuid"))if(!log.isNull(key))id(log,key)
+            log.remove("sourceGroupUuid");log.remove("scheduleTimeUuid")
+            root.getJSONArray("medicines").put(evidence.getJSONObject("medicine"));root.getJSONArray("medicationLogs").put(log)
+        } else {
+            require(kind=="RESULT")
+            val panel=JSONObject(evidence.getJSONObject("panel").toString()).put("results",JSONArray().put(evidence.getJSONObject("result")))
+            root.getJSONArray("bloodTestPanels").put(panel)
+        }
+        return read(root.toString())
+    }
+
 }

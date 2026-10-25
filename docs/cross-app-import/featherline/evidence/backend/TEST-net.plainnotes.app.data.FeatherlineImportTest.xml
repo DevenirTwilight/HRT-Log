@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.FeatherlineImportTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-25T20:52:32.853Z" hostname="68e3ecace23d" time="5.254">
+  <properties/>
+  <testcase name="nativeBusinessFifteenRoundTripsAndOldReaderRejectsBeforeMutation" classname="net.plainnotes.app.data.FeatherlineImportTest" time="4.068"/>
+  <testcase name="commitReceiptCannotBeReplayed" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.191"/>
+  <testcase name="editedSourcePanelAndChangedMembershipDoNotAcceptNewResult" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.165"/>
+  <testcase name="clinicalDeleteRestoreAndPurgeRetainTypedSourceTombstones" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.276"/>
+  <testcase name="sameUuidIsIdempotentButChangedSourceAndLocalEditAreConflicts" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.188"/>
+  <testcase name="realCommitPreservesClinicalFactsWithoutPkStockOrPlan" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.112"/>
+  <testcase name="failedInsertAndCancellationRollBackAllClinicalFactsAndReceipts" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.153"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
