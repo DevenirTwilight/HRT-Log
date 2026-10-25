@@ -1,3 +1,9 @@
+## MED-02 多资料库集成接手与#121验收 — 2026-10-25
+
+实时主线efb2ff5d，#103–120相关PR均已合并（117为issue）。#121最终1a970493仍Draft但双触发六门全PASS；PR Android40127485261/Science40127485262、独立低内存40127485253 SUCCESS。逐源码审查codec/index/wrap域隔离及独立reader/全历史内层AEAD，未发现需重写部分；无冲突、review未解决0、无changes-requested。官方三API/低内存ZIP已SHA256+CRC核验，原件/原HTML/8点日志/receipt存collection-integration/accepted-121：三API archive12含collection3，均0fail/skip；低内存原12+新增collection4+原8新PID均真实通过。明确仅CODEC，不是恢复后新增附件闭环。
+
+负责人本轮继续授权§147.J完整集合快照、恢复、联合持久预留与A→B新增→全库备份→C恢复合成链，限制8库/JSON32MiB/metadata8MiB/100000rows/1000versions/wire1GiB/cipher512MiB/local256MiB/512alias不提高。先正常保护收尾#121并核主线，再独立分支集成既有production组件，不重写Tink/Keystore/codec，不触P4/PK/BDPM/UI。正式入口feature0/publicfalse/外审未做/永久删除与签名发布OFF；物理NOT_RUN。最新合并事实后续追加，本历史PENDING不覆盖已验证记录。
+
 ## MED-02 accepted-main sync checkpoint — 2026-10-24
 
 #120 safely MERGED at efb2ff5dd52aea7cad52eec8bd4f042128853a2a (tree1bba7e4d equals accepted source60dc382b). Exact PR40124568442 all5 Android jobs/Science40124568445 and lowmem40124568449 SUCCESS. Official threeAPI ZIP SHA/CRC and actual MedicalAttachmentOperation3/0fail/0skip reports verified; lowmem actualOK12 +8 fresh-PID verifications retained. Older pending/failure notes below are historical. Main postmerge CI separate/pending.

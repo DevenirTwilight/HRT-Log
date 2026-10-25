@@ -1,0 +1,41 @@
+{
+  "source_sha": "1a9704930ac2444273a3deda8c34bc7940b629f2",
+  "baseline": "efb2ff5dd52aea7cad52eec8bd4f042128853a2a",
+  "pr": 121,
+  "android_run": 40127485261,
+  "science_run": 40127485262,
+  "low_memory_run": 40127485253,
+  "native": "26/29/35 each archive12/0fail/0skip, including collection3; each8fresh-PID verifies OK1",
+  "low_memory": "original12 + collection4 +8fresh-PID actual PASS",
+  "ramMiB": 512,
+  "heapMiB": 192,
+  "scope": "codec only; collection capture/restore/joint reservations NOT_IMPLEMENTED here",
+  "physical": "NOT_RUN",
+  "external_review": "NOT_REVIEWED_EXTERNALLY",
+  "artifacts": [
+    {
+      "api": "26",
+      "artifact": 12573921830,
+      "sha256": "eebc93bcda310e21830557c0d5f2ab90d4add7896f3fcbbbb6230c19fff232de",
+      "crc": "PASS"
+    },
+    {
+      "api": "29",
+      "artifact": 12574066729,
+      "sha256": "98e40c5b00ac935d3d7bff804335b51656655bb3af82c98b5a4b5b73b0f305c0",
+      "crc": "PASS"
+    },
+    {
+      "api": "35",
+      "artifact": 12574416389,
+      "sha256": "8539ceec04ba8876358484f4b8a5b134f3fa687250ecdf3058ccef846409e18b",
+      "crc": "PASS"
+    },
+    {
+      "api": "low",
+      "artifact": 12573724762,
+      "sha256": "b9a17d9c444752d724a275890979d2d112169099bfc58cb542adbf8978788ddd",
+      "crc": "PASS"
+    }
+  ]
+}
