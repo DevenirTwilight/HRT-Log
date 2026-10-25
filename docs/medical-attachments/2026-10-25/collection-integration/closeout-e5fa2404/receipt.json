@@ -1,0 +1,42 @@
+{
+  "source": "e5fa2404ddd4174888f7510477498f4d0f2af84a",
+  "priorSource": "65cc87fe53921a8981902d51f5b90a52fc9b3274",
+  "priorFailureRun": 40177701574,
+  "hostArtifact": {
+    "id": 12593114361,
+    "sha256": "a19da6dd19f198ed9a1a7e42377ecc7c81c8e7322b0d8b07cf04f55524f649ba",
+    "zipCRC": "PASS",
+    "note": "124MiB official ZIP kept in GitHub; selected original failure HTML and raw failed-job logs retained here"
+  },
+  "priorLowmemRun": 40177701582,
+  "priorLowmemArtifact": 12592404067,
+  "priorLowmemSHA256": "c60381f701903ad69b515b918f41c1217101e4d862e78197fe09b2ad65da8fe6",
+  "red": "FAIL_BEFORE_PRODUCTION_FIX",
+  "targetedGreen": [
+    {
+      "name": "net.plainnotes.app.RuntimeLibrarySessionTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.TransMemoImportFlowTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "androidTestCompilation": "PASS",
+  "finalNative": "PENDING",
+  "physical": "NOT_RUN",
+  "external": "NOT_REVIEWED_EXTERNALLY"
+}

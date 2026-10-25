@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.TransMemoImportFlowTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-25T09:50:13.022Z" hostname="68e3ecace23d" time="0.86">
+  <properties/>
+  <testcase name="previewDeletesCopyAndStillImportsParsedMemoryWithoutChangingOriginal" classname="net.plainnotes.app.TransMemoImportFlowTest" time="0.352"/>
+  <testcase name="replacingImportKeepsItsRealCommitAndRevokesTheOldScreen" classname="net.plainnotes.app.TransMemoImportFlowTest" time="0.188"/>
+  <testcase name="rapidReopenAndCancelDoNotPublishAnOldPreview" classname="net.plainnotes.app.TransMemoImportFlowTest" time="0.101"/>
+  <testcase name="invalidSchemaKeepsSafeErrorAndRemovesCopy" classname="net.plainnotes.app.TransMemoImportFlowTest" time="0.094"/>
+  <testcase name="switchingToHrtTrackerCancelsTheTransMemoRead" classname="net.plainnotes.app.TransMemoImportFlowTest" time="0.118"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

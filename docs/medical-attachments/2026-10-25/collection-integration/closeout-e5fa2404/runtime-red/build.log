@@ -1,0 +1,284 @@
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+Starting a Gradle Daemon, 1 busy Daemon could not be reused, use --status for details
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:processResources NO-SOURCE
+> Task :importer:processResources NO-SOURCE
+> Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:compileKotlin
+> Task :core:domain:compileJava NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :pk-engine:compileKotlin
+> Task :core:domain:jar
+> Task :pk-engine:compileJava NO-SOURCE
+> Task :pk-engine:processResources
+> Task :pk-engine:classes
+> Task :pk-engine:jar
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preFullDebugBuild UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateFullDebugBuildConfig
+> Task :app:generateFullDebugResources
+> Task :app:packageFullDebugResources
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preDebugBuild UP-TO-DATE
+> Task :core:data:processDebugNavigationResources
+> Task :core:reminder:preBuild UP-TO-DATE
+> Task :core:reminder:preDebugBuild UP-TO-DATE
+> Task :core:reminder:processDebugNavigationResources
+> Task :core:ui:preBuild UP-TO-DATE
+> Task :core:ui:preDebugBuild UP-TO-DATE
+> Task :core:ui:processDebugNavigationResources
+> Task :app:processFullDebugNavigationResources
+> Task :app:parseFullDebugLocalResources
+> Task :app:generateFullDebugRFile
+> Task :core:data:generateDebugResources
+> Task :core:data:packageDebugResources
+> Task :core:data:parseDebugLocalResources
+> Task :core:data:generateDebugRFile
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :importer:compileKotlin
+> Task :importer:compileJava NO-SOURCE
+> Task :importer:classes UP-TO-DATE
+> Task :core:data:javaPreCompileDebug
+> Task :importer:jar
+> Task :core:reminder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:reminder:generateDebugResources
+> Task :core:reminder:packageDebugResources
+> Task :core:reminder:parseDebugLocalResources
+> Task :core:reminder:generateDebugRFile
+> Task :core:reminder:javaPreCompileDebug
+> Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:ui:generateDebugResources
+> Task :core:ui:packageDebugResources
+> Task :core:ui:parseDebugLocalResources
+> Task :core:ui:generateDebugRFile
+> Task :core:ui:compileDebugKotlin
+> Task :core:ui:javaPreCompileDebug
+> Task :core:ui:compileDebugJavaWithJavac NO-SOURCE
+> Task :core:ui:bundleLibCompileToJarDebug
+> Task :app:javaPreCompileFullDebug
+> Task :core:ui:bundleLibRuntimeToJarDebug
+> Task :core:ui:processDebugJavaRes
+> Task :core:ui:createFullJarDebug
+> Task :core:data:writeDebugAarMetadata
+> Task :core:reminder:writeDebugAarMetadata
+> Task :core:ui:writeDebugAarMetadata
+> Task :app:checkFullDebugAarMetadata
+> Task :app:mapFullDebugSourceSetPaths
+> Task :app:compileFullDebugNavigationResources
+
+> Task :app:mergeFullDebugResources
+/workspace/HRT-Log-med02-integration/app/src/main/res/values/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-integration/app/src/main/res/values-fr/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-integration/app/src/main/res/values-b+zh+Hant/strings.xml:549:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-integration/app/src/main/res/values-b+zh+Hant/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-integration/app/src/main/res/values-b+zh+Hant/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-integration/app/src/main/res/values-zh/strings.xml:549:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-integration/app/src/main/res/values-zh/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med02-integration/app/src/main/res/values-zh/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+
+> Task :app:createFullDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksFullDebug
+> Task :core:data:extractDeepLinksDebug
+> Task :core:data:processDebugManifest
+> Task :core:reminder:extractDeepLinksDebug
+> Task :core:reminder:processDebugManifest
+> Task :core:ui:extractDeepLinksDebug
+> Task :core:ui:processDebugManifest
+> Task :app:processFullDebugMainManifest
+> Task :app:processFullDebugManifest
+> Task :app:processFullDebugManifestForPackage
+> Task :core:data:mapDebugSourceSetPaths
+> Task :core:data:compileDebugLibraryResources
+> Task :core:reminder:mapDebugSourceSetPaths
+> Task :core:reminder:compileDebugLibraryResources
+> Task :core:ui:mapDebugSourceSetPaths
+> Task :core:ui:compileDebugLibraryResources
+> Task :app:processFullDebugResources
+> Task :app:generateFullDebugAssets UP-TO-DATE
+> Task :core:data:generateDebugAssets UP-TO-DATE
+> Task :core:data:mergeDebugAssets
+> Task :core:reminder:generateDebugAssets UP-TO-DATE
+> Task :core:reminder:mergeDebugAssets
+> Task :core:ui:generateDebugAssets UP-TO-DATE
+> Task :core:ui:mergeDebugAssets
+> Task :app:mergeFullDebugAssets
+> Task :app:preFullDebugUnitTestBuild UP-TO-DATE
+> Task :app:packageFullDebugUnitTestForUnitTest
+
+> Task :app:processFullDebugUnitTestManifest
+/workspace/HRT-Log-med02-integration/app/src/debug/AndroidManifest.xml Warning:
+	meta-data#androidx.work.WorkManagerInitializer was tagged at AndroidManifest.xml:0 to remove other declarations but no other declaration present
+
+> Task :app:generateFullDebugUnitTestConfig
+> Task :app:javaPreCompileFullDebugUnitTest
+> Task :core:data:kspDebugKotlin
+
+> Task :core:data:compileDebugKotlin
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt:30:99 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt:31:101 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt:32:109 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt:33:89 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:32:148 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:49:169 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:66:251 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:71:148 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:74:162 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:79:162 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentObjectStreams.kt:48:52 'fun <P : Any!> getPrimitive(targetClassObject: Class<P!>!): P!' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentOperations.kt:24:13 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/AttachmentOperations.kt:31:13 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:158:18 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:160:33 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:169:43 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:169:73 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:170:30 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:170:62 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:173:107 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:174:96 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionRestore.kt:58:18 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionRestore.kt:63:26 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionRestore.kt:63:58 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionRestore.kt:65:51 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionRestore.kt:142:158 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryLifecycle.kt:32:18 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryLifecycle.kt:36:35 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryLifecycle.kt:36:67 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryLifecycle.kt:38:95 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:38:18 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:44:26 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:44:58 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:47:96 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:98:187 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:153:14 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:163:22 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:163:54 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:165:92 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreObjects.kt:61:181 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreSequences.kt:44:90 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreSequences.kt:45:87 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt:379:153 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt:933:103 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt:991:152 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/MeasuredUseIntegration.kt:25:109 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveCrypto.kt:33:23 Non-public primary constructor is exposed via the generated 'copy()' method of the 'data' class.
+
+The generated 'copy()' will change its visibility in future releases.
+
+To suppress the warning do one of the following:
+- Annotate the data class with the '@ConsistentCopyVisibility' annotation.
+- Use the '-Xconsistent-data-class-copy-visibility' compiler flag.
+- Annotate the data class with the '@ExposedCopyVisibility' annotation 
+  (Discouraged, but can be used to keep binary compatibility).
+
+To learn more, see the documentation of the '@ConsistentCopyVisibility' and '@ExposedCopyVisibility' annotations.
+
+This will become an error in language version 2.5. See https://youtrack.jetbrains.com/issue/KT-11914.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/MedicalAttachmentOperations.kt:130:146 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/MedicalAttachmentOperations.kt:144:21 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/ReferenceAuditReads.kt:163:24 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/ReferenceAuditReads.kt:164:24 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:85:83 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:108:106 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:114:103 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:133:113 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:180:84 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:25:108 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:35:120 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:36:97 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:40:135 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+
+> Task :core:data:compileDebugJavaWithJavac
+> Task :core:data:processDebugJavaRes
+> Task :core:data:transformDebugClassesWithAsm
+> Task :core:data:bundleLibRuntimeToJarDebug
+> Task :core:data:bundleLibCompileToJarDebug
+> Task :core:data:createFullJarDebug
+> Task :core:reminder:kspDebugKotlin
+
+> Task :core:reminder:compileDebugKotlin
+w: file:///workspace/HRT-Log-med02-integration/core/reminder/src/main/java/net/plainnotes/app/reminder/ReminderCoordinator.kt:25:58 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+
+> Task :core:reminder:compileDebugJavaWithJavac
+> Task :core:reminder:bundleLibCompileToJarDebug
+> Task :core:reminder:bundleLibRuntimeToJarDebug
+> Task :core:reminder:processDebugJavaRes
+> Task :core:reminder:createFullJarDebug
+> Task :app:kspFullDebugKotlin
+> Task :app:compileFullDebugKotlin
+w: file:///workspace/HRT-Log-med02-integration/app/src/debug/java/net/plainnotes/app/debug/AboutTestActivity.kt:15:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-med02-integration/app/src/debug/java/net/plainnotes/app/debug/CalendarTestActivity.kt:33:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-med02-integration/app/src/debug/java/net/plainnotes/app/debug/DataPrivacyTestActivity.kt:28:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-med02-integration/app/src/debug/java/net/plainnotes/app/debug/SyntheticLibraryScope.kt:15:152 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/app/src/debug/java/net/plainnotes/app/debug/attachments/AttachmentOperationTestActivity.kt:51:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-med02-integration/app/src/debug/java/net/plainnotes/app/debug/attachments/AttachmentOperationTestActivity.kt:97:38 The corresponding parameter in the supertype 'ComponentActivity' is named 'outState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-med02-integration/app/src/debug/java/net/plainnotes/app/debug/demo/DemoArchiveScreen.kt:35:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+w: file:///workspace/HRT-Log-med02-integration/app/src/debug/java/net/plainnotes/app/debug/demo/DemoArchiveScreen.kt:93:5 'fun ScrollableTabRow(selectedTabIndex: Int, modifier: Modifier = ..., containerColor: Color = ..., contentColor: Color = ..., edgePadding: Dp = ..., indicator: ComposableFunction1<List<TabPosition>, Unit> = ..., divider: ComposableFunction0<Unit> = ..., tabs: ComposableFunction0<Unit>): Unit' is deprecated. Replaced with PrimaryScrollableTabRow and SecondaryScrollableTabRow tab variants.
+w: file:///workspace/HRT-Log-med02-integration/app/src/main/java/net/plainnotes/app/NotesViewModel.kt:24:5 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+w: file:///workspace/HRT-Log-med02-integration/app/src/main/java/net/plainnotes/app/ui/AppShell.kt:295:17 'when' is exhaustive so 'else' is redundant here.
+w: file:///workspace/HRT-Log-med02-integration/app/src/main/java/net/plainnotes/app/ui/HistoryScreen.kt:229:123 'val Icons.Outlined.Undo: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.Undo.
+
+> Task :app:compileFullDebugJavaWithJavac
+> Task :app:hiltAggregateDepsFullDebug
+> Task :app:hiltJavaCompileFullDebug
+> Task :app:processFullDebugJavaRes
+> Task :app:bundleFullDebugClassesToCompileJar
+> Task :app:transformFullDebugClassesWithAsm
+> Task :app:bundleFullDebugClassesToRuntimeJar
+> Task :app:kspFullDebugUnitTestKotlin
+
+> Task :app:compileFullDebugUnitTestKotlin
+w: file:///workspace/HRT-Log-med02-integration/app/src/test/java/net/plainnotes/app/AppShellBackNavigationTest.kt:101:83 'fun onBackPressed(): Unit' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-med02-integration/app/src/test/java/net/plainnotes/app/AppShellBackNavigationTest.kt:239:83 'fun onBackPressed(): Unit' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-med02-integration/app/src/test/java/net/plainnotes/app/OutlierDispositionTest.kt:31:59 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'File?'.
+w: file:///workspace/HRT-Log-med02-integration/app/src/test/java/net/plainnotes/app/ReminderTestChainTest.kt:58:37 'field operation: PendingIntent?' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-med02-integration/app/src/test/java/net/plainnotes/app/SyntheticLibrary.kt:28:152 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+w: file:///workspace/HRT-Log-med02-integration/app/src/test/java/net/plainnotes/app/TestReminderSurvivalTest.kt:45:68 'field operation: PendingIntent?' is deprecated. Deprecated in Java.
+w: file:///workspace/HRT-Log-med02-integration/app/src/test/java/net/plainnotes/app/WriteStatusCardLayoutTest.kt:58:13 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'File?'.
+
+> Task :app:compileFullDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:hiltAggregateDepsFullDebugUnitTest
+> Task :app:hiltJavaCompileFullDebugUnitTest NO-SOURCE
+> Task :app:processFullDebugUnitTestJavaRes
+> Task :app:transformFullDebugUnitTestClassesWithAsm
+
+> Task :app:testFullDebugUnitTest
+Picked up JAVA_TOOL_OPTIONS: -Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080 -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts
+
+RuntimeLibrarySessionTest > committedReplacementRemainsTerminalWhenOldVerificationArrivesLate FAILED
+    java.lang.AssertionError at RuntimeLibrarySessionTest.kt:58
+
+1 test completed, 1 failed
+
+> Task :app:testFullDebugUnitTest FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:testFullDebugUnitTest'.
+> There were failing tests. See the report at: file:///workspace/HRT-Log-med02-integration/app/build/reports/tests/testFullDebugUnitTest/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 2m 36s
+100 actionable tasks: 100 executed
