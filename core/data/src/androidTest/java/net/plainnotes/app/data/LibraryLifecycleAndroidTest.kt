@@ -121,6 +121,24 @@ class LibraryLifecycleAndroidTest {
                 assertTrue(report.items.any {it.library==committed.generation.toString() && it.category=="COMMITTED"})
                 assertEquals(LibraryLifecycle.Eligibility.REFUSED,lifecycle.exportEligibility(scope,session.issue(),UUID.randomUUID()).eligibility)
                 val out=ByteArrayOutputStream();reject {lifecycle.writeArchive(scope,session.issue(),UUID.randomUUID(),source.password(),out)};assertEquals(0,out.size())
+                // v2 discovers the closed set under the real root fence; v1 above still refuses.
+                val collection=File.createTempFile("synthetic-retained-",".cipher",app.cacheDir)
+                try {
+                    val receipt=LibraryCollectionCapture(f.access).write(scope,session.issue(),UUID.randomUUID(),source.password(),collection.outputStream())
+                    assertEquals(2,receipt.libraries)
+                    assertEquals(source.manifest.versions.size,receipt.objects)
+                    MedicalCollectionReader.read(session.issue(),source.password(),FileInputStream(collection).channel).use {archive->
+                        val index=archive.index()
+                        assertEquals(2,index.libraries.size)
+                        val retained=index.libraries.single {it.role==MedicalCollectionIndex.Role.RETAINED}
+                        val active=index.libraries.single {it.role==MedicalCollectionIndex.Role.ACTIVE}
+                        assertEquals(f.scope.dataset,retained.dataset.toString())
+                        archive.records(retained.id) {assertArrayEquals(f.facts(),it)}
+                        archive.records(active.id) {assertArrayEquals(source.records,it)}
+                        assertEquals(AttachmentCandidateMetadata.normalized(source.manifest.copy(dataset=active.dataset,epoch=active.epoch)),
+                            AttachmentCandidateMetadata.normalized(archive.manifest(active.id)))
+                    }
+                }finally {check(collection.delete())}
                 session.revoke();reject {lifecycle.inventory(scope,session.issue(),UUID.randomUUID())}
             }finally {session.revoke()}
         }}

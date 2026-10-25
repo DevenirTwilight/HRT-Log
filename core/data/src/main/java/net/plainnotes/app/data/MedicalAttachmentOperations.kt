@@ -162,6 +162,11 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
     suspend fun writeArchive(cap:AttachmentSession.Capability,password:CharArray,output:java.io.OutputStream) {
         try {work(cap) {_,s->LibraryLifecycle(access).writeArchive(s,cap,UUID.randomUUID(),password,output)}}finally {password.fill('\u0000')}
     }
+    /** Complete authenticated collection, including every retained library. Internal OFF caller
+     * must keep a failed output private; only normal return acknowledges the complete set. */
+    suspend fun writeCollection(cap:AttachmentSession.Capability,password:CharArray,output:java.io.OutputStream) {
+        try {work(cap) {_,s->LibraryCollectionCapture(access).write(s,cap,UUID.randomUUID(),password,output)}}finally {password.fill('\u0000')}
+    }
     suspend fun exportEligibility(cap:AttachmentSession.Capability):Export=work(cap) {_,s->
         Export.valueOf(LibraryLifecycle(access).exportEligibility(s,cap,UUID.randomUUID()).eligibility.name)
     }
