@@ -1,3 +1,13 @@
+## PR122 closeout checkpoint — evidence branch, 2026-10-25
+
+**This branch stores evidence, not candidate application code.** Build/check out implementation branch `feature/med02-collection-integration-20261025`, exact source `e5fa2404ddd4174888f7510477498f4d0f2af84a`. Base main4f3cddff. Existing PR122; do not create a duplicate. Final Android40182479995/Science40182479990/lowmem40182480005 were started automatically once by the source push; no manual rerun. Current raw status and final acceptance receipt: `docs/medical-attachments/2026-10-25/collection-integration/current.json`.
+
+Actual minimal fixes: preserve acknowledged real-COMMIT terminal explanation against late old-scope invalidation without restoring any permission; two fresh-current native restart assertions16→17, historical migration16/rollback16/old-reader rejection unchanged. Deterministic test RED then GREEN. **Original XML total13 = Runtime3 + TransMemo5 + Period5**, zero failures/errors/skips; this corrects the candidate checkpoint arithmetic14. Android test source compilation PASS, not native execution. Original failed jobs/method HTML, RED and GREEN originals, artifact hashes/verified prior-source lowmem ZIP are retained in `collection-integration/closeout-e5fa2404`.
+
+Prior65cc lowmem40177701582 really passed wiped C after source guest destruction, separate Android IDs, ciphertext-only transfer and targetOK2; do not credit it to final e5fa. Earlier869 LMK confirmed by kernel remains historical failure. The final native/lowmem test is mandatory; do not repeat old unchanged-source research. External review delta and exact per-file source hashes: `docs/medical-attachments/2026-10-25/external-review/`. This package is preparation only: NOT_REVIEWED_EXTERNALLY, physical/manual TalkBack/parser corpus NOT_RUN, feature0/publicfalse/permanent deletionOFF. No real files, APK delivery, signing or release.
+
+Next: inspect exact-final raw CI/native/lowmem/fresh C results, retain any real failures and fix only concrete blockers. Once all mandatory tests/reviews/conflicts clear, Ready and normal §106 protected merge; verify resulting main and CI, then update this receipt/review delta. Never use evidence-branch skip-ci commits as acceptance of application code.
+
 ## Live evidence checkpoint — 2026-10-25
 
 Current implementation PR122 is Draft at ef3a424df9619c602b2f71f3ed0e9863b3e240bf; default main4f3cddff (#121 normally merged, main Android/Science SUCCESS). Final PR Android40176914142, push40176911182, lowmem40176914362 are RUNNING. No current-code native pass claim yet. Source/scoped-production implementation is on feature/med02-collection-integration-20261025, not this evidence-only branch.
