@@ -31,7 +31,7 @@ class AutomaticImportAndroidTest {
     private var scenario:ActivityScenario<MainActivity>?=null
     private lateinit var model:NotesViewModel
     private fun text(id:Int)=context.getString(id)
-    @Before fun setup() {Disguise.disable(context);AppLock(context).disable();Session.reset();UiPrefs(context).disclaimerAccepted=true}
+    @Before fun setup() {net.plainnotes.app.attachmentpoc.SyntheticEmulatorGuard.requireEmulator();Disguise.disable(context);AppLock(context).disable();Session.reset();UiPrefs(context).disclaimerAccepted=true}
     @After fun close(){scenario?.close();Session.reset()}
     private fun launch() {
         scenario=ActivityScenario.launch<MainActivity>(Intent(context,MainActivity::class.java))

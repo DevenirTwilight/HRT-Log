@@ -6,7 +6,9 @@
 
 PR123已建立Draft（初始41b528b6）。最终本地importer16、Reader4、TransMemo流程8、Period5、四语可访问性8均0失败/错误/跳过，原生Kotlin/Java测试源码编译PASS；实际SAF原生/最终CI尚PENDING，不能宣称正式验收。新的MainActivity+真实DocumentsUI两来源全流程测试已写入，API26/29选择器加入该类，API35全套自动发现；四语320dp/2倍字号/夜间资源配置可访问性已定向PASS（几何/完整字符/触控/取消；非物理TalkBack），无物理TalkBack/真机。详细边界见`docs/cross-app-import/2026-10-25/pr-a-contract.md`。
 
-下一步：验收PR123最终精确HEAD精确HEAD六项必需CI和真实SAF结果，仅修真实失败。按§106满足后受保护合并并核主线。不要自动开始PR-B；Mona接点在ImportFormatDetector.JsonRule/jsonRules及Parsed/source专属预览，未实现空壳。保持MED OFF/外审未完成，不签名交付或Release。
+补充审查：自动入口重复导入测试现在等待每次具体Job完成，避免旧Imported状态使第二次操作断言提前返回；真实执行两次仍8项PASS。真实MainActivity测试和DocumentsProvider在触碰应用状态前复用既有ro.kernel.qemu合成模拟器守卫，防止误在真实手机运行此导入测试。原生Kotlin/Java重新编译PASS。原c01d0f58 CI尚运行时不记为最终验收，下一源码必须取得自己的六项结果。
+
+下一步：验收PR123最终精确HEAD六项必需CI和真实SAF结果，仅修真实失败。按§106满足后受保护合并并核主线。不要自动开始PR-B；Mona接点在ImportFormatDetector.JsonRule/jsonRules及Parsed/source专属预览，未实现空壳。保持MED OFF/外审未完成，不签名交付或Release。
 
 ## MED-02 #122 concrete CI blockers corrected — 2026-10-25
 

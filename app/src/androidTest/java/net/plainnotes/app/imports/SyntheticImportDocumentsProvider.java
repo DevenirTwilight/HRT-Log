@@ -15,7 +15,7 @@ import java.util.*;
 public final class SyntheticImportDocumentsProvider extends DocumentsProvider {
     private static final String[] ROOTS={"root_id","document_id","title","mime_types","flags"};
     private static final String[] DOCS={"document_id","_display_name","mime_type","_size","flags"};
-    @Override public boolean onCreate() {return true;}
+    @Override public boolean onCreate() {net.plainnotes.app.attachmentpoc.SyntheticEmulatorGuard.requireEmulator();return true;}
     private void row(MatrixCursor c,String id) {
         if(!Arrays.asList("exports","tracker","memo").contains(id))throw new IllegalArgumentException();
         MatrixCursor.RowBuilder r=c.newRow();for(String k:c.getColumnNames()) {

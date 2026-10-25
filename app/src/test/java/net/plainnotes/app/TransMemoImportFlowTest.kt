@@ -117,8 +117,8 @@ class TransMemoImportFlowTest {
         assertNoCopy()
         val choices=TransMemo.Choices(mapOf(1L to 120,2L to 60,3L to 60,4L to 60),TransMemo.LateHandling.AS_MISSED,TransMemo.WellbeingScale.ONE_TO_FIVE)
         repeat(2) {
-            model.runImport(ready.export,choices,false)
-            await {model.dataJob.value is NotesViewModel.DataJob.Imported}
+            val operation=model.runImport(ready.export,choices,false)
+            await {operation.isCompleted && model.dataJob.value is NotesViewModel.DataJob.Imported}
             assertEquals(9,runBlocking {repo.records()}.size)
         }
     }
