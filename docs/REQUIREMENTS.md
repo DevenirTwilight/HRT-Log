@@ -1424,3 +1424,7 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 现有单库PNMEDBK1不能完整表达非空fallback时，继续拒绝不安全写入/导出，不能丢弃旧库、附件或UNKNOWN来通过。任何多库协议改动须先提出具体兼容方案并获单独批准；不得把默认OFF开发授权当作协议授权。若有不依赖新格式且可证明安全的场景，应真实端到端验收；没有此前被拒绝场景的完整闭环，不能称功能性突破或本阶段完成。不能声称所有恢复场景都必然需要新格式：真正空fallback需单独论证联合预留/并发/备份一致性。
 
 保留默认feature_enabled=0、PUBLIC_ENTRY_ENABLED=false、NOT_REVIEWED_EXTERNALLY；真实原件/公开入口/永久删除/签名发布OFF。不改PNBAK1、PK、库存、BDPM、权限或配额，默认不加Room版本。本轮只做必要生产接线、针对性合成测试和最小协议决策；不重复旧P4或已验收底座研究，按§106独立受保护PR交付。
+
+### 147.J PNMEDBK2 默认OFF多库归档扩展明确批准（2026-10-24）
+
+负责人对93461e67提出的具体兼容方案明确答复“批准”。授权默认关闭的PNMEDBK2集合协议实现：单一认证集合覆盖ACTIVE及完整RETAINED库（最多8库），稳定类型化身份、不忽略历史/回收站/空库/未知资源；复用Argon2id/Tink/AES-GCM并对新协议做版本域隔离，PNMEDBK1和PNBAK1不改且旧reader拒绝新header。聚合限制仍为业务JSON32MiB、100000行、manifest8MiB、1000版本、wire1GiB/cipher512MiB，本地联合256MiB/512alias不提高。批准继续开发真实集合导出/独立认证/恢复及联合持久预留，不需重复申请此协议实施授权；具体字节布局应可审查，永久格式冻结、功能启用、真实原件、永久删除、签名发布仍未授权。继续feature0/publicfalse/NOT_REVIEWED_EXTERNALLY。

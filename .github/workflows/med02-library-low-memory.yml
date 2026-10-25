@@ -4,6 +4,8 @@ on:
     paths:
       - 'core/data/src/**/Library*.kt'
       - 'core/data/src/**/MedicalAttachmentOperation*.kt'
+      - 'core/data/src/**/MedicalCollection*.kt'
+      - 'core/data/src/**/MedicalArchive*.kt'
       - 'core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt'
       - 'core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt'
       - 'core/data/src/main/java/net/plainnotes/app/data/AttachmentTransaction.kt'
