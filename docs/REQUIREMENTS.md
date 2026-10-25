@@ -1432,3 +1432,9 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 ### 147.K 多资料库完整业务闭环（2026-10-25）
 
 负责人要求承接147.J：完成ACTIVE与RETAINED（包括真正为空的库）的认证一致快照、持久联合资源预留、恢复后新增附件、完整集合的单一root COMMIT激活，并以合成A→B新增→全集合→独立C恢复逐字段核对。复用已合并codec，不改变PNMEDBK1/PNBAK1语义。局部组件通过不能宣称闭环完成。8库/32MiB业务/8MiB索引与manifest/100000行/1000版本/1GiB wire/512MiB归档密文及本地256MiB、512alias上限不变。UNKNOWN、不完整资源、旧scope及无法证明安全的请求必须拒绝。保持默认OFF、外审未完成、永久删除OFF；不签名、发布或开放真实入口。
+
+### 147.L MED-02 #122 收尾与独立外审准备（2026-10-25）
+
+负责人要求继续既有#122及方案A，先核实时HEAD与原始失败，再最小修复当前Room17重启断言、真实导入COMMIT/旧作用域撤权回归，不能把历史Room16输入和回滚断言改成17。以当前最终源码验收A→B新增→全集合→销毁来源密钥→重建独立AVD C→全字段/历史/typed关系/认证密文→重开/再导出，三API、16→17迁移/回滚/旧reader拒绝、既有v1/v2与四切换死亡点、512MiB/192MiB都保留。区分PASS/FAIL/SKIPPED/NOT_RUN；旧成功不能冒充新SHA验收，LMK/未知环境失败保留原件，只做有假设的有限诊断，不反复重跑旧源筛绿。
+
+核心闭环实际验收后，复用外审包补齐新协议、联合资源、持久化原子性、输入/解析、AppLock/伪装/通知、撤权、跨设备恢复及剩余风险，固定源码/构建方法和原始证据；AI内部检查不等于独立外审。最终必需CI/原生及审查满足§106后普通受保护合并并核主线；不绕保护。仍feature0/publicfalse/NOT_REVIEWED_EXTERNALLY，正式真实附件导入查看恢复UI/永久删除/真实医疗资料测试OFF；不改已批准格式兼容语义、PNBAK1/PK/BDPM/P5P6/网络/签名/versionCode/Release，不交付APK。

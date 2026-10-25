@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import net.plainnotes.app.R
 import net.plainnotes.app.data.*
 
@@ -71,7 +72,12 @@ class RuntimeLibrarySession(private val source:NotesRepository,private val saved
     }
     fun pause() {allowed=false;releaseProtected()}
     suspend fun resume() {initialized.await();verify();if(!closed)allowed=true}
-    fun invalidate(message:Int=R.string.library_scope_changed) {closed=true;allowed=false;releaseProtected();mutable.value=State.Unavailable(message)}
+    fun invalidate(message:Int=R.string.library_scope_changed) {
+        closed=true;allowed=false;releaseProtected()
+        // A late suspended verify must not downgrade acknowledgement of a real COMMIT.
+        // This only preserves its terminal explanation; permissions remain revoked.
+        mutable.update {old->if((old as? State.Unavailable)?.message==R.string.library_change_committed)old else State.Unavailable(message)}
+    }
     fun close() {closed=true;allowed=false;releaseProtected()}
     companion object {
         const val SAVED_SCOPE="library.request.scope"

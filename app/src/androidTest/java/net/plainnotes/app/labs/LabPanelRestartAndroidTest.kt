@@ -11,7 +11,7 @@ import java.io.File
 import java.time.Instant
 
 /**
- * LAB-02, synthetic data in a persistent Room 12 database across two separately started app processes
+ * LAB-02 behavior, synthetic data in the current persistent Room database across two separately started app processes
  * (scripts/run_lab_panel_restart.py): a lab panel, a panel in the bin and an encrypted backup survive the restart, the bin
  * restores the panel whole and the backup restores the panels as they were.
  */
@@ -32,7 +32,7 @@ class LabPanelRestartAndroidTest {
             val r = repo(db)
             r.saveLabs(listOf(lab("E2", 150.0, "pg/mL"), lab("T", 30.0, "ng/dL")), at)
             r.saveLabs(listOf(lab("PRL", 12.0, "ng/mL", t0 - 3_600_000)), at)
-            assertEquals(16, db.openHelper.writableDatabase.version)
+            assertEquals(17, db.openHelper.writableDatabase.version)
             File(context.filesDir, "synthetic-lab-panel-state").writeText(state(r))
             File(context.filesDir, "synthetic-lab-panel-backup.pnbak").writeBytes(r.exportBackup("synthetic-lab-pass".toCharArray()))
             r.deleteLabPanel(r.labPanels().first { it.sampled_utc == t0 }.id, at)

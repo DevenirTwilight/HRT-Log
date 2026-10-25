@@ -47,4 +47,17 @@ class RuntimeLibrarySessionTest {
             assertEquals(1,next.dao().appointments().size);fresh.resume();permitted.deleteAppointment(1);assertTrue(next.dao().appointments().isEmpty())
         } finally {first.close();next.close()}
     }
+    @Test fun committedReplacementRemainsTerminalWhenOldVerificationArrivesLate() {
+        val context=ApplicationProvider.getApplicationContext<Context>();var touched=false
+        val source=NotesRepository(object:DatabaseAccess(context) {override fun get(space:Space):NotesDatabase {touched=true;error("Terminal owner must not reopen storage")}})
+        val session=RuntimeLibrarySession(source,SavedStateHandle())
+        session.invalidate(R.string.library_scope_changed)
+        session.invalidate(R.string.library_change_committed)
+        // Models an already-suspended verify() returning after the genuine COMMIT acknowledgement.
+        session.invalidate(R.string.library_scope_changed)
+        assertEquals(RuntimeLibrarySession.State.Unavailable(R.string.library_change_committed),session.state.value)
+        try {session.checkRequest();fail("Committed old owner regained write permission")}catch(_:LibraryRequestRevoked){}
+        assertFalse(touched)
+    }
+
 }
