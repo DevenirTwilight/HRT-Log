@@ -1,3 +1,13 @@
+## PR-A 跨应用统一导入：实现与首轮定向验证 — 2026-10-25
+
+当前任务已转为跨应用迁移，勿继续MED研发。实时远端#122已MERGED，主线1ddcf431558e0e90662b4a9ab931a9a6ec437209，合并源e5fa2404；下方旧PENDING是历史。独立worktree `/workspace/HRT-Log-import-a`，分支`feature/import-auto-detection-20261025`，未复制旧MED工作树修改。
+
+已实现真实DataSection单SAF入口→冻结scope→单次打开/有界快照→字节/结构自动识别→原HRT Tracker或Trans Memo专属预览→原事务。保留本应用恢复入口、全部旧导入方法和断言，不改MED/schema/备份协议/权限/版本/库存。Featherline仅已知不支持提示。四语状态完整；SQLite仍使用原私有副本及启动/异常/取消清理，确认时不再读provider。
+
+本地importer16、Reader4、TransMemo流程7、Period5均0失败/错误/跳过，原生测试源码编译PASS；实际SAF原生/最终CI尚PENDING，不能宣称正式验收。新的MainActivity+真实DocumentsUI两来源全流程测试已写入，API26/29选择器加入该类，API35全套自动发现；四语320dp/2倍字号/夜间可访问性正在定向验证，无物理TalkBack/真机。详细边界见`docs/cross-app-import/2026-10-25/pr-a-contract.md`。
+
+下一步：完成四语定向测试，推送PR并验收精确HEAD六项必需CI和真实SAF结果，仅修真实失败。按§106满足后受保护合并并核主线。不要自动开始PR-B；Mona接点在ImportFormatDetector.JsonRule/jsonRules及Parsed/source专属预览，未实现空壳。保持MED OFF/外审未完成，不签名交付或Release。
+
 ## MED-02 #122 concrete CI blockers corrected — 2026-10-25
 
 Resumed exact65cc87fe (main4f3cddff), clean existing branch, no other active data/schema implementation PR. Original PR40177701574 host HTML shows TransMemo real Import result/9rows passed, only terminal reason expected library_change_committed vs actual library_scope_changed failed. Runtime.verify can suspend before COMMIT acknowledgement and later invalidate its old owner, overwriting the genuine commit explanation. New deterministic RuntimeLibrarySession test RED on old production; minimum fix uses atomic StateFlow.update to preserve already-acknowledged COMMIT explanation while closed/allowed=false and protected-resource revocation remain unconditional. No page rebind/new permission; existing real import test unchanged. Targeted Runtime3 + TransMemo6 + Period5 =14/0fail/error/skip GREEN, Android test source compilation PASS.

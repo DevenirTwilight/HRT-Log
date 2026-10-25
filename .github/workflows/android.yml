@@ -259,7 +259,7 @@ jobs:
             python3 scripts/run_b3_gate_red.py
             ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=net.plainnotes.app.attachmentpoc --no-parallel --max-workers=2
             # China beta P0 regressions on API 26/29 (the full app suite runs on API 35 above).
-            ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.shell.InAppNavigationLockAndroidTest,net.plainnotes.app.shell.ReminderTestDeviceTest,net.plainnotes.app.shell.RuntimeRequestUiAndroidTest,net.plainnotes.app.privacy.RestoreProtectionAndroidTest --no-parallel --max-workers=2
+            ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.shell.InAppNavigationLockAndroidTest,net.plainnotes.app.shell.ReminderTestDeviceTest,net.plainnotes.app.shell.RuntimeRequestUiAndroidTest,net.plainnotes.app.privacy.RestoreProtectionAndroidTest,net.plainnotes.app.imports.AutomaticImportAndroidTest --no-parallel --max-workers=2
             python3 scripts/run_attachment_poc_restart.py
             python3 scripts/collect_attachment_poc_evidence.py --output app/build/reports/attachment-poc-evidence.json
             python3 scripts/run_attachment_gate3_red.py

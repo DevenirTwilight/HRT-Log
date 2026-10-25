@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="import_other_apps">Importer depuis une autre application</string>
+    <string name="import_other_apps_desc">Reconnaissance automatique des exports HRT Tracker et Trans Memo</string>
+    <string name="import_identified">Source reconnue : %1$s</string>
+    <string name="import_detecting">Détection du format…</string>
+    <string name="import_parsing">Lecture et validation du fichier…</string>
+    <string name="import_cancelled">Import annulé. Aucune donnée modifiée.</string>
+    <string name="import_format_unknown">Le format de ce fichier est inconnu.</string>
+    <string name="import_file_damaged">Le fichier est endommagé ou incomplet.</string>
+    <string name="import_file_too_large">Le fichier dépasse la limite (32 MiB ou 100 000 lignes).</string>
+    <string name="import_featherline_unsupported">Sauvegarde chiffrée Featherline reconnue, mais pas encore prise en charge.</string>
+    <string name="import_use_native_restore">Utilisez la restauration des sauvegardes HRT Log pour ce fichier.</string>
+    <string name="import_version_unsupported">Cette version ne peut pas être importée.</string>
+</resources>

@@ -41,8 +41,15 @@ import java.time.LocalDate
     var pdfChoice by remember { mutableStateOf(90 to true) }
     var wipe by remember { mutableStateOf(false) }
     val labels = checkinLabels()
-    val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(model::openTransMemo) }
-    val htLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(model::openHrtTracker) }
+    var importScope by remember { mutableStateOf<net.plainnotes.app.data.LibraryRequestScope?>(null) }
+    var awaitingImportPicker by remember { mutableStateOf(false) }
+    val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri->
+        if(awaitingImportPicker) {
+            awaitingImportPicker=false
+            val scope=importScope;importScope=null
+            if(uri==null)model.cancelAutomaticImport() else model.openImport(uri,scope)
+        }
+    }
     val state by model.state.collectAsStateWithLifecycle()
     val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
         if(awaitingBackupPicker){awaitingBackupPicker=false;backupUri=uri} }
@@ -63,8 +70,14 @@ import java.time.LocalDate
     val pdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { it?.let { u -> model.exportPdf(u, pdfChoice.first, pdfChoice.second, context, labels, scheduleTexts) } }
 
     SectionCard(stringResource(R.string.data)) {
-        DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_ht), stringResource(R.string.import_ht_desc)) { htLauncher.launchPicker(arrayOf("application/json", "text/plain", "*/*")) }
-        DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_tm), stringResource(R.string.import_tm_desc)) { importLauncher.launchPicker(arrayOf("*/*")) }
+        DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_other_apps), stringResource(R.string.import_other_apps_desc)) {
+            model.clearDataJob()
+            importScope=(model.librarySession.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope
+            awaitingImportPicker=true
+            try {importLauncher.launchPicker(arrayOf("*/*"))}
+            catch(_:Exception) {awaitingImportPicker=false;importScope=null;model.dataJob.value=NotesViewModel.DataJob.Failed(R.string.operation_error)}
+        }
+        if(job is NotesViewModel.DataJob.ImportCancelled)Text(stringResource(R.string.import_cancelled),style=MaterialTheme.typography.bodySmall)
         DataRow(Icons.Outlined.Lock, stringResource(R.string.backup_export), stringResource(R.string.backup_export_desc)) {
             awaitingBackupPicker=true
             try{backupLauncher.launchPicker("notes-${LocalDate.now()}.pnbak")}
@@ -116,18 +129,26 @@ import java.time.LocalDate
     if (wipe) WipeDialog({ wipe = false }) { wipe = false; model.wipeAll { (context as? Activity)?.let { a -> a.finish(); a.startActivity(Intent(a, a.javaClass)) } } }
 
     when (val j = job) {
+        is NotesViewModel.DataJob.ImportDetecting, is NotesViewModel.DataJob.ImportParsing -> AlertDialog(onDismissRequest=model::cancelAutomaticImport,
+            title={Text(stringResource(R.string.import_other_apps))},text={Column(verticalArrangement=Arrangement.spacedBy(12.dp)) {
+                CircularProgressIndicator(Modifier.size(28.dp))
+                if(j is NotesViewModel.DataJob.ImportParsing) {
+                    Text(stringResource(R.string.import_identified,importSourceLabel(j.source)))
+                    Text(stringResource(R.string.import_parsing))
+                } else Text(stringResource(R.string.import_detecting))
+            }},confirmButton={},dismissButton={TextButton(onClick=model::cancelAutomaticImport){Text(stringResource(R.string.cancel))}})
         is NotesViewModel.DataJob.Working -> AlertDialog(onDismissRequest = {}, confirmButton = {}, text = { Row(verticalAlignment = Alignment.CenterVertically) {
             CircularProgressIndicator(Modifier.size(28.dp)); Spacer(Modifier.width(16.dp)); Text(stringResource(R.string.working)) } })
         is NotesViewModel.DataJob.Done -> AlertDialog(onDismissRequest = model::clearDataJob, icon = { Icon(Icons.Outlined.CheckCircle, null) }, text = { Text(stringResource(j.message)) },
             confirmButton = { TextButton(onClick = model::clearDataJob) { Text(stringResource(R.string.ok)) } })
         is NotesViewModel.DataJob.Failed -> AlertDialog(onDismissRequest = model::clearDataJob, icon = { Icon(Icons.Outlined.ErrorOutline, null) }, text = { Text(stringResource(j.message)) },
             confirmButton = { TextButton(onClick = model::clearDataJob) { Text(stringResource(R.string.ok)) } })
-        is NotesViewModel.DataJob.ImportReady -> ImportWizard(j.export, j.preview, model::cancelImport) { c, overwrite -> model.runImport(j.export, c, overwrite) }
+        is NotesViewModel.DataJob.ImportReady -> ImportWizard(j.export, j.preview, model::cancelAutomaticImport) { c, overwrite -> model.runImport(j.export, c, overwrite) }
         is NotesViewModel.DataJob.Imported -> AlertDialog(onDismissRequest = model::clearDataJob, icon = { Icon(Icons.Outlined.CheckCircle, null) }, title = { Text(stringResource(R.string.import_done)) },
             text = { Text(stringResource(R.string.import_done_body, j.summary.medications, j.summary.reusedMedications, j.summary.intakes, j.summary.duplicates, j.summary.containers,
                 j.summary.scores, j.summary.notes, j.summary.appointments)) },
             confirmButton = { TextButton(onClick = model::clearDataJob) { Text(stringResource(R.string.ok)) } })
-        is NotesViewModel.DataJob.HtReady -> HtImportWizard(j.export, j.preview, state.medications, state.profiles, model::clearDataJob) { d, t, n, w -> model.runHtImport(j.export, d, t, n, w) }
+        is NotesViewModel.DataJob.HtReady -> HtImportWizard(j.export, j.preview, state.medications, state.profiles, model::cancelAutomaticImport) { d, t, n, w -> model.runHtImport(j.export, d, t, n, w) }
         is NotesViewModel.DataJob.HtImported -> AlertDialog(onDismissRequest = model::clearDataJob, icon = { Icon(Icons.Outlined.CheckCircle, null) }, title = { Text(stringResource(R.string.import_done)) },
             text = { Text(stringResource(R.string.ht_done, j.summary.intakes, j.summary.medications, j.summary.alreadyImported, j.summary.labs)) },
             confirmButton = { TextButton(onClick = model::clearDataJob) { Text(stringResource(R.string.ok)) } })
@@ -194,6 +215,7 @@ import java.time.LocalDate
             actions = { TextButton(enabled = ready, onClick = { onImport(TransMemo.Choices(lateValues.mapValues { it.value!! }, lateHandling, scale), overwrite!!) }) { Text(stringResource(R.string.import_action)) } }) }) { pad ->
             Column(Modifier.padding(pad).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                 SectionCard(stringResource(R.string.import_preview)) {
+                    Text(stringResource(R.string.import_identified,importSourceLabel(net.plainnotes.app.importer.ImportFormatDetector.Source.TRANS_MEMO)),style=MaterialTheme.typography.titleSmall)
                     Text(stringResource(R.string.import_preview_body, p.products, p.takenIntakes, p.missed, p.pending, p.containers, p.wellbeingScores, p.notesWithText, p.appointments), style = MaterialTheme.typography.bodyMedium)
                     p.intakeRange?.let { (a, b) -> Text(stringResource(R.string.import_range, formatDateTime(a), formatDateTime(b)), style = MaterialTheme.typography.bodySmall) }
                     val notes = buildList {
@@ -242,4 +264,11 @@ import java.time.LocalDate
         "OVERALL" -> R.string.wb_overall; "MOOD" -> R.string.wb_mood; "EMO_STABILITY" -> R.string.wb_emo_stability; "ENERGY" -> R.string.wb_energy
         "AGGRESSIVENESS" -> R.string.wb_aggressiveness; "LIBIDO" -> R.string.wb_libido; "PAIN" -> R.string.wb_pain; "PERIOD_LIKE" -> R.string.wb_period_like
         "APPETITE" -> R.string.wb_appetite; "SLEEP_QUALITY" -> R.string.wb_sleep; "SKIN_QUALITY" -> R.string.wb_skin; else -> R.string.choice_other }) }
+}
+
+@Composable internal fun importSourceLabel(source:net.plainnotes.app.importer.ImportFormatDetector.Source):String=when(source) {
+    net.plainnotes.app.importer.ImportFormatDetector.Source.HRT_TRACKER->"HRT Tracker"
+    net.plainnotes.app.importer.ImportFormatDetector.Source.TRANS_MEMO->"Trans Memo"
+    net.plainnotes.app.importer.ImportFormatDetector.Source.FEATHERLINE->"Featherline"
+    net.plainnotes.app.importer.ImportFormatDetector.Source.HRT_LOG->"HRT Log"
 }

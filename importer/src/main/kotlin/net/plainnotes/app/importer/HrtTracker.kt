@@ -45,6 +45,10 @@ object HrtTracker {
 
     fun read(text: String): Export {
         val root: Any = try { if (text.trimStart().startsWith("[")) JSONArray(text) else JSONObject(text) } catch (e: Exception) { throw InvalidExport("not JSON") }
+        return readRoot(root)
+    }
+    /** Already parsed immutable input for source detection; clinical conversion remains identical. */
+    internal fun readRoot(root:Any):Export {
         val obj = root as? JSONObject
         val events = (obj?.optJSONArray("events") ?: root as? JSONArray) ?: throw InvalidExport("no events")
         obj?.optJSONObject("meta")?.optInt("version", 0)?.let { if (it > 2) throw InvalidExport("unsupported version $it") }

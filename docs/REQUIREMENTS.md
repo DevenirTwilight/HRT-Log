@@ -1438,3 +1438,11 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 负责人要求继续既有#122及方案A，先核实时HEAD与原始失败，再最小修复当前Room17重启断言、真实导入COMMIT/旧作用域撤权回归，不能把历史Room16输入和回滚断言改成17。以当前最终源码验收A→B新增→全集合→销毁来源密钥→重建独立AVD C→全字段/历史/typed关系/认证密文→重开/再导出，三API、16→17迁移/回滚/旧reader拒绝、既有v1/v2与四切换死亡点、512MiB/192MiB都保留。区分PASS/FAIL/SKIPPED/NOT_RUN；旧成功不能冒充新SHA验收，LMK/未知环境失败保留原件，只做有假设的有限诊断，不反复重跑旧源筛绿。
 
 核心闭环实际验收后，复用外审包补齐新协议、联合资源、持久化原子性、输入/解析、AppLock/伪装/通知、撤权、跨设备恢复及剩余风险，固定源码/构建方法和原始证据；AI内部检查不等于独立外审。最终必需CI/原生及审查满足§106后普通受保护合并并核主线；不绕保护。仍feature0/publicfalse/NOT_REVIEWED_EXTERNALLY，正式真实附件导入查看恢复UI/永久删除/真实医疗资料测试OFF；不改已批准格式兼容语义、PNBAK1/PK/BDPM/P5P6/网络/签名/versionCode/Release，不交付APK。
+
+## 148. 跨应用迁移 PR-A：统一入口与格式识别（2026-10-25）
+
+负责人要求将设置→数据与备份的 HRT Tracker / Trans Memo 两个普通入口改为「从其他应用导入」：SAF 单次选择，按真实字节和结构识别，进入已有专属预览，保留全部选择、时间/剂量/来源身份、重复处理、体重、覆盖事务及 COMMIT 事实/旧 scope 撤权语义。本应用加密备份恢复入口独立保留。不得依赖扩展名/MIME，不识别或存在歧义则拒绝；HRTBKP1 只提示已知暂不支持，不能交给原生解密器。
+
+有界读取同一份内容：JSON 内存快照；SQLite 复用现有 noBackup 私有副本、只读表/版本校验和清理，不再次打开不可信 provider。普通导入上限32MiB、SQLite总读取行100000；JSON深度64、容器/分隔项各250000防止解析分配攻击。新增上限只影响跨应用输入，不改变现有备份协议或MED资源限额。选择时冻结RuntimeLibrarySession作用域，解析/确认保留既有检查；取消、撤权、换库、损坏、超限不能写入。
+
+四语、320dp/2倍字号、可访问语义、真实AppShell/SAF接线及最终精确SHA CI必须验证，保留TransMemoImportFlowTest和时期稳定性断言。仅实现首批两来源及可扩展规则；PR-B Mona待本阶段完成后单独开展，不复制GPL/AGPL实现。不改MED/PNBAK1/PNMEDBK1/2/PK/BDPM/精确库存、权限、版本号、签名或Release；正式附件继续OFF。按§106受保护PR流程验收和合并。

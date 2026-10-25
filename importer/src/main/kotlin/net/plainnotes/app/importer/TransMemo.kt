@@ -61,6 +61,9 @@ object TransMemo {
     private fun Map<String, Any?>.double(k: String) = (this[k] as? Number)?.toDouble()
     private fun Map<String, Any?>.str(k: String) = this[k]?.toString()
 
+    /** Structural fingerprint only. read() still performs its complete version/column checks. */
+    fun matchesSchema(src:SqlSource):Boolean=REQUIRED.all {(table,columns)->src.columns(table)?.containsAll(columns)==true}
+
     fun read(src: SqlSource): TmExport {
         if (src.userVersion() != 8) throw InvalidExport("user_version=${src.userVersion()}, expected 8")
         REQUIRED.forEach { (t, cols) ->

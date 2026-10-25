@@ -250,7 +250,10 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun setContainerInfo(id:Long,source:String?,batch:String?)=mutateExtra{repo.setContainerInfo(id,source,batch)}
     fun reorderItems(ids:List<Long>)=mutateExtra{repo.reorderCheckinItems(ids)}
     // Data: Trans Memo import, encrypted backup, exports, wipe
-    sealed interface DataJob { object Idle:DataJob; object Working:DataJob; class Done(val message:Int,val arg:String?=null):DataJob; class Failed(val message:Int):DataJob
+    sealed interface DataJob { object Idle:DataJob; object Working:DataJob;
+        object ImportDetecting:DataJob
+        class ImportParsing(val source:net.plainnotes.app.importer.ImportFormatDetector.Source):DataJob
+        object ImportCancelled:DataJob; class Done(val message:Int,val arg:String?=null):DataJob; class Failed(val message:Int):DataJob
         class ImportReady(val export:net.plainnotes.app.importer.TmExport,val preview:net.plainnotes.app.importer.TransMemo.Preview):DataJob
         class Imported(val summary:ImportSummary):DataJob
         class HtReady(val export:net.plainnotes.app.importer.HrtTracker.Export,val preview:net.plainnotes.app.importer.HrtTracker.Preview):DataJob
@@ -264,7 +267,15 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     private fun acknowledgeCommittedLibrary(receipt:CommittedLibraryChange) {
         runtimeFailure(LibraryScopeMismatch());runtime.invalidate(R.string.library_change_committed);dataJob.value=receipt.result
     }
-    private fun dataOp(committed:()->CommittedLibraryChange?={null},block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;val result=try{runtime.repository();block().also {if(committed()==null){runtime.verify();runtime.checkRequest()}}}catch(e:LibraryScopeMismatch){runtimeFailure(e);DataJob.Failed(R.string.library_scope_changed)}catch(e:LibraryRequestRevoked){DataJob.Failed(R.string.library_request_locked)}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
+    private fun dataOp(committed:()->CommittedLibraryChange?={null},block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;val result=try{runtime.repository();block().also {if(committed()==null){runtime.verify();runtime.checkRequest()}}}catch(e:LibraryScopeMismatch){runtimeFailure(e);DataJob.Failed(R.string.library_scope_changed)}catch(e:LibraryRequestRevoked){DataJob.Failed(R.string.library_request_locked)}catch(e:net.plainnotes.app.importer.ImportFormatDetector.Unknown){DataJob.Failed(R.string.import_format_unknown)}
+        catch(e:net.plainnotes.app.importer.ImportFormatDetector.Damaged){DataJob.Failed(R.string.import_file_damaged)}
+        catch(e:net.plainnotes.app.importer.ImportFormatDetector.TooLarge){DataJob.Failed(R.string.import_file_too_large)}
+        catch(e:net.plainnotes.app.importer.ImportFormatDetector.Unsupported){DataJob.Failed(when(e.source) {
+            net.plainnotes.app.importer.ImportFormatDetector.Source.FEATHERLINE->R.string.import_featherline_unsupported
+            net.plainnotes.app.importer.ImportFormatDetector.Source.HRT_LOG->R.string.import_use_native_restore
+            else->R.string.import_version_unsupported
+        })}
+        catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
         catch(e:BackupCodec.TooLarge){DataJob.Failed(R.string.backup_too_large)}
         catch(e:BackupCodec.NewerBackup){DataJob.Failed(R.string.backup_newer_version)}
         catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(e:CancellationException){committed()?.let(::acknowledgeCommittedLibrary);throw e}catch(_:Exception){DataJob.Failed(R.string.operation_error)}
@@ -276,6 +287,19 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         previous?.cancel()
         return dataOp { previous?.join(); block() }.also{importReadJob=it}
     }
+    /** One SAF result, frozen screen identity, one provider open and source-specific preview. */
+    fun openImport(uri:android.net.Uri,expected:LibraryRequestScope?=(librarySession.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope)=importRead {
+        val current=(librarySession.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope
+        if(expected==null || current!=expected)throw LibraryScopeMismatch()
+        dataJob.value=DataJob.ImportDetecting
+        val parsed=net.plainnotes.app.imports.AutomaticImportReader.read(app.noBackupFilesDir,
+            {app.contentResolver.openInputStream(uri)},runtime::checkRequest) {source->dataJob.value=DataJob.ImportParsing(source)}
+        withContext(Dispatchers.Default) {when(parsed) {
+            is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Tracker->DataJob.HtReady(parsed.export,net.plainnotes.app.importer.HrtTracker.preview(parsed.export))
+            is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Memo->DataJob.ImportReady(parsed.export,net.plainnotes.app.importer.TransMemo.preview(parsed.export,ZoneId.systemDefault()))
+        }}
+    }
+    fun cancelAutomaticImport() {clearDataJob();dataJob.value=DataJob.ImportCancelled}
     fun openTransMemo(uri:android.net.Uri)=importRead {
         val export=net.plainnotes.app.privacy.TransMemoImportCopies.read(app.noBackupFilesDir,
             {app.contentResolver.openInputStream(uri)}) { file ->
