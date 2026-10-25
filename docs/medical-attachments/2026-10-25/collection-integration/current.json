@@ -20,6 +20,8 @@
   "mainCI": {
     "android": 40184646056,
     "science": 40184646043,
-    "status": "RUNNING"
+    "status": "RUNNING",
+    "scienceStatus": "SUCCESS",
+    "androidStatus": "RUNNING"
   }
 }
