@@ -1,3 +1,9 @@
+## PR125 separate constrained jobs; previous shared-guest failures preserved — 2026-10-25
+
+a2c lowmem40240440656 FAIL before Featherline: MED12+collection4+integration2 PASS and identity precondition passed; first Tracker DocumentsUI roots_list remained empty, Provider acquisition errors and earlier system OOM recorded. Raw job/kernel/logcat in featherline/evidence/failures/a2c-lowmem*. No sole-cause claim. Featherline was NOT_RUN; old e515 foreground LMK remains unresolved, not relabelled.
+
+Only workflow isolation now changes: existing MED+independentC acceptance remains in library-api26-512m; unchanged complete four-source MainActivity/SAF/Featherline password/COMMIT/reopen/idempotency test runs in separate fresh featherline-api26-512m guest. Both original512MiB/192MiB/API26, same fixtures/assertions/crypto/limits, no directURI/sleep/GC/newcrypto. No claim of comparable shared-guest memory improvement; new exact-source dedicated acceptance required. Production application unchanged from afb. Draft/MED OFF/no PR-D; inspect real new logs, not unchanged reruns.
+
 ## PR125 low-memory transfer precondition correction — 2026-10-25
 
 afb4ef07 lowmem40239852755 FAIL before Featherline: MED12+collection4+integration2 PASS, then existing transfer export demanded exactly16 lowercase hex ANDROID_ID characters. Raw original log retained featherline/evidence/failures/afb-lowmem*. Returned value was not recorded: do NOT assert shorter-ID root cause as proven. Helper now correctly validates nonzero64-bit hexadecimal1–16 digits and normalizes numeric identity before both export and fresh-C comparison; invalid response remains fail-closed and bounded in error. Independent parser tests2PASS. No source crypto/clinical/memory budget/assertion changes. Featherline low-memory NOT_RUN on afb, previous e515 actual LMK remains unresolved. Target changed-source native/CI acceptance required, keep Draft/MED OFF/no PR-D.
