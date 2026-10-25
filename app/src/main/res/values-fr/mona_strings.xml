@@ -1,0 +1,35 @@
+<resources>
+
+    <string name="mona_preview">Aperçu de l’import Mona</string>
+    <string name="mona_version">Base %1$d · Application %2$s</string>
+    <string name="mona_scan">Analysés : %1$d prises · %2$d résultats biologiques</string>
+    <string name="mona_counts">Prises prêtes/nouvelles : %1$d · Résultats : %2$d\nDéjà présents ou supprimés : %3$d\nConflits conservés : %4$d\nNon convertis : %5$d</string>
+    <string name="mona_unsupported">Non importés : %1$d plans · %2$d stocks. Informations de source : %3$d.</string>
+    <string name="mona_review_note">Seules les prises réelles et les analyses prises en charge sont importées. Les nouveaux médicaments restent inactifs et à vérifier ; aucun plan, rappel, stock ou profil PK n’est créé. Méthodes et intervalles inconnus restent inconnus. Les conflits ne sont jamais écrasés.</string>
+    <string name="mona_dose_item">Prise nº %1$s — %2$s</string>
+    <string name="mona_lab_item">Analyse nº %1$s — %2$s</string>
+    <string name="mona_page">%1$d / %2$d</string>
+    <string name="mona_confirm">Importer les données compatibles</string>
+    <string name="mona_result">Résultat de l’import Mona</string>
+    <string name="mona_committed">Enregistrés : %1$d prises · %2$d résultats dans %3$d bilans · %4$d nouveaux médicaments.</string>
+    <string name="mona_saving">Enregistrement transactionnel. Une annulation avant validation annule tout ; une validation réelle reste reconnue même si la page se ferme.</string>
+    <string name="mona_new">Prêt à importer</string>
+    <string name="mona_existing">Déjà importé ; ignoré</string>
+    <string name="mona_deleted">Déjà supprimé ; non restauré</string>
+    <string name="mona_source_changed">Source modifiée ; vérification manuelle nécessaire</string>
+    <string name="mona_local_changed">Donnée locale modifiée ; conservée</string>
+    <string name="mona_missing_target">Cible non vérifiable ; non importée</string>
+    <string name="mona_draw_changed">Bilan d’origine modifié ; non regroupé</string>
+    <string name="mona_not_taken">Aucune prise réelle datée ; non importée</string>
+    <string name="mona_invalid_time">Date, fuseau ou précision non conservable</string>
+    <string name="mona_invalid_value">Valeur ou précision non représentable</string>
+    <string name="mona_unknown_identity">Molécule ou ester non identifié avec fiabilité</string>
+    <string name="mona_unknown_route">Voie inconnue ou non prise en charge</string>
+    <string name="mona_unknown_unit">Unité ou quantité non convertible avec fiabilité</string>
+    <string name="mona_unknown_field">Champs non pris en charge à vérifier</string>
+    <string name="mona_empty_lab">Aucun résultat compatible</string>
+    <string name="mona_previous">Précédent</string>
+    <string name="mona_next">Suivant</string>
+    <string name="mona_source_item">Source %1$s — %2$s</string>
+    <string name="mona_reference_only">Référence seule ; aucun plan ni stock importé</string>
+</resources>

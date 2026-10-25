@@ -6,11 +6,12 @@ import org.json.JSONTokener
 
 /** Schema recognition, not filename/MIME guessing or permission to write. No new clinical rules. */
 object ImportFormatDetector {
-    enum class Source { HRT_TRACKER, TRANS_MEMO, FEATHERLINE, HRT_LOG }
+    enum class Source { HRT_TRACKER, TRANS_MEMO, MONA, FEATHERLINE, HRT_LOG }
     enum class Container { JSON, SQLITE, FEATHERLINE, HRT_LOG, UNKNOWN }
     sealed interface Parsed {
         class Tracker(val export:HrtTracker.Export):Parsed
         class Memo(val export:TmExport):Parsed
+        class MonaFile(val export:Mona.Export):Parsed
     }
     class Unknown:Exception()
     class Damaged:Exception()
@@ -54,9 +55,24 @@ object ImportFormatDetector {
             return try {Parsed.Tracker(HrtTracker.readRoot(root))}catch(_:HrtTracker.InvalidExport){throw Damaged()}catch(_:org.json.JSONException){throw Damaged()}
         }
     }
-    // Real independent rules only. PR-B adds Mona's verified fingerprint and parser here;
-    // no speculative Mona/TransMTF/Chrysalide readers or copied upstream source are included.
-    private val jsonRules=listOf<JsonRule>(TrackerRule)
+    private object MonaRule:JsonRule {
+        override val source=Source.MONA
+        override fun recognizes(root:Any):Boolean {
+            val obj=root as? JSONObject ?: return false
+            val meta=obj.optJSONObject("metadata") ?: return false
+            val data=obj.optJSONObject("data") ?: return false
+            return listOf("app_version","database_version","export_date").all(meta::has) &&
+                listOf("medication_intakes","medication_schedules","supply_items","blood_tests").all(data::has)
+        }
+        override fun read(root:Any):Parsed {
+            val obj=root as JSONObject
+            if(obj.getJSONObject("metadata").opt("database_version").toString()!="23")throw Unsupported(source)
+            return try{Parsed.MonaFile(Mona.readRoot(obj))}catch(e:Mona.InvalidExport){
+                if(e.code=="TOO_MANY_ROWS")throw TooLarge() else throw Damaged()
+            }catch(_:org.json.JSONException){throw Damaged()}
+        }
+    }
+    private val jsonRules=listOf<JsonRule>(TrackerRule,MonaRule)
     fun json(text:String,onRecognized:(Source)->Unit={}):Parsed {
         bounds(text)
         val root=try {

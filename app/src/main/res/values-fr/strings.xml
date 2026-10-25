@@ -1352,4 +1352,5 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="library_restore_pending">Une restauration est en cours. Terminez-la ou annulez-la avant toute modification.</string>
 <string name="library_request_locked">Déverrouillez puis rouvrez l’application avant toute modification.</string>
 <string name="library_change_committed">Le remplacement est enregistré. Rouvrez la bibliothèque pour le consulter, sans le soumettre à nouveau.</string>
+
 </resources>

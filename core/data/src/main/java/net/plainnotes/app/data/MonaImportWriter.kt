@@ -17,7 +17,7 @@ data class MonaImportPreview(val plan:MonaMigration.Plan,val items:List<MonaItem
     val conflicts get()=items.count{it.status !in setOf(MonaItemStatus.NEW,MonaItemStatus.EXISTING,MonaItemStatus.DELETED)}
 }
 data class MonaImportSummary(val addedDoses:Int,val addedLabs:Int,val addedDraws:Int,val medications:Int,val existing:Int,val conflicts:Int,val unsupported:Int,
-    val schedules:Int,val supplies:Int,val reviews:List<MonaItemReview>)
+    val schedules:Int,val supplies:Int,val reviews:List<MonaItemReview>,val sourceNotices:Int=0)
 /** Only the data module can publish a real commit; callbacks/refresh cannot manufacture it. */
 class MonaCommitReceipt {
     private val claimed=java.util.concurrent.atomic.AtomicBoolean()
@@ -135,7 +135,7 @@ internal object MonaImportWriter {
             }
         }
         checkActive()
-        return MonaImportSummary(doses.size,labs.size,draws,medications,preview.existing,preview.conflicts,plan.issues.size,plan.unsupportedSchedules,plan.unsupportedSupplies,preview.items)
+        return MonaImportSummary(doses.size,labs.size,draws,medications,preview.existing,preview.conflicts,plan.issues.size,plan.unsupportedSchedules,plan.unsupportedSupplies,preview.items,plan.sourceWarnings.size)
     }
     fun compatible(group:MonaMigration.Identity,med:MedicationEntity,profile:ProfileEntity?):Boolean =
         med.molecule==group.molecule && med.unit=="MG" && (med.route==group.route || group.molecule!="E2" && med.route==null) &&

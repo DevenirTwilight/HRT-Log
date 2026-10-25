@@ -148,6 +148,11 @@ import java.time.LocalDate
             text = { Text(stringResource(R.string.import_done_body, j.summary.medications, j.summary.reusedMedications, j.summary.intakes, j.summary.duplicates, j.summary.containers,
                 j.summary.scores, j.summary.notes, j.summary.appointments)) },
             confirmButton = { TextButton(onClick = model::clearDataJob) { Text(stringResource(R.string.ok)) } })
+        is NotesViewModel.DataJob.MonaReady -> MonaImportWizard(j.preview,model::cancelAutomaticImport){targets,names->model.runMonaImport(j.export,targets,names)}
+        is NotesViewModel.DataJob.MonaWorking -> AlertDialog(onDismissRequest={},title={Text(stringResource(R.string.import_other_apps))},
+            text={Column(verticalArrangement=Arrangement.spacedBy(12.dp)){CircularProgressIndicator();Text(stringResource(R.string.mona_saving))}},confirmButton={},
+            dismissButton={TextButton(onClick=model::cancelMonaImport){Text(stringResource(R.string.cancel))}})
+        is NotesViewModel.DataJob.MonaImported -> MonaImportReport(j.summary,model::clearDataJob)
         is NotesViewModel.DataJob.HtReady -> HtImportWizard(j.export, j.preview, state.medications, state.profiles, model::cancelAutomaticImport) { d, t, n, w -> model.runHtImport(j.export, d, t, n, w) }
         is NotesViewModel.DataJob.HtImported -> AlertDialog(onDismissRequest = model::clearDataJob, icon = { Icon(Icons.Outlined.CheckCircle, null) }, title = { Text(stringResource(R.string.import_done)) },
             text = { Text(stringResource(R.string.ht_done, j.summary.intakes, j.summary.medications, j.summary.alreadyImported, j.summary.labs)) },
@@ -267,6 +272,7 @@ import java.time.LocalDate
 }
 
 @Composable internal fun importSourceLabel(source:net.plainnotes.app.importer.ImportFormatDetector.Source):String=when(source) {
+    net.plainnotes.app.importer.ImportFormatDetector.Source.MONA->"Mona"
     net.plainnotes.app.importer.ImportFormatDetector.Source.HRT_TRACKER->"HRT Tracker"
     net.plainnotes.app.importer.ImportFormatDetector.Source.TRANS_MEMO->"Trans Memo"
     net.plainnotes.app.importer.ImportFormatDetector.Source.FEATHERLINE->"Featherline"

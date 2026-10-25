@@ -1,0 +1,35 @@
+<resources>
+
+    <string name="mona_preview">Mona 匯入預覽</string>
+    <string name="mona_version">資料庫 %1$d · 應用程式 %2$s</string>
+    <string name="mona_scan">掃描發現：%1$d 筆用藥紀錄 · %2$d 項化驗結果</string>
+    <string name="mona_counts">準備或新增用藥：%1$d · 化驗：%2$d\n已存在或已刪除：%3$d\n保留原資料的衝突：%4$d\n未轉換：%5$d</string>
+    <string name="mona_unsupported">不匯入：%1$d 項計畫 · %2$d 項庫存。來源提示：%3$d 項。</string>
+    <string name="mona_review_note">僅匯入已實際服用且可轉換的紀錄和化驗結果。新藥物保持停用、待檢查；不建立計畫、提醒、庫存或藥代 Profile。檢測方法和參考範圍未知時保持未知。同源內容變化或本機修改均不覆寫。</string>
+    <string name="mona_dose_item">用藥 #%1$s：%2$s</string>
+    <string name="mona_lab_item">化驗 #%1$s：%2$s</string>
+    <string name="mona_page">%1$d / %2$d</string>
+    <string name="mona_confirm">匯入可支援的紀錄</string>
+    <string name="mona_result">Mona 匯入結果</string>
+    <string name="mona_committed">已實際提交：%1$d 筆用藥 · %2$d 項化驗（%3$d 張化驗單）· %4$d 個新藥物。</string>
+    <string name="mona_saving">正在以單次交易儲存。提交前取消會完整回復；實際提交後即使頁面關閉，仍保留提交事實。</string>
+    <string name="mona_new">準備匯入</string>
+    <string name="mona_existing">已匯入，略過</string>
+    <string name="mona_deleted">曾刪除，不自動回復</string>
+    <string name="mona_source_changed">來源內容變化，需人工核對</string>
+    <string name="mona_local_changed">本機紀錄已修改，保留不變</string>
+    <string name="mona_missing_target">無法核實原關聯，不匯入</string>
+    <string name="mona_draw_changed">原化驗單已修改，不自動重新歸組</string>
+    <string name="mona_not_taken">沒有實際服藥時間，不匯入</string>
+    <string name="mona_invalid_time">無法準確保留時間、時區或精度</string>
+    <string name="mona_invalid_value">數值或精度無法可靠表達</string>
+    <string name="mona_unknown_identity">成分或酯型無法可靠對應</string>
+    <string name="mona_unknown_route">給藥途徑未知或暫不支援</string>
+    <string name="mona_unknown_unit">單位或物理量無法安全轉換</string>
+    <string name="mona_unknown_field">包含不支援的來源欄位，需檢查</string>
+    <string name="mona_empty_lab">沒有可支援的化驗結果</string>
+    <string name="mona_previous">上一頁</string>
+    <string name="mona_next">下一頁</string>
+    <string name="mona_source_item">來源 %1$s：%2$s</string>
+    <string name="mona_reference_only">僅作來源參考，不匯入計畫或庫存</string>
+</resources>

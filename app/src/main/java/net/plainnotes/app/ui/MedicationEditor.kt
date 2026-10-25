@@ -43,7 +43,8 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     var name by remember { mutableStateOf(m?.name ?: "") }
     var molecule by remember { mutableStateOf(m?.molecule ?: "E2") }
     var route by remember { mutableStateOf(m?.route ?: if (review != null) "" else "ORAL") }
-    var ester by remember { mutableStateOf(p?.ester ?: "E2") }
+    val monaReview=review?.optString("source")=="mona"
+    var ester by remember { mutableStateOf(p?.ester ?: if(monaReview)review?.optJSONObject("raw")?.optString("mona_ester")?.takeIf{it in estersFor(route)}.orEmpty() else "E2") }
     var unit by remember { mutableStateOf(m?.unit ?: "MG") }
     var dose by remember { mutableStateOf(m?.dose_per_intake?.let(::inputNumber) ?: "") }
     // HRT tracker has no package size; the stored placeholder is not shown as if it were known.
@@ -79,7 +80,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     val isE2 = molecule == "E2"
     // Application area is not a model input any more; a value saved by an older version is kept as is.
     val resolvedArea = p?.gel_area_cm2
-    val valid = (!isE2 || route in E2_ROUTES) && name.isNotBlank() && doseV != null && capV != null && expV != -1 && soonV != null && lateV != null && intervalV != null &&
+    val valid = (!isE2 || route in E2_ROUTES) && (!monaReview || !isE2 || ester in estersFor(route)) && name.isNotBlank() && doseV != null && capV != null && expV != -1 && soonV != null && lateV != null && intervalV != null &&
         (kind == RuleKind.EVERY_N_HOURS || times.isNotEmpty()) && (kind != RuleKind.WEEKLY || weekdays.isNotEmpty())
 
     fun save() {
@@ -115,7 +116,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                     DropdownField(stringResource(R.string.molecule), MOLECULES, molecule, { choiceLabel(it) }, { molecule = it }, detail = { if (it == "E2") null else brandNames(it) })
                     if (isE2) {
                         DropdownField(stringResource(R.string.route), E2_ROUTES, route.takeIf { it in E2_ROUTES }, { choiceLabel(it) }, isError = tried && route !in E2_ROUTES, onSelect = {
-                            route = it; if (ester !in estersFor(it)) ester = estersFor(it).first(); if (it == "PATCH") unit = "PATCH" else if (unit == "PATCH") unit = "MG"
+                            route = it; if (ester !in estersFor(it)) ester = if(monaReview) "" else estersFor(it).first(); if (it == "PATCH") unit = "PATCH" else if (unit == "PATCH") unit = "MG"
                         })
                         DropdownField(stringResource(R.string.ester), estersFor(route), ester, { choiceLabel(it) }, { ester = it }, detail = ::brandNames)
                     }

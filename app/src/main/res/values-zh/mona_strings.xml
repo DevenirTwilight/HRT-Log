@@ -1,0 +1,35 @@
+<resources>
+
+    <string name="mona_preview">Mona 导入预览</string>
+    <string name="mona_version">数据库 %1$d · 应用 %2$s</string>
+    <string name="mona_scan">扫描发现：%1$d 条用药记录 · %2$d 项化验结果</string>
+    <string name="mona_counts">准备或新增用药：%1$d · 化验：%2$d\n已存在或已删除：%3$d\n保留原数据的冲突：%4$d\n未转换：%5$d</string>
+    <string name="mona_unsupported">不导入：%1$d 项计划 · %2$d 项库存。来源提示：%3$d 项。</string>
+    <string name="mona_review_note">仅导入已实际服用且可转换的记录和化验结果。新药物保持停用、待检查；不创建计划、提醒、库存或药代 Profile。检测方法和参考范围未知时保持未知。同源内容变化或本地修改均不覆盖。</string>
+    <string name="mona_dose_item">用药 #%1$s：%2$s</string>
+    <string name="mona_lab_item">化验 #%1$s：%2$s</string>
+    <string name="mona_page">%1$d / %2$d</string>
+    <string name="mona_confirm">导入可支持的记录</string>
+    <string name="mona_result">Mona 导入结果</string>
+    <string name="mona_committed">已真实提交：%1$d 条用药 · %2$d 项化验（%3$d 张化验单）· %4$d 个新药物。</string>
+    <string name="mona_saving">正在以单次事务保存。提交前取消会完整回滚；真实提交后即使页面关闭，仍保留提交事实。</string>
+    <string name="mona_new">准备导入</string>
+    <string name="mona_existing">已导入，跳过</string>
+    <string name="mona_deleted">曾删除，不自动恢复</string>
+    <string name="mona_source_changed">来源内容变化，需人工核对</string>
+    <string name="mona_local_changed">本地记录已修改，保留不变</string>
+    <string name="mona_missing_target">无法核实原关联，不导入</string>
+    <string name="mona_draw_changed">原化验单已修改，不自动重新归组</string>
+    <string name="mona_not_taken">没有实际服药时间，不导入</string>
+    <string name="mona_invalid_time">无法准确保留时间、时区或精度</string>
+    <string name="mona_invalid_value">数值或精度无法可靠表达</string>
+    <string name="mona_unknown_identity">成分或酯型无法可靠映射</string>
+    <string name="mona_unknown_route">给药途径未知或暂不支持</string>
+    <string name="mona_unknown_unit">单位或物理量无法安全转换</string>
+    <string name="mona_unknown_field">包含不支持的来源字段，需检查</string>
+    <string name="mona_empty_lab">没有可支持的化验结果</string>
+    <string name="mona_previous">上一页</string>
+    <string name="mona_next">下一页</string>
+    <string name="mona_source_item">来源 %1$s：%2$s</string>
+    <string name="mona_reference_only">仅作来源参考，不导入计划或库存</string>
+</resources>

@@ -1,0 +1,35 @@
+<resources>
+
+    <string name="mona_preview">Mona import preview</string>
+    <string name="mona_version">Database %1$d · App %2$s</string>
+    <string name="mona_scan">Scanned: %1$d intake rows · %2$d lab results</string>
+    <string name="mona_counts">Ready/new doses: %1$d · Labs: %2$d\nAlready present or deleted: %3$d\nConflicts kept unchanged: %4$d\nNot converted: %5$d</string>
+    <string name="mona_unsupported">Not imported: %1$d schedules · %2$d supply rows. Source notices: %3$d.</string>
+    <string name="mona_review_note">Only actual, supported intakes and lab results are imported. New medicines stay inactive and need review; no schedules, reminders, stock or PK profiles are created. Unknown methods and reference ranges stay unknown. Changed source IDs or locally edited records are never overwritten.</string>
+    <string name="mona_dose_item">Intake #%1$s — %2$s</string>
+    <string name="mona_lab_item">Lab #%1$s — %2$s</string>
+    <string name="mona_page">%1$d / %2$d</string>
+    <string name="mona_confirm">Import supported records</string>
+    <string name="mona_result">Mona import result</string>
+    <string name="mona_committed">Committed: %1$d intakes · %2$d lab results in %3$d panels · %4$d new medicines.</string>
+    <string name="mona_saving">Saving in one transaction. Cancellation before commit rolls back; a real commit is reported even if the screen closes afterward.</string>
+    <string name="mona_new">Ready to import</string>
+    <string name="mona_existing">Already imported; skipped</string>
+    <string name="mona_deleted">Previously removed; not restored</string>
+    <string name="mona_source_changed">Source content changed; manual review required</string>
+    <string name="mona_local_changed">Local record edited; kept unchanged</string>
+    <string name="mona_missing_target">Source target cannot be verified; not imported</string>
+    <string name="mona_draw_changed">Original lab panel changed; not regrouped</string>
+    <string name="mona_not_taken">No actual intake time; not imported</string>
+    <string name="mona_invalid_time">Time, zone or precision cannot be preserved</string>
+    <string name="mona_invalid_value">Value or precision cannot be represented</string>
+    <string name="mona_unknown_identity">Compound or ester is not reliably mapped</string>
+    <string name="mona_unknown_route">Route is unsupported or unknown</string>
+    <string name="mona_unknown_unit">Unit or quantity cannot be safely converted</string>
+    <string name="mona_unknown_field">Unsupported source fields need review</string>
+    <string name="mona_empty_lab">No supported lab result</string>
+    <string name="mona_previous">Previous</string>
+    <string name="mona_next">Next</string>
+    <string name="mona_source_item">Source %1$s — %2$s</string>
+    <string name="mona_reference_only">Reference only; no schedule or stock is imported</string>
+</resources>

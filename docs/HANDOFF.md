@@ -1,3 +1,7 @@
+## Superseded local continuation saved — 2026-10-25
+
+Owner redirected work to existing PR125. Refreshed GitHub: PR124 already merged source f86ec077 at8f8761d0; local tree had not fetched that later implementation. This archive preserves incomplete local UI edits only, NOT a candidate to merge or copy over accepted main. Local backend checkpoint ffd2abad has tests documented below; later UI compile succeeded once but newer edits not fully validated. Do not resume/reopen Mona PR124 or force-push its branch. Continue existing feature/featherline-import-20261025 PR125 from exact remote HEAD ee0973c6 after reading its approved148.E contract. No pending old local native jobs.
+
 ## Mona backend implementation checkpoint — 2026-10-25
 
 PR-A #123 merged d477f092; exact default Android40210593055/Science40210593016 SUCCESS. Mona independent branch now implements approved Room18/source receipts/IMPORT_MONA/business14, atomic scoped clinical writer and per-analyte evidence, trash retention/restore/purge tombstones, old-version rejection. Local Mona writer11 + schema2 + shared migration17 =30 PASS; raw XML in mona/backend. Full migration test includes actual exported Room1..17 and additive17→18 interruption/rollback/downgrade rejection. Old business12/13 exports omit unused source table; original frozen byte oracle still PASS. PNBAK1 crypto/PNMED envelopes unchanged; MED OFF. No P4 algorithm/PK changes.
