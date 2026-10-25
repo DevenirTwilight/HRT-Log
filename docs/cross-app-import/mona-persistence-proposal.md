@@ -1,6 +1,6 @@
-# Mona persistence compatibility proposal (not implemented / awaiting decision)
+# Mona persistence compatibility proposal (approved / not implemented)
 
-2026-10-25. Applies only after PR123 acceptance and protected merge. Current default1ddcf431 is Room17/business backup13 (user-only export12). No active PR currently claims Room18; recheck before implementation. This proposal does not activate attachments or modify native backup cryptography.
+Owner explicitly approved this minimal compatibility expansion on2026-10-25; REQUIREMENTS148.C. Approval is for implementation, not acceptance or release. Applies only after PR123 acceptance and protected merge. Current default1ddcf431 is Room17/business backup13 (user-only export12). No active PR currently claims Room18; recheck before implementation. This proposal does not activate attachments or modify native backup cryptography.
 
 ## Why existing storage is insufficient
 
@@ -27,4 +27,4 @@ Production: importer/Mona.kt + ImportFormatDetector; core/data new receipt entit
 
 Tests: own official-schema23 fixtures; stable IDs/changed source/local edit/deleted rows; exact UTC/IANA/precision/compound/ester boundaries; null actual time; labs E2/T original units/grouping; unsupported schedule/supply counts; cancel/failure rollback/generation denial/commit receipt; full historical migration chain +17→18/rollback; old backup restore/new-version refusal/full receipt round trip; actual SAF Mona→preview→commit→reopen/reimport on API26/29/35; old import/PeriodStability regressions and four-language320dp/2× accessibility. No real health data. No APK/release.
 
-Until this compatibility expansion is approved: source-format audit and independent parser/UI tests may proceed after A; no production migration, receipt writes or falsely labelled Mona support. No Featherline/other formats.
+The expansion is now approved, but PR123 acceptance/merge still precedes production PR-B. No falsely labelled Mona support or unaccepted production writes. No Featherline/other formats.

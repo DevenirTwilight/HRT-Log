@@ -1,3 +1,7 @@
+## Mona compatibility owner approval — 2026-10-25
+
+Owner replied “批准该最小兼容扩展”: concrete Mona receipt/true origin, Room17→18 and business Schema14 when Mona present are authorized; native PNBAK1/PNMED crypto/envelopes unchanged. Recorded in REQUIREMENTS148.C. No production PR-B started before PR123 acceptance/merge. Current A276ee752 native/Android CI still running. Source proposal status is APPROVED_FOR_IMPLEMENTATION_AFTER_PR_A, not implemented/tested/merged.
+
 ## Mona persistence proposal ready for review — 2026-10-25
 
 Concrete proposed fields/files/migration/backup compatibility and test scope: docs/cross-app-import/mona-persistence-proposal.md. Not implemented. It distinguishes unchanged PNBAK1/PNMED cryptography/envelopes from the proposed business Schema14/version gate needed to preserve immutable source receipts; do not infer approval from default-OFF MED development. Current PR123276ee752 CI remains prerequisite, no production PR-B started.

@@ -1438,3 +1438,7 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 负责人要求继续既有#122及方案A，先核实时HEAD与原始失败，再最小修复当前Room17重启断言、真实导入COMMIT/旧作用域撤权回归，不能把历史Room16输入和回滚断言改成17。以当前最终源码验收A→B新增→全集合→销毁来源密钥→重建独立AVD C→全字段/历史/typed关系/认证密文→重开/再导出，三API、16→17迁移/回滚/旧reader拒绝、既有v1/v2与四切换死亡点、512MiB/192MiB都保留。区分PASS/FAIL/SKIPPED/NOT_RUN；旧成功不能冒充新SHA验收，LMK/未知环境失败保留原件，只做有假设的有限诊断，不反复重跑旧源筛绿。
 
 核心闭环实际验收后，复用外审包补齐新协议、联合资源、持久化原子性、输入/解析、AppLock/伪装/通知、撤权、跨设备恢复及剩余风险，固定源码/构建方法和原始证据；AI内部检查不等于独立外审。最终必需CI/原生及审查满足§106后普通受保护合并并核主线；不绕保护。仍feature0/publicfalse/NOT_REVIEWED_EXTERNALLY，正式真实附件导入查看恢复UI/永久删除/真实医疗资料测试OFF；不改已批准格式兼容语义、PNBAK1/PK/BDPM/P5P6/网络/签名/versionCode/Release，不交付APK。
+
+### 148.C Mona最小来源持久化兼容扩展批准（2026-10-25）
+
+负责人明确批准 docs/cross-app-import/mona-persistence-proposal.md 中的最小兼容扩展：在PR123通过并保护合并后，独立Mona PR-B可实施Room17→18非破坏性迁移、真实IMPORT_MONA来源和来源凭据表、含Mona数据时的普通业务序列化Schema14；PNBAK1/PNMEDBK1/PNMEDBK2密码学参数和外层协议不变。保留无Mona时12/13输出、旧1–13导入、新版前置拒绝、历史/回收站/更正及来源墓碑语义，所有多类型临床事实及来源凭据原子提交。不得冒用其他来源、混用PK/needs_review/可编辑备注作权威身份；不改MED开关、库存、PK、网络、签名或发布。实际迁移版本实施前重新核查其他工作流，不能占用冲突编号。批准不等于实现、测试或合并，PR-A仍是生产修改前置门。
