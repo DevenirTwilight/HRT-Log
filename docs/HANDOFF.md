@@ -1,3 +1,11 @@
+## PR-A merged; Mona PR-B started — 2026-10-25
+
+PR123 accepted source276ee75221990dac442c76da2aa7512c5999e863, both PR40207907781/push40207904696 all six required jobs PASS. Real SAF XML26/29/35 each1test/0failure/error/skip verified and saved in native-276; historical failures remain FAIL. Normal protected squash merge d477f092bb6244203066340d675a2356230ed585 at16:12:42Z; default claude/new-session-1959qb tree exactly equals tested source. Default Android40210593055/Science40210593016 IN_PROGRESS, keep checking separately.
+
+Independent feature/mona-json-import-20261025 in HRT-Log-mona now starts from that accepted default tree. Owner approved source receipts/true IMPORT_MONA/Room17→18/business Schema14 for Mona only; REQUIREMENTS148.C and mona-persistence-proposal.md. No other active migration PR; recheck before integration. Mona source audit23 only, no inherited AGPL implementation or unfinished prototype code copied. Next: RED detection/source identity tests, then real parser/writer/scoped transaction/preview/report/backup compatibility and native acceptance. Mona production support NOT_IMPLEMENTED at this checkpoint. Feature attachments staysOFF, no Featherline/PK/stock/crypto/permission/release changes. Old dirty worktrees preserved.
+
+### Historical PR-A checkpoints (resolved by accepted source above)
+
 ## PR123 current checkpoint — 2026-10-25
 
 Current test-only correction removes the Back race after choosing a DocumentsUI root: system root selection already closes its drawer, so a later Back could cancel the picker. Source77394f6f PR40207089641 API26 genuinely FAIL before file touch (window returned to app); original verified artifact/logcat in native-773. Lifecycle wait remains valid but did not fix this earlier cancellation. New root selection is scoped to drawer_roots, waits for automatic close, keeps real dir_list touch and every original assertion. No production changes. Compile/new exact-SHA CI pending; PR123 remains Draft. Mona production still not started. Existing575/2bf failures remain historical FAIL, never reclassified. Main1ddcf431 Android/Science PASS. Next: targeted-first three-API CI, protected merge only if qualified, then independent Mona PR-B.

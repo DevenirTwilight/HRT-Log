@@ -1,0 +1,49 @@
+{
+  "source_sha": "276ee75221990dac442c76da2aa7512c5999e863",
+  "run": 40207907781,
+  "status": "PR_A_ACCEPTED_MERGED",
+  "artifact_sha256_and_all_zip_crc_verified": true,
+  "artifacts": [
+    {
+      "api": 26,
+      "id": 12605049192,
+      "sha256": "87b218374d80d76cdd4281a767745a78baadb9c357eb4a39b14f447dbbc59853",
+      "target_tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "api": 29,
+      "id": 12604899374,
+      "sha256": "2e42dbe2d09a2557cda07a569eef6c5a1538a699245536066fcc47896b4ec1c3",
+      "target_tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "api": 35,
+      "id": 12604503208,
+      "sha256": "a3f103a2cca27499c367808ce40b86443ff3427cdd92c78d1cd953d9ce1f7af4",
+      "target_tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "physical_device": "NOT_RUN",
+  "physical_talkback": "NOT_RUN",
+  "historical_failures": "Remain FAIL at native-2bf/native-575/native-773; superseded unfinished773 jobs cancelled, not PASS",
+  "pr_run": 40207907781,
+  "push_run": 40207904696,
+  "both_required_suites": "PASS",
+  "merge_sha": "d477f092bb6244203066340d675a2356230ed585",
+  "merged_at": "2026-10-25T16:12:42Z",
+  "main_runs": {
+    "android": 40210593055,
+    "science": 40210593016,
+    "status": "IN_PROGRESS"
+  },
+  "merge_tree_equals_tested_source": true
+}
