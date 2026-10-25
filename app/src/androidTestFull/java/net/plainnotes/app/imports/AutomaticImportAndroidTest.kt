@@ -116,7 +116,7 @@ class AutomaticImportAndroidTest {
         waitSystem("root selection completed without cancelling picker") {pickerRoot()!=null && !rootsOpen()}
     }
     private fun choose(kind:String,expectFailure:Boolean=false) {
-        val name=when(kind){"tracker"->"SYNTHETIC tracker.db";"mona"->"SYNTHETIC mona.db";"invalid"->"SYNTHETIC invalid.json";else->"SYNTHETIC memo.json"}
+        val name=when(kind){"tracker"->"SYNTHETIC tracker.db";"mona"->"SYNTHETIC mona.db";"featherline"->"SYNTHETIC featherline.json";"invalid"->"SYNTHETIC invalid.json";else->"SYNTHETIC memo.json"}
         click(R.string.import_other_apps)
         waitSystem("DocumentsUI"){pickerRoot()!=null}
         settlePicker()
@@ -155,7 +155,7 @@ class AutomaticImportAndroidTest {
         waitSystem("resumed application after document result") {
             scenario?.state==Lifecycle.State.RESUMED && pickerRoot()==null
         }
-        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.MonaReady || model.dataJob.value is NotesViewModel.DataJob.HtReady || model.dataJob.value is NotesViewModel.DataJob.ImportReady || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.FeatherlinePassword || model.dataJob.value is NotesViewModel.DataJob.MonaReady || model.dataJob.value is NotesViewModel.DataJob.HtReady || model.dataJob.value is NotesViewModel.DataJob.ImportReady || model.dataJob.value is NotesViewModel.DataJob.Failed}
         assertEquals("Detection result",expectFailure,model.dataJob.value is NotesViewModel.DataJob.Failed)
     }
     @Test fun realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory() {
@@ -230,5 +230,59 @@ class AutomaticImportAndroidTest {
         instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK)
         ui.waitUntil(10000){model.dataJob.value is NotesViewModel.DataJob.ImportCancelled}
         ui.onNodeWithText(text(R.string.import_cancelled)).assertExists()
+        exerciseFeatherline()
+    }
+    private fun exerciseFeatherline() {
+        val expected=InstrumentationRegistry.getArguments().getString("featherlineExpectedHeapMb")
+        if(expected!=null)assertEquals(expected.toLong()*1024*1024,Runtime.getRuntime().maxMemory())
+        val memory=net.plainnotes.app.attachmentpoc.SampledMemory()
+        try {
+        scenario?.close();launch();data();choose("featherline")
+        ui.onNodeWithText(text(R.string.featherline_password_title)).assertExists()
+        val before=model.extra.value.records.filter{it.origin=="IMPORT_FEATHERLINE"}.size
+        // Cancel the protected encrypted snapshot before any authentication or write.
+        click(R.string.cancel,false);assertEquals(before,model.extra.value.records.count{it.origin=="IMPORT_FEATHERLINE"})
+        choose("featherline")
+        ui.onNode(hasSetTextAction()).performTextInput("wrong-password")
+        click(R.string.featherline_unlock,false)
+        ui.waitUntil(30000){(model.dataJob.value as? NotesViewModel.DataJob.FeatherlinePassword)?.error!=null}
+        ui.onNodeWithText(text(R.string.featherline_auth_failed)).assertExists()
+        assertEquals(before,model.extra.value.records.count{it.origin=="IMPORT_FEATHERLINE"})
+        // Retry inside the same selected snapshot, without launching DocumentsUI again.
+        ui.onNode(hasSetTextAction()).performTextReplacement("synthetic-only-password")
+        click(R.string.featherline_unlock,false)
+        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.FeatherlineReady || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        val ready=model.dataJob.value as NotesViewModel.DataJob.FeatherlineReady
+        val doses=ready.preview.newDoses;val labs=ready.preview.newLabs
+        assertEquals(1,doses);assertEquals(2,labs)
+        ui.onNodeWithText(text(R.string.featherline_preview)).assertExists()
+        assertEquals(before,model.extra.value.records.count{it.origin=="IMPORT_FEATHERLINE"})
+        click(R.string.featherline_confirm,false)
+        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.FeatherlineImported || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        val result=model.dataJob.value as NotesViewModel.DataJob.FeatherlineImported
+        assertEquals(1,result.summary.doses);assertEquals(2,result.summary.labs)
+        click(R.string.ok,false)
+        val records=model.extra.value.records.filter{it.origin=="IMPORT_FEATHERLINE"}.sortedBy{it.id}
+        assertEquals(before+1,records.size);assertEquals(1.0,records.last().actual_dose!!,0.0)
+        assertEquals("Europe/Paris",records.last().taken_zone)
+        scenario!!.close();launch();open(Destination.HISTORY)
+        ui.waitUntil(30000){model.extra.value.records.any{it.origin=="IMPORT_FEATHERLINE"}}
+        assertEquals(records,model.extra.value.records.filter{it.origin=="IMPORT_FEATHERLINE"}.sortedBy{it.id})
+        data();choose("featherline")
+        ui.onNode(hasSetTextAction()).performTextInput("synthetic-only-password");click(R.string.featherline_unlock,false)
+        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.FeatherlineReady || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        val repeated=model.dataJob.value as NotesViewModel.DataJob.FeatherlineReady
+        assertEquals(0,repeated.preview.newDoses+repeated.preview.newLabs);assertEquals(3,repeated.preview.existing)
+        click(R.string.cancel,false)
+        assertEquals(records,model.extra.value.records.filter{it.origin=="IMPORT_FEATHERLINE"}.sortedBy{it.id})
+
+        } finally {
+            memory.close()
+            val measurements=org.json.JSONObject().put("api",android.os.Build.VERSION.SDK_INT).put("sampledNotPeak",true).put("sampleIntervalMs",20)
+                .put("maxHeapBytes",Runtime.getRuntime().maxMemory()).put("javaObservedBytes",memory.javaBytes.get()).put("nativeObservedBytes",memory.nativeBytes.get()).put("pssObservedKib",memory.pssKib.get()).put("samples",memory.samples.get())
+            java.io.File(context.filesDir,"synthetic-featherline-memory.json").writeText(measurements.toString())
+            android.util.Log.i("SyntheticImport","Featherline full password/COMMIT/reopen sequence: $measurements")
+        }
+
     }
 }

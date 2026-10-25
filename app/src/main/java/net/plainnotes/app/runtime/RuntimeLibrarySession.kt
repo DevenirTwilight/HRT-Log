@@ -58,6 +58,12 @@ class RuntimeLibrarySession(private val source:NotesRepository,private val saved
         val owned=synchronized(protectedResources) {protectedResources.toList().also {protectedResources.clear()}}
         owned.forEach {runCatching {it.close()}} // Permission is already revoked even if cleanup reports a fault.
     }
+    /** Close retained encrypted snapshots on lock/dataset revocation, without a persistent grant. */
+    internal fun protect(resource:AutoCloseable):AutoCloseable {
+        try{synchronized(protectedResources){checkRequest();protectedResources+=resource}}
+        catch(t:Throwable){resource.close();throw t}
+        return AutoCloseable{synchronized(protectedResources){protectedResources-=resource};resource.close()}
+    }
     internal suspend fun attachments(target:net.plainnotes.app.data.MedicalAttachmentOperations.Target,
         title:String,operation:java.util.UUID=java.util.UUID.randomUUID(),document:java.util.UUID=java.util.UUID.randomUUID()):net.plainnotes.app.attachments.AttachmentFlowController {
         val repo=repository();val scope=requireNotNull(frozen)

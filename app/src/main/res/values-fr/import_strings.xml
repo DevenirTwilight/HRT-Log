@@ -9,7 +9,7 @@
     <string name="import_format_unknown">Le format de ce fichier est inconnu.</string>
     <string name="import_file_damaged">Le fichier est endommagé ou incomplet.</string>
     <string name="import_file_too_large">Le fichier dépasse la limite (32 MiB ou 100 000 lignes).</string>
-    <string name="import_featherline_unsupported">Sauvegarde chiffrée Featherline reconnue, mais pas encore prise en charge.</string>
+    <string name="import_featherline_unsupported">Ce conteneur ou profil de chiffrement Featherline n’est pas pris en charge. Utilisez le conteneur3 et les paramètres documentés.</string>
     <string name="import_use_native_restore">Utilisez la restauration des sauvegardes HRT Log pour ce fichier.</string>
     <string name="import_version_unsupported">Cette version ne peut pas être importée.</string>
 </resources>

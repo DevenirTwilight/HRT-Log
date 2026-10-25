@@ -1,0 +1,15 @@
+<resources>
+    <string name="featherline_password_title">Featherline 備份密碼</string>
+    <string name="featherline_password_note">僅在本機解密，不儲存密碼。目前僅支援 envelope3／snapshot7。</string>
+    <string name="featherline_password">備份密碼</string>
+    <string name="featherline_unlock">解密並預覽</string>
+    <string name="featherline_auth_failed">無法認證此備份。請檢查密碼；檔案也可能已損壞。未修改任何資料。</string>
+    <string name="featherline_preview">Featherline 匯入預覽</string>
+    <string name="featherline_result">Featherline 實際提交結果</string>
+    <string name="featherline_version">Featherline · envelope3 · snapshot7</string>
+    <string name="featherline_counts">新增用藥：%1$d · 化驗結果：%2$d\n已存在或已刪除：%3$d · 衝突：%4$d\n未轉換臨床項目：%5$d</string>
+    <string name="featherline_safety">僅匯入可支援的實際質量劑量和原始 E2／T 結果。新藥物保持停用、待檢查；不建立提醒、庫存或藥代 Profile。保留本機修改與刪除事實。</string>
+    <string name="featherline_ignored">不遷移：%1$d 個計畫組、%2$d 項庫存、%3$d 筆記事、%4$d 個設定或個人資料欄位。</string>
+    <string name="featherline_item">%1$s · %2$s\n%3$s</string>
+    <string name="featherline_confirm">匯入可支援的紀錄</string>
+</resources>

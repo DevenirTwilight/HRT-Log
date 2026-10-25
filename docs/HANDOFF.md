@@ -1,3 +1,11 @@
+## PR125 actual unified encrypted flow implemented; native acceptance pending — 2026-10-25
+
+Password/preview/commit/results now connected to the EXISTING single SAF entry, no second provider read. Bounded ciphertext ownership transfers into FeatherlineContainer; runtime lock/dataset revocation closes it. KDF close no longer blocks UI behind the full authentication lock; deferred owned-buffer cleanup occurs at authenticated boundaries. Password is never persistent state; wrong authentication retains only the same encrypted snapshot for retry, cancellation clears it. Clinical transaction remains scope/epoch bound, single-use; actual COMMIT receipt survives refresh failure.
+
+Local source integration: Featherline flow6, Reader4, Mona8, PeriodStability5, four-language320dp/2x/night accessibility24 =47 PASS; native Kotlin+Java source compile PASS. Source native test retains original HT/TM/Mona assertions and appends actual system-picker Featherline cancel/password-error-retry/preview/COMMIT/reopen/idempotency, not a direct URI substitute. Independent Python clinical cipher fixture generator added, synthetic only. Existing API26/512MiB/192MiB job now also executes the true application import flow and sampled20ms memory (not an absolute peak); no memory limits raised. Room source chain1..18/current19, additive18→19 rollback and old reader refusal, existing attachment migrations now local PASS. New raw XML integration-local; source final CI/API/lowmem PENDING, not formal release support yet.
+
+Next inspect exact-head CI/native; targeted issues only, no blind reruns/PR-D. Additional prefinal audit: source-only ester identity must remain frozen without enabling PK, and source-parent metadata/unknown items must not silently merge. Keep MED OFF and no signing/APK/Release/permission/backup crypto changes. Old failures retained. PR125 Draft.
+
 ## PR125 source-specific persistence checkpoint — 2026-10-25
 
 Resumed exact remote ee0973c6 in independent worktree HRT-Log-featherline-final; PR124 already MERGED8f8761d0. Superseded local Mona UI edits preserved on archive/mona-local-pre-handoff-20261025/c21317a0, never applied over accepted main. PR125 remains Draft; original ee CI green is parser-only evidence, not final acceptance.

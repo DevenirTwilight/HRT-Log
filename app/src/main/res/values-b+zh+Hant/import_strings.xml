@@ -9,7 +9,7 @@
     <string name="import_format_unknown">無法辨識此檔案格式。</string>
     <string name="import_file_damaged">匯出檔案損毀或不完整。</string>
     <string name="import_file_too_large">匯出檔案超出匯入限制（32 MiB 或 100,000 列）。</string>
-    <string name="import_featherline_unsupported">已辨識 Featherline 加密備份，目前尚不支援匯入。</string>
+    <string name="import_featherline_unsupported">暫不支援此 Featherline 容器版本或加密參數；目前支援 envelope3 的已核實參數。</string>
     <string name="import_use_native_restore">請使用「還原 HRT Log 備份」開啟此檔案。</string>
     <string name="import_version_unsupported">暫不支援此匯出版本。</string>
 </resources>

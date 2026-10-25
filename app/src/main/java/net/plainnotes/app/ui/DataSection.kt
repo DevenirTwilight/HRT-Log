@@ -148,6 +148,12 @@ import java.time.LocalDate
             text = { Text(stringResource(R.string.import_done_body, j.summary.medications, j.summary.reusedMedications, j.summary.intakes, j.summary.duplicates, j.summary.containers,
                 j.summary.scores, j.summary.notes, j.summary.appointments)) },
             confirmButton = { TextButton(onClick = model::clearDataJob) { Text(stringResource(R.string.ok)) } })
+        is NotesViewModel.DataJob.FeatherlinePassword -> FeatherlinePasswordDialog(j.error,model::cancelAutomaticImport){pw->model.decryptFeatherline(j,pw)}
+        is NotesViewModel.DataJob.FeatherlineReady -> FeatherlineImportDialog(j.preview,null,model::cancelAutomaticImport){model.runFeatherlineImport(j)}
+        is NotesViewModel.DataJob.FeatherlineImported -> FeatherlineImportDialog(j.preview,j.summary,model::clearDataJob,model::clearDataJob)
+        is NotesViewModel.DataJob.FeatherlineWorking -> AlertDialog(onDismissRequest=model::cancelAutomaticImport,title={Text("Featherline")},
+            text={Row{CircularProgressIndicator(Modifier.size(28.dp));Spacer(Modifier.width(12.dp));Text(stringResource(R.string.working))}},confirmButton={},
+            dismissButton={TextButton(onClick=model::cancelAutomaticImport){Text(stringResource(R.string.cancel))}})
         is NotesViewModel.DataJob.MonaReady -> MonaImportDialog(j.preview,null,model::cancelAutomaticImport) {model.runMonaImport(j)}
         is NotesViewModel.DataJob.MonaImported -> MonaImportDialog(net.plainnotes.app.data.MonaImportPreview(j.plan,j.summary.reviews),j.summary,model::clearDataJob,model::clearDataJob)
         is NotesViewModel.DataJob.HtReady -> HtImportWizard(j.export, j.preview, state.medications, state.profiles, model::cancelAutomaticImport) { d, t, n, w -> model.runHtImport(j.export, d, t, n, w) }

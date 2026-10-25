@@ -1,0 +1,15 @@
+<resources>
+    <string name="featherline_password_title">Mot de passe de la sauvegarde Featherline</string>
+    <string name="featherline_password_note">Déchiffrement local. Le mot de passe n’est pas conservé. Seuls le conteneur3 et l’instantané7 sont pris en charge.</string>
+    <string name="featherline_password">Mot de passe de sauvegarde</string>
+    <string name="featherline_unlock">Déchiffrer et examiner</string>
+    <string name="featherline_auth_failed">Authentification impossible. Vérifiez le mot de passe ; le fichier peut aussi être endommagé. Aucune donnée modifiée.</string>
+    <string name="featherline_preview">Aperçu de l’import Featherline</string>
+    <string name="featherline_result">Résultat enregistré de Featherline</string>
+    <string name="featherline_version">Featherline · conteneur3 · instantané7</string>
+    <string name="featherline_counts">Nouvelles prises : %1$d · Analyses : %2$d\nDéjà présents/supprimés : %3$d · Conflits : %4$d\nÉléments cliniques non convertis : %5$d</string>
+    <string name="featherline_safety">Seules les doses massiques réelles compatibles et les résultats E2/T originaux sont importés. Les nouveaux médicaments restent inactifs, à vérifier. Aucun rappel, stock ou profil PK créé. Modifications et suppressions conservées.</string>
+    <string name="featherline_ignored">Non transférés : %1$d groupes de planification, %2$d stocks, %3$d notes, %4$d champs de paramètres/profil.</string>
+    <string name="featherline_item">%1$s · %2$s\n%3$s</string>
+    <string name="featherline_confirm">Importer les données compatibles</string>
+</resources>

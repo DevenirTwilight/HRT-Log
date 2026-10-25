@@ -12,6 +12,7 @@ object ImportFormatDetector {
         class Tracker(val export:HrtTracker.Export):Parsed
         class Memo(val export:TmExport):Parsed
         class Mona(val export:net.plainnotes.app.importer.Mona.Export):Parsed
+        class EncryptedFeatherline(val archive:Featherline.Archive):Parsed
     }
     class Unknown:Exception()
     class Damaged:Exception()

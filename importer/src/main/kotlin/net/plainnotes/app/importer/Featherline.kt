@@ -10,6 +10,7 @@ import java.util.UUID
 
 /** Independently authored snapshot7 projection. Source catalog tokens are identities, not PK inputs. */
 object Featherline {
+    interface Archive:AutoCloseable {fun authenticate(password:CharArray,checkActive:()->Unit={}):ByteArray}
     class Invalid:Exception()
     class Unsupported:Exception()
     data class Medicine(val sourceId:String,val name:String,val molecule:String,val route:String,val ester:String?)

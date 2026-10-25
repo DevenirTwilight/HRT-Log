@@ -259,10 +259,16 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         class HtReady(val export:net.plainnotes.app.importer.HrtTracker.Export,val preview:net.plainnotes.app.importer.HrtTracker.Preview):DataJob
         class HtImported(val summary:net.plainnotes.app.data.HtImportSummary):DataJob
         class MonaReady(val export:net.plainnotes.app.importer.Mona.Export,val preview:MonaImportPreview,val scope:LibraryRequestScope):DataJob
-        class MonaImported(val summary:MonaImportSummary,val plan:net.plainnotes.app.importer.MonaMigration.Plan):DataJob }
+        class MonaImported(val summary:MonaImportSummary,val plan:net.plainnotes.app.importer.MonaMigration.Plan):DataJob
+        object FeatherlineWorking:DataJob
+        class FeatherlinePassword(val archive:net.plainnotes.app.importer.Featherline.Archive,val scope:LibraryRequestScope,val error:Int?=null):DataJob
+        class FeatherlineReady(val preview:FeatherlineImportPreview,val scope:LibraryRequestScope):DataJob
+        class FeatherlineImported(val summary:FeatherlineImportSummary,val preview:FeatherlineImportPreview):DataJob }
     val dataJob=MutableStateFlow<DataJob>(DataJob.Idle)
     private var importReadJob:Job?=null
-    fun clearDataJob(){importReadJob?.cancel();importReadJob=null;dataJob.value=DataJob.Idle}
+    private var featherlineRegistration:AutoCloseable?=null
+    private fun releaseFeatherline(){featherlineRegistration?.close();featherlineRegistration=null}
+    fun clearDataJob(){importReadJob?.cancel();importReadJob=null;releaseFeatherline();dataJob.value=DataJob.Idle}
     // Only an actual Repository return may acknowledge a replacing restore. A later scheduling
     // error or deliberate epoch change cannot turn that historical COMMIT into a failed save.
     private class CommittedLibraryChange(val result:DataJob)
@@ -297,12 +303,19 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         val parsed=net.plainnotes.app.imports.AutomaticImportReader.read(app.noBackupFilesDir,
             {app.contentResolver.openInputStream(uri)},runtime::checkRequest) {source->dataJob.compareAndSet(DataJob.ImportDetecting,DataJob.ImportParsing(source))}
         withContext(Dispatchers.Default) {when(parsed) {
+            is net.plainnotes.app.importer.ImportFormatDetector.Parsed.EncryptedFeatherline->{
+                releaseFeatherline();featherlineRegistration=runtime.protect(parsed.archive)
+                DataJob.FeatherlinePassword(parsed.archive,expected)
+            }
             is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Mona->DataJob.MonaReady(parsed.export,repo.previewMona(parsed.export),expected)
             is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Tracker->DataJob.HtReady(parsed.export,net.plainnotes.app.importer.HrtTracker.preview(parsed.export))
             is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Memo->DataJob.ImportReady(parsed.export,net.plainnotes.app.importer.TransMemo.preview(parsed.export,ZoneId.systemDefault()))
         }}
     }
-    fun cancelAutomaticImport() {clearDataJob();dataJob.value=DataJob.ImportCancelled}
+    fun cancelAutomaticImport() {
+        if(dataJob.value==DataJob.FeatherlineWorking)importReadJob?.cancel()
+        else{clearDataJob();dataJob.value=DataJob.ImportCancelled}
+    }
     fun openTransMemo(uri:android.net.Uri)=importRead {
         val export=net.plainnotes.app.privacy.TransMemoImportCopies.read(app.noBackupFilesDir,
             {app.contentResolver.openInputStream(uri)}) { file ->
@@ -358,6 +371,49 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 receipt.committed?.let {dataJob.value=DataJob.MonaImported(it,ready.preview.plan)}
             }
         }
+    }
+    fun decryptFeatherline(ready:DataJob.FeatherlinePassword,password:CharArray):Job? {
+        if(!dataJob.compareAndSet(ready,DataJob.FeatherlineWorking)){password.fill('\u0000');return null}
+        return viewModelScope.launch {
+            var plain:ByteArray?=null
+            try {
+                runtime.repository();runtime.verify();runtime.checkRequest()
+                if((librarySession.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope!=ready.scope)throw LibraryScopeMismatch()
+                val parent=coroutineContext[Job]
+                val export=withContext(Dispatchers.IO) {
+                    plain=ready.archive.authenticate(password){parent?.ensureActive();runtime.checkRequest()}
+                    try {
+                        val text=Charsets.UTF_8.newDecoder().onMalformedInput(java.nio.charset.CodingErrorAction.REPORT).onUnmappableCharacter(java.nio.charset.CodingErrorAction.REPORT)
+                            .decode(java.nio.ByteBuffer.wrap(requireNotNull(plain))).toString()
+                        net.plainnotes.app.importer.Featherline.read(text)
+                    }finally{plain?.fill(0);plain=null}
+                }
+                runtime.verify();runtime.checkRequest()
+                val preview=repo.previewFeatherline(export)
+                releaseFeatherline();dataJob.value=DataJob.FeatherlineReady(preview,ready.scope)
+            }catch(_:FeatherlineContainer.Authentication){dataJob.value=DataJob.FeatherlinePassword(ready.archive,ready.scope,R.string.featherline_auth_failed)}
+            catch(_:net.plainnotes.app.importer.Featherline.Unsupported){releaseFeatherline();dataJob.value=DataJob.Failed(R.string.import_version_unsupported)}
+            catch(e:CancellationException){releaseFeatherline();dataJob.value=DataJob.ImportCancelled;throw e}
+            catch(e:LibraryScopeMismatch){releaseFeatherline();runtimeFailure(e);dataJob.value=DataJob.Failed(R.string.library_scope_changed)}
+            catch(_:LibraryRequestRevoked){releaseFeatherline();dataJob.value=DataJob.Failed(R.string.library_request_locked)}
+            catch(_:Exception){releaseFeatherline();dataJob.value=DataJob.Failed(R.string.import_file_damaged)}
+            finally{plain?.fill(0);password.fill('\u0000')}
+        }.also{importReadJob=it;it.invokeOnCompletion{password.fill('\u0000')}}
+    }
+    fun runFeatherlineImport(ready:DataJob.FeatherlineReady):Job? {
+        if(!dataJob.compareAndSet(ready,DataJob.FeatherlineWorking))return null
+        val receipt=FeatherlineCommitReceipt()
+        return viewModelScope.launch {
+            try {
+                runtime.repository();runtime.verify();runtime.checkRequest()
+                if((librarySession.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope!=ready.scope)throw LibraryScopeMismatch()
+                mutate{repo.importFeatherline(ready.preview.export,receipt)};refresh().join()
+            }catch(e:CancellationException){if(receipt.committed==null){dataJob.value=DataJob.ImportCancelled;throw e}}
+            catch(e:LibraryScopeMismatch){runtimeFailure(e);if(receipt.committed==null)dataJob.value=DataJob.Failed(R.string.library_scope_changed)}
+            catch(_:LibraryRequestRevoked){if(receipt.committed==null)dataJob.value=DataJob.Failed(R.string.library_request_locked)}
+            catch(_:Exception){if(receipt.committed==null)dataJob.value=DataJob.Failed(R.string.operation_error)}
+            finally{receipt.committed?.let{dataJob.value=DataJob.FeatherlineImported(it,ready.preview)}}
+        }.also{importReadJob=it}
     }
     fun cancelImport(){clearDataJob()}
     val backupHistory=net.plainnotes.app.privacy.BackupHistory(app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE))

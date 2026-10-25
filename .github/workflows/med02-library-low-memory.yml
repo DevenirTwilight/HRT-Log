@@ -13,6 +13,9 @@ on:
       - 'scripts/run_library_collection_restart.py'
       - 'scripts/run_library_collection_transfer.py'
       - 'scripts/run_library_low_memory_acceptance.sh'
+      - 'scripts/run_featherline_low_memory_acceptance.sh'
+      - 'core/data/src/**/Featherline*.kt'
+      - 'app/src/**/Featherline*.kt'
       - '.github/workflows/med02-library-low-memory.yml'
   workflow_dispatch:
 permissions:
@@ -51,6 +54,7 @@ jobs:
           script: |
             python3 scripts/configure_ansm_native_runtime.py
             bash scripts/run_library_low_memory_acceptance.sh
+            bash scripts/run_featherline_low_memory_acceptance.sh
       - name: Restore only encrypted collection in independent fresh API26 guest C
         uses: ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808
         with:
@@ -70,6 +74,7 @@ jobs:
         with:
           name: med02-library-api26-512m
           path: |
+            app/build/reports/featherline-low-memory/
             core/data/build/reports/androidTests/
             core/data/build/outputs/androidTest-results/
             core/data/build/reports/med02-generation-restart/
