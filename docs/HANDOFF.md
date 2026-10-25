@@ -1,3 +1,7 @@
+## PR123 current checkpoint — 2026-10-25
+
+Current test-only correction removes the Back race after choosing a DocumentsUI root: system root selection already closes its drawer, so a later Back could cancel the picker. Source77394f6f PR40207089641 API26 genuinely FAIL before file touch (window returned to app); original verified artifact/logcat in native-773. Lifecycle wait remains valid but did not fix this earlier cancellation. New root selection is scoped to drawer_roots, waits for automatic close, keeps real dir_list touch and every original assertion. No production changes. Compile/new exact-SHA CI pending; PR123 remains Draft. Mona production still not started. Existing575/2bf failures remain historical FAIL, never reclassified. Main1ddcf431 Android/Science PASS. Next: targeted-first three-API CI, protected merge only if qualified, then independent Mona PR-B.
+
 ## PR123接手：真实抽屉状态修正，Mona仍未启动 — 2026-10-25
 
 2026-10-25 PR123 checkpoint: exact57567c91 PR workflow40204515855 all jobs green, but push40204512843 API26 FAIL (Compose idle then teardown SlotWriter crash); acceptance remains BLOCKED, no merge/Mona production. Original verified ZIP/evidence in docs/cross-app-import/2026-10-25/native-575. Next test-only correction awaits host RESUMED after SAF result and preserves first failure before teardown; new exact-SHA CI required. No test assertions removed; no unchanged rerun.

@@ -100,14 +100,20 @@ class AutomaticImportAndroidTest {
     }
     private fun rootsOpen()=systemId("drawer_roots")!=null
     private fun settlePicker() {instrumentation.uiAutomation.waitForIdle(300,3000)}
-    private fun closeRoots() {
-        settlePicker()
-        if(rootsOpen()) {
-            // The main navigation button OPENS roots; it is not a toggle. Back is sent
-            // only for a fresh, on-screen drawer_roots pane, never for a retained label.
-            assertTrue(instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK))
-            waitSystem("closed roots pane, picker still active"){pickerRoot()!=null && !rootsOpen()}
+    private fun selectImportRoot() {
+        var rootAction:AccessibilityNodeInfo?=null
+        waitSystem("settled synthetic drawer root") {
+            settlePicker()
+            // A toolbar folder title is not a root action. Scope to the actual pane.
+            var node=systemId("drawer_roots")?.findAccessibilityNodeInfosByText("SYNTHETIC IMPORT")
+                ?.firstOrNull{it.text?.toString()=="SYNTHETIC IMPORT" && shown(it)}
+            while(node!=null && !node.isClickable)node=node.parent
+            rootAction=node?.takeIf(::shown);rootAction!=null
         }
+        assertTrue(requireNotNull(rootAction).performAction(AccessibilityNodeInfo.ACTION_CLICK))
+        // Root selection closes the drawer itself. A Back injected while that close
+        // is being dispatched can cancel the entire picker after the drawer closes.
+        waitSystem("root selection completed without cancelling picker") {pickerRoot()!=null && !rootsOpen()}
     }
     private fun choose(kind:String) {
         val name=if(kind=="tracker")"SYNTHETIC tracker.db" else "SYNTHETIC memo.json"
@@ -128,16 +134,8 @@ class AutomaticImportAndroidTest {
                 }
                 assertTrue(requireNotNull(navigation).performAction(AccessibilityNodeInfo.ACTION_CLICK))
             }
-            var rootAction:AccessibilityNodeInfo?=null
-            waitSystem("settled synthetic root") {
-                settlePicker()
-                var node=systemNode("SYNTHETIC IMPORT")
-                while(node!=null && !node.isClickable)node=node.parent
-                rootAction=node?.takeIf(::shown);rootAction!=null
-            }
-            assertTrue(requireNotNull(rootAction).performAction(AccessibilityNodeInfo.ACTION_CLICK))
+            selectImportRoot()
         }
-        closeRoots()
         waitSystem(name){!rootsOpen() && systemNode(name)!=null}
         settlePicker()
         // Reacquire after navigation/layout; never touch coordinates from the covered list.
@@ -199,7 +197,8 @@ class AutomaticImportAndroidTest {
         assertEquals(imported,model.extra.value.records.filter{it.origin in setOf("IMPORT_HT","IMPORT_TM")}.sortedBy{it.id})
         stage("reopened history verified; cancel picker");data();click(R.string.import_other_apps)
         waitSystem("cancel DocumentsUI"){instrumentation.uiAutomation.rootInActiveWindow?.packageName?.toString()?.endsWith(".documentsui")==true}
-        closeRoots()
+        settlePicker()
+        if(rootsOpen())selectImportRoot()
         instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK)
         ui.waitUntil(10000){model.dataJob.value is NotesViewModel.DataJob.ImportCancelled}
         ui.onNodeWithText(text(R.string.import_cancelled)).assertExists()
