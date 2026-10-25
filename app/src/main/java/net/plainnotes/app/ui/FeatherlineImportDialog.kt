@@ -5,10 +5,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import net.plainnotes.app.R
@@ -16,13 +20,15 @@ import net.plainnotes.app.data.*
 
 @Composable internal fun FeatherlinePasswordDialog(error:Int?,onCancel:()->Unit,onConfirm:(CharArray)->Unit) {
     var password by remember{mutableStateOf("")}
+    val focus=LocalFocusManager.current
+    val keyboard=LocalSoftwareKeyboardController.current
     AlertDialog(onDismissRequest={password="";onCancel()},title={Text(stringResource(R.string.featherline_password_title))},
         text={Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.featherline_password_note))
             OutlinedTextField(password,{if(it.length<=4096)password=it},Modifier.fillMaxWidth(),label={Text(stringResource(R.string.featherline_password))},
-                visualTransformation=PasswordVisualTransformation(),singleLine=true,isError=error!=null)
+                visualTransformation=PasswordVisualTransformation(),keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Password,autoCorrectEnabled=false),singleLine=true,isError=error!=null)
             if(error!=null)Text(stringResource(error),color=MaterialTheme.colorScheme.error)
-        }},confirmButton={Button(onClick={val chars=password.toCharArray();password="";onConfirm(chars)}){Text(stringResource(R.string.featherline_unlock))}},
+        }},confirmButton={Button(onClick={val chars=password.toCharArray();password="";focus.clearFocus();keyboard?.hide();onConfirm(chars)}){Text(stringResource(R.string.featherline_unlock))}},
         dismissButton={TextButton(onClick={password="";onCancel()}){Text(stringResource(R.string.cancel))}})
 }
 @Composable internal fun FeatherlineImportDialog(preview:FeatherlineImportPreview,summary:FeatherlineImportSummary?,onCancel:()->Unit,onConfirm:()->Unit) {
