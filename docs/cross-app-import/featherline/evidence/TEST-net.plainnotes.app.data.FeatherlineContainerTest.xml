@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.FeatherlineContainerTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-25T19:21:27.100Z" hostname="4d93e8665384" time="1.826">
+  <properties/>
+  <testcase name="independentPythonVectorAuthenticatesExactlyAndClearsPassword" classname="net.plainnotes.app.data.FeatherlineContainerTest" time="0.467"/>
+  <testcase name="wrongPasswordAndCiphertextOrTagTamperingNeverPublishPlaintext" classname="net.plainnotes.app.data.FeatherlineContainerTest" time="0.699"/>
+  <testcase name="cancellationClearsPasswordAndClosedInputCannotBeReused" classname="net.plainnotes.app.data.FeatherlineContainerTest" time="0.004"/>
+  <testcase name="headerIsAuthenticatedAndHostileCostsAreRejectedBeforeKdf" classname="net.plainnotes.app.data.FeatherlineContainerTest" time="0.223"/>
+  <testcase name="authenticatedButInvalidOrExpandingGzipIsRejected" classname="net.plainnotes.app.data.FeatherlineContainerTest" time="0.429"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.importer.FeatherlineTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-25T19:21:14.931Z" hostname="4d93e8665384" time="0.102">
+  <properties/>
+  <testcase name="actualMassIsIndependentOfPkEquivalentAndOriginalLabIndependentOfCanonical()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.073"/>
+  <testcase name="unknownUnitIsReportedWithoutSubstitutingCanonical()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.003"/>
+  <testcase name="duplicateRowsAndMissingTimeZoneRefuse()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.003"/>
+  <testcase name="unsupportedReleaseRateCustomAndActualDeltaNeverBecomeAssumedDoses()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.006"/>
+  <testcase name="invalidVersionAppUuidOrOrphanRefuses()" classname="net.plainnotes.app.importer.FeatherlineTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
