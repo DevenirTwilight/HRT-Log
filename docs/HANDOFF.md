@@ -1,3 +1,7 @@
+## Exact e5fa low-memory + independent wiped C PASS — 2026-10-25
+
+Official40182480005/artifact12594942311 digest216e95a8… and ZIP CRC verified. Actual baselineOK12/codecOK4/integrationOK2(18.259s), all12 generation/operation/collection fresh-PID verification logs OK1, fresh wiped targetC OK2(24.244s). Source AndroidIDef267226625998cd → C9824e1fa3f173067, exact source e5fa2404 and transferred encrypted SHAef6ebbfe… matched; only ciphertext crosses. Source keys gone, package/aliases absent on freshC and complete independent business/history/link/cipher comparison are in actual test assertions.512MiB/192MiB unchanged. Stage memory files are observations, not full viewer/integration peak. Prior LMK remains failure evidence. Raw ZIP and selected logs in closeout-e5fa2404. Normal final Android/API26/29/35 still running; do not mark Ready/merge yet. External review remains NOT_REVIEWED_EXTERNALLY, publicOFF.
+
 ## PR122 closeout checkpoint — evidence branch, 2026-10-25
 
 **This branch stores evidence, not candidate application code.** Build/check out implementation branch `feature/med02-collection-integration-20261025`, exact source `e5fa2404ddd4174888f7510477498f4d0f2af84a`. Base main4f3cddff. Existing PR122; do not create a duplicate. Final Android40182479995/Science40182479990/lowmem40182480005 were started automatically once by the source push; no manual rerun. Current raw status and final acceptance receipt: `docs/medical-attachments/2026-10-25/collection-integration/current.json`.

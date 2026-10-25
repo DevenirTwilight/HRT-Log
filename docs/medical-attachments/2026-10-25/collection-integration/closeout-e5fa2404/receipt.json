@@ -38,5 +38,35 @@
   "androidTestCompilation": "PASS",
   "finalNative": "PENDING",
   "physical": "NOT_RUN",
-  "external": "NOT_REVIEWED_EXTERNALLY"
+  "external": "NOT_REVIEWED_EXTERNALLY",
+  "finalLowmem": {
+    "status": "PASS",
+    "run": 40182480005,
+    "artifact": 12594942311,
+    "sha256": "216e95a8b5a83b9eb27653172a71af259232e1074f2e7c55a19cb030639c77a8",
+    "zipCRC": "PASS",
+    "base": "OK12",
+    "codec": "OK4",
+    "integration": "OK2/18.259s",
+    "freshProcessSeams": 12,
+    "source": {
+      "sourceHead": "e5fa2404ddd4174888f7510477498f4d0f2af84a",
+      "sourceAndroidId": "ef267226625998cd",
+      "cipherSha256": "ef6ebbfe399d732332c8055c55ceda3dcbdecd70d082175f1af641174b5ad9f5",
+      "bytes": 71211
+    },
+    "target": {
+      "sourceHead": "e5fa2404ddd4174888f7510477498f4d0f2af84a",
+      "targetAndroidId": "9824e1fa3f173067",
+      "cipherSha256": "ef6ebbfe399d732332c8055c55ceda3dcbdecd70d082175f1af641174b5ad9f5",
+      "api": 26,
+      "heapMiB": 192,
+      "freshGuest": true,
+      "native": "PASS_2",
+      "physical": "NOT_RUN"
+    },
+    "freshDeviceNative": "OK2/24.244s",
+    "physical": "NOT_RUN",
+    "memory": "stage samples, not whole-process/viewer peak; collection-codec process HWM157728KiB; no full integration-stage peak claimed"
+  }
 }

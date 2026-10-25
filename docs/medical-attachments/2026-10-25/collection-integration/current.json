@@ -2,7 +2,7 @@
   "main": "4f3cddff49e2bdfb139fa936a03bffee47a24601",
   "pr": 122,
   "source": "e5fa2404ddd4174888f7510477498f4d0f2af84a",
-  "status": "DRAFT_FINAL_NATIVE_PENDING",
+  "status": "DRAFT_FINAL_ANDROID_PENDING_LOWMEM_PASS",
   "ci": {
     "pr": 40182479995,
     "science": 40182479990,
@@ -11,5 +11,6 @@
   "evidence": "closeout-e5fa2404/receipt.json",
   "physical": "NOT_RUN",
   "external": "NOT_REVIEWED_EXTERNALLY",
-  "publicEnabled": false
+  "publicEnabled": false,
+  "lowmem": "PASS_FINAL_SOURCE"
 }
