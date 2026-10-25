@@ -1,5 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
+        <provider android:name="net.plainnotes.app.imports.SyntheticImportDocumentsProvider"
+            android:authorities="net.plainnotes.app.test.synthetic-imports" android:exported="true"
+            android:permission="android.permission.MANAGE_DOCUMENTS" android:grantUriPermissions="true">
+            <intent-filter><action android:name="android.content.action.DOCUMENTS_PROVIDER" /></intent-filter>
+        </provider>
         <provider android:name="net.plainnotes.app.attachments.SyntheticDocumentsProvider"
             android:authorities="net.plainnotes.app.test.synthetic-medflow" android:exported="true"
             android:permission="android.permission.MANAGE_DOCUMENTS" android:grantUriPermissions="true">

@@ -108,4 +108,32 @@ class TransMemoImportFlowTest {
         assertEquals(R.string.import_invalid,(model.dataJob.value as NotesViewModel.DataJob.Failed).message)
         assertNoCopy()
     }
+
+    @Test fun automaticEntryPreservesPreviewMergeAndDuplicateSemantics() {
+        model.openImport(Uri.fromFile(input))
+        await {model.dataJob.value is NotesViewModel.DataJob.ImportReady || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        assertTrue(model.dataJob.value is NotesViewModel.DataJob.ImportReady)
+        val ready=model.dataJob.value as NotesViewModel.DataJob.ImportReady
+        assertNoCopy()
+        val choices=TransMemo.Choices(mapOf(1L to 120,2L to 60,3L to 60,4L to 60),TransMemo.LateHandling.AS_MISSED,TransMemo.WellbeingScale.ONE_TO_FIVE)
+        repeat(2) {
+            val operation=model.runImport(ready.export,choices,false)
+            await {operation.isCompleted && model.dataJob.value is NotesViewModel.DataJob.Imported}
+            assertEquals(9,runBlocking {repo.records()}.size)
+        }
+    }
+    @Test fun stalePickerCannotMutateOrPublishPreview() {
+        model.openImport(Uri.fromFile(input),null)
+        await {model.dataJob.value is NotesViewModel.DataJob.Failed}
+        assertEquals(R.string.library_scope_changed,(model.dataJob.value as NotesViewModel.DataJob.Failed).message)
+        assertTrue(runBlocking {repo.records()}.isEmpty());assertNoCopy()
+    }
+
+    @Test fun unknownAutomaticInputDoesNotChangeCurrentData() {
+        input.writeText("{}")
+        model.openImport(Uri.fromFile(input))
+        await {model.dataJob.value is NotesViewModel.DataJob.Failed}
+        assertEquals(R.string.import_format_unknown,(model.dataJob.value as NotesViewModel.DataJob.Failed).message)
+        assertTrue(runBlocking {repo.records()}.isEmpty());assertNoCopy()
+    }
 }

@@ -1,3 +1,43 @@
+## PR123 current checkpoint — 2026-10-25
+
+Current test-only correction removes the Back race after choosing a DocumentsUI root: system root selection already closes its drawer, so a later Back could cancel the picker. Source77394f6f PR40207089641 API26 genuinely FAIL before file touch (window returned to app); original verified artifact/logcat in native-773. Lifecycle wait remains valid but did not fix this earlier cancellation. New root selection is scoped to drawer_roots, waits for automatic close, keeps real dir_list touch and every original assertion. No production changes. Compile/new exact-SHA CI pending; PR123 remains Draft. Mona production still not started. Existing575/2bf failures remain historical FAIL, never reclassified. Main1ddcf431 Android/Science PASS. Next: targeted-first three-API CI, protected merge only if qualified, then independent Mona PR-B.
+
+## PR123接手：真实抽屉状态修正，Mona仍未启动 — 2026-10-25
+
+2026-10-25 PR123 checkpoint: exact57567c91 PR workflow40204515855 all jobs green, but push40204512843 API26 FAIL (Compose idle then teardown SlotWriter crash); acceptance remains BLOCKED, no merge/Mona production. Original verified ZIP/evidence in docs/cross-app-import/2026-10-25/native-575. Next test-only correction awaits host RESUMED after SAF result and preserves first failure before teardown; new exact-SHA CI required. No test assertions removed; no unchanged rerun.
+
+实时PR123仍Draft/HEAD2bf822e0；主线1ddcf431。新独立工作树HRT-Log-import-auto跟踪原feature/import-auto-detection-20261025，未覆盖旧HRT-Log-cross-import及Featherline未提交实验。原2bf PR40199164557 Android host/JVM/ScienceSUCCESS、三API真实SAF在closed roots drawer FAIL。三官方ZIP SHA/CRC和API26原始job保留native-2bf，旧失败仍FAIL。
+
+已证实测试把主导航当toggle；AOSP NavigationViewManager明确setOpen(true)。测试现在报告view IDs/边界，以fresh drawer_roots可见交集判断，只在真实展开时Back关闭且picker仍须存在；主toolbar仅用于打开，触摸文件前重取dir_list内节点，保留全部双源提交/重开/取消断言。UiAutomation标志恢复，不改生产代码。原生测试源码编译PASS(2m38s)，新SHA实际API26/29/35/六门PENDING。下一步提交本最小修复→CI前置本用例→完整门槛，无新大型诊断或旧源重跑。通过§106合并且核主线后才独立Mona PR-B；当前§148.B仅Mona，Featherline/其他格式停止。未启用MED、不签名发布。
+
+## PR-A #123 / PR-B Mona 接续 — 2026-10-25
+
+8e07bc2f真实API29已经通过两种SAF文件、原专用预览及7条HT/9条TM提交、合计16条断言；随后失败于历史页标题：测试错误使用history（History），真实Destination.HISTORY.title为nav_history（Dose log）。修正为实际导航资源，保留后续逐字段重开一致性与取消断言。原运行40197810759/job121182370872，不能将尚未执行的后续断言标PASS。PR仍Draft，最终源码CI尚待通过。
+
+负责人新增PR-B Mona授权：必须先收尾#123并核主线，再在独立分支实现Mona当前真实版本JSON的实际服药与化验预览/事务/幂等/冲突保护；计划/库存不安全部分明确报告，不伪造服药或库存事实。官方源码只作格式依据，不复制AGPL实现。参考仓库已在工作树外/workspace/mona-format-reference取得，SHA8bc965fd340ee0758608be047039e79ea056b2eb，版本及字段尚待完成核对。Mona尚未实现，不宣称交付。
+
+## PR-A #123：第二次原生定位 — 2026-10-25
+
+85209475 API26/29仍FAIL，不宣称完成。API29工件12599860719原始logcat已存native-852：12:57:10.746实际进入synthetic-imports，12:57:11.325文件坐标点击却切到synthetic-medflow；因此不是解析超时，而是roots侧栏仍覆盖文件列表。测试现在仅在MED-02侧栏项仍可见时用系统Back关闭侧栏，确认消失后才点文件；保留真实SAF和全部提交/重开/取消断言。下一SHA原生仍待验证，PR Draft；生产代码未因此修改。
+
+## PR-A #123：保留首轮原生失败，修正真实选择器测试 — 2026-10-25
+
+41373b61精确源码的PR运行40193377789：JVM/science通过；API26/29均实际执行原27项，26通过，新MainActivity跨应用流程1失败（未找到SYNTHETIC tracker.db），不是导入成功。官方工件12599043088/12599117894的SHA256和CRC已核，原始本测试logcat与收据在`docs/cross-app-import/2026-10-25/native-413/`。API29显示两合成root注册成功，但DocumentStack仍Recent，未进入真实导入器；侧栏触摸命中了布局过渡坐标是当前测试层假设，不宣称已证明生产通过。
+
+本次仅修系统UI测试：侧栏使用稳定后的真实可访问点击，文件仍通过真实DocumentsUI选择，无替身结果；超时保留有界树快照。将此新测试前置到三API正常矩阵并保存其原始报告，后续大套仅排除这一个已执行的新用例，全部旧断言保留。无需再等旧大型矩阵跑完才发现新路径错误；不改生产导入规则/预算/权限。最终新SHA仍须自身CI和真实流程验证，PR保持Draft。既有MED OFF/协议/PK/库存不动。
+
+## PR-A 跨应用统一导入：实现与首轮定向验证 — 2026-10-25
+
+当前任务已转为跨应用迁移，勿继续MED研发。实时远端#122已MERGED，主线1ddcf431558e0e90662b4a9ab931a9a6ec437209，合并源e5fa2404；下方旧PENDING是历史。独立worktree `/workspace/HRT-Log-import-a`，分支`feature/import-auto-detection-20261025`，未复制旧MED工作树修改。
+
+已实现真实DataSection单SAF入口→冻结scope→单次打开/有界快照→字节/结构自动识别→原HRT Tracker或Trans Memo专属预览→原事务。保留本应用恢复入口、全部旧导入方法和断言，不改MED/schema/备份协议/权限/版本/库存。Featherline仅已知不支持提示。四语状态完整；SQLite仍使用原私有副本及启动/异常/取消清理，确认时不再读provider。
+
+PR123已建立Draft（初始41b528b6）。最终本地importer16、Reader4、TransMemo流程8、Period5、四语可访问性8均0失败/错误/跳过，原生Kotlin/Java测试源码编译PASS；实际SAF原生/最终CI尚PENDING，不能宣称正式验收。新的MainActivity+真实DocumentsUI两来源全流程测试已写入，API26/29选择器加入该类，API35全套自动发现；四语320dp/2倍字号/夜间资源配置可访问性已定向PASS（几何/完整字符/触控/取消；非物理TalkBack），无物理TalkBack/真机。详细边界见`docs/cross-app-import/2026-10-25/pr-a-contract.md`。
+
+补充审查：自动入口重复导入测试现在等待每次具体Job完成，避免旧Imported状态使第二次操作断言提前返回；真实执行两次仍8项PASS。真实MainActivity测试和DocumentsProvider在触碰应用状态前复用既有ro.kernel.qemu合成模拟器守卫，防止误在真实手机运行此导入测试。原生Kotlin/Java重新编译PASS。原c01d0f58 CI尚运行时不记为最终验收，下一源码必须取得自己的六项结果。
+
+下一步：验收PR123最终精确HEAD六项必需CI和真实SAF结果，仅修真实失败。按§106满足后受保护合并并核主线。不要自动开始PR-B；Mona接点在ImportFormatDetector.JsonRule/jsonRules及Parsed/source专属预览，未实现空壳。保持MED OFF/外审未完成，不签名交付或Release。
+
 ## MED-02 #122 concrete CI blockers corrected — 2026-10-25
 
 Resumed exact65cc87fe (main4f3cddff), clean existing branch, no other active data/schema implementation PR. Original PR40177701574 host HTML shows TransMemo real Import result/9rows passed, only terminal reason expected library_change_committed vs actual library_scope_changed failed. Runtime.verify can suspend before COMMIT acknowledgement and later invalidate its old owner, overwriting the genuine commit explanation. New deterministic RuntimeLibrarySession test RED on old production; minimum fix uses atomic StateFlow.update to preserve already-acknowledged COMMIT explanation while closed/allowed=false and protected-resource revocation remain unconditional. No page rebind/new permission; existing real import test unchanged. Targeted Runtime3 + TransMemo6 + Period5 =14/0fail/error/skip GREEN, Android test source compilation PASS.

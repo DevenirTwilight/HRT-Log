@@ -49,6 +49,7 @@ fun matchingMedication(g: HrtTracker.Group, meds: List<MedicationEntity>, profil
         preview.groups.keys.all { targets[it]?.medication != null || !names[it].isNullOrBlank() }
     AlertDialog(onDismissRequest = onCancel, icon = { Icon(Icons.Outlined.MoveToInbox, null) }, title = { Text(stringResource(R.string.import_ht)) },
         text = { Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(stringResource(R.string.import_identified,importSourceLabel(net.plainnotes.app.importer.ImportFormatDetector.Source.HRT_TRACKER)),style=MaterialTheme.typography.titleSmall)
             val first = preview.first; val last = preview.last
             val range = if (first != null && last != null) "${formatShortDate(first.atZone(zone).toLocalDate())} – ${formatShortDate(last.atZone(zone).toLocalDate())}" else "—"
             Text(stringResource(R.string.ht_summary, preview.events, range, preview.labs), style = MaterialTheme.typography.bodyMedium)

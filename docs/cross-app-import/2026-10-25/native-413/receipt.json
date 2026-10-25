@@ -1,0 +1,23 @@
+{
+  "source": "41373b619cce93487c9998f0e2d4a972d9f43df6",
+  "run": 40193377789,
+  "artifacts": [
+    {
+      "api": 26,
+      "artifact": 12599043088,
+      "sha256": "8609780d6811396ede1f30fb6cf4bc38f4c98801fae9d2d5d8e4d43f21b9892b",
+      "crc": "PASS",
+      "result": "FAIL",
+      "failure": "picker did not reach synthetic tracker; no import executed"
+    },
+    {
+      "api": 29,
+      "artifact": 12599117894,
+      "sha256": "6bd7d0ff61da0bceb64ab172806de420f90864e51203bad6eeb6b9a10d3614dc",
+      "crc": "PASS",
+      "result": "FAIL",
+      "failure": "picker did not reach synthetic tracker; no import executed"
+    }
+  ],
+  "interpretation": "Both roots registered; API29 DocumentStack stays Recent after root touch. Pre-layout navigation coordinates are the test-harness hypothesis. Production detector/commit not reached. No pass claimed."
+}

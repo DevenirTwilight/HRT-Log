@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="import_other_apps">从其他应用导入</string>
+    <string name="import_other_apps_desc">自动识别 HRT Tracker 或 Trans Memo 导出文件</string>
+    <string name="import_identified">已识别：%1$s</string>
+    <string name="import_detecting">正在检测文件格式…</string>
+    <string name="import_parsing">正在解析并校验文件…</string>
+    <string name="import_cancelled">已取消导入，未修改数据。</string>
+    <string name="import_format_unknown">无法识别此文件格式。</string>
+    <string name="import_file_damaged">导出文件损坏或不完整。</string>
+    <string name="import_file_too_large">导出文件超出导入限制（32 MiB 或 100,000 行）。</string>
+    <string name="import_featherline_unsupported">已识别 Featherline 加密备份，目前尚不支持导入。</string>
+    <string name="import_use_native_restore">请使用「恢复 HRT Log 备份」打开此文件。</string>
+    <string name="import_version_unsupported">暂不支持此导出版本。</string>
+</resources>
