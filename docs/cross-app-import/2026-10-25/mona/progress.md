@@ -1,0 +1,9 @@
+# Mona implementation checkpoint
+
+Base: accepted PR123 merge d477f092 (tree equals accepted276ee752); main CI Android40210593055 in progress, Science40210593016 PASS. Owner-approved compatibility is REQUIREMENTS148.C.
+
+Actual production component: independently authored schema23 source parser adapted from this project's own earlier prototype to the current bounded root API; no upstream AGPL code copied. It distinguishes actual/null/planned time, preserves exact source time/zone/decimal/chemical/ester/basis/units, counts unsupported collections, freezes source rows with deterministic Unicode-safe JSON evidence encoding. Encoded nested JSON has its own depth guard. No writer, migration, public MONA detector hook or user support claim yet.
+
+Local importer full suite34 PASS (old16 + Mona source12 + evidence6), 0failure/error/skip. Original unified detector RED actually FAIL with Unknown at8efabb85 before integration; XML retained, test source retained at /workspace/scratch/MonaDetectionTest.kt and must return as an unchanged final GREEN assertion when the real detector hook is integrated. This is not a skipped test or claimed feature pass. Initial new evidence test wrongly expected malformed nested clinical data to reject the whole file; original failure XML kept. Correct contract distinguishes an INPUT_LIMIT issue and absent molecule; guard-specific assertion now PASS. No original HT/TM assertions changed.
+
+Next: real typed source receipts and Room17→18/business14 compatibility, source-aware clinical writer and commit receipt, explicit preview/report, unified hook, four-language strings, scoped/cancel/duplicate/conflict/trash/backup tests, real SAF Mona integration/API26/29/35. Mona formal import NOT_IMPLEMENTED at this checkpoint. No Featherline/PK/stock/MED activation/crypto/permission/release changes.

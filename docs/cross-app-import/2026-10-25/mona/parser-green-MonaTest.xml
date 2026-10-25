@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.importer.MonaTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-25T16:19:51.160Z" hostname="68e3ecace23d" time="0.021">
+  <properties/>
+  <testcase name="onlyReviewedVersionAndCompleteUniqueTypedRowsAreAccepted()" classname="net.plainnotes.app.importer.MonaTest" time="0.004"/>
+  <testcase name="schedulesAndStockAreReferenceOnlyAndMissingFkIsExplicit()" classname="net.plainnotes.app.importer.MonaTest" time="0.002"/>
+  <testcase name="unknownRouteUnitAndEsterRemainOriginalAndAreNotMadeEquivalent()" classname="net.plainnotes.app.importer.MonaTest" time="0.001"/>
+  <testcase name="actualCurrentSqlRowsPreserveIdentityExactTimeDecimalRouteAndMolecule()" classname="net.plainnotes.app.importer.MonaTest" time="0.0"/>
+  <testcase name="malformedClinicalValueIsNotZeroOrARecommendedDefault()" classname="net.plainnotes.app.importer.MonaTest" time="0.003"/>
+  <testcase name="unsupportedFieldsAndCollectionsAreNotSilentlyCountedAsImported()" classname="net.plainnotes.app.importer.MonaTest" time="0.001"/>
+  <testcase name="hormoneValuesRemainSeparateReportedValuesWithTheirOwnUnitsAndNoConversion()" classname="net.plainnotes.app.importer.MonaTest" time="0.001"/>
+  <testcase name="dstOverlapInstantsAreNeverReconstructedFromWallTime()" classname="net.plainnotes.app.importer.MonaTest" time="0.001"/>
+  <testcase name="patchReleaseRateIsNotReinterpretedAsMassOrPatchCount()" classname="net.plainnotes.app.importer.MonaTest" time="0.0"/>
+  <testcase name="timezoneOrOffsetAbsenceNeverUsesDeviceDefault()" classname="net.plainnotes.app.importer.MonaTest" time="0.0"/>
+  <testcase name="plannedOrMissingActualTimeDoesNotBecomeTakenOrMissed()" classname="net.plainnotes.app.importer.MonaTest" time="0.001"/>
+  <testcase name="nestingIsRejectedBeforeConstructingDeepJsonObjectGraph()" classname="net.plainnotes.app.importer.MonaTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

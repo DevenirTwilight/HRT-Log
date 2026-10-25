@@ -1,3 +1,7 @@
+## Mona source parser checkpoint — 2026-10-25
+
+PR-A123 merged d477f092, accepted276ee752 both CI suites green. New independent branch feature/mona-json-import-20261025 now has actual Mona23 typed parser/source-evidence code: local importer34 PASS (existing16 + new18), source facts and no defaults. docs/cross-app-import/2026-10-25/mona/progress.md + raw XML preserve detector RED/initial test mistake and parser GREEN. No unified MONA hook/writer/Schema18/business14/UI yet, so formal import NOT_IMPLEMENTED. Restoring exact MonaDetectionTest from scratch is a required integration task, not a skipped original test. Owner compatibility approval148.C retained. Next implement receipts/atomic clinical writer before advertising MONA. Default d477 Android40210593055 still pending, Science PASS; final PR must have exact-source six checks + native evidence.
+
 ## PR-A merged; Mona PR-B started — 2026-10-25
 
 PR123 accepted source276ee75221990dac442c76da2aa7512c5999e863, both PR40207907781/push40207904696 all six required jobs PASS. Real SAF XML26/29/35 each1test/0failure/error/skip verified and saved in native-276; historical failures remain FAIL. Normal protected squash merge d477f092bb6244203066340d675a2356230ed585 at16:12:42Z; default claude/new-session-1959qb tree exactly equals tested source. Default Android40210593055/Science40210593016 IN_PROGRESS, keep checking separately.

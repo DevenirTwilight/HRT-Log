@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.importer.MonaDetectionTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2026-10-25T16:16:02.912Z" hostname="68e3ecace23d" time="0.056">
+  <properties/>
+  <testcase name="reviewedMona23UsesTheCommonDetectorAndReportsItsOwnIdentity()" classname="net.plainnotes.app.importer.MonaDetectionTest" time="0.034">
+    <failure message="net.plainnotes.app.importer.ImportFormatDetector$Unknown" type="net.plainnotes.app.importer.ImportFormatDetector$Unknown">net.plainnotes.app.importer.ImportFormatDetector$Unknown
+	at net.plainnotes.app.importer.ImportFormatDetector.json(ImportFormatDetector.kt:68)
+	at net.plainnotes.app.importer.MonaDetectionTest.reviewedMona23UsesTheCommonDetectorAndReportsItsOwnIdentity(MonaDetectionTest.kt:10)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
