@@ -60,11 +60,15 @@ fi
 # New business integration runs independently; neither old baseline nor codec failures are masked.
 integration_result=1
 if [ "$collection_installed" -eq 1 ]; then
-  adb shell am instrument -w -e class net.plainnotes.app.data.NativeCiHeapProbe,net.plainnotes.app.data.LibraryCollectionAndroidTest -e ansmExpectedHeapMb 192 net.plainnotes.app.data.test/androidx.test.runner.AndroidJUnitRunner > "$report/native-integration.log" 2>&1
+  adb shell am instrument -w -e class net.plainnotes.app.data.NativeCiHeapProbe,net.plainnotes.app.data.LibraryCollectionAndroidTest#restoredLibraryAddsOriginalAndExportsAllLibrariesToIndependentNewDevice -e collection_transfer export -e ansmExpectedHeapMb 192 net.plainnotes.app.data.test/androidx.test.runner.AndroidJUnitRunner > "$report/native-integration.log" 2>&1
   integration_result=$?
   cat "$report/native-integration.log"
   if [ "$integration_result" -eq 0 ]; then
     python3 -c 'from pathlib import Path; t=Path("core/data/build/reports/med02-generation-memory/native-integration.log").read_text(); assert "OK (2 tests)" in t and not any(x in t for x in ("FAILURES!!!","INSTRUMENTATION_FAILED","INSTRUMENTATION_STATUS_CODE: -3")), "Heap probe and complete independent-device collection roundtrip must pass"'
+    integration_result=$?
+  fi
+  if [ "$integration_result" -eq 0 ]; then
+    python3 scripts/run_library_collection_transfer.py export
     integration_result=$?
   fi
 fi

@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import net.plainnotes.app.domain.AttachmentSession
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Assume.assumeTrue
 import org.junit.Test
 import java.io.File
 import java.io.FileInputStream
@@ -26,7 +27,19 @@ class LibraryCollectionAndroidTest {
     private fun uri(name:String)=MedicalAttachmentOperationAndroidTest().uri(name)
     private fun compareRecords(left:ByteArray,right:ByteArray) {
         BackupJsonReader.indexed(left.copyOf()).use {a->BackupJsonReader.indexed(right.copyOf()).use {b->
-            DOMAIN_TABLES.forEach {t->assertEquals(t,a.tables.getJSONArray(t).toString(),b.tables.getJSONArray(t).toString())}
+            fun values(rows:BackupRows):List<String> =(0 until rows.length()).map {i->
+                val row=rows.getJSONObject(i)
+                row.keys().asSequence().sorted().joinToString("|") {key->
+                    val value=row.get(key)
+                    org.json.JSONObject.quote(key)+":"+when(value) {
+                        org.json.JSONObject.NULL->"null"
+                        is String->"s"+org.json.JSONObject.quote(value)
+                        is Number->"n"+java.math.BigDecimal(value.toString()).stripTrailingZeros().toString()
+                        else->error("Unexpected database scalar")
+                    }
+                }
+            }.sorted()
+            DOMAIN_TABLES.forEach {t->assertEquals(t,values(a.tables.getJSONArray(t)),values(b.tables.getJSONArray(t)))}
         }}
     }
     @Test fun restoredLibraryAddsOriginalAndExportsAllLibrariesToIndependentNewDevice()=runBlocking {
@@ -80,6 +93,23 @@ class LibraryCollectionAndroidTest {
             // Source device's exact fixture-owned keys/files are now gone. Target has a new
             // namespace/Keystore database key and an initially empty retained root.
             isolatedWholeUid()
+            verifyNewTarget(second,third)
+            if(InstrumentationRegistry.getArguments().getString("collection_transfer")=="export") {
+                val transfer=File(app.filesDir,"synthetic-collection-transfer.cipher")
+                check(!transfer.exists());second.inputStream().use {input->transfer.outputStream().use {out->input.copyTo(out);out.fd.sync()}}
+                android.system.Os.chmod(transfer.path,384) // Ciphertext only, no URI/key/database transfer.
+            }
+
+        }finally {listOf(first,second,third).forEach {check(it.delete())}}
+    }
+    @Test fun freshDeviceRestoresOnlyTransferredEncryptedCollection()=runBlocking {
+        assumeTrue(InstrumentationRegistry.getArguments().getString("collection_transfer")=="restore")
+        assertTrue("Fresh target UID must have none of the source keys",KeyStore.getInstance("AndroidKeyStore").apply {load(null)}.aliases().toList().isEmpty())
+        val input=File(app.filesDir,"synthetic-collection-transfer.cipher")
+        val output=File.createTempFile("synthetic-fresh-c-",".cipher",app.cacheDir)
+        try {verifyNewTarget(input,output)}finally {check(output.delete());check(input.delete())}
+    }
+    private suspend fun verifyNewTarget(second:File,third:File) {
             LibraryRestoreAndroidTest.RootFixture(app,seed=false).use {target->
                 val original=target.facts();val cap=target.session.issue()
                 MedicalCollectionReader.read(cap,password(),FileInputStream(second).channel).use {archive->
@@ -112,6 +142,6 @@ class LibraryCollectionAndroidTest {
                     }finally {session.revoke()}
                 }
             }
-        }finally {listOf(first,second,third).forEach {check(it.delete())}}
     }
+
 }

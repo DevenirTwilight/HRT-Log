@@ -91,7 +91,8 @@ class LibraryRestoreAndroidTest {
         assertNotEquals(manifest.epoch.toString(),scope.epoch)
         val session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
         try {
-            AttachmentBackupPreparation(f.context,db).capture(scope,session.issue(),created=Instant.EPOCH).use {snapshot->
+            val created=BackupJsonReader.indexed(records.copyOf()).use {Instant.parse(it.metadata.getString("created"))}
+            AttachmentBackupPreparation(f.context,db).capture(scope,session.issue(),created=created).use {snapshot->
                 assertEquals(AttachmentCandidateMetadata.normalized(manifest.copy(dataset=UUID.fromString(scope.dataset),epoch=UUID.fromString(scope.epoch))),AttachmentCandidateMetadata.normalized(snapshot.manifest()))
                 snapshot.records {assertArrayEquals(records,it)}
             }

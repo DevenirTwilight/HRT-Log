@@ -39,7 +39,9 @@ internal class LibraryLifecycle(private val access:DatabaseAccess) {
         }finally {owner.close()}
     }
     internal fun fresh(root:NotesDatabase,current:NotesDatabase,checkActive:()->Unit):LibraryResourceFacts.Scan = try {
-        LibraryResourceFacts.scan(context,root.openHelper.writableDatabase,DatabaseAccess.handleIdentity(current),checkActive=checkActive,live=DatabaseAccess.storageContext(current,context) to current.openHelper.writableDatabase)
+        // Borrow a live writer only to observe its uncommitted facts. Ordinary lifecycle
+        // reads retain the accepted short-lived READONLY/cache-bounded path, not a Room reader pool.
+        LibraryResourceFacts.scan(context,root.openHelper.writableDatabase,DatabaseAccess.handleIdentity(current),checkActive=checkActive,live=if(current.openHelper.writableDatabase.inTransaction())DatabaseAccess.storageContext(current,context) to current.openHelper.writableDatabase else null)
     }catch(e:Exception) {
         checkActive()
         // A partial scan may already have encountered unowned resources before failing.

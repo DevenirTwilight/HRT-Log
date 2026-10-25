@@ -38,7 +38,7 @@ def main():
                 shutil.copytree(path, REPORT / name, dirs_exist_ok=True)
     reset_fixture("before-collection-integration")
     result = subprocess.run(["./gradlew", ":core:data:connectedDebugAndroidTest",
-        "-Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.LibraryCollectionAndroidTest",
+        "-Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.LibraryCollectionAndroidTest#restoredLibraryAddsOriginalAndExportsAllLibrariesToIndependentNewDevice",
         "--no-parallel", "--max-workers=2"], cwd=ROOT)
     try:
         assert result.returncode == 0, "Complete collection business roundtrip failed"
