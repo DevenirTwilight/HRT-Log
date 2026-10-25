@@ -250,7 +250,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun setContainerInfo(id:Long,source:String?,batch:String?)=mutateExtra{repo.setContainerInfo(id,source,batch)}
     fun reorderItems(ids:List<Long>)=mutateExtra{repo.reorderCheckinItems(ids)}
     // Data: Trans Memo import, encrypted backup, exports, wipe
-    sealed interface DataJob { object Idle:DataJob; object Working:DataJob; class Done(val message:Int,val arg:String?=null):DataJob; class Failed(val message:Int):DataJob
+    sealed interface DataJob { object Idle:DataJob; object Reading:DataJob; object Working:DataJob; class Done(val message:Int,val arg:String?=null):DataJob; class Failed(val message:Int):DataJob
+        class ForeignReady(val identity:net.plainnotes.app.importer.CrossAppInput.Identification,val next:DataJob):DataJob
         class ImportReady(val export:net.plainnotes.app.importer.TmExport,val preview:net.plainnotes.app.importer.TransMemo.Preview):DataJob
         class Imported(val summary:ImportSummary):DataJob
         class HtReady(val export:net.plainnotes.app.importer.HrtTracker.Export,val preview:net.plainnotes.app.importer.HrtTracker.Preview):DataJob
@@ -260,11 +261,11 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun clearDataJob(){importReadJob?.cancel();importReadJob=null;dataJob.value=DataJob.Idle}
     // Only an actual Repository return may acknowledge a replacing restore. A later scheduling
     // error or deliberate epoch change cannot turn that historical COMMIT into a failed save.
-    private class CommittedLibraryChange(val result:DataJob)
+    private class CommittedLibraryChange(val result:DataJob,val replacement:Boolean=true)
     private fun acknowledgeCommittedLibrary(receipt:CommittedLibraryChange) {
-        runtimeFailure(LibraryScopeMismatch());runtime.invalidate(R.string.library_change_committed);dataJob.value=receipt.result
+        if(receipt.replacement){runtimeFailure(LibraryScopeMismatch());runtime.invalidate(R.string.library_change_committed)};dataJob.value=receipt.result
     }
-    private fun dataOp(committed:()->CommittedLibraryChange?={null},block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=DataJob.Working;val result=try{runtime.repository();block().also {if(committed()==null){runtime.verify();runtime.checkRequest()}}}catch(e:LibraryScopeMismatch){runtimeFailure(e);DataJob.Failed(R.string.library_scope_changed)}catch(e:LibraryRequestRevoked){DataJob.Failed(R.string.library_request_locked)}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
+    private fun dataOp(committed:()->CommittedLibraryChange?={null},reading:Boolean=false,block:suspend()->DataJob)=viewModelScope.launch{dataJob.value=if(reading)DataJob.Reading else DataJob.Working;val result=try{runtime.repository();block().also {if(committed()?.replacement!=true){runtime.verify();runtime.checkRequest()}}}catch(e:LibraryScopeMismatch){runtimeFailure(e);DataJob.Failed(R.string.library_scope_changed)}catch(e:LibraryRequestRevoked){DataJob.Failed(R.string.library_request_locked)}catch(e:BackupCodec.WrongPassword){DataJob.Failed(R.string.backup_wrong_password)}
         catch(e:BackupCodec.TooLarge){DataJob.Failed(R.string.backup_too_large)}
         catch(e:BackupCodec.NewerBackup){DataJob.Failed(R.string.backup_newer_version)}
         catch(e:BackupCodec.BadFile){DataJob.Failed(R.string.backup_bad_file)}catch(e:net.plainnotes.app.importer.InvalidExport){DataJob.Failed(R.string.import_invalid)}catch(e:net.plainnotes.app.importer.HrtTracker.InvalidExport){DataJob.Failed(R.string.ht_invalid)}catch(e:CancellationException){committed()?.let(::acknowledgeCommittedLibrary);throw e}catch(_:Exception){DataJob.Failed(R.string.operation_error)}
@@ -274,7 +275,21 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     private fun importRead(block:suspend()->DataJob):Job {
         val previous=importReadJob
         previous?.cancel()
-        return dataOp { previous?.join(); block() }.also{importReadJob=it}
+        return dataOp(reading=true) { previous?.join(); block() }.also{importReadJob=it}
+    }
+    fun openFromOtherApp(uri:android.net.Uri)=importRead {
+        try {
+            when(val parsed=net.plainnotes.app.privacy.CrossAppImportReader.read(app.noBackupFilesDir,{app.contentResolver.openInputStream(uri)})) {
+                is net.plainnotes.app.privacy.CrossAppImportReader.Parsed.Memo -> DataJob.ForeignReady(parsed.identity,
+                    DataJob.ImportReady(parsed.export,net.plainnotes.app.importer.TransMemo.preview(parsed.export,ZoneId.systemDefault())))
+                is net.plainnotes.app.privacy.CrossAppImportReader.Parsed.Tracker -> DataJob.ForeignReady(parsed.identity,
+                    DataJob.HtReady(parsed.export,net.plainnotes.app.importer.HrtTracker.preview(parsed.export)))
+            }
+        }catch(e:CancellationException){throw e}catch(_:Exception){DataJob.Failed(R.string.migration_invalid)}
+    }
+    fun reviewForeignOptions(ready:DataJob.ForeignReady) {
+        // A detached/old dialog cannot publish a captured draft into a different operation.
+        if(dataJob.value===ready)dataJob.value=ready.next
     }
     fun openTransMemo(uri:android.net.Uri)=importRead {
         val export=net.plainnotes.app.privacy.TransMemoImportCopies.read(app.noBackupFilesDir,
@@ -289,7 +304,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         var committed:CommittedLibraryChange?=null
         return dataOp(committed={committed}) {
         val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.TransMemo.plan(export,ZoneId.systemDefault(),choices)}
-        val summary=mutate{repo.importTransMemo(plan,overwrite).also {if(overwrite)committed=CommittedLibraryChange(DataJob.Imported(it))}}
+        val summary=mutate{repo.importTransMemo(plan,overwrite).also {committed=CommittedLibraryChange(DataJob.Imported(it),overwrite)}}
         if(!overwrite)refresh().join();DataJob.Imported(summary)
         }
     }
@@ -303,10 +318,13 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         DataJob.HtReady(export,net.plainnotes.app.importer.HrtTracker.preview(export))
     }
     fun runHtImport(export:net.plainnotes.app.importer.HrtTracker.Export,duplicates:net.plainnotes.app.importer.HrtTracker.Duplicates?,
-                    targets:Map<net.plainnotes.app.importer.HrtTracker.Group,Long?>,names:Map<net.plainnotes.app.importer.HrtTracker.Group,String>,weight:Boolean)=dataOp {
-        val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.HrtTracker.plan(export,duplicates)}
-        val summary=mutate{repo.importHrtTracker(plan,targets,names,if(weight)export.weightKg else null)}
-        refresh().join();DataJob.HtImported(summary)
+                    targets:Map<net.plainnotes.app.importer.HrtTracker.Group,Long?>,names:Map<net.plainnotes.app.importer.HrtTracker.Group,String>,weight:Boolean):Job {
+        var committed:CommittedLibraryChange?=null
+        return dataOp(committed={committed}) {
+            val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.HrtTracker.plan(export,duplicates)}
+            val summary=mutate{repo.importHrtTracker(plan,targets,names,if(weight)export.weightKg else null).also {committed=CommittedLibraryChange(DataJob.HtImported(it),false)}}
+            refresh().join();DataJob.HtImported(summary)
+        }
     }
     fun cancelImport(){clearDataJob()}
     val backupHistory=net.plainnotes.app.privacy.BackupHistory(app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE))

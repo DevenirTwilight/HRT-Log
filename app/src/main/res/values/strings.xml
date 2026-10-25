@@ -1352,4 +1352,15 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="library_restore_pending">A library restore is in progress. Finish it or cancel it before making changes.</string>
 <string name="library_request_locked">Unlock and reopen the app before making changes.</string>
 <string name="library_change_committed">The replacement was committed. Reopen the library to view it; do not submit it again.</string>
+<string name="migration_import">Import from another app</string>
+<string name="migration_import_desc">Choose an exported file. Supported: HRT tracker / TransMTF JSON and Trans Memo SQLite v8.</string>
+<string name="migration_preview">Import preview</string>
+<string name="migration_source">Source: %1$s</string>
+<string name="migration_format">Format: %1$s · version %2$s</string>
+<string name="migration_scan_note">Counts below describe the source file. Import options and existing records determine the final result.</string>
+<string name="migration_scan_ht">Intake events: %1$d\nMedication groups: %2$d\nLab results: %3$d\nRepeated events within this file: %4$d</string>
+<string name="migration_source_unsupported">Unsupported items or fields: %1$d</string>
+<string name="migration_unchanged">Nothing has been saved. Review source-specific choices before confirming.</string>
+<string name="migration_options">Review import options</string>
+<string name="migration_invalid">The file is unsupported, ambiguous, damaged, or exceeds import limits. Choose a supported export; HRT Log backups must use Restore encrypted backup.</string>
 </resources>

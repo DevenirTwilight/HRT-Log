@@ -41,8 +41,7 @@ import java.time.LocalDate
     var pdfChoice by remember { mutableStateOf(90 to true) }
     var wipe by remember { mutableStateOf(false) }
     val labels = checkinLabels()
-    val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(model::openTransMemo) }
-    val htLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(model::openHrtTracker) }
+    val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(model::openFromOtherApp) }
     val state by model.state.collectAsStateWithLifecycle()
     val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
         if(awaitingBackupPicker){awaitingBackupPicker=false;backupUri=uri} }
@@ -63,8 +62,11 @@ import java.time.LocalDate
     val pdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { it?.let { u -> model.exportPdf(u, pdfChoice.first, pdfChoice.second, context, labels, scheduleTexts) } }
 
     SectionCard(stringResource(R.string.data)) {
-        DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_ht), stringResource(R.string.import_ht_desc)) { htLauncher.launchPicker(arrayOf("application/json", "text/plain", "*/*")) }
-        DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_tm), stringResource(R.string.import_tm_desc)) { importLauncher.launchPicker(arrayOf("*/*")) }
+        DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.migration_import), stringResource(R.string.migration_import_desc)) {
+            model.clearDataJob()
+            try { importLauncher.launchPicker(arrayOf("*/*")) }
+            catch(_:Exception) {model.dataJob.value=NotesViewModel.DataJob.Failed(R.string.operation_error)}
+        }
         DataRow(Icons.Outlined.Lock, stringResource(R.string.backup_export), stringResource(R.string.backup_export_desc)) {
             awaitingBackupPicker=true
             try{backupLauncher.launchPicker("notes-${LocalDate.now()}.pnbak")}
@@ -116,12 +118,16 @@ import java.time.LocalDate
     if (wipe) WipeDialog({ wipe = false }) { wipe = false; model.wipeAll { (context as? Activity)?.let { a -> a.finish(); a.startActivity(Intent(a, a.javaClass)) } } }
 
     when (val j = job) {
+        is NotesViewModel.DataJob.Reading -> AlertDialog(onDismissRequest=model::cancelImport,
+            confirmButton={TextButton(onClick=model::cancelImport){Text(stringResource(R.string.cancel))}},
+            text={Row(verticalAlignment=Alignment.CenterVertically){CircularProgressIndicator(Modifier.size(28.dp));Spacer(Modifier.width(16.dp));Text(stringResource(R.string.working))}})
         is NotesViewModel.DataJob.Working -> AlertDialog(onDismissRequest = {}, confirmButton = {}, text = { Row(verticalAlignment = Alignment.CenterVertically) {
             CircularProgressIndicator(Modifier.size(28.dp)); Spacer(Modifier.width(16.dp)); Text(stringResource(R.string.working)) } })
         is NotesViewModel.DataJob.Done -> AlertDialog(onDismissRequest = model::clearDataJob, icon = { Icon(Icons.Outlined.CheckCircle, null) }, text = { Text(stringResource(j.message)) },
             confirmButton = { TextButton(onClick = model::clearDataJob) { Text(stringResource(R.string.ok)) } })
         is NotesViewModel.DataJob.Failed -> AlertDialog(onDismissRequest = model::clearDataJob, icon = { Icon(Icons.Outlined.ErrorOutline, null) }, text = { Text(stringResource(j.message)) },
             confirmButton = { TextButton(onClick = model::clearDataJob) { Text(stringResource(R.string.ok)) } })
+        is NotesViewModel.DataJob.ForeignReady -> ForeignImportPreview(j,model::cancelImport) {model.reviewForeignOptions(j)}
         is NotesViewModel.DataJob.ImportReady -> ImportWizard(j.export, j.preview, model::cancelImport) { c, overwrite -> model.runImport(j.export, c, overwrite) }
         is NotesViewModel.DataJob.Imported -> AlertDialog(onDismissRequest = model::clearDataJob, icon = { Icon(Icons.Outlined.CheckCircle, null) }, title = { Text(stringResource(R.string.import_done)) },
             text = { Text(stringResource(R.string.import_done_body, j.summary.medications, j.summary.reusedMedications, j.summary.intakes, j.summary.duplicates, j.summary.containers,

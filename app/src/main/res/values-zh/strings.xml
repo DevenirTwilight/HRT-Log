@@ -1352,4 +1352,15 @@
 <string name="library_restore_pending">正在恢复资料库，请先完成恢复或取消后再修改。</string>
 <string name="library_request_locked">请先解锁并重新打开应用，再进行修改。</string>
 <string name="library_change_committed">资料库更换已提交。请重新打开查看，不要重复提交。</string>
+<string name="migration_import">从其他应用导入</string>
+<string name="migration_import_desc">选择原应用的导出文件。当前支持 HRT tracker / TransMTF JSON 和 Trans Memo SQLite v8。</string>
+<string name="migration_preview">导入预览</string>
+<string name="migration_source">来源：%1$s</string>
+<string name="migration_format">格式：%1$s · 版本 %2$s</string>
+<string name="migration_scan_note">以下数量来自实际文件扫描；最终结果取决于导入选项及已有记录。</string>
+<string name="migration_scan_ht">服药事件：%1$d\n药物分组：%2$d\n化验结果：%3$d\n本文件内重复事件：%4$d</string>
+<string name="migration_source_unsupported">不支持的项目或字段：%1$d</string>
+<string name="migration_unchanged">尚未保存任何数据。请继续检查来源专用选项，再明确确认导入。</string>
+<string name="migration_options">检查导入选项</string>
+<string name="migration_invalid">文件格式尚不支持、来源不确定、内容损坏或超出导入限制。请选择受支持的导出文件；HRT Log 备份请使用加密备份恢复入口。</string>
 </resources>

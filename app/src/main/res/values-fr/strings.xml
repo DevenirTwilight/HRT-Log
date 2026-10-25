@@ -1352,4 +1352,15 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="library_restore_pending">Une restauration est en cours. Terminez-la ou annulez-la avant toute modification.</string>
 <string name="library_request_locked">Déverrouillez puis rouvrez l’application avant toute modification.</string>
 <string name="library_change_committed">Le remplacement est enregistré. Rouvrez la bibliothèque pour le consulter, sans le soumettre à nouveau.</string>
+<string name="migration_import">Importer depuis une autre application</string>
+<string name="migration_import_desc">Choisissez un export. Pris en charge : JSON HRT tracker / TransMTF et SQLite Trans Memo v8.</string>
+<string name="migration_preview">Aperçu de l’import</string>
+<string name="migration_source">Source : %1$s</string>
+<string name="migration_format">Format : %1$s · version %2$s</string>
+<string name="migration_scan_note">Les nombres décrivent le fichier source. Les options et les données existantes déterminent le résultat final.</string>
+<string name="migration_scan_ht">Prises : %1$d\nGroupes de médicaments : %2$d\nRésultats d’analyses : %3$d\nPrises répétées dans ce fichier : %4$d</string>
+<string name="migration_source_unsupported">Éléments ou champs non pris en charge : %1$d</string>
+<string name="migration_unchanged">Aucune donnée enregistrée. Vérifiez les options propres à la source avant de confirmer.</string>
+<string name="migration_options">Vérifier les options</string>
+<string name="migration_invalid">Fichier non pris en charge, ambigu, endommagé ou dépassant les limites. Choisissez un export compatible ; utilisez la restauration chiffrée pour les sauvegardes HRT Log.</string>
 </resources>

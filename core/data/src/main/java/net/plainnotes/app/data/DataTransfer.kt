@@ -250,15 +250,32 @@ object BackupCodec {
 }
 
 /** Reads a user-selected Trans Memo export (plain SQLite, opened read-only from a private copy). */
-class AndroidSqlSource(private val db: SQLiteDatabase) : SqlSource, AutoCloseable {
+class AndroidSqlSource(private val db: SQLiteDatabase, private val maximumRows:Int=Int.MAX_VALUE,
+    private val maximumString:Int=Int.MAX_VALUE, private val check:()->Unit={}) : SqlSource, AutoCloseable {
+    private var readRows=0L
     override fun userVersion() = db.version
-    override fun columns(table: String): List<String>? = db.rawQuery("PRAGMA table_info($table)", null).use { c ->
-        buildList { while (c.moveToNext()) add(c.getString(c.getColumnIndexOrThrow("name"))) }.takeIf { it.isNotEmpty() } }
-    override fun rows(table: String): List<Map<String, Any?>> = db.rawQuery("SELECT * FROM $table", null).use { c ->
-        buildList { while (c.moveToNext()) add((0 until c.columnCount).associate { i -> c.getColumnName(i) to when (c.getType(i)) {
-            Cursor.FIELD_TYPE_NULL -> null; Cursor.FIELD_TYPE_INTEGER -> c.getLong(i); Cursor.FIELD_TYPE_FLOAT -> c.getDouble(i); else -> c.getString(i) } }) } }
+    override fun columns(table: String): List<String>? {
+        check()
+        if(maximumRows!=Int.MAX_VALUE)db.rawQuery("SELECT type,sql FROM sqlite_master WHERE name=?",arrayOf(table)).use {
+            if(!it.moveToFirst() || it.getString(0)!="table" || it.getString(1).contains("CREATE VIRTUAL",ignoreCase=true))throw net.plainnotes.app.importer.InvalidExport("unsupported table")
+        }
+        return db.rawQuery("PRAGMA table_info($table)", null).use { c ->
+            buildList { while (c.moveToNext()) add(c.getString(c.getColumnIndexOrThrow("name"))) }.takeIf { it.isNotEmpty() } }
+    }
+    override fun rows(table: String): List<Map<String, Any?>> = db.rawQuery("SELECT * FROM $table LIMIT ${maximumRows.toLong()-readRows+1}", null).use { c ->
+        buildList { while (c.moveToNext()) {
+            check(); if(++readRows>maximumRows)throw net.plainnotes.app.importer.InvalidExport("row limit")
+            add((0 until c.columnCount).associate { i -> c.getColumnName(i) to when (c.getType(i)) {
+                Cursor.FIELD_TYPE_NULL -> null; Cursor.FIELD_TYPE_INTEGER -> c.getLong(i); Cursor.FIELD_TYPE_FLOAT -> c.getDouble(i)
+                else -> c.getString(i).also { if(it.length>maximumString)throw net.plainnotes.app.importer.InvalidExport("string limit") } } })
+        } }
+    }
     override fun close() = db.close()
-    companion object { fun open(file: File) = AndroidSqlSource(SQLiteDatabase.openDatabase(file.path, null, SQLiteDatabase.OPEN_READONLY)) }
+    companion object {
+        fun open(file: File) = AndroidSqlSource(SQLiteDatabase.openDatabase(file.path, null, SQLiteDatabase.OPEN_READONLY))
+        fun openBounded(file:File,check:()->Unit) = AndroidSqlSource(SQLiteDatabase.openDatabase(file.path,null,SQLiteDatabase.OPEN_READONLY),
+            net.plainnotes.app.importer.CrossAppInput.MAX_ITEMS,net.plainnotes.app.importer.CrossAppInput.MAX_STRING_CHARS,check)
+    }
 }
 
 class ImportSummary(val medications: Int, val reusedMedications: Int, val intakes: Int, val duplicates: Int, val containers: Int, val scores: Int, val notes: Int, val appointments: Int)
