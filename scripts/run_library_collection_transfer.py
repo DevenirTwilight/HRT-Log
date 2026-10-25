@@ -27,6 +27,14 @@ def digest(file):
     return h.hexdigest()
 
 
+def normalize_android_id(value):
+    # Settings.Secure.ANDROID_ID is a 64-bit number expressed as hexadecimal,
+    # not a fixed-width wire field. Preserve numeric identity across leading zeros.
+    if not re.fullmatch(r"[0-9a-fA-F]{1,16}", value) or int(value, 16) == 0:
+        raise AssertionError(f"Fresh guest identity not proven: {value[:128]!r}")
+    return f"{int(value, 16):016x}"
+
+
 def main(phase):
     assert phase in ("export", "restore")
     def adb(*args):
@@ -34,7 +42,7 @@ def main(phase):
     assert adb("shell", "getprop", "ro.kernel.qemu") == "1", "Synthetic emulator only"
     assert adb("shell", "getprop", "ro.build.version.sdk") == "26"
     identity = adb("shell", "settings", "get", "secure", "android_id")
-    assert re.fullmatch(r"[0-9a-f]{16}", identity), "Fresh guest identity not proven"
+    identity = normalize_android_id(identity)
     head = os.environ.get("MED02_SOURCE_HEAD") or subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     REPORT.mkdir(parents=True, exist_ok=True)
     file = REPORT / NAME
@@ -47,7 +55,7 @@ def main(phase):
     source = json.loads((REPORT / "source.json").read_text())
     assert source["sourceHead"] == head and source["cipherSha256"] == digest(file)
     assert source["bytes"] == file.stat().st_size
-    assert source["sourceAndroidId"] != identity, "C must be a newly created/wiped guest, not another namespace in A"
+    assert normalize_android_id(source["sourceAndroidId"]) != identity, "C must be a newly created/wiped guest, not another namespace in A"
     assert PACKAGE not in adb("shell", "pm", "list", "packages", PACKAGE), "Target package must not exist in fresh C"
     subprocess.run(["adb", "install", "-r", "-t", str(ROOT / "core/data/build/outputs/apk/androidTest/debug/data-debug-androidTest.apk")], check=True)
     subprocess.run(["adb", "shell", "run-as", PACKAGE, "mkdir", "-p", "files"], check=True)
