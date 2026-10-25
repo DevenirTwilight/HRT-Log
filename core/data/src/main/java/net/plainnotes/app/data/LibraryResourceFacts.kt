@@ -106,7 +106,7 @@ internal object LibraryResourceFacts {
                     } else {
                     val key=LocalDatabaseKey(owned).open("notes.db","key.wrap",c.getString(3),allowCreate=false).also {password=it}
                     val read=net.zetetic.database.sqlcipher.SQLiteDatabase.openDatabase(owned.getDatabasePath("notes.db").path,key,null,net.zetetic.database.sqlcipher.SQLiteDatabase.OPEN_READONLY,null).also {db=it}
-                    require(read.version in 15..17)
+                    require(read.version in 15..18)
                     read.execSQL("PRAGMA temp_store=MEMORY");read.execSQL("PRAGMA cache_size=-2048")
                     read.query("PRAGMA mmap_size=0").use {require(it.moveToFirst() && it.getLong(0)==0L)}
                     source(id.toString(),owned,read,id.toString()!=active)
