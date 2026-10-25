@@ -68,5 +68,85 @@
     "freshDeviceNative": "OK2/24.244s",
     "physical": "NOT_RUN",
     "memory": "stage samples, not whole-process/viewer peak; collection-codec process HWM157728KiB; no full integration-stage peak claimed"
-  }
+  },
+  "finalApi26And29": [
+    {
+      "api": 26,
+      "run": 40182479995,
+      "artifact": 12594703419,
+      "sha256": "2f7622fa36bcead0b50940e4c2f434f00c15ecc08fb6d9443e9aedbb0199e4a1",
+      "zipCRC": "PASS",
+      "xml": [
+        {
+          "path": "core/data/build/reports/med02-lifecycle-isolated/collection/results/connected/debug/TEST-emulator-5554 - 8.0.0-_core_data-.xml",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/data/build/reports/med02-lifecycle-isolated/results/connected/debug/TEST-emulator-5554 - 8.0.0-_core_data-.xml",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/med02-operation-isolated/results/connected/debug/flavors/full/TEST-emulator-5554 - 8.0.0-_app-full.xml",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/outputs/androidTest-results/connected/debug/flavors/full/TEST-emulator-5554 - 8.0.0-_app-full.xml",
+          "tests": 26,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "migration16To17": "PASS_ORIGINAL_HTML",
+      "collectionFreshPidSeams": 4
+    },
+    {
+      "api": 29,
+      "run": 40182479995,
+      "artifact": 12594798458,
+      "sha256": "667bad1b39f015f662a299b0422306010df837ebcf4e472a000149eb139be4af",
+      "zipCRC": "PASS",
+      "xml": [
+        {
+          "path": "core/data/build/reports/med02-lifecycle-isolated/collection/results/connected/debug/TEST-emulator-5554 - 10-_core_data-.xml",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "core/data/build/reports/med02-lifecycle-isolated/results/connected/debug/TEST-emulator-5554 - 10-_core_data-.xml",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/reports/med02-operation-isolated/results/connected/debug/flavors/full/TEST-emulator-5554 - 10-_app-full.xml",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "path": "app/build/outputs/androidTest-results/connected/debug/flavors/full/TEST-emulator-5554 - 10-_app-full.xml",
+          "tests": 26,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "migration16To17": "PASS_ORIGINAL_HTML",
+      "collectionFreshPidSeams": 4
+    }
+  ]
 }
