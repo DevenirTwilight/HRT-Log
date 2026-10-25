@@ -98,6 +98,12 @@ class AutomaticImportAndroidTest {
             // label's pre-layout coordinates can miss while that drawer is being attached.
             assertTrue(requireNotNull(rootAction).performAction(AccessibilityNodeInfo.ACTION_CLICK))
         }
+        // Some DocumentsUI versions keep the roots drawer over the loaded directory
+        // after an accessibility root action. Do not tap a filename through that overlay.
+        if(systemNode("SYNTHETIC MED-02")!=null) {
+            assertTrue(instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK))
+            waitSystem("closed roots drawer"){systemNode("SYNTHETIC MED-02")==null}
+        }
         val name=if(kind=="tracker")"SYNTHETIC tracker.db" else "SYNTHETIC memo.json"
         waitSystem(name){systemNode(name)!=null}
         try{instrumentation.uiAutomation.waitForIdle(300,3000)}catch(_:java.util.concurrent.TimeoutException){}
