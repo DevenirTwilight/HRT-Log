@@ -1,0 +1,24 @@
+{
+  "dataset_study_codes": [
+    "DEMO_CENTER_A",
+    "DEMO_CENTER_B"
+  ],
+  "eligible_for_external_claim": false,
+  "engine_predictions_locked_at_utc": "2025-01-03T00:00:00Z",
+  "first_dataset_access_at_utc": "2025-01-02T00:00:00Z",
+  "model_sha256": {
+    "LEGACY_LOCKED": "2b4bc56c18e424604a9db2976e45e7ad6e1491f42372b82b0db9f10658652567",
+    "M2_LOCKED": "6326ab715c41b92db9a0eebbd10e89c40baf8059994580e041b780b3deaa2702"
+  },
+  "origin": "SYNTHETIC",
+  "phase": "P2-AM",
+  "protocol_frozen_at_utc": "2025-01-01T00:00:00Z",
+  "score_data_unblinded_at_utc": "2025-01-04T00:00:00Z",
+  "training_studies_seen": [
+    "Price1997_figure1",
+    "Rosano1997_PK25",
+    "Komesaroff1998_n10",
+    "Doll2022_previously_reviewed"
+  ],
+  "warning": "ALL RECORDS AND MODEL PREDICTIONS ARE SYNTHETIC. ZERO REAL INDIVIDUAL VALIDATION. SHA PINs ARE SYNTHETIC STRINGS, NOT APP BUILD HASHES."
+}

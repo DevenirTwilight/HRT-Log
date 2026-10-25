@@ -1,0 +1,202 @@
+{
+  "phase": "P2-Z supplementary local clock feasibility",
+  "results": [
+    {
+      "fit_id": 14,
+      "lowest_ratio_local": 0.04356321704313496,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": true,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 15,
+      "lowest_ratio_local": 0.038918607052225024,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": true,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 17,
+      "lowest_ratio_local": 0.020713677816874613,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": true,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 18,
+      "lowest_ratio_local": 0.016798651152564854,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": true,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 19,
+      "lowest_ratio_local": 0.014654010534381876,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": true,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 22,
+      "lowest_ratio_local": 0.44420889536523267,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": false,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 26,
+      "lowest_ratio_local": 0.29658982038230436,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": false,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 29,
+      "lowest_ratio_local": 0.1663074875671402,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": false,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 30,
+      "lowest_ratio_local": 0.16902688335111357,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": false,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 33,
+      "lowest_ratio_local": 0.07370508050524305,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": true,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 34,
+      "lowest_ratio_local": 0.06433796689730449,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": true,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 35,
+      "lowest_ratio_local": 0.05194102536815678,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": true,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 37,
+      "lowest_ratio_local": 0.02547205908599154,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": true,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 38,
+      "lowest_ratio_local": 0.019403186438471363,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": true,
+      "global_optimality_certified": false
+    },
+    {
+      "fit_id": 39,
+      "lowest_ratio_local": 0.015257026634489933,
+      "local_optimal_day_gaps_hours": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "overnight_gap_hours": 16.5,
+      "nominal_threshold": 0.11427773120983514,
+      "eligible_at_refined_clock": true,
+      "global_optimality_certified": false
+    }
+  ],
+  "n_eligible_local": 11,
+  "not_global_proof": true
+}

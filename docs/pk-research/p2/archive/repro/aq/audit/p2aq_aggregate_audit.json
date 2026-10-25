@@ -1,0 +1,191 @@
+{
+  "TCRUW": {
+    "data": {
+      "actual_dose_time_per_sample": false,
+      "explicit_actual_last_dose_datetime": false,
+      "fields": {
+        "6m-E2": {
+          "max": 574.0,
+          "median": 208.3,
+          "min": 51.32,
+          "n_missing_or_text": 1,
+          "n_numeric": 29
+        },
+        "BL-E2 (kupa)": {
+          "max": 269.0,
+          "median": 107.0,
+          "min": 56.0,
+          "n_missing_or_text": 3,
+          "n_numeric": 27
+        }
+      },
+      "group_sizes_unmapped": {
+        "0": 15,
+        "1": 15
+      },
+      "independent_dense_pk_eligible": false,
+      "n_columns": 96,
+      "n_rows": 30,
+      "postdose_timed_e2_columns": [],
+      "sheets": [
+        "Sheet1"
+      ],
+      "text_qualifier_count": {
+        "6m-E2": 1,
+        "BL-E2 (kupa)": 1
+      },
+      "timepoints": [
+        "treatment baseline",
+        "6 month follow-up"
+      ]
+    },
+    "source": {
+      "archive_sha256": "ad5b3df1f99737c33aba15d44d68c2361f2f38918e65e3633037b432a9338187",
+      "entry_name": "Data for OSF.xlsx",
+      "file_size_bytes": 29622,
+      "xlsx_sha256": "4547cd13214bcdf16045b36199e55511db9df11929a47b849d182b066e5a7391",
+      "zip_name": "tcruw-osfstorage-archive.zip"
+    }
+  },
+  "VNC54": {
+    "data": {
+      "actual_prior_dose_history_per_person": false,
+      "actual_sample_timestamp_per_person": false,
+      "e2_assay": "Siemens Immulite 2000 chemiluminescence (published)",
+      "group_sizes_unmapped": {
+        "0": 11,
+        "1": 11
+      },
+      "independent_dense_pk_eligible": false,
+      "n_columns": 128,
+      "n_people_with_both_3m_and_6m_postdose": 10,
+      "n_rows": 22,
+      "pre_exposed_study": "Yaish 2023/2025",
+      "published_90_min_method": "Yaish 2023; morning 0.5 mg SL, 90 min; 4 SL doses per day",
+      "repeated_id_and_arm_alignment": "PASS",
+      "sheets": [
+        "Data",
+        "Baseline GCLS",
+        "6 months GCLS",
+        "Baseline SDI",
+        "6 months SDI",
+        "Baseline IIEF",
+        "Sheet7"
+      ],
+      "unique_people_with_postdose": 11,
+      "visit_stats": [
+        {
+          "n_paired_predose_postdose": 9,
+          "n_postdose": 10,
+          "paired_delta_pmol_l": {
+            "max": 3813.0,
+            "median": 753.5,
+            "min": 153.0,
+            "n_missing_or_text": 0,
+            "n_numeric": 9
+          },
+          "paired_postdose_predose_ratio": {
+            "max": 25.60652395514781,
+            "median": 4.282258064516129,
+            "min": 1.7688442211055277,
+            "n_missing_or_text": 0,
+            "n_numeric": 9
+          },
+          "paired_predose_pmol_l": {
+            "max": 560.5,
+            "median": 206.0,
+            "min": 49.05,
+            "n_missing_or_text": 0,
+            "n_numeric": 9
+          },
+          "postdose_group_counts_unmapped": {
+            "1": 10
+          },
+          "postdose_pmol_l": {
+            "max": 3979.0,
+            "median": 1072.5,
+            "min": 352.0,
+            "n_missing_or_text": 0,
+            "n_numeric": 10
+          },
+          "postdose_tukey_halves_iqr_pmol_l": [
+            758.0,
+            1314.0
+          ],
+          "postdose_type7_iqr_pmol_l": [
+            766.375,
+            1299.5
+          ],
+          "visit": "3_month"
+        },
+        {
+          "n_paired_predose_postdose": 11,
+          "n_postdose": 11,
+          "paired_delta_pmol_l": {
+            "max": 4809.0,
+            "median": 1473.0,
+            "min": 6.5,
+            "n_missing_or_text": 0,
+            "n_numeric": 11
+          },
+          "paired_postdose_predose_ratio": {
+            "max": 31.826923076923077,
+            "median": 6.939516129032258,
+            "min": 1.0292003593890386,
+            "n_missing_or_text": 0,
+            "n_numeric": 11
+          },
+          "paired_predose_pmol_l": {
+            "max": 286.0,
+            "median": 201.0,
+            "min": 63.0,
+            "n_missing_or_text": 0,
+            "n_numeric": 11
+          },
+          "postdose_group_counts_unmapped": {
+            "1": 11
+          },
+          "postdose_pmol_l": {
+            "max": 4965.0,
+            "median": 1721.0,
+            "min": 229.1,
+            "n_missing_or_text": 0,
+            "n_numeric": 11
+          },
+          "postdose_tukey_halves_iqr_pmol_l": [
+            999.9,
+            2432.0
+          ],
+          "postdose_type7_iqr_pmol_l": [
+            1175.45,
+            2187.5
+          ],
+          "visit": "6_month"
+        }
+      ]
+    },
+    "source": {
+      "archive_sha256": "90fc946e72c8b15abf7be492ec2c29189951190fd08c055db4205f9a24f4b219",
+      "entry_name": "Supplementary table.xlsx",
+      "file_size_bytes": 50073,
+      "xlsx_sha256": "038a935f699ddadc9f0d843e125e5ee8047132773d1d6485085d6302066867dd",
+      "zip_name": "vnc54-osfstorage-archive.zip"
+    }
+  },
+  "conclusions": {
+    "confirmed_unique_people_across_two_studies": null,
+    "deidentified_subject_row_count_naively_added": 52,
+    "eligible_for_retrospective_known_study_90min_benchmark": true,
+    "osf_workbook_count_verified": 2,
+    "published_1721_pmol_l_median_reproduced": true,
+    "published_approx_1000_2432_iqr_reproduced": true,
+    "raw_participant_data_exported": false,
+    "ready_for_0_to_24h_shape_validation": false,
+    "ready_for_absolute_pg_ml_prediction_validation": false,
+    "timed_90min_measurements_at_3m": 10,
+    "timed_90min_measurements_at_6m": 11,
+    "timed_90min_measurements_total": 21,
+    "unique_people_with_timed_90min": 11,
+    "unseen_independent_external_pk_cohorts": 0
+  }
+}

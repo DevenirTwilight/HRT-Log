@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "phase": "P2-AI",
+  "author_timestamp": "2026-10-10",
+  "research_status": "PROVENANCE_CONSTRAINTS_ONLY",
+  "no_git_mutation": true,
+  "personal_pk_validated": false,
+  "study_source_citations": {
+    "primary_article_doi": "https://doi.org/10.1016/S0029-7844(96)00513-3",
+    "primary_article_record": "https://pubmed.ncbi.nlm.nih.gov/9052581/",
+    "body_transcription_not_original_scan": "https://www.academia.edu/122086991/Single_Dose_Pharmacokinetics_of_Sublingual_Versus_Oral_Administration_of_Micronized_17%CE%B2_Estradiol",
+    "secondary_2018_webplotdigitizer_replot_not_primary_or_independent_cohort": "https://commons.wikimedia.org/wiki/File:Estradiol_levels_with_oral_versus_sublingual_estradiol_in_postmenopausal_women.png",
+    "book_secondary_auc": "https://www.ncbi.nlm.nih.gov/books/NBK396201/"
+  },
+  "frozen_p2u_input_sha256": "7f61577d3a2fcdd336e1a308ba62d2d01735cdc181eb753f604f9c10238bfa4e",
+  "study_n": 6,
+  "source_data_warning": "Price Figure 1 P2-U analyst readings: NOT original journal pixel re-digitization. Table 1 values independently transcribed from online OCR: journal plate verification remains required.",
+  "table1_reported_study_arms": [
+    {
+      "arm": "E2_SL_1mg",
+      "route": "SL",
+      "dose_mg": 1.0,
+      "cmax_pg_ml": 451,
+      "cmax_sd_pg_ml": 162,
+      "auc0_24_pg_h_ml": 2109,
+      "auc_sd_pg_h_ml": 1031,
+      "cmax_per_mg": 451.0,
+      "auc_per_mg": 2109.0,
+      "auc_group_coefficient_variation": 0.48885728
+    },
+    {
+      "arm": "E2_SL_0.5mg",
+      "route": "SL",
+      "dose_mg": 0.5,
+      "cmax_pg_ml": 245,
+      "cmax_sd_pg_ml": 115,
+      "auc0_24_pg_h_ml": 970,
+      "auc_sd_pg_h_ml": 440,
+      "cmax_per_mg": 490.0,
+      "auc_per_mg": 1940.0,
+      "auc_group_coefficient_variation": 0.45360825
+    },
+    {
+      "arm": "E2_SL_0.25mg",
+      "route": "SL",
+      "dose_mg": 0.25,
+      "cmax_pg_ml": 294,
+      "cmax_sd_pg_ml": 131,
+      "auc0_24_pg_h_ml": 825,
+      "auc_sd_pg_h_ml": 401,
+      "cmax_per_mg": 1176.0,
+      "auc_per_mg": 3300.0,
+      "auc_group_coefficient_variation": 0.48606061
+    },
+    {
+      "arm": "E2_PO_1mg",
+      "route": "PO",
+      "dose_mg": 1.0,
+      "cmax_pg_ml": 34.0,
+      "cmax_sd_pg_ml": 20.4,
+      "auc0_24_pg_h_ml": 823,
+      "auc_sd_pg_h_ml": 636,
+      "cmax_per_mg": 34.0,
+      "auc_per_mg": 823.0,
+      "auc_group_coefficient_variation": 0.7727825
+    },
+    {
+      "arm": "E2_PO_0.5mg",
+      "route": "PO",
+      "dose_mg": 0.5,
+      "cmax_pg_ml": 24.8,
+      "cmax_sd_pg_ml": 17.5,
+      "auc0_24_pg_h_ml": 403,
+      "auc_sd_pg_h_ml": 142,
+      "cmax_per_mg": 49.6,
+      "auc_per_mg": 806.0,
+      "auc_group_coefficient_variation": 0.35235732
+    }
+  ],
+  "table1_sl_dose_ratio_contrasts": [
+    {
+      "high_dose_arm": "E2_SL_1mg",
+      "low_dose_arm": "E2_SL_0.5mg",
+      "dose_ratio": 2.0,
+      "cmax_mean_ratio": 1.84081633,
+      "auc_mean_ratio": 2.1742268,
+      "auc_ratio_over_linear_dose_ratio": 1.0871134
+    },
+    {
+      "high_dose_arm": "E2_SL_0.5mg",
+      "low_dose_arm": "E2_SL_0.25mg",
+      "dose_ratio": 2.0,
+      "cmax_mean_ratio": 0.83333333,
+      "auc_mean_ratio": 1.17575758,
+      "auc_ratio_over_linear_dose_ratio": 0.58787879
+    },
+    {
+      "high_dose_arm": "E2_SL_1mg",
+      "low_dose_arm": "E2_SL_0.25mg",
+      "dose_ratio": 4.0,
+      "cmax_mean_ratio": 1.53401361,
+      "auc_mean_ratio": 2.55636364,
+      "auc_ratio_over_linear_dose_ratio": 0.63909091
+    }
+  ],
+  "trapezoid_audit": {
+    "baseline_zero_nominal_trapezoid": 1557.5,
+    "method": "linear trapezoid using frozen approximate group mean points; excludes original individual observations",
+    "influence_weights_hour": [
+      0.5,
+      1.0,
+      1.0,
+      1.0,
+      1.5,
+      2.0,
+      3.0,
+      5.0,
+      6.0,
+      3.0
+    ],
+    "max_all_manual_point_width_auc": 185.25,
+    "source_0h_predose_unknown": true,
+    "journal_original_figure_pixels_available": false,
+    "third_party_replot_checked_qualitatively_only": true,
+    "no_claim_of_independent_original_figure_digitization": true,
+    "pointwise_max_1mg_graph_time_1h": 450,
+    "published_1mg_table_auc": 2109,
+    "mean_auc_standard_deviation_from_table": 1031,
+    "unreproduced_gap_relative_to_group_auc_sd_at_b0": 0.534917555771096,
+    "log_trapezoid_note": "For positive consecutive endpoint values, log-mean <= arithmetic mean, so positive log-trapezoids cannot account for an increase over linear trapezoid.",
+    "linear_average_commutes_with_linear_trapezoid_iff_same_grid_and_complete_cases": true
+  },
+  "point_contributions": [
+    {
+      "time_h": 0.0,
+      "reported_digitized_pg_ml": null,
+      "auc_weight_h": 0.5,
+      "manual_read_width_pg_ml": 0.0,
+      "maximum_read_width_auc_effect": 0.0
+    },
+    {
+      "time_h": 1.0,
+      "reported_digitized_pg_ml": 450.0,
+      "auc_weight_h": 1.0,
+      "manual_read_width_pg_ml": 15.0,
+      "maximum_read_width_auc_effect": 15.0
+    },
+    {
+      "time_h": 2.0,
+      "reported_digitized_pg_ml": 225.0,
+      "auc_weight_h": 1.0,
+      "manual_read_width_pg_ml": 32.5,
+      "maximum_read_width_auc_effect": 32.5
+    },
+    {
+      "time_h": 3.0,
+      "reported_digitized_pg_ml": 116.0,
+      "auc_weight_h": 1.0,
+      "manual_read_width_pg_ml": 12.0,
+      "maximum_read_width_auc_effect": 12.0
+    },
+    {
+      "time_h": 4.0,
+      "reported_digitized_pg_ml": 85.0,
+      "auc_weight_h": 1.5,
+      "manual_read_width_pg_ml": 8.5,
+      "maximum_read_width_auc_effect": 12.75
+    },
+    {
+      "time_h": 6.0,
+      "reported_digitized_pg_ml": 56.0,
+      "auc_weight_h": 2.0,
+      "manual_read_width_pg_ml": 7.0,
+      "maximum_read_width_auc_effect": 14.0
+    },
+    {
+      "time_h": 8.0,
+      "reported_digitized_pg_ml": 45.0,
+      "auc_weight_h": 3.0,
+      "manual_read_width_pg_ml": 6.5,
+      "maximum_read_width_auc_effect": 19.5
+    },
+    {
+      "time_h": 12.0,
+      "reported_digitized_pg_ml": 34.0,
+      "auc_weight_h": 5.0,
+      "manual_read_width_pg_ml": 6.0,
+      "maximum_read_width_auc_effect": 30.0
+    },
+    {
+      "time_h": 18.0,
+      "reported_digitized_pg_ml": 25.0,
+      "auc_weight_h": 6.0,
+      "manual_read_width_pg_ml": 5.5,
+      "maximum_read_width_auc_effect": 33.0
+    },
+    {
+      "time_h": 24.0,
+      "reported_digitized_pg_ml": 24.0,
+      "auc_weight_h": 3.0,
+      "manual_read_width_pg_ml": 5.5,
+      "maximum_read_width_auc_effect": 16.5
+    }
+  ],
+  "baseline_scenarios": [
+    {
+      "baseline_pg_ml": 0.0,
+      "trapezoid_baseline_corrected_auc": 1557.5,
+      "raw_fig_auc_assuming_0h_baseline": 1557.5,
+      "table_minus_figure_auc": 551.5,
+      "fraction_of_table_unreproduced": 0.26149834,
+      "min_max_manual_read_width_multipliers_simultaneously": 2.97705803,
+      "min_euclidean_norm_of_width_scaled_point_offsets": 8.29036296,
+      "need_one_point_increase_pg_ml_if_only_12h_misread": 110.3,
+      "need_one_point_increase_pg_ml_if_only_18h_misread": 91.91666667,
+      "need_one_point_increase_pg_ml_if_only_24h_misread": 183.83333333,
+      "hypothetical_half_hour_unobserved_level_pg_ml": 1328.0
+    },
+    {
+      "baseline_pg_ml": 3.0,
+      "trapezoid_baseline_corrected_auc": 1487.0,
+      "raw_fig_auc_assuming_0h_baseline": 1559.0,
+      "table_minus_figure_auc": 622.0,
+      "fraction_of_table_unreproduced": 0.29492651,
+      "min_max_manual_read_width_multipliers_simultaneously": 3.35762483,
+      "min_euclidean_norm_of_width_scaled_point_offsets": 9.35014643,
+      "need_one_point_increase_pg_ml_if_only_12h_misread": 124.4,
+      "need_one_point_increase_pg_ml_if_only_18h_misread": 103.66666667,
+      "need_one_point_increase_pg_ml_if_only_24h_misread": 207.33333333,
+      "hypothetical_half_hour_unobserved_level_pg_ml": 1467.5
+    },
+    {
+      "baseline_pg_ml": 6.0,
+      "trapezoid_baseline_corrected_auc": 1416.5,
+      "raw_fig_auc_assuming_0h_baseline": 1560.5,
+      "table_minus_figure_auc": 692.5,
+      "fraction_of_table_unreproduced": 0.32835467,
+      "min_max_manual_read_width_multipliers_simultaneously": 3.73819163,
+      "min_euclidean_norm_of_width_scaled_point_offsets": 10.40992991,
+      "need_one_point_increase_pg_ml_if_only_12h_misread": 138.5,
+      "need_one_point_increase_pg_ml_if_only_18h_misread": 115.41666667,
+      "need_one_point_increase_pg_ml_if_only_24h_misread": 230.83333333,
+      "hypothetical_half_hour_unobserved_level_pg_ml": 1607.0
+    },
+    {
+      "baseline_pg_ml": 12.0,
+      "trapezoid_baseline_corrected_auc": 1275.5,
+      "raw_fig_auc_assuming_0h_baseline": 1563.5,
+      "table_minus_figure_auc": 833.5,
+      "fraction_of_table_unreproduced": 0.395211,
+      "min_max_manual_read_width_multipliers_simultaneously": 4.49932524,
+      "min_euclidean_norm_of_width_scaled_point_offsets": 12.52949687,
+      "need_one_point_increase_pg_ml_if_only_12h_misread": 166.7,
+      "need_one_point_increase_pg_ml_if_only_18h_misread": 138.91666667,
+      "need_one_point_increase_pg_ml_if_only_24h_misread": 277.83333333,
+      "hypothetical_half_hour_unobserved_level_pg_ml": 1886.0
+    },
+    {
+      "baseline_pg_ml": 18.0,
+      "trapezoid_baseline_corrected_auc": 1134.5,
+      "raw_fig_auc_assuming_0h_baseline": 1566.5,
+      "table_minus_figure_auc": 974.5,
+      "fraction_of_table_unreproduced": 0.46206733,
+      "min_max_manual_read_width_multipliers_simultaneously": 5.26045884,
+      "min_euclidean_norm_of_width_scaled_point_offsets": 14.64906383,
+      "need_one_point_increase_pg_ml_if_only_12h_misread": 194.9,
+      "need_one_point_increase_pg_ml_if_only_18h_misread": 162.41666667,
+      "need_one_point_increase_pg_ml_if_only_24h_misread": 324.83333333,
+      "hypothetical_half_hour_unobserved_level_pg_ml": 2165.0
+    },
+    {
+      "baseline_pg_ml": 24.0,
+      "trapezoid_baseline_corrected_auc": 993.5,
+      "raw_fig_auc_assuming_0h_baseline": 1569.5,
+      "table_minus_figure_auc": 1115.5,
+      "fraction_of_table_unreproduced": 0.52892366,
+      "min_max_manual_read_width_multipliers_simultaneously": 6.02159244,
+      "min_euclidean_norm_of_width_scaled_point_offsets": 16.76863078,
+      "need_one_point_increase_pg_ml_if_only_12h_misread": 223.1,
+      "need_one_point_increase_pg_ml_if_only_18h_misread": 185.91666667,
+      "need_one_point_increase_pg_ml_if_only_24h_misread": 371.83333333,
+      "hypothetical_half_hour_unobserved_level_pg_ml": 2444.0
+    }
+  ],
+  "blocking_conclusion": "Current P2-U digitization cannot reproduce Table1 AUC0-24 under nonnegative common predose scenarios, even after all analyst manual widths are increased simultaneously; actual cause unknown. Do not use Table1 AUC as an independent constraint on P2-X until original figure/individual source agreement resolved.",
+  "dose_conclusion": "Table means show imperfect SL dose proportionality (especially 0.25 vs 0.5 mg), but n=6 and large inter-person dispersion cannot establish genuine nonlinear within-person bioavailability or reject linearity without original paired records."
+}

@@ -1,0 +1,856 @@
+{
+  "auc_cross_study": {
+    "context": "Cross-cohort AUC comparison not a valid individual absolute-prediction test; published Table vs Figure disagrees for Price; area definitions and baseline require caution.",
+    "figure_from_p2aj_without_background": 1550.5664,
+    "journal_table_1mg_sl_mean_auc0_24": 2109,
+    "legacy_single_1mg_auc0_24": 392.6096361984294,
+    "legacy_single_1mg_auc0_8": 390.6484170483189,
+    "price_fig_digitized_1h_pg_ml": 451.72414
+  },
+  "dose_holding_tier_counterfactuals": {
+    "0": {
+      "1h_response": 36.71390159626445,
+      "fold_vs_default": 0.2549155067296476,
+      "hold_minutes": 2
+    },
+    "1": {
+      "1h_response": 76.95511590748588,
+      "fold_vs_default": 0.5343221917060297,
+      "hold_minutes": 5
+    },
+    "2": {
+      "1h_response": 144.02380642618826,
+      "fold_vs_default": 1.0,
+      "hold_minutes": 10
+    },
+    "3": {
+      "1h_response": 144.3475877334518,
+      "fold_vs_default": 1.0022481096375513,
+      "hold_minutes": 15
+    }
+  },
+  "interpretation_flags": [
+    "Doll 1mg 1h/8h AUC are construction targets, not validation",
+    "Price Figure1 digitized mean, already seen during M2 candidate selection",
+    "Rosano/Komesaroff source values are already exposed, not independent heldout",
+    "Assay/population/formulation and group covariance differences",
+    "Single chosen baseline is an assumption, not measured",
+    "Normalized comparisons only shape; no pg/mL calibration of individual",
+    "No personal dose recommendation"
+  ],
+  "komesaroff_early_rise": {
+    "dose_mg": 2,
+    "legacy_15min_to_30min_response": 0.641999648296365,
+    "observed_15min_increment_to_30min_increment": 0.21132155777825073,
+    "predicted_over_observed_ratio": 3.03802250487877,
+    "published_time_0_15_30min_pmol_l": [
+      89.4,
+      486.6,
+      1969
+    ],
+    "reported_dispersion_sem": [
+      9,
+      218,
+      302
+    ],
+    "study": "Komesaroff 1998",
+    "warning": "Published 30-minute value was transcribed from study Table 1; both times share group baseline; not individual matched records."
+  },
+  "legacy_single_dose_pg_ml_exogenous_only": {
+    "0.16666666666666666": 55.228017410542286,
+    "0.25": 76.21879283170954,
+    "0.3333333333333333": 93.50015690959759,
+    "0.5": 118.72092614687041,
+    "0.6666666666666666": 133.9956171184465,
+    "1": 144.02380642618826,
+    "1.5": 131.04337679730406,
+    "12": 0.0862570167532069,
+    "18": 0.04428185519172928,
+    "2": 105.98939034952643,
+    "24": 0.033058416484772084,
+    "3": 58.51580140518021,
+    "4": 28.73521025657075,
+    "6": 5.885535504160614,
+    "8": 1.1146046615353722
+  },
+  "m2_price_in_sample_comparison": [
+    {
+      "all_frozen15_rmse_min": 0.009026555149202664,
+      "b_pg_ml": 0.0,
+      "candidate_count": 15,
+      "caveat": "These M2 candidates were already selected against Price points; in-sample descriptive fit, NOT generalization/clinical evidence.",
+      "rmse_max": 0.0531255224377384,
+      "rmse_median": 0.04484885054924395
+    },
+    {
+      "all_frozen15_rmse_min": 0.007912711360396896,
+      "b_pg_ml": 6.0,
+      "candidate_count": 15,
+      "caveat": "These M2 candidates were already selected against Price points; in-sample descriptive fit, NOT generalization/clinical evidence.",
+      "rmse_max": 0.04251175171791276,
+      "rmse_median": 0.03479343989027394
+    },
+    {
+      "all_frozen15_rmse_min": 0.007305494522922283,
+      "b_pg_ml": 12.0,
+      "candidate_count": 15,
+      "caveat": "These M2 candidates were already selected against Price points; in-sample descriptive fit, NOT generalization/clinical evidence.",
+      "rmse_max": 0.032142412572248584,
+      "rmse_median": 0.02562326570027514
+    },
+    {
+      "all_frozen15_rmse_min": 0.006851519640822011,
+      "b_pg_ml": 18.0,
+      "candidate_count": 15,
+      "caveat": "These M2 candidates were already selected against Price points; in-sample descriptive fit, NOT generalization/clinical evidence.",
+      "rmse_max": 0.03843093017071633,
+      "rmse_median": 0.018967485077604682
+    },
+    {
+      "all_frozen15_rmse_min": 0.005062454006805168,
+      "b_pg_ml": 24.0,
+      "candidate_count": 15,
+      "caveat": "These M2 candidates were already selected against Price points; in-sample descriptive fit, NOT generalization/clinical evidence.",
+      "rmse_max": 0.05051525769200988,
+      "rmse_median": 0.017170708344150375
+    }
+  ],
+  "no_unseen_external_human_data": true,
+  "not_clinical_validation": true,
+  "parameters": {
+    "E2_ORAL": {
+      "ka_per_h": 0.31109807764375685,
+      "terms": [
+        {
+          "A_per_mg": 45.13254431413082,
+          "lambda_per_h": 0.049510512897138946
+        }
+      ]
+    },
+    "E2_SL": {
+      "calibrated_hours": 8,
+      "checks": {
+        "auc0_8": 390.6484170483408,
+        "c_at_24h_1mg": 0.03305841648477258,
+        "cmax_1mg": 144.02380642618826,
+        "tmax_h": 1
+      },
+      "default_tier": 2,
+      "ka_per_h": 1.0005,
+      "swallowed_model": "E2_ORAL",
+      "swallowed_share": 0.0024079912862392887,
+      "terms": [
+        {
+          "A_per_mg": 391432.56698842294,
+          "lambda_per_h": 0.9995
+        }
+      ],
+      "tier_minutes": [
+        2,
+        5,
+        10,
+        15
+      ]
+    },
+    "base_sha": "f69d892d47ca64250db7b35eb95c5e1d0f8a01d8",
+    "parameter_version": "0.1.0-literature-draft",
+    "ref": "claude/new-session-1959qb",
+    "repository": "DevenirTwilight/HRT-Log",
+    "snapshot": "HRT Log production E2_SL and E2_ORAL verified 2026-10-10",
+    "source_files": [
+      {
+        "git_blob_sha1": "f0ce49f09da31286f538affd9977ff36c26e272d",
+        "path": "pk-engine/src/main/resources/pk-params.json"
+      },
+      {
+        "git_blob_sha1": "460e5d89464837738cbd92bf804b876400610bea",
+        "path": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/Engine.kt"
+      },
+      {
+        "git_blob_sha1": "99ed28ab1ae9f6512345917b5b737b18af10455a",
+        "path": "pk-engine/src/main/kotlin/net/plainnotes/app/pk/FittedModels.kt"
+      }
+    ],
+    "warning": "Targeted verified parameter transcription, not a complete pk-params.json or a Kotlin compiler execution. FittedModels.response uses the same exponential terms; Engine.sublingual adds E2_SL and swallowed E2_ORAL and applies hold-time tier scaling."
+  },
+  "phase": "P2-AS",
+  "price_shape_anchor1h": [
+    {
+      "b_pg_ml": 0.0,
+      "early_2h_ratio_pred_to_observed": 1.4985227947365876,
+      "mae_t2_to24": 0.09492623451471566,
+      "mean_ratio_obs_to_model_8h": 12.587952161457634,
+      "points": [
+        {
+          "h": 1,
+          "legacy_relative": 1.0,
+          "observed_raw_pg_ml": 451.72414,
+          "observed_relative": 1.0,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.0,
+          "visual_window_pg_ml": 20
+        },
+        {
+          "h": 2,
+          "legacy_relative": 0.735915769618585,
+          "observed_raw_pg_ml": 221.83908,
+          "observed_relative": 0.49109414431559933,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.24482162530298562,
+          "visual_window_pg_ml": 40
+        },
+        {
+          "h": 3,
+          "legacy_relative": 0.40629256271718783,
+          "observed_raw_pg_ml": 115.83596,
+          "observed_relative": 0.2564307499705462,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.14986181274664162,
+          "visual_window_pg_ml": 12
+        },
+        {
+          "h": 4,
+          "legacy_relative": 0.199517086581776,
+          "observed_raw_pg_ml": 85.74132,
+          "observed_relative": 0.18980902813827927,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.009708058443496731,
+          "visual_window_pg_ml": 10
+        },
+        {
+          "h": 6,
+          "legacy_relative": 0.04086501843135865,
+          "observed_raw_pg_ml": 56.21451,
+          "observed_relative": 0.12444433454452977,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.08357931611317113,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 8,
+          "legacy_relative": 0.007739030714388204,
+          "observed_raw_pg_ml": 44.00631,
+          "observed_relative": 0.09741854840877001,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.0896795176943818,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 12,
+          "legacy_relative": 0.0005989080478678596,
+          "observed_raw_pg_ml": 34.35331,
+          "observed_relative": 0.076049311865423,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.07545040381755515,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 18,
+          "legacy_relative": 0.0003074620529101457,
+          "observed_raw_pg_ml": 23.84858,
+          "observed_relative": 0.052794566170406565,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.05248710411749642,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 24,
+          "legacy_relative": 0.00022953438952271003,
+          "observed_raw_pg_ml": 24.4164,
+          "observed_relative": 0.05405157227151952,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.05382203788199681,
+          "visual_window_pg_ml": 8
+        }
+      ],
+      "rmse_t2_to24": 0.11665270400152207
+    },
+    {
+      "b_pg_ml": 6.0,
+      "early_2h_ratio_pred_to_observed": 1.5197221167069555,
+      "mae_t2_to24": 0.09066478326849678,
+      "mean_ratio_obs_to_model_8h": 11.018005387426197,
+      "points": [
+        {
+          "h": 1,
+          "legacy_relative": 1.0,
+          "observed_raw_pg_ml": 451.72414,
+          "observed_relative": 1.0,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.0,
+          "visual_window_pg_ml": 20
+        },
+        {
+          "h": 2,
+          "legacy_relative": 0.735915769618585,
+          "observed_raw_pg_ml": 221.83908,
+          "observed_relative": 0.4842436400236254,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.25167212959495955,
+          "visual_window_pg_ml": 40
+        },
+        {
+          "h": 3,
+          "legacy_relative": 0.40629256271718783,
+          "observed_raw_pg_ml": 115.83596,
+          "observed_relative": 0.24642138520924625,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.15987117750794158,
+          "visual_window_pg_ml": 12
+        },
+        {
+          "h": 4,
+          "legacy_relative": 0.199517086581776,
+          "observed_raw_pg_ml": 85.74132,
+          "observed_relative": 0.1789028523337327,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.02061423424804329,
+          "visual_window_pg_ml": 10
+        },
+        {
+          "h": 6,
+          "legacy_relative": 0.04086501843135865,
+          "observed_raw_pg_ml": 56.21451,
+          "observed_relative": 0.11265826885660714,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.07179325042524848,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 8,
+          "legacy_relative": 0.007739030714388204,
+          "observed_raw_pg_ml": 44.00631,
+          "observed_relative": 0.08526868210458603,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.07752965139019782,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 12,
+          "legacy_relative": 0.0005989080478678596,
+          "observed_raw_pg_ml": 34.35331,
+          "observed_relative": 0.0636117891214059,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.06301288107353804,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 18,
+          "legacy_relative": 0.0003074620529101457,
+          "observed_raw_pg_ml": 23.84858,
+          "observed_relative": 0.04004400569374591,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.039736543640835766,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 24,
+          "legacy_relative": 0.00022953438952271003,
+          "observed_raw_pg_ml": 24.4164,
+          "observed_relative": 0.04131793265673248,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.04108839826720977,
+          "visual_window_pg_ml": 8
+        }
+      ],
+      "rmse_t2_to24": 0.11604179800369988
+    },
+    {
+      "b_pg_ml": 12.0,
+      "early_2h_ratio_pred_to_observed": 1.5421337574867864,
+      "mae_t2_to24": 0.08628703771340822,
+      "mean_ratio_obs_to_model_8h": 9.405215022209664,
+      "points": [
+        {
+          "h": 1,
+          "legacy_relative": 1.0,
+          "observed_raw_pg_ml": 451.72414,
+          "observed_relative": 1.0,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.0,
+          "visual_window_pg_ml": 20
+        },
+        {
+          "h": 2,
+          "legacy_relative": 0.735915769618585,
+          "observed_raw_pg_ml": 221.83908,
+          "observed_relative": 0.4772061865878003,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.2587095830307847,
+          "visual_window_pg_ml": 40
+        },
+        {
+          "h": 3,
+          "legacy_relative": 0.40629256271718783,
+          "observed_raw_pg_ml": 115.83596,
+          "observed_relative": 0.23613886651753985,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.17015369619964799,
+          "visual_window_pg_ml": 12
+        },
+        {
+          "h": 4,
+          "legacy_relative": 0.199517086581776,
+          "observed_raw_pg_ml": 85.74132,
+          "observed_relative": 0.167699048771805,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.031818037809971,
+          "visual_window_pg_ml": 10
+        },
+        {
+          "h": 6,
+          "legacy_relative": 0.04086501843135865,
+          "observed_raw_pg_ml": 56.21451,
+          "observed_relative": 0.1005505633600193,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.05968554492866065,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 8,
+          "legacy_relative": 0.007739030714388204,
+          "observed_raw_pg_ml": 44.00631,
+          "observed_relative": 0.07278724793230593,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.06504821721791772,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 12,
+          "legacy_relative": 0.0005989080478678596,
+          "observed_raw_pg_ml": 34.35331,
+          "observed_relative": 0.050834848412006674,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.050235940364138816,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 18,
+          "legacy_relative": 0.0003074620529101457,
+          "observed_raw_pg_ml": 23.84858,
+          "observed_relative": 0.026945484503079587,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.02663802245016944,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 24,
+          "legacy_relative": 0.00022953438952271003,
+          "observed_raw_pg_ml": 24.4164,
+          "observed_relative": 0.028236794095498147,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.028007259705975437,
+          "visual_window_pg_ml": 8
+        }
+      ],
+      "rmse_t2_to24": 0.11656896649069216
+    },
+    {
+      "b_pg_ml": 18.0,
+      "early_2h_ratio_pred_to_observed": 1.5658647708293172,
+      "mae_t2_to24": 0.08178817151545881,
+      "mean_ratio_obs_to_model_8h": 7.747803012501316,
+      "points": [
+        {
+          "h": 1,
+          "legacy_relative": 1.0,
+          "observed_raw_pg_ml": 451.72414,
+          "observed_relative": 1.0,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.0,
+          "visual_window_pg_ml": 20
+        },
+        {
+          "h": 2,
+          "legacy_relative": 0.735915769618585,
+          "observed_raw_pg_ml": 221.83908,
+          "observed_relative": 0.4699740254254698,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.26594174419311517,
+          "visual_window_pg_ml": 40
+        },
+        {
+          "h": 3,
+          "legacy_relative": 0.40629256271718783,
+          "observed_raw_pg_ml": 115.83596,
+          "observed_relative": 0.22557185772505078,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.18072070499213705,
+          "visual_window_pg_ml": 12
+        },
+        {
+          "h": 4,
+          "legacy_relative": 0.199517086581776,
+          "observed_raw_pg_ml": 85.74132,
+          "observed_relative": 0.15618526559301035,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.043331820988765646,
+          "visual_window_pg_ml": 10
+        },
+        {
+          "h": 6,
+          "legacy_relative": 0.04086501843135865,
+          "observed_raw_pg_ml": 56.21451,
+          "observed_relative": 0.0881078696703393,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.04724285123898065,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 8,
+          "legacy_relative": 0.007739030714388204,
+          "observed_raw_pg_ml": 44.00631,
+          "observed_relative": 0.05996048548277714,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.052221454768388936,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 12,
+          "legacy_relative": 0.0005989080478678596,
+          "observed_raw_pg_ml": 34.35331,
+          "observed_relative": 0.037704403540923505,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.03710549549305565,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 18,
+          "legacy_relative": 0.0003074620529101457,
+          "observed_raw_pg_ml": 23.84858,
+          "observed_relative": 0.013484561869210229,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.013177099816300082,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 24,
+          "legacy_relative": 0.00022953438952271003,
+          "observed_raw_pg_ml": 24.4164,
+          "observed_relative": 0.014793735022449983,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.014564200632927274,
+          "visual_window_pg_ml": 8
+        }
+      ],
+      "rmse_t2_to24": 0.11831323269941066
+    },
+    {
+      "b_pg_ml": 24.0,
+      "early_2h_ratio_pred_to_observed": 1.5910351972549983,
+      "mae_t2_to24": 0.07732845634874537,
+      "mean_ratio_obs_to_model_8h": 6.043891536766805,
+      "points": [
+        {
+          "h": 1,
+          "legacy_relative": 1.0,
+          "observed_raw_pg_ml": 451.72414,
+          "observed_relative": 1.0,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.0,
+          "visual_window_pg_ml": 20
+        },
+        {
+          "h": 2,
+          "legacy_relative": 0.735915769618585,
+          "observed_raw_pg_ml": 221.83908,
+          "observed_relative": 0.46253896261267835,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.2733768070059066,
+          "visual_window_pg_ml": 40
+        },
+        {
+          "h": 3,
+          "legacy_relative": 0.40629256271718783,
+          "observed_raw_pg_ml": 115.83596,
+          "observed_relative": 0.21470838657832125,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.19158417613886658,
+          "visual_window_pg_ml": 12
+        },
+        {
+          "h": 4,
+          "legacy_relative": 0.199517086581776,
+          "observed_raw_pg_ml": 85.74132,
+          "observed_relative": 0.14434845786351924,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.05516862871825676,
+          "visual_window_pg_ml": 10
+        },
+        {
+          "h": 6,
+          "legacy_relative": 0.04086501843135865,
+          "observed_raw_pg_ml": 56.21451,
+          "observed_relative": 0.07531609041285348,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.03445107198149482,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 8,
+          "legacy_relative": 0.007739030714388204,
+          "observed_raw_pg_ml": 44.00631,
+          "observed_relative": 0.046773862237469224,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.03903483152308102,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 12,
+          "legacy_relative": 0.0005989080478678596,
+          "observed_raw_pg_ml": 34.35331,
+          "observed_relative": 0.024205577922256156,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.023606669874388295,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 18,
+          "legacy_relative": 0.0003074620529101457,
+          "observed_raw_pg_ml": 23.84858,
+          "observed_relative": -0.00035401321982902735,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": 0.0006614752727391731,
+          "visual_window_pg_ml": 8
+        },
+        {
+          "h": 24,
+          "legacy_relative": 0.00022953438952271003,
+          "observed_raw_pg_ml": 24.4164,
+          "observed_relative": 0.0009735246647523786,
+          "reported_observation_kind": "analyst_figure_digitization",
+          "residual_pred_minus_observed": -0.0007439902752296686,
+          "visual_window_pg_ml": 8
+        }
+      ],
+      "rmse_t2_to24": 0.12132178963223163
+    }
+  ],
+  "price_visual_stress_envelope": [
+    {
+      "h": 2,
+      "legacy_relative": 0.735915769618585,
+      "max_observed_relative": 0.6064962686589636,
+      "min_observed_relative": 0.3525364524682542,
+      "out_of_manually_defined_envelope": true
+    },
+    {
+      "h": 3,
+      "legacy_relative": 0.40629256271718783,
+      "max_observed_relative": 0.29610565672792816,
+      "min_observed_relative": 0.1783150669517172,
+      "out_of_manually_defined_envelope": true
+    },
+    {
+      "h": 4,
+      "legacy_relative": 0.199517086581776,
+      "max_observed_relative": 0.22176503727588642,
+      "min_observed_relative": 0.11556517814741908,
+      "out_of_manually_defined_envelope": false
+    },
+    {
+      "h": 6,
+      "legacy_relative": 0.04086501843135865,
+      "max_observed_relative": 0.1487396789996501,
+      "min_observed_relative": 0.05408354796326148,
+      "out_of_manually_defined_envelope": true
+    },
+    {
+      "h": 8,
+      "legacy_relative": 0.007739030714388204,
+      "max_observed_relative": 0.12046189958245096,
+      "min_observed_relative": 0.026816311490374407,
+      "out_of_manually_defined_envelope": true
+    },
+    {
+      "h": 12,
+      "legacy_relative": 0.0005989080478678596,
+      "max_observed_relative": 0.09810271438608924,
+      "min_observed_relative": 0.005256160634983856,
+      "out_of_manually_defined_envelope": true
+    },
+    {
+      "h": 18,
+      "legacy_relative": 0.0003074620529101457,
+      "max_observed_relative": 0.07377067217042808,
+      "min_observed_relative": -0.018206344647844992,
+      "out_of_manually_defined_envelope": false
+    },
+    {
+      "h": 24,
+      "legacy_relative": 0.00022953438952271003,
+      "max_observed_relative": 0.07508591018329436,
+      "min_observed_relative": -0.01693810836288613,
+      "out_of_manually_defined_envelope": false
+    }
+  ],
+  "repeated_dose_synthetic_not_observed": {
+    "12": {
+      "pre_next_dose_pg_ml_q1mg": 0.16013014789393298,
+      "steady_8h_after_last_pg_ml_1mg": 1.2045293065478457
+    },
+    "24": {
+      "pre_next_dose_pg_ml_q1mg": 0.04757625483488511,
+      "steady_8h_after_last_pg_ml_1mg": 1.1466575630778597
+    },
+    "6": {
+      "pre_next_dose_pg_ml_q1mg": 6.144872241302399,
+      "steady_8h_after_last_pg_ml_1mg": 1.3289622467092752
+    }
+  },
+  "rosano_shape_anchor1h": [
+    {
+      "anchor_h": 1.0,
+      "b_pmol_l": 0.0,
+      "data": [
+        {
+          "h": 0.16666666666666666,
+          "legacy_relative": 0.38346450341073623,
+          "observed_pmol_l": 234,
+          "observed_relative": 0.11016949152542373
+        },
+        {
+          "h": 0.3333333333333333,
+          "legacy_relative": 0.6491993180135545,
+          "observed_pmol_l": 468,
+          "observed_relative": 0.22033898305084745
+        },
+        {
+          "h": 0.6666666666666666,
+          "legacy_relative": 0.930371307656827,
+          "observed_pmol_l": 1980,
+          "observed_relative": 0.9322033898305084
+        },
+        {
+          "h": 1,
+          "legacy_relative": 1.0,
+          "observed_pmol_l": 2124,
+          "observed_relative": 1.0
+        }
+      ],
+      "observed_units": "pmol/L",
+      "rmse_first3": 0.29360671367824087
+    },
+    {
+      "anchor_h": 1.0,
+      "b_pmol_l": 100.0,
+      "data": [
+        {
+          "h": 0.16666666666666666,
+          "legacy_relative": 0.38346450341073623,
+          "observed_pmol_l": 234,
+          "observed_relative": 0.06620553359683795
+        },
+        {
+          "h": 0.3333333333333333,
+          "legacy_relative": 0.6491993180135545,
+          "observed_pmol_l": 468,
+          "observed_relative": 0.18181818181818182
+        },
+        {
+          "h": 0.6666666666666666,
+          "legacy_relative": 0.930371307656827,
+          "observed_pmol_l": 1980,
+          "observed_relative": 0.9288537549407114
+        },
+        {
+          "h": 1,
+          "legacy_relative": 1.0,
+          "observed_pmol_l": 2124,
+          "observed_relative": 1.0
+        }
+      ],
+      "observed_units": "pmol/L",
+      "rmse_first3": 0.3261393788780597
+    },
+    {
+      "anchor_h": 1.0,
+      "b_pmol_l": 225.0,
+      "data": [
+        {
+          "h": 0.16666666666666666,
+          "legacy_relative": 0.38346450341073623,
+          "observed_pmol_l": 234,
+          "observed_relative": 0.004739336492890996
+        },
+        {
+          "h": 0.3333333333333333,
+          "legacy_relative": 0.6491993180135545,
+          "observed_pmol_l": 468,
+          "observed_relative": 0.12796208530805686
+        },
+        {
+          "h": 0.6666666666666666,
+          "legacy_relative": 0.930371307656827,
+          "observed_pmol_l": 1980,
+          "observed_relative": 0.9241706161137441
+        },
+        {
+          "h": 1,
+          "legacy_relative": 1.0,
+          "observed_pmol_l": 2124,
+          "observed_relative": 1.0
+        }
+      ],
+      "observed_units": "pmol/L",
+      "rmse_first3": 0.3720033393179185
+    }
+  ],
+  "schema_version": 1,
+  "source_ref": "claude/new-session-1959qb",
+  "source_repo": "DevenirTwilight/HRT-Log",
+  "subject": "production legacy E2_SL model audit",
+  "yaish_90min_exploratory_sensitivity": {
+    "counterfactual_0p5mg_four_doses_day": [
+      {
+        "hypothetical_spacing_h": 6,
+        "legacy_delta_pg_ml": 63.40436409181539,
+        "legacy_delta_pmol_l": 232.75742058105428,
+        "legacy_post_90min_pg_ml": 66.47680021246659,
+        "legacy_pre_pg_ml": 3.0724361206511994
+      },
+      {
+        "hypothetical_spacing_h": 8,
+        "legacy_delta_pg_ml": 65.12918081403485,
+        "legacy_delta_pmol_l": 239.08922276832195,
+        "legacy_post_90min_pg_ml": 65.7616704435878,
+        "legacy_pre_pg_ml": 0.6324896295529429
+      },
+      {
+        "hypothetical_spacing_h": 10,
+        "legacy_delta_pg_ml": 65.45050137546261,
+        "legacy_delta_pmol_l": 240.26879054932323,
+        "legacy_post_90min_pg_ml": 65.62164714846672,
+        "legacy_pre_pg_ml": 0.17114577300410974
+      },
+      {
+        "hypothetical_spacing_h": 12,
+        "legacy_delta_pg_ml": 65.50658364597844,
+        "legacy_delta_pmol_l": 240.47466856438683,
+        "legacy_post_90min_pg_ml": 65.5866487199254,
+        "legacy_pre_pg_ml": 0.08006507394696649
+      },
+      {
+        "hypothetical_spacing_h": 24,
+        "legacy_delta_pg_ml": 65.51999501009824,
+        "legacy_delta_pmol_l": 240.52390168207063,
+        "legacy_post_90min_pg_ml": 65.54378313751569,
+        "legacy_pre_pg_ml": 0.023788127417442555
+      }
+    ],
+    "observed_paired_median_delta_pmol_l": {
+      "3_month": 753.5,
+      "6_month": 1473.0
+    },
+    "source": "/inputs/p2aq_osf_aggregate_audit.json (anonymized aggregate, not original records)",
+    "study": "Yaish 2023, VNC54 OSF workbook aggregate audit P2-AQ",
+    "verified_subject_count": 11,
+    "warnings": [
+      "No actual individual dose timestamps",
+      "Same subject sampled at 3 and 6 months",
+      "Pregenerated M2 evidence already exposed",
+      "Assay Siemens Immulite 2000; other cohorts use different methods",
+      "The observed paired delta is not equivalent to the dose-response increment without dose history"
+    ]
+  }
+}

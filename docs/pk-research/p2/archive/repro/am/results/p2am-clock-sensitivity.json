@@ -1,0 +1,307 @@
+{
+  "candidate_ids": [
+    "p2x-14",
+    "p2x-15",
+    "p2x-17",
+    "p2x-18",
+    "p2x-19",
+    "p2x-22",
+    "p2x-26",
+    "p2x-29",
+    "p2x-30",
+    "p2x-33",
+    "p2x-34",
+    "p2x-35",
+    "p2x-37",
+    "p2x-38",
+    "p2x-39"
+  ],
+  "cannot_establish_actual_timestamp_quality": true,
+  "dose_clock_rule": "shift dose time relative to every sample, including the 1h anchor, then renormalize",
+  "interpretation": "absolute dimensionless differences, not relative percent or pg/mL, no measured timestamp error",
+  "kind": "hypothetical_time_documentation_sensitivity",
+  "n_models": 15,
+  "perturbation_minutes": [
+    5,
+    15,
+    30
+  ],
+  "phase": "P2-AM",
+  "rows": [
+    {
+      "clock_uncertainty_min": 5,
+      "deltaH_sample_clock_max_over15": 0.09006767247655448,
+      "deltaH_sample_clock_median_over15": 0.08434830280361863,
+      "deltaH_shared_dose_clock_max_over15": 0.0958743880437617,
+      "deltaH_shared_dose_clock_median_over15": 0.08983858245833636,
+      "sample_hour": 0.25,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 5,
+      "deltaH_sample_clock_max_over15": 0.21764737899083797,
+      "deltaH_sample_clock_median_over15": 0.1922894418033959,
+      "deltaH_shared_dose_clock_max_over15": 0.2633109871886483,
+      "deltaH_shared_dose_clock_median_over15": 0.2219529832745225,
+      "sample_hour": 0.5,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 5,
+      "deltaH_sample_clock_max_over15": 0.06040932410857136,
+      "deltaH_sample_clock_median_over15": 0.04243574812877782,
+      "deltaH_shared_dose_clock_max_over15": 0.0,
+      "deltaH_shared_dose_clock_median_over15": 0.0,
+      "sample_hour": 1.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 5,
+      "deltaH_sample_clock_max_over15": 0.03648286846141324,
+      "deltaH_sample_clock_median_over15": 0.030808426318284954,
+      "deltaH_shared_dose_clock_max_over15": 0.039788293842475175,
+      "deltaH_shared_dose_clock_median_over15": 0.020615109996074632,
+      "sample_hour": 2.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 5,
+      "deltaH_sample_clock_max_over15": 0.012575962097018417,
+      "deltaH_sample_clock_median_over15": 0.010608932018403017,
+      "deltaH_shared_dose_clock_max_over15": 0.014281095066476873,
+      "deltaH_shared_dose_clock_median_over15": 0.006000640939637508,
+      "sample_hour": 3.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 5,
+      "deltaH_sample_clock_max_over15": 0.004987009780987123,
+      "deltaH_sample_clock_median_over15": 0.004392843274003827,
+      "deltaH_shared_dose_clock_max_over15": 0.006304548019872708,
+      "deltaH_shared_dose_clock_median_over15": 0.00455969654891103,
+      "sample_hour": 4.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 5,
+      "deltaH_sample_clock_max_over15": 0.0018440916634777371,
+      "deltaH_sample_clock_median_over15": 0.0015537465040667414,
+      "deltaH_shared_dose_clock_max_over15": 0.004512814895914513,
+      "deltaH_shared_dose_clock_median_over15": 0.002827104349608353,
+      "sample_hour": 6.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 5,
+      "deltaH_sample_clock_max_over15": 0.0011395435054488146,
+      "deltaH_sample_clock_median_over15": 0.0009266417777463523,
+      "deltaH_shared_dose_clock_max_over15": 0.003480094517933449,
+      "deltaH_shared_dose_clock_median_over15": 0.0018269722379670034,
+      "sample_hour": 8.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 5,
+      "deltaH_sample_clock_max_over15": 0.0004955564116689119,
+      "deltaH_sample_clock_median_over15": 0.00038852785533027845,
+      "deltaH_shared_dose_clock_max_over15": 0.0028690697173047036,
+      "deltaH_shared_dose_clock_median_over15": 0.0007853649559167244,
+      "sample_hour": 12.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 5,
+      "deltaH_sample_clock_max_over15": 0.00019315012941170662,
+      "deltaH_sample_clock_median_over15": 4.801984380450354e-05,
+      "deltaH_shared_dose_clock_max_over15": 0.0015440027616687516,
+      "deltaH_shared_dose_clock_median_over15": 0.00010879594810097324,
+      "sample_hour": 24.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 15,
+      "deltaH_sample_clock_max_over15": 0.44452093829291645,
+      "deltaH_sample_clock_median_over15": 0.41962647818455584,
+      "deltaH_shared_dose_clock_max_over15": 0.5631757470123172,
+      "deltaH_shared_dose_clock_median_over15": 0.5093925784044393,
+      "sample_hour": 0.25,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 15,
+      "deltaH_sample_clock_max_over15": 0.4939493275259187,
+      "deltaH_sample_clock_median_over15": 0.45600542943155437,
+      "deltaH_shared_dose_clock_max_over15": 0.7349680124955654,
+      "deltaH_shared_dose_clock_median_over15": 0.6336956812672465,
+      "sample_hour": 0.5,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 15,
+      "deltaH_sample_clock_max_over15": 0.1939552022361274,
+      "deltaH_sample_clock_median_over15": 0.15374971588185982,
+      "deltaH_shared_dose_clock_max_over15": 0.0,
+      "deltaH_shared_dose_clock_median_over15": 0.0,
+      "sample_hour": 1.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 15,
+      "deltaH_sample_clock_max_over15": 0.12076461208451233,
+      "deltaH_sample_clock_median_over15": 0.10140028043331534,
+      "deltaH_shared_dose_clock_max_over15": 0.1991863559212419,
+      "deltaH_shared_dose_clock_median_over15": 0.12767621930073236,
+      "sample_hour": 2.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 15,
+      "deltaH_sample_clock_max_over15": 0.04117961135015988,
+      "deltaH_sample_clock_median_over15": 0.03473690987158096,
+      "deltaH_shared_dose_clock_max_over15": 0.07927019129828691,
+      "deltaH_shared_dose_clock_median_over15": 0.04690533771538202,
+      "sample_hour": 3.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 15,
+      "deltaH_sample_clock_max_over15": 0.016091741871865906,
+      "deltaH_sample_clock_median_over15": 0.01395539097530929,
+      "deltaH_shared_dose_clock_max_over15": 0.03799227999897922,
+      "deltaH_shared_dose_clock_median_over15": 0.022049229195212877,
+      "sample_hour": 4.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 15,
+      "deltaH_sample_clock_max_over15": 0.00568385151682714,
+      "deltaH_sample_clock_median_over15": 0.0047874812493816365,
+      "deltaH_shared_dose_clock_max_over15": 0.017480426476313177,
+      "deltaH_shared_dose_clock_median_over15": 0.014139818046551733,
+      "sample_hour": 6.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 15,
+      "deltaH_sample_clock_max_over15": 0.0034799022943842045,
+      "deltaH_sample_clock_median_over15": 0.0028349989609515944,
+      "deltaH_shared_dose_clock_max_over15": 0.014309850986357744,
+      "deltaH_shared_dose_clock_median_over15": 0.009861311227454088,
+      "sample_hour": 8.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 15,
+      "deltaH_sample_clock_max_over15": 0.0015127340200890675,
+      "deltaH_sample_clock_median_over15": 0.0011725020129217112,
+      "deltaH_shared_dose_clock_max_over15": 0.011723411477711415,
+      "deltaH_shared_dose_clock_median_over15": 0.004771236396571676,
+      "sample_hour": 12.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 15,
+      "deltaH_sample_clock_max_over15": 0.0005819542150817189,
+      "deltaH_sample_clock_median_over15": 0.0001464174041607958,
+      "deltaH_shared_dose_clock_max_over15": 0.00630787875214249,
+      "deltaH_shared_dose_clock_median_over15": 0.0004203231852718016,
+      "sample_hour": 24.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 30,
+      "deltaH_sample_clock_max_over15": 0.53933431438951,
+      "deltaH_sample_clock_median_over15": 0.5194661945119453,
+      "deltaH_shared_dose_clock_max_over15": 1.0629546158463152,
+      "deltaH_shared_dose_clock_median_over15": 0.9768848213682886,
+      "sample_hour": 0.5,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 30,
+      "deltaH_sample_clock_max_over15": 0.53933431438951,
+      "deltaH_sample_clock_median_over15": 0.5019305554043344,
+      "deltaH_shared_dose_clock_max_over15": 0.0,
+      "deltaH_shared_dose_clock_median_over15": 0.0,
+      "sample_hour": 1.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 30,
+      "deltaH_sample_clock_max_over15": 0.2751673026341919,
+      "deltaH_sample_clock_median_over15": 0.2364997579266902,
+      "deltaH_shared_dose_clock_max_over15": 1.1386705147338623,
+      "deltaH_shared_dose_clock_median_over15": 0.9258466684604625,
+      "sample_hour": 2.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 30,
+      "deltaH_sample_clock_max_over15": 0.09444648606239817,
+      "deltaH_sample_clock_median_over15": 0.07980112791478866,
+      "deltaH_shared_dose_clock_max_over15": 0.4930732664105105,
+      "deltaH_shared_dose_clock_median_over15": 0.3940585523357792,
+      "sample_hour": 3.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 30,
+      "deltaH_sample_clock_max_over15": 0.03606245196659927,
+      "deltaH_sample_clock_median_over15": 0.03065858326924978,
+      "deltaH_shared_dose_clock_max_over15": 0.25686928847181023,
+      "deltaH_shared_dose_clock_median_over15": 0.2137245689756993,
+      "sample_hour": 4.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 30,
+      "deltaH_sample_clock_max_over15": 0.01185796562730057,
+      "deltaH_sample_clock_median_over15": 0.009991766087293713,
+      "deltaH_shared_dose_clock_max_over15": 0.13598447020666093,
+      "deltaH_shared_dose_clock_median_over15": 0.11305518872095008,
+      "sample_hour": 6.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 30,
+      "deltaH_sample_clock_max_over15": 0.007149970715356155,
+      "deltaH_sample_clock_median_over15": 0.005841977642897463,
+      "deltaH_shared_dose_clock_max_over15": 0.10919211895202832,
+      "deltaH_shared_dose_clock_median_over15": 0.07407212306718428,
+      "sample_hour": 8.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 30,
+      "deltaH_sample_clock_max_over15": 0.0031059630576844993,
+      "deltaH_sample_clock_median_over15": 0.002366142558434217,
+      "deltaH_shared_dose_clock_max_over15": 0.08667243797695347,
+      "deltaH_shared_dose_clock_median_over15": 0.035132698608357625,
+      "sample_hour": 12.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    },
+    {
+      "clock_uncertainty_min": 30,
+      "deltaH_sample_clock_max_over15": 0.001171474086881348,
+      "deltaH_sample_clock_median_over15": 0.00030010243767052526,
+      "deltaH_shared_dose_clock_max_over15": 0.04659210597136049,
+      "deltaH_shared_dose_clock_median_over15": 0.003626533644772442,
+      "sample_hour": 24.0,
+      "sample_time_plus_minus_not_probabilistic": true
+    }
+  ],
+  "sample_jitter_rule": "shift evaluated sample only; calibration anchor fixed at 1h",
+  "sampling_times_h": [
+    0.25,
+    0.5,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    6.0,
+    8.0,
+    12.0,
+    24.0
+  ],
+  "source": "Frozen P2-X 15 conditional candidates; unchanged 1mg/1h-normalized M2 mathematical kernel"
+}

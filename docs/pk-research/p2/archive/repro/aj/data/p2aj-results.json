@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "phase": "P2-AJ",
+  "source_study": "Price et al. 1997; Obstet Gynecol 89(3):340-345; doi:10.1016/S0029-7844(96)00513-3",
+  "input_sha256": "580694af1438a008c0f4109a3924b451bc5175d3751c2051a4b23099bb88d2b1",
+  "time_grid_hours": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    6,
+    8,
+    12,
+    18,
+    24
+  ],
+  "source_pdf_sha256": "40ecaf3a36b6481bbf2e9fc074066700f141ae3a51959b5bf6138cd920deb70a",
+  "source_crop_sha256": "25ff6138da10a0a7a68d0de36b045c32528d715cf128f61cf3f9794a3aa02db0",
+  "digitized_points": [
+    {
+      "hour": 1,
+      "x_px": 222,
+      "y_px": 70,
+      "panel": "upper",
+      "visual_window_pg_ml": 20,
+      "visibility": "clear high marker",
+      "value_pg_ml": 451.72414,
+      "trapezoid_weight_h": 1.0,
+      "pixel_to_pg_ml_sensitivity": 2.29885,
+      "weighted_visual_window_pg_h_ml": 20.0
+    },
+    {
+      "hour": 2,
+      "x_px": 252,
+      "y_px": 170,
+      "panel": "upper",
+      "visual_window_pg_ml": 40,
+      "visibility": "ambiguous center near axis break/SD bars; biggest subjective window",
+      "value_pg_ml": 221.83908,
+      "trapezoid_weight_h": 1.0,
+      "pixel_to_pg_ml_sensitivity": 2.29885,
+      "weighted_visual_window_pg_h_ml": 40.0
+    },
+    {
+      "hour": 3,
+      "x_px": 282,
+      "y_px": 433,
+      "panel": "lower",
+      "visual_window_pg_ml": 12,
+      "visibility": "solid line marker",
+      "value_pg_ml": 115.83596,
+      "trapezoid_weight_h": 1.0,
+      "pixel_to_pg_ml_sensitivity": 0.28391,
+      "weighted_visual_window_pg_h_ml": 12.0
+    },
+    {
+      "hour": 4,
+      "x_px": 311,
+      "y_px": 539,
+      "panel": "lower",
+      "visual_window_pg_ml": 10,
+      "visibility": "solid line marker",
+      "value_pg_ml": 85.74132,
+      "trapezoid_weight_h": 1.5,
+      "pixel_to_pg_ml_sensitivity": 0.28391,
+      "weighted_visual_window_pg_h_ml": 15.0
+    },
+    {
+      "hour": 6,
+      "x_px": 371,
+      "y_px": 643,
+      "panel": "lower",
+      "visual_window_pg_ml": 8,
+      "visibility": "solid line marker",
+      "value_pg_ml": 56.21451,
+      "trapezoid_weight_h": 2.0,
+      "pixel_to_pg_ml_sensitivity": 0.28391,
+      "weighted_visual_window_pg_h_ml": 16.0
+    },
+    {
+      "hour": 8,
+      "x_px": 430,
+      "y_px": 686,
+      "panel": "lower",
+      "visual_window_pg_ml": 8,
+      "visibility": "solid line marker",
+      "value_pg_ml": 44.00631,
+      "trapezoid_weight_h": 3.0,
+      "pixel_to_pg_ml_sensitivity": 0.28391,
+      "weighted_visual_window_pg_h_ml": 24.0
+    },
+    {
+      "hour": 12,
+      "x_px": 549,
+      "y_px": 720,
+      "panel": "lower",
+      "visual_window_pg_ml": 8,
+      "visibility": "solid line marker",
+      "value_pg_ml": 34.35331,
+      "trapezoid_weight_h": 5.0,
+      "pixel_to_pg_ml_sensitivity": 0.28391,
+      "weighted_visual_window_pg_h_ml": 40.0
+    },
+    {
+      "hour": 18,
+      "x_px": 727,
+      "y_px": 757,
+      "panel": "lower",
+      "visual_window_pg_ml": 8,
+      "visibility": "solid line marker; low values overlap other dosing traces",
+      "value_pg_ml": 23.84858,
+      "trapezoid_weight_h": 6.0,
+      "pixel_to_pg_ml_sensitivity": 0.28391,
+      "weighted_visual_window_pg_h_ml": 48.0
+    },
+    {
+      "hour": 24,
+      "x_px": 905,
+      "y_px": 755,
+      "panel": "lower",
+      "visual_window_pg_ml": 8,
+      "visibility": "solid line marker; low values overlap other dosing traces",
+      "value_pg_ml": 24.4164,
+      "trapezoid_weight_h": 3.0,
+      "pixel_to_pg_ml_sensitivity": 0.28391,
+      "weighted_visual_window_pg_h_ml": 24.0
+    }
+  ],
+  "figure1_trapezoid_raw_0h_assumed_zero_pg_h_ml": 1550.5664,
+  "figure1_previous_p2u_0h_zero_pg_h_ml": 1557.5,
+  "new_minus_previous_pg_h_ml": -6.9336,
+  "author_table_auc_pg_h_ml": 2109,
+  "zero_baseline_deficit_pg_h_ml": 558.4336,
+  "zero_baseline_auc_ratio_table_to_digitized": 1.360148,
+  "manual_stress_window_weighted_total_pg_h_ml": 239.0,
+  "zero_baseline_stress_upper_auc_pg_h_ml": 1789.5664,
+  "zero_baseline_gap_even_after_stress_pg_h_ml": 319.4336,
+  "baseline_scenarios": [
+    {
+      "assumed_b_pg_ml": 0,
+      "baseline_subtracted_auc_pg_h_ml": 1550.5664,
+      "deficit_to_table_pg_h_ml": 558.4336,
+      "generous_all_points_up_upper_bound": 1789.5664,
+      "target_still_exceeds_upper_by_pg_h_ml": 319.4336
+    },
+    {
+      "assumed_b_pg_ml": 6,
+      "baseline_subtracted_auc_pg_h_ml": 1409.5664,
+      "deficit_to_table_pg_h_ml": 699.4336,
+      "generous_all_points_up_upper_bound": 1648.5664,
+      "target_still_exceeds_upper_by_pg_h_ml": 460.4336
+    },
+    {
+      "assumed_b_pg_ml": 12,
+      "baseline_subtracted_auc_pg_h_ml": 1268.5664,
+      "deficit_to_table_pg_h_ml": 840.4336,
+      "generous_all_points_up_upper_bound": 1507.5664,
+      "target_still_exceeds_upper_by_pg_h_ml": 601.4336
+    },
+    {
+      "assumed_b_pg_ml": 18,
+      "baseline_subtracted_auc_pg_h_ml": 1127.5664,
+      "deficit_to_table_pg_h_ml": 981.4336,
+      "generous_all_points_up_upper_bound": 1366.5664,
+      "target_still_exceeds_upper_by_pg_h_ml": 742.4336
+    },
+    {
+      "assumed_b_pg_ml": 24,
+      "baseline_subtracted_auc_pg_h_ml": 986.5664,
+      "deficit_to_table_pg_h_ml": 1122.4336,
+      "generous_all_points_up_upper_bound": 1225.5664,
+      "target_still_exceeds_upper_by_pg_h_ml": 883.4336
+    }
+  ],
+  "trapezoid_weights_hours": [
+    0.5,
+    1.0,
+    1.0,
+    1.0,
+    1.5,
+    2.0,
+    3.0,
+    5.0,
+    6.0,
+    3.0
+  ],
+  "assumptions": [
+    "No 0h plotted curve point: 0h baseline-subtracted increment imposed as zero from author Methods, not observed concentration.",
+    "Mean predose background b treated as unknown; table-minus-figure mismatch has conditional nonnegative-b maximum at b=0.",
+    "Visual windows are subjective stress ranges; not reader reliability, lab error, SD, CI or scientific impossibility bounds.",
+    "Only 1 mg SL visibly traced fully. Overlapping 0.5 / 0.25 mg routes not treated as fully independently digitized.",
+    "Research-only source consistency audit; previous exposure excludes blinded generalization claims."
+  ]
+}

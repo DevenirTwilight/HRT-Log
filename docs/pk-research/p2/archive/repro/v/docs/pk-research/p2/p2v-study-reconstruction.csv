@@ -1,0 +1,49 @@
+study,time_h,observed,model,predicted,unit,evidence_type
+Rosano1997_PK25,0.1666666667,234,M0,294.449865185,pmol/L,group mean
+Rosano1997_PK25,0.3333333333,468,M0,537.989127086,pmol/L,group mean
+Rosano1997_PK25,0.6666666667,1980,M0,897.997897839,pmol/L,group mean
+Rosano1997_PK25,1,2124,M0,1124.21262308,pmol/L,group mean
+Komesaroff1998_n10,0,89.4,M0,88.7262280218,pmol/L,group mean
+Komesaroff1998_n10,0.25,486.6,M0,903.236643676,pmol/L,group mean
+Komesaroff1998_n10,0.5,1969,M0,1511.14567073,pmol/L,group mean
+Price1997_figure1,1,450,M0,125.159555979,pg/mL,manually read figure
+Price1997_figure1,2,225,M0,141.63670513,pg/mL,manually read figure
+Price1997_figure1,3,116,M0,126.619639276,pg/mL,manually read figure
+Price1997_figure1,4,85,M0,103.589535027,pg/mL,manually read figure
+Price1997_figure1,6,56,M0,64.4195529692,pg/mL,manually read figure
+Price1997_figure1,8,45,M0,42.2614299554,pg/mL,manually read figure
+Price1997_figure1,12,34,M0,27.1529024616,pg/mL,manually read figure
+Price1997_figure1,18,25,M0,24.1858180925,pg/mL,manually read figure
+Price1997_figure1,24,24,M0,24.0098048364,pg/mL,manually read figure
+Rosano1997_PK25,0.1666666667,234,M1,228.518975278,pmol/L,group mean
+Rosano1997_PK25,0.3333333333,468,M1,494.294248197,pmol/L,group mean
+Rosano1997_PK25,0.6666666667,1980,M1,1884.58779966,pmol/L,group mean
+Rosano1997_PK25,1,2124,M1,2143.7802659,pmol/L,group mean
+Komesaroff1998_n10,0,89.4,M1,90.288171606,pmol/L,group mean
+Komesaroff1998_n10,0.25,486.6,M1,232.980648669,pmol/L,group mean
+Komesaroff1998_n10,0.5,1969,M1,2005.26771746,pmol/L,group mean
+Price1997_figure1,1,450,M1,332.475444858,pg/mL,manually read figure
+Price1997_figure1,2,225,M1,217.36208389,pg/mL,manually read figure
+Price1997_figure1,3,116,M1,141.209433417,pg/mL,manually read figure
+Price1997_figure1,4,85,M1,95.0481261739,pg/mL,manually read figure
+Price1997_figure1,6,56,M1,50.1055442427,pg/mL,manually read figure
+Price1997_figure1,8,45,M1,33.5920818311,pg/mL,manually read figure
+Price1997_figure1,12,34,M1,25.2950099997,pg/mL,manually read figure
+Price1997_figure1,18,25,M1,24.0642411774,pg/mL,manually read figure
+Price1997_figure1,24,24,M1,24.0031867931,pg/mL,manually read figure
+Rosano1997_PK25,0.1666666667,234,M2,232.727308245,pmol/L,group mean
+Rosano1997_PK25,0.3333333333,468,M2,474.364573101,pmol/L,group mean
+Rosano1997_PK25,0.6666666667,1980,M2,1915.10879324,pmol/L,group mean
+Rosano1997_PK25,1,2124,M2,2172.43576358,pmol/L,group mean
+Komesaroff1998_n10,0,89.4,M2,89.5381550798,pmol/L,group mean
+Komesaroff1998_n10,0.25,486.6,M2,441.756118972,pmol/L,group mean
+Komesaroff1998_n10,0.5,1969,M2,1984.99198531,pmol/L,group mean
+Price1997_figure1,1,450,M2,460.303846264,pg/mL,manually read figure
+Price1997_figure1,2,225,M2,208.006264293,pg/mL,manually read figure
+Price1997_figure1,3,116,M2,119.361710003,pg/mL,manually read figure
+Price1997_figure1,4,85,M2,85.8620141856,pg/mL,manually read figure
+Price1997_figure1,6,56,M2,58.1918945307,pg/mL,manually read figure
+Price1997_figure1,8,45,M2,44.5165804759,pg/mL,manually read figure
+Price1997_figure1,12,34,M2,31.5384684974,pg/mL,manually read figure
+Price1997_figure1,18,25,M2,25.6823335915,pg/mL,manually read figure
+Price1997_figure1,24,24,M2,24.375446657,pg/mL,manually read figure

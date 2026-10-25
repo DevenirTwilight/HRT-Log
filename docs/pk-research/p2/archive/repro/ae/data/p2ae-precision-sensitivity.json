@@ -1,0 +1,37 @@
+{
+  "all_noise_cases_hypothetical": true,
+  "has_new_human_data": false,
+  "not_assay_claim": true,
+  "not_medical_or_sample_plan": true,
+  "phase": "P2-AE-precision-stress",
+  "rate_grid": [
+    0.025,
+    0.8
+  ],
+  "results": {
+    "sd_floor_0.5_fractional_cv_0.01": {
+      "max_distance": 16.912608973749666,
+      "median_distance": 6.431302624474023,
+      "p90_distance": 12.462573429123468,
+      "threshold2_count": 94
+    },
+    "sd_floor_1.0_fractional_cv_0.02": {
+      "max_distance": 8.456304486874833,
+      "median_distance": 3.2156513122370116,
+      "p90_distance": 6.231286714561734,
+      "threshold2_count": 76
+    },
+    "sd_floor_1.0_fractional_cv_0.05": {
+      "max_distance": 3.4989121849696234,
+      "median_distance": 1.3525346043617568,
+      "p90_distance": 2.606461470206268,
+      "threshold2_count": 33
+    },
+    "sd_floor_3.0_fractional_cv_0.125": {
+      "max_distance": 1.3948466192819935,
+      "median_distance": 0.5402100137146457,
+      "p90_distance": 1.0345954115736835,
+      "threshold2_count": 0
+    }
+  }
+}

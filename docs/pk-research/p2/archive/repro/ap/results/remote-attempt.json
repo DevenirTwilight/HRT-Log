@@ -1,0 +1,23 @@
+{
+  "method": "OSF public API metadata only; no IPD downloaded",
+  "nodes": [
+    {
+      "node": "vnc54",
+      "status": "inaccessible_not_verified",
+      "error": "URLError: <urlopen error [Errno -3] Temporary failure in name resolution>",
+      "file_count": null,
+      "entries": null,
+      "eligibility": "not_verified",
+      "research_note": "Previously exposed Yaish/body-composition cohort; not external PK validation"
+    },
+    {
+      "node": "tcruw",
+      "status": "inaccessible_not_verified",
+      "error": "URLError: <urlopen error [Errno -3] Temporary failure in name resolution>",
+      "file_count": null,
+      "entries": null,
+      "eligibility": "not_verified",
+      "research_note": "Six-month follow-up cohort; PK timing/overlap unverified"
+    }
+  ]
+}

@@ -1,0 +1,584 @@
+{
+  "Cortez_arms_are_separate_people": true,
+  "Doll_used": false,
+  "Yaish_mean_is_not_median": true,
+  "mode": "FROZEN_P2V_SHAPES_NO_REFITTING_TO_REPEAT_COHORTS",
+  "models": {
+    "M0_extended": {
+      "Cortez_group_mean_6mo_ratio_twice_over_once_raw": 0.833158447009444,
+      "Cortez_increment_ratio_if_subtract_pretreatment_means": 0.8057553956834533,
+      "Cortez_required_amplitude_ratio_twice_to_once_using_pretreatment_baselines": 0.004995898537599282,
+      "Cortez_required_gain_sensitivity": {
+        "0": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 1567.6842052838053,
+            "required_1h_increment_per_mg_if_shared_shape": 158586.23812122835
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 8.098350546536311,
+            "required_1h_increment_per_mg_if_shared_shape": 819.2255454469458
+          }
+        },
+        "50pg": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 745.1846222387868,
+            "required_1h_increment_per_mg_if_shared_shape": 75382.54550778221
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 2.99863357768473,
+            "required_1h_increment_per_mg_if_shared_shape": 303.3404412612117
+          }
+        },
+        "pre_treatment_group_mean": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 1143.2744204325757,
+            "required_1h_increment_per_mg_if_shared_shape": 115653.13273269014
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 5.7116830051137715,
+            "required_1h_increment_per_mg_if_shared_shape": 577.7913166880223
+          }
+        }
+      },
+      "Yaish_noncomparable_summary_indicators": [
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.3795715488101684,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 257.5035776510183,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 678.4058985933142,
+          "hypothetical_steady_background_pg_ml": 0.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.3182221560203268,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 211.27885229371324,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 663.935078989967,
+          "hypothetical_steady_background_pg_ml": 10.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.2541388914800208,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 165.0541269364082,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 649.4642593866197,
+          "hypothetical_steady_background_pg_ml": 20.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.18713484917208031,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 118.82940157910316,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 634.9934397832725,
+          "hypothetical_steady_background_pg_ml": 30.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.11700568820641195,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 72.60467622179813,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 620.5226201799253,
+          "hypothetical_steady_background_pg_ml": 40.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.043527551340324475,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 26.379950864493093,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 606.0518005765781,
+          "hypothetical_steady_background_pg_ml": 50.0
+        }
+      ],
+      "conditional_q12_twice_vs_q24_once_predose_increment_ratio_at_equal_daily_mg": 161.28337867939354,
+      "dimensionless_post_90min_index_per_mg_q6": 1.3820917230820733,
+      "dimensionless_trough_index_per_mg": {
+        "12": 0.03126477606583031,
+        "24": 9.692497863645285e-05,
+        "6": 0.43266887678412863
+      },
+      "parameters": {
+        "effective_slow_weight": 0.0,
+        "family": "M0",
+        "k_elim_per_h": 0.5175575752930232,
+        "k_fast_per_h": 0.5675575752930232,
+        "k_slow_per_h": null,
+        "n_fast": 1
+      },
+      "reference_Price_1h_increment_pg_ml_per_mg_from_that_fit": 101.15955597863457,
+      "timing_sensitivity_indices": {
+        "12": {
+          "-2.0": 0.07678581949787308,
+          "-4.0": 0.18121779323144055,
+          "0.0": 0.03126477606583031,
+          "2.0": 0.01238762498381231,
+          "4.0": 0.004812187143038314
+        },
+        "24": {
+          "-2.0": 0.00026051567941769296,
+          "-4.0": 0.0006949745749473027,
+          "0.0": 9.692497863645285e-05,
+          "2.0": 3.5838380097802243e-05,
+          "4.0": 1.3183079269398294e-05
+        },
+        "6": {
+          "-2.0": 0.8683702918433519,
+          "-4.0": 1.3564881927742471,
+          "0.0": 0.43266887678412863,
+          "2.0": 0.19360541821525284,
+          "4.0": 0.0815980066409114
+        }
+      }
+    },
+    "M1_extended": {
+      "Cortez_group_mean_6mo_ratio_twice_over_once_raw": 0.833158447009444,
+      "Cortez_increment_ratio_if_subtract_pretreatment_means": 0.8057553956834533,
+      "Cortez_required_amplitude_ratio_twice_to_once_using_pretreatment_baselines": 0.003955911330538268,
+      "Cortez_required_gain_sensitivity": {
+        "0": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 4823.304928831349,
+            "required_1h_increment_per_mg_if_shared_shape": 1487871.1336053358
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 19.729480357414182,
+            "required_1h_increment_per_mg_if_shared_shape": 6086.060230063565
+          }
+        },
+        "50pg": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 2292.7147248274932,
+            "required_1h_increment_per_mg_if_shared_shape": 707246.1946728406
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 7.305374338891397,
+            "required_1h_increment_per_mg_if_shared_shape": 2253.528599041169
+          }
+        },
+        "pre_treatment_group_mean": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 3517.520383565359,
+            "required_1h_increment_per_mg_if_shared_shape": 1085068.6651161683
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 13.914998740745519,
+            "required_1h_increment_per_mg_if_shared_shape": 4292.4354267450835
+          }
+        }
+      },
+      "Yaish_noncomparable_summary_indicators": [
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 1.1300064946345851,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 1251.2097941317304,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1107.2589406101947,
+          "hypothetical_steady_background_pg_ml": 0.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.9473657974808577,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 1026.6038697181566,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1083.6404189891603,
+          "hypothetical_steady_background_pg_ml": 10.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.7565862057150164,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 801.997945304583,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1060.021897368126,
+          "hypothetical_steady_background_pg_ml": 20.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.557111289293897,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 577.3920208910093,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1036.4033757470916,
+          "hypothetical_steady_background_pg_ml": 30.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.34833271354739853,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 352.78609647743565,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1012.7848541260571,
+          "hypothetical_steady_background_pg_ml": 40.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.12958404249288488,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 128.18017206386196,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 989.1663325050226,
+          "hypothetical_steady_background_pg_ml": 50.0
+        }
+      ],
+      "conditional_q12_twice_vs_q24_once_predose_increment_ratio_at_equal_daily_mg": 203.6838868109354,
+      "dimensionless_post_90min_index_per_mg_q6": 0.8467930516949966,
+      "dimensionless_trough_index_per_mg": {
+        "12": 0.00420845378744123,
+        "24": 1.0330846129590076e-05,
+        "6": 0.08904484622219223
+      },
+      "parameters": {
+        "effective_slow_weight": 0.0,
+        "family": "M1",
+        "k_elim_per_h": 0.5006048829941504,
+        "k_fast_per_h": 14.424207816930702,
+        "k_slow_per_h": null,
+        "n_fast": 8
+      },
+      "reference_Price_1h_increment_pg_ml_per_mg_from_that_fit": 308.47544485764786,
+      "timing_sensitivity_indices": {
+        "12": {
+          "-2.0": 0.011453611267671507,
+          "-4.0": 0.031171831199005073,
+          "0.0": 0.00420845378744123,
+          "2.0": 0.0015463317958955912,
+          "4.0": 0.0005681759011191411
+        },
+        "24": {
+          "-2.0": 2.811614469607761e-05,
+          "-4.0": 7.652012068077721e-05,
+          "0.0": 1.0330846129590076e-05,
+          "2.0": 3.7959109581675877e-06,
+          "4.0": 1.3947492607663574e-06
+        },
+        "6": {
+          "-2.0": 0.24234198723105713,
+          "-4.0": 0.6595495270914961,
+          "0.0": 0.08904484622219223,
+          "2.0": 0.03271816299490067,
+          "4.0": 0.01202178716879065
+        }
+      }
+    },
+    "P2V_M2_Price_baseline0": {
+      "Cortez_group_mean_6mo_ratio_twice_over_once_raw": 0.833158447009444,
+      "Cortez_increment_ratio_if_subtract_pretreatment_means": 0.8057553956834533,
+      "Cortez_required_amplitude_ratio_twice_to_once_using_pretreatment_baselines": 0.5635900398247176,
+      "Cortez_required_gain_sensitivity": {
+        "0": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 0.5492410513203687,
+            "required_1h_increment_per_mg_if_shared_shape": 244.00735593252872
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 0.32007420722383306,
+            "required_1h_increment_per_mg_if_shared_shape": 142.19705686444095
+          }
+        },
+        "50pg": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 0.2610768061365446,
+            "required_1h_increment_per_mg_if_shared_shape": 115.98670748943915
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 0.11851614222141932,
+            "required_1h_increment_per_mg_if_shared_shape": 52.65231072814313
+          }
+        },
+        "pre_treatment_group_mean": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 0.4005483008055155,
+            "required_1h_increment_per_mg_if_shared_shape": 177.94870133589453
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 0.22574503280270344,
+            "required_1h_increment_per_mg_if_shared_shape": 100.29011567265357
+          }
+        }
+      },
+      "Yaish_noncomparable_summary_indicators": [
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.3052999562022151,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 256.8125423885224,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 841.181065281329,
+          "hypothetical_steady_background_pg_ml": 0.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.25595493287134796,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 210.71186546391283,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 823.2381501700695,
+          "hypothetical_steady_background_pg_ml": 10.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.20441098043661196,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 164.61118853930324,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 805.29523505881,
+          "hypothetical_steady_background_pg_ml": 20.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.1505177651887636,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 118.51051161469368,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 787.3523199475505,
+          "hypothetical_steady_background_pg_ml": 30.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.09411093006523741,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 72.40983469008412,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 769.4094048362911,
+          "hypothetical_steady_background_pg_ml": 40.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.03501042045813822,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 26.309157765474563,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 751.4664897250316,
+          "hypothetical_steady_background_pg_ml": 50.0
+        }
+      ],
+      "conditional_q12_twice_vs_q24_once_predose_increment_ratio_at_equal_daily_mg": 1.4296835265826409,
+      "dimensionless_post_90min_index_per_mg_q6": 1.1146460804158658,
+      "dimensionless_trough_index_per_mg": {
+        "12": 0.18012259740525924,
+        "24": 0.06299387034129315,
+        "6": 0.4338331090605647
+      },
+      "parameters": {
+        "effective_slow_weight": 0.6551641813676453,
+        "family": "M2",
+        "k_elim_per_h": 0.9461483654047314,
+        "k_fast_per_h": 13.33858402097674,
+        "k_slow_per_h": 0.05166645068033081,
+        "n_fast": 8
+      },
+      "reference_Price_1h_increment_pg_ml_per_mg_from_that_fit": 444.2627792404411,
+      "timing_sensitivity_indices": {
+        "12": {
+          "-2.0": 0.19988532782206822,
+          "-4.0": 0.2226699625619617,
+          "0.0": 0.18012259740525924,
+          "2.0": 0.16241836796829748,
+          "4.0": 0.14647005619149162
+        },
+        "24": {
+          "-2.0": 0.06985141566979741,
+          "-4.0": 0.07745548694160415,
+          "0.0": 0.06299387034129315,
+          "2.0": 0.056809554226405955,
+          "4.0": 0.05123237301610373
+        },
+        "6": {
+          "-2.0": 0.5263339973845069,
+          "-4.0": 0.8839924599314861,
+          "0.0": 0.4338331090605647,
+          "2.0": 0.38508833053025915,
+          "4.0": 0.34635538401355986
+        }
+      }
+    },
+    "P2V_M2_extended_n9": {
+      "Cortez_group_mean_6mo_ratio_twice_over_once_raw": 0.833158447009444,
+      "Cortez_increment_ratio_if_subtract_pretreatment_means": 0.8057553956834533,
+      "Cortez_required_amplitude_ratio_twice_to_once_using_pretreatment_baselines": 0.07645221752050449,
+      "Cortez_required_gain_sensitivity": {
+        "0": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 40.8389295956175,
+            "required_1h_increment_per_mg_if_shared_shape": 17818.182059882085
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 3.2284109873433606,
+            "required_1h_increment_per_mg_if_shared_shape": 1408.5681310996144
+          }
+        },
+        "50pg": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 19.412418789942,
+            "required_1h_increment_per_mg_if_shared_shape": 8469.71298334374
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 1.1954065872530832,
+            "required_1h_increment_per_mg_if_shared_shape": 521.5604918681192
+          }
+        },
+        "pre_treatment_group_mean": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 29.782850019888944,
+            "required_1h_increment_per_mg_if_shared_shape": 12994.372016388299
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 2.2769649281011106,
+            "required_1h_increment_per_mg_if_shared_shape": 993.4485559392747
+          }
+        }
+      },
+      "Yaish_noncomparable_summary_indicators": [
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.8518742761268492,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 1107.3961013255664,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1299.952507499673,
+          "hypothetical_steady_background_pg_ml": 0.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.7141875350170582,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 908.6063170729427,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1272.2237122932156,
+          "hypothetical_steady_background_pg_ml": 10.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.570365152219288,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 709.816532820319,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1244.4949170867583,
+          "hypothetical_steady_background_pg_ml": 20.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.41998765364866686,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 511.0267485676954,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1216.766121880301,
+          "hypothetical_steady_background_pg_ml": 30.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.26259643605008476,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 312.2369643150717,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1189.0373266738436,
+          "hypothetical_steady_background_pg_ml": 40.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.09768909552322019,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 113.44718006244808,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1161.3085314673865,
+          "hypothetical_steady_background_pg_ml": 50.0
+        }
+      ],
+      "conditional_q12_twice_vs_q24_once_predose_increment_ratio_at_equal_daily_mg": 10.53933321773629,
+      "dimensionless_post_90min_index_per_mg_q6": 0.7212718710311129,
+      "dimensionless_trough_index_per_mg": {
+        "12": 0.018183645263798107,
+        "24": 0.0008626563411619561,
+        "6": 0.10060879172032221
+      },
+      "parameters": {
+        "effective_slow_weight": 0.5139380956563052,
+        "family": "M2",
+        "k_elim_per_h": 1.3518070625675727,
+        "k_fast_per_h": 14.440199238807665,
+        "k_slow_per_h": 0.249970121099137,
+        "n_fast": 9
+      },
+      "reference_Price_1h_increment_pg_ml_per_mg_from_that_fit": 436.3038462642318,
+      "timing_sensitivity_indices": {
+        "12": {
+          "-2.0": 0.029981751197667883,
+          "-4.0": 0.049485045288690854,
+          "0.0": 0.018183645263798107,
+          "2.0": 0.011029443910486054,
+          "4.0": 0.006690085383773063
+        },
+        "24": {
+          "-2.0": 0.001422194869540477,
+          "-4.0": 0.0023446628214991517,
+          "0.0": 0.0008626563411619561,
+          "2.0": 0.0005232587875570262,
+          "4.0": 0.0003173914636659337
+        },
+        "6": {
+          "-2.0": 0.1784583798707793,
+          "-4.0": 0.48225329775790304,
+          "0.0": 0.10060879172032221,
+          "2.0": 0.060514489199176916,
+          "4.0": 0.03667183658144094
+        }
+      }
+    },
+    "P2V_M2_primary_n8": {
+      "Cortez_group_mean_6mo_ratio_twice_over_once_raw": 0.833158447009444,
+      "Cortez_increment_ratio_if_subtract_pretreatment_means": 0.8057553956834533,
+      "Cortez_required_amplitude_ratio_twice_to_once_using_pretreatment_baselines": 0.09217447102688477,
+      "Cortez_required_gain_sensitivity": {
+        "0": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 30.495718857695724,
+            "required_1h_increment_per_mg_if_shared_shape": 13322.15254278847
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 2.906523967211324,
+            "required_1h_increment_per_mg_if_shared_shape": 1269.7243124894733
+          }
+        },
+        "50pg": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 14.495866361527977,
+            "required_1h_increment_per_mg_if_shared_shape": 6332.565689279304
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 1.0762192019648984,
+            "required_1h_increment_per_mg_if_shared_shape": 470.14980840290326
+          }
+        },
+        "pre_treatment_group_mean": {
+          "once": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 22.239794969673166,
+            "required_1h_increment_per_mg_if_shared_shape": 9715.52572637774
+          },
+          "twice": {
+            "relative_to_Price_fig1_1h_gain_HYPOTHETICAL": 2.049941337075997,
+            "required_1h_increment_per_mg_if_shared_shape": 895.5234445769586
+          }
+        }
+      },
+      "Yaish_noncomparable_summary_indicators": [
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.8546867997639646,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 1078.9827341483165,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1262.4305587102724,
+          "hypothetical_steady_background_pg_ml": 0.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.7165454760652388,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 885.2934619205186,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1235.5021300000726,
+          "hypothetical_steady_background_pg_ml": 10.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.5722482534202037,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 691.6041896927205,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1208.5737012898726,
+          "hypothetical_steady_background_pg_ml": 20.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.42137427282039963,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 497.91491746492244,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1181.6452725796726,
+          "hypothetical_steady_background_pg_ml": 30.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.2634634168993845,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 304.2256452371244,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1154.7168438694728,
+          "hypothetical_steady_background_pg_ml": 40.0
+        },
+        {
+          "diagnostic_ratio_gtrough_over_gpost_NOT_an_individual_ratio": 0.09801162303455282,
+          "gain_from_mean_trough_if_representative_pg_ml_per_1mg_1h": 110.5363730093264,
+          "gain_from_median_90min_if_representative_pg_ml_per_1mg_1h": 1127.7884151592727,
+          "hypothetical_steady_background_pg_ml": 50.0
+        }
+      ],
+      "conditional_q12_twice_vs_q24_once_predose_increment_ratio_at_equal_daily_mg": 8.741632978272657,
+      "dimensionless_post_90min_index_per_mg_q6": 0.7427095065678454,
+      "dimensionless_trough_index_per_mg": {
+        "12": 0.0201720192122562,
+        "24": 0.0011537901020549472,
+        "6": 0.10325817103839387
+      },
+      "parameters": {
+        "effective_slow_weight": 0.4960174991339771,
+        "family": "M2",
+        "k_elim_per_h": 1.3205143102855312,
+        "k_fast_per_h": 12.52860184652404,
+        "k_slow_per_h": 0.23352691574436912,
+        "n_fast": 8
+      },
+      "reference_Price_1h_increment_pg_ml_per_mg_from_that_fit": 436.8532056894461,
+      "timing_sensitivity_indices": {
+        "12": {
+          "-2.0": 0.032185531098804884,
+          "-4.0": 0.05142043326286726,
+          "0.0": 0.0201720192122562,
+          "2.0": 0.012644516758243442,
+          "4.0": 0.007926152027319847
+        },
+        "24": {
+          "-2.0": 0.0018406266717579597,
+          "-4.0": 0.00293632832250357,
+          "0.0": 0.0011537901020549472,
+          "2.0": 0.0007232491088374382,
+          "4.0": 0.000453366060709549
+        },
+        "6": {
+          "-2.0": 0.17954202206838077,
+          "-4.0": 0.4942106499653736,
+          "0.0": 0.10325817103839387,
+          "2.0": 0.06406495002111069,
+          "4.0": 0.040111683126124724
+        }
+      }
+    }
+  },
+  "not_a_population_PK_or_real_external_validation": true,
+  "observations_are_group_aggregates": true,
+  "phase": "P2-W",
+  "production_model_modified": false,
+  "relevant_baseline_interpretation": "Pretreatment serum E2 is NOT directly the steady treatment baseline. All cross-study gain transport is hypothetical.",
+  "source_head_P2V": "7a45741f1a83646195db0a0e20c9806da4878af3"
+}
