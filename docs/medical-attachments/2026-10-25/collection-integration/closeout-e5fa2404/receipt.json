@@ -148,5 +148,58 @@
       "migration16To17": "PASS_ORIGINAL_HTML",
       "collectionFreshPidSeams": 4
     }
-  ]
+  ],
+  "finalApi35": {
+    "run": 40182479995,
+    "artifact": 12594719570,
+    "sha256": "a2cbc5aca4ea710e9bf516a859921877487c826d93dfefb91d8184c9a40c827f",
+    "zipCRC": "PASS",
+    "xml": [
+      {
+        "path": "core/data/build/reports/med02-lifecycle-isolated/collection/results/connected/debug/TEST-emulator-5554 - 15-_core_data-.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/data/build/reports/med02-lifecycle-isolated/results/connected/debug/TEST-emulator-5554 - 15-_core_data-.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "app/build/reports/med02-operation-isolated/results/connected/debug/flavors/full/TEST-emulator-5554 - 15-_app-full.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "app/build/outputs/androidTest-results/connected/debug/flavors/full/TEST-emulator-5554 - 15-_app-full.xml",
+        "tests": 289,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 11
+      }
+    ],
+    "bulkOnlySkipped": [
+      "net.plainnotes.app.BdpmOfflineRestartAndroidTest#freshOfflineProcessStillReadsInstalledOfficialCatalogue",
+      "net.plainnotes.app.disguise.ProcessRestartAndroidTest#prepare",
+      "net.plainnotes.app.disguise.ProcessRestartAndroidTest#verifyFreshProcess",
+      "net.plainnotes.app.labs.LabPanelRestartAndroidTest#prepare",
+      "net.plainnotes.app.labs.LabPanelRestartAndroidTest#verifyFreshProcess",
+      "net.plainnotes.app.privacy.ImportCleanupRestartAndroidTest#prepare",
+      "net.plainnotes.app.privacy.ImportCleanupRestartAndroidTest#verifyFreshProcess",
+      "net.plainnotes.app.privacy.RestoreProcessDeathAndroidTest#prepareOpenPasswordAndWaitForExternalKill",
+      "net.plainnotes.app.privacy.RestoreProcessDeathAndroidTest#freshProcessHasNoPendingRestoreOrPassword",
+      "net.plainnotes.app.stock.VoidedPackageRestartAndroidTest#prepare",
+      "net.plainnotes.app.stock.VoidedPackageRestartAndroidTest#verifyFreshProcess"
+    ],
+    "bulkSkipMeaning": "11 special-instrumentation restart/offline cases are skipped in generic traversal; dedicated workflow scripts run separately and raw successful job log is retained. Not reported as zero skips.",
+    "migration16To17": "PASS_ORIGINAL_HTML",
+    "LabPanelRestart": "PASS prepare+freshProcess explicit log",
+    "UndoSkippedRestart": "PASS prepare+persistedCorrection explicit log"
+  }
 }
