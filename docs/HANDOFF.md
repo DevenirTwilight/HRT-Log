@@ -1,3 +1,7 @@
+## Mona persistence proposal ready for review — 2026-10-25
+
+Concrete proposed fields/files/migration/backup compatibility and test scope: docs/cross-app-import/mona-persistence-proposal.md. Not implemented. It distinguishes unchanged PNBAK1/PNMED cryptography/envelopes from the proposed business Schema14/version gate needed to preserve immutable source receipts; do not infer approval from default-OFF MED development. Current PR123276ee752 CI remains prerequisite, no production PR-B started.
+
 ## Read-only Mona source checkpoint — 2026-10-25
 
 This is the existing feature/import-source-contracts-20261025 branch, NOT PR123 and NOT production PR-B. No current A source copied/overwritten. Public Mona8bc965fd source/version audit saved in docs/cross-app-import/mona23-schema-audit.md. Earlier own parser prototype24f6803b is unintegrated and depends on an obsolete helper; do not advertise it as supported or cherry-pick blindly. Current PR123276ee752 is awaiting real three-API/required CI on separate branch; older actual failures preserved there. Mona production must wait for A acceptance/merge. No Featherline/other source development, no schema/backup/PK/MED changes.
