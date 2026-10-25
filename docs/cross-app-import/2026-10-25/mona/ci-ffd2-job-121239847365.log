@@ -1,0 +1,1659 @@
+﻿2026-10-25T17:31:38.9901610Z Current runner version: '2.338.0'
+2026-10-25T17:31:38.9921389Z ##[group]Runner Image Provisioner
+2026-10-25T17:31:38.9921970Z Hosted Compute Agent
+2026-10-25T17:31:38.9922406Z Version: 20261021.618
+2026-10-25T17:31:38.9922791Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-25T17:31:38.9923220Z Build Date: 2026-10-21T00:45:21Z
+2026-10-25T17:31:38.9923921Z Worker ID: {ae8cc7f1-9f6b-41dd-ac14-fe480f4d7c8f}
+2026-10-25T17:31:38.9924353Z Region: centralus
+2026-10-25T17:31:38.9924750Z Cloud: Azure
+2026-10-25T17:31:38.9925086Z ##[endgroup]
+2026-10-25T17:31:38.9926174Z ##[group]Operating System
+2026-10-25T17:31:38.9926640Z Ubuntu
+2026-10-25T17:31:38.9926962Z 24.04.5
+2026-10-25T17:31:38.9927301Z LTS
+2026-10-25T17:31:38.9927635Z ##[endgroup]
+2026-10-25T17:31:38.9927976Z ##[group]Runner Image
+2026-10-25T17:31:38.9928448Z Image: ubuntu-24.04
+2026-10-25T17:31:38.9928815Z Version: 20261012.334.1
+2026-10-25T17:31:38.9929649Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-25T17:31:38.9930529Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-25T17:31:38.9931202Z ##[endgroup]
+2026-10-25T17:31:38.9931864Z ##[group]GITHUB_TOKEN Permissions
+2026-10-25T17:31:38.9933237Z Contents: read
+2026-10-25T17:31:38.9933728Z Metadata: read
+2026-10-25T17:31:38.9934151Z ##[endgroup]
+2026-10-25T17:31:38.9935669Z Secret source: Actions
+2026-10-25T17:31:38.9936292Z Cache mode: write
+2026-10-25T17:31:38.9936765Z Prepare workflow directory
+2026-10-25T17:31:39.0408968Z Prepare all required actions
+2026-10-25T17:31:39.0456750Z Getting action download info
+2026-10-25T17:31:39.3403711Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-25T17:31:39.5889842Z Download action repository 'actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3' (SHA:cf277c60eb25467037889841efdb72551f06f6c3)
+2026-10-25T17:31:40.8783743Z Download action repository 'android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407' (SHA:9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407)
+2026-10-25T17:31:41.2162983Z Download action repository 'gradle/actions@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d' (SHA:0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d)
+2026-10-25T17:31:42.4375915Z Download action repository 'ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808' (SHA:4c44018e59b437e86cdfc41da381398f93ed8808)
+2026-10-25T17:31:42.8537493Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-25T17:31:43.0732224Z Complete job name: attachment-poc-compatibility (26)
+2026-10-25T17:31:43.1375643Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-25T17:31:43.1376024Z with:
+2026-10-25T17:31:43.1376167Z   repository: DevenirTwilight/HRT-Log
+2026-10-25T17:31:43.1378029Z   token: ***
+2026-10-25T17:31:43.1378155Z   ssh-strict: true
+2026-10-25T17:31:43.1378297Z   ssh-user: git
+2026-10-25T17:31:43.1378439Z   persist-credentials: true
+2026-10-25T17:31:43.1378585Z   clean: true
+2026-10-25T17:31:43.1378717Z   sparse-checkout-cone-mode: true
+2026-10-25T17:31:43.1378879Z   fetch-depth: 1
+2026-10-25T17:31:43.1379012Z   fetch-tags: false
+2026-10-25T17:31:43.1379142Z   show-progress: true
+2026-10-25T17:31:43.1379285Z   lfs: false
+2026-10-25T17:31:43.1379403Z   submodules: false
+2026-10-25T17:31:43.1379533Z   set-safe-directory: true
+2026-10-25T17:31:43.1379686Z   allow-unsafe-pr-checkout: false
+2026-10-25T17:31:43.1379924Z ##[endgroup]
+2026-10-25T17:31:43.2173194Z Syncing repository: DevenirTwilight/HRT-Log
+2026-10-25T17:31:43.2174989Z ##[group]Getting Git version info
+2026-10-25T17:31:43.2175353Z Working directory is '/home/runner/work/HRT-Log/HRT-Log'
+2026-10-25T17:31:43.2175975Z [command]/usr/bin/git version
+2026-10-25T17:31:43.2225029Z git version 2.55.0
+2026-10-25T17:31:43.2251813Z ##[endgroup]
+2026-10-25T17:31:43.2258752Z Temporarily overriding HOME='/home/runner/work/_temp/09c5194c-ee47-496e-84d0-4cfddd59fe1f' before making global git config changes
+2026-10-25T17:31:43.2259790Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-25T17:31:43.2263309Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/HRT-Log/HRT-Log
+2026-10-25T17:31:43.2318436Z Deleting the contents of '/home/runner/work/HRT-Log/HRT-Log'
+2026-10-25T17:31:43.2323094Z ##[group]Initializing the repository
+2026-10-25T17:31:43.2327441Z [command]/usr/bin/git init /home/runner/work/HRT-Log/HRT-Log
+2026-10-25T17:31:43.2450437Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-25T17:31:43.2451803Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-25T17:31:43.2452622Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-25T17:31:43.2453124Z hint: call:
+2026-10-25T17:31:43.2453386Z hint:
+2026-10-25T17:31:43.2453894Z hint: 	git config --global init.defaultBranch <name>
+2026-10-25T17:31:43.2454183Z hint:
+2026-10-25T17:31:43.2454459Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-25T17:31:43.2454972Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-25T17:31:43.2455449Z hint:
+2026-10-25T17:31:43.2455783Z hint: 	git branch -m <name>
+2026-10-25T17:31:43.2456189Z hint:
+2026-10-25T17:31:43.2456649Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-25T17:31:43.2457590Z Initialized empty Git repository in /home/runner/work/HRT-Log/HRT-Log/.git/
+2026-10-25T17:31:43.2464631Z [command]/usr/bin/git remote add origin https://github.com/DevenirTwilight/HRT-Log
+2026-10-25T17:31:43.2525004Z ##[endgroup]
+2026-10-25T17:31:43.2525421Z ##[group]Disabling automatic garbage collection
+2026-10-25T17:31:43.2529401Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-25T17:31:43.2572910Z ##[endgroup]
+2026-10-25T17:31:43.2573336Z ##[group]Setting up auth
+2026-10-25T17:31:43.2581023Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-25T17:31:43.2622025Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-25T17:31:43.2949908Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-25T17:31:43.2981758Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-25T17:31:43.3176490Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-25T17:31:43.3210312Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-25T17:31:43.3406183Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-25T17:31:43.3448880Z ##[endgroup]
+2026-10-25T17:31:43.3456038Z ##[group]Fetching the repository
+2026-10-25T17:31:43.3456612Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e2249e84c20bde47763530e11382dc8b9abb5a36:refs/remotes/pull/124/merge
+2026-10-25T17:31:47.6316460Z From https://github.com/DevenirTwilight/HRT-Log
+2026-10-25T17:31:47.6316966Z  * [new ref]         e2249e84c20bde47763530e11382dc8b9abb5a36 -> pull/124/merge
+2026-10-25T17:31:47.6319361Z ##[endgroup]
+2026-10-25T17:31:47.6319777Z ##[group]Determining the checkout info
+2026-10-25T17:31:47.6321792Z ##[endgroup]
+2026-10-25T17:31:47.6328193Z [command]/usr/bin/git sparse-checkout disable
+2026-10-25T17:31:47.7168038Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-25T17:31:47.7436548Z ##[group]Checking out the ref
+2026-10-25T17:31:47.7461572Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/124/merge
+2026-10-25T17:31:48.7681027Z Updating files:  85% (8266/9655)
+2026-10-25T17:31:48.7854527Z Updating files:  86% (8304/9655)
+2026-10-25T17:31:48.8065942Z Updating files:  87% (8400/9655)
+2026-10-25T17:31:48.8362354Z Updating files:  88% (8497/9655)
+2026-10-25T17:31:48.8650195Z Updating files:  89% (8593/9655)
+2026-10-25T17:31:48.8793170Z Updating files:  90% (8690/9655)
+2026-10-25T17:31:48.8969582Z Updating files:  91% (8787/9655)
+2026-10-25T17:31:48.9127974Z Updating files:  92% (8883/9655)
+2026-10-25T17:31:48.9264789Z Updating files:  93% (8980/9655)
+2026-10-25T17:31:48.9423706Z Updating files:  94% (9076/9655)
+2026-10-25T17:31:48.9585323Z Updating files:  95% (9173/9655)
+2026-10-25T17:31:48.9751475Z Updating files:  96% (9269/9655)
+2026-10-25T17:31:48.9826084Z Updating files:  97% (9366/9655)
+2026-10-25T17:31:48.9882163Z Updating files:  98% (9462/9655)
+2026-10-25T17:31:48.9936434Z Updating files:  99% (9559/9655)
+2026-10-25T17:31:48.9936820Z Updating files: 100% (9655/9655)
+2026-10-25T17:31:48.9937070Z Updating files: 100% (9655/9655), done.
+2026-10-25T17:31:49.0004783Z Note: switching to 'refs/remotes/pull/124/merge'.
+2026-10-25T17:31:49.0004991Z 
+2026-10-25T17:31:49.0005322Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-25T17:31:49.0006332Z changes and commit them, and you can discard any commits you make in this
+2026-10-25T17:31:49.0006800Z state without impacting any branches by switching back to a branch.
+2026-10-25T17:31:49.0007144Z 
+2026-10-25T17:31:49.0007328Z If you want to create a new branch to retain commits you create, you may
+2026-10-25T17:31:49.0007823Z do so (now or later) by using -c with the switch command. Example:
+2026-10-25T17:31:49.0008052Z 
+2026-10-25T17:31:49.0008154Z   git switch -c <new-branch-name>
+2026-10-25T17:31:49.0008298Z 
+2026-10-25T17:31:49.0008393Z Or undo this operation with:
+2026-10-25T17:31:49.0008528Z 
+2026-10-25T17:31:49.0008620Z   git switch -
+2026-10-25T17:31:49.0008746Z 
+2026-10-25T17:31:49.0008932Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-25T17:31:49.0009202Z 
+2026-10-25T17:31:49.0009500Z HEAD is now at e2249e8 Merge ffd2abad0f8367d7a8f4970f781fd55571511abf into d477f092bb6244203066340d675a2356230ed585
+2026-10-25T17:31:49.0060339Z ##[endgroup]
+2026-10-25T17:31:49.0110157Z [command]/usr/bin/git log -1 --format=%H
+2026-10-25T17:31:49.0138961Z e2249e84c20bde47763530e11382dc8b9abb5a36
+2026-10-25T17:31:49.0389669Z ##[group]Run actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+2026-10-25T17:31:49.0389915Z with:
+2026-10-25T17:31:49.0390036Z   distribution: temurin
+2026-10-25T17:31:49.0390163Z   java-version: 21
+2026-10-25T17:31:49.0390284Z   java-package: jdk
+2026-10-25T17:31:49.0390406Z   check-latest: false
+2026-10-25T17:31:49.0390531Z   server-id: github
+2026-10-25T17:31:49.0390654Z   server-username: GITHUB_ACTOR
+2026-10-25T17:31:49.0390804Z   server-password: GITHUB_TOKEN
+2026-10-25T17:31:49.0390949Z   overwrite-settings: true
+2026-10-25T17:31:49.0391103Z   job-status: success
+2026-10-25T17:31:49.0392783Z   token: ***
+2026-10-25T17:31:49.0392905Z ##[endgroup]
+2026-10-25T17:31:49.1584132Z ##[warning]setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.
+2026-10-25T17:31:49.1589616Z ##[group]Installed distributions
+2026-10-25T17:31:49.1615410Z Resolved Java 21.0.12+1 from tool-cache
+2026-10-25T17:31:49.1616053Z Setting Java 21.0.12+1 as the default
+2026-10-25T17:31:49.1622756Z (node:2057) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-25T17:31:49.1623341Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-25T17:31:49.1625216Z Creating toolchains.xml for JDK version 21 from temurin
+2026-10-25T17:31:49.1672967Z Writing to /home/runner/.m2/toolchains.xml
+2026-10-25T17:31:49.1673571Z 
+2026-10-25T17:31:49.1673844Z Java configuration:
+2026-10-25T17:31:49.1674118Z   Distribution: temurin
+2026-10-25T17:31:49.1674734Z   Version: 21.0.12+1
+2026-10-25T17:31:49.1675162Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:31:49.1675468Z 
+2026-10-25T17:31:49.1678198Z ##[endgroup]
+2026-10-25T17:31:49.1728217Z Creating settings.xml with server-id: github
+2026-10-25T17:31:49.1734682Z Writing to /home/runner/.m2/settings.xml
+2026-10-25T17:31:49.1921226Z ##[group]Run android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+2026-10-25T17:31:49.1921556Z with:
+2026-10-25T17:31:49.1921842Z   cmdline-tools-version: 16111833
+2026-10-25T17:31:49.1922074Z   packages: platform-tools
+2026-10-25T17:31:49.1922333Z   accept-android-sdk-licenses: true
+2026-10-25T17:31:49.1922591Z   log-accepted-android-sdk-licenses: true
+2026-10-25T17:31:49.1922829Z env:
+2026-10-25T17:31:49.1923145Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:31:49.1923653Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:31:49.1924015Z ##[endgroup]
+2026-10-25T17:31:49.2729170Z Found preinstalled sdkmanager in /usr/local/lib/android/sdk/cmdline-tools/latest with following source.properties:
+2026-10-25T17:31:49.2729725Z Pkg.Revision=12.0
+2026-10-25T17:31:49.2729934Z Pkg.Path=cmdline-tools;12.0
+2026-10-25T17:31:49.2730178Z Pkg.Desc=Android SDK Command-line Tools
+2026-10-25T17:31:49.2730440Z 
+2026-10-25T17:31:49.2730510Z Wrong version in preinstalled sdkmanager
+2026-10-25T17:31:49.2730858Z Downloading commandline tools from https://dl.google.com/android/repository/commandlinetools-linux-16111833_latest.zip
+2026-10-25T17:31:50.1707358Z [command]/usr/bin/unzip -o -q /home/runner/work/_temp/a78a19a9-335b-4fd2-927d-2d078a15522a
+2026-10-25T17:31:50.7217523Z Accepting Android SDK licenses
+2026-10-25T17:31:50.7221079Z [command]/usr/local/lib/android/sdk/cmdline-tools/16111833/bin/sdkmanager --licenses
+2026-10-25T17:31:50.7271877Z WARNING: The SDK Manager CLI tool (sdkmanager) is deprecated. Android CLI will be used instead.
+2026-10-25T17:31:50.7272693Z The 'android' binary can also be found in the cmdline-tools directory, and 'android sdk' is the replacement for 'sdkmanager'.
+2026-10-25T17:31:50.7273395Z To learn more about the Android CLI and how to use it, see the documentation (https://d.android.com/tools/agents/android-cli)
+2026-10-25T17:31:50.7274012Z 
+2026-10-25T17:31:50.7274162Z Warning: The --licenses option is no longer needed.
+2026-10-25T17:31:50.7278766Z [command]/usr/local/lib/android/sdk/cmdline-tools/16111833/bin/sdkmanager platform-tools
+2026-10-25T17:31:50.7324843Z WARNING: The SDK Manager CLI tool (sdkmanager) is deprecated. Android CLI will be used instead.
+2026-10-25T17:31:50.7325540Z The 'android' binary can also be found in the cmdline-tools directory, and 'android sdk' is the replacement for 'sdkmanager'.
+2026-10-25T17:31:50.7326397Z To learn more about the Android CLI and how to use it, see the documentation (https://d.android.com/tools/agents/android-cli)
+2026-10-25T17:31:50.7326872Z 
+2026-10-25T17:31:50.7363435Z Downloading Android CLI...
+2026-10-25T17:31:51.4485133Z Unpacking embedded installation...
+2026-10-25T17:31:52.1934251Z 
+2026-10-25T17:31:52.1934919Z Terms of Service and License Agreement for the Android Software Development Kit
+2026-10-25T17:31:52.1935157Z 
+2026-10-25T17:31:52.1935378Z https://developer.android.com/studio/terms
+2026-10-25T17:31:52.1935508Z 
+2026-10-25T17:31:52.1936043Z Google collects usage data for the Android CLI, such as commands, sub-commands, and flags used. This data does not include custom parameters or identifiable information. This information helps improve the tool and is collected in accordance with Google's Privacy Policy.
+2026-10-25T17:31:52.1936631Z 
+2026-10-25T17:31:52.1936705Z https://policies.google.com/privacy
+2026-10-25T17:31:52.1936818Z 
+2026-10-25T17:31:52.1936944Z Disable Android CLI metrics collection by using the --no-metrics flag.
+2026-10-25T17:31:52.1937126Z 
+2026-10-25T17:31:52.1937489Z Tip: For the best experience using Android CLI with agents, we strongly recommend running android init to install the necessary skills and resources.
+2026-10-25T17:31:53.6097836Z Oct 25, 2026 5:31:53 PM java.util.prefs.FileSystemPreferences setupUserRoot
+2026-10-25T17:31:53.6098594Z INFO: Created user preferences directory.
+2026-10-25T17:31:54.0701583Z ##[group]Run sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'
+2026-10-25T17:31:54.0702127Z [36;1msdkmanager 'platforms;android-37.0' 'build-tools;37.0.0'[0m
+2026-10-25T17:31:54.1220862Z shell: /usr/bin/bash -e {0}
+2026-10-25T17:31:54.1221069Z env:
+2026-10-25T17:31:54.1221273Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:31:54.1221562Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:31:54.1221801Z   ANDROID_HOME: /usr/local/lib/android/sdk
+2026-10-25T17:31:54.1221982Z   ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+2026-10-25T17:31:54.1222147Z ##[endgroup]
+2026-10-25T17:31:54.1914469Z WARNING: The SDK Manager CLI tool (sdkmanager) is deprecated. Android CLI will be used instead.
+2026-10-25T17:31:54.1915491Z The 'android' binary can also be found in the cmdline-tools directory, and 'android sdk' is the replacement for 'sdkmanager'.
+2026-10-25T17:31:54.1916493Z To learn more about the Android CLI and how to use it, see the documentation (https://d.android.com/tools/agents/android-cli)
+2026-10-25T17:31:54.1917197Z 
+2026-10-25T17:31:56.3340009Z ##[group]Run gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d
+2026-10-25T17:31:56.3340262Z with:
+2026-10-25T17:31:56.3340386Z   cache-disabled: false
+2026-10-25T17:31:56.3340518Z   cache-read-only: true
+2026-10-25T17:31:56.3340652Z   cache-write-only: false
+2026-10-25T17:31:56.3340803Z   cache-overwrite-existing: false
+2026-10-25T17:31:56.3340959Z   cache-cleanup: on-success
+2026-10-25T17:31:56.3341126Z   gradle-home-cache-includes: caches
+notifications
+
+2026-10-25T17:31:56.3341315Z   add-job-summary: always
+2026-10-25T17:31:56.3341465Z   add-job-summary-as-pr-comment: never
+2026-10-25T17:31:56.3341650Z   dependency-graph: disabled
+2026-10-25T17:31:56.3341831Z   dependency-graph-report-dir: dependency-graph-reports
+2026-10-25T17:31:56.3342041Z   dependency-graph-continue-on-failure: true
+2026-10-25T17:31:56.3342216Z   build-scan-publish: false
+2026-10-25T17:31:56.3342359Z   validate-wrappers: true
+2026-10-25T17:31:56.3342503Z   allow-snapshot-wrappers: false
+2026-10-25T17:31:56.3342697Z   gradle-home-cache-strict-match: false
+2026-10-25T17:31:56.3342870Z   workflow-job-context: {
+  "api": 26
+}
+2026-10-25T17:31:56.3344710Z   github-token: ***
+2026-10-25T17:31:56.3344830Z env:
+2026-10-25T17:31:56.3345002Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:31:56.3345280Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:31:56.3345508Z   ANDROID_HOME: /usr/local/lib/android/sdk
+2026-10-25T17:31:56.3345679Z   ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+2026-10-25T17:31:56.3345839Z ##[endgroup]
+2026-10-25T17:31:57.8273129Z Merged default JDK locations into /home/runner/.m2/toolchains.xml
+2026-10-25T17:31:57.8275698Z ##[group]Restore Gradle state from cache
+2026-10-25T17:31:57.9787622Z Cache hit for restore-key: gradle-home-v1|Linux-X64|attachment-poc-compatibility[2129642d956f8f44ad17afcb9d8805d5]-d477f092bb6244203066340d675a2356230ed585
+2026-10-25T17:31:58.8017487Z Received 7941077 of 7941077 (100.0%), 11.6 MBs/sec
+2026-10-25T17:31:58.8018265Z Cache Size: ~8 MB (7941077 B)
+2026-10-25T17:31:58.8039225Z [command]/usr/bin/tar -xf /home/runner/work/_temp/bf9bfa1b-4ba8-436a-a6f2-dc53110c9779/cache.tzst -P -C /home/runner/work/HRT-Log/HRT-Log --use-compress-program unzstd
+2026-10-25T17:31:59.0588674Z Cache restored successfully
+2026-10-25T17:31:59.0595718Z Restored cache entry with key gradle-home-v1|Linux-X64|attachment-poc-compatibility[2129642d956f8f44ad17afcb9d8805d5]-e2249e84c20bde47763530e11382dc8b9abb5a36 to /home/runner/.gradle/caches,/home/runner/.gradle/notifications,/home/runner/.gradle/.setup-gradle in 1231ms
+2026-10-25T17:31:59.2257429Z Cache hit for: gradle-wrapper-zips-v1-8c0de4c6bda6041d6e054bf825a89c98
+2026-10-25T17:31:59.2283867Z Cache hit for: gradle-generated-gradle-jars-v1-cb4b032a7d08b9bf1e84e9eacaebcc29
+2026-10-25T17:31:59.2303974Z Cache hit for: gradle-groovy-dsl-v1-df4d63b61a61fd99792d761bf1e1c50d
+2026-10-25T17:31:59.2326846Z Cache hit for: gradle-kotlin-dsl-v1-df5ebafd198cdf58e1c640b4a430aab1
+2026-10-25T17:31:59.2329552Z Cache hit for: gradle-transforms-v1-f13cc50277352a7b0c140d2902beb66b
+2026-10-25T17:31:59.2355381Z Cache hit for: gradle-dependencies-v1-9fed6a8db93ce230ff0ad50bf0ba4d2c
+2026-10-25T17:31:59.2359232Z Cache hit for: gradle-instrumented-jars-v1-5bb703255d43a47ed349d51c320adc4c
+2026-10-25T17:31:59.6227877Z Received 127490 of 127490 (100.0%), 0.5 MBs/sec
+2026-10-25T17:31:59.6228225Z Cache Size: ~0 MB (127490 B)
+2026-10-25T17:31:59.6252052Z [command]/usr/bin/tar -xf /home/runner/work/_temp/d954485c-48a8-4b07-9f4c-64a067403260/cache.tzst -P -C /home/runner/work/HRT-Log/HRT-Log --use-compress-program unzstd
+2026-10-25T17:31:59.6288004Z Received 69497 of 69497 (100.0%), 0.3 MBs/sec
+2026-10-25T17:31:59.6289635Z Cache Size: ~0 MB (69497 B)
+2026-10-25T17:31:59.6337334Z [command]/usr/bin/tar -xf /home/runner/work/_temp/a43d761d-842f-4e2d-8caa-f0892dcb4692/cache.tzst -P -C /home/runner/work/HRT-Log/HRT-Log --use-compress-program unzstd
+2026-10-25T17:31:59.6464653Z Cache restored successfully
+2026-10-25T17:31:59.6465776Z Restored cache entry with key gradle-instrumented-jars-v1-5bb703255d43a47ed349d51c320adc4c to /home/runner/.gradle/caches/jars-*/*/ in 586ms
+2026-10-25T17:31:59.6524594Z Cache restored successfully
+2026-10-25T17:31:59.6525998Z Restored cache entry with key gradle-groovy-dsl-v1-df4d63b61a61fd99792d761bf1e1c50d to /home/runner/.gradle/caches/*/groovy-dsl/*/ in 591ms
+2026-10-25T17:31:59.7228658Z Received 469343 of 469343 (100.0%), 1.3 MBs/sec
+2026-10-25T17:31:59.7229463Z Cache Size: ~0 MB (469343 B)
+2026-10-25T17:31:59.7255044Z [command]/usr/bin/tar -xf /home/runner/work/_temp/8a53ea3e-7be8-4ea9-b5e0-24da2f9b15c9/cache.tzst -P -C /home/runner/work/HRT-Log/HRT-Log --use-compress-program unzstd
+2026-10-25T17:31:59.8580895Z Cache restored successfully
+2026-10-25T17:31:59.8645958Z Restored cache entry with key gradle-kotlin-dsl-v1-df5ebafd198cdf58e1c640b4a430aab1 to /home/runner/.gradle/caches/*/kotlin-dsl/accessors/*/,/home/runner/.gradle/caches/*/kotlin-dsl/scripts/*/ in 798ms
+2026-10-25T17:32:00.0791338Z Received 41993401 of 41993401 (100.0%), 49.6 MBs/sec
+2026-10-25T17:32:00.0791752Z Cache Size: ~40 MB (41993401 B)
+2026-10-25T17:32:00.0831093Z [command]/usr/bin/tar -xf /home/runner/work/_temp/e18284cb-b5c5-40a6-b58f-5d1ba6495df7/cache.tzst -P -C /home/runner/work/HRT-Log/HRT-Log --use-compress-program unzstd
+2026-10-25T17:32:00.3758903Z Cache restored successfully
+2026-10-25T17:32:00.3826993Z Restored cache entry with key gradle-generated-gradle-jars-v1-cb4b032a7d08b9bf1e84e9eacaebcc29 to /home/runner/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar in 1323ms
+2026-10-25T17:32:00.3844985Z Received 88080384 of 136379802 (64.6%), 84.1 MBs/sec
+2026-10-25T17:32:00.4260425Z Received 67108864 of 420557968 (16.0%), 64.0 MBs/sec
+2026-10-25T17:32:00.4462986Z Received 62914560 of 234564327 (26.8%), 60.0 MBs/sec
+2026-10-25T17:32:00.7165909Z Received 136379802 of 136379802 (100.0%), 97.7 MBs/sec
+2026-10-25T17:32:00.7167631Z Cache Size: ~130 MB (136379802 B)
+2026-10-25T17:32:00.7192315Z [command]/usr/bin/tar -xf /home/runner/work/_temp/bc54aa14-28b0-40a7-b02f-b13a04d85cfe/cache.tzst -P -C /home/runner/work/HRT-Log/HRT-Log --use-compress-program unzstd
+2026-10-25T17:32:00.8871856Z Cache restored successfully
+2026-10-25T17:32:00.8938966Z Restored cache entry with key gradle-wrapper-zips-v1-8c0de4c6bda6041d6e054bf825a89c98 to /home/runner/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks in 1833ms
+2026-10-25T17:32:01.3450045Z Received 234564327 of 234564327 (100.0%), 117.7 MBs/sec
+2026-10-25T17:32:01.3450851Z Cache Size: ~224 MB (234564327 B)
+2026-10-25T17:32:01.3474287Z [command]/usr/bin/tar -xf /home/runner/work/_temp/22c7222c-6bcf-4019-b5a0-9ce26cb5de79/cache.tzst -P -C /home/runner/work/HRT-Log/HRT-Log --use-compress-program unzstd
+2026-10-25T17:32:01.4261288Z Received 130023424 of 420557968 (30.9%), 62.0 MBs/sec
+2026-10-25T17:32:02.4295204Z Received 264241152 of 420557968 (62.8%), 83.9 MBs/sec
+2026-10-25T17:32:03.4280227Z Received 352321536 of 420557968 (83.8%), 84.0 MBs/sec
+2026-10-25T17:32:03.5715198Z Cache restored successfully
+2026-10-25T17:32:03.5837523Z Restored cache entry with key gradle-transforms-v1-f13cc50277352a7b0c140d2902beb66b to /home/runner/.gradle/caches/transforms-4/*/,/home/runner/.gradle/caches/*/transforms/*/ in 4522ms
+2026-10-25T17:32:04.4277206Z Received 412169360 of 420557968 (98.0%), 78.6 MBs/sec
+2026-10-25T17:32:05.0825086Z Received 420557968 of 420557968 (100.0%), 70.9 MBs/sec
+2026-10-25T17:32:05.0856151Z Cache Size: ~401 MB (420557968 B)
+2026-10-25T17:32:05.0926677Z [command]/usr/bin/tar -xf /home/runner/work/_temp/bc4a4686-4f31-4743-9781-69f5e9b09a39/cache.tzst -P -C /home/runner/work/HRT-Log/HRT-Log --use-compress-program unzstd
+2026-10-25T17:32:05.5465676Z Cache restored successfully
+2026-10-25T17:32:05.5636844Z Restored cache entry with key gradle-dependencies-v1-9fed6a8db93ce230ff0ad50bf0ba4d2c to /home/runner/.gradle/caches/modules-*/files-*/*/*/*/* in 6503ms
+2026-10-25T17:32:05.6732314Z ##[endgroup]
+2026-10-25T17:32:05.7581373Z ##[group]All Gradle Wrapper jars are valid
+2026-10-25T17:32:05.7583798Z ✓ Found known Gradle Wrapper JAR files:
+2026-10-25T17:32:05.7584667Z   b3a875ddc1f044746e1b1a55f645584505f4a10438c1afea9f15e92a7c42ec13 gradle/wrapper/gradle-wrapper.jar
+2026-10-25T17:32:05.7585542Z ##[endgroup]
+2026-10-25T17:32:05.8069376Z ##[group]Run sudo chmod a+rw /dev/kvm
+2026-10-25T17:32:05.8069857Z [36;1msudo chmod a+rw /dev/kvm[0m
+2026-10-25T17:32:05.8128729Z shell: /usr/bin/bash -e {0}
+2026-10-25T17:32:05.8128948Z env:
+2026-10-25T17:32:05.8129175Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:32:05.8129535Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:32:05.8129808Z   ANDROID_HOME: /usr/local/lib/android/sdk
+2026-10-25T17:32:05.8130027Z   ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+2026-10-25T17:32:05.8130257Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-25T17:32:05.8130473Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-25T17:32:05.8130679Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-25T17:32:05.8130883Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-25T17:32:05.8131180Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-25T17:32:05.8131552Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-25T17:32:05.8131775Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-25T17:32:05.8131972Z ##[endgroup]
+2026-10-25T17:32:05.8480848Z ##[group]Run ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808
+2026-10-25T17:32:05.8481187Z with:
+2026-10-25T17:32:05.8481333Z   api-level: 26
+2026-10-25T17:32:05.8481498Z   arch: x86_64
+2026-10-25T17:32:05.8481640Z   heap-size: 192M
+2026-10-25T17:32:05.8481803Z   disable-animations: true
+2026-10-25T17:32:05.8510764Z   script: python3 scripts/configure_ansm_native_runtime.py --api 26
+adb shell input keyevent 82
+adb shell wm dismiss-keyguard
+./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.NativeCiHeapProbe -Pandroid.testInstrumentationRunnerArguments.ansmExpectedHeapMb=192 --no-parallel --max-workers=2
+# PR-A real MainActivity + DocumentsUI first; retain its result before later suites replace reports.
+./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.imports.AutomaticImportAndroidTest --no-parallel --max-workers=2
+python3 -c 'import shutil; shutil.copytree("app/build/outputs/androidTest-results", "app/build/reports/import-a-native", dirs_exist_ok=True)'
+# Execute both real SAF operation cases once, before unrelated bulk work.
+python3 scripts/run_attachment_operation_native.py
+python3 scripts/run_library_lifecycle_native.py
+adb logcat -G 16M
+./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.AttachmentFoundationAndroidTest,net.plainnotes.app.data.AttachmentSqlCipherMigrationTest,net.plainnotes.app.data.AttachmentKeyAndroidTest,net.plainnotes.app.data.AttachmentPersistentStoreAndroidTest,net.plainnotes.app.data.AttachmentPersistentRestartAndroidTest,net.plainnotes.app.data.AttachmentBackupCandidateAndroidTest,net.plainnotes.app.data.AttachmentBackupPreparationAndroidTest,net.plainnotes.app.data.AttachmentRestorePreflightAndroidTest,net.plainnotes.app.data.AttachmentRestoreStagingAndroidTest,net.plainnotes.app.data.AttachmentBusinessReconstructionAndroidTest,net.plainnotes.app.data.AttachmentBusinessRestoreAndroidTest,net.plainnotes.app.data.AttachmentFormatReadinessAndroidTest,net.plainnotes.app.data.MedicalArchiveAndroidTest,net.plainnotes.app.data.LibraryRestoreAndroidTest,net.plainnotes.app.data.RuntimeLibraryRequestAndroidTest,net.plainnotes.app.data.Gate2StoreAndroidTest,net.plainnotes.app.data.Gate2RestartAndroidTest,net.plainnotes.app.data.Gate2SafAndroidTest,net.plainnotes.app.data.Gate2ContextAndroidTest,net.plainnotes.app.data.Gate3ProcessLockAndroidTest,net.plainnotes.app.data.B3GateAndroidTest,net.plainnotes.app.data.B3RestartAndroidTest,net.plainnotes.app.data.Ansm03b0InventoryAndroidTest,net.plainnotes.app.data.BackupReplacementAndroidTest,net.plainnotes.app.data.ReferencePersistenceAndroidTest,net.plainnotes.app.data.BdpmCatalogueAndroidTest,net.plainnotes.app.data.ReferenceMigrationAndroidTest,net.plainnotes.app.data.MeasuredContainerAndroidTest,net.plainnotes.app.data.MeasuredConsumptionAndroidTest,net.plainnotes.app.data.MeasuredSaveCoordinatorAndroidTest,net.plainnotes.app.data.ReferenceAuditStreamingAndroidTest,net.plainnotes.app.data.P4LifecycleGrowthAndroidTest,net.plainnotes.app.data.DailyTrashCollisionAndroidTest,net.plainnotes.app.data.LabPanelDataAndroidTest --no-parallel --max-workers=2
+python3 scripts/collect_med02_format_readiness.py
+python3 scripts/run_attachment_foundation_restart.py
+python3 scripts/run_attachment_persistent_restart.py
+python3 scripts/run_attachment_restore_restart.py
+python3 scripts/run_attachment_gate2_red.py
+python3 scripts/run_attachment_gate2_restart.py AFTER_CREATE
+python3 scripts/run_attachment_gate2_restart.py WRITE
+python3 scripts/run_attachment_gate2_restart.py IN_COMMIT
+python3 scripts/run_attachment_gate2_restart.py AFTER_COMMIT
+python3 scripts/run_b3_gate_restart.py BEFORE_COMMIT
+python3 scripts/run_b3_gate_restart.py AFTER_COMMIT
+python3 scripts/run_b3_gate_red.py
+./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=net.plainnotes.app.attachmentpoc --no-parallel --max-workers=2
+# China beta P0 regressions on API 26/29 (the full app suite runs on API 35 above).
+./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.shell.InAppNavigationLockAndroidTest,net.plainnotes.app.shell.ReminderTestDeviceTest,net.plainnotes.app.shell.RuntimeRequestUiAndroidTest,net.plainnotes.app.privacy.RestoreProtectionAndroidTest --no-parallel --max-workers=2
+python3 scripts/run_attachment_poc_restart.py
+python3 scripts/collect_attachment_poc_evidence.py --output app/build/reports/attachment-poc-evidence.json
+python3 scripts/run_attachment_gate3_red.py
+python3 scripts/run_ansm_write_process_death.py
+python3 scripts/run_lab_panel_restart.py
+python3 scripts/run_demo_compat.py
+
+2026-10-25T17:32:05.8539504Z   target: default
+2026-10-25T17:32:05.8539657Z   cores: 2
+2026-10-25T17:32:05.8539797Z   avd-name: test
+2026-10-25T17:32:05.8539956Z   force-avd-creation: true
+2026-10-25T17:32:05.8540137Z   emulator-boot-timeout: 600
+2026-10-25T17:32:05.8540315Z   emulator-port: 5554
+2026-10-25T17:32:05.8540619Z   emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+2026-10-25T17:32:05.8541017Z   disable-spellchecker: false
+2026-10-25T17:32:05.8541201Z   disable-linux-hw-accel: auto
+2026-10-25T17:32:05.8541381Z   enable-hw-keyboard: false
+2026-10-25T17:32:05.8541550Z   channel: stable
+2026-10-25T17:32:05.8541702Z env:
+2026-10-25T17:32:05.8541913Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:32:05.8542233Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:32:05.8542490Z   ANDROID_HOME: /usr/local/lib/android/sdk
+2026-10-25T17:32:05.8542702Z   ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+2026-10-25T17:32:05.8542925Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-25T17:32:05.8543134Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-25T17:32:05.8543331Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-25T17:32:05.8543763Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-25T17:32:05.8544054Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-25T17:32:05.8544365Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-25T17:32:05.8544588Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-25T17:32:05.8544777Z ##[endgroup]
+2026-10-25T17:32:05.9006955Z ##[group]Configure emulator
+2026-10-25T17:32:05.9007649Z API level: 26
+2026-10-25T17:32:05.9008356Z System image API level: 26
+2026-10-25T17:32:05.9008702Z target: default
+2026-10-25T17:32:05.9009942Z CPU architecture: x86_64
+2026-10-25T17:32:05.9010281Z Hardware profile: 
+2026-10-25T17:32:05.9010462Z Cores: 2
+2026-10-25T17:32:05.9010672Z RAM size: 
+2026-10-25T17:32:05.9010837Z Heap size: 192M
+2026-10-25T17:32:05.9011015Z SD card path or size: 
+2026-10-25T17:32:05.9011562Z Disk size: 
+2026-10-25T17:32:05.9012409Z AVD name: test
+2026-10-25T17:32:05.9012720Z force avd creation: true
+2026-10-25T17:32:05.9013308Z Emulator boot timeout: 600
+2026-10-25T17:32:05.9013894Z emulator port: 5554
+2026-10-25T17:32:05.9014437Z emulator options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+2026-10-25T17:32:05.9014856Z disable animations: true
+2026-10-25T17:32:05.9015197Z disable spellchecker: false
+2026-10-25T17:32:05.9015574Z disable Linux hardware acceleration: false
+2026-10-25T17:32:05.9015940Z enable hardware keyboard: false
+2026-10-25T17:32:05.9016270Z Channel: 0 (stable)
+2026-10-25T17:32:05.9016556Z Script:
+2026-10-25T17:32:05.9016962Z python3 scripts/configure_ansm_native_runtime.py --api 26
+2026-10-25T17:32:05.9017346Z adb shell input keyevent 82
+2026-10-25T17:32:05.9017686Z adb shell wm dismiss-keyguard
+2026-10-25T17:32:05.9018723Z ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.NativeCiHeapProbe -Pandroid.testInstrumentationRunnerArguments.ansmExpectedHeapMb=192 --no-parallel --max-workers=2
+2026-10-25T17:32:05.9020193Z ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.imports.AutomaticImportAndroidTest --no-parallel --max-workers=2
+2026-10-25T17:32:05.9021231Z python3 -c 'import shutil; shutil.copytree("app/build/outputs/androidTest-results", "app/build/reports/import-a-native", dirs_exist_ok=True)'
+2026-10-25T17:32:05.9021814Z python3 scripts/run_attachment_operation_native.py
+2026-10-25T17:32:05.9022176Z python3 scripts/run_library_lifecycle_native.py
+2026-10-25T17:32:05.9022559Z adb logcat -G 16M
+2026-10-25T17:32:05.9051034Z ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.AttachmentFoundationAndroidTest,net.plainnotes.app.data.AttachmentSqlCipherMigrationTest,net.plainnotes.app.data.AttachmentKeyAndroidTest,net.plainnotes.app.data.AttachmentPersistentStoreAndroidTest,net.plainnotes.app.data.AttachmentPersistentRestartAndroidTest,net.plainnotes.app.data.AttachmentBackupCandidateAndroidTest,net.plainnotes.app.data.AttachmentBackupPreparationAndroidTest,net.plainnotes.app.data.AttachmentRestorePreflightAndroidTest,net.plainnotes.app.data.AttachmentRestoreStagingAndroidTest,net.plainnotes.app.data.AttachmentBusinessReconstructionAndroidTest,net.plainnotes.app.data.AttachmentBusinessRestoreAndroidTest,net.plainnotes.app.data.AttachmentFormatReadinessAndroidTest,net.plainnotes.app.data.MedicalArchiveAndroidTest,net.plainnotes.app.data.LibraryRestoreAndroidTest,net.plainnotes.app.data.RuntimeLibraryRequestAndroidTest,net.plainnotes.app.data.Gate2StoreAndroidTest,net.plainnotes.app.data.Gate2RestartAndroidTest,net.plainnotes.app.data.Gate2SafAndroidTest,net.plainnotes.app.data.Gate2ContextAndroidTest,net.plainnotes.app.data.Gate3ProcessLockAndroidTest,net.plainnotes.app.data.B3GateAndroidTest,net.plainnotes.app.data.B3RestartAndroidTest,net.plainnotes.app.data.Ansm03b0InventoryAndroidTest,net.plainnotes.app.data.BackupReplacementAndroidTest,net.plainnotes.app.data.ReferencePersistenceAndroidTest,net.plainnotes.app.data.BdpmCatalogueAndroidTest,net.plainnotes.app.data.ReferenceMigrationAndroidTest,net.plainnotes.app.data.MeasuredContainerAndroidTest,net.plainnotes.app.data.MeasuredConsumptionAndroidTest,net.plainnotes.app.data.MeasuredSaveCoordinatorAndroidTest,net.plainnotes.app.data.ReferenceAuditStreamingAndroidTest,net.plainnotes.app.data.P4LifecycleGrowthAndroidTest,net.plainnotes.app.data.DailyTrashCollisionAndroidTest,net.plainnotes.app.data.LabPanelDataAndroidTest --no-parallel --max-workers=2
+2026-10-25T17:32:05.9082634Z python3 scripts/collect_med02_format_readiness.py
+2026-10-25T17:32:05.9083119Z python3 scripts/run_attachment_foundation_restart.py
+2026-10-25T17:32:05.9083673Z python3 scripts/run_attachment_persistent_restart.py
+2026-10-25T17:32:05.9084094Z python3 scripts/run_attachment_restore_restart.py
+2026-10-25T17:32:05.9084477Z python3 scripts/run_attachment_gate2_red.py
+2026-10-25T17:32:05.9084922Z python3 scripts/run_attachment_gate2_restart.py AFTER_CREATE
+2026-10-25T17:32:05.9085397Z python3 scripts/run_attachment_gate2_restart.py WRITE
+2026-10-25T17:32:05.9085902Z python3 scripts/run_attachment_gate2_restart.py IN_COMMIT
+2026-10-25T17:32:05.9086368Z python3 scripts/run_attachment_gate2_restart.py AFTER_COMMIT
+2026-10-25T17:32:05.9086820Z python3 scripts/run_b3_gate_restart.py BEFORE_COMMIT
+2026-10-25T17:32:05.9087249Z python3 scripts/run_b3_gate_restart.py AFTER_COMMIT
+2026-10-25T17:32:05.9087663Z python3 scripts/run_b3_gate_red.py
+2026-10-25T17:32:05.9088503Z ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=net.plainnotes.app.attachmentpoc --no-parallel --max-workers=2
+2026-10-25T17:32:05.9090485Z ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.shell.InAppNavigationLockAndroidTest,net.plainnotes.app.shell.ReminderTestDeviceTest,net.plainnotes.app.shell.RuntimeRequestUiAndroidTest,net.plainnotes.app.privacy.RestoreProtectionAndroidTest --no-parallel --max-workers=2
+2026-10-25T17:32:05.9092265Z python3 scripts/run_attachment_poc_restart.py
+2026-10-25T17:32:05.9092796Z python3 scripts/collect_attachment_poc_evidence.py --output app/build/reports/attachment-poc-evidence.json
+2026-10-25T17:32:05.9093158Z python3 scripts/run_attachment_gate3_red.py
+2026-10-25T17:32:05.9093408Z python3 scripts/run_ansm_write_process_death.py
+2026-10-25T17:32:05.9093900Z python3 scripts/run_lab_panel_restart.py
+2026-10-25T17:32:05.9094222Z python3 scripts/run_demo_compat.py
+2026-10-25T17:32:05.9094536Z Pre emulator launch script:
+2026-10-25T17:32:05.9095144Z ##[endgroup]
+2026-10-25T17:32:05.9095524Z ##[group]Install Android SDK
+2026-10-25T17:32:05.9095911Z [command]/usr/bin/sh -c \yes | sdkmanager --licenses > /dev/null
+2026-10-25T17:32:08.3804813Z Warning: This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+2026-10-25T17:32:11.0261664Z Installing latest build tools, platform tools, and platform.
+2026-10-25T17:32:11.0270591Z [command]/usr/bin/sh -c \sdkmanager --install 'build-tools;37.0.0' platform-tools 'platforms;android-26'> /dev/null
+2026-10-25T17:32:11.3671665Z Warning: This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+2026-10-25T17:32:21.3114806Z Installing latest emulator.
+2026-10-25T17:32:21.3122924Z [command]/usr/bin/sh -c \sdkmanager --install emulator --channel=0 > /dev/null
+2026-10-25T17:32:21.6650810Z Warning: This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+2026-10-25T17:32:30.0130625Z Installing system images.
+2026-10-25T17:32:30.0139815Z [command]/usr/bin/sh -c \sdkmanager --install 'system-images;android-26;default;x86_64' --channel=0 > /dev/null
+2026-10-25T17:32:30.3590813Z Warning: This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+2026-10-25T17:32:58.3687662Z ##[endgroup]
+2026-10-25T17:32:58.3688612Z ##[group]Create AVD
+2026-10-25T17:32:58.3689193Z Creating AVD.
+2026-10-25T17:32:58.3699856Z [command]/usr/bin/sh -c \echo no | avdmanager create avd --force -n test --package 'system-images;android-26;default;x86_64'
+2026-10-25T17:32:58.7494942Z Loading local repository...                                                     
+2026-10-25T17:32:58.7495782Z Warning: This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+2026-10-25T17:32:58.9193203Z [=========                              ] 25% Loading local repository...       
+2026-10-25T17:32:58.9198875Z [=========                              ] 25% Fetch remote repository...        
+2026-10-25T17:32:58.9199348Z [=======================================] 100% Fetch remote repository...       
+2026-10-25T17:32:59.0973102Z Auto-selecting single ABI x86_64
+2026-10-25T17:32:59.2986202Z Do you wish to create a custom hardware profile? [no] [command]/usr/bin/sh -c \printf 'hw.cpu.ncore=2\nhw.heapSize=192M\n' >> /home/runner/.android/avd/test.avd/config.ini
+2026-10-25T17:32:59.3004367Z ##[endgroup]
+2026-10-25T17:32:59.3005760Z ##[group]Launch Emulator
+2026-10-25T17:32:59.3006182Z Starting emulator.
+2026-10-25T17:32:59.3047538Z [command]/usr/bin/sh -c \/usr/local/lib/android/sdk/emulator/emulator -port 5554 -avd test -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim &
+2026-10-25T17:32:59.3149972Z INFO         | Android emulator version 37.2.12.0 (build_id 16428233) (CL:N/A)
+2026-10-25T17:32:59.3150808Z INFO         | Graphics backend: gfxstream
+2026-10-25T17:32:59.3151320Z INFO         | Found systemPath /usr/local/lib/android/sdk/system-images/android-26/default/x86_64/
+2026-10-25T17:33:02.2253037Z WARNING: cannnot unmap ptr 0x7f9dba601000 as it is in the protected range from 0x7f9d5a600000 to 0x7f9dba800000
+2026-10-25T17:33:02.2375819Z INFO         | Saving last run QEMU version for the AVD to 2
+2026-10-25T17:33:02.2376352Z INFO         | Increasing RAM size to 1536MB
+2026-10-25T17:33:02.2376814Z INFO         | Guest GLES Driver: Auto (ext controls)
+2026-10-25T17:33:02.2377458Z INFO         | emuglConfig_init: vulkan_mode_selected:swiftshader gles_mode_selected:swiftshader
+2026-10-25T17:33:02.2378053Z INFO         | Checking system compatibility:
+2026-10-25T17:33:02.2378496Z INFO         |   Checking: hasSufficientDiskSpace
+2026-10-25T17:33:02.2379002Z INFO         |      Ok: Disk space requirements to run avd: `test` are met
+2026-10-25T17:33:02.2379465Z INFO         |   Checking: hasSufficientHwGpu
+2026-10-25T17:33:02.2379989Z INFO         |      Ok: Hardware GPU compatibility checks are not required
+2026-10-25T17:33:02.2380461Z INFO         |   Checking: hasSufficientSystem
+2026-10-25T17:33:02.2381462Z INFO         |      Ok: System requirements to run avd: `test` are met
+2026-10-25T17:33:02.2382508Z WARNING      | Feature QuickbootFileBacked is disabled due to stability issues, if you really want that, the environment variable ANDROID_EMU_FORCE_QUICKBOOT_FILE_BACKED need to set to 1
+2026-10-25T17:33:02.2383632Z WARNING      | FeatureControl is requesting a non existing feature.
+2026-10-25T17:33:02.2384176Z ERROR        | Unable to connect to adb daemon on port: 5037
+2026-10-25T17:33:02.2384954Z INFO         | Storing crashdata in: /tmp/android-runner/emu-crash-37.2.12.db, detection is enabled for process: 2592
+2026-10-25T17:33:02.2385619Z INFO         | Initializing gfxstream backend
+2026-10-25T17:33:02.2386070Z INFO         | startOpenglesRendererImpl: gpu info
+2026-10-25T17:33:02.2386460Z INFO         | 
+2026-10-25T17:33:02.2386855Z INFO         | SharedLibrary::open for [libX11]
+2026-10-25T17:33:02.2387386Z WARNING      | Could not open libX11.so, try libX11.so.6
+2026-10-25T17:33:02.2387967Z INFO         | SharedLibrary::open for [libX11.so.6]
+2026-10-25T17:33:02.2388425Z INFO         | SharedLibrary::open for [libX11-xcb]
+2026-10-25T17:33:02.2388916Z WARNING      | Could not open libX11-xcb.so, try libX11-xcb.so.1
+2026-10-25T17:33:02.2389427Z INFO         | SharedLibrary::open for [libX11-xcb.so.1]
+2026-10-25T17:33:02.2389912Z INFO         | Graphics Adapter Vendor Google (Google Inc.)
+2026-10-25T17:33:02.2390547Z INFO         | Graphics Adapter Android Emulator OpenGL ES Translator (Google SwiftShader)
+2026-10-25T17:33:02.2391261Z INFO         | Graphics API Version OpenGL ES 3.0 (OpenGL ES 3.0 SwiftShader 4.0.0.1)
+2026-10-25T17:33:02.2394374Z INFO         | Graphics API Extensions GL_OES_EGL_sync GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_depth24 GL_OES_depth32 GL_OES_element_index_uint GL_OES_texture_float GL_OES_texture_float_linear GL_OES_compressed_paletted_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth_texture GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_packed_depth_stencil GL_OES_vertex_half_float GL_OES_standard_derivatives GL_OES_texture_npot GL_OES_rgb8_rgba8 GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_texture_format_BGRA8888 GL_APPLE_texture_format_BGRA8888 
+2026-10-25T17:33:02.2396706Z INFO         | Graphics Device Extensions N/A
+2026-10-25T17:33:02.2397158Z INFO         | Verified boot params were not found.
+2026-10-25T17:33:02.2397642Z INFO         | Userspace boot properties:
+2026-10-25T17:33:02.2398035Z INFO         |   android.bootanim=0
+2026-10-25T17:33:02.2398406Z INFO         |   android.qemud=1
+2026-10-25T17:33:02.2399034Z INFO         |   androidboot.android_dt_dir=/sys/bus/platform/devices/ANDR0001:00/properties/android/
+2026-10-25T17:33:02.2399880Z INFO         |   androidboot.hardware=ranchu
+2026-10-25T17:33:02.2400638Z INFO         |   androidboot.serialno=EMULATOR37X2X12X0
+2026-10-25T17:33:02.2401084Z INFO         |   qemu=1
+2026-10-25T17:33:02.2401439Z INFO         |   qemu.avd_name=test
+2026-10-25T17:33:02.2401885Z INFO         |   qemu.camera_hq_edge_processing=0
+2026-10-25T17:33:02.2402361Z INFO         |   qemu.dalvik.vm.heapsize=384m
+2026-10-25T17:33:02.2402790Z INFO         |   qemu.encrypt=1
+2026-10-25T17:33:02.2403162Z INFO         |   qemu.gles=1
+2026-10-25T17:33:02.2404583Z INFO         |   qemu.gltransport=pipe
+2026-10-25T17:33:02.2405217Z INFO         |   qemu.gltransport.drawFlushInterval=800
+2026-10-25T17:33:02.2405649Z INFO         |   qemu.opengles.version=196608
+2026-10-25T17:33:02.2406119Z INFO         |   qemu.settings.system.screen_off_timeout=2147483647
+2026-10-25T17:33:02.2406540Z INFO         |   qemu.skin=320x640
+2026-10-25T17:33:02.2406886Z INFO         |   qemu.uirenderer=skiagl
+2026-10-25T17:33:02.2407233Z INFO         |   qemu.vsync=60
+2026-10-25T17:33:02.2407534Z INFO         |   qemu.wifi=1
+2026-10-25T17:33:02.2407901Z INFO         | Monitoring duration of emulator setup.
+2026-10-25T17:33:02.2490680Z INFO         | Setting display: 0 configuration to: 320x640, dpi: 160x160 
+2026-10-25T17:33:02.2491996Z INFO         | setDisplayActiveConfig: id:0, 320x640
+2026-10-25T17:33:02.2492535Z INFO         | emulatorSetupEnvironment: Environment scene is not required
+2026-10-25T17:33:02.2549448Z USER_INFO    | Emulator is performing a full startup. This may take upto two minutes, or more.
+2026-10-25T17:33:02.2551439Z WARNING      | Failed to process .ini file /home/runner/.android/emu-update-last-check.ini for reading.
+2026-10-25T17:33:02.5164841Z WARNING      | Failed to process .ini file /home/runner/.android/emu-update-last-check.ini for reading.
+2026-10-25T17:33:09.3082502Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell getprop sys.boot_completed
+2026-10-25T17:33:09.3110721Z * daemon not running; starting now at tcp:5037
+2026-10-25T17:33:09.4621704Z * daemon started successfully
+2026-10-25T17:33:09.4627793Z adb: device offline
+2026-10-25T17:33:09.4634141Z The process '/usr/local/lib/android/sdk/platform-tools/adb' failed with exit code 1
+2026-10-25T17:33:11.4662386Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell getprop sys.boot_completed
+2026-10-25T17:33:11.4748157Z 
+2026-10-25T17:33:13.4774278Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell getprop sys.boot_completed
+2026-10-25T17:33:13.4852296Z 
+2026-10-25T17:33:15.4900038Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell getprop sys.boot_completed
+2026-10-25T17:33:15.4974928Z 
+2026-10-25T17:33:17.5016300Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell getprop sys.boot_completed
+2026-10-25T17:33:17.5093211Z 
+2026-10-25T17:33:19.5128617Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell getprop sys.boot_completed
+2026-10-25T17:33:19.5205668Z 
+2026-10-25T17:33:21.5249261Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell getprop sys.boot_completed
+2026-10-25T17:33:21.5328454Z 
+2026-10-25T17:33:23.5368983Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell getprop sys.boot_completed
+2026-10-25T17:33:23.5458454Z 
+2026-10-25T17:33:25.5494739Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell getprop sys.boot_completed
+2026-10-25T17:33:25.5569480Z 
+2026-10-25T17:33:27.5639435Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell getprop sys.boot_completed
+2026-10-25T17:33:27.5952322Z 1
+2026-10-25T17:33:27.5970915Z Emulator booted.
+2026-10-25T17:33:27.5994082Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell input keyevent 82
+2026-10-25T17:33:28.3256132Z Disabling animations.
+2026-10-25T17:33:28.3275496Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell settings put global window_animation_scale 0.0
+2026-10-25T17:33:28.3725956Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell settings put global transition_animation_scale 0.0
+2026-10-25T17:33:28.4124587Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell settings put global animator_duration_scale 0.0
+2026-10-25T17:33:28.4641610Z ##[endgroup]
+2026-10-25T17:33:28.4657866Z [command]/usr/bin/sh -c python3 scripts/configure_ansm_native_runtime.py --api 26
+2026-10-25T17:33:29.6456318Z INFO         | Boot completed in 30310 ms
+2026-10-25T17:33:29.6458395Z INFO         | Increasing screen off timeout, logcat buffer size to 2M.
+2026-10-25T17:33:29.6751447Z WARNING      | adb command '/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell settings put system screen_off_timeout 2147483647 ' failed: 'adb: device 'emulator-5554' not found'
+2026-10-25T17:33:32.7225240Z Synthetic API26 emulator ART heap properties verified192m; test Runtime.maxMemory and measured budgets still required
+2026-10-25T17:33:32.7256430Z [command]/usr/bin/sh -c adb shell input keyevent 82
+2026-10-25T17:33:32.9965105Z [command]/usr/bin/sh -c adb shell wm dismiss-keyguard
+2026-10-25T17:33:33.1316410Z [command]/usr/bin/sh -c ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.data.NativeCiHeapProbe -Pandroid.testInstrumentationRunnerArguments.ansmExpectedHeapMb=192 --no-parallel --max-workers=2
+2026-10-25T17:33:34.1947353Z Starting a Gradle Daemon (subsequent builds will be faster)
+2026-10-25T17:33:41.4938955Z 
+2026-10-25T17:33:41.4947006Z > Configure project :app
+2026-10-25T17:33:41.4950956Z WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+2026-10-25T17:33:41.4951689Z The current default is 'true'.
+2026-10-25T17:33:41.4952443Z It will be removed in version 10.0 of the Android Gradle plugin.
+2026-10-25T17:33:41.4953011Z WARNING: The option setting 'android.newDsl=false' is deprecated.
+2026-10-25T17:33:41.4953588Z The current default is 'true'.
+2026-10-25T17:33:41.4954054Z It will be removed in version 10.0 of the Android Gradle plugin.
+2026-10-25T17:33:43.9985725Z Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+2026-10-25T17:33:44.5937842Z 
+2026-10-25T17:33:44.5942999Z > Task :attachment-poc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:33:44.5951372Z > Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:33:44.9984776Z > Task :core:domain:processResources NO-SOURCE
+2026-10-25T17:33:45.0006769Z > Task :attachment-poc:processResources NO-SOURCE
+2026-10-25T17:33:45.0027884Z > Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:33:45.0055146Z > Task :importer:processResources NO-SOURCE
+2026-10-25T17:33:45.0055841Z > Task :core:data:preBuild UP-TO-DATE
+2026-10-25T17:33:45.0056384Z > Task :core:data:preDebugBuild UP-TO-DATE
+2026-10-25T17:33:45.0056862Z > Task :core:data:generateDebugResources
+2026-10-25T17:33:45.0939794Z > Task :core:data:packageDebugResources
+2026-10-25T17:33:45.0940517Z > Task :core:data:processDebugNavigationResources
+2026-10-25T17:33:46.0940585Z > Task :core:data:parseDebugLocalResources
+2026-10-25T17:33:46.0964292Z > Task :core:data:generateDebugRFile
+2026-10-25T17:33:46.1004427Z > Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:33:46.1973259Z > Task :core:data:javaPreCompileDebug
+2026-10-25T17:33:46.2004445Z > Task :core:data:preDebugAndroidTestBuild UP-TO-DATE
+2026-10-25T17:33:46.2005170Z > Task :core:data:generateDebugAndroidTestResources
+2026-10-25T17:33:46.2030392Z > Task :core:data:packageDebugAndroidTestResources
+2026-10-25T17:33:46.2056099Z > Task :core:data:processDebugAndroidTestNavigationResources
+2026-10-25T17:33:46.2084134Z > Task :core:data:parseDebugAndroidTestLocalResources
+2026-10-25T17:33:46.2965456Z > Task :core:data:generateDebugAndroidTestRFile
+2026-10-25T17:33:46.3004473Z > Task :core:data:prepareAnsm03b0TestSources
+2026-10-25T17:33:46.3032282Z > Task :core:data:javaPreCompileDebugAndroidTest
+2026-10-25T17:33:46.3065139Z > Task :core:data:generateDebugAndroidTestAssets UP-TO-DATE
+2026-10-25T17:33:46.3074824Z > Task :core:data:generateDebugAssets UP-TO-DATE
+2026-10-25T17:33:46.3104151Z > Task :core:data:mergeDebugAssets
+2026-10-25T17:33:46.5002259Z > Task :core:data:mergeDebugAndroidTestAssets
+2026-10-25T17:33:46.5030005Z > Task :core:data:compressDebugAndroidTestAssets
+2026-10-25T17:33:46.5954101Z > Task :core:data:desugarDebugAndroidTestFileDependencies
+2026-10-25T17:33:46.5964549Z > Task :core:data:writeDebugAarMetadata
+2026-10-25T17:33:46.5976303Z > Task :core:data:checkDebugAndroidTestAarMetadata
+2026-10-25T17:33:46.5976853Z > Task :core:data:mapDebugAndroidTestSourceSetPaths
+2026-10-25T17:33:46.5977380Z > Task :core:data:compileDebugAndroidTestNavigationResources
+2026-10-25T17:33:46.5977903Z > Task :core:data:mapDebugSourceSetPaths
+2026-10-25T17:33:46.6956662Z > Task :core:data:compileDebugLibraryResources
+2026-10-25T17:33:47.5958722Z > Task :core:data:mergeDebugAndroidTestResources
+2026-10-25T17:33:47.5959310Z > Task :core:data:extractDeepLinksDebug
+2026-10-25T17:33:47.6957224Z > Task :core:data:processDebugManifest
+2026-10-25T17:33:47.8964548Z > Task :core:data:processDebugAndroidTestManifest
+2026-10-25T17:33:48.3941640Z > Task :core:data:processDebugAndroidTestResources
+2026-10-25T17:33:48.4961113Z > Task :core:data:checkDebugAndroidTestDuplicateClasses
+2026-10-25T17:33:55.3943424Z > Task :core:data:mergeExtDexDebugAndroidTest
+2026-10-25T17:33:55.4951263Z > Task :core:data:mergeDebugJniLibFolders
+2026-10-25T17:33:55.4959176Z > Task :core:data:mergeDebugNativeLibs NO-SOURCE
+2026-10-25T17:33:55.4959788Z > Task :core:data:copyDebugJniLibsProjectOnly
+2026-10-25T17:33:55.4960341Z > Task :core:data:mergeDebugAndroidTestJniLibFolders
+2026-10-25T17:33:56.6944169Z > Task :core:data:validateSigningDebugAndroidTest
+2026-10-25T17:33:56.7948108Z > Task :core:data:writeDebugAndroidTestSigningConfigVersions
+2026-10-25T17:33:59.9955059Z > Task :core:domain:compileKotlin
+2026-10-25T17:33:59.9961000Z > Task :core:domain:compileJava NO-SOURCE
+2026-10-25T17:33:59.9961566Z > Task :core:domain:classes UP-TO-DATE
+2026-10-25T17:34:00.0954388Z > Task :core:domain:jar
+2026-10-25T17:34:02.2943627Z > Task :attachment-poc:compileKotlin
+2026-10-25T17:34:02.3025379Z > Task :attachment-poc:compileJava NO-SOURCE
+2026-10-25T17:34:02.3054544Z > Task :attachment-poc:classes UP-TO-DATE
+2026-10-25T17:34:02.3941786Z > Task :attachment-poc:jar
+2026-10-25T17:34:06.5943834Z > Task :importer:compileKotlin
+2026-10-25T17:34:06.5944638Z > Task :importer:compileJava NO-SOURCE
+2026-10-25T17:34:06.5945080Z > Task :importer:classes UP-TO-DATE
+2026-10-25T17:34:06.5945377Z > Task :importer:jar
+2026-10-25T17:34:07.3940930Z > Task :core:data:mergeDebugAndroidTestNativeLibs
+2026-10-25T17:34:07.4937982Z 
+2026-10-25T17:34:07.4942115Z > Task :core:data:stripDebugAndroidTestDebugSymbols
+2026-10-25T17:34:07.4943163Z Unable to strip the following libraries, packaging them as they are: libsqlcipher.so. Run with --info option to learn more.
+2026-10-25T17:34:17.9937434Z 
+2026-10-25T17:34:17.9938351Z > Task :core:data:kspDebugKotlin
+2026-10-25T17:34:34.0984556Z 
+2026-10-25T17:34:34.1001954Z > Task :core:data:compileDebugKotlin
+2026-10-25T17:34:34.1034149Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt:30:99 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1062715Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt:31:101 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1085132Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt:32:109 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1122395Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentCandidateMetadata.kt:33:89 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1126734Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:32:148 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1130487Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:49:169 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1134266Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:66:251 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1138261Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:71:148 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1142189Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:74:162 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1146221Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentIdentity.kt:79:162 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1148954Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentObjectStreams.kt:48:52 'fun <P : Any!> getPrimitive(targetClassObject: Class<P!>!): P!' is deprecated. Deprecated in Java.
+2026-10-25T17:34:34.1151864Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentOperations.kt:24:13 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1155784Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/AttachmentOperations.kt:31:13 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1158349Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:158:18 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+2026-10-25T17:34:34.1160005Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:160:33 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+2026-10-25T17:34:34.1161755Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:169:43 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+2026-10-25T17:34:34.1163553Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:169:73 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+2026-10-25T17:34:34.1165276Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:170:30 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+2026-10-25T17:34:34.1166987Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:170:62 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+2026-10-25T17:34:34.1168610Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:173:107 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+2026-10-25T17:34:34.1170239Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/DatabaseAccess.kt:174:96 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+2026-10-25T17:34:34.1171916Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionRestore.kt:58:18 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+2026-10-25T17:34:34.1173873Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionRestore.kt:63:26 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+2026-10-25T17:34:34.1175794Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionRestore.kt:63:58 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+2026-10-25T17:34:34.1177502Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionRestore.kt:65:51 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+2026-10-25T17:34:34.1180407Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryCollectionRestore.kt:142:158 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1182989Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryLifecycle.kt:32:18 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+2026-10-25T17:34:34.1187730Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryLifecycle.kt:36:35 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+2026-10-25T17:34:34.1189302Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryLifecycle.kt:36:67 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+2026-10-25T17:34:34.1190815Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryLifecycle.kt:38:95 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+2026-10-25T17:34:34.1192378Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:38:18 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+2026-10-25T17:34:34.1194526Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:44:26 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+2026-10-25T17:34:34.1196159Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:44:58 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+2026-10-25T17:34:34.1197725Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:47:96 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+2026-10-25T17:34:34.1200454Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:98:187 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1202964Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:153:14 'fun beginTransaction(): Unit' is deprecated. beginTransaction() is deprecated.
+2026-10-25T17:34:34.1204781Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:163:22 'fun setTransactionSuccessful(): Unit' is deprecated. setTransactionSuccessful() is deprecated.
+2026-10-25T17:34:34.1206476Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:163:54 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+2026-10-25T17:34:34.1208276Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreCoordinator.kt:165:92 'fun endTransaction(): Unit' is deprecated. endTransaction() is deprecated.
+2026-10-25T17:34:34.1211072Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreObjects.kt:61:181 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1215374Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreSequences.kt:44:90 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1218723Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/LibraryRestoreSequences.kt:45:87 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1222000Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt:379:153 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1225657Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt:933:103 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1229376Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/MeasuredConsumptionStore.kt:991:152 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1233011Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/MeasuredUseIntegration.kt:25:109 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1235836Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveCrypto.kt:33:23 Non-public primary constructor is exposed via the generated 'copy()' method of the 'data' class.
+2026-10-25T17:34:34.1236618Z 
+2026-10-25T17:34:34.1236905Z The generated 'copy()' will change its visibility in future releases.
+2026-10-25T17:34:34.1237200Z 
+2026-10-25T17:34:34.1237400Z To suppress the warning do one of the following:
+2026-10-25T17:34:34.1237915Z - Annotate the data class with the '@ConsistentCopyVisibility' annotation.
+2026-10-25T17:34:34.1238505Z - Use the '-Xconsistent-data-class-copy-visibility' compiler flag.
+2026-10-25T17:34:34.1239074Z - Annotate the data class with the '@ExposedCopyVisibility' annotation 
+2026-10-25T17:34:34.1239606Z   (Discouraged, but can be used to keep binary compatibility).
+2026-10-25T17:34:34.1239871Z 
+2026-10-25T17:34:34.1240329Z To learn more, see the documentation of the '@ConsistentCopyVisibility' and '@ExposedCopyVisibility' annotations.
+2026-10-25T17:34:34.1240759Z 
+2026-10-25T17:34:34.1241160Z This will become an error in language version 2.5. See https://youtrack.jetbrains.com/issue/KT-11914.
+2026-10-25T17:34:34.1244279Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/MedicalAttachmentOperations.kt:130:146 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1248146Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/MedicalAttachmentOperations.kt:144:21 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1251021Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/ReferenceAuditReads.kt:163:24 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:34:34.1253173Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/ReferenceAuditReads.kt:164:24 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:34:34.1256189Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:85:83 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1259668Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:108:106 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1263368Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:114:103 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1267040Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:133:113 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1270531Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/ReferenceStore.kt:180:84 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1274367Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:25:108 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1277987Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:35:120 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1281636Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:36:97 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:34.1286034Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/main/java/net/plainnotes/app/data/WellbeingUpgrade.kt:40:135 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:34:35.8936661Z 
+2026-10-25T17:34:35.8964957Z > Task :core:data:compileDebugJavaWithJavac
+2026-10-25T17:34:35.9939601Z > Task :core:data:processDebugJavaRes
+2026-10-25T17:34:36.0940591Z > Task :core:data:transformDebugClassesWithAsm
+2026-10-25T17:34:36.1938837Z > Task :core:data:bundleLibCompileToJarDebug
+2026-10-25T17:34:36.1944891Z > Task :core:data:bundleLibRuntimeToJarDebug
+2026-10-25T17:34:37.9944856Z > Task :core:data:kspDebugAndroidTestKotlin
+2026-10-25T17:34:46.5955639Z > Task :core:data:createFullJarDebug
+2026-10-25T17:34:46.8939171Z > Task :core:data:bundleLibRuntimeToDirDebug
+2026-10-25T17:34:57.3964784Z > Task :core:data:mergeLibDexDebugAndroidTest
+2026-10-25T17:35:01.7954701Z 
+2026-10-25T17:35:01.7998763Z > Task :core:data:compileDebugAndroidTestKotlin
+2026-10-25T17:35:01.8027274Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/androidTest/java/net/plainnotes/app/data/HistoricalVisitAndroidTest.kt:3:8 'class AndroidJUnit4 : Runner, Filterable, Sortable' is deprecated. Deprecated in Java.
+2026-10-25T17:35:01.8077330Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/androidTest/java/net/plainnotes/app/data/LabPanelDataAndroidTest.kt:5:8 'class AndroidJUnit4 : Runner, Filterable, Sortable' is deprecated. Deprecated in Java.
+2026-10-25T17:35:01.8080520Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/androidTest/java/net/plainnotes/app/data/UndoSkippedAndroidTest.kt:2:8 'class AndroidJUnit4 : Runner, Filterable, Sortable' is deprecated. Deprecated in Java.
+2026-10-25T17:35:01.8083595Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/androidTest/java/net/plainnotes/app/data/UndoSkippedAndroidTest.kt:4:10 'class AndroidJUnit4 : Runner, Filterable, Sortable' is deprecated. Deprecated in Java.
+2026-10-25T17:35:01.8087053Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/androidTest/java/net/plainnotes/app/data/b3/B3Gate.kt:207:62 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8090873Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/androidTest/java/net/plainnotes/app/data/b3/B3Gate.kt:406:13 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8095358Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/androidTest/java/net/plainnotes/app/data/b3/B3Gate.kt:552:102 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8098994Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2Store.kt:151:157 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8102157Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2Store.kt:178:17 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8108750Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2Store.kt:182:181 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8115278Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/androidTest/java/net/plainnotes/app/data/gate2/Gate2Store.kt:206:121 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8126126Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/attachmentTest/java/net/plainnotes/app/data/AttachmentFoundationContract.kt:141:71 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8130303Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/CandidateColumnScanOracle.kt:49:69 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8132969Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:51:48 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+2026-10-25T17:35:01.8134721Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:52:50 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+2026-10-25T17:35:01.8136625Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:62:32 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8138487Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:79:41 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+2026-10-25T17:35:01.8140012Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:97:30 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+2026-10-25T17:35:01.8141541Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:113:26 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+2026-10-25T17:35:01.8143076Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:117:26 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+2026-10-25T17:35:01.8151228Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:129:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8157027Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:135:26 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+2026-10-25T17:35:01.8158963Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ChainContentMemoOracle.kt:138:26 Java type mismatch: inferred type is 'Any?', but 'Any' was expected.
+2026-10-25T17:35:01.8161960Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt:334:153 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8165725Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt:841:103 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8169360Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/FrozenFullAuditStore.kt:899:152 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8172371Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:111:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8174807Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:123:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8177109Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:162:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8179373Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:506:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8181628Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:526:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8184598Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:565:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8189186Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:590:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8193668Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:616:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8197474Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:634:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8203398Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:669:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8207970Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:701:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8212259Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:720:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8218678Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:740:95 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8224404Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:771:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8228292Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:772:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8232975Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:790:40 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8238770Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1466:113 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8242410Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1477:92 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8246372Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1525:79 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8249833Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1591:79 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8253412Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/MeasuredConsumptionContract.kt:1606:83 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8256068Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:109:68 'val id: Long' is deprecated. Deprecated in Java.
+2026-10-25T17:35:01.8257467Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:193:73 'val id: Long' is deprecated. Deprecated in Java.
+2026-10-25T17:35:01.8259290Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:202:51 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'transactionListener'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8261534Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:203:63 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'transactionListener'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8263884Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:244:28 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8265971Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/P4WritePathTiming.kt:245:28 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8268846Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceAuditStreamingContract.kt:70:27 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8272760Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceAuditStreamingContract.kt:71:27 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8275838Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceAuditStreamingContract.kt:97:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8278167Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/ReferenceAuditStreamingContract.kt:98:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8280404Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/historyTest/java/net/plainnotes/app/data/SyntheticRestoreDigest.kt:20:36 The corresponding parameter in the supertype 'SupportSQLiteDatabase' is named 'query'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8283587Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0CandidateStore.kt:89:75 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8286369Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:112:33 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'File?'.
+2026-10-25T17:35:01.8289229Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:269:64 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8292939Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:270:81 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>?' & 'Serializable?']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8296764Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:271:71 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:01.8299574Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:350:39 The corresponding parameter in the supertype 'Callback' is named 'db'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:01.8301798Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/data/src/test/shared/java/net/plainnotes/app/data/Ansm03b0InventoryContract.kt:357:40 The corresponding parameter in the supertype 'Callback' is named 'db'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:02.6937434Z 
+2026-10-25T17:35:02.6947435Z > Task :core:data:compileDebugAndroidTestJavaWithJavac
+2026-10-25T17:35:02.8941668Z > Task :core:data:hiltAggregateDepsDebugAndroidTest
+2026-10-25T17:35:02.8964475Z > Task :core:data:hiltJavaCompileDebugAndroidTest NO-SOURCE
+2026-10-25T17:35:02.9955491Z > Task :core:data:processDebugAndroidTestJavaRes
+2026-10-25T17:35:03.2945744Z > Task :core:data:transformDebugAndroidTestClassesWithAsm
+2026-10-25T17:35:07.3938428Z > Task :core:data:mergeDebugAndroidTestJavaResource
+2026-10-25T17:35:08.4938310Z > Task :core:data:dexBuilderDebugAndroidTest
+2026-10-25T17:35:08.5937627Z > Task :core:data:mergeDebugAndroidTestGlobalSynthetics
+2026-10-25T17:35:08.9938057Z > Task :core:data:mergeProjectDexDebugAndroidTest
+2026-10-25T17:35:09.3964974Z > Task :core:data:packageDebugAndroidTest
+2026-10-25T17:35:09.3965953Z > Task :core:data:createDebugAndroidTestApkListingFileRedirect
+2026-10-25T17:35:09.5940317Z [EmulatorConsole]: Failed to start Emulator console for 5554
+2026-10-25T17:35:16.0936372Z Starting 1 tests on emulator-5554 - 8.0.0
+2026-10-25T17:35:16.5961429Z Finished 1 tests on emulator-5554 - 8.0.0
+2026-10-25T17:35:16.9936780Z > Task :core:data:connectedDebugAndroidTest
+2026-10-25T17:35:16.9937909Z gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__ReactiveCircus_android-emulator-runner-1792949617345.json
+2026-10-25T17:35:17.0617569Z 
+2026-10-25T17:35:17.0621739Z BUILD SUCCESSFUL in 1m 43s
+2026-10-25T17:35:17.0622366Z 66 actionable tasks: 66 executed
+2026-10-25T17:35:17.0623316Z Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.1/userguide/configuration_cache_enabling.html
+2026-10-25T17:35:17.3826583Z [command]/usr/bin/sh -c ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.imports.AutomaticImportAndroidTest --no-parallel --max-workers=2
+2026-10-25T17:35:18.3210634Z 
+2026-10-25T17:35:18.3223026Z > Configure project :app
+2026-10-25T17:35:18.3224015Z WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+2026-10-25T17:35:18.3224699Z The current default is 'true'.
+2026-10-25T17:35:18.3225260Z It will be removed in version 10.0 of the Android Gradle plugin.
+2026-10-25T17:35:18.3225880Z WARNING: The option setting 'android.newDsl=false' is deprecated.
+2026-10-25T17:35:18.3226421Z The current default is 'true'.
+2026-10-25T17:35:18.3226959Z It will be removed in version 10.0 of the Android Gradle plugin.
+2026-10-25T17:35:18.8204413Z 
+2026-10-25T17:35:18.8224640Z > Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:35:18.8234407Z > Task :core:domain:compileKotlin UP-TO-DATE
+2026-10-25T17:35:18.8235136Z > Task :core:domain:compileJava NO-SOURCE
+2026-10-25T17:35:18.8244205Z > Task :core:domain:processResources NO-SOURCE
+2026-10-25T17:35:18.8244731Z > Task :core:domain:classes UP-TO-DATE
+2026-10-25T17:35:18.8252280Z > Task :core:domain:jar UP-TO-DATE
+2026-10-25T17:35:18.8252888Z > Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:35:18.9237527Z > Task :pk-engine:processResources
+2026-10-25T17:35:18.9251313Z > Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:35:18.9252091Z > Task :importer:compileKotlin UP-TO-DATE
+2026-10-25T17:35:18.9252617Z > Task :importer:compileJava NO-SOURCE
+2026-10-25T17:35:18.9253141Z > Task :importer:processResources NO-SOURCE
+2026-10-25T17:35:18.9253829Z > Task :importer:classes UP-TO-DATE
+2026-10-25T17:35:18.9254746Z > Task :importer:jar UP-TO-DATE
+2026-10-25T17:35:18.9255333Z > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:35:18.9256265Z > Task :app:preBuild UP-TO-DATE
+2026-10-25T17:35:18.9256750Z > Task :app:preFullDebugBuild UP-TO-DATE
+2026-10-25T17:35:18.9260286Z > Task :app:generateFullDebugBuildConfig
+2026-10-25T17:35:19.0224875Z > Task :app:generateFullDebugResources
+2026-10-25T17:35:19.2216388Z > Task :app:packageFullDebugResources
+2026-10-25T17:35:19.3220471Z > Task :core:data:preBuild UP-TO-DATE
+2026-10-25T17:35:19.3233794Z > Task :core:data:preDebugBuild UP-TO-DATE
+2026-10-25T17:35:19.3276362Z > Task :core:data:processDebugNavigationResources UP-TO-DATE
+2026-10-25T17:35:19.3277059Z > Task :core:reminder:preBuild UP-TO-DATE
+2026-10-25T17:35:19.3277625Z > Task :core:reminder:preDebugBuild UP-TO-DATE
+2026-10-25T17:35:19.3282160Z > Task :core:reminder:processDebugNavigationResources
+2026-10-25T17:35:19.3302768Z > Task :core:ui:preBuild UP-TO-DATE
+2026-10-25T17:35:19.3322610Z > Task :core:ui:preDebugBuild UP-TO-DATE
+2026-10-25T17:35:19.3323219Z > Task :core:ui:processDebugNavigationResources
+2026-10-25T17:35:19.6212796Z > Task :app:processFullDebugNavigationResources
+2026-10-25T17:35:19.7236639Z > Task :app:parseFullDebugLocalResources
+2026-10-25T17:35:19.7264587Z > Task :app:generateFullDebugRFile
+2026-10-25T17:35:19.7294622Z > Task :core:data:generateDebugResources UP-TO-DATE
+2026-10-25T17:35:19.7325841Z > Task :core:data:packageDebugResources UP-TO-DATE
+2026-10-25T17:35:19.7379468Z > Task :core:data:parseDebugLocalResources UP-TO-DATE
+2026-10-25T17:35:19.7409549Z > Task :core:data:generateDebugRFile UP-TO-DATE
+2026-10-25T17:35:19.7419015Z > Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:35:19.8244902Z > Task :core:data:kspDebugKotlin UP-TO-DATE
+2026-10-25T17:35:19.8280233Z > Task :core:data:compileDebugKotlin UP-TO-DATE
+2026-10-25T17:35:19.8305484Z > Task :core:data:javaPreCompileDebug UP-TO-DATE
+2026-10-25T17:35:19.9215671Z > Task :core:data:compileDebugJavaWithJavac UP-TO-DATE
+2026-10-25T17:35:19.9274792Z > Task :core:data:transformDebugClassesWithAsm UP-TO-DATE
+2026-10-25T17:35:19.9288618Z > Task :core:data:bundleLibCompileToJarDebug UP-TO-DATE
+2026-10-25T17:35:19.9314349Z > Task :core:reminder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:35:19.9334168Z > Task :core:reminder:generateDebugResources
+2026-10-25T17:35:19.9356499Z > Task :core:reminder:packageDebugResources
+2026-10-25T17:35:19.9378703Z > Task :core:reminder:parseDebugLocalResources
+2026-10-25T17:35:19.9404302Z > Task :core:reminder:generateDebugRFile
+2026-10-25T17:35:21.2203737Z > Task :pk-engine:compileKotlin
+2026-10-25T17:35:21.2244560Z > Task :pk-engine:compileJava NO-SOURCE
+2026-10-25T17:35:21.2269731Z > Task :pk-engine:classes
+2026-10-25T17:35:21.2304118Z > Task :pk-engine:jar
+2026-10-25T17:35:21.2334023Z > Task :core:reminder:javaPreCompileDebug
+2026-10-25T17:35:21.2364272Z > Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:35:21.2364799Z > Task :core:ui:generateDebugResources
+2026-10-25T17:35:21.3238785Z > Task :core:ui:packageDebugResources
+2026-10-25T17:35:21.3239742Z > Task :core:ui:parseDebugLocalResources
+2026-10-25T17:35:21.3240176Z > Task :core:ui:generateDebugRFile
+2026-10-25T17:35:22.9257761Z > Task :core:reminder:kspDebugKotlin
+2026-10-25T17:35:23.2244893Z > Task :core:ui:compileDebugKotlin
+2026-10-25T17:35:23.3224877Z > Task :core:ui:javaPreCompileDebug
+2026-10-25T17:35:23.3278025Z > Task :core:ui:compileDebugJavaWithJavac NO-SOURCE
+2026-10-25T17:35:23.3342997Z > Task :core:ui:bundleLibCompileToJarDebug
+2026-10-25T17:35:23.3360264Z > Task :app:javaPreCompileFullDebug
+2026-10-25T17:35:23.3365753Z > Task :app:generateFullDebugAssets UP-TO-DATE
+2026-10-25T17:35:23.3370853Z > Task :core:data:generateDebugAssets UP-TO-DATE
+2026-10-25T17:35:23.3377793Z > Task :core:data:mergeDebugAssets UP-TO-DATE
+2026-10-25T17:35:23.3382032Z > Task :core:reminder:generateDebugAssets UP-TO-DATE
+2026-10-25T17:35:23.3385340Z > Task :core:reminder:mergeDebugAssets
+2026-10-25T17:35:23.3389885Z > Task :core:ui:generateDebugAssets UP-TO-DATE
+2026-10-25T17:35:23.3390291Z > Task :core:ui:mergeDebugAssets
+2026-10-25T17:35:23.4231639Z > Task :app:mergeFullDebugAssets
+2026-10-25T17:35:23.4254166Z > Task :app:compressFullDebugAssets
+2026-10-25T17:35:23.6202357Z > Task :app:checkFullDebugDuplicateClasses
+2026-10-25T17:35:23.7208059Z > Task :app:desugarFullDebugFileDependencies
+2026-10-25T17:35:24.8204518Z 
+2026-10-25T17:35:24.8232113Z > Task :core:reminder:compileDebugKotlin
+2026-10-25T17:35:24.8265177Z w: file:///home/runner/work/HRT-Log/HRT-Log/core/reminder/src/main/java/net/plainnotes/app/reminder/ReminderCoordinator.kt:25:58 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+2026-10-25T17:35:24.8294468Z - To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+2026-10-25T17:35:24.8305147Z - To keep applying to the value parameter only, use the '@param:' annotation target.
+2026-10-25T17:35:24.8323869Z 
+2026-10-25T17:35:24.8354181Z See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+2026-10-25T17:35:24.9254868Z 
+2026-10-25T17:35:24.9284852Z > Task :core:reminder:compileDebugJavaWithJavac
+2026-10-25T17:35:30.5214808Z > Task :core:reminder:bundleLibCompileToJarDebug
+2026-10-25T17:35:30.6201187Z > Task :app:mergeExtDexFullDebug
+2026-10-25T17:35:31.4224931Z > Task :core:reminder:bundleLibRuntimeToJarDebug
+2026-10-25T17:35:31.8206809Z > Task :core:data:bundleLibRuntimeToJarDebug UP-TO-DATE
+2026-10-25T17:35:31.8264521Z > Task :core:ui:bundleLibRuntimeToJarDebug
+2026-10-25T17:35:32.1214451Z > Task :core:reminder:processDebugJavaRes
+2026-10-25T17:35:32.1234732Z > Task :core:reminder:createFullJarDebug
+2026-10-25T17:35:32.1254617Z > Task :core:data:processDebugJavaRes UP-TO-DATE
+2026-10-25T17:35:32.1255452Z > Task :core:data:createFullJarDebug UP-TO-DATE
+2026-10-25T17:35:32.1256156Z > Task :core:ui:processDebugJavaRes
+2026-10-25T17:35:32.1256683Z > Task :core:ui:createFullJarDebug
+2026-10-25T17:35:32.1257255Z > Task :core:data:writeDebugAarMetadata UP-TO-DATE
+2026-10-25T17:35:32.1257771Z > Task :core:reminder:writeDebugAarMetadata
+2026-10-25T17:35:32.1258420Z > Task :core:ui:writeDebugAarMetadata
+2026-10-25T17:35:32.2216460Z > Task :app:checkFullDebugAarMetadata
+2026-10-25T17:35:32.2217172Z > Task :app:mapFullDebugSourceSetPaths
+2026-10-25T17:35:32.2217801Z > Task :app:compileFullDebugNavigationResources
+2026-10-25T17:35:34.0204225Z 
+2026-10-25T17:35:34.0291294Z > Task :app:mergeFullDebugResources
+2026-10-25T17:35:34.0308051Z /home/runner/work/HRT-Log/HRT-Log/app/src/main/res/values/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+2026-10-25T17:35:34.0310951Z /home/runner/work/HRT-Log/HRT-Log/app/src/main/res/values-fr/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+2026-10-25T17:35:34.0312953Z /home/runner/work/HRT-Log/HRT-Log/app/src/main/res/values-b+zh+Hant/strings.xml:549:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+2026-10-25T17:35:34.0320077Z /home/runner/work/HRT-Log/HRT-Log/app/src/main/res/values-b+zh+Hant/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+2026-10-25T17:35:34.0330133Z /home/runner/work/HRT-Log/HRT-Log/app/src/main/res/values-b+zh+Hant/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+2026-10-25T17:35:34.0332580Z /home/runner/work/HRT-Log/HRT-Log/app/src/main/res/values-zh/strings.xml:549:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+2026-10-25T17:35:34.0367798Z /home/runner/work/HRT-Log/HRT-Log/app/src/main/res/values-zh/strings.xml:192:0: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+2026-10-25T17:35:34.0394609Z /home/runner/work/HRT-Log/HRT-Log/app/src/main/res/values-zh/strings.xml:220:0: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+2026-10-25T17:35:34.0396521Z 
+2026-10-25T17:35:34.0396916Z > Task :app:createFullDebugCompatibleScreenManifests
+2026-10-25T17:35:34.0411036Z > Task :app:extractDeepLinksFullDebug
+2026-10-25T17:35:34.0412255Z > Task :core:data:extractDeepLinksDebug UP-TO-DATE
+2026-10-25T17:35:34.0413708Z > Task :core:data:processDebugManifest UP-TO-DATE
+2026-10-25T17:35:34.0414285Z > Task :core:reminder:extractDeepLinksDebug
+2026-10-25T17:35:34.0417397Z > Task :core:reminder:processDebugManifest
+2026-10-25T17:35:34.0417983Z > Task :core:ui:extractDeepLinksDebug
+2026-10-25T17:35:34.0418471Z > Task :core:ui:processDebugManifest
+2026-10-25T17:35:34.2204658Z > Task :app:processFullDebugMainManifest
+2026-10-25T17:35:34.2222957Z > Task :app:processFullDebugManifest
+2026-10-25T17:35:34.3217398Z > Task :app:processFullDebugManifestForPackage
+2026-10-25T17:35:34.3245281Z > Task :core:data:mapDebugSourceSetPaths UP-TO-DATE
+2026-10-25T17:35:34.3256637Z > Task :core:data:compileDebugLibraryResources UP-TO-DATE
+2026-10-25T17:35:34.3281008Z > Task :core:reminder:mapDebugSourceSetPaths
+2026-10-25T17:35:34.3315750Z > Task :core:reminder:compileDebugLibraryResources
+2026-10-25T17:35:34.3324523Z > Task :core:ui:mapDebugSourceSetPaths
+2026-10-25T17:35:34.3355158Z > Task :core:ui:compileDebugLibraryResources
+2026-10-25T17:35:35.2225790Z > Task :app:processFullDebugResources
+2026-10-25T17:35:35.2290625Z > Task :core:reminder:bundleLibRuntimeToDirDebug
+2026-10-25T17:35:35.7224789Z > Task :core:data:bundleLibRuntimeToDirDebug UP-TO-DATE
+2026-10-25T17:35:35.7251318Z > Task :core:ui:bundleLibRuntimeToDirDebug
+2026-10-25T17:35:36.6208576Z > Task :app:mergeLibDexFullDebug
+2026-10-25T17:35:36.6229672Z > Task :app:mergeFullDebugJniLibFolders
+2026-10-25T17:35:36.6246131Z > Task :core:data:mergeDebugJniLibFolders UP-TO-DATE
+2026-10-25T17:35:36.6307410Z > Task :core:data:mergeDebugNativeLibs NO-SOURCE
+2026-10-25T17:35:36.6347332Z > Task :core:data:copyDebugJniLibsProjectOnly UP-TO-DATE
+2026-10-25T17:35:36.6389087Z > Task :core:reminder:mergeDebugJniLibFolders
+2026-10-25T17:35:36.6425205Z > Task :core:reminder:mergeDebugNativeLibs NO-SOURCE
+2026-10-25T17:35:36.6452392Z > Task :core:reminder:copyDebugJniLibsProjectOnly
+2026-10-25T17:35:36.6475748Z > Task :core:ui:mergeDebugJniLibFolders
+2026-10-25T17:35:36.6476178Z > Task :core:ui:mergeDebugNativeLibs NO-SOURCE
+2026-10-25T17:35:36.6524374Z > Task :core:ui:copyDebugJniLibsProjectOnly
+2026-10-25T17:35:36.9224837Z > Task :app:mergeFullDebugNativeLibs
+2026-10-25T17:35:36.9234518Z 
+2026-10-25T17:35:36.9244172Z > Task :app:stripFullDebugDebugSymbols
+2026-10-25T17:35:36.9283394Z Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libsqlcipher.so. Run with --info option to learn more.
+2026-10-25T17:35:36.9319482Z 
+2026-10-25T17:35:36.9349245Z > Task :app:validateSigningFullDebug
+2026-10-25T17:35:36.9362767Z > Task :app:writeFullDebugAppMetadata
+2026-10-25T17:35:36.9378159Z > Task :app:writeFullDebugSigningConfigVersions
+2026-10-25T17:35:36.9378771Z > Task :attachment-poc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:35:36.9379442Z > Task :attachment-poc:compileKotlin UP-TO-DATE
+2026-10-25T17:35:36.9379853Z > Task :attachment-poc:compileJava NO-SOURCE
+2026-10-25T17:35:36.9380282Z > Task :attachment-poc:processResources NO-SOURCE
+2026-10-25T17:35:36.9380676Z > Task :attachment-poc:classes UP-TO-DATE
+2026-10-25T17:35:36.9381017Z > Task :attachment-poc:jar UP-TO-DATE
+2026-10-25T17:35:36.9381402Z > Task :app:preFullDebugAndroidTestBuild SKIPPED
+2026-10-25T17:35:37.1202431Z > Task :app:processFullDebugAndroidTestManifest
+2026-10-25T17:35:37.1203174Z > Task :app:generateFullDebugAndroidTestBuildConfig
+2026-10-25T17:35:37.1203963Z > Task :app:generateFullDebugAndroidTestResources
+2026-10-25T17:35:37.1204867Z > Task :app:packageFullDebugAndroidTestResources
+2026-10-25T17:35:37.1205498Z > Task :app:processFullDebugAndroidTestNavigationResources
+2026-10-25T17:35:37.1206120Z > Task :app:parseFullDebugAndroidTestLocalResources
+2026-10-25T17:35:37.2255043Z > Task :app:generateFullDebugAndroidTestRFile
+2026-10-25T17:35:37.2257146Z > Task :app:javaPreCompileFullDebugAndroidTest
+2026-10-25T17:35:37.2284994Z > Task :app:generateFullDebugAndroidTestAssets UP-TO-DATE
+2026-10-25T17:35:37.2314236Z > Task :app:mergeFullDebugAndroidTestAssets
+2026-10-25T17:35:37.2344160Z > Task :app:compressFullDebugAndroidTestAssets
+2026-10-25T17:35:37.3205017Z > Task :app:checkFullDebugAndroidTestDuplicateClasses
+2026-10-25T17:35:37.3233190Z > Task :app:desugarFullDebugAndroidTestFileDependencies
+2026-10-25T17:35:37.7204605Z > Task :app:mergeExtDexFullDebugAndroidTest
+2026-10-25T17:35:37.7224853Z > Task :app:checkFullDebugAndroidTestAarMetadata
+2026-10-25T17:35:37.7254682Z > Task :app:mapFullDebugAndroidTestSourceSetPaths
+2026-10-25T17:35:37.7278830Z > Task :app:compileFullDebugAndroidTestNavigationResources
+2026-10-25T17:35:37.7294340Z > Task :app:kspFullDebugKotlin
+2026-10-25T17:35:37.9204893Z > Task :app:mergeFullDebugAndroidTestResources
+2026-10-25T17:35:38.2227686Z > Task :app:processFullDebugAndroidTestResources
+2026-10-25T17:35:38.2294757Z > Task :app:mergeLibDexFullDebugAndroidTest
+2026-10-25T17:35:38.2354653Z > Task :app:mergeFullDebugAndroidTestJniLibFolders
+2026-10-25T17:35:38.3228661Z > Task :app:mergeFullDebugAndroidTestNativeLibs NO-SOURCE
+2026-10-25T17:35:38.3264048Z > Task :app:stripFullDebugAndroidTestDebugSymbols NO-SOURCE
+2026-10-25T17:35:38.3294280Z > Task :app:validateSigningFullDebugAndroidTest
+2026-10-25T17:35:38.3314316Z > Task :app:writeFullDebugAndroidTestSigningConfigVersions
+2026-10-25T17:35:56.8203312Z 
+2026-10-25T17:35:56.8216518Z > Task :app:compileFullDebugKotlin
+2026-10-25T17:35:56.8224597Z w: file:///home/runner/work/HRT-Log/HRT-Log/app/src/debug/java/net/plainnotes/app/debug/AboutTestActivity.kt:15:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:56.8225892Z w: file:///home/runner/work/HRT-Log/HRT-Log/app/src/debug/java/net/plainnotes/app/debug/CalendarTestActivity.kt:33:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:56.8227132Z w: file:///home/runner/work/HRT-Log/HRT-Log/app/src/debug/java/net/plainnotes/app/debug/DataPrivacyTestActivity.kt:28:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:56.8228832Z w: file:///home/runner/work/HRT-Log/HRT-Log/app/src/debug/java/net/plainnotes/app/debug/SyntheticLibraryScope.kt:15:152 Type argument for reified type parameter 'T' was inferred to the intersection of ['Comparable<*>' & 'Serializable']. Reification of an intersection type results in the common supertype being used. This may lead to subtle issues and an explicit type argument is encouraged. This will become an error in a future release. See https://youtrack.jetbrains.com/issue/KT-71420.
+2026-10-25T17:35:56.8230514Z w: file:///home/runner/work/HRT-Log/HRT-Log/app/src/debug/java/net/plainnotes/app/debug/attachments/AttachmentOperationTestActivity.kt:51:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:56.8231814Z w: file:///home/runner/work/HRT-Log/HRT-Log/app/src/debug/java/net/plainnotes/app/debug/attachments/AttachmentOperationTestActivity.kt:97:38 The corresponding parameter in the supertype 'ComponentActivity' is named 'outState'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:56.8233265Z w: file:///home/runner/work/HRT-Log/HRT-Log/app/src/debug/java/net/plainnotes/app/debug/demo/DemoArchiveScreen.kt:35:27 The corresponding parameter in the supertype 'ComponentActivity' is named 'savedInstanceState'. This may cause problems when calling this function with named arguments.
+2026-10-25T17:35:56.8236232Z w: file:///home/runner/work/HRT-Log/HRT-Log/app/src/debug/java/net/plainnotes/app/debug/demo/DemoArchiveScreen.kt:93:5 'fun ScrollableTabRow(selectedTabIndex: Int, modifier: Modifier = ..., containerColor: Color = ..., contentColor: Color = ..., edgePadding: Dp = ..., indicator: ComposableFunction1<List<TabPosition>, Unit> = ..., divider: ComposableFunction0<Unit> = ..., tabs: ComposableFunction0<Unit>): Unit' is deprecated. Replaced with PrimaryScrollableTabRow and SecondaryScrollableTabRow tab variants.
+2026-10-25T17:35:56.8238713Z w: file:///home/runner/work/HRT-Log/HRT-Log/app/src/main/java/net/plainnotes/app/NotesViewModel.kt:24:5 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+2026-10-25T17:35:56.8239946Z - To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+2026-10-25T17:35:56.8240908Z - To keep applying to the value parameter only, use the '@param:' annotation target.
+2026-10-25T17:35:56.8241248Z 
+2026-10-25T17:35:56.8241531Z See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+2026-10-25T17:35:56.8242465Z w: file:///home/runner/work/HRT-Log/HRT-Log/app/src/main/java/net/plainnotes/app/ui/AppShell.kt:295:17 'when' is exhaustive so 'else' is redundant here.
+2026-10-25T17:35:56.8243998Z w: file:///home/runner/work/HRT-Log/HRT-Log/app/src/main/java/net/plainnotes/app/ui/HistoryScreen.kt:229:123 'val Icons.Outlined.Undo: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.Undo.
+2026-10-25T17:35:57.5201418Z 
+2026-10-25T17:35:57.5202267Z > Task :app:compileFullDebugJavaWithJavac
+2026-10-25T17:35:57.7199839Z > Task :app:hiltAggregateDepsFullDebug
+2026-10-25T17:35:59.3204244Z > Task :app:hiltJavaCompileFullDebug
+2026-10-25T17:35:59.4219813Z > Task :app:processFullDebugJavaRes
+2026-10-25T17:35:59.7219905Z > Task :app:transformFullDebugClassesWithAsm
+2026-10-25T17:36:06.4200306Z > Task :app:mergeFullDebugJavaResource
+2026-10-25T17:36:06.7201677Z > Task :app:dexBuilderFullDebug
+2026-10-25T17:36:06.9217697Z > Task :app:mergeFullDebugGlobalSynthetics
+2026-10-25T17:36:07.1205069Z > Task :app:bundleFullDebugClassesToCompileJar
+2026-10-25T17:36:07.5205494Z > Task :app:mergeProjectDexFullDebug
+2026-10-25T17:36:08.4224707Z > Task :app:packageFullDebug
+2026-10-25T17:36:08.4225218Z > Task :app:createFullDebugApkListingFileRedirect
+2026-10-25T17:36:08.6235717Z > Task :app:kspFullDebugAndroidTestKotlin
+2026-10-25T17:36:13.9264700Z > Task :app:compileFullDebugAndroidTestKotlin
+2026-10-25T17:36:14.5227550Z > Task :app:compileFullDebugAndroidTestJavaWithJavac
+2026-10-25T17:36:14.5232718Z > Task :app:hiltAggregateDepsFullDebugAndroidTest
+2026-10-25T17:36:14.5234335Z > Task :app:hiltJavaCompileFullDebugAndroidTest NO-SOURCE
+2026-10-25T17:36:14.6216748Z > Task :app:processFullDebugAndroidTestJavaRes
+2026-10-25T17:36:14.6243280Z > Task :app:transformFullDebugAndroidTestClassesWithAsm
+2026-10-25T17:36:15.4207164Z > Task :app:mergeFullDebugAndroidTestJavaResource
+2026-10-25T17:36:16.0203124Z > Task :app:dexBuilderFullDebugAndroidTest
+2026-10-25T17:36:16.0203663Z > Task :app:mergeFullDebugAndroidTestGlobalSynthetics
+2026-10-25T17:36:16.1210023Z > Task :app:mergeProjectDexFullDebugAndroidTest
+2026-10-25T17:36:16.1210859Z > Task :app:packageFullDebugAndroidTest
+2026-10-25T17:36:16.1211451Z > Task :app:createFullDebugAndroidTestApkListingFileRedirect
+2026-10-25T17:36:16.2204329Z [EmulatorConsole]: Failed to start Emulator console for 5554
+2026-10-25T17:36:27.2199129Z Starting 1 tests on emulator-5554 - 8.0.0
+2026-10-25T17:36:37.2199006Z emulator-5554 - 8.0.0 Tests 0/1 completed. (0 skipped) (0 failed)
+2026-10-25T17:36:38.7204735Z Finished 1 tests on emulator-5554 - 8.0.0
+2026-10-25T17:36:38.7206969Z > Task :app:connectedFullDebugAndroidTest
+2026-10-25T17:36:38.7207988Z gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__ReactiveCircus_android-emulator-runner-1792949717870.json
+2026-10-25T17:36:38.7208696Z 
+2026-10-25T17:36:38.7208912Z BUILD SUCCESSFUL in 1m 21s
+2026-10-25T17:36:38.7209334Z 152 actionable tasks: 123 executed, 29 up-to-date
+2026-10-25T17:36:38.7529739Z Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.1/userguide/configuration_cache_enabling.html
+2026-10-25T17:36:38.7672779Z [command]/usr/bin/sh -c python3 -c 'import shutil; shutil.copytree("app/build/outputs/androidTest-results", "app/build/reports/import-a-native", dirs_exist_ok=True)'
+2026-10-25T17:36:38.8073590Z [command]/usr/bin/sh -c python3 scripts/run_attachment_operation_native.py
+2026-10-25T17:36:40.4603950Z 
+2026-10-25T17:36:40.4605043Z > Configure project :app
+2026-10-25T17:36:40.4605956Z WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+2026-10-25T17:36:40.4606580Z The current default is 'true'.
+2026-10-25T17:36:40.4607178Z It will be removed in version 10.0 of the Android Gradle plugin.
+2026-10-25T17:36:40.4608414Z WARNING: The option setting 'android.newDsl=false' is deprecated.
+2026-10-25T17:36:40.4609029Z The current default is 'true'.
+2026-10-25T17:36:40.4609628Z It will be removed in version 10.0 of the Android Gradle plugin.
+2026-10-25T17:36:40.9577399Z 
+2026-10-25T17:36:40.9621644Z > Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:36:40.9627952Z > Task :core:domain:compileKotlin UP-TO-DATE
+2026-10-25T17:36:40.9628605Z > Task :core:domain:compileJava NO-SOURCE
+2026-10-25T17:36:40.9629150Z > Task :core:domain:processResources NO-SOURCE
+2026-10-25T17:36:40.9629650Z > Task :core:domain:classes UP-TO-DATE
+2026-10-25T17:36:40.9630113Z > Task :core:domain:jar UP-TO-DATE
+2026-10-25T17:36:40.9630751Z > Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:36:40.9631372Z > Task :pk-engine:compileKotlin UP-TO-DATE
+2026-10-25T17:36:40.9631841Z > Task :pk-engine:compileJava NO-SOURCE
+2026-10-25T17:36:40.9632341Z > Task :pk-engine:processResources UP-TO-DATE
+2026-10-25T17:36:40.9632858Z > Task :pk-engine:classes UP-TO-DATE
+2026-10-25T17:36:40.9633331Z > Task :pk-engine:jar UP-TO-DATE
+2026-10-25T17:36:40.9634079Z > Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:36:40.9634672Z > Task :importer:compileKotlin UP-TO-DATE
+2026-10-25T17:36:40.9635147Z > Task :importer:compileJava NO-SOURCE
+2026-10-25T17:36:40.9635627Z > Task :importer:processResources NO-SOURCE
+2026-10-25T17:36:40.9636100Z > Task :importer:classes UP-TO-DATE
+2026-10-25T17:36:40.9636552Z > Task :importer:jar UP-TO-DATE
+2026-10-25T17:36:40.9637088Z > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:36:40.9647753Z > Task :app:preBuild UP-TO-DATE
+2026-10-25T17:36:40.9648284Z > Task :app:preFullDebugBuild UP-TO-DATE
+2026-10-25T17:36:40.9648854Z > Task :app:generateFullDebugBuildConfig UP-TO-DATE
+2026-10-25T17:36:40.9649419Z > Task :app:generateFullDebugResources UP-TO-DATE
+2026-10-25T17:36:40.9649954Z > Task :app:packageFullDebugResources UP-TO-DATE
+2026-10-25T17:36:40.9650477Z > Task :core:data:preBuild UP-TO-DATE
+2026-10-25T17:36:40.9650950Z > Task :core:data:preDebugBuild UP-TO-DATE
+2026-10-25T17:36:40.9651598Z > Task :core:data:processDebugNavigationResources UP-TO-DATE
+2026-10-25T17:36:40.9652155Z > Task :core:reminder:preBuild UP-TO-DATE
+2026-10-25T17:36:40.9652664Z > Task :core:reminder:preDebugBuild UP-TO-DATE
+2026-10-25T17:36:40.9653258Z > Task :core:reminder:processDebugNavigationResources UP-TO-DATE
+2026-10-25T17:36:40.9653976Z > Task :core:ui:preBuild UP-TO-DATE
+2026-10-25T17:36:40.9654449Z > Task :core:ui:preDebugBuild UP-TO-DATE
+2026-10-25T17:36:40.9654997Z > Task :core:ui:processDebugNavigationResources UP-TO-DATE
+2026-10-25T17:36:41.0588356Z > Task :app:processFullDebugNavigationResources UP-TO-DATE
+2026-10-25T17:36:41.0591337Z > Task :app:parseFullDebugLocalResources UP-TO-DATE
+2026-10-25T17:36:41.0591825Z > Task :app:generateFullDebugRFile UP-TO-DATE
+2026-10-25T17:36:41.0592254Z > Task :core:data:generateDebugResources UP-TO-DATE
+2026-10-25T17:36:41.0592705Z > Task :core:data:packageDebugResources UP-TO-DATE
+2026-10-25T17:36:41.0593120Z > Task :core:data:parseDebugLocalResources UP-TO-DATE
+2026-10-25T17:36:41.0593698Z > Task :core:data:generateDebugRFile UP-TO-DATE
+2026-10-25T17:36:41.0594206Z > Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:36:41.0594702Z > Task :core:data:kspDebugKotlin UP-TO-DATE
+2026-10-25T17:36:41.0595113Z > Task :core:data:compileDebugKotlin UP-TO-DATE
+2026-10-25T17:36:41.0595518Z > Task :core:data:javaPreCompileDebug UP-TO-DATE
+2026-10-25T17:36:41.0595936Z > Task :core:data:compileDebugJavaWithJavac UP-TO-DATE
+2026-10-25T17:36:41.0596394Z > Task :core:data:transformDebugClassesWithAsm UP-TO-DATE
+2026-10-25T17:36:41.0598254Z > Task :core:data:bundleLibCompileToJarDebug UP-TO-DATE
+2026-10-25T17:36:41.0598734Z > Task :core:reminder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:36:41.0599180Z > Task :core:reminder:generateDebugResources UP-TO-DATE
+2026-10-25T17:36:41.0599788Z > Task :core:reminder:packageDebugResources UP-TO-DATE
+2026-10-25T17:36:41.1622908Z > Task :core:reminder:parseDebugLocalResources UP-TO-DATE
+2026-10-25T17:36:41.1623937Z > Task :core:reminder:generateDebugRFile UP-TO-DATE
+2026-10-25T17:36:41.1624393Z > Task :core:reminder:kspDebugKotlin UP-TO-DATE
+2026-10-25T17:36:41.1624857Z > Task :core:reminder:compileDebugKotlin UP-TO-DATE
+2026-10-25T17:36:41.1645040Z > Task :core:reminder:javaPreCompileDebug UP-TO-DATE
+2026-10-25T17:36:41.1645793Z > Task :core:reminder:compileDebugJavaWithJavac UP-TO-DATE
+2026-10-25T17:36:41.1646440Z > Task :core:reminder:bundleLibCompileToJarDebug UP-TO-DATE
+2026-10-25T17:36:41.1647168Z > Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:36:41.1647831Z > Task :core:ui:generateDebugResources UP-TO-DATE
+2026-10-25T17:36:41.1648406Z > Task :core:ui:packageDebugResources UP-TO-DATE
+2026-10-25T17:36:41.1648985Z > Task :core:ui:parseDebugLocalResources UP-TO-DATE
+2026-10-25T17:36:41.1649540Z > Task :core:ui:generateDebugRFile UP-TO-DATE
+2026-10-25T17:36:41.1650073Z > Task :core:ui:compileDebugKotlin UP-TO-DATE
+2026-10-25T17:36:41.1650589Z > Task :core:ui:javaPreCompileDebug UP-TO-DATE
+2026-10-25T17:36:41.1651132Z > Task :core:ui:compileDebugJavaWithJavac NO-SOURCE
+2026-10-25T17:36:41.1651732Z > Task :core:ui:bundleLibCompileToJarDebug UP-TO-DATE
+2026-10-25T17:36:41.1652253Z > Task :app:kspFullDebugKotlin UP-TO-DATE
+2026-10-25T17:36:41.2585033Z > Task :app:compileFullDebugKotlin UP-TO-DATE
+2026-10-25T17:36:41.2614616Z > Task :app:javaPreCompileFullDebug UP-TO-DATE
+2026-10-25T17:36:41.2640764Z > Task :app:compileFullDebugJavaWithJavac UP-TO-DATE
+2026-10-25T17:36:41.2651208Z > Task :app:generateFullDebugAssets UP-TO-DATE
+2026-10-25T17:36:41.2652077Z > Task :core:data:generateDebugAssets UP-TO-DATE
+2026-10-25T17:36:41.2652636Z > Task :core:data:mergeDebugAssets UP-TO-DATE
+2026-10-25T17:36:41.2653174Z > Task :core:reminder:generateDebugAssets UP-TO-DATE
+2026-10-25T17:36:41.2653918Z > Task :core:reminder:mergeDebugAssets UP-TO-DATE
+2026-10-25T17:36:41.2654477Z > Task :core:ui:generateDebugAssets UP-TO-DATE
+2026-10-25T17:36:41.2654980Z > Task :core:ui:mergeDebugAssets UP-TO-DATE
+2026-10-25T17:36:41.2655481Z > Task :app:mergeFullDebugAssets UP-TO-DATE
+2026-10-25T17:36:41.2655993Z > Task :app:compressFullDebugAssets UP-TO-DATE
+2026-10-25T17:36:41.2656538Z > Task :app:checkFullDebugDuplicateClasses UP-TO-DATE
+2026-10-25T17:36:41.2657250Z > Task :app:desugarFullDebugFileDependencies UP-TO-DATE
+2026-10-25T17:36:41.2657774Z > Task :app:mergeExtDexFullDebug UP-TO-DATE
+2026-10-25T17:36:41.2658315Z > Task :core:reminder:bundleLibRuntimeToJarDebug UP-TO-DATE
+2026-10-25T17:36:41.2658883Z > Task :core:data:bundleLibRuntimeToJarDebug UP-TO-DATE
+2026-10-25T17:36:41.2659833Z > Task :core:ui:bundleLibRuntimeToJarDebug UP-TO-DATE
+2026-10-25T17:36:41.2660423Z > Task :core:reminder:processDebugJavaRes UP-TO-DATE
+2026-10-25T17:36:41.2660965Z > Task :core:reminder:createFullJarDebug UP-TO-DATE
+2026-10-25T17:36:41.2661513Z > Task :core:data:processDebugJavaRes UP-TO-DATE
+2026-10-25T17:36:41.2662060Z > Task :core:data:createFullJarDebug UP-TO-DATE
+2026-10-25T17:36:41.2662587Z > Task :core:ui:processDebugJavaRes UP-TO-DATE
+2026-10-25T17:36:41.2663098Z > Task :core:ui:createFullJarDebug UP-TO-DATE
+2026-10-25T17:36:41.2663899Z > Task :core:data:writeDebugAarMetadata UP-TO-DATE
+2026-10-25T17:36:41.2664414Z > Task :app:hiltAggregateDepsFullDebug UP-TO-DATE
+2026-10-25T17:36:41.2664865Z > Task :app:hiltJavaCompileFullDebug UP-TO-DATE
+2026-10-25T17:36:41.2665316Z > Task :core:reminder:writeDebugAarMetadata UP-TO-DATE
+2026-10-25T17:36:41.2665766Z > Task :core:ui:writeDebugAarMetadata UP-TO-DATE
+2026-10-25T17:36:41.2666208Z > Task :app:checkFullDebugAarMetadata UP-TO-DATE
+2026-10-25T17:36:41.2666656Z > Task :app:mapFullDebugSourceSetPaths UP-TO-DATE
+2026-10-25T17:36:41.2667137Z > Task :app:compileFullDebugNavigationResources UP-TO-DATE
+2026-10-25T17:36:41.2667595Z > Task :app:mergeFullDebugResources UP-TO-DATE
+2026-10-25T17:36:41.2668401Z > Task :app:createFullDebugCompatibleScreenManifests UP-TO-DATE
+2026-10-25T17:36:41.2668904Z > Task :app:extractDeepLinksFullDebug UP-TO-DATE
+2026-10-25T17:36:41.2669350Z > Task :core:data:extractDeepLinksDebug UP-TO-DATE
+2026-10-25T17:36:41.2669789Z > Task :core:data:processDebugManifest UP-TO-DATE
+2026-10-25T17:36:41.2670235Z > Task :core:reminder:extractDeepLinksDebug UP-TO-DATE
+2026-10-25T17:36:41.2670651Z > Task :core:reminder:processDebugManifest UP-TO-DATE
+2026-10-25T17:36:41.2671071Z > Task :core:ui:extractDeepLinksDebug UP-TO-DATE
+2026-10-25T17:36:41.2671506Z > Task :core:ui:processDebugManifest UP-TO-DATE
+2026-10-25T17:36:41.2671971Z > Task :app:processFullDebugMainManifest UP-TO-DATE
+2026-10-25T17:36:41.2672428Z > Task :app:processFullDebugManifest UP-TO-DATE
+2026-10-25T17:36:41.2672928Z > Task :app:processFullDebugManifestForPackage UP-TO-DATE
+2026-10-25T17:36:41.2673372Z > Task :core:data:mapDebugSourceSetPaths UP-TO-DATE
+2026-10-25T17:36:41.2673941Z > Task :core:data:compileDebugLibraryResources UP-TO-DATE
+2026-10-25T17:36:41.3606424Z > Task :core:reminder:mapDebugSourceSetPaths UP-TO-DATE
+2026-10-25T17:36:41.3609820Z > Task :core:reminder:compileDebugLibraryResources UP-TO-DATE
+2026-10-25T17:36:41.3618495Z > Task :core:ui:mapDebugSourceSetPaths UP-TO-DATE
+2026-10-25T17:36:41.3619239Z > Task :core:ui:compileDebugLibraryResources UP-TO-DATE
+2026-10-25T17:36:41.3619675Z > Task :app:processFullDebugResources UP-TO-DATE
+2026-10-25T17:36:41.3620119Z > Task :app:transformFullDebugClassesWithAsm UP-TO-DATE
+2026-10-25T17:36:41.3620540Z > Task :app:dexBuilderFullDebug UP-TO-DATE
+2026-10-25T17:36:41.3620961Z > Task :app:mergeFullDebugGlobalSynthetics UP-TO-DATE
+2026-10-25T17:36:41.3621384Z > Task :app:processFullDebugJavaRes UP-TO-DATE
+2026-10-25T17:36:41.3621831Z > Task :app:mergeFullDebugJavaResource UP-TO-DATE
+2026-10-25T17:36:41.3622300Z > Task :core:reminder:bundleLibRuntimeToDirDebug UP-TO-DATE
+2026-10-25T17:36:41.3622773Z > Task :core:data:bundleLibRuntimeToDirDebug UP-TO-DATE
+2026-10-25T17:36:41.3623211Z > Task :core:ui:bundleLibRuntimeToDirDebug UP-TO-DATE
+2026-10-25T17:36:41.3623799Z > Task :app:mergeProjectDexFullDebug UP-TO-DATE
+2026-10-25T17:36:41.3624217Z > Task :app:mergeFullDebugJniLibFolders UP-TO-DATE
+2026-10-25T17:36:41.3624657Z > Task :core:data:mergeDebugJniLibFolders UP-TO-DATE
+2026-10-25T17:36:41.3625072Z > Task :core:data:mergeDebugNativeLibs NO-SOURCE
+2026-10-25T17:36:41.3625513Z > Task :core:data:copyDebugJniLibsProjectOnly UP-TO-DATE
+2026-10-25T17:36:41.3625962Z > Task :core:reminder:mergeDebugJniLibFolders UP-TO-DATE
+2026-10-25T17:36:41.3626407Z > Task :core:reminder:mergeDebugNativeLibs NO-SOURCE
+2026-10-25T17:36:41.3626890Z > Task :core:reminder:copyDebugJniLibsProjectOnly UP-TO-DATE
+2026-10-25T17:36:41.3627329Z > Task :app:mergeLibDexFullDebug UP-TO-DATE
+2026-10-25T17:36:41.3628076Z > Task :core:ui:mergeDebugJniLibFolders UP-TO-DATE
+2026-10-25T17:36:41.3628517Z > Task :core:ui:mergeDebugNativeLibs NO-SOURCE
+2026-10-25T17:36:41.3628941Z > Task :core:ui:copyDebugJniLibsProjectOnly UP-TO-DATE
+2026-10-25T17:36:41.3629373Z > Task :app:mergeFullDebugNativeLibs UP-TO-DATE
+2026-10-25T17:36:41.3629801Z > Task :app:stripFullDebugDebugSymbols UP-TO-DATE
+2026-10-25T17:36:41.3630225Z > Task :app:validateSigningFullDebug UP-TO-DATE
+2026-10-25T17:36:41.3630654Z > Task :app:writeFullDebugAppMetadata UP-TO-DATE
+2026-10-25T17:36:41.3631122Z > Task :app:writeFullDebugSigningConfigVersions UP-TO-DATE
+2026-10-25T17:36:41.3631548Z > Task :app:packageFullDebug UP-TO-DATE
+2026-10-25T17:36:41.3632014Z > Task :app:createFullDebugApkListingFileRedirect UP-TO-DATE
+2026-10-25T17:36:41.3632594Z > Task :attachment-poc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:36:41.3633101Z > Task :attachment-poc:compileKotlin UP-TO-DATE
+2026-10-25T17:36:41.3633664Z > Task :attachment-poc:compileJava NO-SOURCE
+2026-10-25T17:36:41.3634087Z > Task :attachment-poc:processResources NO-SOURCE
+2026-10-25T17:36:41.3634469Z > Task :attachment-poc:classes UP-TO-DATE
+2026-10-25T17:36:41.3634828Z > Task :attachment-poc:jar UP-TO-DATE
+2026-10-25T17:36:41.3635481Z > Task :app:bundleFullDebugClassesToCompileJar UP-TO-DATE
+2026-10-25T17:36:41.3635934Z > Task :app:preFullDebugAndroidTestBuild SKIPPED
+2026-10-25T17:36:41.3636406Z > Task :app:processFullDebugAndroidTestManifest UP-TO-DATE
+2026-10-25T17:36:41.3636940Z > Task :app:generateFullDebugAndroidTestBuildConfig UP-TO-DATE
+2026-10-25T17:36:41.3637467Z > Task :app:generateFullDebugAndroidTestResources UP-TO-DATE
+2026-10-25T17:36:41.3637962Z > Task :app:packageFullDebugAndroidTestResources UP-TO-DATE
+2026-10-25T17:36:41.3638529Z > Task :app:processFullDebugAndroidTestNavigationResources UP-TO-DATE
+2026-10-25T17:36:41.3639095Z > Task :app:parseFullDebugAndroidTestLocalResources UP-TO-DATE
+2026-10-25T17:36:41.3639613Z > Task :app:generateFullDebugAndroidTestRFile UP-TO-DATE
+2026-10-25T17:36:41.4580068Z > Task :app:kspFullDebugAndroidTestKotlin UP-TO-DATE
+2026-10-25T17:36:41.4581078Z > Task :app:compileFullDebugAndroidTestKotlin UP-TO-DATE
+2026-10-25T17:36:41.4603720Z > Task :app:javaPreCompileFullDebugAndroidTest UP-TO-DATE
+2026-10-25T17:36:41.4604502Z > Task :app:compileFullDebugAndroidTestJavaWithJavac UP-TO-DATE
+2026-10-25T17:36:41.4605233Z > Task :app:generateFullDebugAndroidTestAssets UP-TO-DATE
+2026-10-25T17:36:41.4605816Z > Task :app:mergeFullDebugAndroidTestAssets UP-TO-DATE
+2026-10-25T17:36:41.4606417Z > Task :app:compressFullDebugAndroidTestAssets UP-TO-DATE
+2026-10-25T17:36:41.4607061Z > Task :app:checkFullDebugAndroidTestDuplicateClasses UP-TO-DATE
+2026-10-25T17:36:41.4607765Z > Task :app:desugarFullDebugAndroidTestFileDependencies UP-TO-DATE
+2026-10-25T17:36:41.4608403Z > Task :app:mergeExtDexFullDebugAndroidTest UP-TO-DATE
+2026-10-25T17:36:41.4609030Z > Task :app:hiltAggregateDepsFullDebugAndroidTest UP-TO-DATE
+2026-10-25T17:36:41.4609646Z > Task :app:hiltJavaCompileFullDebugAndroidTest NO-SOURCE
+2026-10-25T17:36:41.4610232Z > Task :app:checkFullDebugAndroidTestAarMetadata UP-TO-DATE
+2026-10-25T17:36:41.4610849Z > Task :app:mapFullDebugAndroidTestSourceSetPaths UP-TO-DATE
+2026-10-25T17:36:41.4611508Z > Task :app:compileFullDebugAndroidTestNavigationResources UP-TO-DATE
+2026-10-25T17:36:41.4613873Z > Task :app:mergeFullDebugAndroidTestResources UP-TO-DATE
+2026-10-25T17:36:41.4615536Z > Task :app:processFullDebugAndroidTestResources UP-TO-DATE
+2026-10-25T17:36:41.4617845Z > Task :app:transformFullDebugAndroidTestClassesWithAsm UP-TO-DATE
+2026-10-25T17:36:41.4619772Z > Task :app:dexBuilderFullDebugAndroidTest UP-TO-DATE
+2026-10-25T17:36:41.4620380Z > Task :app:mergeFullDebugAndroidTestGlobalSynthetics UP-TO-DATE
+2026-10-25T17:36:41.4620977Z > Task :app:processFullDebugAndroidTestJavaRes UP-TO-DATE
+2026-10-25T17:36:41.4621565Z > Task :app:mergeFullDebugAndroidTestJavaResource UP-TO-DATE
+2026-10-25T17:36:41.4622138Z > Task :app:mergeLibDexFullDebugAndroidTest UP-TO-DATE
+2026-10-25T17:36:41.4622987Z > Task :app:mergeProjectDexFullDebugAndroidTest UP-TO-DATE
+2026-10-25T17:36:41.4623739Z > Task :app:mergeFullDebugAndroidTestJniLibFolders UP-TO-DATE
+2026-10-25T17:36:41.4624360Z > Task :app:mergeFullDebugAndroidTestNativeLibs NO-SOURCE
+2026-10-25T17:36:41.4624968Z > Task :app:stripFullDebugAndroidTestDebugSymbols NO-SOURCE
+2026-10-25T17:36:41.4625581Z > Task :app:validateSigningFullDebugAndroidTest UP-TO-DATE
+2026-10-25T17:36:41.4626238Z > Task :app:writeFullDebugAndroidTestSigningConfigVersions UP-TO-DATE
+2026-10-25T17:36:41.4626859Z > Task :app:packageFullDebugAndroidTest UP-TO-DATE
+2026-10-25T17:36:41.4627505Z > Task :app:createFullDebugAndroidTestApkListingFileRedirect UP-TO-DATE
+2026-10-25T17:36:41.5578123Z [EmulatorConsole]: Failed to start Emulator console for 5554
+2026-10-25T17:36:53.8574666Z Starting 2 tests on emulator-5554 - 8.0.0
+2026-10-25T17:37:03.8574373Z emulator-5554 - 8.0.0 Tests 0/2 completed. (0 skipped) (0 failed)
+2026-10-25T17:37:05.9576049Z Finished 2 tests on emulator-5554 - 8.0.0
+2026-10-25T17:37:05.9576580Z > Task :app:connectedFullDebugAndroidTest
+2026-10-25T17:37:05.9577490Z gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__ReactiveCircus_android-emulator-runner-1792949799326.json
+2026-10-25T17:37:05.9578434Z 
+2026-10-25T17:37:05.9578595Z BUILD SUCCESSFUL in 27s
+2026-10-25T17:37:05.9578885Z 152 actionable tasks: 1 executed, 151 up-to-date
+2026-10-25T17:37:05.9579605Z Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.1/userguide/configuration_cache_enabling.html
+2026-10-25T17:37:06.0042450Z [command]/usr/bin/sh -c python3 scripts/run_library_lifecycle_native.py
+2026-10-25T17:37:06.8241026Z 
+2026-10-25T17:37:06.8244949Z > Configure project :app
+2026-10-25T17:37:06.8245597Z WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+2026-10-25T17:37:06.8246077Z The current default is 'true'.
+2026-10-25T17:37:06.8246575Z It will be removed in version 10.0 of the Android Gradle plugin.
+2026-10-25T17:37:06.8249839Z WARNING: The option setting 'android.newDsl=false' is deprecated.
+2026-10-25T17:37:06.8250549Z The current default is 'true'.
+2026-10-25T17:37:06.8251135Z It will be removed in version 10.0 of the Android Gradle plugin.
+2026-10-25T17:37:07.1254413Z 
+2026-10-25T17:37:07.1295209Z > Task :attachment-poc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:37:07.1310150Z > Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:37:07.1311022Z > Task :core:domain:compileKotlin UP-TO-DATE
+2026-10-25T17:37:07.1311775Z > Task :core:domain:compileJava NO-SOURCE
+2026-10-25T17:37:07.1312453Z > Task :core:domain:processResources NO-SOURCE
+2026-10-25T17:37:07.1313002Z > Task :core:domain:classes UP-TO-DATE
+2026-10-25T17:37:07.1313653Z > Task :core:domain:jar UP-TO-DATE
+2026-10-25T17:37:07.1314163Z > Task :attachment-poc:compileKotlin UP-TO-DATE
+2026-10-25T17:37:07.1314677Z > Task :attachment-poc:compileJava NO-SOURCE
+2026-10-25T17:37:07.1315549Z > Task :attachment-poc:processResources NO-SOURCE
+2026-10-25T17:37:07.1316081Z > Task :attachment-poc:classes UP-TO-DATE
+2026-10-25T17:37:07.1316575Z > Task :attachment-poc:jar UP-TO-DATE
+2026-10-25T17:37:07.1317189Z > Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:37:07.2221440Z > Task :importer:compileKotlin UP-TO-DATE
+2026-10-25T17:37:07.2228717Z > Task :importer:compileJava NO-SOURCE
+2026-10-25T17:37:07.2229385Z > Task :importer:processResources NO-SOURCE
+2026-10-25T17:37:07.2229882Z > Task :importer:classes UP-TO-DATE
+2026-10-25T17:37:07.2230352Z > Task :importer:jar UP-TO-DATE
+2026-10-25T17:37:07.2230800Z > Task :core:data:preBuild UP-TO-DATE
+2026-10-25T17:37:07.2231279Z > Task :core:data:preDebugBuild UP-TO-DATE
+2026-10-25T17:37:07.2231868Z > Task :core:data:generateDebugResources UP-TO-DATE
+2026-10-25T17:37:07.2232475Z > Task :core:data:packageDebugResources UP-TO-DATE
+2026-10-25T17:37:07.2233275Z > Task :core:data:processDebugNavigationResources UP-TO-DATE
+2026-10-25T17:37:07.2234250Z > Task :core:data:parseDebugLocalResources UP-TO-DATE
+2026-10-25T17:37:07.2234636Z > Task :core:data:generateDebugRFile UP-TO-DATE
+2026-10-25T17:37:07.2235171Z > Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-25T17:37:07.2235662Z > Task :core:data:kspDebugKotlin UP-TO-DATE
+2026-10-25T17:37:07.3217511Z > Task :core:data:compileDebugKotlin UP-TO-DATE
+2026-10-25T17:37:07.3229811Z > Task :core:data:javaPreCompileDebug UP-TO-DATE
+2026-10-25T17:37:07.3233216Z > Task :core:data:compileDebugJavaWithJavac UP-TO-DATE
+2026-10-25T17:37:07.3234084Z > Task :core:data:transformDebugClassesWithAsm UP-TO-DATE
+2026-10-25T17:37:07.3234723Z > Task :core:data:bundleLibCompileToJarDebug UP-TO-DATE
+2026-10-25T17:37:07.3235367Z > Task :core:data:preDebugAndroidTestBuild UP-TO-DATE
+2026-10-25T17:37:07.3235992Z > Task :core:data:generateDebugAndroidTestResources UP-TO-DATE
+2026-10-25T17:37:07.3236632Z > Task :core:data:packageDebugAndroidTestResources UP-TO-DATE
+2026-10-25T17:37:07.3237348Z > Task :core:data:processDebugAndroidTestNavigationResources UP-TO-DATE
+2026-10-25T17:37:07.3238043Z > Task :core:data:parseDebugAndroidTestLocalResources UP-TO-DATE
+2026-10-25T17:37:07.3239039Z > Task :core:data:generateDebugAndroidTestRFile UP-TO-DATE
+2026-10-25T17:37:07.3239675Z > Task :core:data:prepareAnsm03b0TestSources UP-TO-DATE
+2026-10-25T17:37:07.3240257Z > Task :core:data:kspDebugAndroidTestKotlin UP-TO-DATE
+2026-10-25T17:37:07.3240852Z > Task :core:data:compileDebugAndroidTestKotlin UP-TO-DATE
+2026-10-25T17:37:07.3241490Z > Task :core:data:javaPreCompileDebugAndroidTest UP-TO-DATE
+2026-10-25T17:37:07.3242141Z > Task :core:data:compileDebugAndroidTestJavaWithJavac UP-TO-DATE
+2026-10-25T17:37:07.3242790Z > Task :core:data:generateDebugAndroidTestAssets UP-TO-DATE
+2026-10-25T17:37:07.3243353Z > Task :core:data:generateDebugAssets UP-TO-DATE
+2026-10-25T17:37:07.3244079Z > Task :core:data:mergeDebugAssets UP-TO-DATE
+2026-10-25T17:37:07.3244666Z > Task :core:data:mergeDebugAndroidTestAssets UP-TO-DATE
+2026-10-25T17:37:07.3245270Z > Task :core:data:compressDebugAndroidTestAssets UP-TO-DATE
+2026-10-25T17:37:07.3245863Z > Task :core:data:bundleLibRuntimeToJarDebug UP-TO-DATE
+2026-10-25T17:37:07.3246514Z > Task :core:data:desugarDebugAndroidTestFileDependencies UP-TO-DATE
+2026-10-25T17:37:07.3247147Z > Task :core:data:processDebugJavaRes UP-TO-DATE
+2026-10-25T17:37:07.3247683Z > Task :core:data:createFullJarDebug UP-TO-DATE
+2026-10-25T17:37:07.4220395Z > Task :core:data:hiltAggregateDepsDebugAndroidTest UP-TO-DATE
+2026-10-25T17:37:07.4225086Z > Task :core:data:hiltJavaCompileDebugAndroidTest NO-SOURCE
+2026-10-25T17:37:07.4225879Z > Task :core:data:writeDebugAarMetadata UP-TO-DATE
+2026-10-25T17:37:07.4226505Z > Task :core:data:checkDebugAndroidTestAarMetadata UP-TO-DATE
+2026-10-25T17:37:07.4227285Z > Task :core:data:mapDebugAndroidTestSourceSetPaths UP-TO-DATE
+2026-10-25T17:37:07.4230924Z > Task :core:data:compileDebugAndroidTestNavigationResources UP-TO-DATE
+2026-10-25T17:37:07.4232122Z > Task :core:data:mapDebugSourceSetPaths UP-TO-DATE
+2026-10-25T17:37:07.4232735Z > Task :core:data:compileDebugLibraryResources UP-TO-DATE
+2026-10-25T17:37:07.4233410Z > Task :core:data:mergeDebugAndroidTestResources UP-TO-DATE
+2026-10-25T17:37:07.4234167Z > Task :core:data:extractDeepLinksDebug UP-TO-DATE
+2026-10-25T17:37:07.4234753Z > Task :core:data:processDebugManifest UP-TO-DATE
+2026-10-25T17:37:07.4236522Z > Task :core:data:processDebugAndroidTestManifest UP-TO-DATE
+2026-10-25T17:37:07.4237249Z > Task :core:data:processDebugAndroidTestResources UP-TO-DATE
+2026-10-25T17:37:07.4237943Z > Task :core:data:transformDebugAndroidTestClassesWithAsm UP-TO-DATE
+2026-10-25T17:37:07.4243827Z > Task :core:data:dexBuilderDebugAndroidTest UP-TO-DATE
+2026-10-25T17:37:07.4261481Z > Task :core:data:mergeDebugAndroidTestGlobalSynthetics UP-TO-DATE
+2026-10-25T17:37:07.4278564Z > Task :core:data:processDebugAndroidTestJavaRes UP-TO-DATE
+2026-10-25T17:37:07.4282656Z > Task :core:data:mergeDebugAndroidTestJavaResource UP-TO-DATE
+2026-10-25T17:37:07.5221782Z > Task :core:data:checkDebugAndroidTestDuplicateClasses UP-TO-DATE
+2026-10-25T17:37:07.5222927Z > Task :core:data:mergeExtDexDebugAndroidTest UP-TO-DATE
+2026-10-25T17:37:07.5223351Z > Task :core:data:bundleLibRuntimeToDirDebug UP-TO-DATE
+2026-10-25T17:37:07.5223978Z > Task :core:data:mergeProjectDexDebugAndroidTest UP-TO-DATE
+2026-10-25T17:37:07.5224351Z > Task :core:data:mergeDebugJniLibFolders UP-TO-DATE
+2026-10-25T17:37:07.5224671Z > Task :core:data:mergeDebugNativeLibs NO-SOURCE
+2026-10-25T17:37:07.5225033Z > Task :core:data:copyDebugJniLibsProjectOnly UP-TO-DATE
+2026-10-25T17:37:07.5225395Z > Task :core:data:mergeDebugAndroidTestJniLibFolders UP-TO-DATE
+2026-10-25T17:37:07.5225787Z > Task :core:data:mergeDebugAndroidTestNativeLibs UP-TO-DATE
+2026-10-25T17:37:07.5226134Z > Task :core:data:mergeLibDexDebugAndroidTest UP-TO-DATE
+2026-10-25T17:37:07.5226515Z > Task :core:data:stripDebugAndroidTestDebugSymbols UP-TO-DATE
+2026-10-25T17:37:07.5226900Z > Task :core:data:validateSigningDebugAndroidTest UP-TO-DATE
+2026-10-25T17:37:07.5227331Z > Task :core:data:writeDebugAndroidTestSigningConfigVersions UP-TO-DATE
+2026-10-25T17:37:07.5227933Z > Task :core:data:packageDebugAndroidTest UP-TO-DATE
+2026-10-25T17:37:07.5228620Z > Task :core:data:createDebugAndroidTestApkListingFileRedirect UP-TO-DATE
+2026-10-25T17:37:07.5229148Z [EmulatorConsole]: Failed to start Emulator console for 5554
+2026-10-25T17:37:13.9218174Z Starting 7 tests on emulator-5554 - 8.0.0
+2026-10-25T17:37:14.9216703Z 
+2026-10-25T17:37:14.9218893Z net.plainnotes.app.data.LibraryLifecycleAndroidTest > liveNeverStartedOwnerCanBeAtomicallyAbortedAndReleasedAndCannotResume[emulator-5554 - 8.0.0] [31mFAILED [0m
+2026-10-25T17:37:14.9219917Z 	java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:14.9220584Z 	at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:16.8244214Z 
+2026-10-25T17:37:16.8246675Z net.plainnotes.app.data.LibraryLifecycleAndroidTest > materializedAndRetainedLibrariesCannotBeReleasedOrIgnoredByExport[emulator-5554 - 8.0.0] [31mFAILED [0m
+2026-10-25T17:37:16.8247822Z 	java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:16.8248535Z 	at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:17.4216236Z 
+2026-10-25T17:37:17.4217881Z net.plainnotes.app.data.LibraryLifecycleAndroidTest > committedHistoryTrashAndCompleteCurrentArchiveUseExistingWriterAndReader[emulator-5554 - 8.0.0] [31mFAILED [0m
+2026-10-25T17:37:17.4229026Z 	java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:17.4229618Z 	at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:18.1215605Z 
+2026-10-25T17:37:18.1217564Z net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest > realGenerationSwitchRejectsOldFacadeAndRetainedSetExport[emulator-5554 - 8.0.0] [31mFAILED [0m
+2026-10-25T17:37:18.1218672Z 	java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:18.1219434Z 	at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:19.0216078Z 
+2026-10-25T17:37:19.0217502Z net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest > explicitAppointmentLabHistoryTrashAndFormalArchiveAreComplete[emulator-5554 - 8.0.0] [31mFAILED [0m
+2026-10-25T17:37:19.0218211Z 	java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:19.0219089Z 	at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:20.1224143Z Tests on emulator-5554 - 8.0.0 failed: There was 5 failure(s).
+2026-10-25T17:37:20.1239410Z Finished 7 tests on emulator-5554 - 8.0.0
+2026-10-25T17:37:20.1243755Z Execute net.plainnotes.app.data.LibraryLifecycleAndroidTest.liveNeverStartedOwnerCanBeAtomicallyAbortedAndReleasedAndCannotResume: FAILED
+2026-10-25T17:37:20.1265044Z java.lang.IllegalArgumentException: java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:20.1266013Z at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:20.1270176Z at net.plainnotes.app.data.MedicalArchiveWriter.write$lambda$2(MedicalArchiveWriter.kt:31)
+2026-10-25T17:37:20.1270744Z at net.plainnotes.app.data.MedicalArchiveWriter$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+2026-10-25T17:37:20.1271273Z at net.plainnotes.app.data.AttachmentBackupPreparation$Snapshot.records(AttachmentBackupPreparation.kt:48)
+2026-10-25T17:37:20.1271745Z at net.plainnotes.app.data.MedicalArchiveWriter.write(MedicalArchiveWriter.kt:30)
+2026-10-25T17:37:20.1272218Z at net.plainnotes.app.data.LibraryRestoreAndroidTest$SourceBundle.<init>(LibraryRestoreAndroidTest.kt:78)
+2026-10-25T17:37:20.1272952Z at net.plainnotes.app.data.LibraryLifecycleAndroidTest.liveNeverStartedOwnerCanBeAtomicallyAbortedAndReleasedAndCannotResume(LibraryLifecycleAndroidTest.kt:90)
+2026-10-25T17:37:20.1273403Z 
+2026-10-25T17:37:20.1273740Z java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:20.1274172Z at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:20.1274609Z at net.plainnotes.app.data.MedicalArchiveWriter.write$lambda$2(MedicalArchiveWriter.kt:31)
+2026-10-25T17:37:20.1275273Z at net.plainnotes.app.data.MedicalArchiveWriter$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+2026-10-25T17:37:20.1275788Z at net.plainnotes.app.data.AttachmentBackupPreparation$Snapshot.records(AttachmentBackupPreparation.kt:48)
+2026-10-25T17:37:20.1276248Z at net.plainnotes.app.data.MedicalArchiveWriter.write(MedicalArchiveWriter.kt:30)
+2026-10-25T17:37:20.1276718Z at net.plainnotes.app.data.LibraryRestoreAndroidTest$SourceBundle.<init>(LibraryRestoreAndroidTest.kt:78)
+2026-10-25T17:37:20.1277453Z at net.plainnotes.app.data.LibraryLifecycleAndroidTest.liveNeverStartedOwnerCanBeAtomicallyAbortedAndReleasedAndCannotResume(LibraryLifecycleAndroidTest.kt:90)
+2026-10-25T17:37:20.1278337Z Execute net.plainnotes.app.data.LibraryLifecycleAndroidTest.materializedAndRetainedLibrariesCannotBeReleasedOrIgnoredByExport: FAILED
+2026-10-25T17:37:20.1278983Z java.lang.IllegalArgumentException: java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:20.1279426Z at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:20.1279861Z at net.plainnotes.app.data.MedicalArchiveWriter.write$lambda$2(MedicalArchiveWriter.kt:31)
+2026-10-25T17:37:20.1280342Z at net.plainnotes.app.data.MedicalArchiveWriter$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+2026-10-25T17:37:20.1280861Z at net.plainnotes.app.data.AttachmentBackupPreparation$Snapshot.records(AttachmentBackupPreparation.kt:48)
+2026-10-25T17:37:20.1281320Z at net.plainnotes.app.data.MedicalArchiveWriter.write(MedicalArchiveWriter.kt:30)
+2026-10-25T17:37:20.1281785Z at net.plainnotes.app.data.LibraryRestoreAndroidTest$SourceBundle.<init>(LibraryRestoreAndroidTest.kt:78)
+2026-10-25T17:37:20.1282513Z at net.plainnotes.app.data.LibraryLifecycleAndroidTest.materializedAndRetainedLibrariesCannotBeReleasedOrIgnoredByExport(LibraryLifecycleAndroidTest.kt:111)
+2026-10-25T17:37:20.1282949Z 
+2026-10-25T17:37:20.1283095Z java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:20.1283613Z at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:20.1284074Z at net.plainnotes.app.data.MedicalArchiveWriter.write$lambda$2(MedicalArchiveWriter.kt:31)
+2026-10-25T17:37:20.1284545Z at net.plainnotes.app.data.MedicalArchiveWriter$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+2026-10-25T17:37:20.1285052Z at net.plainnotes.app.data.AttachmentBackupPreparation$Snapshot.records(AttachmentBackupPreparation.kt:48)
+2026-10-25T17:37:20.1285506Z at net.plainnotes.app.data.MedicalArchiveWriter.write(MedicalArchiveWriter.kt:30)
+2026-10-25T17:37:20.1285962Z at net.plainnotes.app.data.LibraryRestoreAndroidTest$SourceBundle.<init>(LibraryRestoreAndroidTest.kt:78)
+2026-10-25T17:37:20.1286812Z at net.plainnotes.app.data.LibraryLifecycleAndroidTest.materializedAndRetainedLibrariesCannotBeReleasedOrIgnoredByExport(LibraryLifecycleAndroidTest.kt:111)
+2026-10-25T17:37:20.1287674Z Execute net.plainnotes.app.data.LibraryLifecycleAndroidTest.committedHistoryTrashAndCompleteCurrentArchiveUseExistingWriterAndReader: FAILED
+2026-10-25T17:37:20.1288305Z java.lang.IllegalArgumentException: java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:20.1288730Z at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:20.1289158Z at net.plainnotes.app.data.MedicalArchiveWriter.write$lambda$2(MedicalArchiveWriter.kt:31)
+2026-10-25T17:37:20.1289630Z at net.plainnotes.app.data.MedicalArchiveWriter$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+2026-10-25T17:37:20.1290130Z at net.plainnotes.app.data.AttachmentBackupPreparation$Snapshot.records(AttachmentBackupPreparation.kt:48)
+2026-10-25T17:37:20.1290582Z at net.plainnotes.app.data.MedicalArchiveWriter.write(MedicalArchiveWriter.kt:30)
+2026-10-25T17:37:20.1290987Z at net.plainnotes.app.data.LibraryLifecycle.writeArchive(LibraryLifecycle.kt:133)
+2026-10-25T17:37:20.1291826Z at net.plainnotes.app.data.LibraryLifecycleAndroidTest.committedHistoryTrashAndCompleteCurrentArchiveUseExistingWriterAndReader(LibraryLifecycleAndroidTest.kt:46)
+2026-10-25T17:37:20.1292394Z 
+2026-10-25T17:37:20.1292532Z java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:20.1292890Z at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:20.1293313Z at net.plainnotes.app.data.MedicalArchiveWriter.write$lambda$2(MedicalArchiveWriter.kt:31)
+2026-10-25T17:37:20.1293923Z at net.plainnotes.app.data.MedicalArchiveWriter$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+2026-10-25T17:37:20.1294425Z at net.plainnotes.app.data.AttachmentBackupPreparation$Snapshot.records(AttachmentBackupPreparation.kt:48)
+2026-10-25T17:37:20.1294878Z at net.plainnotes.app.data.MedicalArchiveWriter.write(MedicalArchiveWriter.kt:30)
+2026-10-25T17:37:20.1295281Z at net.plainnotes.app.data.LibraryLifecycle.writeArchive(LibraryLifecycle.kt:133)
+2026-10-25T17:37:20.1295963Z at net.plainnotes.app.data.LibraryLifecycleAndroidTest.committedHistoryTrashAndCompleteCurrentArchiveUseExistingWriterAndReader(LibraryLifecycleAndroidTest.kt:46)
+2026-10-25T17:37:20.1296815Z Execute net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.realGenerationSwitchRejectsOldFacadeAndRetainedSetExport: FAILED
+2026-10-25T17:37:20.1297422Z java.lang.IllegalArgumentException: java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:20.1297845Z at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:20.1298271Z at net.plainnotes.app.data.MedicalArchiveWriter.write$lambda$2(MedicalArchiveWriter.kt:31)
+2026-10-25T17:37:20.1298740Z at net.plainnotes.app.data.MedicalArchiveWriter$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+2026-10-25T17:37:20.1299244Z at net.plainnotes.app.data.AttachmentBackupPreparation$Snapshot.records(AttachmentBackupPreparation.kt:48)
+2026-10-25T17:37:20.1299697Z at net.plainnotes.app.data.MedicalArchiveWriter.write(MedicalArchiveWriter.kt:30)
+2026-10-25T17:37:20.1300161Z at net.plainnotes.app.data.LibraryRestoreAndroidTest$SourceBundle.<init>(LibraryRestoreAndroidTest.kt:78)
+2026-10-25T17:37:20.1300895Z at net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest$realGenerationSwitchRejectsOldFacadeAndRetainedSetExport$1.invokeSuspend(MedicalAttachmentOperationAndroidTest.kt:95)
+2026-10-25T17:37:20.1301568Z at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+2026-10-25T17:37:20.1301968Z at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+2026-10-25T17:37:20.1302343Z at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+2026-10-25T17:37:20.1302727Z at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+2026-10-25T17:37:20.1303198Z at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+2026-10-25T17:37:20.1303675Z at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+2026-10-25T17:37:20.1304032Z at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+2026-10-25T17:37:20.1304404Z at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+2026-10-25T17:37:20.1305068Z at net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.realGenerationSwitchRejectsOldFacadeAndRetainedSetExport(MedicalAttachmentOperationAndroidTest.kt:94)
+2026-10-25T17:37:20.1305520Z 
+2026-10-25T17:37:20.1305657Z java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:20.1306014Z at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:20.1306437Z at net.plainnotes.app.data.MedicalArchiveWriter.write$lambda$2(MedicalArchiveWriter.kt:31)
+2026-10-25T17:37:20.1306909Z at net.plainnotes.app.data.MedicalArchiveWriter$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+2026-10-25T17:37:20.1307560Z at net.plainnotes.app.data.AttachmentBackupPreparation$Snapshot.records(AttachmentBackupPreparation.kt:48)
+2026-10-25T17:37:20.1308264Z at net.plainnotes.app.data.MedicalArchiveWriter.write(MedicalArchiveWriter.kt:30)
+2026-10-25T17:37:20.1309106Z at net.plainnotes.app.data.LibraryRestoreAndroidTest$SourceBundle.<init>(LibraryRestoreAndroidTest.kt:78)
+2026-10-25T17:37:20.1310087Z at net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest$realGenerationSwitchRejectsOldFacadeAndRetainedSetExport$1.invokeSuspend(MedicalAttachmentOperationAndroidTest.kt:95)
+2026-10-25T17:37:20.1310746Z at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+2026-10-25T17:37:20.1311140Z at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+2026-10-25T17:37:20.1311509Z at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+2026-10-25T17:37:20.1311888Z at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+2026-10-25T17:37:20.1312242Z at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+2026-10-25T17:37:20.1312576Z at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+2026-10-25T17:37:20.1312930Z at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+2026-10-25T17:37:20.1313384Z at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+2026-10-25T17:37:20.1314542Z at net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.realGenerationSwitchRejectsOldFacadeAndRetainedSetExport(MedicalAttachmentOperationAndroidTest.kt:94)
+2026-10-25T17:37:20.1315813Z Execute net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.explicitAppointmentLabHistoryTrashAndFormalArchiveAreComplete: FAILED
+2026-10-25T17:37:20.1316477Z java.lang.IllegalArgumentException: java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:20.1316911Z at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:20.1317353Z at net.plainnotes.app.data.MedicalArchiveWriter.write$lambda$2(MedicalArchiveWriter.kt:31)
+2026-10-25T17:37:20.1317824Z at net.plainnotes.app.data.MedicalArchiveWriter$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+2026-10-25T17:37:20.1318348Z at net.plainnotes.app.data.AttachmentBackupPreparation$Snapshot.records(AttachmentBackupPreparation.kt:48)
+2026-10-25T17:37:20.1318807Z at net.plainnotes.app.data.MedicalArchiveWriter.write(MedicalArchiveWriter.kt:30)
+2026-10-25T17:37:20.1319212Z at net.plainnotes.app.data.LibraryLifecycle.writeArchive(LibraryLifecycle.kt:133)
+2026-10-25T17:37:20.1319700Z at net.plainnotes.app.data.MedicalAttachmentOperations.writeArchive$lambda$0(MedicalAttachmentOperations.kt:175)
+2026-10-25T17:37:20.1320288Z at net.plainnotes.app.data.MedicalAttachmentOperations$$ExternalSyntheticLambda16.invoke(D8$$SyntheticClass:0)
+2026-10-25T17:37:20.1320820Z at net.plainnotes.app.data.MedicalAttachmentOperations$work$2.invokeSuspend(MedicalAttachmentOperations.kt:45)
+2026-10-25T17:37:20.1321507Z at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+2026-10-25T17:37:20.1321903Z at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+2026-10-25T17:37:20.1322282Z at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+2026-10-25T17:37:20.1322655Z at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+2026-10-25T17:37:20.1323039Z at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+2026-10-25T17:37:20.1323708Z at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:820)
+2026-10-25T17:37:20.1324434Z at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+2026-10-25T17:37:20.1324947Z at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+2026-10-25T17:37:20.1325178Z 
+2026-10-25T17:37:20.1325322Z java.lang.IllegalArgumentException: Failed requirement.
+2026-10-25T17:37:20.1325685Z at net.plainnotes.app.data.MedicalArchiveRecords.count(MedicalArchiveWriter.kt:95)
+2026-10-25T17:37:20.1326114Z at net.plainnotes.app.data.MedicalArchiveWriter.write$lambda$2(MedicalArchiveWriter.kt:31)
+2026-10-25T17:37:20.1326760Z at net.plainnotes.app.data.MedicalArchiveWriter$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+2026-10-25T17:37:20.1327430Z at net.plainnotes.app.data.AttachmentBackupPreparation$Snapshot.records(AttachmentBackupPreparation.kt:48)
+2026-10-25T17:37:20.1327883Z at net.plainnotes.app.data.MedicalArchiveWriter.write(MedicalArchiveWriter.kt:30)
+2026-10-25T17:37:20.1328284Z at net.plainnotes.app.data.LibraryLifecycle.writeArchive(LibraryLifecycle.kt:133)
+2026-10-25T17:37:20.1328772Z at net.plainnotes.app.data.MedicalAttachmentOperations.writeArchive$lambda$0(MedicalAttachmentOperations.kt:175)
+2026-10-25T17:37:20.1329314Z at net.plainnotes.app.data.MedicalAttachmentOperations$$ExternalSyntheticLambda16.invoke(D8$$SyntheticClass:0)
+2026-10-25T17:37:20.1329850Z at net.plainnotes.app.data.MedicalAttachmentOperations$work$2.invokeSuspend(MedicalAttachmentOperations.kt:45)
+2026-10-25T17:37:20.1330336Z at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+2026-10-25T17:37:20.1330729Z at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+2026-10-25T17:37:20.1331108Z at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+2026-10-25T17:37:20.1331464Z at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+2026-10-25T17:37:20.1331841Z at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+2026-10-25T17:37:20.1332308Z at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:820)
+2026-10-25T17:37:20.1332782Z at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+2026-10-25T17:37:20.1333380Z at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+2026-10-25T17:37:20.2249358Z > Task :core:data:connectedDebugAndroidTest FAILED
+2026-10-25T17:37:20.2257284Z gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__ReactiveCircus_android-emulator-runner-1792949826562.json
+2026-10-25T17:37:20.2258370Z 
+2026-10-25T17:37:20.2258833Z FAILURE: Build failed with an exception.
+2026-10-25T17:37:20.2259084Z 
+2026-10-25T17:37:20.2259213Z * What went wrong:
+2026-10-25T17:37:20.2259606Z Execution failed for task ':core:data:connectedDebugAndroidTest'.
+2026-10-25T17:37:20.2260428Z > There were failing tests. See the report at: file:///home/runner/work/HRT-Log/HRT-Log/core/data/build/reports/androidTests/connected/debug/index.html
+2026-10-25T17:37:20.2260934Z 
+2026-10-25T17:37:20.2261028Z * Try:
+2026-10-25T17:37:20.2261383Z > Run with --stacktrace option to get the stack trace.
+2026-10-25T17:37:20.2261819Z > Run with --info or --debug option to get more log output.
+2026-10-25T17:37:20.2262330Z > Run with --scan to get full insights from a Build Scan (powered by Develocity).
+2026-10-25T17:37:20.2263135Z > Get more help at https://help.gradle.org.
+2026-10-25T17:37:20.2263274Z 
+2026-10-25T17:37:20.2263354Z BUILD FAILED in 13s
+2026-10-25T17:37:20.2263802Z 66 actionable tasks: 1 executed, 65 up-to-date
+2026-10-25T17:37:20.3609455Z Traceback (most recent call last):
+2026-10-25T17:37:20.3610043Z   File "/home/runner/work/HRT-Log/HRT-Log/scripts/run_library_lifecycle_native.py", line 62, in <module>
+2026-10-25T17:37:20.3610335Z     main()
+2026-10-25T17:37:20.3610630Z   File "/home/runner/work/HRT-Log/HRT-Log/scripts/run_library_lifecycle_native.py", line 33, in main
+2026-10-25T17:37:20.3611033Z     assert result.returncode == 0, "Isolated lifecycle native tests failed"
+2026-10-25T17:37:20.3611342Z            ^^^^^^^^^^^^^^^^^^^^^^
+2026-10-25T17:37:20.3611582Z AssertionError: Isolated lifecycle native tests failed
+2026-10-25T17:37:20.3765540Z ##[error]The process '/usr/bin/sh' failed with exit code 1
+2026-10-25T17:37:20.3770471Z ##[group]Terminate Emulator
+2026-10-25T17:37:20.3770878Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 emu kill
+2026-10-25T17:37:20.3796105Z OK: killing emulator, bye bye
+2026-10-25T17:37:20.3796553Z OK
+2026-10-25T17:37:20.3800134Z ##[endgroup]
+2026-10-25T17:37:20.3801174Z INFO         | Wait for emulator (pid 2592) 20 seconds to shutdown gracefully before kill;you can set environment variable ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL(in seconds) to change the default value (20 seconds)
+2026-10-25T17:37:20.3801693Z 
+2026-10-25T17:37:20.3880789Z USER_INFO    | Snapshots have been disabled by the user, save request is ignored.
+2026-10-25T17:37:20.3881657Z INFO         | Saving snapshot 'default_boot' took 0 ms
+2026-10-25T17:37:21.3744093Z ERROR        | stop: Not implemented
+2026-10-25T17:37:21.3744512Z WARNING      | Emulator client has not yet been configured.. Call configure me first!
+2026-10-25T17:37:21.3823876Z INFO         | removeAll
+2026-10-25T17:37:22.0842790Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-25T17:37:22.0843068Z with:
+2026-10-25T17:37:22.0843250Z   name: attachment-poc-api26
+2026-10-25T17:37:22.0845150Z   path: app/build/reports/demo/
+core/data/build/reports/androidTests/
+core/data/build/reports/med02-lifecycle-isolated/
+core/data/build/reports/med02-operation-restart/
+core/data/build/reports/ansm-write-process-death/
+core/data/build/reports/gate2/
+core/data/build/reports/gate3/
+core/data/build/reports/b3/
+core/data/build/reports/med02-persistent-restart/
+core/data/build/reports/med02-restore-restart/
+core/data/build/reports/med02-generation-restart/
+core/data/build/reports/med02-collection-restart/
+core/data/build/reports/med02-format-readiness/
+app/build/reports/androidTests/
+app/build/reports/import-a-native/
+app/build/reports/med02-operation-isolated/
+app/build/outputs/androidTest-results/
+app/build/reports/attachment-poc-evidence.json
+
+2026-10-25T17:37:22.0846717Z   if-no-files-found: warn
+2026-10-25T17:37:22.0846889Z   compression-level: 6
+2026-10-25T17:37:22.0847040Z   overwrite: false
+2026-10-25T17:37:22.0847190Z   include-hidden-files: false
+2026-10-25T17:37:22.0847355Z env:
+2026-10-25T17:37:22.0847555Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:37:22.0847868Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-25T17:37:22.0848184Z   ANDROID_HOME: /usr/local/lib/android/sdk
+2026-10-25T17:37:22.0848398Z   ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+2026-10-25T17:37:22.0848606Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-25T17:37:22.0848802Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-25T17:37:22.0848989Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-25T17:37:22.0849180Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-25T17:37:22.0849458Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-25T17:37:22.0849760Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-25T17:37:22.0849965Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-25T17:37:22.0850158Z   ANDROID_AVD_HOME: /home/runner/.android/avd
+2026-10-25T17:37:22.0850342Z ##[endgroup]
+2026-10-25T17:37:22.2147368Z (node:3999) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-25T17:37:22.2148617Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-25T17:37:22.2427119Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-25T17:37:22.2432303Z The least common ancestor is /home/runner/work/HRT-Log/HRT-Log. This will be the root directory of the artifact
+2026-10-25T17:37:22.2432975Z With the provided path, there will be 82 files uploaded
+2026-10-25T17:37:22.2435303Z Artifact name is valid!
+2026-10-25T17:37:22.2435867Z Root directory input is valid!
+2026-10-25T17:37:22.4996732Z Beginning upload of artifact content to blob storage
+2026-10-25T17:37:22.5601838Z (node:3999) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-25T17:37:22.7702993Z Uploaded bytes 108270
+2026-10-25T17:37:22.8115092Z Finished uploading artifact content to blob storage!
+2026-10-25T17:37:22.8116035Z SHA256 digest of uploaded artifact zip is db04df46b033bddf7d99fc47093000e12f95a2afa1582eeacbf5a2696d7d1018
+2026-10-25T17:37:22.8116548Z Finalizing artifact upload
+2026-10-25T17:37:23.2408628Z Artifact attachment-poc-api26.zip successfully finalized. Artifact ID 12607488387
+2026-10-25T17:37:23.2409417Z Artifact attachment-poc-api26 has been successfully uploaded! Final size is 108270 bytes. Artifact ID is 12607488387
+2026-10-25T17:37:23.2413661Z Artifact download URL: https://github.com/DevenirTwilight/HRT-Log/actions/runs/40216890041/artifacts/12607488387
+2026-10-25T17:37:23.2620209Z Post job cleanup.
+2026-10-25T17:37:23.4401188Z In post-action step
+2026-10-25T17:37:23.4408093Z Cache is read-only: will not save state for use in subsequent builds.
+2026-10-25T17:37:23.4412298Z Generating Job Summary
+2026-10-25T17:37:23.4426070Z Completed post-action step
+2026-10-25T17:37:23.4530142Z Post job cleanup.
+2026-10-25T17:37:23.5615692Z (node:4024) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-25T17:37:23.5616226Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-25T17:37:23.5849826Z Post job cleanup.
+2026-10-25T17:37:23.6561381Z [command]/usr/bin/git version
+2026-10-25T17:37:23.6598757Z git version 2.55.0
+2026-10-25T17:37:23.6625644Z Temporarily overriding HOME='/home/runner/work/_temp/4373a21c-3094-49e3-b129-d0319cf2304a' before making global git config changes
+2026-10-25T17:37:23.6626659Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-25T17:37:23.6630253Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/HRT-Log/HRT-Log
+2026-10-25T17:37:23.6669274Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-25T17:37:23.6711590Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-25T17:37:23.6977085Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-25T17:37:23.7011321Z http.https://github.com/.extraheader
+2026-10-25T17:37:23.7023979Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-25T17:37:23.7076865Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-25T17:37:23.7301097Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-25T17:37:23.7334893Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-25T17:37:23.7659225Z Cleaning up orphan processes
+2026-10-25T17:37:23.8058810Z Terminate orphan process: pid (2690) (adb)
+2026-10-25T17:37:23.8154381Z Terminate orphan process: pid (2967) (java)
+2026-10-25T17:37:23.8259383Z Terminate orphan process: pid (3061) (java)
+2026-10-25T17:37:23.8354659Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02, android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407, gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

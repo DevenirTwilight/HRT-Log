@@ -121,4 +121,26 @@ abstract class AttachmentBusinessReconstructionContract {
         }finally {b.fill(0)}}
     }
     private fun sha(b:ByteArray)=MessageDigest.getInstance("SHA-256").digest(b).joinToString("") {"%02x".format(it.toInt() and 255)}
+    @Test fun monaReceiptsSurviveFullBusinessReconstructionAndPreventReplay() {
+        val json="""{"metadata":{"app_version":"synthetic","database_version":23,"export_date":"2026-10-25T12:00:00"},"data":{"medication_intakes":[{"id":801,"takenDateTime":"2026-10-25T00:30:00Z","takenTimeZone":"Europe/Paris","takenDose":"1.25","molecule":"{\"name\":\"estradiol\",\"massUnit\":\"mg\"}","administrationRoute":"oral","dosingBasis":"mass"}],"blood_tests":[],"medication_schedules":[],"supply_items":[]}}"""
+        val export=net.plainnotes.app.importer.Mona.read(json)
+        database().use {source->
+            val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=source})
+            runBlocking {assertEquals(1,repo.importMona(export,emptyMap(),emptyMap()).addedDoses)}
+            val bytes=source.runInTransaction(Callable {MeasuredBackupJson.encode(source.openHelper.writableDatabase,Instant.EPOCH)})
+            try {
+                assertEquals(14,JSONObject(String(bytes)).getInt("schema"))
+                val m=AttachmentBackupManifest(UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),emptyList(),emptyList(),emptyList(),emptyList())
+                val prepared=plan(m,bytes)
+                database().use {candidate->
+                    candidate.runInTransaction {AttachmentCandidateMetadata.reconstruct(candidate.openHelper.writableDatabase,tables(bytes),prepared) {}}
+                    candidate.runInTransaction {AttachmentCandidateMetadata.compareBusiness(candidate.openHelper.writableDatabase,tables(bytes)) {}}
+                    val restored=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=candidate})
+                    runBlocking {val replay=restored.importMona(export,emptyMap(),emptyMap());assertEquals(0,replay.addedDoses);assertEquals(1,replay.existing)}
+                    assertArrayEquals(bytes,candidate.runInTransaction(Callable {MeasuredBackupJson.encode(candidate.openHelper.writableDatabase,Instant.EPOCH)}))
+                }
+                assertArrayEquals(bytes,source.runInTransaction(Callable {MeasuredBackupJson.encode(source.openHelper.writableDatabase,Instant.EPOCH)}))
+            } finally {bytes.fill(0)}
+        }
+    }
 }

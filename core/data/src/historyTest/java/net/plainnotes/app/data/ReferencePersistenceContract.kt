@@ -132,7 +132,7 @@ abstract class ReferencePersistenceContract {
     }
     @Test fun oldSchemaNineBackupClearsNewReferencesAndKeepsLegacyStockUnknown()=runBlocking {
         val medication=med();repo.addContainers(medication,10.0,1,true);repo.unscheduled(medication,at,1.0)
-        val legacy=legacy();val oldTables=RawData.dump(raw,DOMAIN_TABLES.filterNot {it in ReferenceSchema.businessTables})
+        val legacy=legacy();val oldTables=RawData.dump(raw,RecordBackupCompatibility.tables(9).filterNot {it in ReferenceSchema.businessTables})
         PublishedBusinessFixture.stripLegacyEncoding(oldTables)
         val archive=BackupCodec.encrypt(JSONObject().put("format",1).put("schema",9).put("tables",oldTables).toString().toByteArray(),password)
         val scope=repo.referenceScope();repo.associateMedication(scope,medication,0,id(),product())

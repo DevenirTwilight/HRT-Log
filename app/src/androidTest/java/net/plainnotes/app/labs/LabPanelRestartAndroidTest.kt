@@ -32,7 +32,7 @@ class LabPanelRestartAndroidTest {
             val r = repo(db)
             r.saveLabs(listOf(lab("E2", 150.0, "pg/mL"), lab("T", 30.0, "ng/dL")), at)
             r.saveLabs(listOf(lab("PRL", 12.0, "ng/mL", t0 - 3_600_000)), at)
-            assertEquals(17, db.openHelper.writableDatabase.version)
+            assertEquals(18, db.openHelper.writableDatabase.version)
             File(context.filesDir, "synthetic-lab-panel-state").writeText(state(r))
             File(context.filesDir, "synthetic-lab-panel-backup.pnbak").writeBytes(r.exportBackup("synthetic-lab-pass".toCharArray()))
             r.deleteLabPanel(r.labPanels().first { it.sampled_utc == t0 }.id, at)

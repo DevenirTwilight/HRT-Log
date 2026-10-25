@@ -1,9 +1,21 @@
-# Mona implementation checkpoint
+# Mona PR124 integration checkpoint (2026-10-25)
 
-Base: accepted PR123 merge d477f092 (tree equals accepted276ee752); main CI Android40210593055 in progress, Science40210593016 PASS. Owner-approved compatibility is REQUIREMENTS148.C.
+Starting source ffd2abad; PR123 is MERGED at d477f092, its default Android40210593055/Science40210593016 passed. Work continues in existing PR124, with no concurrent Room migration PR found.
 
-Actual production component: independently authored schema23 source parser adapted from this project's own earlier prototype to the current bounded root API; no upstream AGPL code copied. It distinguishes actual/null/planned time, preserves exact source time/zone/decimal/chemical/ester/basis/units, counts unsupported collections, freezes source rows with deterministic Unicode-safe JSON evidence encoding. Encoded nested JSON has its own depth guard. No writer, migration, public MONA detector hook or user support claim yet.
+## Executable path
 
-Local importer full suite34 PASS (old16 + Mona source12 + evidence6), 0failure/error/skip. Original unified detector RED actually FAIL with Unknown at8efabb85 before integration; XML retained, test source retained at /workspace/scratch/MonaDetectionTest.kt and must return as an unchanged final GREEN assertion when the real detector hook is integrated. This is not a skipped test or claimed feature pass. Initial new evidence test wrongly expected malformed nested clinical data to reject the whole file; original failure XML kept. Correct contract distinguishes an INPUT_LIMIT issue and absent molecule; guard-specific assertion now PASS. No original HT/TM assertions changed.
+Unified MainActivity DataSection SAF → bounded single snapshot → independent MONA23 rule/typed parser → scoped Repository conflict preview → four-language Mona dialog → explicit confirmation → existing atomic Writer/source receipts → real commit receipt/report. A preview is single-use. Cancellation before commit is not success; later read/reminder failure cannot erase an acknowledged commit. No URI reopen, separate source button, automatic current regimen, inventory consumption or PK calibration.
 
-Next: real typed source receipts and Room17→18/business14 compatibility, source-aware clinical writer and commit receipt, explicit preview/report, unified hook, four-language strings, scoped/cancel/duplicate/conflict/trash/backup tests, real SAF Mona integration/API26/29/35. Mona formal import NOT_IMPLEMENTED at this checkpoint. No Featherline/PK/stock/MED activation/crypto/permission/release changes.
+Preview includes original dose/units/UTC instant/source zone/chemical identity, individual new/existing/deleted/conflict/unsupported states, per-analyte E2/T values, schedules/supplies excluded counts, and reasons. New medicines are inactive review items; no implicit match by name. Current support is database23 only; schedules/supplies are not imported. IDs are scoped to MONA, but Mona has no installation UUID: two device exports with overlapping IDs are conservatively duplicates/conflicts, never guessed independent.
+
+## Compatibility repair and retained evidence
+
+Original ffd2 PR run40216890041 really failed, not infrastructure: restore required external_import_item in old12/13, MedicalArchiveRecords counted an unconditional new table set. Both are now version-gated; absent old receipt table must rebuild as empty, while schema14 still requires it and validates source receipts. Full candidate exact row comparison remains. Current-version test assertions use18; historical17/16 rollback assertions remain unchanged. The16→17 injected-fault builder now includes the17→18 continuation so its fault is actually reached. The synthetic schema12 preflight fixture uses its published table set. Raw host/API26 job logs retained alongside this file.
+
+First local integration pass: importer46, core28, app21 (Mona8 + TransMemo8 + Period5), all zero failure/error/skip; Android test Kotlin compilation passed. Subsequent additions (accessibility, missing-target/multiple conflicts, schema14 independent reconstruction/replay, final native fixture) require the final checks currently running. Do not promote intermediate results to final acceptance.
+
+## Acceptance still pending
+
+Final local data regression, lint and four-language320dp/2× semantic/geometry checks; final exact-SHA six CI checks; actual API26/29/35 MainActivity/DocumentsUI Mona cancellation/confirmation/commit/reopen/replay/malformed file, with original HT/TM assertions retained. Native compilation is not native execution. Activity recreation is not a physical-device/process-death claim. PHYSICAL_NOT_RUN; physical TalkBack NOT_RUN. PR stays Draft until acceptance.
+
+MED feature0/publicfalse/external-review-pending remain unchanged. PNBAK1 and PNMEDBK1/2 crypto/framing unchanged; Room18 and conditional business14 are owner-approved148.C. No Featherline decryption, PK/stock algorithm, INTERNET, APK/signing/version/Release changes. PR-C later reuses single snapshot/container detector, scoped owner, source-specific preview and receipt/report boundary; it still needs its own reviewed password/format adapter and authorization scope.

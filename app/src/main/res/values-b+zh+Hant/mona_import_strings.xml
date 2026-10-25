@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mona_preview">Mona 匯入預覽</string>
+    <string name="mona_result">Mona 匯入結果</string>
+    <string name="mona_version">已識別：Mona · 資料庫 %1$d · 應用 %2$s</string>
+    <string name="mona_counts">來源服藥紀錄：%1$d · 新增服藥：%2$d\n來源採樣：%3$d · 新增檢驗結果：%4$d</string>
+    <string name="mona_status_counts">已存在：%1$d · 已刪除：%2$d · 衝突：%3$d · 未轉換：%4$d</string>
+    <string name="mona_unsupported">不匯入：%1$d 條計畫、%2$d 項庫存資料。</string>
+    <string name="mona_safety">僅儲存可轉換的新紀錄。已有、已刪除和衝突紀錄保持不變。藥物建立為停用的待核對項目，不啟用提醒、扣庫存或校準藥代。Mona ID 不能識別原裝置。</string>
+    <string name="mona_item">%1$s #%2$s %3$s: %4$s</string>
+    <string name="mona_intake">服藥</string>
+    <string name="mona_blood">檢驗</string>
+    <string name="mona_new">將新增</string>
+    <string name="mona_saved">已儲存</string>
+    <string name="mona_existing">已存在</string>
+    <string name="mona_deleted">已刪除，不重建</string>
+    <string name="mona_source_changed">來源已變更，不覆寫</string>
+    <string name="mona_local_changed">本機已修改，不覆寫</string>
+    <string name="mona_missing">目標遺失，需核對</string>
+    <string name="mona_draw_changed">採樣組已變更，需核對</string>
+    <string name="mona_not_taken">無實際服藥時間，不匯入</string>
+    <string name="mona_time">時間或時區無效</string>
+    <string name="mona_precision">無法保留原始精度</string>
+    <string name="mona_dose">實際劑量無效</string>
+    <string name="mona_identity">成分或酯型不支援</string>
+    <string name="mona_route">給藥途徑不支援</string>
+    <string name="mona_quantity">劑量計量基準不支援</string>
+    <string name="mona_unit">單位未知或不支援</string>
+    <string name="mona_field">存在不支援的來源欄位</string>
+    <string name="mona_lab">檢驗值缺失或無效</string>
+    <string name="mona_confirm">匯入可支援的紀錄</string>
+    <string name="mona_warning">來源詳情需核對：%1$s #%2$s · %3$s（%4$d）。不儲存推測值。</string>
+</resources>

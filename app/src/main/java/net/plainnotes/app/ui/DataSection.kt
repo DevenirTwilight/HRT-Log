@@ -148,6 +148,8 @@ import java.time.LocalDate
             text = { Text(stringResource(R.string.import_done_body, j.summary.medications, j.summary.reusedMedications, j.summary.intakes, j.summary.duplicates, j.summary.containers,
                 j.summary.scores, j.summary.notes, j.summary.appointments)) },
             confirmButton = { TextButton(onClick = model::clearDataJob) { Text(stringResource(R.string.ok)) } })
+        is NotesViewModel.DataJob.MonaReady -> MonaImportDialog(j.preview,null,model::cancelAutomaticImport) {model.runMonaImport(j)}
+        is NotesViewModel.DataJob.MonaImported -> MonaImportDialog(net.plainnotes.app.data.MonaImportPreview(j.plan,j.summary.reviews),j.summary,model::clearDataJob,model::clearDataJob)
         is NotesViewModel.DataJob.HtReady -> HtImportWizard(j.export, j.preview, state.medications, state.profiles, model::cancelAutomaticImport) { d, t, n, w -> model.runHtImport(j.export, d, t, n, w) }
         is NotesViewModel.DataJob.HtImported -> AlertDialog(onDismissRequest = model::clearDataJob, icon = { Icon(Icons.Outlined.CheckCircle, null) }, title = { Text(stringResource(R.string.import_done)) },
             text = { Text(stringResource(R.string.ht_done, j.summary.intakes, j.summary.medications, j.summary.alreadyImported, j.summary.labs)) },
@@ -267,6 +269,7 @@ import java.time.LocalDate
 }
 
 @Composable internal fun importSourceLabel(source:net.plainnotes.app.importer.ImportFormatDetector.Source):String=when(source) {
+    net.plainnotes.app.importer.ImportFormatDetector.Source.MONA->"Mona"
     net.plainnotes.app.importer.ImportFormatDetector.Source.HRT_TRACKER->"HRT Tracker"
     net.plainnotes.app.importer.ImportFormatDetector.Source.TRANS_MEMO->"Trans Memo"
     net.plainnotes.app.importer.ImportFormatDetector.Source.FEATHERLINE->"Featherline"

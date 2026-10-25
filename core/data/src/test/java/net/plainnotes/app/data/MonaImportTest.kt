@@ -123,4 +123,16 @@ class MonaImportTest {
         assertEquals(0,write().addedLabs)
     }
 
+    @Test fun missingTargetsAndMultipleConflictsAreReportedWithoutRecreation()=runBlocking {
+        write();val rows=repo.records().sortedBy{it.id}
+        db.withTransaction {RawData.unguarded(db.openHelper.writableDatabase) {
+            db.openHelper.writableDatabase.execSQL("DELETE FROM dose_record WHERE id=?",arrayOf(rows[0].id))
+        }}
+        db.dao().updateRecord(rows[1].copy(actual_dose=3.0,revision=2))
+        val before=dump();val replay=write()
+        assertEquals(2,replay.conflicts);assertEquals(0,replay.addedDoses)
+        assertTrue(replay.reviews.any{it.status==MonaItemStatus.MISSING_TARGET})
+        assertTrue(replay.reviews.any{it.status==MonaItemStatus.LOCAL_CHANGED})
+        assertEquals(before,dump())
+    }
 }

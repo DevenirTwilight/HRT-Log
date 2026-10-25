@@ -39,7 +39,11 @@ class LibraryCollectionAndroidTest {
                     }
                 }
             }.sorted()
-            DOMAIN_TABLES.forEach {t->assertEquals(t,values(a.tables.getJSONArray(t)),values(b.tables.getJSONArray(t)))}
+            val version=RecordBackupCompatibility.readVersion(a.metadata)
+            assertEquals(version,RecordBackupCompatibility.readVersion(b.metadata))
+            val tables=RecordBackupCompatibility.tables(version)
+            assertEquals(tables.toSet(),a.tables.keys());assertEquals(tables.toSet(),b.tables.keys())
+            tables.forEach {t->assertEquals(t,values(a.tables.getJSONArray(t)),values(b.tables.getJSONArray(t)))}
         }}
     }
     @Test fun restoredLibraryAddsOriginalAndExportsAllLibrariesToIndependentNewDevice()=runBlocking {

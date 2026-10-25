@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mona_preview">Aperçu de l’import Mona</string>
+    <string name="mona_result">Résultat de l’import Mona</string>
+    <string name="mona_version">Identifié : Mona · base %1$d · appli %2$s</string>
+    <string name="mona_counts">Prises source : %1$d · nouvelles prises : %2$d\nPrélèvements source : %3$d · nouveaux résultats : %4$d</string>
+    <string name="mona_status_counts">Existants : %1$d · supprimés : %2$d · conflits : %3$d · non convertis : %4$d</string>
+    <string name="mona_unsupported">Non importés : %1$d programmes et %2$d articles de stock.</string>
+    <string name="mona_safety">Seuls les nouveaux éléments compatibles sont enregistrés. Les éléments existants, supprimés ou conflictuels restent inchangés. Médicaments inactifs à vérifier, sans rappel, consommation de stock ni calibration PK. Les ID Mona ne désignent pas l’appareil source.</string>
+    <string name="mona_item">%1$s #%2$s %3$s: %4$s</string>
+    <string name="mona_intake">Prise</string>
+    <string name="mona_blood">Analyse</string>
+    <string name="mona_new">À ajouter</string>
+    <string name="mona_saved">Enregistré</string>
+    <string name="mona_existing">Déjà présent</string>
+    <string name="mona_deleted">Supprimé ; non recréé</string>
+    <string name="mona_source_changed">Source modifiée ; non remplacé</string>
+    <string name="mona_local_changed">Modification locale ; non remplacé</string>
+    <string name="mona_missing">Cible manquante ; à vérifier</string>
+    <string name="mona_draw_changed">Prélèvement modifié ; à vérifier</string>
+    <string name="mona_not_taken">Aucune heure de prise réelle ; non importé</string>
+    <string name="mona_time">Date ou fuseau invalide</string>
+    <string name="mona_precision">Précision impossible à conserver</string>
+    <string name="mona_dose">Dose réelle invalide</string>
+    <string name="mona_identity">Molécule ou ester non pris en charge</string>
+    <string name="mona_route">Voie non prise en charge</string>
+    <string name="mona_quantity">Base de dosage non prise en charge</string>
+    <string name="mona_unit">Unité inconnue ou non prise en charge</string>
+    <string name="mona_field">Champ source non pris en charge</string>
+    <string name="mona_lab">Résultat absent ou invalide</string>
+    <string name="mona_confirm">Importer les éléments compatibles</string>
+    <string name="mona_warning">Détail source à vérifier : %1$s #%2$s · %3$s (%4$d). Aucune valeur déduite enregistrée.</string>
+</resources>

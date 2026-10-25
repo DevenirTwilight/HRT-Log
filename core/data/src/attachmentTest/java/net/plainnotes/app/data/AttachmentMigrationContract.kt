@@ -235,7 +235,7 @@ abstract class AttachmentMigrationContract {
             fixture(name,pass,16).use {h->h.writableDatabase.execSQL("INSERT INTO day_note(date,text) VALUES ('2026-01-01','synthetic collection sentinel')")}
             var reached=false
             val fault=object:androidx.room.migration.Migration(16,17) {override fun migrate(db:SupportSQLiteDatabase) {migration16To17.migrate(db);reached=true;error("synthetic collection interruption")}}
-            val broken=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault).build()
+            val broken=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration17To18).build()
             try {try {broken.openHelper.writableDatabase;fail("Interrupted migration succeeded")}catch(_:IllegalStateException){}}finally {broken.close()}
             assertTrue(reached)
             fixture(name,pass,16).use {h->val r=h.writableDatabase;assertEquals(16,r.version)
