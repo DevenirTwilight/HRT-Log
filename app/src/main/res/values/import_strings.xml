@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="import_other_apps">Import from other apps</string>
-    <string name="import_other_apps_desc">Automatically recognize HRT Tracker or Trans Memo exports</string>
+    <string name="import_other_apps_desc">Automatically recognize HRT Tracker, Trans Memo or Mona exports</string>
     <string name="import_identified">Identified: %1$s</string>
     <string name="import_detecting">Detecting file format…</string>
     <string name="import_parsing">Parsing and validating file…</string>

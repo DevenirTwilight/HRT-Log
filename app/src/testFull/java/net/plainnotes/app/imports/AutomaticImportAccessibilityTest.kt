@@ -58,4 +58,33 @@ class AutomaticImportAccessibilityTest(private val locale:String,private val nig
         ui.runOnUiThread {ui.activity.model.cancelAutomaticImport()}
         ui.onNodeWithText(ui.activity.getString(R.string.import_cancelled)).performScrollTo().assertIsDisplayed()
     }
+    @Test fun monaReviewKeepsExplicitConfirmationAndReadableReasons() {
+        val model=ui.activity.model
+        ui.waitUntil(30000){model.librarySession.value is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready}
+        val export=net.plainnotes.app.importer.Mona.read(java.io.File("../importer/src/test/resources/mona23_synthetic.json").readText())
+        val plan=net.plainnotes.app.importer.MonaMigration.plan(export)
+        val reviews=plan.doses.map{net.plainnotes.app.data.MonaItemReview("INTAKE",it.sourceId,"",net.plainnotes.app.data.MonaItemStatus.NEW)}+
+            plan.labs.map{net.plainnotes.app.data.MonaItemReview("BLOOD_TEST",it.sourceId,it.analyte,net.plainnotes.app.data.MonaItemStatus.NEW)}
+        ui.runOnUiThread {model.dataJob.value=net.plainnotes.app.NotesViewModel.DataJob.MonaReady(export,
+            net.plainnotes.app.data.MonaImportPreview(plan,reviews),
+            (model.librarySession.value as net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready).scope)}
+        val label=ui.activity.getString(R.string.mona_confirm)
+        val confirm=ui.onNodeWithText(label).assertIsDisplayed().assertHasClickAction()
+        val density=ui.activity.resources.displayMetrics.density
+        assertTrue(confirm.fetchSemanticsNode().touchBoundsInRoot.height>=48*density-1)
+        val layouts=mutableListOf<TextLayoutResult>()
+        ui.onAllNodes(hasText(label),useUnmergedTree=true).fetchSemanticsNodes().forEach {
+            it.config.getOrNull(SemanticsActions.GetTextLayoutResult)?.action?.invoke(layouts)
+        }
+        assertTrue(layouts.isNotEmpty())
+        layouts.forEach {layout->
+            val last=layout.lineCount-1
+            assertFalse(layout.isLineEllipsized(last));assertEquals(label.length,layout.getLineEnd(last,visibleEnd=false))
+            assertTrue(layout.getLineBottom(last)-layout.size.height<=2*density)
+            assertTrue((0..last).maxOf{layout.getLineRight(it)-layout.getLineLeft(it)}-layout.size.width<=density)
+        }
+        ui.onNodeWithText(ui.activity.getString(R.string.cancel)).assertHasClickAction().performClick()
+        ui.onNodeWithText(ui.activity.getString(R.string.mona_preview)).assertDoesNotExist()
+        assertTrue(model.dataJob.value is net.plainnotes.app.NotesViewModel.DataJob.ImportCancelled)
+    }
 }

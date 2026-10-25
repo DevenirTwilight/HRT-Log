@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mona_preview">Mona import preview</string>
+    <string name="mona_result">Mona import result</string>
+    <string name="mona_version">Identified: Mona · database %1$d · app %2$s</string>
+    <string name="mona_counts">Source intakes: %1$d · new doses: %2$d\nSource blood tests: %3$d · new results: %4$d</string>
+    <string name="mona_status_counts">Existing: %1$d · deleted: %2$d · conflicts: %3$d · unconverted: %4$d</string>
+    <string name="mona_unsupported">Not imported: %1$d schedules and %2$d supply items.</string>
+    <string name="mona_safety">Only supported new records are saved. Existing, deleted and conflicting records stay unchanged. Medicines are inactive review items; no reminders, stock consumption or PK calibration. Mona IDs do not identify the original device.</string>
+    <string name="mona_item">%1$s #%2$s %3$s: %4$s</string>
+    <string name="mona_intake">Dose</string>
+    <string name="mona_blood">Blood test</string>
+    <string name="mona_new">Will add</string>
+    <string name="mona_saved">Saved</string>
+    <string name="mona_existing">Already present</string>
+    <string name="mona_deleted">Deleted; not recreated</string>
+    <string name="mona_source_changed">Source changed; not overwritten</string>
+    <string name="mona_local_changed">Local edit; not overwritten</string>
+    <string name="mona_missing">Target missing; needs review</string>
+    <string name="mona_draw_changed">Blood panel changed; needs review</string>
+    <string name="mona_not_taken">No actual intake time; not imported</string>
+    <string name="mona_time">Invalid time or time zone</string>
+    <string name="mona_precision">Precision cannot be preserved</string>
+    <string name="mona_dose">Invalid actual dose</string>
+    <string name="mona_identity">Unsupported molecule or ester</string>
+    <string name="mona_route">Unsupported route</string>
+    <string name="mona_quantity">Unsupported dosing basis</string>
+    <string name="mona_unit">Unknown or unsupported unit</string>
+    <string name="mona_field">Unsupported source field</string>
+    <string name="mona_lab">Missing or invalid lab result</string>
+    <string name="mona_confirm">Import supported records</string>
+    <string name="mona_warning">Source detail needs review: %1$s #%2$s · %3$s (%4$d). No inferred value is saved.</string>
+</resources>

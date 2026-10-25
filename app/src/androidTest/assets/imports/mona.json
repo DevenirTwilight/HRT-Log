@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "app_version": "synthetic",
+    "database_version": 23,
+    "export_date": "2026-10-25T12:00:00"
+  },
+  "data": {
+    "medication_intakes": [
+      {
+        "id": 1,
+        "takenDateTime": "2026-10-25T00:30:00Z",
+        "takenTimeZone": "Europe/Paris",
+        "takenDose": "1.2500",
+        "scheduledTime": "9:0",
+        "molecule": "{\"name\":\"estradiol\",\"massUnit\":\"mg\"}",
+        "administrationRoute": "oral",
+        "ester": null,
+        "dosingBasis": "mass",
+        "genericSupplyItemIds": "[]",
+        "placements": "[]"
+      },
+      {
+        "id": 2,
+        "takenDateTime": "2026-10-25T01:30:00Z",
+        "takenTimeZone": "Europe/Paris",
+        "takenDose": "1.2500",
+        "scheduledTime": "9:0",
+        "molecule": "{\"name\":\"estradiol\",\"massUnit\":\"mg\"}",
+        "administrationRoute": "oral",
+        "ester": null,
+        "dosingBasis": "mass",
+        "genericSupplyItemIds": "[]",
+        "placements": "[]"
+      },
+      {
+        "id": 3,
+        "takenDateTime": null,
+        "takenTimeZone": "Europe/Paris",
+        "takenDose": "1.2500",
+        "scheduledTime": "9:0",
+        "molecule": "{\"name\":\"estradiol\",\"massUnit\":\"mg\"}",
+        "administrationRoute": "oral",
+        "ester": null,
+        "dosingBasis": "mass",
+        "genericSupplyItemIds": "[]",
+        "placements": "[]"
+      }
+    ],
+    "blood_tests": [
+      {
+        "id": 5,
+        "dateTime": "2026-10-25T08:30:00Z",
+        "timeZone": "Europe/Paris",
+        "notes": "Synthetic draw",
+        "estradiolLevels": "{\"value\": \"210.00\", \"unit\": \"pg/mL\"}",
+        "testosteroneLevels": "{\"value\": \"9\", \"unit\": \"ng/dL\"}"
+      }
+    ],
+    "medication_schedules": [],
+    "supply_items": []
+  }
+}

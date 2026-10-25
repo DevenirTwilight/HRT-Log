@@ -1166,7 +1166,8 @@ abstract class MeasuredConsumptionContract {
         val trusted=raw.query("SELECT tbl_name,sql FROM sqlite_master WHERE type IN ('table','index') AND sql IS NOT NULL ORDER BY CASE type WHEN 'table' THEN 0 ELSE 1 END,name").use { c ->
             buildList { while(c.moveToNext())if(c.getString(0) in DOMAIN_TABLES)add(c.getString(1)) }
         }
-        val rows=RawData.dump(raw)
+        // This fixture clones the entire live schema, rather than exporting a versioned backup.
+        val rows=RawData.dump(raw,DOMAIN_TABLES)
         val configuration=SupportSQLiteOpenHelper.Configuration.builder(context).name(null)
             .callback(object:SupportSQLiteOpenHelper.Callback(1) {
                 override fun onConfigure(db:androidx.sqlite.db.SupportSQLiteDatabase){db.setForeignKeyConstraintsEnabled(true)}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.importer.MonaEvidenceTest" tests="6" skipped="0" failures="1" errors="0" timestamp="2026-10-25T16:18:57.353Z" hostname="68e3ecace23d" time="0.029">
+  <properties/>
+  <testcase name="keyOrderDoesNotChangeEvidenceAndSourceIdsRemainExact()" classname="net.plainnotes.app.importer.MonaEvidenceTest" time="0.004"/>
+  <testcase name="canonicalStringsRoundTripUnicodeControlCharactersAndQuotes()" classname="net.plainnotes.app.importer.MonaEvidenceTest" time="0.002"/>
+  <testcase name="oversizedAndMalformedUnicodeFieldsAreRefused()" classname="net.plainnotes.app.importer.MonaEvidenceTest" time="0.007"/>
+  <testcase name="sourceRowsAreFrozenCopiesNotMutableParserObjects()" classname="net.plainnotes.app.importer.MonaEvidenceTest" time="0.005"/>
+  <testcase name="trailingJsonIsNotASecondExportOrAnIgnoredDocument()" classname="net.plainnotes.app.importer.MonaEvidenceTest" time="0.001"/>
+  <testcase name="embeddedJsonDepthIsBoundedIndependentlyOfTheOuterString()" classname="net.plainnotes.app.importer.MonaEvidenceTest" time="0.009">
+    <failure message="org.opentest4j.AssertionFailedError: Expected net.plainnotes.app.importer.Mona.InvalidExport to be thrown, but nothing was thrown." type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: Expected net.plainnotes.app.importer.Mona.InvalidExport to be thrown, but nothing was thrown.
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:152)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:73)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128)
+	at net.plainnotes.app.importer.MonaEvidenceTest.embeddedJsonDepthIsBoundedIndependentlyOfTheOuterString(MonaEvidenceTest.kt:71)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -96,7 +96,7 @@ abstract class MedicalArchiveContract {
         val m=AttachmentBackupManifest(UUID.randomUUID(),UUID.randomUUID(),context.logicalVault,emptyList(),
             listOf(AttachmentBackupManifest.Document(doc,1,"SYNTHETIC","OTHER","ACTIVE",context.version,null)),
             listOf(AttachmentBackupManifest.Version(doc,1,context,member,"application/octet-stream")),emptyList())
-        val tables=JSONObject();DOMAIN_TABLES.forEach {tables.put(it,org.json.JSONArray())}
+        val tables=JSONObject();RecordBackupCompatibility.tables(12).forEach {tables.put(it,org.json.JSONArray())}
         val structured=JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",12).put("tables",tables).toString().toByteArray()
         val template=MedicalArchiveManifest.encode(m,mapOf(context.version to "00".repeat(60)))
         val size=91L+template.size+structured.size+49+member.ciphertextBytes
@@ -155,7 +155,7 @@ abstract class MedicalArchiveContract {
         val ciphers=ids.mapIndexed {i,_->ByteArrayOutputStream().also {output->
             AttachmentObjectStreams.write(cap,context,dek.copyOf(),ByteArrayInputStream(ByteArray(100+i) {i.toByte()}),output,101)
         }.toByteArray()}
-        val tables=JSONObject();DOMAIN_TABLES.forEach {tables.put(it,org.json.JSONArray())}
+        val tables=JSONObject();RecordBackupCompatibility.tables(12).forEach {tables.put(it,org.json.JSONArray())}
         val records=JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",12).put("tables",tables).toString().toByteArray()
         val manifests=ids.mapIndexed {i,_->
             if(fault=="INNER" && i==0)ciphers[i][ciphers[i].lastIndex]=(ciphers[i].last().toInt() xor 1).toByte()

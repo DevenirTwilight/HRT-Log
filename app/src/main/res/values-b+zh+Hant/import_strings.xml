@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="import_other_apps">從其他應用程式匯入</string>
-    <string name="import_other_apps_desc">自動辨識 HRT Tracker 或 Trans Memo 匯出檔案</string>
+    <string name="import_other_apps_desc">自動辨識 HRT Tracker、Trans Memo 或 Mona 匯出檔案</string>
     <string name="import_identified">已辨識：%1$s</string>
     <string name="import_detecting">正在偵測檔案格式…</string>
     <string name="import_parsing">正在解析並驗證檔案…</string>

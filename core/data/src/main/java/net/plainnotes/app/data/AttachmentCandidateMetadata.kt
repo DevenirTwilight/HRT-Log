@@ -75,8 +75,11 @@ internal object AttachmentCandidateMetadata {
         }
         var budget=0L
         DOMAIN_TABLES.forEach {t->
-            val expected=HashMap<String,Int>();val rows=source.getJSONArray(t)
-            for(i in 0 until rows.length()) {checkActive();val r=rows.getJSONObject(i)
+            val expected=HashMap<String,Int>()
+            // A pre-Mona snapshot has no receipt table; the rebuilt table must be empty.
+            // Required source tables were checked by the versioned archive reader.
+            val rows=if(t==ExternalImportSchema.TABLE && !source.has(t))null else source.getJSONArray(t)
+            for(i in 0 until (rows?.length() ?: 0)) {checkActive();val r=requireNotNull(rows).getJSONObject(i)
                 require(r.keys().asSequence().toSet()==RecordBackupCompatibility.columns.getValue(t).toSet()) {"Incomplete current snapshot row"}
                 val text=row(r);budget=Math.addExact(budget,text.length.toLong()*2);require(budget<=BackupLimits.MAX_JSON_BYTES.toLong()*4)
                 expected[text]=(expected[text] ?: 0)+1

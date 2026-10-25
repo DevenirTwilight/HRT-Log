@@ -379,6 +379,7 @@ const val BACKFILL_MAX_DAYS=731L
                 }
                 if(t.kind==Trash.LAB)relinkLabPanel(dao,payload)
                 Trash.reinsert(sql(),payload)
+                MonaReceiptStore.restore(sql(),payload)
             }
             Trash.RECORD->{val r=requireNotNull(dao.recordById(t.ref.toLong()));require(r.deleted_at_utc!=null)
                 val back=r.copy(deleted_at_utc=null,revision=r.revision+1);dao.updateRecord(back)
@@ -440,6 +441,7 @@ const val BACKFILL_MAX_DAYS=731L
      */
     suspend fun purgeTrash(id:Long,systemUnderneath:Boolean=true):Boolean=transaction { dao ->
         val t=trashItem(dao,id);require(t.state==Trash.TRASHED)
+        MonaReceiptStore.purge(sql(),t)
         val removed=when(t.kind) {
             in Trash.SNAPSHOT_KINDS->true
             Trash.RECORD->{val rid=t.ref.toLong()
@@ -874,6 +876,36 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun records()=withContext(Dispatchers.IO){db().dao().records()}
 
     // --- Import / backup / wipe ---
+    suspend fun previewMona(export:net.plainnotes.app.importer.Mona.Export):MonaImportPreview {
+        val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.MonaMigration.plan(export)}
+        return transactionWithSql(Space.PRIMARY,mutation=false){_,raw->MonaImportWriter.preview(raw,plan)}
+    }
+    /** The receipt crosses a dispatcher cancellation boundary only AFTER the actual commit.
+     * Cancellation remains checked at each row and before commit; it never means rollback
+     * of an already committed transaction. No tasks, URI grants or caches survive a process. */
+    suspend fun importMona(export:net.plainnotes.app.importer.Mona.Export,
+        targets:Map<net.plainnotes.app.importer.MonaMigration.Identity,Long?>,
+        names:Map<net.plainnotes.app.importer.MonaMigration.Identity,String>,receipt:MonaCommitReceipt=MonaCommitReceipt(),now:Instant=Instant.now()):MonaImportSummary {
+        receipt.claim()
+        val target=space;if(target!=Space.PRIMARY)throw LibraryScopeMismatch()
+        val parent=kotlinx.coroutines.currentCoroutineContext()[kotlinx.coroutines.Job]
+        val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.MonaMigration.plan(export)}
+        return measuredSaveGate.mutation(target) {
+            withContext(Dispatchers.IO+kotlinx.coroutines.NonCancellable+transactionSpace.asContextElement(target)) {
+                fun active(){parent?.ensureActive();requestPermission()}
+                active();var selected:NotesDatabase?=null
+                val summary=access.withGenerationTransaction(target,{writeBinding(target,it);selected=it},{
+                    active();writeBinding(target,requireNotNull(selected))
+                }) {database->
+                    active()
+                    MonaImportWriter.write(database.dao(),database.openHelper.writableDatabase,plan,targets,names,now,::active)
+                }
+                // No suspend point or fallible refresh between true COMMIT and acknowledgement.
+                receipt.acknowledge(summary)
+                summary
+            }
+        }
+    }
     suspend fun importTransMemo(plan:net.plainnotes.app.importer.TransMemo.Plan,overwrite:Boolean,zone:ZoneId=ZoneId.systemDefault()):ImportSummary {
         val target=space
         return measuredSaveGate.mutation(target){withContext(Dispatchers.IO) {
@@ -906,7 +938,7 @@ const val BACKFILL_MAX_DAYS=731L
             val json=boundTransaction(target) {db->
                 val raw=db.openHelper.writableDatabase
                 RegimenHistory.seed(raw)
-                InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw)
+                InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw);ExternalImportSchema.validate(raw)
                 JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.exportSchema(raw))
                     .put("created",Instant.now().toString()).put("tables",RawData.dump(raw))
             }
@@ -944,7 +976,7 @@ const val BACKFILL_MAX_DAYS=731L
                 require(schema>=10 || ReferenceSchema.businessTables.none {tables.has(it)}) { "Misdeclared reference backup version" }
                 RecordBackupCompatibility.validateInventoryVersion(schema,tables)
                 RecordBackupCompatibility.validateReferenceVersion(schema,tables)
-                val required=DOMAIN_TABLES.filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables) || (schema<11 && it=="lab_panel")}
+                val required=RecordBackupCompatibility.tables(schema).filterNot{(schema<2 && it in listOf("stage_review","symptom_check","review_effect")) || (schema<4 && it in listOf("regimen_version","regimen_rule_link","milestone")) || (schema<5 && it=="lab_context_revision") || (schema<6 && it in listOf("visit_question","visit_pack")) || (schema<7 && it in listOf("history_period_revision","record_annotation")) || (schema<9 && it=="trash_item") || (schema<10 && it in ReferenceSchema.businessTables) || (schema<11 && it=="lab_panel")}
                 require(required.all{tables.has(it)}) { "Incomplete backup" }
                 // LAB-02: an older backup has no panels; its results are restored ungrouped, never regrouped by time, laboratory or id.
                 require(schema>=11 || ((tables.optJSONArray("lab_panel")?.length() ?: 0)==0 && tables.optJSONArray("lab_value")?.let{a->(0 until a.length()).all{a.getJSONObject(it).isNull("panel_id")}}!=false)) { "Misdeclared lab panel backup version" }

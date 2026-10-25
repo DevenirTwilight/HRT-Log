@@ -6,11 +6,12 @@ import org.json.JSONTokener
 
 /** Schema recognition, not filename/MIME guessing or permission to write. No new clinical rules. */
 object ImportFormatDetector {
-    enum class Source { HRT_TRACKER, TRANS_MEMO, FEATHERLINE, HRT_LOG }
+    enum class Source { HRT_TRACKER, TRANS_MEMO, MONA, FEATHERLINE, HRT_LOG }
     enum class Container { JSON, SQLITE, FEATHERLINE, HRT_LOG, UNKNOWN }
     sealed interface Parsed {
         class Tracker(val export:HrtTracker.Export):Parsed
         class Memo(val export:TmExport):Parsed
+        class Mona(val export:net.plainnotes.app.importer.Mona.Export):Parsed
     }
     class Unknown:Exception()
     class Damaged:Exception()
@@ -54,9 +55,26 @@ object ImportFormatDetector {
             return try {Parsed.Tracker(HrtTracker.readRoot(root))}catch(_:HrtTracker.InvalidExport){throw Damaged()}catch(_:org.json.JSONException){throw Damaged()}
         }
     }
-    // Real independent rules only. PR-B adds Mona's verified fingerprint and parser here;
-    // no speculative Mona/TransMTF/Chrysalide readers or copied upstream source are included.
-    private val jsonRules=listOf<JsonRule>(TrackerRule)
+    private object MonaRule:JsonRule {
+        override val source=Source.MONA
+        override fun recognizes(root:Any):Boolean {
+            val obj=root as? JSONObject ?: return false
+            val meta=obj.optJSONObject("metadata") ?: return false
+            val data=obj.optJSONObject("data") ?: return false
+            return listOf("app_version","database_version","export_date").all(meta::has) &&
+                listOf("medication_intakes","medication_schedules","supply_items","blood_tests").all(data::has)
+        }
+        override fun read(root:Any):Parsed = try {
+            Parsed.Mona(Mona.readRoot(root as JSONObject))
+        } catch(e:Mona.InvalidExport) {
+            when(e.code) {
+                "UNSUPPORTED_DATABASE_VERSION"->throw Unsupported(source)
+                "TOO_MANY_ROWS"->throw TooLarge()
+                else->throw Damaged()
+            }
+        }
+    }
+    private val jsonRules=listOf<JsonRule>(TrackerRule,MonaRule)
     fun json(text:String,onRecognized:(Source)->Unit={}):Parsed {
         bounds(text)
         val root=try {
@@ -76,7 +94,7 @@ object ImportFormatDetector {
         return try {Parsed.Memo(TransMemo.read(source))}catch(_:InvalidExport){throw Damaged()}
     }
     /** Allocation/recursion guard before the existing JSON parser. This is not a second parser. */
-    private fun bounds(text:String) {
+    internal fun bounds(text:String) {
         var depth=0;var containers=0;var entries=0;var quoted=false;var escaped=false
         for(c in text) {
             if(quoted) {if(escaped)escaped=false else if(c=='\\')escaped=true else if(c=='"')quoted=false}

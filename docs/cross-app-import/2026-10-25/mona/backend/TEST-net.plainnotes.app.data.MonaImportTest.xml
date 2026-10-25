@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.MonaImportTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-25T17:30:50.425Z" hostname="68e3ecace23d" time="2.275">
+  <properties/>
+  <testcase name="cancellationInsideActualWriteRollsBackTheWholeTransaction" classname="net.plainnotes.app.data.MonaImportTest" time="0.14"/>
+  <testcase name="clinicalTrashRestoreAndPurgeKeepExactSourceOwnershipWithoutResurrection" classname="net.plainnotes.app.data.MonaImportTest" time="0.214"/>
+  <testcase name="encryptedBusinessFourteenRoundTripPreservesSourcesAndOldReaderRefuses" classname="net.plainnotes.app.data.MonaImportTest" time="0.795"/>
+  <testcase name="legacyExportOmitsUnusedSourceTableAndKeepsSchemaTwelve" classname="net.plainnotes.app.data.MonaImportTest" time="0.306"/>
+  <testcase name="sameSourceIdChangedContentIsAConflictAndDifferentIdIsNotADuplicate" classname="net.plainnotes.app.data.MonaImportTest" time="0.103"/>
+  <testcase name="repeatedAndLaterExportsAreIdempotentWithoutOrphanMedications" classname="net.plainnotes.app.data.MonaImportTest" time="0.129"/>
+  <testcase name="receiptCannotBeReusedForAnotherAttemptAndNeverAcknowledgesBeforeCommit" classname="net.plainnotes.app.data.MonaImportTest" time="0.129"/>
+  <testcase name="actualTimesOriginalUnitsAndDrawAreCommittedWithoutPlansStockOrPk" classname="net.plainnotes.app.data.MonaImportTest" time="0.157"/>
+  <testcase name="newLabPartJoinsOnlyItsUnmodifiedOriginalSourceDraw" classname="net.plainnotes.app.data.MonaImportTest" time="0.11"/>
+  <testcase name="localCorrectionAndDeletedHistoryAreNeverOverwrittenOrResurrected" classname="net.plainnotes.app.data.MonaImportTest" time="0.108"/>
+  <testcase name="insertFailureRollsBackClinicalRowsSourceReceiptsAndCommitAcknowledgement" classname="net.plainnotes.app.data.MonaImportTest" time="0.074"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

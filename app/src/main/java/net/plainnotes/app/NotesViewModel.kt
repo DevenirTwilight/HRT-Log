@@ -257,7 +257,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         class ImportReady(val export:net.plainnotes.app.importer.TmExport,val preview:net.plainnotes.app.importer.TransMemo.Preview):DataJob
         class Imported(val summary:ImportSummary):DataJob
         class HtReady(val export:net.plainnotes.app.importer.HrtTracker.Export,val preview:net.plainnotes.app.importer.HrtTracker.Preview):DataJob
-        class HtImported(val summary:net.plainnotes.app.data.HtImportSummary):DataJob }
+        class HtImported(val summary:net.plainnotes.app.data.HtImportSummary):DataJob
+        class MonaReady(val export:net.plainnotes.app.importer.Mona.Export,val preview:MonaImportPreview,val scope:LibraryRequestScope):DataJob
+        class MonaImported(val summary:MonaImportSummary,val plan:net.plainnotes.app.importer.MonaMigration.Plan):DataJob }
     val dataJob=MutableStateFlow<DataJob>(DataJob.Idle)
     private var importReadJob:Job?=null
     fun clearDataJob(){importReadJob?.cancel();importReadJob=null;dataJob.value=DataJob.Idle}
@@ -295,6 +297,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         val parsed=net.plainnotes.app.imports.AutomaticImportReader.read(app.noBackupFilesDir,
             {app.contentResolver.openInputStream(uri)},runtime::checkRequest) {source->dataJob.compareAndSet(DataJob.ImportDetecting,DataJob.ImportParsing(source))}
         withContext(Dispatchers.Default) {when(parsed) {
+            is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Mona->DataJob.MonaReady(parsed.export,repo.previewMona(parsed.export),expected)
             is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Tracker->DataJob.HtReady(parsed.export,net.plainnotes.app.importer.HrtTracker.preview(parsed.export))
             is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Memo->DataJob.ImportReady(parsed.export,net.plainnotes.app.importer.TransMemo.preview(parsed.export,ZoneId.systemDefault()))
         }}
@@ -331,6 +334,30 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.HrtTracker.plan(export,duplicates)}
         val summary=mutate{repo.importHrtTracker(plan,targets,names,if(weight)export.weightKg else null)}
         refresh().join();DataJob.HtImported(summary)
+    }
+    /** A preview is single-use in this owner. The Repository rescans under its transaction. */
+    fun runMonaImport(ready:DataJob.MonaReady):Job? {
+        if(!dataJob.compareAndSet(ready,DataJob.Working))return null
+        val receipt=MonaCommitReceipt()
+        return viewModelScope.launch {
+            try {
+                runtime.repository();runtime.verify();runtime.checkRequest()
+                if((librarySession.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope!=ready.scope)throw LibraryScopeMismatch()
+                mutate {repo.importMona(ready.export,emptyMap(),emptyMap(),receipt)}
+                refresh().join()
+            } catch(e:CancellationException) {
+                if(receipt.committed==null) {dataJob.value=DataJob.ImportCancelled;throw e}
+            } catch(e:LibraryScopeMismatch) {
+                runtimeFailure(e)
+                if(receipt.committed==null)dataJob.value=DataJob.Failed(R.string.library_scope_changed)
+            } catch(_:LibraryRequestRevoked) {
+                if(receipt.committed==null)dataJob.value=DataJob.Failed(R.string.library_request_locked)
+            } catch(_:Exception) {
+                if(receipt.committed==null)dataJob.value=DataJob.Failed(R.string.operation_error)
+            } finally {
+                receipt.committed?.let {dataJob.value=DataJob.MonaImported(it,ready.preview.plan)}
+            }
+        }
     }
     fun cancelImport(){clearDataJob()}
     val backupHistory=net.plainnotes.app.privacy.BackupHistory(app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE))

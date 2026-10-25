@@ -110,4 +110,7 @@ val migration15To16=object:Migration(15,16) { override fun migrate(db:SupportSQL
 
 val migration16To17=object:Migration(16,17) { override fun migrate(db:SupportSQLiteDatabase)=LibraryCollectionSchema.migrate(db) }
 
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17)
+/** Mona source receipts only; existing medical rows and unknown foreign identities are unchanged. */
+val migration17To18=object:Migration(17,18) { override fun migrate(db:SupportSQLiteDatabase)=ExternalImportSchema.migrate(db) }
+
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17, migration17To18)

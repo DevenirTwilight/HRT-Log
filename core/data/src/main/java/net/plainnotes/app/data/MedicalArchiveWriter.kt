@@ -92,11 +92,11 @@ internal object MedicalArchiveRecords {
         val copy=bytes.copyOf()
         return BackupJsonReader.indexed(copy,checkActive=active).use {input->
             val version=RecordBackupCompatibility.readVersion(input.metadata)
-            require(version in 12..RecordBackupCompatibility.SCHEMA && input.tables.keys()==DOMAIN_TABLES.toSet())
+            require(version in 12..RecordBackupCompatibility.SCHEMA && input.tables.keys()==RecordBackupCompatibility.tables(version).toSet())
             RecordBackupCompatibility.validateInventoryVersion(version,input.tables)
             RecordBackupCompatibility.validateReferenceVersion(version,input.tables)
             var count=0L
-            DOMAIN_TABLES.forEach {active();count=Math.addExact(count,input.tables.getJSONArray(it).length().toLong());require(count<=100000)}
+            RecordBackupCompatibility.tables(version).forEach {active();count=Math.addExact(count,input.tables.getJSONArray(it).length().toLong());require(count<=100000)}
             count
         }
     }

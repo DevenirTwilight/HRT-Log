@@ -76,7 +76,7 @@ internal object MeasuredBackupJson {
                 .put("created",created.toString()).toString()
             check(header.endsWith("}"))
             output.text(header.dropLast(1)+",\"tables\":{")
-            DOMAIN_TABLES.forEachIndexed {index,table->
+            RecordBackupCompatibility.exportTables(db).forEachIndexed {index,table->
                 if(index>0)output.text(",")
                 output.text(JSONObject.quote(table)+":[")
                 var first=true

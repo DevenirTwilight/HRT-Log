@@ -115,8 +115,8 @@ class AutomaticImportAndroidTest {
         // is being dispatched can cancel the entire picker after the drawer closes.
         waitSystem("root selection completed without cancelling picker") {pickerRoot()!=null && !rootsOpen()}
     }
-    private fun choose(kind:String) {
-        val name=if(kind=="tracker")"SYNTHETIC tracker.db" else "SYNTHETIC memo.json"
+    private fun choose(kind:String,expectFailure:Boolean=false) {
+        val name=when(kind){"tracker"->"SYNTHETIC tracker.db";"mona"->"SYNTHETIC mona.db";"invalid"->"SYNTHETIC invalid.json";else->"SYNTHETIC memo.json"}
         click(R.string.import_other_apps)
         waitSystem("DocumentsUI"){pickerRoot()!=null}
         settlePicker()
@@ -155,8 +155,8 @@ class AutomaticImportAndroidTest {
         waitSystem("resumed application after document result") {
             scenario?.state==Lifecycle.State.RESUMED && pickerRoot()==null
         }
-        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.HtReady || model.dataJob.value is NotesViewModel.DataJob.ImportReady || model.dataJob.value is NotesViewModel.DataJob.Failed}
-        assertFalse("Detection or parsing failed",model.dataJob.value is NotesViewModel.DataJob.Failed)
+        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.MonaReady || model.dataJob.value is NotesViewModel.DataJob.HtReady || model.dataJob.value is NotesViewModel.DataJob.ImportReady || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        assertEquals("Detection result",expectFailure,model.dataJob.value is NotesViewModel.DataJob.Failed)
     }
     @Test fun realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory() {
         try { exerciseImport() } catch(failure:Throwable) {
@@ -195,7 +195,35 @@ class AutomaticImportAndroidTest {
         ui.onNodeWithTag("top-title").assertTextEquals(text(Destination.HISTORY.title))
         ui.waitUntil(30000){model.state.value.medications.any{it.name=="Synthetic gel"} && model.extra.value.records.isNotEmpty()}
         assertEquals(imported,model.extra.value.records.filter{it.origin in setOf("IMPORT_HT","IMPORT_TM")}.sortedBy{it.id})
-        stage("reopened history verified; cancel picker");data();click(R.string.import_other_apps)
+        stage("reopened legacy history verified; Mona cancel preview");data();choose("mona")
+        val preview=model.dataJob.value as NotesViewModel.DataJob.MonaReady
+        assertEquals(2,preview.preview.addedDoses);assertEquals(2,preview.preview.addedLabs)
+        ui.onNodeWithText(text(R.string.mona_preview)).assertExists()
+        click(R.string.cancel,false)
+        assertEquals(16,model.extra.value.records.size)
+        stage("Mona real confirmation");choose("mona");click(R.string.mona_confirm,false)
+        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.MonaImported || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        val saved=model.dataJob.value as NotesViewModel.DataJob.MonaImported
+        assertEquals(2,saved.summary.addedDoses);assertEquals(2,saved.summary.addedLabs)
+        click(R.string.ok,false)
+        val mona=model.extra.value.records.filter{it.origin=="IMPORT_MONA"}.sortedBy{it.id}
+        assertEquals(2,mona.size)
+        assertTrue(mona.all{it.actual_dose==1.25 && it.taken_zone=="Europe/Paris" && it.scheduled_utc==null})
+        scenario!!.close();launch();open(Destination.HISTORY)
+        ui.waitUntil(30000){model.extra.value.records.any{it.origin=="IMPORT_MONA"}}
+        assertEquals(mona,model.extra.value.records.filter{it.origin=="IMPORT_MONA"}.sortedBy{it.id})
+        data();choose("mona")
+        val repeated=model.dataJob.value as NotesViewModel.DataJob.MonaReady
+        assertEquals(4,repeated.preview.existing);assertEquals(0,repeated.preview.addedDoses+repeated.preview.addedLabs)
+        click(R.string.mona_confirm,false)
+        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.MonaImported || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        assertEquals(0,(model.dataJob.value as NotesViewModel.DataJob.MonaImported).summary.addedDoses)
+        assertEquals(18,model.extra.value.records.size);click(R.string.ok,false)
+        val persistedLabs=model.extra.value.labs.filter{it.sampled_utc==java.time.Instant.parse("2026-10-25T08:30:00Z").toEpochMilli()}
+        assertEquals(setOf("pg/mL","ng/dL"),persistedLabs.map{it.unit}.toSet())
+        assertTrue(persistedLabs.all{it.panel_id!=null && it.sampled_zone=="Europe/Paris"})
+        choose("invalid",true);assertEquals(18,model.extra.value.records.size);click(R.string.ok,false)
+        stage("reopened Mona and idempotency verified; cancel picker");click(R.string.import_other_apps)
         waitSystem("cancel DocumentsUI"){instrumentation.uiAutomation.rootInActiveWindow?.packageName?.toString()?.endsWith(".documentsui")==true}
         settlePicker()
         if(rootsOpen())selectImportRoot()

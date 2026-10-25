@@ -2,6 +2,8 @@ package net.plainnotes.app.data
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 @Dao interface NotesDao {
+    @Insert suspend fun externalImport(value:ExternalImportEntity)
+
     /** Captured with record rows on this DAO/transaction; never reopen a second database handle for a list ticket. */
     @Query("SELECT epoch FROM reference_runtime WHERE id=1") suspend fun referencePreviewEpoch():String
 

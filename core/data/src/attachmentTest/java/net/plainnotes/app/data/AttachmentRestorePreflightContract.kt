@@ -41,7 +41,7 @@ internal class RestoreSyntheticArchive:AutoCloseable {
             AttachmentBackupManifest.Link(UUID.randomUUID(),lab,trashDocument,2,"QUARANTINED"),
             AttachmentBackupManifest.Link(UUID.randomUUID(),dose,document,2,"QUARANTINED")))
     fun structured():JSONObject {
-        val tables=JSONObject();DOMAIN_TABLES.forEach {tables.put(it,JSONArray())}
+        val tables=JSONObject();RecordBackupCompatibility.tables(12).forEach {tables.put(it,JSONArray())}
         tables.getJSONArray("appointment").put(JSONObject().put("id",7).put("note","Synthetic source appointment"))
         tables.getJSONArray("dose_record").put(JSONObject().put("id",8).put("deleted_at_utc",1000))
         tables.getJSONArray("trash_item").put(JSONObject().put("id",11).put("kind",Trash.LAB).put("ref","7").put("payload_json",labPayload))
