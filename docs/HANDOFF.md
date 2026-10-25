@@ -1,3 +1,7 @@
+## PR125 native harness correction — 2026-10-25
+
+091513ba local importer55/backend27/app51 allPASS. Exact091 JVM/Science green; main native matrices still running when independent lowmem40236502363 failed BEFORE Featherline instrumentation: new script's optional adb logcat -c returned1 with failed to clear main log. Original log preserved evidence/failures/091-lowmem-original.log.gz; Featherline lowmem NOT_RUN, not LMK diagnosis or PASS. Only correction: keep logd refusal in logcat-clear.txt, continue ALL original actual UI/heap/memory/result assertions. Source production code unchanged; final new SHA still needs its own required gates. No changed limits/fixture/crypto, no unchanged rerun selected for green. Draft/MED OFF/no PR-D.
+
 ## PR125 candidate frozen for real native acceptance — 2026-10-25
 
 Actual Featherline integration is implemented in existing feature/featherline-import-20261025, no second PR. Base8f8761d0, MED OFF. Production writer/Room19/business15/scope/trash/backup and unified single-snapshot password/preview/true-COMMIT UI are complete. Targeted final local results in featherline/evidence/candidate-local/result.txt: importer55, source/backend/reconstruction and app/a11y all0 failures/errors/skips; native app/core test compilation PASS. Earlier full data644 PASS and lintFullDebug PASS. New password a11y32 includes all languages/320dp/2x/night, actual retained reader and cancellation; paused host Looper failure preserved and corrected without removing assertions.

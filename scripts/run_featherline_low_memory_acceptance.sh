@@ -13,7 +13,11 @@ PY
 ./gradlew :app:assembleFullDebug :app:assembleFullDebugAndroidTest --no-parallel --max-workers=2
 adb install -r -t app/build/outputs/apk/full/debug/app-full-debug.apk
 adb install -r -t app/build/outputs/apk/androidTest/full/debug/app-full-debug-androidTest.apk
-adb logcat -c
+# Optional diagnostic housekeeping is not a functional acceptance gate. Preserve
+# logd refusal and still run EVERY real import/heap/memory assertion below.
+if ! adb logcat -c > "$report/logcat-clear.txt" 2>&1; then
+  cat "$report/logcat-clear.txt"
+fi
 set +e
 adb shell am instrument -w -e class net.plainnotes.app.imports.AutomaticImportAndroidTest -e featherlineExpectedHeapMb 192 net.plainnotes.app.test/androidx.test.runner.AndroidJUnitRunner > "$report/native.txt" 2>&1
 result=$?
