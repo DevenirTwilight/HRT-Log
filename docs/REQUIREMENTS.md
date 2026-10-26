@@ -1503,3 +1503,8 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 - **禁止**：重写 Tink/AES-GCM，改 SQLCipher/KeyStore，改 PNBAK1/PNMEDBK1/PNMEDBK2，新增不必要的 Room Schema，扩大配额，改 PK/库存/BDPM/跨应用导入，加 INTERNET 权限，把真实医疗文件放进测试或证据。
 - **验收必须区分**：UI 演示、真实生产接口调用、实际 COMMIT、经认证读取、独立外部安全审查。物理设备、人工 TalkBack、外审未执行时如实标为 NOT_RUN/PENDING。
 - **交付**：交互规范与验收见 `docs/medical-attachments/2026-10-26/attachment-ui/README.md`。PR 按 §106 自动合并。不签名，不交付 APK。
+
+**149 补记（2026-10-26，负责人批准）**：负责人回复“我批准，不用等待”。据此：
+1. 确认 147.K 补记中 #128 的处置：API < 28 上 `AttachmentViewer` 不做 PDF 页面预览，在任何代理或渲染器创建之前拒绝；该补记不再是“待负责人确认”。
+2. #128 转为可审并按 §106 开启自动合并，仍等必需 CI 通过，不绕过保护。
+3. 阶段 B 不再等 #128 合并，直接提交独立 PR。该 PR 包含 #128 的提交，#128 合并后差异自动缩小。

@@ -1,5 +1,7 @@
 ## MED-02 阶段 B：隔离的医疗附件交互界面（进行中）— 2026-10-26
 
+- 2026-10-26 负责人批准“不用等待”：#128 已转为可审并开启自动合并（等最后一次 `android` 重跑）；阶段 B 直接开 PR（包含 #128 提交）。完整 JVM 测试 2455 项 0 失败，lint 通过。界面参考了库中样图 06、07（见规范文档“参考样图”一节）。
+
 - 分支 `feature/med02-attachment-ui-20261026`，工作树 /home/user/wt-medui。目前基于 #128 分支；#128 受保护合并后，再合入默认分支并开独立 PR。REQUIREMENTS §149；规范与验收见 `docs/medical-attachments/2026-10-26/attachment-ui/README.md`。
 - 已完成：
   - 网关：`attachments/ui/MedicalAttachmentGateway.kt`，生产实现只走 RuntimeLibrarySession、AttachmentFlowController、AttachmentViewer；
