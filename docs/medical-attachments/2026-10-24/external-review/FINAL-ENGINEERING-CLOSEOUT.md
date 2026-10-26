@@ -1,6 +1,6 @@
 # MED-02 V1 FINAL ACCEPTANCE & HANDOFF
 
-2026-10-26. **Final default-branch verification IN_PROGRESS.** The exact implementation candidate passed acceptance and #131 is merged. Final ENGINEERING_COMPLETE / READY_FOR_EXTERNAL_REVIEW decision follows the remaining default-branch CI. **NOT_REVIEWED_EXTERNALLY — RELEASE_NOT_AUTHORIZED.**
+2026-10-26. **ENGINEERING_COMPLETE — READY_FOR_EXTERNAL_REVIEW.** #131 is protected-merged and both exact-source and default-branch required CI passed. This closes the frozen default-OFF V1 software scope, not universal low-memory stability or security approval. **NOT_REVIEWED_EXTERNALLY — RELEASE_NOT_AUTHORIZED.**
 
 ## Source and immutable evidence
 
@@ -32,7 +32,7 @@ Changed executable test/harness files only: `LibraryRestoreAndroidTest.kt`, `Med
 | Generation source/live phase timings | PREPARED7.669/4.946s; OBJECTS_COMMITTED5.793/8.874s; IN_SWITCH5.890/17.143s; SWITCHED5.604/11.107s. Different nonoverlapping phases, not a retroactive old-budget success. Raw JSON retained. |
 | Featherline API26/512MiB/192MiB | **PASS** full actual application sequence, run40389538449/job121806604485. No direct-URI substitute, higher heap, smaller fixture, skipped password or forcedGC. |
 | Viewer API26/512MiB/192MiB | **PASS** run40389538098; existing bounded image and unsupported8.x PDF policies retained. |
-| Default merge03f724f4 | Science40394519787 **PASS**; Android40394519910 **IN_PROGRESS** at this checkpoint. No source-tree divergence. |
+| Default merge03f724f4 | Science40394519787 **PASS**; Android40394519910 all five jobs **PASS**. All six default required gates passed on merge03f724f4; no source-tree divergence. |
 | Physical device / manual TalkBack / hardware power loss | **NOT_RUN**, each independently; emulator force-stop is not hardware power loss. |
 
 ### Resource observations, not memory peaks or a stability-fix claim
@@ -69,4 +69,8 @@ Existing#103–#130 storage/keys/restore/codec/viewer/UI work was reused. Earlie
 
 Start with [README](README.md), threat boundaries, [source inventory](source-inventory.json), original and current receipts above. Checkout accepted source9fafe3c2 or merge03f724f4; reproduce normal pinned CI plus existing `run_library_low_memory_acceptance.sh`, `run_featherline_low_memory_acceptance.sh` and viewer workflow in the stated synthetic emulators. Source/test hashes bind exact bytes; CI artifacts/hashes and selected unmodified XML/logs are retained in this repository, not AI-review substitutes.
 
-No StageD/E/F follows automatically. Final decision remains conditional only on the outstanding default-branch check at this checkpoint; real enablement, independent security approval and release remain separate.
+No observed blocking MED-02 ownership/authentication/durability/session implementation failure remains in the accepted OFF candidate. The historical cross-app-import LMK is retained as a pressure/GC/physical-device review risk, not labelled repaired or used to claim universal stability. Any concrete newly reproduced integrity failure reopens engineering; no speculative feature stage follows automatically.
+
+**MED-02 V1 ENGINEERING CLOSED — READY FOR EXTERNAL SECURITY REVIEW — RELEASE NOT AUTHORIZED**
+
+Internal V1 feature development stops here. Independent expert review, blocking-finding correction, final physical/accessibility acceptance and explicit activation/release authorization remain separate. No StageD/E/F, real-original UI or permanent destruction is started.

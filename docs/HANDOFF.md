@@ -1,3 +1,13 @@
+## MED-02 V1 ENGINEERING CLOSED — 2026-10-26
+
+ENGINEERING_COMPLETE / READY_FOR_EXTERNAL_REVIEW / NOT_REVIEWED_EXTERNALLY / RELEASE_NOT_AUTHORIZED. #131 protected-merged03f724f41e91a1a866d98de31de673594d1105af; tested source9fafe3c27d563c32f5638029ff084db3e1b59d7f. All six source AND default required checks PASS; default Android40394519910 and Science40394519787 completeSUCCESS. API26/29/35 each8 lifecycle and3realUI cases zero failures/errors/skips. Library13+4+2, all12 force-stop/newPID verifications, independent freshC, Featherline and viewer512MiB/192MiB PASS.132 source hashes checked, merged/tested trees identical.
+
+Single authoritative final report and immutable raw receipt: evidence/med02-v1-final-9fafe3c2, docs/medical-attachments/2026-10-24/external-review/FINAL-ENGINEERING-CLOSEOUT.md and final-acceptance-evidence/9fafe3c2/. This branch contains documentation/evidence only, no second implementation PR or changed accepted code. Original4e failures remain preserved. Historical Featherline post-COMMIT foregroundLMK is not declared repaired; final finite full-flow PASS plus actual GC/resource evidence retained. Physical low-RAM/GC timing remains external-review/enablement risk, not universal stability certification.
+
+STOP internal V1 feature development; do not create StageD/E/F or restart closed Tink/restore/P4 research. Next is independent expert review and agreed final device/accessibility acceptance, then owner-approved activation/compatibility patch if qualified. feature_enabled0/PUBLIC_ENTRY_ENABLEDfalse/permanent deletionOFF. Physical device/manualTalkBack/hardwarepowerloss NOT_RUN. No signing, APK delivery or Release. No new protocol/schema/KDF/quota/dependency was introduced by the final correction.
+
+Historical checkpoints below reflect their original times; the final source/default acceptance above supersedes pending/blocked checkpoint statuses, never rewrites original failed runs as PASS.
+
 ## MED-02 V1 final evidence checkpoint — 2026-10-26
 
 #131 protected MERGED03f724f41e91a1a866d98de31de673594d1105af. Accepted source9fafe3c27d563c32f5638029ff084db3e1b59d7f: six required checks and API26/29/35 PASS; lifecycle cohort8/API zero failures/errors/skips, real medical UI3/API PASS; library13+4+2, all12 force-stop verifications and freshC PASS; Featherline and viewer512MiB192MiB PASS. Source inventory132 files verified; merged tree exactly equals tested source. No protection bypass, feature0/publicfalse, no signing/APK/Release. No StageD/E/F.

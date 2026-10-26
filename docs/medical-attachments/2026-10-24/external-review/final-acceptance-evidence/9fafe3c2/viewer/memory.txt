@@ -1,0 +1,4 @@
+viewer=formats api=26 sampled_not_peak=true sampled_java_max_bytes=3468504 sampled_native_max_bytes=4820384 sampled_pss_max_kib=115612 memory_samples=3 max_heap_bytes=201326592
+viewer=after-unopenable api=26 sampled_not_peak=true sampled_java_max_bytes=1918496 sampled_native_max_bytes=5207456 sampled_pss_max_kib=125221 memory_samples=7 max_heap_bytes=201326592
+viewer=closed api=26 sampled_not_peak=true sampled_java_max_bytes=1511448 sampled_native_max_bytes=5142944 sampled_pss_max_kib=115302 memory_samples=2 max_heap_bytes=201326592
+viewer=malformed api=26 sampled_not_peak=true sampled_java_max_bytes=1863928 sampled_native_max_bytes=5966936 sampled_pss_max_kib=117009 memory_samples=2 max_heap_bytes=201326592

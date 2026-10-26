@@ -1,0 +1,66 @@
+{
+  "conclusion": "success",
+  "databaseId": 40394519787,
+  "headSha": "03f724f41e91a1a866d98de31de673594d1105af",
+  "jobs": [
+    {
+      "completedAt": "2026-10-26T20:19:09Z",
+      "conclusion": "success",
+      "databaseId": 121823903147,
+      "name": "science-change-gate",
+      "startedAt": "2026-10-26T20:18:56Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Classify science changes",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Gate trigger matrix and change-range tests",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 8,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 9,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/40394519787/job/121823903147"
+    },
+    {
+      "completedAt": "2026-10-26T20:19:10Z",
+      "conclusion": "skipped",
+      "databaseId": 121824047814,
+      "name": "research-deep",
+      "startedAt": "2026-10-26T20:19:10Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/40394519787/job/121824047814"
+    }
+  ],
+  "status": "completed",
+  "updatedAt": "2026-10-26T20:19:10Z"
+}

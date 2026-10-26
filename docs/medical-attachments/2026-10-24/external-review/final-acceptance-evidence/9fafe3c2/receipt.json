@@ -21,7 +21,14 @@
   "sourceInventoryFiles": 132,
   "defaultAndroid": {
     "run": 40394519910,
-    "status": "IN_PROGRESS"
+    "status": "SUCCESS",
+    "jobs": {
+      "android": "success",
+      "device-tests": "success",
+      "attachment-poc-compatibility (26)": "success",
+      "jvm": "success",
+      "attachment-poc-compatibility (29)": "success"
+    }
   },
   "defaultScience": {
     "run": 40394519787,
@@ -80,6 +87,11 @@
     "featherline": {
       "id": 12684210113,
       "sha256": "86b6c590acf057db2e701cc67ecd7a891026b1274220e3ea7d0949f813268432",
+      "crc": "VERIFIED"
+    },
+    "viewer": {
+      "id": 12681924997,
+      "sha256": "df71f5dbf49be4a33fd2b1f66db11201f6524d97abadbf8a5428808525b53f46",
       "crc": "VERIFIED"
     }
   },
@@ -212,5 +224,10 @@
       "artifactPath": "core/data/build/reports/med02-generation-memory/native-tests.log",
       "sha256": "505bdd4e960ea0d656d12e94e44524f2e6d7d063dd46223871572cdc1c977b97"
     }
-  }
+  },
+  "engineering": "ENGINEERING_COMPLETE",
+  "reviewReadiness": "READY_FOR_EXTERNAL_REVIEW",
+  "enabled": false,
+  "publicEntryEnabled": false,
+  "permanentDeletionEnabled": false
 }

@@ -1,6 +1,6 @@
 {
   "status": "NOT_REVIEWED_EXTERNALLY",
-  "note": "Accepted product source/test bytes; evidence-only branch changes docs, not these132 files. Candidate required/native/low-memory gates PASS. Final default verification tracked in receipt. No external expert assessment or release authorization.",
+  "note": "Accepted product source/test bytes: source9fafe3c2 and protected merge03f724f4 have identical trees. All source/default required gates and affected native/low-memory acceptance PASS;132 hashes verified. This evidence-only branch changes docs, not product code. No external expert assessment or release authorization.",
   "files_sha256": {
     "app/src/androidTest/AndroidManifest.xml": "5161d86ad0a8e3be77e4eb98389d8b0e1398951c4202b05795fc0c2bb37dacef",
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/AttachmentCapabilityAndroidTest.kt": "5e43f4bf6b298b956e7b18912983ab100c9faebee7380b475a473e5045ae4f2a",

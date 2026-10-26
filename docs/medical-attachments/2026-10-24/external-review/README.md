@@ -1,4 +1,4 @@
-> **V1 final source9fafe3c2 / protected merge03f724f4.** See [single final acceptance and handoff](FINAL-ENGINEERING-CLOSEOUT.md) and [immutable raw receipt](final-acceptance-evidence/9fafe3c2/receipt.json). This evidence-only branch changes no product source. Final default verification is pending; NOT_REVIEWED_EXTERNALLY / RELEASE_NOT_AUTHORIZED. Historical LMK is preserved, not claimed repaired. No automatic next feature stage.
+> **V1 final source9fafe3c2 / protected merge03f724f4.** See [single final acceptance and handoff](FINAL-ENGINEERING-CLOSEOUT.md) and [immutable raw receipt](final-acceptance-evidence/9fafe3c2/receipt.json). This evidence-only branch changes no product source. Exact-source and default required checks PASS: ENGINEERING_COMPLETE / READY_FOR_EXTERNAL_REVIEW. NOT_REVIEWED_EXTERNALLY / RELEASE_NOT_AUTHORIZED. Historical LMK is preserved, not claimed repaired. No automatic next feature stage.
 
 # MED-02 external security review package
 
