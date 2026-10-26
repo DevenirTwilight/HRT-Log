@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
         <activity android:name="net.plainnotes.app.debug.attachments.AttachmentOperationTestActivity" android:exported="false" />
+        <!-- MED-02 attachment UI host (REQUIREMENTS §149): synthetic namespace and provider only, no launcher, never in release. -->
+        <activity android:name="net.plainnotes.app.debug.attachments.MedicalAttachmentUiTestActivity" android:exported="false" />
         <!-- ANSM-02A synthetic-only instrumentation host; no launcher or external entry. -->
         <activity android:name="net.plainnotes.app.debug.catalog.CatalogPrototypeActivity" android:exported="false" />
         <!-- Synthetic instrumentation host only. No public research sandbox or release entry. -->

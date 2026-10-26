@@ -70,3 +70,23 @@ Root cause is an Android 8.0/8.1 framework defect, verified in AOSP (`android-8.
 
 Fix (fail closed, minimal): on API < 28 `AttachmentViewer.pdfPage` throws `PdfPreviewUnsupported` before any HandlerThread, ProxyFD or `PdfRenderer` exists, so untrusted bytes never reach the defective renderer. Stored PDFs stay encrypted, listed, backed up and readable through the authenticated reader; images and opaque prefixes are unaffected. On API ≥ 28 behaviour is unchanged. `validPdfStillRendersAfterUnopenablePdf` asserts both sides (8.x: refusal before the renderer; P+: valid PDFs of two sizes still render after unopenable ones and forced finalization). The debug synthetic host falls back to the authenticated prefix read for PDFs on 8.x. A later product decision may restore 8.x PDF preview only through an isolated process; that is not implemented. Historical failing runs above are retained, not rewritten.
 
+
+### API29 hang after #128 merge and fix — PdfRenderer finalizer closes its input (2026-10-26)
+
+After #128 merged (`d6221397`), `attachment-poc-compatibility (29)` intermittently hung inside `ProductionViewerSafetyAndroidTest.validPdfStillRendersAfterUnopenablePdf` until the 45-minute job limit:
+- #129 pull_request run 40342161197, job 121640277661: stopped at 66/75;
+- #130 run 40341160034, job 121635912808: stopped at 68/75.
+
+The same SHA `1e455dd9` passed this job once in its push run (job 121639890480). The main-branch run for `d6221397` (job 121620221215) failed earlier for an unrelated reason: the API29 system image download was corrupt. The logcat for the hung test shows only the memory sampler running, with no exception.
+
+Likely cause, inferred from AOSP and not reproduced locally because there is no emulator:
+- On API 28+, `PdfRenderer` still sets `mInput` before `nativeCreate`. After a failed open, its `finalize()` → `doClose()` therefore still closes that input.
+- The test forces GC and finalization while `AttachmentViewer.dispose()` closes the same `ParcelFileDescriptor` on the cleanup dispatcher.
+- Two unsynchronized closes of one descriptor number can close a number that has already been reused, such as a new proxy bridge descriptor. Proxied I/O then waits forever.
+
+Fix:
+- `PdfRenderer` now receives `descriptor.dup()`, so each descriptor has exactly one closer: `PdfRenderer` (close or finalizer) for the duplicate, `dispose()` for the original.
+- Revocation is unchanged. The reader is closed first, so any late read through the duplicate gets EIO.
+- The test's `measured()` gained a 120 s watchdog that logs all thread stacks (`SyntheticViewerHang`), so a recurrence leaves evidence instead of a silent timeout.
+
+This fix needs new API29 CI results; the historical hung runs are kept.

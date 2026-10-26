@@ -1,3 +1,25 @@
+## MED-02 阶段 B：隔离的医疗附件交互界面（进行中）— 2026-10-26
+
+- 2026-10-26 负责人澄清：批准的是**第八张样图**（为就诊准备资料），不是 AI 当时的计划。AI 误读后提前开了 #129，已取消其自动合并并转回草稿，等 #128 合并后再继续；8.x PDF 处置仍待确认；第八张图的实现范围待负责人确认。#128 已转为可审并开启自动合并（等最后一次 `android` 重跑）。完整 JVM 测试 2455 项 0 失败，lint 通过。界面参考了库中样图 06、07（见规范文档“参考样图”一节）。
+
+- 分支 `feature/med02-attachment-ui-20261026`，工作树 /home/user/wt-medui。目前基于 #128 分支；#128 受保护合并后，再合入默认分支并开独立 PR。REQUIREMENTS §149；规范与验收见 `docs/medical-attachments/2026-10-26/attachment-ui/README.md`。
+- 已完成：
+  - 网关：`attachments/ui/MedicalAttachmentGateway.kt`，生产实现只走 RuntimeLibrarySession、AttachmentFlowController、AttachmentViewer；
+  - 状态机：`MedicalAttachmentsController.kt`；
+  - Compose：`MedicalAttachmentsUi.kt`；
+  - 四语言 `medical_attachments.xml`；
+  - debug 宿主 `MedicalAttachmentUiTestActivity`：不导出，FLAG_SECURE，只用合成数据、模拟器、合成 DocumentsProvider，已加入正式版隔离检查。
+- 本地测试：控制器 10 项、界面 48 项（4 项因 Robolectric 对话框限制跳过）、守卫 3 项均通过。模拟器端到端 `MedicalAttachmentUiAndroidTest` 已编译，等 CI 的 API26/35 例行仪器测试执行。
+- 注意：WIP 推送触发的 CI 已手动取消，避免浪费；正式验证在开 PR 后跑。
+- 2026-10-26 15:40 进度：
+  - #128 已合并（d6221397）。
+  - #129（1e455dd9）上，端到端测试 `MedicalAttachmentUiAndroidTest` 在 API35 和 API26 通过。
+  - API29 卡住 45 分钟被取消：#129 和 #130 各一次，卡在 #128 新增的 `validPdfStillRendersAfterUnopenablePdf`；同一 SHA 的 push 运行通过过一次，所以是偶发。
+  - 推断原因：API 28 以上 `PdfRenderer` 打开失败后，其 finalizer 仍会关闭传入的描述符，与 `dispose()` 并发关闭同一个描述符编号。
+  - 修复（在 #129 中）：给 `PdfRenderer` 传 `dup()`，每个描述符只有一个关闭方；测试加 120 秒看门狗，卡住时把所有线程栈打到 logcat。
+  - 外审 README 末节与 inventory 哈希已更新。
+  - 默认分支 d6221397 的 API29 失败是镜像下载损坏（测试前），已重跑一次。#130 的 API29 已评论并重跑一次。
+
 ## MED-02 #128 API26 失败定位与修复 — 2026-10-26
 
 - #128（`security/med02-preview-20261026`）在 e9220e6c 上两次必需运行的 `attachment-poc-compatibility (26)` 都失败，同样 5 项：`TinkPdfGate2AndroidTest` 正常 PDF 报 "file not in PDF format or corrupted"。基线 ccd51332 和同一 SHA 的 API29/35 都通过。

@@ -50,7 +50,12 @@ class ProductionViewerSafetyAndroidTest {
         val expected=InstrumentationRegistry.getArguments().getString("viewerExpectedHeapMb")
         if(expected!=null)assertEquals(expected.toLong()*1024*1024,Runtime.getRuntime().maxMemory())
         val observer=SampledMemory()
+        // A blocked native/FUSE call cannot be interrupted; leave every thread's stack in logcat instead of a silent CI timeout.
+        val watchdog=Thread {try {Thread.sleep(120_000)
+            Thread.getAllStackTraces().forEach {(t,s)->Log.e("SyntheticViewerHang","$name ${t.name} ${t.state}\n"+s.joinToString("\n"))}
+        }catch(_:InterruptedException) {}}.apply {isDaemon=true;start()}
         try {block()}finally {
+            watchdog.interrupt()
             observer.close()
             val line="viewer=$name api=${Build.VERSION.SDK_INT} sampled_not_peak=true ${observer.fields()} max_heap_bytes=${Runtime.getRuntime().maxMemory()}"
             Log.i("SyntheticViewerMemory",line)

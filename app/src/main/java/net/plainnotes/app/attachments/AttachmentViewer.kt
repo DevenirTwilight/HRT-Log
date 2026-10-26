@@ -57,7 +57,10 @@ internal class AttachmentViewer(private val context:Context,private val read:Med
             }
             try {
                 descriptor=(context.getSystemService(Context.STORAGE_SERVICE) as StorageManager).openProxyFileDescriptor(ParcelFileDescriptor.MODE_READ_ONLY,callbacks,Handler(handler.looper))
-                pdf=PdfRenderer(requireNotNull(descriptor))
+                // PdfRenderer stores its input before parsing and its finalizer closes it even after a
+                // failed open. A duplicate gives each descriptor exactly one closer, so that finalizer can
+                // never race dispose() on the same descriptor number.
+                pdf=PdfRenderer(requireNotNull(descriptor).dup())
             }catch(e:Throwable) {close();throw e}
         }
         requireNotNull(pdf).openPage(index).use {page->
