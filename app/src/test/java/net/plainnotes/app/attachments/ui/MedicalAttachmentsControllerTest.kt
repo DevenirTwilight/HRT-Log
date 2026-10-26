@@ -83,7 +83,7 @@ class MedicalAttachmentsControllerTest {
 
     @Test fun choosingCreatesNoOperationAndCancelLeavesNothingPending()=runBlocking {
         val fake=Fake(target);val c=controller(fake)
-        assertNotNull(c.startImport());c.picked(picked,"Visit document")
+        assertNotNull(c.startImport());assertNull("Only one picker may be pending",c.startImport());c.picked(picked,"Visit document")
         assertEquals(Import.Confirming("Visit document"),c.state.value.import)
         c.resume() // An ordinary onResume (back from the picker) keeps the pending confirmation.
         assertEquals(Import.Confirming("Visit document"),c.state.value.import)

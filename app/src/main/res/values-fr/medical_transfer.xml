@@ -1,0 +1,24 @@
+<resources>
+    <string name="med_transfer_title">Sauvegarde médicale complète</string>
+    <string name="med_transfer_scope">Inclut les dossiers, toutes les bibliothèques conservées et les versions des pièces jointes. La sauvegarde ordinaire ne contient pas les originaux.</string>
+    <string name="med_transfer_export">Exporter la sauvegarde complète</string>
+    <string name="med_transfer_restore">Restaurer la sauvegarde complète</string>
+    <string name="med_transfer_picking">Choisissez un fichier avec le sélecteur système.</string>
+    <string name="med_transfer_preview">Format authentifié %1$d · bibliothèques %2$d · versions %3$d</string>
+    <string name="med_transfer_switch_warning">La confirmation crée une bibliothèque active et conserve la précédente. Aucun remplacement avant authentification et validation de la transaction autoritaire.</string>
+    <string name="med_transfer_confirm">Confirmer la restauration</string>
+    <string name="med_transfer_exported">Archive chiffrée complète écrite. Gardez le mot de passe séparément.</string>
+    <string name="med_transfer_restored">Transaction de restauration validée. Rouvrez la bibliothèque ; les anciennes requêtes restent invalides.</string>
+    <string name="med_transfer_reopen">Rouvrir la bibliothèque</string>
+    <string name="med_transfer_unknown">Résultat incertain. Vérifiez le journal sans soumettre à nouveau le fichier.</string>
+    <string name="med_transfer_check">Vérifier seulement le statut</string>
+    <string name="med_transfer_not_found">Aucun journal de cette opération dans la racine autorisée. Aucun succès confirmé. Une nouvelle tâche exige un nouveau choix explicite de fichier.</string>
+    <string name="med_transfer_committed">Cette opération a été validée ; sa bibliothèque peut ne plus être active. Rouvrez pour vérifier.</string>
+    <string name="med_transfer_pending">Le journal vérifié est incomplet. Les anciennes données sont conservées, sans nouvelle tentative automatique.</string>
+    <string name="med_transfer_abort">Annuler la restauration incomplète</string>
+    <string name="med_transfer_abort_warning">Seule cette opération vérifiée est abandonnée. Les fichiers chiffrés, clés et réservations restent conservés ; aucun espace libéré promis.</string>
+    <string name="med_transfer_failed">Opération impossible : mot de passe, format, corruption, autorisation ou espace. Aucun succès de restauration confirmé ; le fichier de sortie peut être incomplet.</string>
+    <string name="med_transfer_cancelled">Annulé. Le fichier exporté peut être incomplet ; cela ne confirme aucune restauration.</string>
+    <string name="med_transfer_revoked">Accès terminé. Rouvrez après autorisation ; aucun fichier ne se rouvre automatiquement.</string>
+    <string name="med_transfer_password_note">Ce mot de passe protège une archive médicale portable, ce ne sont pas les chiffres du verrou. Il ne sera pas conservé ; gardez-en une copie.</string>
+</resources>

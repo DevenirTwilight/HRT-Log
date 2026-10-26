@@ -29,6 +29,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     private val runtime=net.plainnotes.app.runtime.RuntimeLibrarySession(bootstrapRepository,savedState)
     private val repo get()=runtime.currentRepository()
     internal val libraryRuntime get()=runtime
+    internal val libraryUiState get()=savedState
+    fun pendingLibraryOperation():String?=savedState.get<String>(net.plainnotes.app.runtime.RuntimeLibrarySession.RESTORE_OPERATION)
+        ?.takeIf {runCatching {java.util.UUID.fromString(it).toString()==it}.getOrDefault(false)}
     fun sensitivePresentationHidden()=runtime.hideSensitivePresentation()
     val librarySession=runtime.state
     private var referenceController:net.plainnotes.app.reference.MedicationReferenceController?=null

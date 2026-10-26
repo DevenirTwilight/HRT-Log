@@ -154,4 +154,31 @@ class MedicalAttachmentsUiTest(private val locale:String,private val width:Int,p
             .fetchSemanticsNodes().map {it.config.getOrNull(SemanticsProperties.Role)}
         assertEquals(listOf(Role.Button,null),roles)
     }
+    @Test fun completeMedicalTransferReviewAndRealReceiptLabelsFitAllLocales() {
+        setup()
+        RuntimeEnvironment.setQualifiers("$locale-w${width}dp-h${if(width==320)640 else 891}dp-night-xxhdpi")
+        val operation=UUID.randomUUID()
+        val fake=object:net.plainnotes.app.attachments.MedicalLibraryGateway {
+            override var committedReceipt:net.plainnotes.app.data.MedicalLibraryTransfer.Committed?=null
+            override suspend fun export(uri:android.net.Uri,password:CharArray){}
+            override suspend fun prepare(uri:android.net.Uri,password:CharArray)=net.plainnotes.app.attachments.MedicalLibraryGateway.Prepared(operation,net.plainnotes.app.data.MedicalLibraryTransfer.Summary(2,2,3))
+            override suspend fun restore()=net.plainnotes.app.data.MedicalLibraryTransfer.Committed(operation,UUID.randomUUID(),2).also{committedReceipt=it}
+            override suspend fun status(operation:UUID):net.plainnotes.app.data.MedicalLibraryTransfer.Status?=null
+            override suspend fun abortPending(operation:UUID)=false
+            override fun cancel(){}
+            override fun close(){}
+            override fun onRevoked(listener:()->Unit)=AutoCloseable{}
+        }
+        val c=MedicalLibraryTransferController(fake,kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Unconfined),androidx.lifecycle.SavedStateHandle())
+        c.choose(MedicalLibraryTransferController.Mode.RESTORE)
+        c.picked(androidx.activity.result.ActivityResult(android.app.Activity.RESULT_OK,android.content.Intent().setData(android.net.Uri.parse("content://synthetic/archive"))))
+        c.password("SYNTHETIC password".toCharArray())
+        var reopened=false
+        ui.setContent {NotesTheme {MedicalLibraryTransferContent(c,{},{reopened=true})}}
+        ui.onNodeWithText(s(R.string.med_transfer_confirm)).performScrollTo().assertHasClickAction().performClick()
+        ui.onNodeWithText(s(R.string.med_transfer_restored)).performScrollTo().assertIsDisplayed()
+        ui.onNodeWithText(s(R.string.med_transfer_reopen)).performScrollTo().performClick()
+        assertTrue(reopened);c.close()
+    }
+
 }

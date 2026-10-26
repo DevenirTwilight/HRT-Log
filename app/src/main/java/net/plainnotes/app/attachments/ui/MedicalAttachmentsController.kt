@@ -86,7 +86,7 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
 
     /** Returns the system picker intent. Choosing a file creates no operation and reads nothing. */
     suspend fun startImport():Intent? {
-        if(closed || state.value.revoked || state.value.import==Import.Saving || state.value.import==Import.Checking)return null
+        if(picking || closed || state.value.revoked || state.value.import==Import.Saving || state.value.import==Import.Checking)return null
         chosen=null;picking=true
         mutable.update {it.copy(import=Import.Idle)}
         return try {gateway.pickerIntent()}catch(e:CancellationException) {throw e}catch(_:Exception) {picking=false;null}

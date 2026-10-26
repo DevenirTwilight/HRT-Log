@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.provider.DocumentsContract
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,9 +18,8 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import net.plainnotes.app.R
-import net.plainnotes.app.attachments.ui.MedicalAttachmentViewer
+import net.plainnotes.app.attachments.ui.MedicalAttachmentRecordContent
 import net.plainnotes.app.attachments.ui.MedicalAttachmentsController
-import net.plainnotes.app.attachments.ui.MedicalAttachmentsSection
 import net.plainnotes.app.attachments.ui.RuntimeAttachmentGateway
 import net.plainnotes.app.data.MedicalAttachmentOperations
 import net.plainnotes.app.runtime.RuntimeLibrarySession
@@ -64,8 +62,6 @@ class MedicalAttachmentUiTestActivity:ComponentActivity() {
         }catch(_:Exception) {ready=false;message="SYNTHETIC refused"}}
         setContent {NotesTheme {Surface {
             val c=controller
-            val ui=c?.state?.collectAsState()?.value
-            BackHandler(ui?.viewer!=null && ui.viewer!=MedicalAttachmentsController.Viewer.Closed) {c?.closeViewer()}
             // Synthetic test controls stay reachable above the page; the viewer covers only the page area below them.
             Column(Modifier.fillMaxSize()) {
                 Column(Modifier.padding(horizontal=16.dp,vertical=8.dp).fillMaxWidth(),verticalArrangement=Arrangement.spacedBy(8.dp)) {
@@ -81,15 +77,11 @@ class MedicalAttachmentUiTestActivity:ComponentActivity() {
                         OutlinedButton({fixture.runtime.invalidate()},enabled=ready) {Text("Switch data")}
                     }
                 }
-                Box(Modifier.fillMaxWidth().weight(1f)) {
-                    Column(Modifier.padding(16.dp).fillMaxSize().verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                        if(c!=null && ui!=null)MedicalAttachmentsSection(ui,targetLabel(),
-                            onAdd={lifecycleScope.launch {c.startImport()?.let {awaitingPicker=true;select.launch(it.putExtra(DocumentsContract.EXTRA_INITIAL_URI,
-                                DocumentsContract.buildDocumentUri(AttachmentOperationTestActivity.AUTHORITY,"samples")))}}},
-                            onConfirm=c::confirmImport,
-                            onCancelImport=c::cancelImport,onCheckStatus=c::checkStatus,onDismissMessage=c::dismissImportMessage,onRetry=c::refresh,onOpen=c::open)
-                    }
-                    if(c!=null && ui!=null)MedicalAttachmentViewer(ui.viewer,c::closeViewer)
+                if(c!=null)Box(Modifier.fillMaxWidth().weight(1f)) {
+                    MedicalAttachmentRecordContent(c,targetLabel(),onAdd={lifecycleScope.launch {
+                        c.startImport()?.let {awaitingPicker=true;select.launch(it.putExtra(DocumentsContract.EXTRA_INITIAL_URI,
+                            DocumentsContract.buildDocumentUri(AttachmentOperationTestActivity.AUTHORITY,"samples")))}
+                    }})
                 }
             }
         }}}

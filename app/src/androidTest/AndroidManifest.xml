@@ -14,5 +14,7 @@
         <provider android:name="net.plainnotes.app.attachmentpoc.SyntheticStreamProvider"
             android:authorities="net.plainnotes.app.test.synthetic-attachments"
             android:exported="true" />
+        <provider android:name="net.plainnotes.app.attachments.SyntheticMedicalArchiveProvider"
+            android:authorities="net.plainnotes.app.test.synthetic-medarchive" android:exported="true" />
     </application>
 </manifest>

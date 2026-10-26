@@ -96,6 +96,7 @@ class RuntimeLibrarySession(private val source:NotesRepository,private val saved
     }
     fun close() {closed=true;allowed=false;hideSensitivePresentation();releaseProtected()}
     companion object {
+        const val RESTORE_OPERATION="medical.restore.operation.v1"
         const val SAVED_SCOPE="library.request.scope"
         const val RESTORED="library.request.restored"
         const val INTENT_SCOPE=LibraryRequestScope.INTENT_EXTRA

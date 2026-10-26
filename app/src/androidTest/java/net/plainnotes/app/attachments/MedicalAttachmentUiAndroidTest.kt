@@ -203,4 +203,30 @@ class MedicalAttachmentUiAndroidTest {
             assertEquals(0,next.fixture.access.get(Space.PRIMARY).openHelper.writableDatabase.query("SELECT COUNT(*) FROM attachment_journal").use {it.moveToFirst();it.getInt(0)})
         }finally {scenario.close();activity?.fixture?.let(::cleanup)}
     }
+    @Test fun actualRuntimeTransferAdapterWritesAndAuthenticatesOneHeldChannelAndRevokesIt()=kotlinx.coroutines.runBlocking {
+        val app=androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
+        val uri=android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-medarchive/archive")
+        app.contentResolver.call(uri,"reset",null,null)
+        val fixture=net.plainnotes.app.debug.attachments.SyntheticAttachmentFixture(app)
+        val gateway=net.plainnotes.app.attachments.RuntimeMedicalLibraryGateway(app,fixture.runtime)
+        try {
+            fixture.initialize()
+            val flow=fixture.runtime.attachments(fixture.target,"SYNTHETIC backup adapter")
+            flow.selected(androidx.activity.result.ActivityResult(android.app.Activity.RESULT_OK,android.content.Intent().setData(
+                android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-attachments/mime"))))
+            assertTrue(flow.state.value is net.plainnotes.app.attachments.AttachmentFlowController.State.Saved);flow.close()
+            val password="SYNTHETIC gateway password".toCharArray()
+            gateway.export(uri,password);assertTrue(password.all{it=='\u0000'})
+            val ready=gateway.prepare(uri,"SYNTHETIC gateway password".toCharArray())
+            assertEquals(2,ready.summary.format);assertEquals(1,ready.summary.libraries);assertEquals(1,ready.summary.versions)
+            val opens=app.contentResolver.call(uri,"counts",null,null)!!.getInt("opens")
+            fixture.runtime.pause()
+            try {gateway.restore();fail("Revoked adapter restored")}catch(_:Exception){}
+            assertEquals(opens,app.contentResolver.call(uri,"counts",null,null)!!.getInt("opens"))
+            assertNull(gateway.committedReceipt)
+            fixture.runtime.resume()
+            assertEquals("LEGACY",fixture.repository.currentGenerationScope().generation)
+        }finally {gateway.close();cleanup(fixture);app.contentResolver.call(uri,"reset",null,null)}
+    }
+
 }

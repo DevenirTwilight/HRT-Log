@@ -98,7 +98,10 @@ class LockState : androidx.lifecycle.ViewModel() {
         if(!authorized() || locked)return
         // A NEW ViewModel/saved-state owner, never a mutable retag of old callbacks or integers.
         if(Disguise.enabled(this))Session.begin(UnlockTarget.PRIMARY)
-        startActivity(Intent(this,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK));finish()
+        startActivity(Intent(this,MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            model.pendingLibraryOperation()?.let {putExtra(net.plainnotes.app.runtime.RuntimeLibrarySession.RESTORE_OPERATION,it)}
+        });finish()
     }
     override fun onStart() {
         super.onStart()
