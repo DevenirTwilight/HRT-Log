@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.MonaImportFlowTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-25T21:00:12.719Z" hostname="68e3ecace23d" time="1.427">
+  <properties/>
+  <testcase name="stalePickerIsRejectedWithoutClinicalWrites" classname="net.plainnotes.app.MonaImportFlowTest" time="0.122"/>
+  <testcase name="revokedPreviewAndOldLibraryCannotWrite" classname="net.plainnotes.app.MonaImportFlowTest" time="0.168"/>
+  <testcase name="cancelPreviewCannotBeReplayedAndWritesNothing" classname="net.plainnotes.app.MonaImportFlowTest" time="0.133"/>
+  <testcase name="malformedAndUnsupportedVersionsNeverPublishSuccess" classname="net.plainnotes.app.MonaImportFlowTest" time="0.13"/>
+  <testcase name="previewCannotBeReboundToAnotherDataset" classname="net.plainnotes.app.MonaImportFlowTest" time="0.205"/>
+  <testcase name="automaticPreviewCommitAndRepeatKeepActualRecordsAndLabs" classname="net.plainnotes.app.MonaImportFlowTest" time="0.337"/>
+  <testcase name="databaseFailureRollsBackBothTypesAndReportsFailure" classname="net.plainnotes.app.MonaImportFlowTest" time="0.181"/>
+  <testcase name="postCommitReadFailureCannotTurnSavedClinicalFactsIntoFailure" classname="net.plainnotes.app.MonaImportFlowTest" time="0.141"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

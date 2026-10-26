@@ -9,7 +9,7 @@
     <string name="import_format_unknown">This file format could not be identified.</string>
     <string name="import_file_damaged">The export is damaged or incomplete.</string>
     <string name="import_file_too_large">The export exceeds the import limit (32 MiB or 100,000 rows).</string>
-    <string name="import_featherline_unsupported">Featherline encrypted backups are recognized but not supported yet.</string>
+    <string name="import_featherline_unsupported">This Featherline envelope or encryption profile is not supported. Use envelope3 with the documented parameters.</string>
     <string name="import_use_native_restore">Use Restore HRT Log backup for this file.</string>
     <string name="import_version_unsupported">This export version is not supported.</string>
 </resources>

@@ -86,5 +86,54 @@ class AutomaticImportAccessibilityTest(private val locale:String,private val nig
         ui.onNodeWithText(ui.activity.getString(R.string.cancel)).assertHasClickAction().performClick()
         ui.onNodeWithText(ui.activity.getString(R.string.mona_preview)).assertDoesNotExist()
         assertTrue(model.dataJob.value is net.plainnotes.app.NotesViewModel.DataJob.ImportCancelled)
+    }    @Test fun featherlineReviewKeepsExplicitConfirmationAndReadableReasons() {
+        val model=ui.activity.model
+        ui.waitUntil(30000){model.librarySession.value is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready}
+        val export=net.plainnotes.app.importer.Featherline.read(java.io.File("../core/data/src/test/resources/featherline/clinical-s7.json").readText())
+        val reviews=export.doses.map{net.plainnotes.app.data.FeatherlineItemReview("LOG",it.id,net.plainnotes.app.data.FeatherlineItemStatus.NEW)}+
+            export.labs.map{net.plainnotes.app.data.FeatherlineItemReview("RESULT",it.id,net.plainnotes.app.data.FeatherlineItemStatus.NEW)}
+        ui.runOnUiThread {model.dataJob.value=net.plainnotes.app.NotesViewModel.DataJob.FeatherlineReady(
+            net.plainnotes.app.data.FeatherlineImportPreview(export,reviews),
+            (model.librarySession.value as net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready).scope)}
+        val label=ui.activity.getString(R.string.featherline_confirm)
+        val confirm=ui.onNodeWithText(label).assertIsDisplayed().assertHasClickAction()
+        val density=ui.activity.resources.displayMetrics.density
+        assertTrue(confirm.fetchSemanticsNode().touchBoundsInRoot.height>=48*density-1)
+        val layouts=mutableListOf<TextLayoutResult>()
+        ui.onAllNodes(hasText(label),useUnmergedTree=true).fetchSemanticsNodes().forEach {
+            it.config.getOrNull(SemanticsActions.GetTextLayoutResult)?.action?.invoke(layouts)
+        }
+        assertTrue(layouts.isNotEmpty())
+        layouts.forEach {layout->
+            val last=layout.lineCount-1
+            assertFalse(layout.isLineEllipsized(last));assertEquals(label.length,layout.getLineEnd(last,visibleEnd=false))
+            assertTrue(layout.getLineBottom(last)-layout.size.height<=2*density)
+            assertTrue((0..last).maxOf{layout.getLineRight(it)-layout.getLineLeft(it)}-layout.size.width<=density)
+        }
+        ui.onNodeWithText(ui.activity.getString(R.string.cancel)).assertHasClickAction().performClick()
+        ui.onNodeWithText(ui.activity.getString(R.string.featherline_preview)).assertDoesNotExist()
+        assertTrue(model.dataJob.value is net.plainnotes.app.NotesViewModel.DataJob.ImportCancelled)
     }
+    @Test fun featherlinePasswordHasAccessibleControlsAndCancellation() {
+        val model=ui.activity.model
+        ui.waitUntil(30000){model.librarySession.value is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready}
+        val file=java.io.File.createTempFile("synthetic-featherline-ui-",".json",ui.activity.cacheDir)
+        try {
+            file.writeBytes(java.io.File("../core/data/src/test/resources/featherline/clinical-v3.cipher").readBytes())
+            ui.runOnUiThread{model.openImport(android.net.Uri.fromFile(file))}
+            ui.waitUntil(30000){
+                // This host fixture has a paused Android looper; explicitly drain the
+                // real dispatcher return just as the scoped import flow tests do.
+                org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle()
+                model.dataJob.value is net.plainnotes.app.NotesViewModel.DataJob.FeatherlinePassword || model.dataJob.value is net.plainnotes.app.NotesViewModel.DataJob.Failed
+            }
+            assertTrue(model.dataJob.value is net.plainnotes.app.NotesViewModel.DataJob.FeatherlinePassword)
+            val confirm=ui.onNodeWithText(ui.activity.getString(R.string.featherline_unlock)).assertIsDisplayed().assertHasClickAction()
+            assertTrue(confirm.fetchSemanticsNode().touchBoundsInRoot.height>=48*ui.activity.resources.displayMetrics.density-1)
+            ui.onNode(hasSetTextAction()).performScrollTo().assertIsDisplayed().assertHasClickAction()
+            ui.onNodeWithText(ui.activity.getString(R.string.cancel)).assertIsDisplayed().performClick()
+            assertTrue(model.dataJob.value is net.plainnotes.app.NotesViewModel.DataJob.ImportCancelled)
+        }finally{file.delete()}
+    }
+
 }

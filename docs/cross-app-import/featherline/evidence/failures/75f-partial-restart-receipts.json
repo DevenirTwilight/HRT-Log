@@ -1,0 +1,17 @@
+{
+  "med02-generation-restart": {
+    "IN_SWITCH-verify": "\nnet.plainnotes.app.data.LibraryRestoreRestartAndroidTest:.\n\nTime: 1.597\n\nOK (1 test)\n\n\n",
+    "OBJECTS_COMMITTED-verify": "\nnet.plainnotes.app.data.LibraryRestoreRestartAndroidTest:.\n\nTime: 1.139\n\nOK (1 test)\n\n\n",
+    "PREPARED-verify": "\nnet.plainnotes.app.data.LibraryRestoreRestartAndroidTest:.\n\nTime: 1.722\n\nOK (1 test)\n\n\n",
+    "SWITCHED-verify": "\nnet.plainnotes.app.data.LibraryRestoreRestartAndroidTest:.\n\nTime: 6.896\n\nOK (1 test)\n\n\n"
+  },
+  "med02-operation-restart": {
+    "STAGED-verify": "\nnet.plainnotes.app.data.MedicalAttachmentOperationRestartAndroidTest:.\n\nTime: 1.753\n\nOK (1 test)\n\n\n",
+    "IN_COMMIT-verify": "\nnet.plainnotes.app.data.MedicalAttachmentOperationRestartAndroidTest:.\n\nTime: 1.789\n\nOK (1 test)\n\n\n",
+    "COMMITTED-verify": "\nnet.plainnotes.app.data.MedicalAttachmentOperationRestartAndroidTest:.\n\nTime: 1.881\n\nOK (1 test)\n\n\n",
+    "PREPARED-verify": "\nnet.plainnotes.app.data.MedicalAttachmentOperationRestartAndroidTest:.\n\nTime: 1.699\n\nOK (1 test)\n\n\n"
+  },
+  "med02-collection-restart": {
+    "PREPARED-verify": "\nnet.plainnotes.app.data.LibraryCollectionRestartAndroidTest:.\n\nTime: 1.509\n\nOK (1 test)\n\n\n"
+  }
+}

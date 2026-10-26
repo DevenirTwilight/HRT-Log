@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.FeatherlineContainerTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-25T21:35:34.118Z" hostname="68e3ecace23d" time="1.466">
+  <properties/>
+  <testcase name="independentPythonVectorAuthenticatesExactlyAndClearsPassword" classname="net.plainnotes.app.data.FeatherlineContainerTest" time="0.331"/>
+  <testcase name="wrongPasswordAndCiphertextOrTagTamperingNeverPublishPlaintext" classname="net.plainnotes.app.data.FeatherlineContainerTest" time="0.515"/>
+  <testcase name="anUnsupportedEnvelopeVersionIsIdentifiedBeforeApplyingV3LengthRules" classname="net.plainnotes.app.data.FeatherlineContainerTest" time="0.001"/>
+  <testcase name="cancellationClearsPasswordAndClosedInputCannotBeReused" classname="net.plainnotes.app.data.FeatherlineContainerTest" time="0.0"/>
+  <testcase name="headerIsAuthenticatedAndHostileCostsAreRejectedBeforeKdf" classname="net.plainnotes.app.data.FeatherlineContainerTest" time="0.205"/>
+  <testcase name="closeDoesNotWaitForAuthenticationAndClosedAttemptsClearPasswords" classname="net.plainnotes.app.data.FeatherlineContainerTest" time="0.004"/>
+  <testcase name="authenticatedButInvalidOrExpandingGzipIsRejected" classname="net.plainnotes.app.data.FeatherlineContainerTest" time="0.408"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

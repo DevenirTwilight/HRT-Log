@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.imports.AutomaticImportReaderTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-25T21:01:41.737Z" hostname="68e3ecace23d" time="0.316">
+  <properties/>
+  <testcase name="cancellationAndRevocationCloseSourceAndNeverReturnPreview" classname="net.plainnotes.app.imports.AutomaticImportReaderTest" time="0.038"/>
+  <testcase name="oneProviderOpenUsesOnlyValidatedSnapshot" classname="net.plainnotes.app.imports.AutomaticImportReaderTest" time="0.049"/>
+  <testcase name="realSqliteReadOnlyCopyIsRemovedBeforePreview" classname="net.plainnotes.app.imports.AutomaticImportReaderTest" time="0.061"/>
+  <testcase name="unsupportedUnknownDamagedAndOversizeRejectWithoutCopies" classname="net.plainnotes.app.imports.AutomaticImportReaderTest" time="0.165"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

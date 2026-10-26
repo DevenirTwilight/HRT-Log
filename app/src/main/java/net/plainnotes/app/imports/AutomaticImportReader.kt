@@ -24,7 +24,9 @@ internal object AutomaticImportReader {
     const val MAXIMUM_BYTES=32*1024*1024
     private const val MAXIMUM_ROWS=100000L
     suspend fun read(directory:File,open:()->InputStream?,permission:()->Unit,
-        recognized:(ImportFormatDetector.Source)->Unit):ImportFormatDetector.Parsed=withContext(Dispatchers.IO) {
+        recognized:(ImportFormatDetector.Source)->Unit):ImportFormatDetector.Parsed {
+        var owned:net.plainnotes.app.importer.Featherline.Archive?=null
+        try{return withContext(Dispatchers.IO) {
         val coroutine=currentCoroutineContext()
         fun active() {coroutine.ensureActive();permission()}
         active()
@@ -47,7 +49,20 @@ internal object AutomaticImportReader {
             while(used<prefix.size) {val n=input.read(prefix,used,prefix.size-used);if(n<0)break;used+=n}
             input.unread(prefix,0,used)
             when(ImportFormatDetector.header(prefix.copyOf(used))) {
-                ImportFormatDetector.Container.FEATHERLINE->throw ImportFormatDetector.Unsupported(ImportFormatDetector.Source.FEATHERLINE)
+                ImportFormatDetector.Container.FEATHERLINE->{
+                    recognized(ImportFormatDetector.Source.FEATHERLINE)
+                    val output=object:ByteArrayOutputStream(){fun clear(){buf.fill(0);reset()}}
+                    val block=ByteArray(64*1024)
+                    try {
+                        while(true){val n=input.read(block);if(n<0)break;output.write(block,0,n)}
+                        val container=try{net.plainnotes.app.data.FeatherlineContainer.takeOwnership(output.toByteArray())}
+                        catch(_:net.plainnotes.app.data.FeatherlineContainer.Invalid){throw ImportFormatDetector.Damaged()}
+                        catch(_:net.plainnotes.app.data.FeatherlineContainer.Unsupported){throw ImportFormatDetector.Unsupported(ImportFormatDetector.Source.FEATHERLINE)}
+                        catch(_:net.plainnotes.app.data.FeatherlineContainer.TooLarge){throw ImportFormatDetector.TooLarge()}
+                        owned=container
+                        try{active();ImportFormatDetector.Parsed.EncryptedFeatherline(container)}catch(t:Throwable){container.close();throw t}
+                    }finally{block.fill(0);output.clear()}
+                }
                 ImportFormatDetector.Container.HRT_LOG->throw ImportFormatDetector.Unsupported(ImportFormatDetector.Source.HRT_LOG)
                 ImportFormatDetector.Container.UNKNOWN->throw ImportFormatDetector.Unknown()
                 ImportFormatDetector.Container.JSON->{
@@ -92,5 +107,6 @@ internal object AutomaticImportReader {
                 }
             }
         }
+        }}catch(t:Throwable){owned?.close();throw t}
     }
 }

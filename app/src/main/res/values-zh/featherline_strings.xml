@@ -1,0 +1,19 @@
+<resources>
+    <string name="featherline_password_title">Featherline 备份密码</string>
+    <string name="featherline_password_note">仅在本地解密，不保存密码。目前仅支持 envelope3／snapshot7。</string>
+    <string name="featherline_password">备份密码</string>
+    <string name="featherline_unlock">解密并预览</string>
+    <string name="featherline_auth_failed">无法认证此备份。请检查密码；文件也可能已损坏。未修改任何数据。</string>
+    <string name="featherline_preview">Featherline 导入预览</string>
+    <string name="featherline_result">Featherline 实际提交结果</string>
+    <string name="featherline_version">Featherline · envelope3 · snapshot7</string>
+    <string name="featherline_counts">新增用药：%1$d · 化验结果：%2$d\n已存在或已删除：%3$d · 冲突：%4$d\n未转换临床项目：%5$d</string>
+    <string name="featherline_safety">仅导入可支持的实际质量剂量和原始 E2／T 结果。新药物保持停用、待检查；不创建提醒、库存或药代 Profile。保留本地修改与删除事实。</string>
+    <string name="featherline_ignored">不迁移：%1$d 个计划组、%2$d 项库存、%3$d 条笔记、%4$d 个设置或个人资料字段。</string>
+    <string name="featherline_item">%1$s · %2$s\n%3$s</string>
+    <string name="featherline_confirm">导入可支持的记录</string>
+    <string name="featherline_other">不迁移：%1$d 个纪念日期、%2$d 项自定义化验定义。%3$d 项药物定义仅用于解释实际记录，不创建历史处方。</string>
+    <string name="featherline_delta">暂不支持剂量修正，没有推测实际剂量。</string>
+    <string name="featherline_group">同组化验项目存在歧义，需人工核对。</string>
+    <string name="featherline_limit">来源证据超过本版单条记录或批次限制。</string>
+</resources>

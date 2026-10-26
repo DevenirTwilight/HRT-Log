@@ -22,11 +22,20 @@ data class HistoricalTreatmentProjection(val observed:List<ObservedTreatment>,va
     val markers:List<UserGap> = emptyList())
 
 object ObservedTreatmentHistory {
-    private data class Identity(val compound:String,val route:String?,val unit:String,val ester:String?,val formulation:String?)
+    private data class Identity(val compound:String,val route:String?,val unit:String,val ester:String?,val formulation:String?,val external:Boolean=false)
     private fun identity(m:MedicationSnapshot):Identity? {
         val compound=m.molecule ?: return null;val unit=m.unit ?: return null
         val formulation=when(m.route){"GEL"->m.profile?.gel_product_id?.let{"gel:$it"};"PATCH"->m.profile?.patch_release_ug_day?.let{"patch:$it"};else->null}
         return Identity(compound,m.route,unit,m.profile?.ester,formulation)
+    }
+    /** Source chemical identity is independent of an unknown PK model. Only Featherline
+     * records use this extension; existing sources keep their established period rules. */
+    private fun identity(r:RecordEntity,m:MedicationSnapshot):Identity? {
+        val base=identity(m) ?: return null
+        if(r.origin!="IMPORT_FEATHERLINE")return base
+        val context=runCatching{org.json.JSONObject(r.config_snapshot).getJSONObject("external_context")}.getOrNull()
+        val ester=context?.opt("ester") as? String
+        return base.copy(ester=ester ?: base.ester,external=true)
     }
     private fun compatible(a:Identity,b:Identity)=a.compound==b.compound && a.unit==b.unit &&
         (a.route==null || b.route==null || a.route==b.route) && (a.ester==null || b.ester==null || a.ester==b.ester) &&
@@ -45,7 +54,7 @@ object ObservedTreatmentHistory {
     private data class Candidate(val med:Long,val from:Instant,val until:Instant,val standard:TherapyStandard,val snapshot:MedicationSnapshot,val facts:List<Fact>)
 
     /** The same entry, or another entry whose saved identity is compatible with a known identity. */
-    private fun related(s:Saved,med:Long,key:Identity?)=s.raw.span.medicationId==med || (key!=null && s.identity!=null && compatible(s.identity,key))
+    private fun related(s:Saved,med:Long,key:Identity?)=s.raw.span.medicationId==med || (key!=null && s.identity!=null && !key.external && !s.identity.external && compatible(s.identity,key))
     const val CONFIRMED_SPAN_BASE=-1_000_000_000L
     /** §37b display-only IDs: user edits, and the later pieces of a saved version cut by a user edit. */
     const val USER_SPAN_BASE=-2_000_000_000L
@@ -98,9 +107,9 @@ object ObservedTreatmentHistory {
             if(r.deleted_at_utc!=null || r.status !in listOf("ON_TIME","LATE") || !dose.isFinite() || dose<=0) return@mapNotNull null
             val at=Instant.ofEpochMilli(timestamp);if(at>now)return@mapNotNull null
             val snapshot=snapshots[r.id] ?: return@mapNotNull null
-            val key=identity(snapshot) ?: return@mapNotNull null
+            val key=identity(r,snapshot) ?: return@mapNotNull null
             // Missing route/ester/product is not proof that two different medication IDs are equivalent.
-            val identifiable=key.route!=null && (key.compound!="E2" || key.ester!=null) &&
+            val identifiable=!key.external && key.route!=null && (key.compound!="E2" || key.ester!=null) &&
                 (key.route !in listOf("GEL","PATCH") || key.formulation!=null)
             val canonical=if(identifiable)idsByIdentity[key]?.singleOrNull() ?: r.medication_id else r.medication_id
             val recordedZone=r.taken_zone?.let{runCatching{ZoneId.of(it)}.getOrNull()} ?: zone
@@ -133,7 +142,7 @@ object ObservedTreatmentHistory {
         val clipped=mutableListOf<Candidate>()
         candidates.sortedWith(compareBy({it.med},{it.from})).forEach{c->
             var pieces=underUser(c.med,listOf(c.from to c.until))
-            val candidateIdentity=identity(c.standard)
+            val candidateIdentity=c.facts.firstOrNull()?.identity ?: identity(c.standard)
             val medicationVersions=saved.filter{related(it,c.med,candidateIdentity)}.sortedBy{it.raw.span.from}
             medicationVersions.forEach{s->
                 val from=s.raw.span.from;val until=s.raw.span.until ?: Instant.MAX
@@ -169,15 +178,15 @@ object ObservedTreatmentHistory {
             if(Instant.ofEpochMilli(timestamp)>now)return@forEach
             val m=snapshots[r.id] ?: return@forEach
             val fact=byRecord[r.id];val med=fact?.med ?: r.medication_id
-            val recordIdentity=identity(m)
+            val recordIdentity=identity(r,m)
             fun covers(s:Saved)=timestamp>=s.raw.span.from.toEpochMilli() &&
                 (s.raw.span.until?.let{timestamp<it.toEpochMilli()} ?: true) && s.identity?.let{key->
                     (m.molecule==null || m.molecule==key.compound) && (m.unit==null || m.unit==key.unit) &&
                     (m.route==null || key.route==null || m.route==key.route) && (m.profile?.ester==null || key.ester==null || m.profile?.ester==key.ester) &&
-                    identity(m)?.let{compatible(it,key)}!=false
+                    identity(r,m)?.let{compatible(it,key)}!=false
                 }==true
             // Its own entry first; otherwise a saved or confirmed part of the same medicine on another entry (§36).
-            val effectiveSaved=if(legacy)saved else saved+observed.map{Saved(it.interval,identity(it.interval.standard))}
+            val effectiveSaved=if(legacy)saved else saved+observed.map{Saved(it.interval,it.records.firstOrNull()?.let{r->identity(r,it.snapshot)} ?: identity(it.interval.standard))}
             val linked=effectiveSaved.firstOrNull{s->s.raw.span.medicationId==med && covers(s)} ?: effectiveSaved.firstOrNull{s->related(s,med,recordIdentity) && covers(s)}
             if(linked!=null)resolved+=r.id
             if(r.status in listOf("ON_TIME","LATE"))coverage[r.id]=RecordCoverage(linked?.raw,legacy && linked==null && r.id in pendingIds)

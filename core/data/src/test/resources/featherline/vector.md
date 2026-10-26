@@ -1,0 +1,1 @@
+Independent synthetic vector: Python argon2-cffi + cryptography AESGCM + gzip, public sequential salt/nonce, password synthetic-only-password. No upstream implementation copied. SHA256 aad992219f2bd2147364232e773c5294dd0fae8669af68d1008a48c6c633a734

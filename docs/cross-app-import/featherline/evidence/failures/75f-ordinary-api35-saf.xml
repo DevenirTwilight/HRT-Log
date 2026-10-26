@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="1" failures="0" errors="0" skipped="0" time="29.889" timestamp="2026-10-26T06:00:27" hostname="localhost">
+  <testsuite name="net.plainnotes.app.imports.AutomaticImportAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="29.379" timestamp="2026-10-26T06:00:27" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory" classname="net.plainnotes.app.imports.AutomaticImportAndroidTest" time="29.379" />
+  </testsuite>
+</testsuites>

@@ -1,0 +1,7 @@
+package net.plainnotes.app.data
+
+/** Public fabricated source values, shared only by host/native test variants. */
+internal object FeatherlineSynthetic {
+    const val JSON="""{"snapshotVersion":7,"exportedAtEpochMillis":1792929600000,"app":{"packageName":"com.mkx.hrttracker"},"settings":{},"userProfile":{},"medicines":[{"uuid":"00000000-0000-4000-8000-000000000001","selectionKind":"CATALOG","category":"ESTRADIOL","medicationKey":"ESTRADIOL_VALERATE","preparationType":"PILL","strengthMgPerTablet":2,"displayDoseUnit":"MG"}],"medicationGroups":[],"medicationLogs":[{"uuid":"00000000-0000-4000-8000-000000000002","medicineUuid":"00000000-0000-4000-8000-000000000001","category":"ESTRADIOL","applicationType":"ORAL","doseInstructionKind":"TABLET_FRACTION","tabletFractionNumerator":1,"tabletFractionDenominator":2,"count":1,"appliedAtEpochMillis":1792888200000,"appliedAtTimeZoneId":"Europe/Paris","equivalentE2Mg":999}],"customBloodAnalytes":[],"bloodTestPanels":[{"uuid":"00000000-0000-4000-8000-000000000003","collectedAtInstantEpochMillis":1792888200000,"collectedAtTimeZoneId":"Europe/Paris","notes":"SYNTHETIC ONLY","results":[{"uuid":"00000000-0000-4000-8000-000000000004","builtinAnalyteKey":"e2","value":210,"unitSnapshot":"pg_ml","canonicalValue":999},{"uuid":"00000000-0000-4000-8000-000000000005","builtinAnalyteKey":"t","value":9,"unitSnapshot":"ng_dl","canonicalValue":999}]}]}"""
+    fun export()=net.plainnotes.app.importer.Featherline.read(JSON)
+}

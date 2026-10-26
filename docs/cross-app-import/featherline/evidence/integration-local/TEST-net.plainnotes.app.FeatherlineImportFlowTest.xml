@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.FeatherlineImportFlowTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-25T21:00:01.111Z" hostname="68e3ecace23d" time="11.243">
+  <properties/>
+  <testcase name="postCommitRefreshFailureCannotReportTheRealTransactionAsFailure" classname="net.plainnotes.app.FeatherlineImportFlowTest" time="6.937"/>
+  <testcase name="damagedCiphertextNeverPublishesClinicalPreview" classname="net.plainnotes.app.FeatherlineImportFlowTest" time="0.556"/>
+  <testcase name="wrongPasswordRetryUsesTheSameSnapshotWithoutReopeningProvider" classname="net.plainnotes.app.FeatherlineImportFlowTest" time="0.797"/>
+  <testcase name="actualEncryptedReadPreviewCommitAndReplayPreserveFacts" classname="net.plainnotes.app.FeatherlineImportFlowTest" time="1.045"/>
+  <testcase name="cancelClosesEncryptedSnapshotAndOldPreviewCannotBeReplayed" classname="net.plainnotes.app.FeatherlineImportFlowTest" time="0.48"/>
+  <testcase name="revokedOrReplacedLibraryCannotReceiveThePreparedClinicalRows" classname="net.plainnotes.app.FeatherlineImportFlowTest" time="0.505"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

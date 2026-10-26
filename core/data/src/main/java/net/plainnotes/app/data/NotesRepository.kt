@@ -380,6 +380,7 @@ const val BACKFILL_MAX_DAYS=731L
                 if(t.kind==Trash.LAB)relinkLabPanel(dao,payload)
                 Trash.reinsert(sql(),payload)
                 MonaReceiptStore.restore(sql(),payload)
+                FeatherlineReceiptStore.restore(sql(),payload)
             }
             Trash.RECORD->{val r=requireNotNull(dao.recordById(t.ref.toLong()));require(r.deleted_at_utc!=null)
                 val back=r.copy(deleted_at_utc=null,revision=r.revision+1);dao.updateRecord(back)
@@ -442,6 +443,7 @@ const val BACKFILL_MAX_DAYS=731L
     suspend fun purgeTrash(id:Long,systemUnderneath:Boolean=true):Boolean=transaction { dao ->
         val t=trashItem(dao,id);require(t.state==Trash.TRASHED)
         MonaReceiptStore.purge(sql(),t)
+        FeatherlineReceiptStore.purge(sql(),t)
         val removed=when(t.kind) {
             in Trash.SNAPSHOT_KINDS->true
             Trash.RECORD->{val rid=t.ref.toLong()
@@ -906,6 +908,24 @@ const val BACKFILL_MAX_DAYS=731L
             }
         }
     }
+    suspend fun previewFeatherline(export:net.plainnotes.app.importer.Featherline.Export):FeatherlineImportPreview {
+        val target=space;if(target!=Space.PRIMARY)throw LibraryScopeMismatch()
+        return boundTransaction(target){db->FeatherlineImportWriter.preview(db.openHelper.writableDatabase,export)}
+    }
+    suspend fun importFeatherline(export:net.plainnotes.app.importer.Featherline.Export,receipt:FeatherlineCommitReceipt=FeatherlineCommitReceipt(),now:Instant=Instant.now()):FeatherlineImportSummary {
+        receipt.claim();val target=space;if(target!=Space.PRIMARY)throw LibraryScopeMismatch()
+        val parent=kotlinx.coroutines.currentCoroutineContext()[kotlinx.coroutines.Job]
+        return measuredSaveGate.mutation(target) {
+            withContext(Dispatchers.IO+kotlinx.coroutines.NonCancellable+transactionSpace.asContextElement(target)) {
+                fun active(){parent?.ensureActive();requestPermission()}
+                active();var selected:NotesDatabase?=null
+                val result=access.withGenerationTransaction(target,{writeBinding(target,it);selected=it},{active();writeBinding(target,requireNotNull(selected))}) {db->
+                    active();FeatherlineImportWriter.write(db.dao(),db.openHelper.writableDatabase,export,now,::active)
+                }
+                receipt.acknowledge(result);result
+            }
+        }
+    }
     suspend fun importTransMemo(plan:net.plainnotes.app.importer.TransMemo.Plan,overwrite:Boolean,zone:ZoneId=ZoneId.systemDefault()):ImportSummary {
         val target=space
         return measuredSaveGate.mutation(target){withContext(Dispatchers.IO) {
@@ -938,7 +958,7 @@ const val BACKFILL_MAX_DAYS=731L
             val json=boundTransaction(target) {db->
                 val raw=db.openHelper.writableDatabase
                 RegimenHistory.seed(raw)
-                InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw);ExternalImportSchema.validate(raw)
+                InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw);ExternalImportSchema.validate(raw);FeatherlineImportSchema.validate(raw)
                 JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.exportSchema(raw))
                     .put("created",Instant.now().toString()).put("tables",RawData.dump(raw))
             }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.FeatherlineHistoryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-25T21:33:47.782Z" hostname="68e3ecace23d" time="2.074">
+  <properties/>
+  <testcase name="knownSourceEsterIsHistoricalIdentityWithoutCreatingAPkProfile" classname="net.plainnotes.app.FeatherlineHistoryTest" time="1.785"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

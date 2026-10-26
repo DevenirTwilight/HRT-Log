@@ -62,6 +62,8 @@ class LibraryCollectionAndroidTest {
                 repo.saveLab(LabValueEntity(analyte_code="E2",value=123.0,unit="pg/mL",sampled_utc=1000,sampled_zone="UTC"))
                 val lab=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.LAB,repo.labs().single().id)
                 ops.import(cap,MedicalAttachmentOperations.Import(UUID.randomUUID(),UUID.randomUUID(),lab,"SYNTHETIC lab"),uri("pdfclaim"))
+                val migrated=repo.importFeatherline(FeatherlineSynthetic.export())
+                assertEquals(1,migrated.doses);assertEquals(2,migrated.labs)
                 ops.writeCollection(cap,password(),first.outputStream())
                 val original=f.facts()
                 MedicalCollectionReader.read(cap,password(),FileInputStream(first).channel).use {archive->
@@ -89,6 +91,10 @@ class LibraryCollectionAndroidTest {
                     reject {runBlocking {newOps.import(newCap,request.copy(title="changed"),uri("failure"))}}
                     newOps.open(newCap,appointment,request.document).use {read->val bytes=ByteArray(8192);assertEquals(bytes.size,read.readAt(0,bytes,0,bytes.size));assertEquals(17,bytes[0].toInt())}
                     f.raw.query("SELECT state FROM library_write_reservation").use {assertTrue(it.moveToFirst());assertEquals("COMMITTED",it.getString(0));assertFalse(it.moveToNext())}
+                    val source=org.json.JSONObject(FeatherlineSynthetic.JSON)
+                    source.getJSONArray("medicationLogs").getJSONObject(0).put("uuid","00000000-0000-4000-8000-000000000012")
+                    val added=current.forGeneration(newScope).pinnedTo(Space.PRIMARY).importFeatherline(net.plainnotes.app.importer.Featherline.read(source.toString()))
+                    assertEquals(1,added.doses);assertEquals(0,added.labs)
                     f.access.close(Space.PRIMARY) // Actual persisted key/DB handles, not an in-memory candidate.
                     newOps.writeCollection(newCap,password(),second.outputStream())
                     assertArrayEquals(original,f.facts())

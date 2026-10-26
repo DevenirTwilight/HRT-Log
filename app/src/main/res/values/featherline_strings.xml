@@ -1,0 +1,19 @@
+<resources>
+    <string name="featherline_password_title">Featherline backup password</string>
+    <string name="featherline_password_note">Decrypt locally. The password is not saved. Only envelope3 / snapshot7 is supported.</string>
+    <string name="featherline_password">Backup password</string>
+    <string name="featherline_unlock">Decrypt and preview</string>
+    <string name="featherline_auth_failed">Cannot authenticate this backup. Check the password; the file may also be damaged. No data was changed.</string>
+    <string name="featherline_preview">Featherline import preview</string>
+    <string name="featherline_result">Featherline committed result</string>
+    <string name="featherline_version">Featherline · envelope3 · snapshot7</string>
+    <string name="featherline_counts">New intakes: %1$d · Lab results: %2$d\nAlready present/deleted: %3$d · Conflicts: %4$d\nUnconverted clinical items: %5$d</string>
+    <string name="featherline_safety">Only supported actual mass doses and original E2/T results are imported. New medicines stay inactive for review. No reminders, stock or PK profiles are created. Changes and deletions are preserved.</string>
+    <string name="featherline_ignored">Not migrated: %1$d schedule groups, %2$d stock items, %3$d notes, %4$d settings/profile fields.</string>
+    <string name="featherline_item">%1$s · %2$s\n%3$s</string>
+    <string name="featherline_confirm">Import supported records</string>
+    <string name="featherline_other">Not migrated: %1$d tracked dates and %2$d custom analyte definitions. %3$d medicine definitions are used only to interpret actual records.</string>
+    <string name="featherline_delta">Dose corrections are not supported; no dose was assumed.</string>
+    <string name="featherline_group">Ambiguous result grouping; manual review required.</string>
+    <string name="featherline_limit">Source evidence exceeds the supported record or batch limit.</string>
+</resources>
