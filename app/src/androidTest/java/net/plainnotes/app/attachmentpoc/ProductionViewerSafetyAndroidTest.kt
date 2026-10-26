@@ -43,6 +43,8 @@ class ProductionViewerSafetyAndroidTest {
         } finally {doc.close()}
     }
     private fun refused(block:()->Unit) {try {block();fail("Unsafe synthetic input accepted")}catch(e:Exception) {/* fail() throws AssertionError, not swallowed */}}
+    private val pdfPreview get()=Build.VERSION.SDK_INT>=Build.VERSION_CODES.P
+    private fun unsupported(block:()->Unit) {assertThrows(AttachmentViewer.PdfPreviewUnsupported::class.java) {block()}}
     private fun measured(name:String,block:()->Unit) {
         SyntheticEmulatorGuard.requireEmulator()
         val expected=InstrumentationRegistry.getArguments().getString("viewerExpectedHeapMb")
@@ -66,8 +68,25 @@ class ProductionViewerSafetyAndroidTest {
         }
         val source=Source(pdf())
         AttachmentViewer(context,source).use {viewer->
+            if(!pdfPreview) {unsupported{viewer.pdfPage(0)};return@use}
             repeat(3){val page=viewer.pdfPage(0);assertEquals(512,page.width);viewer.release(page)}
             val held=viewer.pdfPage(0);source.session.revoke();assertTrue(held.isRecycled);refused{viewer.pdfPage(0)}
+        }
+    }
+    /** Android 8.x PdfRenderer finalizes a failed open with nativeClose(0), unbalancing pdfium for the
+     * whole process. Unopenable documents must not disable later valid previews (P+), and on 8.x the
+     * viewer must refuse before PdfRenderer can see untrusted bytes at all. */
+    @Test fun validPdfStillRendersAfterUnopenablePdf()=measured("after-unopenable") {
+        for(bytes in listOf("%PDF-1.7\ninvalid".toByteArray(),pdf().copyOf(8))) {
+            AttachmentViewer(context,Source(bytes)).use{viewer->if(pdfPreview)refused{viewer.pdfPage(0)} else unsupported{viewer.pdfPage(0)}}
+        }
+        // Give the failed renderers' finalizers the chance to run before the valid document opens.
+        repeat(3){Runtime.getRuntime().gc();System.runFinalization()}
+        for(size in listOf(100,240)) {
+            AttachmentViewer(context,Source(pdf(size,size))).use {viewer->
+                if(!pdfPreview) {unsupported{viewer.pdfPage(0)};return@use}
+                val page=viewer.pdfPage(0);assertEquals(512,page.width);viewer.release(page);assertTrue(page.isRecycled)
+            }
         }
     }
     @Test fun malformedTruncatedAndOversizeRasterRefused()=measured("malformed") {

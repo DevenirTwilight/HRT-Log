@@ -1486,3 +1486,5 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 ### 147.K Preview safety and review package refresh（2026-10-26）
 
 负责人要求先保护收尾#127再基于最新主线补齐MED-02预览输入/native解码/生命周期及低内存验收，复用生产viewer/session/provider防护与既有证据，只测试缺口、不重跑ABC。合成PDF/JPEG/PNG/WebP和有界畸形输入，记录实际采样而非峰值；同一已有external-review包绑定源码/未验证风险及UI合同。无漏洞证据不重构密码学或存储；不扩备份协议/配额，真实入口/原件/永久删除OFF，外审状态NOT_REVIEWED_EXTERNALLY。独立审核及负责人另行启用批准仍是开放门槛。
+
+**147.K 补记（2026-10-26，AI 处置，待负责人确认）**：#128 在 API26 上发现 Android 8.0/8.1 `PdfRenderer` 框架缺陷（打开失败的对象在回收时多减一次 pdfium 进程级初始化计数，之后同一进程内所有 PDF 都无法打开；Android 9 已修复，AOSP 源码已核对）。按“失败即关闭”的最小修复：API < 28 上 `AttachmentViewer` 不做 PDF 页面预览，在创建任何代理或渲染器之前拒绝；PDF 仍加密保存、可列出、可备份、可经认证读取，图片预览不受影响，API ≥ 28 行为不变。若以后要在 8.x 上提供 PDF 预览，只能另行评审隔离进程方案。

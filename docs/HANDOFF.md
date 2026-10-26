@@ -1,3 +1,10 @@
+## MED-02 #128 API26 失败定位与修复 — 2026-10-26
+
+- #128（`security/med02-preview-20261026`）在 e9220e6c 上两次必需运行的 `attachment-poc-compatibility (26)` 都失败，同样 5 项：`TinkPdfGate2AndroidTest` 正常 PDF 报 "file not in PDF format or corrupted"。基线 ccd51332 和同一 SHA 的 API29/35 都通过。
+- 根因：Android 8.0/8.1 `PdfRenderer` 框架缺陷（AOSP 8.0/8.1/9.0 源码已核对，见外审 README 末节）。#128 新增的畸形 PDF 测试第一次让渲染器构造失败，之后同一进程的 PDF 全部失效。生产中任何打不开的 PDF 附件在 API26/27 上都会这样。
+- 修复：API < 28 时 `AttachmentViewer.pdfPage` 抛 `PdfPreviewUnsupported`，在创建代理/渲染器之前拒绝；debug 合成宿主在 8.x 上退回经认证的前缀读取；新增 `validPdfStillRendersAfterUnopenablePdf`；低内存工作流改为 4 项；外审清单哈希已更新。REQUIREMENTS 147.K 补记（待负责人确认）。
+- 下一步：推送后只看新 SHA 的必需 CI 和低内存工作流，通过后按 §106 收尾 #128；然后开始阶段 B（隔离的医疗附件交互界面），从合并后的默认分支建新分支。
+
 ## PR125 second bounded constrained verification candidate — 2026-10-26
 
 75f188a7 lowmem40276838121 still FAIL: Featherline NOT_RUN because DocumentsUI duplicate directory push crashed while reopening picker after Tracker commit; library native12+4+2 and generation4/operation4/collectionPREPARED1 fresh-PID verification PASS, then collection OBJECTS_COMMITTED startup timed out60s while process still working. Original job/kernel/logcat/native/partial receipts and artifact hashes retained featherline/evidence/failures/75f-*. Do not call whole acceptance PASS; freshC NOT_RUN. Actual startup excess cause ROOT_CAUSE_NOT_PROVEN, no unsupported LMK/OOM/deadlock claim.

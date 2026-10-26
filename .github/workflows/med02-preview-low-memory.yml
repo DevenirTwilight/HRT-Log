@@ -44,7 +44,7 @@ jobs:
             adb logcat -d > app/build/reports/viewer-safety/logcat.txt
             adb shell dmesg > app/build/reports/viewer-safety/kernel.txt 2>&1 || true
             adb exec-out run-as net.plainnotes.app cat files/synthetic-viewer-memory.txt > app/build/reports/viewer-safety/memory.txt
-            python3 -c 'from pathlib import Path; s=Path("app/build/reports/viewer-safety/native.txt").read_text(); assert "OK (3 tests)" in s and not any(x in s for x in ("FAILURES!!!","INSTRUMENTATION_FAILED","Process crashed")); m=Path("app/build/reports/viewer-safety/memory.txt").read_text(); assert m.count("sampled_not_peak=true")==3'
+            python3 -c 'from pathlib import Path; s=Path("app/build/reports/viewer-safety/native.txt").read_text(); assert "OK (4 tests)" in s and not any(x in s for x in ("FAILURES!!!","INSTRUMENTATION_FAILED","Process crashed")); m=Path("app/build/reports/viewer-safety/memory.txt").read_text(); assert m.count("sampled_not_peak=true")==4'
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
