@@ -36,7 +36,7 @@
     "app/src/main/java/net/plainnotes/app/attachments/AttachmentViewer.kt": "966958cb6be1e0725630205c9424c1d7739976063223cdd4c6c0c884364611ef",
     "app/src/main/java/net/plainnotes/app/attachments/ui/MedicalAttachmentGateway.kt": "a5d8113b568299f5cb09783810c201896c8400991344b8cba05d0b0a845e61fe",
     "app/src/main/java/net/plainnotes/app/attachments/ui/MedicalAttachmentIntegration.kt": "2ca65fca1183a918a92fd3bd7972334da1138e902f0005268e11be14915f9c9a",
-    "app/src/main/java/net/plainnotes/app/attachments/ui/MedicalAttachmentsController.kt": "f3813eec87e185b88795fb7065718adb038a8b1f80549b53cdb47098e054719a",
+    "app/src/main/java/net/plainnotes/app/attachments/ui/MedicalAttachmentsController.kt": "4e565ac6e61f111e2d5301c5a3b3451150fd6a92fb653a125c96e27f81617622",
     "app/src/main/java/net/plainnotes/app/attachments/ui/MedicalAttachmentsUi.kt": "a83e367789749376aaacb06cdaab176c53ea72a463ed96ba373127c2777c8cb2",
     "app/src/main/java/net/plainnotes/app/runtime/RuntimeLibrarySession.kt": "3d2bdc9836cfa6d7d7de83cda6a1eb1f710d647240754f33b5cd48733dc17cf5",
     "app/src/test/java/net/plainnotes/app/attachments/ui/MedicalAttachmentsControllerTest.kt": "552e590fe0aaf17cb0150cc25d02c08ab6a2275932aef8eca4de17627ab6ef85",
