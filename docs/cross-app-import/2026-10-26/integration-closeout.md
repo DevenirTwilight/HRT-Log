@@ -33,3 +33,7 @@ Existing scrollable dialogs and role-labelled explicit selection are reused. Phy
 3. **Dollfin**: `lillelilje/harbour-dollfin`, commit `4ace7cb9f29343f8d2e873444ce63ef2aa4f1a69`, README GPL-3.0-or-later (GitHub reports GPL-3.0), 0 stars, no GitHub releases observed, last push 2026-10-10. `src/core/backup.cpp` emits format=dollfin-backup, version1, schemaVersion, exportedAt and tables. Table schema/version, historical dose identity and unit semantics require audit; export function can omit a failed table query, so collection closure cannot be assumed. Independent parser possible but no demonstrated migration demand yet. Defer.
 
 Evidence URLs: each repository's default branch README; NoMTF `app/src/main/kotlin/com/nanxin/hrtrecorder/JsonCodec.kt`; Dollfin `src/core/backup.cpp`; Oyama `src/services/export.ts`; Featherline `data/importer/ExternalImportModels.kt`. No third-party implementation copied. No new adapter, Room migration, or additional domain introduced. Next deliverable is a bounded NoMTF format/semantics audit with synthetic vectors, only if demand warrants it; no claim of current support.
+
+## Protected merge result
+
+#126 merged normally as `6a197dfb9af26b09e8ef22bfaf143f128358e874` after cancelled push run40304779789 attempt2 passed all five jobs. No review or ruleset bypass was necessary. Follow-up #127 is now based on accepted default branch; final integration-source checks remain pending. Earlier OPEN/PENDING sections above describe the investigation checkpoint, not the current #126 status.
