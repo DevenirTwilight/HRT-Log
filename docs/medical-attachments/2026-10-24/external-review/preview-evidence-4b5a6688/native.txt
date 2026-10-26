@@ -1,0 +1,51 @@
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+net.plainnotes.app.attachmentpoc.ProductionViewerSafetyAndroidTest:
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=jpegPngWebpAndPdfPublishReleaseAndRevoke
+INSTRUMENTATION_STATUS: class=net.plainnotes.app.attachmentpoc.ProductionViewerSafetyAndroidTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=jpegPngWebpAndPdfPublishReleaseAndRevoke
+INSTRUMENTATION_STATUS: class=net.plainnotes.app.attachmentpoc.ProductionViewerSafetyAndroidTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=closedOrRevokedCapabilityCannotPublishBytesOrPixels
+INSTRUMENTATION_STATUS: class=net.plainnotes.app.attachmentpoc.ProductionViewerSafetyAndroidTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=closedOrRevokedCapabilityCannotPublishBytesOrPixels
+INSTRUMENTATION_STATUS: class=net.plainnotes.app.attachmentpoc.ProductionViewerSafetyAndroidTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=malformedTruncatedAndOversizeRasterRefused
+INSTRUMENTATION_STATUS: class=net.plainnotes.app.attachmentpoc.ProductionViewerSafetyAndroidTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=malformedTruncatedAndOversizeRasterRefused
+INSTRUMENTATION_STATUS: class=net.plainnotes.app.attachmentpoc.ProductionViewerSafetyAndroidTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 29.907
+
+OK (3 tests)
+
+
+INSTRUMENTATION_CODE: -1

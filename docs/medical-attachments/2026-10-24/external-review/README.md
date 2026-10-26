@@ -49,3 +49,15 @@ UI may depend on `RuntimeLibrarySession.attachments` / AttachmentFlowController 
 Reviewers must inspect latest multi-library/root authority, full archive membership, provider blocking/cleanup, ProxyFD threading/native teardown, decode allocation and raster publication/revocation races, app-lock/disguise wiring and memory remnants. Memory samples cannot prove complete erasure of native/graphics buffers. Broad malformed corpus, physical low-memory device, manual UI/TalkBack and physical power interruption remain NOT_RUN. Existing historical crashes/LMK and fixes remain in their source-specific evidence; no new test pass rewrites them.
 
 External findings/remediation acceptance and separate owner approval are both required before public import/view/restore or real-original use. `feature_enabled=0`, `PUBLIC_ENTRY_ENABLED=false`, permanent deletion OFF and `NOT_REVIEWED_EXTERNALLY` remain unchanged. Independent review must cover the actual proposed enablement SHA; this package is preparation, not external approval.
+
+### Original API26 viewer observations — source4b5a6688
+
+Run40322026302, job121569085644, artifact12649937943 (`viewer-api26-512m`), ZIP SHA256 `6f719b2576e83116d186cf6cb3d39f9e2c9cc770f2a235a785642c47430d872c` verified against GitHub metadata. Native output **OK (3 tests)** in29.907s; original native/memory files retained in `preview-evidence-4b5a6688/`. API26/x86512MiB guest, max ART heap201326592 bytes. No production viewer code changed from accepted baseline.
+
+| Phase | Sampled Java bytes | Sampled native bytes | Sampled PSS KiB | Samples |
+|---|---:|---:|---:|---:|
+| formats |2097704|5871736|111022|53|
+| closed |1716680|6624032|120834|3|
+| malformed |3224008|7433280|120408|31|
+
+These are independently sampled observations, not simultaneous sums, absolute peaks or proof of reclamation after every native allocation. The closed phase has only3 samples. Kernel/system/native memory outside this process and larger corpora are not bounded by this result. Native parser tests passed without a production-code vulnerability finding; do not infer absence of native vulnerabilities. API29/35 and final documentation HEAD CI are separate gates and not credited from this API26 run. Worker HTTP artifact download was denied by its storage-domain proxy; GitHub connector obtained the same original ZIP and its digest matched, without rerunning tests.
