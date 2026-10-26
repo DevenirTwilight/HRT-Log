@@ -133,7 +133,7 @@ abstract class ReferenceMigrationContract {
     }
 
     // Frozen independent DOM oracle from bba9562d DataTransfer.kt, before the shared row-reader refactor.
-    private fun frozenDumpBeforeStreaming(db: SupportSQLiteDatabase, tableNames: List<String> = DOMAIN_TABLES.filterNot{it in setOf("external_import_item","featherline_import_item")}): JSONObject {
+    private fun frozenDumpBeforeStreaming(db: SupportSQLiteDatabase, tableNames: List<String> = DOMAIN_TABLES.filterNot{it in setOf("external_import_item","featherline_import_item",ChrysalideImportSchema.TABLE)}): JSONObject {
         // Explicit trusted subset is used to construct old-version fixture archives; production exports always use all tables.
         require(tableNames.distinct().size == tableNames.size && tableNames.all { it in DOMAIN_TABLES })
         val tables = JSONObject()
@@ -531,7 +531,7 @@ abstract class ReferenceMigrationContract {
                 override fun migrate(db:SupportSQLiteDatabase) {migration18To19.migrate(db);reached=true;error("synthetic Featherline migration interrupted")}
             }
             Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(key.clone()))
-                .addMigrations(fault).build().useRoom {room->
+                .addMigrations(fault,migration19To20).build().useRoom {room->
                     try {room.openHelper.writableDatabase;fail("Interrupted upgrade accepted")}
                     catch(e:Exception){assertTrue(generateSequence<Throwable>(e){it.cause}.any{it.message.orEmpty().contains("synthetic Featherline migration interrupted")})}
                 }
