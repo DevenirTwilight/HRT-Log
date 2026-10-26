@@ -1,3 +1,13 @@
+## 就诊资料选择界面按样图 08 改版 — 2026-10-26
+
+- 负责人批准第八张样图，范围为只改选择界面，浓度曲线暂不做（REQUIREMENTS §150）。分支 `feature/visit-prep-08-20261026`，工作树 /home/user/wt-visitprep。
+- 新增 `visit/VisitPrepLayout.kt`（分组、来源、导出顺序）、`ui/VisitPrepDialog.kt`、四语言 `visit_prep.xml`。`VisitPackDialog` 签名不变，改为调用新对话框；`sectionLabel` 从 private 改为 internal。
+- 测试：
+  - `VisitPrepLayoutTest`：对照真实 PDF 渲染的章节顺序；
+  - `VisitPrepDialogTest`：4 种语言 × 320dp/2 倍、411dp/1 倍，覆盖默认值、标签、计数和目录；
+  - 原有 `VisitPackTest`、`PlainExportEntryTest`、`TranslationsTest` 保持通过。
+- 同时进行中：MED-02 阶段 B #129（附件界面，已开启自动合并）。两个 PR 都在 REQUIREMENTS 末尾追加内容，后合并的一方需要处理这处简单冲突。
+
 ## MED-02 #128 API26 失败定位与修复 — 2026-10-26
 
 - #128（`security/med02-preview-20261026`）在 e9220e6c 上两次必需运行的 `attachment-poc-compatibility (26)` 都失败，同样 5 项：`TinkPdfGate2AndroidTest` 正常 PDF 报 "file not in PDF format or corrupted"。基线 ccd51332 和同一 SHA 的 API29/35 都通过。

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Visit preparation selection after owner-approved sample 08 (REQUIREMENTS §150). -->
+<resources>
+    <string name="visit_prep_title">Prepare for the visit</string>
+    <string name="visit_prep_intro">Only what you tick is exported. By default, only what relates to this visit is ticked.</string>
+    <string name="visit_prep_range">Period</string>
+    <string name="visit_prep_group_visit">Visit and medication</string>
+    <string name="visit_prep_group_labs">Lab results</string>
+    <string name="visit_prep_group_other">Other records</string>
+    <string name="visit_prep_tag_entered">Entered by you</string>
+    <string name="visit_prep_tag_summarised">Summarised from records</string>
+    <string name="visit_prep_tag_default_off">Not ticked by default</string>
+    <string name="visit_prep_period">%1$s – %2$s</string>
+    <string name="visit_prep_toc">Contents of the PDF</string>
+    <string name="visit_prep_toc_note">In export order. Parts with nothing recorded in the period may be left out.</string>
+    <string name="visit_prep_external">Once exported, copies saved elsewhere can’t be taken back by this app.</string>
+    <plurals name="visit_prep_selected">
+        <item quantity="one">%d part selected</item>
+        <item quantity="other">%d parts selected</item>
+    </plurals>
+    <plurals name="visit_prep_meds">
+        <item quantity="one">%d medication</item>
+        <item quantity="other">%d medications</item>
+    </plurals>
+    <plurals name="visit_prep_labs">
+        <item quantity="one">%d result</item>
+        <item quantity="other">%d results</item>
+    </plurals>
+    <plurals name="visit_prep_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="visit_prep_symptom_days">
+        <item quantity="one">%d day with symptom notes</item>
+        <item quantity="other">%d days with symptom notes</item>
+    </plurals>
+    <plurals name="visit_prep_reviews">
+        <item quantity="one">%d review</item>
+        <item quantity="other">%d reviews</item>
+    </plurals>
+    <plurals name="visit_prep_daily_days">
+        <item quantity="one">%d day with check-in</item>
+        <item quantity="other">%d days with check-in</item>
+    </plurals>
+    <plurals name="visit_prep_questions">
+        <item quantity="one">%d question</item>
+        <item quantity="other">%d questions</item>
+    </plurals>
+    <plurals name="visit_prep_milestones">
+        <item quantity="one">%d milestone</item>
+        <item quantity="other">%d milestones</item>
+    </plurals>
+    <plurals name="visit_prep_packages">
+        <item quantity="one">%d package with details</item>
+        <item quantity="other">%d packages with details</item>
+    </plurals>
+</resources>

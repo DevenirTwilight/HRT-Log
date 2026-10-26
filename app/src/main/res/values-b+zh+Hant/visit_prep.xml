@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Visit preparation selection after owner-approved sample 08 (REQUIREMENTS §150). -->
+<resources>
+    <string name="visit_prep_title">為就診準備資料</string>
+    <string name="visit_prep_intro">只有勾選的內容會被匯出。預設只選和這次就診有關的資料。</string>
+    <string name="visit_prep_range">時間範圍</string>
+    <string name="visit_prep_group_visit">就診與用藥</string>
+    <string name="visit_prep_group_labs">檢驗</string>
+    <string name="visit_prep_group_other">其他資料</string>
+    <string name="visit_prep_tag_entered">你填寫的內容</string>
+    <string name="visit_prep_tag_summarised">由紀錄彙整</string>
+    <string name="visit_prep_tag_default_off">預設不選</string>
+    <string name="visit_prep_period">%1$s 至 %2$s</string>
+    <string name="visit_prep_toc">PDF 目錄預覽</string>
+    <string name="visit_prep_toc_note">按匯出順序列出。這段時間內沒有紀錄的部分可能不會出現。</string>
+    <string name="visit_prep_external">匯出後，儲存在其他地方的副本無法由本應用程式收回。</string>
+    <plurals name="visit_prep_selected">
+        <item quantity="other">已選 %d 項</item>
+    </plurals>
+    <plurals name="visit_prep_meds">
+        <item quantity="other">%d 種藥物</item>
+    </plurals>
+    <plurals name="visit_prep_labs">
+        <item quantity="other">%d 項結果</item>
+    </plurals>
+    <plurals name="visit_prep_days">
+        <item quantity="other">%d 天</item>
+    </plurals>
+    <plurals name="visit_prep_symptom_days">
+        <item quantity="other">%d 天有症狀紀錄</item>
+    </plurals>
+    <plurals name="visit_prep_reviews">
+        <item quantity="other">%d 次階段回顧</item>
+    </plurals>
+    <plurals name="visit_prep_daily_days">
+        <item quantity="other">%d 天有每日紀錄</item>
+    </plurals>
+    <plurals name="visit_prep_questions">
+        <item quantity="other">%d 個問題</item>
+    </plurals>
+    <plurals name="visit_prep_milestones">
+        <item quantity="other">%d 個里程碑</item>
+    </plurals>
+    <plurals name="visit_prep_packages">
+        <item quantity="other">%d 個包裝有來源或批號</item>
+    </plurals>
+</resources>
