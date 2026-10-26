@@ -216,50 +216,5 @@ class LibraryRestoreAndroidTest {
         }}
     }
     private fun reject(action:()->Unit) {try {action();fail("Unsafe action accepted")}catch(_:Exception) {}}
-    @Test fun applicationTransferFacadeAuthenticatesBeforeCommitAndKeepsOldScopeInvalid()=runBlocking {
-        val app=InstrumentationRegistry.getInstrumentation().targetContext
-        for(format in listOf(1,2)) {
-            val file=File.createTempFile("synthetic-public-transfer-",".cipher",app.cacheDir)
-            val document=UUID.randomUUID()
-            fun transferPassword()=if(format==1)charArrayOf('p')else "SYNTHETIC transfer password".toCharArray()
-            try {
-                RootFixture(app).use {source->
-                    val repo=NotesRepository(source.access).forGeneration(LibraryRequestScope("LEGACY",source.scope.dataset,source.scope.epoch)).pinnedTo(Space.PRIMARY)
-                    repo.saveLab(LabValueEntity(analyte_code="E2",value=123.0,unit="pg/mL",sampled_utc=1000,sampled_zone="UTC"))
-                    val cap=source.session.issue();val ops=repo.medicalAttachments()
-                    ops.import(cap,MedicalAttachmentOperations.Import(UUID.randomUUID(),document,MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,2),"SYNTHETIC facade"),MedicalAttachmentOperationAndroidTest().uri("unknown"))
-                    file.outputStream().use {out->if(format==1)ops.writeArchive(cap,transferPassword(),out)else repo.medicalLibraryTransfer().export(cap,transferPassword(),out)}
-                }
-                RootFixture(app).use {target->
-                    val old=LibraryRequestScope("LEGACY",target.scope.dataset,target.scope.epoch)
-                    val repo=NotesRepository(target.access).forGeneration(old).pinnedTo(Space.PRIMARY)
-                    val facade=repo.medicalLibraryTransfer();val cap=target.session.issue();val before=target.facts()
-                    val password=transferPassword()
-                    facade.prepare(cap,password,FileInputStream(file).channel).use {prepared->
-                        assertTrue(password.all{it=='\u0000'});assertEquals(format,prepared.summary.format);assertEquals(1,prepared.summary.versions)
-                        assertArrayEquals(before,target.facts())
-                        val receipt=prepared.restore();assertEquals(prepared.operation,receipt.operation)
-                        try {prepared.restore();fail("Restore write replayed")}catch(_:IllegalStateException){}
-                        val current=NotesRepository(target.access);val scope=current.currentGenerationScope()
-                        assertNotEquals(old,scope)
-                        val fresh=current.forGeneration(scope).pinnedTo(Space.PRIMARY)
-                        val session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
-                        try {
-                            assertEquals(123.0,fresh.labs().single().value,0.0)
-                            val state=requireNotNull(fresh.medicalLibraryTransfer().status(session.issue(),receipt.operation))
-                            assertTrue(state.committed);assertTrue(state.currentlyActive)
-                            val restoredTarget=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,fresh.appointments().single().id)
-                            val docs=fresh.medicalAttachments().documents(session.issue(),restoredTarget)
-                            assertEquals(document,docs.single().document)
-                            fresh.medicalAttachments().open(session.issue(),restoredTarget,document).use {read->
-                                val bytes=ByteArray(1);assertEquals(1,read.readAt(0,bytes,0,1));bytes.fill(0)
-                            }
-                            try {facade.status(cap,receipt.operation);fail("Old scope rebound")}catch(_:Exception){}
-                        }finally {session.revoke()}
-                    }
-                }
-            }finally {file.delete()}
-        }
-    }
 
 }

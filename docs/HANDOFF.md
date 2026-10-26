@@ -1,3 +1,11 @@
+## #131 final acceptance takeover — 2026-10-26
+
+Remote exact4e73d700/default9192b91a; continuing existing feature/med02-stage-c-lifecycle-20261026 in /workspace/HRT-Log-med02-final-131, clean remote baseline, no new PR/stage. Original five failed native/lowmem jobs and artifacts preserved external-review/final-acceptance-evidence/4e73-original (CRC/hash checked). Host/JVM/Science and preview low-memory PASS; threeAPI facade export failed, library failed SWITCHED60s seam after13+4+2/first3seams PASS, Featherline real foregroundLMK afterCOMMIT confirmed, not logcat-clear cause.
+
+Corrective checkpoint: unchanged facade test moved into EXISTING isolated whole-UID MedicalAttachmentOperationAndroidTest cohort with explicit empty-alias precondition; broad tests intentionally retain unrelated keys. No production inventory weakening, new fake ledger, deletion or quota changes. Existing UNKNOWN negatives retained. Restart fixture source export now separate bounded process, source keys destroyed before live restore; original60s restore seam/90s verify/four seams unchanged, total source+restore time not disguised as original60s. Native compile PASS; actual final native PENDING.
+
+Featherline LMK NOT_FIXED, allocator cause NOT_PROVEN. Do not claim engineering closed or merge merely because another run happens to pass. No native crypto dependency has been introduced; one candidate library was only inspected outside repo and not adopted due native-output ownership concerns. Final report remains BLOCKED_ENGINEERING/NOT_REVIEWED_EXTERNALLY/RELEASE_NOT_AUTHORIZED, no public enable/APK/stageD/E/F. Next inspect changed-source native and resolve actual remaining memory block safely, not rerun unchanged source for green.
+
 ## 就诊资料选择界面按样图 08 改版 — 2026-10-26
 
 - 负责人批准第八张样图，范围为只改选择界面，浓度曲线暂不做（REQUIREMENTS §150）。分支 `feature/visit-prep-08-20261026`，工作树 /home/user/wt-visitprep。

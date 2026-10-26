@@ -1,10 +1,23 @@
-# MED-02 FINAL ENGINEERING CLOSEOUT
+# MED-02 V1 FINAL ACCEPTANCE & HANDOFF
 
 2026-10-26. **NOT_REVIEWED_EXTERNALLY / RELEASE_NOT_AUTHORIZED**.
 
+
+## Final acceptance correction checkpoint — 2026-10-26
+
+**BLOCKED_ENGINEERING.** No merge, engineering closure or release qualification yet. Original evidence: [receipt](final-acceptance-evidence/4e73-original/receipt.json) and compressed original job/kernel/logcat/memory reports in the same directory. Both original host Android jobs, JVM and Science passed; threeAPI native and two low-memory gates failed. Preview low-memory succeeded. None of the old failures is relabelled PASS.
+
+| Failure | Evidence and minimum action |
+|---|---|
+| All threeAPI facade export OWNER_OR_SET_NOT_PROVEN | New facade test was in the broad restore cohort while production export inventories all UID Keystore aliases. Unrelated roots intentionally retain aliases (documented in existing run_library_lifecycle_native.py). The same original test passed within low-memory13's isolated cohort. Move it, unchanged, into existing isolated MedicalAttachmentOperationAndroidTest; add a clean-UID precondition, never delete/adopt unknown aliases or alter COMPLETE logic. Existing unknown-file/unknown-alias negative tests stay in that same cohort. Actual new-source native result PENDING. |
+| Library low-memory SWITCHED seam timeout | Original13+4+2 passed; PREPARED/OBJECTS_COMMITTED/IN_SWITCH fresh-PID verification passed. SWITCHED had active source export/SQLCipher work but no seam within60s; no proven LMK. Prepare the identical complete encrypted source archive in a separate60s-bounded process first, then retain the original60s live restore seam deadline and90s independent verify. Source and restore durations are separate; do NOT claim the old combined source+restore60s gate passed. No size/heap/fixture or restore assertion reduction. New native result PENDING. |
+| Featherline low-memory | Kernel explicitly killed foregroundPID3830 after realCOMMIT, during activity reopen. Last phase committed; sampled Java~76.8MiB/native~19.2MiB/PSS227433KiB, sampled observations not peaks; anon196996KiB at kill. Logcat clear refusal was nonfatal. **NOT_FIXED**: exact allocator/lifetime cause is not proven. No KDF/format/heap/quota change, System.gc or weakened test. A later green alone cannot establish this failure fixed. |
+
+Local changed native Kotlin compilation PASS; restart helper syntax PASS. Production attachment/import/crypto code is unchanged in this corrective checkpoint. New exact-source final CI and native acceptance are required; keep #131 Draft. All three-api closure, memory and external-review readiness claims remain evidence-dependent. No StageD/E/F or new functionality.
+
 ## Immutable candidate and acceptance rule
 
-Accepted default baseline: `9192b91a99107d41fad402a3d16622f63e1ce1ef` (#130). Existing #131 is the only closeout PR; no successor stage is planned. Executable/test freeze: `a61f10638446a72602e514c357c7615635146cb9`. [Source inventory](source-inventory.json) binds the actual reviewed bytes. Documentation commits do not certify themselves; resolve the final PR HEAD and merge SHA using:
+Accepted default baseline: `9192b91a99107d41fad402a3d16622f63e1ce1ef` (#130). Existing #131 is the only closeout PR; no successor stage is planned. Production implementation freeze: `a61f10638446a72602e514c357c7615635146cb9`; test fixture corrections follow4e73d700. Exact final HEAD is still pending acceptance. [Source inventory](source-inventory.json) binds the actual reviewed bytes. Documentation commits do not certify themselves; resolve the final PR HEAD and merge SHA using:
 
 ```sh
 gh pr view 131 --repo DevenirTwilight/HRT-Log --json headRefOid,mergeCommit,state,statusCheckRollup
@@ -49,7 +62,7 @@ No Room/business version, key protocol, archive format, KDF, quota, importer, PK
 - Local targeted suite before last safety-copy addition: 80 cases, zero failures, four existing skipped dialog cases (Robolectric 411dp limitations). Last targeted controller rerun: 6 cases, zero failures/errors/skips, including safety-copy source protection. Kotlin app/core AndroidTest sources compile. These are JVM/compile results, not native execution.
 - UI matrix: EN/zh-CN/zh-TW/FR, 320dp/2x and 411dp/1x; new transfer review/receipt cases also night mode. Automated semantics are not manual TalkBack.
 - Existing Python release isolation 5 and design validation 61 passed locally; final CI must independently certify final bytes.
-- New core native `LibraryRestoreAndroidTest.applicationTransferFacadeAuthenticatesBeforeCommitAndKeepsOldScopeInvalid`: real old-format PNMEDBK1 and PNMEDBK2 auth, unchanged target before confirmation, fresh-device keys/SQLCipher/root COMMIT, original read/typed relation and old-scope refusal. No alternate TEST_ONLY archive.
+- New core native `MedicalAttachmentOperationAndroidTest.applicationTransferFacadeAuthenticatesBeforeCommitAndKeepsOldScopeInvalid`: real old-format PNMEDBK1 and PNMEDBK2 auth, unchanged target before confirmation, fresh-device keys/SQLCipher/root COMMIT, original read/typed relation and old-scope refusal. No alternate TEST_ONLY archive.
 - New app native `MedicalAttachmentUiAndroidTest.actualRuntimeTransferAdapterWritesAndAuthenticatesOneHeldChannelAndRevokesIt`: real runtime adapter export/authenticate/owned channel/revoke/refused restore. Controlled synthetic provider only. Core native test above separately proves activation; fake UI tests prove review/receipt semantics.
 - Existing #129 real DocumentsUI synthetic import → explicit target → COMMIT → authenticated preview remains in API26/29/35 cohort. New code reuses its composition. Actual MainActivity lock/background/recreate and actual Disguise.exit witnesses are retained; these event tests are not a native pixel-forensics claim.
 - Library low-memory exact cohort is original 12 plus one new facade method =13; original restart/fresh-C contracts and sample sizes unchanged. Workflow may run this mandatory cohort because scoped Repository is affected. No extra discretionary A→B→C benchmark requested.

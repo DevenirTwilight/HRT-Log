@@ -1,6 +1,6 @@
 {
   "status": "NOT_REVIEWED_EXTERNALLY",
-  "note": "Final executable freeze; final PR HEAD/merge CI is separate evidence. No external expert assessment has occurred.",
+  "note": "Corrective candidate bytes; exact PR HEAD/native and merge acceptance remain separate and pending; no external expert assessment.",
   "files_sha256": {
     "app/src/androidTest/AndroidManifest.xml": "5161d86ad0a8e3be77e4eb98389d8b0e1398951c4202b05795fc0c2bb37dacef",
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/AttachmentCapabilityAndroidTest.kt": "5e43f4bf6b298b956e7b18912983ab100c9faebee7380b475a473e5045ae4f2a",
@@ -70,10 +70,10 @@
     "core/data/src/androidTest/java/net/plainnotes/app/data/AttachmentRestoreStagingAndroidTest.kt": "ba91eed7376b3ea707dc62be38aeb7021b0565c90577576a3c53835d45fb6d34",
     "core/data/src/androidTest/java/net/plainnotes/app/data/AttachmentSqlCipherMigrationTest.kt": "7fd539c3d5842a3a4abcd676bf07b0e6b475248d7b3e8c8f841cff897bd181f5",
     "core/data/src/androidTest/java/net/plainnotes/app/data/LibraryLifecycleAndroidTest.kt": "48c158a2f602a40fe2a38e724631b1d4a4827f8f3f260af1523ea8ac32572265",
-    "core/data/src/androidTest/java/net/plainnotes/app/data/LibraryRestoreAndroidTest.kt": "f9fdce742b86829078e3a9cf86bfcc788d36f40d5133ca8d585552d01f050720",
-    "core/data/src/androidTest/java/net/plainnotes/app/data/LibraryRestoreRestartAndroidTest.kt": "936ced076d1d053329b747a684912ce04260cd941b7aaa366ede4cfe9a1aa548",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/LibraryRestoreAndroidTest.kt": "191f89d4248c0fcaa4e33290fc93015d030b10fe45087253038ce1b2b0971888",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/LibraryRestoreRestartAndroidTest.kt": "c4b0f93df56d8628aaa768904cb7cee990610546df46e9004d1f1159be1ba351",
     "core/data/src/androidTest/java/net/plainnotes/app/data/MedicalArchiveAndroidTest.kt": "1e5b7f2c84ef2bbf1b266d47b50494c8f34606c9b8d9e35b59426833a49c5c19",
-    "core/data/src/androidTest/java/net/plainnotes/app/data/MedicalAttachmentOperationAndroidTest.kt": "49bab1a9023a66d39d8f1ce700704749ce334e6f9a792d9032cd7273867af89e",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/MedicalAttachmentOperationAndroidTest.kt": "cb87ccc0209132aa862487d91d567c75f0a799009e4f99bab0c49668802b021b",
     "core/data/src/androidTest/java/net/plainnotes/app/data/MedicalAttachmentOperationRestartAndroidTest.kt": "93b9032e70e82deb3a85c7368c971daac6418fdb2a0eb1cab6ef3776537308b8",
     "core/data/src/androidTest/java/net/plainnotes/app/data/RuntimeLibraryRequestAndroidTest.kt": "d4d2469b094feef369f3c90a4da057abd72ed316fca08eecb1669e7ebc694065",
     "core/data/src/debug/java/net/plainnotes/app/data/SyntheticAttachmentDatabase.kt": "5124a31f6b069c2c51f6ca192a684e4ebe3df165e1771e1e8c9ae85f88c3a654",
