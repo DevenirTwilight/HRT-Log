@@ -214,4 +214,12 @@ class MedicalAttachmentsControllerTest {
         }
     }
 
+    @Test fun pauseDiscardsUnconfirmedSelectionWithoutStartingAnImport()=runBlocking {
+        val fake=Fake(target);val c=controller(fake)
+        c.startImport();c.picked(picked,"t")
+        fake.hide?.invoke();c.confirmImport("t")
+        assertEquals(Import.Cancelled,c.state.value.import);assertTrue(fake.imports.isEmpty())
+        c.close()
+    }
+
 }

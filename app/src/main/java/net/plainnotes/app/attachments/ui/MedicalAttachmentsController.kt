@@ -64,7 +64,7 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
     private var preview:MedicalAttachmentGateway.Preview?=null
     private var job:Job?=null
     private var presentationEpoch=0L
-    private val hidden=gateway.onHidden {closeViewer()}
+    private val hidden=gateway.onHidden {hidePresentation()}
     private val revocation=try {gateway.onRevoked {if(!closed) {if(gateway.scopeEnded)libraryChanged()else revoke()}}}
         catch(t:Throwable) {hidden.close();throw t}
 
@@ -195,6 +195,9 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
             }
         }
     }
+    /** A real pause also discards an unconfirmed selection, never a committed receipt. */
+    @Synchronized private fun hidePresentation() {closeViewer();cancelImport()}
+
     /** Leaving the viewer: forget the page first, then release pixels and close the reader. */
     @Synchronized fun closeViewer() {
         presentationEpoch++
