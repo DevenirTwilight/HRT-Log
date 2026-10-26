@@ -1,0 +1,45 @@
+INSTRUMENTATION_STATUS: class=net.plainnotes.app.imports.AutomaticImportAndroidTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+net.plainnotes.app.imports.AutomaticImportAndroidTest:
+INSTRUMENTATION_STATUS: test=realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=net.plainnotes.app.imports.AutomaticImportAndroidTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:755)
+at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:362)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.exerciseImport(AutomaticImportAndroidTest.kt:266)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:191)
+
+INSTRUMENTATION_STATUS: stream=
+Error in realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(net.plainnotes.app.imports.AutomaticImportAndroidTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:755)
+at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:362)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.exerciseImport(AutomaticImportAndroidTest.kt:266)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:191)
+
+INSTRUMENTATION_STATUS: test=realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 52.077
+There was 1 failure:
+1) realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(net.plainnotes.app.imports.AutomaticImportAndroidTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:755)
+at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:362)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.exerciseImport(AutomaticImportAndroidTest.kt:266)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:191)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1
+

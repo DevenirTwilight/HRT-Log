@@ -261,7 +261,10 @@ class AutomaticImportAndroidTest {
         click(R.string.cancel,false)
         assertEquals(beforeChry,model.extra.value.records.count{it.origin=="IMPORT_CHRYSALIDE"})
         choose("chry")
-        ui.onNodeWithText(targetName).performClick()
+        val targetChoice=ui.onNode(hasText(targetName) and hasClickAction())
+        targetChoice.performClick()
+        targetChoice.assertIsSelected()
+        ui.onNodeWithText(text(R.string.chry_confirm)).assertIsEnabled()
         click(R.string.chry_confirm,false)
         try { ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.ChrysalideImported || model.dataJob.value is NotesViewModel.DataJob.Failed} }
         catch(failure:Throwable) {

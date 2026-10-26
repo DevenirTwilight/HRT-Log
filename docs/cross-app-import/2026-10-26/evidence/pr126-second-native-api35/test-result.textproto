@@ -1,0 +1,82 @@
+# proto-message: google.testing.platform.proto.api.core.TestSuiteResult
+# 2026-10-26T08:41:36.816295280Z:
+test_suite_meta_data {
+  scheduled_test_case_count: 1
+  device {
+    id: "emulator-5554"
+    friendly_name: "primary"
+  }
+}
+test_status: FAILED
+test_result {
+  test_case {
+    test_class: "AutomaticImportAndroidTest"
+    test_package: "net.plainnotes.app.imports"
+    test_method: "realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory"
+    start_time {
+      seconds: 1793004044
+      nanos: 269000000
+    }
+    end_time {
+      seconds: 1793004096
+      nanos: 329000000
+    }
+    device {
+      id: "emulator-5554"
+      friendly_name: "primary"
+    }
+  }
+  test_status: FAILED
+  error {
+    error_message: "androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms\nat androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:755)\nat androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:362)\nat net.plainnotes.app.imports.AutomaticImportAndroidTest.exerciseImport(AutomaticImportAndroidTest.kt:266)\nat net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:191)\n"
+    error_type: "androidx.compose.ui.test.ComposeTimeoutException"
+    stack_trace: "androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms\nat androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:755)\nat androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:362)\nat net.plainnotes.app.imports.AutomaticImportAndroidTest.exerciseImport(AutomaticImportAndroidTest.kt:266)\nat net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:191)\n"
+  }
+  output_artifact {
+    label {
+      label: "logcat"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/logcat-net.plainnotes.app.imports.AutomaticImportAndroidTest-realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory.txt"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/device-info.pb"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.meminfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/meminfo"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.cpuinfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/cpuinfo"
+    }
+  }
+}
+output_artifact {
+  label {
+    label: "test-results.log"
+    namespace: "com.google.testing.platform.runtime.android.driver.AndroidInstrumentationDriver"
+  }
+  source_path {
+    path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/testlog/test-results.log"
+  }
+  type: TEST_DATA
+  mime_type: "text/plain"
+}
