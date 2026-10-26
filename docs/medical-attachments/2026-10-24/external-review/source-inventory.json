@@ -39,7 +39,7 @@
     "app/src/main/java/net/plainnotes/app/attachments/ui/MedicalAttachmentsController.kt": "4e565ac6e61f111e2d5301c5a3b3451150fd6a92fb653a125c96e27f81617622",
     "app/src/main/java/net/plainnotes/app/attachments/ui/MedicalAttachmentsUi.kt": "a83e367789749376aaacb06cdaab176c53ea72a463ed96ba373127c2777c8cb2",
     "app/src/main/java/net/plainnotes/app/runtime/RuntimeLibrarySession.kt": "3d2bdc9836cfa6d7d7de83cda6a1eb1f710d647240754f33b5cd48733dc17cf5",
-    "app/src/test/java/net/plainnotes/app/attachments/ui/MedicalAttachmentsControllerTest.kt": "552e590fe0aaf17cb0150cc25d02c08ab6a2275932aef8eca4de17627ab6ef85",
+    "app/src/test/java/net/plainnotes/app/attachments/ui/MedicalAttachmentsControllerTest.kt": "5206a9f852750c9133a2278d3fc9f8844e7f091463c2563704b21b21a103ff5f",
     "core/data/src/androidTest/java/net/plainnotes/app/data/AttachmentBackupCandidateAndroidTest.kt": "bf57c4854d9b243db2c57973d3290b93ce04f676d3f52a6fcce99e4bbc217d92",
     "core/data/src/androidTest/java/net/plainnotes/app/data/AttachmentBackupPreparationAndroidTest.kt": "7c99b00f8d7501ce4ab785578e31663e2ac7763e201cb16d71ebb9ce39262828",
     "core/data/src/androidTest/java/net/plainnotes/app/data/AttachmentBusinessReconstructionAndroidTest.kt": "596d4532897fe6425bf259925d14ed34744b35a8191b042a83cb498b199c82f3",
@@ -111,7 +111,8 @@
     "core/data/src/main/java/net/plainnotes/app/data/NotesDatabase.kt": "0b4daa2d2b096b44a1b24951a970b286380e256977f90fdadc369a9388be9e0f",
     "core/data/src/main/java/net/plainnotes/app/data/NotesRepository.kt": "6d0af3cbdf19b41b54e6a82af06daee9ad6f3a4325047832f6f3d4037c0da634",
     "core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentInputStream.kt": "f997cead5d471bb886e8c0829610aea99286d243285f803f88054106f4a39266",
-    "core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentSession.kt": "6619382e91f4cde89dcc810019204bbbeda9365b9a52bcb19b3477b23d880331"
+    "core/domain/src/main/kotlin/net/plainnotes/app/domain/AttachmentSession.kt": "6619382e91f4cde89dcc810019204bbbeda9365b9a52bcb19b3477b23d880331",
+    "app/src/test/java/net/plainnotes/app/attachments/ui/MedicalAttachmentUiGuardTest.kt": "8b39ddc084f51a3ee2586f71e3d2453db947f50aed59a4fbc15c701901cc7ee8"
   },
   "production_base_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895",
   "acknowledgement_fix_base_sha": "70584c6f00ba167e77f2406e87d301b329db1acc",

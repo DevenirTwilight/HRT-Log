@@ -38,6 +38,7 @@ class MedicalAttachmentsControllerTest {
         val imports=mutableListOf<Imp>()
         val reconciles=mutableListOf<Pair<UUID,UUID>>()
         val previews=mutableListOf<Prev>()
+        override var scopeEnded=false
         var beforeImage:(()->Unit)?=null
         var hide:(()->Unit)?=null
         override fun onHidden(listener:()->Unit):AutoCloseable {hide=listener;return AutoCloseable{hide=null}}
@@ -195,7 +196,7 @@ class MedicalAttachmentsControllerTest {
 
     @Test fun dataSwitchEndsThePageForGood()=runBlocking {
         val fake=Fake(target).apply {docs+=doc("Photo","image/png")};val c=controller(fake);c.refresh()
-        c.libraryChanged()
+        fake.scopeEnded=true;fake.revoke()
         assertTrue(c.state.value.ended);assertTrue(c.state.value.revoked)
         c.resume();c.refresh()
         assertTrue(c.state.value.ended);assertEquals(Files.Loading,c.state.value.files)

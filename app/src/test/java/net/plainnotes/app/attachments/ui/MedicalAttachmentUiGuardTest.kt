@@ -12,7 +12,7 @@ class MedicalAttachmentUiGuardTest {
 
     @Test fun noReleaseSourceOutsideTheUiPackageReachesIt() {
         assertFalse(AttachmentFlowController.PUBLIC_ENTRY_ENABLED)
-        val names=listOf("MedicalAttachmentsSection","MedicalAttachmentViewer","MedicalAttachmentsController","RuntimeAttachmentGateway","MedicalAttachmentGateway")
+        val names=listOf("MedicalAttachmentsSection","MedicalAttachmentViewer","MedicalAttachmentsController","RuntimeAttachmentGateway","MedicalAttachmentGateway","medicalAttachmentsForRecord")
         val reaching=main.walkTopDown().filter {it.isFile && it.extension=="kt" && !it.path.startsWith(ui.path)}
             .filter {f->val text=f.readText();names.any {it in text}}.map {it.path}.toList()
         assertEquals("Only the debug synthetic host may open the attachment UI",emptyList<String>(),reaching)
