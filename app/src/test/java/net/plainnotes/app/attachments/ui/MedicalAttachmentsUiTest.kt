@@ -6,7 +6,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.*
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.runtime.*
 import androidx.test.core.app.ApplicationProvider
 import net.plainnotes.app.R
@@ -38,20 +39,22 @@ class MedicalAttachmentsUiTest(private val locale:String,private val width:Int,p
         @JvmStatic @ParameterizedRobolectricTestRunner.Parameters(name="{0}/{1}dp/{2}x")
         fun params()=listOf("en","zh-rCN","zh-rTW","fr").flatMap {l->listOf(arrayOf<Any>(l,320,2f),arrayOf<Any>(l,411,1f))}
     }
-    @get:Rule val ui=createComposeRule()
+    @get:Rule val ui=createAndroidComposeRule<ComponentActivity>()
     private val context get()=ApplicationProvider.getApplicationContext<android.content.Context>()
     private fun s(id:Int,vararg args:Any)=context.getString(id,*args)
     private val pdf=Item(UUID.randomUUID(),"Synthetic visit letter",FileKind.PDF,true)
     private val image=Item(UUID.randomUUID(),"Synthetic lab photo",FileKind.IMAGE,true)
     private val trashed=Item(UUID.randomUUID(),"Synthetic old scan",FileKind.OTHER,false)
     private fun setup() {RuntimeEnvironment.setQualifiers("$locale-w${width}dp-h${if(width==320)640 else 891}dp-xxhdpi");RuntimeEnvironment.setFontScale(font)}
+    /** Evidence PNGs (no pixel assertions); off unless MED02_UI_SHOTS is set. Dialog windows are not in the activity view. */
     private fun shot(name:String) {
         val dir=System.getenv("MED02_UI_SHOTS")?.takeIf {it.isNotBlank()} ?: return
+        ui.waitForIdle()
+        val view=ui.activity.window.decorView
+        val bitmap=Bitmap.createBitmap(view.width,view.height,Bitmap.Config.ARGB_8888);view.draw(android.graphics.Canvas(bitmap))
         val out=File("build/med02-ui-shots/$dir").apply {mkdirs()}
-        val bitmap=ui.onRoot().captureToImage().let {android.graphics.Bitmap.createBitmap(it.width,it.height,Bitmap.Config.ARGB_8888).also {b->it.readPixelsInto(b)}}
         File(out,"${name}_${locale}_${width}dp_${if(font==1f)"1x" else "2x"}.png").outputStream().use {bitmap.compress(Bitmap.CompressFormat.PNG,100,it)}
     }
-    private fun androidx.compose.ui.graphics.ImageBitmap.readPixelsInto(b:Bitmap) {val px=IntArray(width*height);readPixels(px);b.setPixels(px,0,width,0,0,width,height)}
 
     @Test fun listRowsAreLabelledButtonsAndUnavailableRowsAreNotClickable() {
         setup()
@@ -80,7 +83,6 @@ class MedicalAttachmentsUiTest(private val locale:String,private val width:Int,p
         ui.onNodeWithText(s(R.string.attach_empty)).assertExists()
         ui.onNodeWithText(s(R.string.attach_confirm_target,"Synthetic visit 12")).assertIsDisplayed()
         ui.onNodeWithTag("attachments-add").assertIsNotEnabled()
-        shot("2_confirm")
         ui.onNodeWithTag("attachments-name").performTextClearance()
         ui.onNodeWithTag("attachments-confirm-attach").assertIsNotEnabled()
         ui.onNodeWithTag("attachments-name").performTextInput("Synthetic letter")

@@ -33,7 +33,7 @@
     <string name="viewer_opening">Ouverture…</string>
     <string name="viewer_page">Aperçu de %1$s, première page</string>
     <string name="viewer_image">Aperçu de %1$s</string>
-    <string name="viewer_pdf_first_page">Seule la première page est affichée.</string>
+    <string name="viewer_pdf_first_page">Page 1</string>
     <string name="viewer_pdf_unsupported">L’aperçu des PDF nécessite Android 9 ou une version ultérieure. Le fichier reste enregistré.</string>
     <string name="viewer_no_preview">Ce type de fichier ne peut pas être affiché ici. Le fichier reste enregistré.</string>
     <string name="viewer_failed">Ce fichier n’a pas pu être affiché.</string>

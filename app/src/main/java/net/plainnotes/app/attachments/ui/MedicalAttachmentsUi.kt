@@ -3,11 +3,8 @@ package net.plainnotes.app.attachments.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.InsertDriveFile
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.PictureAsPdf
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,6 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.*
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import net.plainnotes.app.R
@@ -93,21 +91,36 @@ import net.plainnotes.app.ui.StatusPill
     }
 }
 
+/** Sample 06 (docs/design/claude-ui-2026-10-17): a tinted file tile, title, type line; unavailable files say so in grey. */
 @Composable private fun AttachmentRow(item:Item,index:Int,count:Int,onOpen:(Item)->Unit) {
     val kind=stringResource(when(item.kind) {FileKind.PDF->R.string.attach_kind_pdf;FileKind.IMAGE->R.string.attach_kind_image;FileKind.OTHER->R.string.attach_kind_other})
     val status=stringResource(if(item.available)R.string.attach_status_saved else R.string.attach_status_unavailable)
     val description=stringResource(R.string.attach_item_description,item.title,kind,status)
     GroupedItem(index,count,onClick=if(item.available) ({onOpen(item)}) else null) {
-        Row(Modifier.fillMaxWidth().heightIn(min=56.dp).padding(horizontal=16.dp,vertical=12.dp).testTag("attachment:${item.document}")
+        Row(Modifier.fillMaxWidth().heightIn(min=72.dp).padding(horizontal=16.dp,vertical=12.dp).testTag("attachment:${item.document}")
             .clearAndSetSemantics {contentDescription=description;if(item.available)role=Role.Button},
-            verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
-            Icon(when(item.kind) {FileKind.PDF->Icons.Outlined.PictureAsPdf;FileKind.IMAGE->Icons.Outlined.Image;FileKind.OTHER->Icons.AutoMirrored.Outlined.InsertDriveFile},null)
-            Column(Modifier.weight(1f)) {
-                Text(item.title,style=MaterialTheme.typography.bodyLarge,maxLines=2,overflow=TextOverflow.Ellipsis)
-                Text(kind,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+            verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {
+            FileTile(item.kind,item.available)
+            Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(2.dp)) {
+                Text(item.title,style=MaterialTheme.typography.titleMedium,maxLines=2,overflow=TextOverflow.Ellipsis)
+                Text(kind,style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                if(!item.available)Text(status,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.outline)
             }
-            val tone=if(item.available)NotesTheme.semantic.success else NotesTheme.semantic.skipped
-            StatusPill(status,tone.container,tone.onContainer)
+        }
+    }
+}
+
+/** File-type tile; the short code is a visual mark only (the localized type is read by TalkBack). */
+@Composable private fun FileTile(kind:FileKind,available:Boolean) {
+    val (container,content)=when {
+        !available->MaterialTheme.colorScheme.surfaceContainerHigh to MaterialTheme.colorScheme.outline
+        kind==FileKind.PDF->MaterialTheme.colorScheme.secondaryContainer to MaterialTheme.colorScheme.onSecondaryContainer
+        kind==FileKind.IMAGE->NotesTheme.semantic.attention.container to NotesTheme.semantic.attention.onContainer
+        else->MaterialTheme.colorScheme.surfaceContainerHigh to MaterialTheme.colorScheme.onSurfaceVariant
+    }
+    Surface(Modifier.size(48.dp),shape=MaterialTheme.shapes.medium,color=container,contentColor=content) {
+        Box(Modifier.padding(bottom=6.dp),contentAlignment=Alignment.BottomCenter) {
+            Text(when(kind) {FileKind.PDF->"PDF";FileKind.IMAGE->"IMG";FileKind.OTHER->"FILE"},style=MaterialTheme.typography.labelSmall,fontWeight=FontWeight.SemiBold)
         }
     }
 }
@@ -126,31 +139,46 @@ import net.plainnotes.app.ui.StatusPill
         dismissButton={TextButton(onCancel,modifier=Modifier.testTag("attachments-confirm-cancel")) {Text(stringResource(R.string.cancel))}})
 }
 
-/** Full-page preview. Shows only a page the controller still owns; on revocation the controller has already
- * replaced it with [Viewer.Closed], so no stale medical page stays on screen. */
+/** Full-page preview after sample 07: back arrow, the page on a white sheet inside a rounded preview area, a type chip
+ * and the title. Shows only a page the controller still owns; on revocation the controller has already replaced it
+ * with [Viewer.Closed], so no stale medical page stays on screen. */
 @Composable internal fun MedicalAttachmentViewer(viewer:Viewer,onClose:()->Unit,modifier:Modifier=Modifier) {
     if(viewer==Viewer.Closed)return
+    val title=when(viewer) {is Viewer.Opening->viewer.title;is Viewer.Showing->viewer.title;is Viewer.Message->viewer.title;else->""}
     Surface(modifier.fillMaxSize().testTag("attachment-viewer"),color=MaterialTheme.colorScheme.surface) {
-        Column(Modifier.fillMaxSize().padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-            Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically) {
-                Text(when(viewer) {is Viewer.Opening->viewer.title;is Viewer.Showing->viewer.title;is Viewer.Message->viewer.title;else->""},
-                    Modifier.weight(1f).semantics {heading()},style=MaterialTheme.typography.titleMedium,maxLines=2,overflow=TextOverflow.Ellipsis)
-                IconButton(onClose,Modifier.size(48.dp).testTag("attachment-viewer-close")) {Icon(Icons.Outlined.Close,stringResource(R.string.viewer_close))}
+        Column(Modifier.fillMaxSize().padding(horizontal=16.dp,vertical=8.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
+            IconButton(onClose,Modifier.size(48.dp).testTag("attachment-viewer-close")) {Icon(Icons.AutoMirrored.Outlined.ArrowBack,stringResource(R.string.viewer_close))}
+            Surface(Modifier.fillMaxWidth().weight(1f),shape=MaterialTheme.shapes.extraLarge,color=MaterialTheme.colorScheme.surfaceContainerHigh) {
+                Box(Modifier.fillMaxSize().padding(24.dp),contentAlignment=Alignment.Center) {
+                    when(viewer) {
+                        is Viewer.Opening->Column(Modifier.semantics {liveRegion=LiveRegionMode.Polite},verticalArrangement=Arrangement.spacedBy(8.dp)) {
+                            Text(stringResource(R.string.viewer_opening));LinearProgressIndicator(Modifier.fillMaxWidth())
+                        }
+                        is Viewer.Message->Text(stringResource(when(viewer.reason) {Reason.PDF_NEEDS_ANDROID_9->R.string.viewer_pdf_unsupported;Reason.NO_PREVIEW_FOR_TYPE->R.string.viewer_no_preview;Reason.FAILED->R.string.viewer_failed}),
+                            Modifier.fillMaxWidth().testTag("attachment-viewer-message").semantics {liveRegion=LiveRegionMode.Polite})
+                        is Viewer.Showing-> {
+                            val label=stringResource(if(viewer.pdf)R.string.viewer_page else R.string.viewer_image,viewer.title)
+                            // Defensive: a recycled page is never drawn even if a frame races the revocation.
+                            if(!viewer.page.isRecycled)Surface(Modifier.aspectRatio(viewer.page.width.toFloat()/viewer.page.height.coerceAtLeast(1)),shape=MaterialTheme.shapes.extraSmall,
+                                color=androidx.compose.ui.graphics.Color.White,shadowElevation=2.dp) {
+                                // Scales to the preview area; the page keeps its proportions.
+                                Image(remember(viewer.page) {viewer.page.asImageBitmap()},label,Modifier.fillMaxSize().testTag("attachment-viewer-page"),contentScale=ContentScale.Fit)
+                            }
+                            if(viewer.pdf)Surface(Modifier.align(Alignment.BottomEnd),shape=MaterialTheme.shapes.extraLarge,color=MaterialTheme.colorScheme.inverseSurface.copy(alpha=0.8f),
+                                contentColor=MaterialTheme.colorScheme.inverseOnSurface) {
+                                Text(stringResource(R.string.viewer_pdf_first_page),Modifier.padding(horizontal=12.dp,vertical=6.dp),style=MaterialTheme.typography.labelMedium)
+                            }
+                        }
+                        Viewer.Closed->{}
+                    }
+                }
             }
-            when(viewer) {
-                is Viewer.Opening->Column(Modifier.semantics {liveRegion=LiveRegionMode.Polite},verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.viewer_opening));LinearProgressIndicator(Modifier.fillMaxWidth())
+            Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
+                (viewer as? Viewer.Showing)?.let {
+                    val tone=MaterialTheme.colorScheme
+                    StatusPill(stringResource(if(it.pdf)R.string.attach_kind_pdf else R.string.attach_kind_image),tone.secondaryContainer,tone.onSecondaryContainer)
                 }
-                is Viewer.Message->Text(stringResource(when(viewer.reason) {Reason.PDF_NEEDS_ANDROID_9->R.string.viewer_pdf_unsupported;Reason.NO_PREVIEW_FOR_TYPE->R.string.viewer_no_preview;Reason.FAILED->R.string.viewer_failed}),
-                    Modifier.testTag("attachment-viewer-message").semantics {liveRegion=LiveRegionMode.Polite})
-                is Viewer.Showing-> {
-                    if(viewer.pdf)Text(stringResource(R.string.viewer_pdf_first_page),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
-                    val label=stringResource(if(viewer.pdf)R.string.viewer_page else R.string.viewer_image,viewer.title)
-                    // Defensive: a recycled page is never drawn even if a frame races the revocation.
-                    if(!viewer.page.isRecycled)Image(remember(viewer.page) {viewer.page.asImageBitmap()},label,
-                        Modifier.fillMaxWidth().weight(1f).testTag("attachment-viewer-page"),contentScale=ContentScale.FillWidth)
-                }
-                Viewer.Closed->{}
+                Text(title,Modifier.semantics {heading()},style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.SemiBold,maxLines=3,overflow=TextOverflow.Ellipsis)
             }
         }
     }

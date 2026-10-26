@@ -33,7 +33,7 @@
     <string name="viewer_opening">Opening…</string>
     <string name="viewer_page">Preview of %1$s, first page</string>
     <string name="viewer_image">Preview of %1$s</string>
-    <string name="viewer_pdf_first_page">Only the first page is shown.</string>
+    <string name="viewer_pdf_first_page">Page 1</string>
     <string name="viewer_pdf_unsupported">PDF preview needs Android 9 or later. The file is still saved.</string>
     <string name="viewer_no_preview">This type of file can’t be previewed here. The file is still saved.</string>
     <string name="viewer_failed">This file couldn’t be displayed.</string>

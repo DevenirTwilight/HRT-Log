@@ -33,7 +33,7 @@
     <string name="viewer_opening">正在開啟…</string>
     <string name="viewer_page">%1$s的預覽，第一頁</string>
     <string name="viewer_image">%1$s的預覽</string>
-    <string name="viewer_pdf_first_page">只顯示第一頁。</string>
+    <string name="viewer_pdf_first_page">第 1 頁</string>
     <string name="viewer_pdf_unsupported">PDF 預覽需要 Android 9 或更新版本。檔案仍保留著。</string>
     <string name="viewer_no_preview">這種檔案無法在這裡預覽。檔案仍保留著。</string>
     <string name="viewer_failed">這個檔案未能顯示。</string>
