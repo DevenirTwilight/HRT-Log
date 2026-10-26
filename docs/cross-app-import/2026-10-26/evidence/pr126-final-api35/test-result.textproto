@@ -1,0 +1,138 @@
+# proto-message: google.testing.platform.proto.api.core.TestSuiteResult
+# 2026-10-26T08:57:34.283888231Z:
+test_suite_meta_data {
+  scheduled_test_case_count: 2
+  device {
+    id: "emulator-5554"
+    friendly_name: "primary"
+  }
+}
+test_status: FAILED
+test_result {
+  test_case {
+    test_class: "AutomaticImportAndroidTest"
+    test_package: "net.plainnotes.app.imports"
+    test_method: "realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory"
+    start_time {
+      seconds: 1793005022
+      nanos: 410000000
+    }
+    end_time {
+      seconds: 1793005044
+      nanos: 109000000
+    }
+    device {
+      id: "emulator-5554"
+      friendly_name: "primary"
+    }
+  }
+  test_status: FAILED
+  error {
+    error_message: "java.lang.AssertionError: Failed to assert the following: (Selected = \'true\')\nSemantics of the node:\nNode #1864 at (l=24.0, t=448.0, r=296.0, b=480.0)px\nFocused = \'false\'\nRole = \'RadioButton\'\nSelected = \'false\'\nText = \'[Estradiol (E2) (Sublingual)]\'\nActions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]\nMergeDescendants = \'true\'\nHas 19 siblings\nSelector used: ((Text + InputText + EditableText contains \'Estradiol (E2) (Sublingual)\' (ignoreCase: false)) && (OnClick is defined))\n\nat androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:264)\nat androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)\nat androidx.compose.ui.test.AssertionsKt.assertIsSelected(Assertions.kt:88)\nat net.plainnotes.app.imports.AutomaticImportAndroidTest.exerciseImport(AutomaticImportAndroidTest.kt:272)\nat net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:191)\n"
+    error_type: "java.lang.AssertionError"
+    stack_trace: "java.lang.AssertionError: Failed to assert the following: (Selected = \'true\')\nSemantics of the node:\nNode #1864 at (l=24.0, t=448.0, r=296.0, b=480.0)px\nFocused = \'false\'\nRole = \'RadioButton\'\nSelected = \'false\'\nText = \'[Estradiol (E2) (Sublingual)]\'\nActions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]\nMergeDescendants = \'true\'\nHas 19 siblings\nSelector used: ((Text + InputText + EditableText contains \'Estradiol (E2) (Sublingual)\' (ignoreCase: false)) && (OnClick is defined))\n\nat androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:264)\nat androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)\nat androidx.compose.ui.test.AssertionsKt.assertIsSelected(Assertions.kt:88)\nat net.plainnotes.app.imports.AutomaticImportAndroidTest.exerciseImport(AutomaticImportAndroidTest.kt:272)\nat net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:191)\n"
+  }
+  output_artifact {
+    label {
+      label: "logcat"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/logcat-net.plainnotes.app.imports.AutomaticImportAndroidTest-realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory.txt"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/device-info.pb"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.meminfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/meminfo"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.cpuinfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/cpuinfo"
+    }
+  }
+}
+test_result {
+  test_case {
+    test_class: "AutomaticImportAndroidTest"
+    test_package: "net.plainnotes.app.imports"
+    test_method: "featherlineImportRunsAsIsolatedLowMemoryFlow"
+    start_time {
+      seconds: 1793005044
+      nanos: 136000000
+    }
+    end_time {
+      seconds: 1793005053
+      nanos: 792000000
+    }
+    device {
+      id: "emulator-5554"
+      friendly_name: "primary"
+    }
+  }
+  test_status: PASSED
+  output_artifact {
+    label {
+      label: "logcat"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/logcat-net.plainnotes.app.imports.AutomaticImportAndroidTest-featherlineImportRunsAsIsolatedLowMemoryFlow.txt"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/device-info.pb"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.meminfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/meminfo"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.cpuinfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/cpuinfo"
+    }
+  }
+}
+output_artifact {
+  label {
+    label: "test-results.log"
+    namespace: "com.google.testing.platform.runtime.android.driver.AndroidInstrumentationDriver"
+  }
+  source_path {
+    path: "/home/runner/work/HRT-Log/HRT-Log/app/build/outputs/androidTest-results/connected/debug/flavors/full/emulator-5554 - 15/testlog/test-results.log"
+  }
+  type: TEST_DATA
+  mime_type: "text/plain"
+}

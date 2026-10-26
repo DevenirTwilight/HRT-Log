@@ -1,0 +1,95 @@
+INSTRUMENTATION_STATUS: class=net.plainnotes.app.imports.AutomaticImportAndroidTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+net.plainnotes.app.imports.AutomaticImportAndroidTest:
+INSTRUMENTATION_STATUS: test=realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=net.plainnotes.app.imports.AutomaticImportAndroidTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Failed to assert the following: (Selected = 'true')
+Semantics of the node:
+Node #1864 at (l=24.0, t=448.0, r=296.0, b=480.0)px
+Focused = 'false'
+Role = 'RadioButton'
+Selected = 'false'
+Text = '[Estradiol (E2) (Sublingual)]'
+Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+MergeDescendants = 'true'
+Has 19 siblings
+Selector used: ((Text + InputText + EditableText contains 'Estradiol (E2) (Sublingual)' (ignoreCase: false)) && (OnClick is defined))
+
+at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:264)
+at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+at androidx.compose.ui.test.AssertionsKt.assertIsSelected(Assertions.kt:88)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.exerciseImport(AutomaticImportAndroidTest.kt:272)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:191)
+
+INSTRUMENTATION_STATUS: stream=
+Error in realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(net.plainnotes.app.imports.AutomaticImportAndroidTest):
+java.lang.AssertionError: Failed to assert the following: (Selected = 'true')
+Semantics of the node:
+Node #1864 at (l=24.0, t=448.0, r=296.0, b=480.0)px
+Focused = 'false'
+Role = 'RadioButton'
+Selected = 'false'
+Text = '[Estradiol (E2) (Sublingual)]'
+Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+MergeDescendants = 'true'
+Has 19 siblings
+Selector used: ((Text + InputText + EditableText contains 'Estradiol (E2) (Sublingual)' (ignoreCase: false)) && (OnClick is defined))
+
+at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:264)
+at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+at androidx.compose.ui.test.AssertionsKt.assertIsSelected(Assertions.kt:88)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.exerciseImport(AutomaticImportAndroidTest.kt:272)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:191)
+
+INSTRUMENTATION_STATUS: test=realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=net.plainnotes.app.imports.AutomaticImportAndroidTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=featherlineImportRunsAsIsolatedLowMemoryFlow
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=net.plainnotes.app.imports.AutomaticImportAndroidTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=featherlineImportRunsAsIsolatedLowMemoryFlow
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 31.368
+There was 1 failure:
+1) realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(net.plainnotes.app.imports.AutomaticImportAndroidTest)
+java.lang.AssertionError: Failed to assert the following: (Selected = 'true')
+Semantics of the node:
+Node #1864 at (l=24.0, t=448.0, r=296.0, b=480.0)px
+Focused = 'false'
+Role = 'RadioButton'
+Selected = 'false'
+Text = '[Estradiol (E2) (Sublingual)]'
+Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+MergeDescendants = 'true'
+Has 19 siblings
+Selector used: ((Text + InputText + EditableText contains 'Estradiol (E2) (Sublingual)' (ignoreCase: false)) && (OnClick is defined))
+
+at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:264)
+at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+at androidx.compose.ui.test.AssertionsKt.assertIsSelected(Assertions.kt:88)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.exerciseImport(AutomaticImportAndroidTest.kt:272)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:191)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1
+

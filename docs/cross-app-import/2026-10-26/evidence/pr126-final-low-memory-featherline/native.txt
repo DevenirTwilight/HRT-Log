@@ -1,0 +1,8 @@
+
+net.plainnotes.app.imports.AutomaticImportAndroidTest:.
+
+Time: 43.118
+
+OK (1 test)
+
+
