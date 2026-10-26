@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MED-02 attachment UI (REQUIREMENTS §149). Not reachable from release navigation. -->
+<resources>
+    <string name="attach_section">Pièces jointes</string>
+    <string name="attach_add">Ajouter un fichier</string>
+    <string name="attach_empty">Aucun fichier n’est encore joint à cet enregistrement.</string>
+    <string name="attach_kind_pdf">PDF</string>
+    <string name="attach_kind_image">Image</string>
+    <string name="attach_kind_other">Autre fichier</string>
+    <string name="attach_status_saved">Enregistré</string>
+    <string name="attach_status_unavailable">Indisponible</string>
+    <string name="attach_item_description">%1$s, %2$s, %3$s</string>
+    <string name="attach_confirm_title">Joindre ce fichier ?</string>
+    <string name="attach_confirm_target">Il sera joint à : %1$s</string>
+    <string name="attach_confirm_name">Nom</string>
+    <string name="attach_confirm_action">Joindre</string>
+    <string name="attach_saving">Enregistrement du fichier…</string>
+    <string name="attach_saved">Fichier enregistré.</string>
+    <string name="attach_saved_list_stale">Fichier enregistré. La liste n’a pas pu être actualisée.</string>
+    <string name="attach_not_saved">Le fichier n’a pas été enregistré.</string>
+    <string name="attach_cancelled">Aucun fichier n’a été joint.</string>
+    <string name="attach_unknown">On ne sait pas encore si le fichier a été enregistré.</string>
+    <string name="attach_check">Vérifier l’état</string>
+    <string name="attach_checking">Vérification…</string>
+    <string name="attach_dismiss">Fermer</string>
+    <string name="attach_hidden">Les fichiers sont masqués tant que l’application est verrouillée.</string>
+    <string name="attach_data_changed">Les données ont changé. Rouvrez cette page pour voir ses fichiers.</string>
+    <string name="attach_list_failed">Les fichiers n’ont pas pu être chargés.</string>
+    <string name="attach_retry">Réessayer</string>
+    <string name="attach_default_visit">Document de consultation</string>
+    <string name="attach_default_lab">Compte rendu d’analyse</string>
+    <string name="viewer_close">Fermer l’aperçu</string>
+    <string name="viewer_opening">Ouverture…</string>
+    <string name="viewer_page">Aperçu de %1$s, première page</string>
+    <string name="viewer_image">Aperçu de %1$s</string>
+    <string name="viewer_pdf_first_page">Page 1</string>
+    <string name="viewer_pdf_unsupported">L’aperçu des PDF nécessite Android 9 ou une version ultérieure. Le fichier reste enregistré.</string>
+    <string name="viewer_no_preview">Ce type de fichier ne peut pas être affiché ici. Le fichier reste enregistré.</string>
+    <string name="viewer_failed">Ce fichier n’a pas pu être affiché.</string>
+</resources>

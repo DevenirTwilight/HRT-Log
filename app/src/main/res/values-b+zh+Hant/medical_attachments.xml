@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MED-02 attachment UI (REQUIREMENTS §149). Not reachable from release navigation. -->
+<resources>
+    <string name="attach_section">附件</string>
+    <string name="attach_add">新增檔案</string>
+    <string name="attach_empty">這筆紀錄還沒有附件。</string>
+    <string name="attach_kind_pdf">PDF</string>
+    <string name="attach_kind_image">圖片</string>
+    <string name="attach_kind_other">其他檔案</string>
+    <string name="attach_status_saved">已儲存</string>
+    <string name="attach_status_unavailable">無法使用</string>
+    <string name="attach_item_description">%1$s，%2$s，%3$s</string>
+    <string name="attach_confirm_title">新增這個檔案？</string>
+    <string name="attach_confirm_target">將新增到：%1$s</string>
+    <string name="attach_confirm_name">名稱</string>
+    <string name="attach_confirm_action">新增</string>
+    <string name="attach_saving">正在儲存檔案…</string>
+    <string name="attach_saved">檔案已儲存。</string>
+    <string name="attach_saved_list_stale">檔案已儲存，但清單未能重新整理。</string>
+    <string name="attach_not_saved">檔案沒有儲存。</string>
+    <string name="attach_cancelled">沒有新增檔案。</string>
+    <string name="attach_unknown">還無法確認檔案是否已儲存。</string>
+    <string name="attach_check">檢查狀態</string>
+    <string name="attach_checking">正在檢查…</string>
+    <string name="attach_dismiss">知道了</string>
+    <string name="attach_hidden">應用程式鎖定時不顯示檔案。</string>
+    <string name="attach_data_changed">資料已切換。請重新開啟此頁面查看檔案。</string>
+    <string name="attach_list_failed">未能載入檔案。</string>
+    <string name="attach_retry">重試</string>
+    <string name="attach_default_visit">就診文件</string>
+    <string name="attach_default_lab">檢驗報告</string>
+    <string name="viewer_close">關閉預覽</string>
+    <string name="viewer_opening">正在開啟…</string>
+    <string name="viewer_page">%1$s的預覽，第一頁</string>
+    <string name="viewer_image">%1$s的預覽</string>
+    <string name="viewer_pdf_first_page">第 1 頁</string>
+    <string name="viewer_pdf_unsupported">PDF 預覽需要 Android 9 或更新版本。檔案仍保留著。</string>
+    <string name="viewer_no_preview">這種檔案無法在這裡預覽。檔案仍保留著。</string>
+    <string name="viewer_failed">這個檔案未能顯示。</string>
+</resources>
