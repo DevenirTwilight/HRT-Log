@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="import_other_apps">Importer depuis une autre application</string>
-    <string name="import_other_apps_desc">Reconnaissance automatique des exports HRT Tracker, Trans Memo et Mona</string>
+    <string name="import_other_apps_desc">Reconnaissance des exports JSON compatibles HRT Tracker / TransMTF, Trans Memo, Mona, Featherline et Chrysalide</string>
     <string name="import_identified">Source reconnue : %1$s</string>
     <string name="import_detecting">Détection du format…</string>
     <string name="import_parsing">Lecture et validation du fichier…</string>
@@ -12,4 +12,5 @@
     <string name="import_featherline_unsupported">Ce conteneur ou profil de chiffrement Featherline n’est pas pris en charge. Utilisez le conteneur3 et les paramètres documentés.</string>
     <string name="import_use_native_restore">Utilisez la restauration des sauvegardes HRT Log pour ce fichier.</string>
     <string name="import_version_unsupported">Cette version ne peut pas être importée.</string>
+    <string name="import_tracker_compatible">JSON compatible HRT Tracker / TransMTF</string>
 </resources>
