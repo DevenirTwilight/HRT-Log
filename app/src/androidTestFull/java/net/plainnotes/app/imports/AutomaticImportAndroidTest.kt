@@ -208,7 +208,7 @@ class AutomaticImportAndroidTest {
         ui.onNodeWithText(text(R.string.import_ht)).assertDoesNotExist();ui.onNodeWithText(text(R.string.import_tm)).assertDoesNotExist()
         ui.onNodeWithText(text(R.string.backup_restore)).assertExists()
         stage("select tracker");choose("tracker");stage("tracker preview")
-        ui.onNodeWithText(context.getString(R.string.import_identified,"HRT Tracker")).assertExists()
+        ui.onNodeWithText(context.getString(R.string.import_identified,text(R.string.import_tracker_compatible))).assertExists()
         click(R.string.ht_dup_merge);stage("tracker choices");click(R.string.import_action,false)
         ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.HtImported || model.dataJob.value is NotesViewModel.DataJob.Failed}
         assertTrue(model.dataJob.value is NotesViewModel.DataJob.HtImported)
