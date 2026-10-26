@@ -17,11 +17,11 @@ public final class SyntheticImportDocumentsProvider extends DocumentsProvider {
     private static final String[] DOCS={"document_id","_display_name","mime_type","_size","flags"};
     @Override public boolean onCreate() {net.plainnotes.app.attachmentpoc.SyntheticEmulatorGuard.requireEmulator();return true;}
     private void row(MatrixCursor c,String id) {
-        if(!Arrays.asList("exports","tracker","memo","mona","featherline","invalid").contains(id))throw new IllegalArgumentException();
+        if(!Arrays.asList("exports","tracker","memo","mona","featherline","chrysalide","invalid").contains(id))throw new IllegalArgumentException();
         MatrixCursor.RowBuilder r=c.newRow();for(String k:c.getColumnNames()) {
             Object v=null;
             if(k.equals("document_id"))v=id;
-            if(k.equals("_display_name"))v=id.equals("exports")?"SYNTHETIC exports":id.equals("tracker")?"SYNTHETIC tracker.db":id.equals("invalid")?"SYNTHETIC invalid.json":id.equals("mona")?"SYNTHETIC mona.db":id.equals("featherline")?"SYNTHETIC featherline.json":"SYNTHETIC memo.json";
+            if(k.equals("_display_name"))v=id.equals("exports")?"SYNTHETIC exports":id.equals("tracker")?"SYNTHETIC tracker.db":id.equals("invalid")?"SYNTHETIC invalid.json":id.equals("mona")?"SYNTHETIC mona.db":id.equals("featherline")?"SYNTHETIC featherline.json":id.equals("chrysalide")?"SYNTHETIC chrysalide.db":"SYNTHETIC memo.json";
             if(k.equals("mime_type"))v=id.equals("exports")?DocumentsContract.Document.MIME_TYPE_DIR:"application/octet-stream";
             if(k.equals("_size"))v=1L;if(k.equals("flags"))v=0;r.add(k,v);
         }
@@ -34,8 +34,8 @@ public final class SyntheticImportDocumentsProvider extends DocumentsProvider {
         return c;
     }
     @Override public Cursor queryDocument(String id,String[] p) {MatrixCursor c=new MatrixCursor(p==null?DOCS:p);row(c,id);return c;}
-    @Override public Cursor queryChildDocuments(String id,String[] p,String sort) {if(!id.equals("exports"))throw new IllegalArgumentException();MatrixCursor c=new MatrixCursor(p==null?DOCS:p);row(c,"tracker");row(c,"memo");row(c,"mona");row(c,"featherline");row(c,"invalid");return c;}
-    @Override public boolean isChildDocument(String parent,String child) {return parent.equals("exports")&&Arrays.asList("tracker","memo","mona","featherline","invalid").contains(child);}
+    @Override public Cursor queryChildDocuments(String id,String[] p,String sort) {if(!id.equals("exports"))throw new IllegalArgumentException();MatrixCursor c=new MatrixCursor(p==null?DOCS:p);row(c,"tracker");row(c,"memo");row(c,"mona");row(c,"featherline");row(c,"chrysalide");row(c,"invalid");return c;}
+    @Override public boolean isChildDocument(String parent,String child) {return parent.equals("exports")&&Arrays.asList("tracker","memo","mona","featherline","chrysalide","invalid").contains(child);}
     @Override public DocumentsContract.Path findDocumentPath(String parent,String child) {return new DocumentsContract.Path(parent==null?"exports":null,child.equals("exports")?Collections.singletonList("exports"):Arrays.asList("exports",child));}
     private byte[] asset(String name) throws IOException {try(InputStream in=getContext().getAssets().open("imports/"+name);ByteArrayOutputStream out=new ByteArrayOutputStream()) {byte[] b=new byte[8192];int n;while((n=in.read(b))!=-1)out.write(b,0,n);return out.toByteArray();}}
     @Override public ParcelFileDescriptor openDocument(String id,String mode,CancellationSignal signal) throws FileNotFoundException {
@@ -45,6 +45,7 @@ public final class SyntheticImportDocumentsProvider extends DocumentsProvider {
             if(id.equals("tracker"))bytes=asset("tracker.json");
             else if(id.equals("mona"))bytes=asset("mona.json");
             else if(id.equals("featherline"))bytes=asset("featherline.cipher");
+            else if(id.equals("chrysalide"))bytes=asset("chrysalide.json");
             else if(id.equals("invalid"))bytes="{".getBytes(StandardCharsets.UTF_8);
             else if(id.equals("memo")) {
                 File f=File.createTempFile("synthetic-import-", ".db",getContext().getCacheDir());

@@ -1,0 +1,413 @@
+# proto-message: google.testing.platform.proto.api.core.TestSuiteResult
+# 2026-10-26T08:41:36.758350317Z:
+test_suite_meta_data {
+  scheduled_test_case_count: 7
+  device {
+    id: "emulator-5554"
+    friendly_name: "primary"
+  }
+}
+test_status: PASSED
+test_result {
+  test_case {
+    test_class: "LibraryLifecycleAndroidTest"
+    test_package: "net.plainnotes.app.data"
+    test_method: "liveNeverStartedOwnerCanBeAtomicallyAbortedAndReleasedAndCannotResume"
+    start_time {
+      seconds: 1793004081
+      nanos: 908000000
+    }
+    end_time {
+      seconds: 1793004084
+      nanos: 409000000
+    }
+    device {
+      id: "emulator-5554"
+      friendly_name: "primary"
+    }
+  }
+  test_status: PASSED
+  output_artifact {
+    label {
+      label: "logcat"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/logcat-net.plainnotes.app.data.LibraryLifecycleAndroidTest-liveNeverStartedOwnerCanBeAtomicallyAbortedAndReleasedAndCannotResume.txt"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/device-info.pb"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.meminfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/meminfo"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.cpuinfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/cpuinfo"
+    }
+  }
+}
+test_result {
+  test_case {
+    test_class: "LibraryLifecycleAndroidTest"
+    test_package: "net.plainnotes.app.data"
+    test_method: "unknownFileNeverBecomesAbsentAfterRestartAndPreventsCompleteExport"
+    start_time {
+      seconds: 1793004084
+      nanos: 423000000
+    }
+    end_time {
+      seconds: 1793004085
+      nanos: 451000000
+    }
+    device {
+      id: "emulator-5554"
+      friendly_name: "primary"
+    }
+  }
+  test_status: PASSED
+  output_artifact {
+    label {
+      label: "logcat"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/logcat-net.plainnotes.app.data.LibraryLifecycleAndroidTest-unknownFileNeverBecomesAbsentAfterRestartAndPreventsCompleteExport.txt"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/device-info.pb"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.meminfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/meminfo"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.cpuinfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/cpuinfo"
+    }
+  }
+}
+test_result {
+  test_case {
+    test_class: "LibraryLifecycleAndroidTest"
+    test_package: "net.plainnotes.app.data"
+    test_method: "materializedAndRetainedLibrariesCannotBeReleasedOrIgnoredByExport"
+    start_time {
+      seconds: 1793004085
+      nanos: 453000000
+    }
+    end_time {
+      seconds: 1793004089
+      nanos: 115000000
+    }
+    device {
+      id: "emulator-5554"
+      friendly_name: "primary"
+    }
+  }
+  test_status: PASSED
+  output_artifact {
+    label {
+      label: "logcat"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/logcat-net.plainnotes.app.data.LibraryLifecycleAndroidTest-materializedAndRetainedLibrariesCannotBeReleasedOrIgnoredByExport.txt"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/device-info.pb"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.meminfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/meminfo"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.cpuinfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/cpuinfo"
+    }
+  }
+}
+test_result {
+  test_case {
+    test_class: "LibraryLifecycleAndroidTest"
+    test_package: "net.plainnotes.app.data"
+    test_method: "committedHistoryTrashAndCompleteCurrentArchiveUseExistingWriterAndReader"
+    start_time {
+      seconds: 1793004089
+      nanos: 116000000
+    }
+    end_time {
+      seconds: 1793004090
+      nanos: 721000000
+    }
+    device {
+      id: "emulator-5554"
+      friendly_name: "primary"
+    }
+  }
+  test_status: PASSED
+  output_artifact {
+    label {
+      label: "logcat"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/logcat-net.plainnotes.app.data.LibraryLifecycleAndroidTest-committedHistoryTrashAndCompleteCurrentArchiveUseExistingWriterAndReader.txt"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/device-info.pb"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.meminfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/meminfo"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.cpuinfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/cpuinfo"
+    }
+  }
+}
+test_result {
+  test_case {
+    test_class: "MedicalAttachmentOperationAndroidTest"
+    test_package: "net.plainnotes.app.data"
+    test_method: "realGenerationSwitchRejectsOldFacadeAndRetainedSetExport"
+    start_time {
+      seconds: 1793004090
+      nanos: 722000000
+    }
+    end_time {
+      seconds: 1793004094
+      nanos: 282000000
+    }
+    device {
+      id: "emulator-5554"
+      friendly_name: "primary"
+    }
+  }
+  test_status: PASSED
+  output_artifact {
+    label {
+      label: "logcat"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/logcat-net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest-realGenerationSwitchRejectsOldFacadeAndRetainedSetExport.txt"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/device-info.pb"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.meminfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/meminfo"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.cpuinfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/cpuinfo"
+    }
+  }
+}
+test_result {
+  test_case {
+    test_class: "MedicalAttachmentOperationAndroidTest"
+    test_package: "net.plainnotes.app.data"
+    test_method: "explicitAppointmentLabHistoryTrashAndFormalArchiveAreComplete"
+    start_time {
+      seconds: 1793004094
+      nanos: 288000000
+    }
+    end_time {
+      seconds: 1793004095
+      nanos: 768000000
+    }
+    device {
+      id: "emulator-5554"
+      friendly_name: "primary"
+    }
+  }
+  test_status: PASSED
+  output_artifact {
+    label {
+      label: "logcat"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/logcat-net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest-explicitAppointmentLabHistoryTrashAndFormalArchiveAreComplete.txt"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/device-info.pb"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.meminfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/meminfo"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.cpuinfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/cpuinfo"
+    }
+  }
+}
+test_result {
+  test_case {
+    test_class: "MedicalAttachmentOperationAndroidTest"
+    test_package: "net.plainnotes.app.data"
+    test_method: "hostileInputCapacityUnknownAndLostAuthorityRefuseWithoutFalseCommit"
+    start_time {
+      seconds: 1793004095
+      nanos: 769000000
+    }
+    end_time {
+      seconds: 1793004096
+      nanos: 296000000
+    }
+    device {
+      id: "emulator-5554"
+      friendly_name: "primary"
+    }
+  }
+  test_status: PASSED
+  output_artifact {
+    label {
+      label: "logcat"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/logcat-net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest-hostileInputCapacityUnknownAndLostAuthorityRefuseWithoutFalseCommit.txt"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/device-info.pb"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.meminfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/meminfo"
+    }
+  }
+  output_artifact {
+    label {
+      label: "device-info.cpuinfo"
+      namespace: "android"
+    }
+    source_path {
+      path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/cpuinfo"
+    }
+  }
+}
+output_artifact {
+  label {
+    label: "test-results.log"
+    namespace: "com.google.testing.platform.runtime.android.driver.AndroidInstrumentationDriver"
+  }
+  source_path {
+    path: "/home/runner/work/HRT-Log/HRT-Log/core/data/build/outputs/androidTest-results/connected/debug/emulator-5554 - 8.0.0/testlog/test-results.log"
+  }
+  type: TEST_DATA
+  mime_type: "text/plain"
+}

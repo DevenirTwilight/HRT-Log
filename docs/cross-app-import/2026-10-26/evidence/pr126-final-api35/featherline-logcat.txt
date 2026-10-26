@@ -1,0 +1,561 @@
+10-26 08:57:23.950  3501  3516 I TestRunner: started: featherlineImportRunsAsIsolatedLowMemoryFlow(net.plainnotes.app.imports.AutomaticImportAndroidTest)
+10-26 08:57:23.952  2468  2468 I TopTaskTracker: onTaskRemoved: taskId=13
+10-26 08:57:23.953  3501  3516 D IdlingRegistry: Registering idling resources: [androidx.compose.ui.test.EspressoLink@4119d8b]
+10-26 08:57:23.953  2468  2468 I TopTaskTracker: onTaskRemoved: taskId=13
+10-26 08:57:23.965  1827  1827 W IPCThreadState: Sending oneway calls to frozen process.
+10-26 08:57:23.966  1827  1827 W IPCThreadState: Sending oneway calls to frozen process.
+10-26 08:57:23.966  1827  1827 W IPCThreadState: Sending oneway calls to frozen process.
+10-26 08:57:23.967  3501  3516 I SyntheticImport: Featherline before-file-selection; sampled_java_max_bytes=0 sampled_native_max_bytes=0 sampled_pss_max_kib=0 memory_samples=0
+10-26 08:57:23.968  1827  1827 W IPCThreadState: Sending oneway calls to frozen process.
+10-26 08:57:23.969  1827  1827 W IPCThreadState: Sending oneway calls to frozen process.
+10-26 08:57:23.969  1827  1827 W IPCThreadState: Sending oneway calls to frozen process.
+10-26 08:57:23.969  3501  3749 I .plainnotes.app: Using smaps_rollup for pss collection
+10-26 08:57:23.969  3501  3516 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+10-26 08:57:23.980  1827  2971 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10149, packageName = null, attributionTag = null, token = android.os.Binder@3400440, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+10-26 08:57:23.986  2055  2134 D SplashScreenView: Build android.window.SplashScreenView{3652609 V.E...... ......ID 0,0-0,0}
+10-26 08:57:23.986  2055  2134 D SplashScreenView: Icon: view: null drawable: null size: 0
+10-26 08:57:23.986  2055  2134 D SplashScreenView: Branding: view: android.view.View{79e200e G.ED..... ......I. 0,0-0,0 #1020503 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+10-26 08:57:23.987  2468  2468 W SplitSelectStateCtor: Missing session instanceIds
+10-26 08:57:23.987  2468  2468 D StatsLog: LAUNCHER_SPLIT_SELECTION_EXIT_INTERRUPTED
+10-26 08:57:23.991  2468  2468 I TopTaskTracker: onTaskMovedToFront: (moved taskInfo to front) taskId=14, baseIntent=Intent { flg=0x10008000 cmp=net.plainnotes.app/.MainActivity }
+10-26 08:57:23.998  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: PRE_ON_CREATE
+10-26 08:57:23.999  3501  3501 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+10-26 08:57:24.008  1747  1747 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-26 08:57:24.018  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: CREATED
+10-26 08:57:24.019  3501  3501 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:24.021  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: STARTED
+10-26 08:57:24.021  3501  3501 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:24.021  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:24.021  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:24.024  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: RESUMED
+10-26 08:57:24.029  3501  3501 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:24.041  3501  3501 D AutofillManager: Fill dialog is enabled:false, hints=[]
+10-26 08:57:24.051  2468  2468 D VRI[QuickstepLauncher]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:24.104  1827  1846 W ziparchive: Unable to open '/data/app/~~PYpdRn5kMKa63uPdFNkM3w==/net.plainnotes.app-Dv1Hr-adJ4tyvb81Unauiw==/base.dm': No such file or directory
+10-26 08:57:24.107  1827  1846 I ActivityTaskManager: Displayed net.plainnotes.app/.MainActivity for user 0: +130ms
+10-26 08:57:24.107  2468  2468 D BaseDepthController: setSurface:
+10-26 08:57:24.107  2468  2468 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+10-26 08:57:24.107  2468  2468 D BaseDepthController: 	mSurface: null
+10-26 08:57:24.107  2468  2468 D BaseDepthController: mSurface is null and mCurrentBlur is: 0
+10-26 08:57:24.108  2468  2468 D StateManager: goToState - fromState: Normal, toState: Normal, partial trace:
+10-26 08:57:24.108  2468  2468 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:453)
+10-26 08:57:24.108  2468  2468 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:444)
+10-26 08:57:24.108  2468  2468 D StateManager: 	at com.android.launcher3.statemanager.StatefulActivity.onStop(StatefulActivity.java:119)
+10-26 08:57:24.110  2468  2468 D StatsLog: LAUNCHER_ONSTOP
+10-26 08:57:24.113  2055  2132 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@dd90c28
+10-26 08:57:24.120  1827  2987 W InputManager-JNI: Input channel object 'a4557c2 Splash Screen net.plainnotes.app (client)' was disposed without first being removed with the input manager!
+10-26 08:57:24.128  2468  2468 W FrameTracker: Missing SF jank callback for vsyncId: 11304, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+10-26 08:57:24.136  1827  3754 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+10-26 08:57:24.165  1827  1837 I system_server: Background concurrent mark compact GC freed 15MB AllocSpace bytes, 32(768KB) LOS objects, 49% free, 19MB/38MB, paused 717us,2.064ms total 212.773ms
+10-26 08:57:24.167  1827  1838 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-26 08:57:24.169  1827  1839 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SdkSetup/SdkSetup.apk' with 1 weak references
+10-26 08:57:24.170  1827  1839 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/Launcher3QuickStep/Launcher3QuickStep.apk' with 1 weak references
+10-26 08:57:24.170  1827  1839 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/LatinIME/LatinIME.apk' with 1 weak references
+10-26 08:57:24.171  1827  1839 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/app/AccessibilityMenu/AccessibilityMenu.apk' with 1 weak references
+10-26 08:57:24.171  1827  1839 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /system/priv-app/InputDevices/InputDevices.apk' with 1 weak references
+10-26 08:57:24.193  1827  1930 I ImeTracker: net.plainnotes.app:706bc413: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:24.194  1827  1930 I ImeTracker: net.plainnotes.app:706bc413: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:24.611  1827  2971 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10062, packageName = null, attributionTag = null, token = android.os.Binder@3400440, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+10-26 08:57:24.625  1747  1747 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-26 08:57:24.628  3275  3277 I AidlLazyServiceRegistrar: Process has 0 (of 1 available) client(s) in use after notification artd has clients: 0
+10-26 08:57:24.628  3275  3277 I AidlLazyServiceRegistrar: Trying to shut down the service. No clients in use for any service in process.
+10-26 08:57:24.631  3275  3277 I AidlLazyServiceRegistrar: Unregistered all clients and exiting
+10-26 08:57:24.636  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: PAUSED
+10-26 08:57:24.636  3501  3501 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:24.649  2581  2581 D PickActivity: Created new state object: State{action=3, acceptMimes=[*/*], allowMultiple=false, localOnly=false, stack=DocumentStack{root=null, docStack=[], stackTouched=false}, dirConfigs={}, excludedAuthorities=[], openableOnly=false, restrictScopeStorage=true, sortModel=SortModel{dimensions={16908304=SortDimension{id=16908304, labelId=2131886475, dataType=0, sortCapability=0, defaultSortDirection=1, sortDirection=0, visibility=4}, 16908310=SortDimension{id=16908310, labelId=2131886469, dataType=0, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}, 2131296435=SortDimension{id=2131296435, labelId=2131886462, dataType=1, sortCapability=3, defaultSortDirection=2, sortDirection=0, visibility=0}, 2131296507=SortDimension{id=2131296507, labelId=2131886466, dataType=0, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}, 2131296791=SortDimension{id=2131296791, labelId=2131886472, dataType=1, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}}, defaultDimensionId=0, sortedDimension=null}}
+10-26 08:57:24.651  2581  2581 D DrawerController: Calculated drawer width:272.0
+10-26 08:57:24.655  2581  2581 D AutofillManager: Fill dialog is enabled:false, hints=[]
+10-26 08:57:24.657  2581  2581 D BaseActivity: Set recents screenshot to enabled
+10-26 08:57:24.658  2581  2581 D PickerActionHandler: Load last accessed stack.
+10-26 08:57:24.658  2581  2581 D PickerActionHandler: Attempting to load last used stack for calling package.
+10-26 08:57:24.660  2581  2581 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples]
+10-26 08:57:24.661  2581  2581 D DocumentStack: Resetting the whole darn stack to: DocumentStack{root=Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, docStack=[DocumentInfo{docId=exports, userId=0, name=SYNTHETIC exports, mimeType=vnd.android.document/directory, isContainer=true, isDirectory=true, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false, isBlockedFromTree=false} @ content://net.plainnotes.app.test.synthetic-imports/document/exports], stackTouched=true}
+10-26 08:57:24.661  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:24.662  2581  2581 D DocumentStack: Resetting the whole darn stack to: DocumentStack{root=Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, docStack=[DocumentInfo{docId=exports, userId=0, name=SYNTHETIC exports, mimeType=vnd.android.document/directory, isContainer=true, isDirectory=true, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false, isBlockedFromTree=false} @ content://net.plainnotes.app.test.synthetic-imports/document/exports], stackTouched=true}
+10-26 08:57:24.662  2581  2581 D DirectoryFragment: Showing directory: content://net.plainnotes.app.test.synthetic-imports/document/exports
+10-26 08:57:24.662  2581  2581 D DirectoryFragment: Creating new fragment for directory: content://net.plainnotes.app.test.synthetic-imports/document/exports
+10-26 08:57:24.665  2581  2581 W SelectionTracker: Setting gestureTooltypes is likely to result in unexpected behavior.
+10-26 08:57:24.665  2581  2581 D AbstractActionHandler: Creating new directory loader for: content://net.plainnotes.app.test.synthetic-imports/document/exports
+10-26 08:57:24.666  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:24.666  2581  3662 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples]
+10-26 08:57:24.671  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:24.671  2581  2581 V RefreshTask: Provider does not support refresh and did not refresh
+10-26 08:57:24.682  2581  3551 I EGL_emulation: Opening libGLESv1_CM_emulation.so
+10-26 08:57:24.682  2581  3551 I EGL_emulation: Opening libGLESv2_emulation.so
+10-26 08:57:24.683  2581  2581 D AutofillManager: notifyViewReadyInner:1073741824
+10-26 08:57:24.683  2581  2581 D AutofillManager: notifyViewReadyInner:1073741825
+10-26 08:57:24.683  2581  2581 D AutofillManager: notifyViewReadyInner:1073741826
+10-26 08:57:24.687  2581  3551 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+10-26 08:57:24.689  2581  2581 D AbstractActionHandler: Loader has finished for: content://net.plainnotes.app.test.synthetic-imports/document/exports
+10-26 08:57:24.689  2581  2581 I Model   : Updating model with new result set.
+10-26 08:57:24.689  2581  2581 D DirectoryFragment: Received model update. Loading=false
+10-26 08:57:24.689  2581  2581 D DefaultSelectionTracker: Ignoring onDataSetChange. No active selection.
+10-26 08:57:24.690  2581  3662 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples]
+10-26 08:57:25.241  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:25.242  1827  1846 I ActivityTaskManager: Displayed com.android.documentsui/.picker.PickActivity for user 0: +627ms
+10-26 08:57:25.248  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:25.248  2581  2581 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+10-26 08:57:25.354  3501  3501 D VRI[MainActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:25.411  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: STOPPED
+10-26 08:57:25.411  3501  3501 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:25.414  1827  1930 I ImeTracker: com.android.documentsui:759628b: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:25.415  1827  1930 I ImeTracker: com.android.documentsui:759628b: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:25.438  1746  1770 I netd    : tetherGetStats() -> {[]} <0.33ms>
+10-26 08:57:25.451  3501  3516 E AccessibilityInteractionClient: 2 Disconnected nodes.
+10-26 08:57:25.457  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:25.461  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:25.468  3501  3516 E AccessibilityInteractionClient: 2 Disconnected nodes.
+10-26 08:57:25.478  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:25.481  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:25.488  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:25.720  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:25.761  2581  2581 D PickerActionHandler: onFinished() [content://net.plainnotes.app.test.synthetic-imports/document/featherline]
+10-26 08:57:25.770  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: RESTARTED
+10-26 08:57:25.771  3501  3501 V ActivityScenario: Update currentActivityStage to RESTARTED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:25.772  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: STARTED
+10-26 08:57:25.772  3501  3501 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:25.773  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:25.773  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:25.777  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: RESUMED
+10-26 08:57:25.778  3501  3501 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:25.791  1747  1747 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-26 08:57:25.848  1827  1930 I ImeTracker: net.plainnotes.app:e800703e: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:25.848  1827  1930 I ImeTracker: net.plainnotes.app:e800703e: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:25.862  2581  2581 D VRI[PickActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:25.875  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:25.875  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:25.891  2581  2581 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@26e760e
+10-26 08:57:25.897  1827  1842 W InputManager-JNI: Input channel object 'eb3d764 com.android.documentsui/com.android.documentsui.picker.PickActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:25.934  2055  2190 D EGL_emulation: app_time_stats: avg=286.69ms min=12.02ms max=1833.90ms count=8
+10-26 08:57:25.947  1827  1930 I ImeTracker: net.plainnotes.app:548a6ea3: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:25.951  1827  1930 I ImeTracker: net.plainnotes.app:548a6ea3: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:26.027  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@de4baf9
+10-26 08:57:26.030  1827  1842 W InputManager-JNI: Input channel object 'fd2a573 net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:26.067  1827  1930 I ImeTracker: net.plainnotes.app:a8132077: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:26.067  1827  1930 I ImeTracker: net.plainnotes.app:a8132077: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:26.107  1827  1842 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10062, packageName = null, attributionTag = null, token = android.os.Binder@3400440, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+10-26 08:57:26.121  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: PAUSED
+10-26 08:57:26.121  3501  3501 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:26.132  2581  2581 D PickActivity: Created new state object: State{action=3, acceptMimes=[*/*], allowMultiple=false, localOnly=false, stack=DocumentStack{root=null, docStack=[], stackTouched=false}, dirConfigs={}, excludedAuthorities=[], openableOnly=false, restrictScopeStorage=true, sortModel=SortModel{dimensions={16908304=SortDimension{id=16908304, labelId=2131886475, dataType=0, sortCapability=0, defaultSortDirection=1, sortDirection=0, visibility=4}, 16908310=SortDimension{id=16908310, labelId=2131886469, dataType=0, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}, 2131296435=SortDimension{id=2131296435, labelId=2131886462, dataType=1, sortCapability=3, defaultSortDirection=2, sortDirection=0, visibility=0}, 2131296507=SortDimension{id=2131296507, labelId=2131886466, dataType=0, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}, 2131296791=SortDimension{id=2131296791, labelId=2131886472, dataType=1, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}}, defaultDimensionId=0, sortedDimension=null}}
+10-26 08:57:26.132  2581  2581 D DrawerController: Calculated drawer width:272.0
+10-26 08:57:26.136  2581  2581 D AutofillManager: Fill dialog is enabled:false, hints=[]
+10-26 08:57:26.138  2581  2581 D BaseActivity: Set recents screenshot to enabled
+10-26 08:57:26.138  2581  2581 D PickerActionHandler: Load last accessed stack.
+10-26 08:57:26.139  2581  2581 D PickerActionHandler: Attempting to load last used stack for calling package.
+10-26 08:57:26.139  2581  2581 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples]
+10-26 08:57:26.140  2581  2581 D DocumentStack: Resetting the whole darn stack to: DocumentStack{root=Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, docStack=[DocumentInfo{docId=exports, userId=0, name=SYNTHETIC exports, mimeType=vnd.android.document/directory, isContainer=true, isDirectory=true, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false, isBlockedFromTree=false} @ content://net.plainnotes.app.test.synthetic-imports/document/exports], stackTouched=true}
+10-26 08:57:26.140  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:26.140  2581  2581 D DocumentStack: Resetting the whole darn stack to: DocumentStack{root=Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, docStack=[DocumentInfo{docId=exports, userId=0, name=SYNTHETIC exports, mimeType=vnd.android.document/directory, isContainer=true, isDirectory=true, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false, isBlockedFromTree=false} @ content://net.plainnotes.app.test.synthetic-imports/document/exports], stackTouched=true}
+10-26 08:57:26.141  2581  2581 D DirectoryFragment: Showing directory: content://net.plainnotes.app.test.synthetic-imports/document/exports
+10-26 08:57:26.141  2581  2581 D DirectoryFragment: Creating new fragment for directory: content://net.plainnotes.app.test.synthetic-imports/document/exports
+10-26 08:57:26.147  2581  2581 W SelectionTracker: Setting gestureTooltypes is likely to result in unexpected behavior.
+10-26 08:57:26.148  2581  2581 D AbstractActionHandler: Creating new directory loader for: content://net.plainnotes.app.test.synthetic-imports/document/exports
+10-26 08:57:26.149  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:26.150  2581  3662 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples]
+10-26 08:57:26.154  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:26.154  2581  2581 V RefreshTask: Provider does not support refresh and did not refresh
+10-26 08:57:26.165  2581  3551 I EGL_emulation: Opening libGLESv1_CM_emulation.so
+10-26 08:57:26.166  2581  2581 D AutofillManager: notifyViewReadyInner:1073741824
+10-26 08:57:26.166  2581  3551 I EGL_emulation: Opening libGLESv2_emulation.so
+10-26 08:57:26.166  2581  2581 D AutofillManager: notifyViewReadyInner:1073741825
+10-26 08:57:26.167  2581  2581 D AutofillManager: notifyViewReadyInner:1073741826
+10-26 08:57:26.171  2581  3551 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+10-26 08:57:26.178  2581  2581 D AbstractActionHandler: Loader has finished for: content://net.plainnotes.app.test.synthetic-imports/document/exports
+10-26 08:57:26.178  2581  2581 I Model   : Updating model with new result set.
+10-26 08:57:26.178  2581  2581 D DirectoryFragment: Received model update. Loading=false
+10-26 08:57:26.178  2581  2581 D DefaultSelectionTracker: Ignoring onDataSetChange. No active selection.
+10-26 08:57:26.186  2581  3662 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports]
+10-26 08:57:26.743  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:26.746  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:26.747  2581  2581 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+10-26 08:57:26.755  1827  1846 I ActivityTaskManager: Displayed com.android.documentsui/.picker.PickActivity for user 0: +640ms
+10-26 08:57:26.927  3501  3501 D VRI[MainActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:26.929  1827  1930 I ImeTracker: com.android.documentsui:5ae8c472: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:26.931  1827  1930 I ImeTracker: com.android.documentsui:5ae8c472: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:26.950  1746  1770 I netd    : tetherGetStats() -> {[]} <0.33ms>
+10-26 08:57:26.954  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: STOPPED
+10-26 08:57:26.954  3501  3501 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:26.955  3578  3583 W nnotes.app.test: Cleared Reference was only reachable from finalizer (only reported once)
+10-26 08:57:27.241  3501  3516 E AccessibilityInteractionClient: 2 Disconnected nodes.
+10-26 08:57:27.250  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:27.252  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:27.262  3501  3516 E AccessibilityInteractionClient: 2 Disconnected nodes.
+10-26 08:57:27.270  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:27.273  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:27.282  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:27.289  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:27.328  2581  2581 D PickerActionHandler: onFinished() [content://net.plainnotes.app.test.synthetic-imports/document/featherline]
+10-26 08:57:27.336  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: RESTARTED
+10-26 08:57:27.336  3501  3501 V ActivityScenario: Update currentActivityStage to RESTARTED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:27.337  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: STARTED
+10-26 08:57:27.337  3501  3501 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:27.337  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:27.337  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:27.339  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: RESUMED
+10-26 08:57:27.339  3501  3501 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:27.397  1827  1930 I ImeTracker: net.plainnotes.app:168ef662: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:27.404  1827  1930 I ImeTracker: net.plainnotes.app:168ef662: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:27.428  2581  2581 D VRI[PickActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:27.430  3501  3516 I SyntheticImport: Featherline before-wrong-password-kdf; sampled_java_max_bytes=23809648 sampled_native_max_bytes=30001984 sampled_pss_max_kib=267705 memory_samples=119
+10-26 08:57:27.438  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:27.438  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:27.456  2581  2581 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@4a59a30
+10-26 08:57:27.457  1827  2971 W InputManager-JNI: Input channel object '7fb2c3e com.android.documentsui/com.android.documentsui.picker.PickActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:27.502  2055  2190 D EGL_emulation: app_time_stats: avg=391.92ms min=12.58ms max=1422.19ms count=4
+10-26 08:57:27.517  1827  1930 I ImeTracker: net.plainnotes.app:85a77226: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:27.517  1827  1930 I ImeTracker: net.plainnotes.app:85a77226: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:27.643  3501  3501 D Autofill Status: Autofill popup isn't shown because autofill is not available.
+10-26 08:57:27.643  3501  3501 D Autofill Status:
+10-26 08:57:27.643  3501  3501 D Autofill Status: Did you set up autofill?
+10-26 08:57:27.643  3501  3501 D Autofill Status: 1. Go to Settings > System > Languages&input > Advanced > Autofill Service
+10-26 08:57:27.643  3501  3501 D Autofill Status: 2. Pick a service
+10-26 08:57:27.643  3501  3501 D Autofill Status:
+10-26 08:57:27.643  3501  3501 D Autofill Status: Did you add an account?
+10-26 08:57:27.643  3501  3501 D Autofill Status: 1. Go to Settings > System > Languages&input > Advanced
+10-26 08:57:27.643  3501  3501 D Autofill Status: 2. Click on the settings icon next to the Autofill Service
+10-26 08:57:27.643  3501  3501 D Autofill Status: 3. Add your account
+10-26 08:57:27.662  3501  3501 D InsetsController: show(ime(), fromIme=false)
+10-26 08:57:27.662  3501  3501 I ImeTracker: net.plainnotes.app:46f0082a: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT_BY_INSETS_API fromUser false
+10-26 08:57:27.663  3501  3501 D InputMethodManager: showSoftInput() view=androidx.compose.ui.platform.AndroidComposeView{66e746e VFED..... .F....ID 0,0-320,336 aid=1073741827} flags=0 reason=SHOW_SOFT_INPUT_BY_INSETS_API
+10-26 08:57:27.678  2466  2466 I LatinIME: Starting input. Cursor position = 0,0
+10-26 08:57:27.689  3501  3501 I ImeTracker: net.plainnotes.app:8a55e793: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+10-26 08:57:27.689  3501  3501 D InputMethodManager: showSoftInput() view=androidx.compose.ui.platform.AndroidComposeView{66e746e VFED..... .F....ID 0,0-320,336 aid=1073741827} flags=0 reason=SHOW_SOFT_INPUT
+10-26 08:57:27.743  3501  3501 D InsetsController: show(ime(), fromIme=true)
+10-26 08:57:27.744  3501  3501 D InsetsController: show(ime(), fromIme=true)
+10-26 08:57:27.744  3501  3501 I ImeTracker: net.plainnotes.app:8a55e793: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+10-26 08:57:27.775  3501  3501 I ImeTracker: net.plainnotes.app:46f0082a: onShown
+10-26 08:57:27.808  3501  3501 I ImeTracker: net.plainnotes.app:f93f992c: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+10-26 08:57:27.808  3501  3501 I ImeTracker: net.plainnotes.app:f93f992c: onFailed at PHASE_CLIENT_VIEW_SERVED
+10-26 08:57:27.809  3501  3501 D InsetsController: hide(ime(), fromIme=false)
+10-26 08:57:27.809  3501  3501 I ImeTracker: net.plainnotes.app:b4029e4e: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT_BY_INSETS_API fromUser false
+10-26 08:57:27.809  3501  3501 I ImeTracker: net.plainnotes.app:b4029e4e: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+10-26 08:57:27.819  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@48bdbe0
+10-26 08:57:27.822  1827  2971 W InputManager-JNI: Input channel object '655a19e net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:27.835  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:27.835  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:27.850  3501  3501 I ImeTracker: net.plainnotes.app:30a0cfa2: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+10-26 08:57:27.851  3501  3501 I ImeTracker: net.plainnotes.app:30a0cfa2: onFailed at PHASE_CLIENT_VIEW_SERVED
+10-26 08:57:27.899  1827  1930 I ImeTracker: net.plainnotes.app:89b39c4c: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:27.901  1827  2971 I ImeTracker: net.plainnotes.app:89b39c4c: onFailed at PHASE_WM_HAS_IME_INSETS_CONTROL_TARGET
+10-26 08:57:27.902  3501  3501 E ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: 262719729
+10-26 08:57:27.966  3501  3506 I .plainnotes.app: Background concurrent mark compact GC freed 2669KB AllocSpace bytes, 0(0B) LOS objects, 24% free, 75MB/99MB, paused 3.690ms,3.620ms total 153.706ms
+10-26 08:57:28.587  3501  3516 I SyntheticImport: Featherline wrong-password-rejected; sampled_java_max_bytes=79063472 sampled_native_max_bytes=30001984 sampled_pss_max_kib=324057 memory_samples=163
+10-26 08:57:28.590  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@7f84e41
+10-26 08:57:28.593  1827  2971 W InputManager-JNI: Input channel object '619fb62 net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:28.595  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:28.595  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:28.630  2055  2190 D EGL_emulation: app_time_stats: avg=187.73ms min=14.14ms max=713.97ms count=6
+10-26 08:57:28.649  1827  1930 I ImeTracker: net.plainnotes.app:d1f661a5: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:28.649  1827  1930 I ImeTracker: net.plainnotes.app:d1f661a5: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:28.696  3501  3516 I SyntheticImport: Featherline before-correct-password-kdf; sampled_java_max_bytes=79723552 sampled_native_max_bytes=30001984 sampled_pss_max_kib=324057 memory_samples=167
+10-26 08:57:28.792  3501  3501 D Autofill Status: Autofill popup isn't shown because autofill is not available.
+10-26 08:57:28.792  3501  3501 D Autofill Status:
+10-26 08:57:28.792  3501  3501 D Autofill Status: Did you set up autofill?
+10-26 08:57:28.792  3501  3501 D Autofill Status: 1. Go to Settings > System > Languages&input > Advanced > Autofill Service
+10-26 08:57:28.792  3501  3501 D Autofill Status: 2. Pick a service
+10-26 08:57:28.792  3501  3501 D Autofill Status:
+10-26 08:57:28.792  3501  3501 D Autofill Status: Did you add an account?
+10-26 08:57:28.792  3501  3501 D Autofill Status: 1. Go to Settings > System > Languages&input > Advanced
+10-26 08:57:28.792  3501  3501 D Autofill Status: 2. Click on the settings icon next to the Autofill Service
+10-26 08:57:28.792  3501  3501 D Autofill Status: 3. Add your account
+10-26 08:57:28.809  3501  3501 D InsetsController: show(ime(), fromIme=false)
+10-26 08:57:28.811  3501  3501 I ImeTracker: net.plainnotes.app:c3ec35ef: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT_BY_INSETS_API fromUser false
+10-26 08:57:28.811  3501  3501 D InputMethodManager: showSoftInput() view=androidx.compose.ui.platform.AndroidComposeView{3ae0e64 VFED..... .F....ID 0,0-320,408 aid=1073741831} flags=0 reason=SHOW_SOFT_INPUT_BY_INSETS_API
+10-26 08:57:28.815  2466  2466 I LatinIME: Starting input. Cursor position = 0,0
+10-26 08:57:28.829  1746  1770 I netd    : tetherGetStats() -> {[]} <0.35ms>
+10-26 08:57:28.835  3501  3501 I ImeTracker: net.plainnotes.app:af2b09a0: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+10-26 08:57:28.835  3501  3501 D InputMethodManager: showSoftInput() view=androidx.compose.ui.platform.AndroidComposeView{3ae0e64 VFED..... .F....ID 0,0-320,408 aid=1073741831} flags=0 reason=SHOW_SOFT_INPUT
+10-26 08:57:28.856  3501  3501 D InsetsController: show(ime(), fromIme=true)
+10-26 08:57:28.862  3501  3501 D InsetsController: show(ime(), fromIme=true)
+10-26 08:57:28.862  3501  3501 I ImeTracker: net.plainnotes.app:af2b09a0: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+10-26 08:57:28.875  3501  3501 I ImeTracker: net.plainnotes.app:c3ec35ef: onShown
+10-26 08:57:28.941  3501  3501 I ImeTracker: net.plainnotes.app:dae2ad1e: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+10-26 08:57:28.942  3501  3501 I ImeTracker: net.plainnotes.app:dae2ad1e: onFailed at PHASE_CLIENT_VIEW_SERVED
+10-26 08:57:28.942  3501  3501 D InsetsController: hide(ime(), fromIme=false)
+10-26 08:57:28.942  3501  3501 I ImeTracker: net.plainnotes.app:b7da62eb: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT_BY_INSETS_API fromUser false
+10-26 08:57:28.942  3501  3501 I ImeTracker: net.plainnotes.app:b7da62eb: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+10-26 08:57:28.949  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@566bf72
+10-26 08:57:28.954  1827  2022 W InputManager-JNI: Input channel object 'a1f5f2f net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:28.964  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:28.964  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:28.972  3501  3501 I ImeTracker: net.plainnotes.app:8abba937: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+10-26 08:57:28.972  3501  3501 I ImeTracker: net.plainnotes.app:8abba937: onFailed at PHASE_CLIENT_VIEW_SERVED
+10-26 08:57:29.034  1827  1930 I ImeTracker: net.plainnotes.app:e182f214: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:29.035  3501  3501 E ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: 262719729
+10-26 08:57:29.036  1827  2022 I ImeTracker: net.plainnotes.app:e182f214: onFailed at PHASE_WM_HAS_IME_INSETS_CONTROL_TARGET
+10-26 08:57:29.584  3501  3516 I SyntheticImport: Featherline authenticated-preview; sampled_java_max_bytes=87105920 sampled_native_max_bytes=30001984 sampled_pss_max_kib=328258 memory_samples=200
+10-26 08:57:29.588  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@6dac404
+10-26 08:57:29.590  1827  2971 W InputManager-JNI: Input channel object '6d3c72a net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:29.596  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:29.596  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:29.630  1827  1930 I ImeTracker: net.plainnotes.app:f7be6e72: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:29.630  1827  1930 I ImeTracker: net.plainnotes.app:f7be6e72: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:29.631  2055  2190 D EGL_emulation: app_time_stats: avg=123.71ms min=2.38ms max=568.26ms count=8
+10-26 08:57:29.661  1827  1930 I ImeTracker: net.plainnotes.app:83254f58: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:29.662  1827  1930 I ImeTracker: net.plainnotes.app:83254f58: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:29.718  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@5b0894c
+10-26 08:57:29.723  1827  2987 W InputManager-JNI: Input channel object 'f29f4f5 net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:29.734  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:29.734  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:29.785  1827  1930 I ImeTracker: net.plainnotes.app:63772d89: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:29.785  1827  1930 I ImeTracker: net.plainnotes.app:63772d89: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:29.812  3501  3516 I SyntheticImport: Featherline committed; sampled_java_max_bytes=89998864 sampled_native_max_bytes=30001984 sampled_pss_max_kib=331710 memory_samples=208
+10-26 08:57:29.818  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@e657495
+10-26 08:57:29.826  1827  2971 W InputManager-JNI: Input channel object '70888db net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:29.830  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:29.830  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:29.866  1827  1930 I ImeTracker: net.plainnotes.app:f5719643: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:29.866  1827  1930 I ImeTracker: net.plainnotes.app:f5719643: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:29.885  1827  1930 I ImeTracker: net.plainnotes.app:f9ba40ff: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:29.885  1827  1930 I ImeTracker: net.plainnotes.app:f9ba40ff: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:29.949  1827  2987 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10150, packageName = null, attributionTag = null, token = android.os.Binder@3400440, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+10-26 08:57:29.953  2055  2134 D SplashScreenView: Build android.window.SplashScreenView{f2c6742 V.E...... ......ID 0,0-0,0}
+10-26 08:57:29.953  2055  2134 D SplashScreenView: Icon: view: null drawable: null size: 0
+10-26 08:57:29.953  2055  2134 D SplashScreenView: Branding: view: android.view.View{c6a4353 G.ED..... ......I. 0,0-0,0 #1020503 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+10-26 08:57:29.962  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: PAUSED
+10-26 08:57:29.962  3501  3501 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:29.968  2468  2468 I TopTaskTracker: onTaskMovedToFront: (moved taskInfo to front) taskId=15, baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=net.plainnotes.app.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity }
+10-26 08:57:29.975  1747  1747 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-26 08:57:29.983  1746  1770 I netd    : tetherGetStats() -> {[]} <1.01ms>
+10-26 08:57:30.006  1827  3650 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+10-26 08:57:30.167  1827  2925 W system_server: Long monitor contention with owner android.anim (1850) at void com.android.server.wm.WindowAnimator.lambda$new$1(long)(WindowAnimator.java:103) waiters=5 in void com.android.server.wm.WindowOrganizerController.finishTransition(android.os.IBinder, android.window.WindowContainerTransaction) for 159ms
+10-26 08:57:30.169  3501  3501 D VRI[MainActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:30.169  3501  3501 D VRI[MainActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:30.173  1827  1846 W ziparchive: Unable to open '/data/app/~~m9GRAsNUuHJ2_LNs5YObDg==/net.plainnotes.app.test-yx-MkVi_GsOcmVpCHu5yCg==/base.dm': No such file or directory
+10-26 08:57:30.174  1827  1846 I ActivityTaskManager: Displayed net.plainnotes.app.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +224ms
+10-26 08:57:30.175  1747  1747 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-26 08:57:30.180  2468  2468 I TopTaskTracker: onTaskMovedToFront: (moved taskInfo to front) taskId=7, baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.android.launcher3/.uioverrides.QuickstepLauncher }
+10-26 08:57:30.191  2468  2468 D StatsLog: LAUNCHER_ONRESUME
+10-26 08:57:30.225  2468  2468 D BaseDepthController: setSurface:
+10-26 08:57:30.225  2468  2468 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+10-26 08:57:30.225  2468  2468 D BaseDepthController: 	mSurface: Surface(name=com.android.launcher3/com.android.launcher3.uioverrides.QuickstepLauncher)/@0x1f2dac4
+10-26 08:57:30.272  2468  2468 D StateManager: createAtomicAnimation - fromState: Background, toState: Normal, partial trace:
+10-26 08:57:30.272  2468  2468 D StateManager: 	at com.android.quickstep.util.WorkspaceRevealAnim.prepareToAnimate(WorkspaceRevealAnim.java:130)
+10-26 08:57:30.272  2468  2468 D StateManager: 	at com.android.quickstep.util.WorkspaceRevealAnim.<init>(WorkspaceRevealAnim.java:66)
+10-26 08:57:30.272  2468  2468 D StateManager: 	at com.android.launcher3.QuickstepTransitionManager.createWallpaperOpenAnimations(QuickstepTransitionManager.java:1716)
+10-26 08:57:30.286  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: STOPPED
+10-26 08:57:30.286  3501  3501 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.MainActivity@692ddf1
+10-26 08:57:30.292  2468  2589 D EGL_emulation: app_time_stats: avg=3196.36ms min=149.85ms max=6242.87ms count=2
+10-26 08:57:30.294  3578  3578 D VRI[InstrumentationActivityInvoker$EmptyActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:30.305  1827  1930 I ImeTracker: com.android.launcher3:e7987619: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:30.306  1827  1930 I ImeTracker: com.android.launcher3:e7987619: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:30.318  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@5782f0b
+10-26 08:57:30.321  1827  2022 W InputManager-JNI: Input channel object 'bd81eb5 net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:30.322  2055  2132 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@6afcd45
+10-26 08:57:30.323  1827  2971 W InputManager-JNI: Input channel object 'eeb1176 Splash Screen net.plainnotes.app.test (client)' was disposed without first being removed with the input manager!
+10-26 08:57:30.324  3578  3578 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@c6057cc
+10-26 08:57:30.328  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@692ddf1 in: DESTROYED
+10-26 08:57:30.328  3501  3501 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+10-26 08:57:30.328  3501  3516 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+10-26 08:57:30.328  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@1100b8
+10-26 08:57:30.330  1827  2971 W InputManager-JNI: Input channel object 'd0cf0e6 net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:30.331  1827  2022 W InputManager-JNI: Input channel object 'c61fb68 net.plainnotes.app.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:30.334  2468  2468 I TopTaskTracker: onTaskRemoved: taskId=14
+10-26 08:57:30.334  2468  2468 I TopTaskTracker: onTaskRemoved: taskId=14
+10-26 08:57:30.336  2468  2468 I TopTaskTracker: onTaskRemoved: taskId=15
+10-26 08:57:30.336  2468  2468 I TopTaskTracker: onTaskRemoved: taskId=15
+10-26 08:57:30.338  1827  2971 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10149, packageName = null, attributionTag = null, token = android.os.Binder@3400440, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+10-26 08:57:30.344  2055  2134 D SplashScreenView: Build android.window.SplashScreenView{6d93020 V.E...... ......ID 0,0-0,0}
+10-26 08:57:30.344  2055  2134 D SplashScreenView: Icon: view: null drawable: null size: 0
+10-26 08:57:30.344  2055  2134 D SplashScreenView: Branding: view: android.view.View{fe36dd9 G.ED..... ......I. 0,0-0,0 #1020503 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+10-26 08:57:30.351  2468  2468 W SplitSelectStateCtor: Missing session instanceIds
+10-26 08:57:30.352  2468  2468 D StatsLog: LAUNCHER_SPLIT_SELECTION_EXIT_INTERRUPTED
+10-26 08:57:30.355  2468  2468 I TopTaskTracker: onTaskMovedToFront: (moved taskInfo to front) taskId=16, baseIntent=Intent { flg=0x10008000 cmp=net.plainnotes.app/.MainActivity }
+10-26 08:57:30.356  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@77fee6b in: PRE_ON_CREATE
+10-26 08:57:30.356  3501  3501 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+10-26 08:57:30.375  1747  1747 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-26 08:57:30.395  2468  2468 D VRI[QuickstepLauncher]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:30.399  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@77fee6b in: CREATED
+10-26 08:57:30.399  3501  3501 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=net.plainnotes.app.MainActivity@77fee6b
+10-26 08:57:30.400  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@77fee6b in: STARTED
+10-26 08:57:30.401  3501  3501 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.MainActivity@77fee6b
+10-26 08:57:30.401  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:30.401  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:30.404  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@77fee6b in: RESUMED
+10-26 08:57:30.404  3501  3501 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.MainActivity@77fee6b
+10-26 08:57:30.415  3501  3501 D AutofillManager: Fill dialog is enabled:false, hints=[]
+10-26 08:57:30.454  1827  1846 W ziparchive: Unable to open '/data/app/~~PYpdRn5kMKa63uPdFNkM3w==/net.plainnotes.app-Dv1Hr-adJ4tyvb81Unauiw==/base.dm': No such file or directory
+10-26 08:57:30.457  1827  1846 I ActivityTaskManager: Displayed net.plainnotes.app/.MainActivity for user 0: +113ms
+10-26 08:57:30.467  2468  2468 D BaseDepthController: setSurface:
+10-26 08:57:30.467  2468  2468 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+10-26 08:57:30.467  2468  2468 D BaseDepthController: 	mSurface: null
+10-26 08:57:30.467  2468  2468 D BaseDepthController: mSurface is null and mCurrentBlur is: 0
+10-26 08:57:30.468  2468  2468 D StateManager: goToState - fromState: Normal, toState: Normal, partial trace:
+10-26 08:57:30.468  2468  2468 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:453)
+10-26 08:57:30.468  2468  2468 D StateManager: 	at com.android.launcher3.statemanager.StateManager.moveToRestState(StateManager.java:444)
+10-26 08:57:30.468  2468  2468 D StateManager: 	at com.android.launcher3.statemanager.StatefulActivity.onStop(StatefulActivity.java:119)
+10-26 08:57:30.470  2468  2468 D StatsLog: LAUNCHER_ONSTOP
+10-26 08:57:30.475  2468  2468 W FrameTracker: Missing SF jank callback for vsyncId: 14446, CUJ=J<LAUNCHER_APP_CLOSE_TO_HOME_FALLBACK>
+10-26 08:57:30.490  2055  2132 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@225b39b
+10-26 08:57:30.491  1827  2271 W InputManager-JNI: Input channel object '38f8141 Splash Screen net.plainnotes.app (client)' was disposed without first being removed with the input manager!
+10-26 08:57:30.542  1827  1930 I ImeTracker: net.plainnotes.app:37dde2d2: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:30.544  1827  1930 I ImeTracker: net.plainnotes.app:37dde2d2: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:31.147  1827  2022 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10062, packageName = null, attributionTag = null, token = android.os.Binder@3400440, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+10-26 08:57:31.158  1747  1747 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-26 08:57:31.166  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@77fee6b in: PAUSED
+10-26 08:57:31.166  3501  3501 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.MainActivity@77fee6b
+10-26 08:57:31.180  2581  2581 D PickActivity: Created new state object: State{action=3, acceptMimes=[*/*], allowMultiple=false, localOnly=false, stack=DocumentStack{root=null, docStack=[], stackTouched=false}, dirConfigs={}, excludedAuthorities=[], openableOnly=false, restrictScopeStorage=true, sortModel=SortModel{dimensions={16908304=SortDimension{id=16908304, labelId=2131886475, dataType=0, sortCapability=0, defaultSortDirection=1, sortDirection=0, visibility=4}, 16908310=SortDimension{id=16908310, labelId=2131886469, dataType=0, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}, 2131296435=SortDimension{id=2131296435, labelId=2131886462, dataType=1, sortCapability=3, defaultSortDirection=2, sortDirection=0, visibility=0}, 2131296507=SortDimension{id=2131296507, labelId=2131886466, dataType=0, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}, 2131296791=SortDimension{id=2131296791, labelId=2131886472, dataType=1, sortCapability=3, defaultSortDirection=1, sortDirection=0, visibility=0}}, defaultDimensionId=0, sortedDimension=null}}
+10-26 08:57:31.182  2581  2581 D DrawerController: Calculated drawer width:272.0
+10-26 08:57:31.185  2581  2581 D AutofillManager: Fill dialog is enabled:false, hints=[]
+10-26 08:57:31.187  2581  2581 D BaseActivity: Set recents screenshot to enabled
+10-26 08:57:31.187  2581  2581 D PickerActionHandler: Load last accessed stack.
+10-26 08:57:31.187  2581  2581 D PickerActionHandler: Attempting to load last used stack for calling package.
+10-26 08:57:31.187  2581  2581 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports]
+10-26 08:57:31.190  1746  1770 I netd    : tetherGetStats() -> {[]} <1.67ms>
+10-26 08:57:31.190  2581  2581 D DocumentStack: Resetting the whole darn stack to: DocumentStack{root=Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, docStack=[DocumentInfo{docId=exports, userId=0, name=SYNTHETIC exports, mimeType=vnd.android.document/directory, isContainer=true, isDirectory=true, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false, isBlockedFromTree=false} @ content://net.plainnotes.app.test.synthetic-imports/document/exports], stackTouched=true}
+10-26 08:57:31.191  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:31.191  2581  2581 D DocumentStack: Resetting the whole darn stack to: DocumentStack{root=Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, docStack=[DocumentInfo{docId=exports, userId=0, name=SYNTHETIC exports, mimeType=vnd.android.document/directory, isContainer=true, isDirectory=true, isArchive=false, isInArchive=false, isPartial=false, isVirtual=false, isDeleteSupported=false, isCreateSupported=false, isMoveSupported=false, isRenameSupported=false, isMetadataSupported=false, isBlockedFromTree=false} @ content://net.plainnotes.app.test.synthetic-imports/document/exports], stackTouched=true}
+10-26 08:57:31.191  2581  2581 D DirectoryFragment: Showing directory: content://net.plainnotes.app.test.synthetic-imports/document/exports
+10-26 08:57:31.191  2581  2581 D DirectoryFragment: Creating new fragment for directory: content://net.plainnotes.app.test.synthetic-imports/document/exports
+10-26 08:57:31.201  2581  2581 W SelectionTracker: Setting gestureTooltypes is likely to result in unexpected behavior.
+10-26 08:57:31.201  2581  2581 D AbstractActionHandler: Creating new directory loader for: content://net.plainnotes.app.test.synthetic-imports/document/exports
+10-26 08:57:31.203  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:31.206  2581  3801 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports]
+10-26 08:57:31.214  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:31.222  2581  3551 I EGL_emulation: Opening libGLESv1_CM_emulation.so
+10-26 08:57:31.222  2581  3551 I EGL_emulation: Opening libGLESv2_emulation.so
+10-26 08:57:31.224  2581  2581 D AutofillManager: notifyViewReadyInner:1073741824
+10-26 08:57:31.225  2581  2581 D AutofillManager: notifyViewReadyInner:1073741825
+10-26 08:57:31.225  2581  2581 D AutofillManager: notifyViewReadyInner:1073741826
+10-26 08:57:31.233  2581  3551 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+10-26 08:57:31.251  3501  3506 I .plainnotes.app: Background concurrent mark compact GC freed 22MB AllocSpace bytes, 3(68KB) LOS objects, 23% free, 77MB/101MB, paused 249us,11.692ms total 119.772ms
+10-26 08:57:31.546  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:31.549  1827  1846 I ActivityTaskManager: Displayed com.android.documentsui/.picker.PickActivity for user 0: +396ms
+10-26 08:57:31.552  2581  3662 D ProvidersAccess: Matched roots: [Root{userId=0, authority=null, rootId=null, title=Recent, isUsb=false, isSd=false, isMtp=false} @ content:/root/null, Root{userId=0, authority=com.android.externalstorage.documents, rootId=primary, title=Android SDK built for x86_64, isUsb=false, isSd=false, isMtp=false} @ content://com.android.externalstorage.documents/root/primary, Root{userId=0, authority=com.android.providers.downloads.documents, rootId=downloads, title=Downloads, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.downloads.documents/root/downloads, Root{userId=0, authority=net.plainnotes.app.test.synthetic-imports, rootId=exports, title=SYNTHETIC IMPORT, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-imports/root/exports, Root{userId=0, authority=net.plainnotes.app.test.synthetic-medflow, rootId=samples, title=SYNTHETIC MED-02, isUsb=false, isSd=false, isMtp=false} @ content://net.plainnotes.app.test.synthetic-medflow/root/samples, Root{userId=0, authority=com.android.providers.media.documents, rootId=documents_root, title=Documents, isUsb=false, isSd=false, isMtp=false} @ content://com.android.providers.media.documents/root/documents_root]
+10-26 08:57:31.552  2581  2581 V RefreshTask: Provider does not support refresh and did not refresh
+10-26 08:57:31.553  2581  2581 D AbstractActionHandler: Loader has finished for: content://net.plainnotes.app.test.synthetic-imports/document/exports
+10-26 08:57:31.553  2581  2581 I Model   : Updating model with new result set.
+10-26 08:57:31.553  2581  2581 D DirectoryFragment: Received model update. Loading=false
+10-26 08:57:31.553  2581  2581 D DefaultSelectionTracker: Ignoring onDataSetChange. No active selection.
+10-26 08:57:31.570  2581  2581 E oid.documentsui: No package ID ff found for resource ID 0xffffffff.
+10-26 08:57:31.596  3501  3501 D VRI[MainActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:31.708  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@77fee6b in: STOPPED
+10-26 08:57:31.709  3501  3501 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.MainActivity@77fee6b
+10-26 08:57:31.895  1827  1930 I ImeTracker: com.android.documentsui:98188b6f: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:31.896  1827  1930 I ImeTracker: com.android.documentsui:98188b6f: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:31.954  3501  3516 E AccessibilityInteractionClient: 2 Disconnected nodes.
+10-26 08:57:31.964  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:31.967  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:31.979  3501  3516 E AccessibilityInteractionClient: 2 Disconnected nodes.
+10-26 08:57:31.988  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:31.990  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:32.000  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:32.219  3501  3516 E AccessibilityInteractionClient: 1 Disconnected nodes.
+10-26 08:57:32.243  2581  2581 D PickerActionHandler: onFinished() [content://net.plainnotes.app.test.synthetic-imports/document/featherline]
+10-26 08:57:32.253  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@77fee6b in: RESTARTED
+10-26 08:57:32.253  3501  3501 V ActivityScenario: Update currentActivityStage to RESTARTED, currentActivity=net.plainnotes.app.MainActivity@77fee6b
+10-26 08:57:32.254  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@77fee6b in: STARTED
+10-26 08:57:32.254  3501  3501 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=net.plainnotes.app.MainActivity@77fee6b
+10-26 08:57:32.254  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:32.254  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:32.256  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@77fee6b in: RESUMED
+10-26 08:57:32.257  3501  3501 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=net.plainnotes.app.MainActivity@77fee6b
+10-26 08:57:32.258  1747  1747 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-26 08:57:32.272  1746  1770 I netd    : tetherGetStats() -> {[]} <0.26ms>
+10-26 08:57:32.300  1827  1930 I ImeTracker: net.plainnotes.app:f066918: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:32.308  1827  1930 I ImeTracker: net.plainnotes.app:f066918: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:32.328  2581  2581 D VRI[PickActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:32.352  3501  3516 I SyntheticImport: Featherline before-reopened-password-kdf; sampled_java_max_bytes=104127840 sampled_native_max_bytes=31597120 sampled_pss_max_kib=351265 memory_samples=286
+10-26 08:57:32.358  2581  2581 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@602338b
+10-26 08:57:32.364  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:32.364  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:32.374  1827  2022 W InputManager-JNI: Input channel object '295f4fc com.android.documentsui/com.android.documentsui.picker.PickActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:32.437  2055  2062 I ndroid.systemui: Background concurrent mark compact GC freed 14MB AllocSpace bytes, 29(580KB) LOS objects, 49% free, 15MB/31MB, paused 3.565ms,3ms total 106.895ms
+10-26 08:57:32.439  2055  2190 D EGL_emulation: app_time_stats: avg=163.84ms min=2.86ms max=1953.20ms count=17
+10-26 08:57:32.444  1827  1930 I ImeTracker: net.plainnotes.app:8b5cba62: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:32.444  1827  1930 I ImeTracker: net.plainnotes.app:8b5cba62: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:32.448  2055  2064 W ndroid.systemui: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~PYpdRn5kMKa63uPdFNkM3w==/net.plainnotes.app-Dv1Hr-adJ4tyvb81Unauiw==/base.apk' with 1 weak references
+10-26 08:57:32.450  2055  2064 W ndroid.systemui: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~m9GRAsNUuHJ2_LNs5YObDg==/net.plainnotes.app.test-yx-MkVi_GsOcmVpCHu5yCg==/base.apk' with 1 weak references
+10-26 08:57:32.543  3501  3501 D Autofill Status: Autofill popup isn't shown because autofill is not available.
+10-26 08:57:32.543  3501  3501 D Autofill Status:
+10-26 08:57:32.543  3501  3501 D Autofill Status: Did you set up autofill?
+10-26 08:57:32.543  3501  3501 D Autofill Status: 1. Go to Settings > System > Languages&input > Advanced > Autofill Service
+10-26 08:57:32.543  3501  3501 D Autofill Status: 2. Pick a service
+10-26 08:57:32.543  3501  3501 D Autofill Status:
+10-26 08:57:32.543  3501  3501 D Autofill Status: Did you add an account?
+10-26 08:57:32.543  3501  3501 D Autofill Status: 1. Go to Settings > System > Languages&input > Advanced
+10-26 08:57:32.543  3501  3501 D Autofill Status: 2. Click on the settings icon next to the Autofill Service
+10-26 08:57:32.543  3501  3501 D Autofill Status: 3. Add your account
+10-26 08:57:32.559  3501  3501 D InsetsController: show(ime(), fromIme=false)
+10-26 08:57:32.559  3501  3501 I ImeTracker: net.plainnotes.app:f79c7616: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT_BY_INSETS_API fromUser false
+10-26 08:57:32.560  3501  3501 D InputMethodManager: showSoftInput() view=androidx.compose.ui.platform.AndroidComposeView{b14f5fc VFED..... .F....ID 0,0-320,336 aid=1073741825} flags=0 reason=SHOW_SOFT_INPUT_BY_INSETS_API
+10-26 08:57:32.567  2466  2466 I LatinIME: Starting input. Cursor position = 0,0
+10-26 08:57:32.587  3501  3501 I ImeTracker: net.plainnotes.app:bd462b54: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+10-26 08:57:32.588  3501  3501 D InputMethodManager: showSoftInput() view=androidx.compose.ui.platform.AndroidComposeView{b14f5fc VFED..... .F....ID 0,0-320,336 aid=1073741825} flags=0 reason=SHOW_SOFT_INPUT
+10-26 08:57:32.605  3501  3501 D InsetsController: show(ime(), fromIme=true)
+10-26 08:57:32.626  3501  3501 I ImeTracker: net.plainnotes.app:f79c7616: onShown
+10-26 08:57:32.631  3501  3501 D InsetsController: show(ime(), fromIme=true)
+10-26 08:57:32.631  3501  3501 I ImeTracker: net.plainnotes.app:bd462b54: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+10-26 08:57:32.708  3501  3501 I ImeTracker: net.plainnotes.app:9ee40dab: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+10-26 08:57:32.711  3501  3501 I ImeTracker: net.plainnotes.app:9ee40dab: onFailed at PHASE_CLIENT_VIEW_SERVED
+10-26 08:57:32.711  3501  3501 D InsetsController: hide(ime(), fromIme=false)
+10-26 08:57:32.711  3501  3501 I ImeTracker: net.plainnotes.app:ba32a0d4: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT_BY_INSETS_API fromUser false
+10-26 08:57:32.711  3501  3501 I ImeTracker: net.plainnotes.app:ba32a0d4: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+10-26 08:57:32.719  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@e51351f
+10-26 08:57:32.722  1827  2271 W InputManager-JNI: Input channel object '1669d3a net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:32.732  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:32.732  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:32.750  3501  3501 I ImeTracker: net.plainnotes.app:aafbf6d3: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+10-26 08:57:32.750  3501  3501 I ImeTracker: net.plainnotes.app:aafbf6d3: onFailed at PHASE_CLIENT_VIEW_SERVED
+10-26 08:57:32.773  1827  1930 I ImeTracker: net.plainnotes.app:39d37458: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:32.782  3501  3501 E ImeBackDispatcher: Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: 262719729
+10-26 08:57:32.783  1827  2971 I ImeTracker: net.plainnotes.app:39d37458: onFailed at PHASE_WM_HAS_IME_INSETS_CONTROL_TARGET
+10-26 08:57:32.802  1827  1930 I ImeTracker: net.plainnotes.app:52b54807: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:32.803  1827  1930 I ImeTracker: net.plainnotes.app:52b54807: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:33.347  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@f4ab507
+10-26 08:57:33.349  1827  2925 W InputManager-JNI: Input channel object 'd2e766d net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:33.352  3501  3501 W WindowOnBackDispatcher: OnBackInvokedCallback is not enabled for the application.
+10-26 08:57:33.352  3501  3501 W WindowOnBackDispatcher: Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+10-26 08:57:33.388  1827  1930 I ImeTracker: net.plainnotes.app:fa83d8c5: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:33.388  1827  1930 I ImeTracker: net.plainnotes.app:fa83d8c5: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:33.395  1746  1770 I netd    : tetherGetStats() -> {[]} <0.25ms>
+10-26 08:57:33.415  1827  1930 I ImeTracker: net.plainnotes.app:e2bd1de2: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:33.416  1827  1930 I ImeTracker: net.plainnotes.app:e2bd1de2: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:33.473  3501  3516 I SyntheticImport: Featherline finished; sampled_java_max_bytes=104127840 sampled_native_max_bytes=31597120 sampled_pss_max_kib=351265 memory_samples=327
+10-26 08:57:33.478  3501  3516 I SyntheticImport: Featherline full password/COMMIT/reopen sequence: {"api":35,"sampledNotPeak":true,"sampleIntervalMs":20,"maxHeapBytes":201326592,"javaObservedBytes":104127840,"nativeObservedBytes":31597120,"pssObservedKib":351265,"samples":327}
+10-26 08:57:33.483  1827  2925 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10150, packageName = null, attributionTag = null, token = android.os.Binder@3400440, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+10-26 08:57:33.488  2055  2134 D SplashScreenView: Build android.window.SplashScreenView{5cf7649 V.E...... ......ID 0,0-0,0}
+10-26 08:57:33.488  2055  2134 D SplashScreenView: Icon: view: null drawable: null size: 0
+10-26 08:57:33.488  2055  2134 D SplashScreenView: Branding: view: android.view.View{4d5cb4e G.ED..... ......I. 0,0-0,0 #1020503 android:id/splashscreen_branding_view} drawable: null size w: 0 h: 0
+10-26 08:57:33.490  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@77fee6b in: PAUSED
+10-26 08:57:33.490  3501  3501 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=net.plainnotes.app.MainActivity@77fee6b
+10-26 08:57:33.491  1747  1747 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-26 08:57:33.496  2468  2468 I TopTaskTracker: onTaskMovedToFront: (moved taskInfo to front) taskId=17, baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10000000 cmp=net.plainnotes.app.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity }
+10-26 08:57:33.536  3501  3501 D VRI[MainActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:33.536  3501  3501 D VRI[MainActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:33.545  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@77fee6b in: STOPPED
+10-26 08:57:33.545  3501  3501 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=net.plainnotes.app.MainActivity@77fee6b
+10-26 08:57:33.548  2055  2190 D EGL_emulation: app_time_stats: avg=110.94ms min=8.61ms max=570.44ms count=10
+10-26 08:57:33.550  1827  1846 W ziparchive: Unable to open '/data/app/~~m9GRAsNUuHJ2_LNs5YObDg==/net.plainnotes.app.test-yx-MkVi_GsOcmVpCHu5yCg==/base.dm': No such file or directory
+10-26 08:57:33.552  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@817334e
+10-26 08:57:33.554  2468  2468 I TopTaskTracker: onTaskMovedToFront: (moved taskInfo to front) taskId=7, baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.android.launcher3/.uioverrides.QuickstepLauncher }
+10-26 08:57:33.554  1827  1846 I ActivityTaskManager: Displayed net.plainnotes.app.test/androidx.test.core.app.InstrumentationActivityInvoker$EmptyActivity for user 0: +67ms
+10-26 08:57:33.558  1747  1747 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+10-26 08:57:33.558  2468  2468 D StatsLog: LAUNCHER_ONRESUME
+10-26 08:57:33.564  1827  2271 W InputManager-JNI: Input channel object '354f13 net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:33.567  2468  2468 D BaseDepthController: setSurface:
+10-26 08:57:33.567  2468  2468 D BaseDepthController: 	mWaitingOnSurfaceValidity: false
+10-26 08:57:33.567  2468  2468 D BaseDepthController: 	mSurface: Surface(name=com.android.launcher3/com.android.launcher3.uioverrides.QuickstepLauncher)/@0x1f2dac4
+10-26 08:57:33.577  3501  3501 D LifecycleMonitor: Lifecycle status change: net.plainnotes.app.MainActivity@77fee6b in: DESTROYED
+10-26 08:57:33.577  3501  3501 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+10-26 08:57:33.581  3501  3501 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@a6ef7c9
+10-26 08:57:33.586  2468  2468 D StateManager: createAtomicAnimation - fromState: Background, toState: Normal, partial trace:
+10-26 08:57:33.586  2468  2468 D StateManager: 	at com.android.quickstep.util.WorkspaceRevealAnim.prepareToAnimate(WorkspaceRevealAnim.java:130)
+10-26 08:57:33.586  2468  2468 D StateManager: 	at com.android.quickstep.util.WorkspaceRevealAnim.<init>(WorkspaceRevealAnim.java:66)
+10-26 08:57:33.586  2468  2468 D StateManager: 	at com.android.launcher3.QuickstepTransitionManager.createWallpaperOpenAnimations(QuickstepTransitionManager.java:1716)
+10-26 08:57:33.597  1827  2971 W InputManager-JNI: Input channel object 'c9a3cb1 net.plainnotes.app/net.plainnotes.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-26 08:57:33.599  2468  2589 D EGL_emulation: app_time_stats: avg=1653.52ms min=99.39ms max=3207.65ms count=2
+10-26 08:57:33.601  1827  1930 I ImeTracker: com.android.launcher3:e2a8f95c: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
+10-26 08:57:33.601  1827  1930 I ImeTracker: com.android.launcher3:e2a8f95c: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-26 08:57:33.605  3578  3578 D VRI[InstrumentationActivityInvoker$EmptyActivity]: visibilityChanged oldVisibility=true newVisibility=false
+10-26 08:57:33.607  1827  1827 W IPCThreadState: Sending oneway calls to frozen process.
+10-26 08:57:33.607  1827  1827 W IPCThreadState: Sending oneway calls to frozen process.
+10-26 08:57:33.607  1827  1827 W IPCThreadState: Sending oneway calls to frozen process.
+10-26 08:57:33.607  1827  1827 W IPCThreadState: Sending oneway calls to frozen process.
+10-26 08:57:33.607  1827  1827 W IPCThreadState: Sending oneway calls to frozen process.
+10-26 08:57:33.607  1827  1827 W IPCThreadState: Sending oneway calls to frozen process.
+10-26 08:57:33.617  3501  3516 D IdlingRegistry: Unregistering idling resources: [androidx.compose.ui.test.EspressoLink@4119d8b]
+10-26 08:57:33.618  2468  2468 I TopTaskTracker: onTaskRemoved: taskId=16
+10-26 08:57:33.618  2468  2468 I TopTaskTracker: onTaskRemoved: taskId=16
+10-26 08:57:33.619  2055  2132 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@8902e05
+10-26 08:57:33.620  3501  3516 I TestRunner: finished: featherlineImportRunsAsIsolatedLowMemoryFlow(net.plainnotes.app.imports.AutomaticImportAndroidTest)

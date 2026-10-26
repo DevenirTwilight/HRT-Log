@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="2" failures="1" errors="0" skipped="0" time="36.26" timestamp="2026-10-26T09:19:18" hostname="localhost">
+  <testsuite name="net.plainnotes.app.imports.AutomaticImportAndroidTest" tests="2" failures="1" errors="0" skipped="0" time="35.574" timestamp="2026-10-26T09:19:18" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory" classname="net.plainnotes.app.imports.AutomaticImportAndroidTest" time="23.825">
+      <failure>java.lang.AssertionError: Failed to assert the following: (Selected = 'true')
+Semantics of the node:
+Node #1908 at (l=24.0, t=448.0, r=296.0, b=504.0)px
+Focused = 'false'
+Role = 'RadioButton'
+Selected = 'false'
+Text = '[Estradiol (E2) (Sublingual)]'
+Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+MergeDescendants = 'true'
+Has 1 child, 19 siblings
+Selector used: ((Text + InputText + EditableText contains 'Estradiol (E2) (Sublingual)' (ignoreCase: false)) &amp;&amp; (OnClick is defined))
+
+at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:264)
+at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+at androidx.compose.ui.test.AssertionsKt.assertIsSelected(Assertions.kt:88)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.exerciseImport(AutomaticImportAndroidTest.kt:273)
+at net.plainnotes.app.imports.AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory(AutomaticImportAndroidTest.kt:191)
+</failure>
+    </testcase>
+    <testcase name="featherlineImportRunsAsIsolatedLowMemoryFlow" classname="net.plainnotes.app.imports.AutomaticImportAndroidTest" time="11.749" />
+  </testsuite>
+</testsuites>

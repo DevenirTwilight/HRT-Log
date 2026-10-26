@@ -66,7 +66,7 @@ class UndoSkippedRestartAndroidTest {
             val slot=r.calendar(at(7),zone,day).single{it.slot.key==skipped.slot_key};check(slot)
             r.complete(slot.slot,at(10),3.0);r.complete(slot.slot,at(10),3.0)
             assertEquals(3.0,r.containers().single().used_amount,0.0);assertEquals(hidden,r.voidedContainers().single())
-            assertEquals(1,r.records().count{it.slot_key==skipped.slot_key});assertEquals(19,db.openHelper.writableDatabase.version)
+            assertEquals(1,r.records().count{it.slot_key==skipped.slot_key});assertEquals(20,db.openHelper.writableDatabase.version)
         } finally { db.close();context.deleteDatabase(name);backup.delete();pid.delete() }
     }
 }

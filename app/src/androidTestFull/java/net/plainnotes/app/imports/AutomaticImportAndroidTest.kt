@@ -102,7 +102,7 @@ class AutomaticImportAndroidTest {
     private fun loadedImportDirectory()=!rootsOpen() &&
         (systemNode("SYNTHETIC IMPORT")!=null || systemNode("SYNTHETIC exports")!=null) &&
         (systemId("dir_list")?.childCount ?: 0)>0 &&
-        listOf("SYNTHETIC tracker.db","SYNTHETIC memo.json","SYNTHETIC mona.db","SYNTHETIC featherline.json","SYNTHETIC invalid.json")
+        listOf("SYNTHETIC tracker.db","SYNTHETIC memo.json","SYNTHETIC mona.db","SYNTHETIC featherline.json","SYNTHETIC chrysalide.db","SYNTHETIC invalid.json")
             .any {systemNode(it)!=null}
     private fun settlePicker() {instrumentation.uiAutomation.waitForIdle(300,3000)}
     private fun selectImportRoot() {
@@ -121,7 +121,7 @@ class AutomaticImportAndroidTest {
         waitSystem("root selection completed without cancelling picker") {pickerRoot()!=null && !rootsOpen()}
     }
     private fun choose(kind:String,expectFailure:Boolean=false) {
-        val name=when(kind){"tracker"->"SYNTHETIC tracker.db";"mona"->"SYNTHETIC mona.db";"featherline"->"SYNTHETIC featherline.json";"invalid"->"SYNTHETIC invalid.json";else->"SYNTHETIC memo.json"}
+        val name=when(kind){"tracker"->"SYNTHETIC tracker.db";"mona"->"SYNTHETIC mona.db";"featherline"->"SYNTHETIC featherline.json";"chry"->"SYNTHETIC chrysalide.db";"invalid"->"SYNTHETIC invalid.json";else->"SYNTHETIC memo.json"}
         click(R.string.import_other_apps)
         waitSystem("DocumentsUI"){pickerRoot()!=null}
         settlePicker()
@@ -184,7 +184,7 @@ class AutomaticImportAndroidTest {
         waitSystem("resumed application after document result") {
             scenario?.state==Lifecycle.State.RESUMED && pickerRoot()==null
         }
-        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.FeatherlinePassword || model.dataJob.value is NotesViewModel.DataJob.MonaReady || model.dataJob.value is NotesViewModel.DataJob.HtReady || model.dataJob.value is NotesViewModel.DataJob.ImportReady || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.FeatherlinePassword || model.dataJob.value is NotesViewModel.DataJob.ChrysalideReady || model.dataJob.value is NotesViewModel.DataJob.MonaReady || model.dataJob.value is NotesViewModel.DataJob.HtReady || model.dataJob.value is NotesViewModel.DataJob.ImportReady || model.dataJob.value is NotesViewModel.DataJob.Failed}
         assertEquals("Detection result",expectFailure,model.dataJob.value is NotesViewModel.DataJob.Failed)
     }
     @Test fun realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory() {
@@ -192,6 +192,12 @@ class AutomaticImportAndroidTest {
             // Activity destruction may itself fail after a failed composition. Keep
             // the original failure/line before @After can mask it. Synthetic only.
             android.util.Log.e("SyntheticImport", "Primary unified import test failure", failure)
+            throw failure
+        }
+    }
+    @Test fun featherlineImportRunsAsIsolatedLowMemoryFlow() {
+        try { exerciseFeatherline() } catch(failure:Throwable) {
+            android.util.Log.e("SyntheticImport", "Isolated Featherline import failed", failure)
             throw failure
         }
     }
@@ -251,7 +257,47 @@ class AutomaticImportAndroidTest {
         val persistedLabs=model.extra.value.labs.filter{it.sampled_utc==java.time.Instant.parse("2026-10-25T08:30:00Z").toEpochMilli()}
         assertEquals(setOf("pg/mL","ng/dL"),persistedLabs.map{it.unit}.toSet())
         assertTrue(persistedLabs.all{it.panel_id!=null && it.sampled_zone=="Europe/Paris"})
-        choose("invalid",true);assertEquals(18,model.extra.value.records.size);click(R.string.ok,false)
+        stage("Chrysalide SAF preview, explicit target, commit")
+        choose("chry")
+        val chry=model.dataJob.value as NotesViewModel.DataJob.ChrysalideReady
+        assertEquals(1,chry.preview.newCount);assertEquals(1,chry.preview.plan.export.bloodTests.size)
+        ui.onNodeWithText(context.getString(R.string.import_identified,"Chrysalide · v5")).assertExists()
+        val targetName=model.state.value.medications.first().name
+        val beforeChry=model.extra.value.records.count{it.origin=="IMPORT_CHRYSALIDE"}
+        click(R.string.cancel,false)
+        assertEquals(beforeChry,model.extra.value.records.count{it.origin=="IMPORT_CHRYSALIDE"})
+        choose("chry")
+        val targetChoice=ui.onNode(hasText(targetName) and hasClickAction())
+        targetChoice.performScrollTo()
+        targetChoice.performTouchInput { click() }
+        ui.waitForIdle()
+        targetChoice.assertIsSelected()
+        ui.onNodeWithText(text(R.string.chry_confirm)).assertIsEnabled()
+        click(R.string.chry_confirm,false)
+        try { ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.ChrysalideImported || model.dataJob.value is NotesViewModel.DataJob.Failed} }
+        catch(failure:Throwable) {
+            val visibleRows=model.extra.value.records.count{it.origin=="IMPORT_CHRYSALIDE"}
+            android.util.Log.e("SyntheticImport","Chrysalide result wait timed out; state=${model.dataJob.value::class.java.simpleName}, visibleRows=$visibleRows",failure)
+            throw failure
+        }
+        val chryResult=model.dataJob.value as NotesViewModel.DataJob.ChrysalideImported
+        assertEquals(1,chryResult.summary.added);assertEquals(2,chryResult.summary.unsupported)
+        click(R.string.ok,false)
+        ui.waitUntil(30000){model.extra.value.records.count{it.origin=="IMPORT_CHRYSALIDE"}==beforeChry+1}
+        val chryRows=model.extra.value.records.filter{it.origin=="IMPORT_CHRYSALIDE"}
+        assertEquals(1,chryRows.size);assertNull(chryRows.single().actual_dose);assertEquals(java.time.Instant.parse("2024-03-31T07:30:00Z").toEpochMilli(),chryRows.single().taken_utc);assertEquals("UTC",chryRows.single().taken_zone)
+        scenario!!.close();launch();open(Destination.HISTORY)
+        ui.waitUntil(30000){model.extra.value.records.any{it.origin=="IMPORT_CHRYSALIDE"}}
+        assertEquals(chryRows,model.extra.value.records.filter{it.origin=="IMPORT_CHRYSALIDE"})
+        data();choose("chry")
+        val replay=model.dataJob.value as NotesViewModel.DataJob.ChrysalideReady
+        assertEquals(0,replay.preview.newCount);assertEquals(1,replay.preview.items.count{it.status==net.plainnotes.app.data.ChrysalideItemStatus.EXISTING})
+        click(R.string.chry_confirm,false)
+        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.ChrysalideImported || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        assertEquals(0,(model.dataJob.value as NotesViewModel.DataJob.ChrysalideImported).summary.added)
+        click(R.string.ok,false)
+        assertEquals(1,model.extra.value.records.count{it.origin=="IMPORT_CHRYSALIDE"})
+        choose("invalid",true);assertEquals(19,model.extra.value.records.size);click(R.string.ok,false)
         stage("reopened Mona and idempotency verified; cancel picker");click(R.string.import_other_apps)
         waitSystem("cancel DocumentsUI"){instrumentation.uiAutomation.rootInActiveWindow?.packageName?.toString()?.endsWith(".documentsui")==true}
         settlePicker()
@@ -259,7 +305,6 @@ class AutomaticImportAndroidTest {
         instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK)
         ui.waitUntil(10000){model.dataJob.value is NotesViewModel.DataJob.ImportCancelled}
         ui.onNodeWithText(text(R.string.import_cancelled)).assertExists()
-        exerciseFeatherline()
     }
     private fun exerciseFeatherline() {
         val expected=InstrumentationRegistry.getArguments().getString("featherlineExpectedHeapMb")

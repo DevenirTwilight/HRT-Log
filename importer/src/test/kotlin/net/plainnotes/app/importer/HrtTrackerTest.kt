@@ -15,6 +15,19 @@ class HrtTrackerTest {
         assertEquals(listOf("pg/mL", "pmol/L"), export.labs.map { it.unit }) // unknown unit dropped
     }
 
+    @Test fun transmtfV2CompatibleSyntheticShapeUsesExistingTrackerParserAndCompoundMass() {
+        val text=javaClass.getResource("/hrttracker_v2_synthetic.json")!!.readText()
+        val parsed=ImportFormatDetector.json(text) as ImportFormatDetector.Parsed.Tracker
+        assertEquals(export.events.map{it.id},parsed.export.events.map{it.id})
+        val ev=parsed.export.events.first{it.id=="s1"}
+        assertEquals(Instant.ofEpochSecond(491000L*3600),ev.at)
+        assertEquals(1.5,ev.doseMg) // upstream doseMG is compound mass, never E2 equivalent
+        assertEquals("EV",parsed.export.events.first{it.id=="i1"}.ester)
+        assertTrue(parsed.export.events.any{it.route=="gel"})
+        assertTrue(parsed.export.events.any{it.route=="patchApply"})
+        assertTrue(HrtTracker.preview(parsed.export).skipped.getOrDefault("patch_remove",0)>0)
+    }
+
     @Test fun groupsAndSkipsWithoutGuessing() {
         val p = HrtTracker.preview(export)
         val groups = p.groups.keys

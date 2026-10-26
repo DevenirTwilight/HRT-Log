@@ -1,0 +1,1224 @@
+[   23.249894] init: computing context for service 'mediadrm'
+[   23.251570] init: couldn't write 1512 to /dev/cpuset/camera-daemon/tasks: No such file or directory
+[   23.287453] init: starting service 'mediadrm'...
+[   23.289988] init: computing context for service 'mediaextractor'
+[   23.320350] init: starting service 'mediaextractor'...
+[   23.321884] init: computing context for service 'mediametrics'
+[   23.323322] init: starting service 'mediametrics'...
+[   23.324779] init: computing context for service 'media'
+[   23.326059] init: starting service 'media'...
+[   23.327297] init: computing context for service 'netd'
+[   23.328584] init: starting service 'netd'...
+[   23.329797] init: computing context for service 'storaged'
+[   23.385059] init: Created socket '/dev/socket/netd', mode 660, user 0, group 1000
+[   23.387097] init: Created socket '/dev/socket/dnsproxyd', mode 660, user 0, group 3003
+[   23.389221] init: Created socket '/dev/socket/mdns', mode 660, user 0, group 1000
+[   23.401260] init: starting service 'storaged'...
+[   23.405986] init: computing context for service 'wificond'
+[   23.408078] init: starting service 'wificond'...
+[   23.420561] init: computing context for service 'gnss_service'
+[   23.422185] init: starting service 'gnss_service'...
+[   23.423736] init: computing context for service 'mediacodec'
+[   23.425259] init: starting service 'mediacodec'...
+[   23.426944] init: computing context for service 'ril-daemon'
+[   23.428490] init: starting service 'ril-daemon'...
+[   23.450470] init: Failed to open file '/d/mmc0/mmc0:0001/ext_csd': No such file or directory
+[   23.460778] init: Created socket '/dev/socket/fwmarkd', mode 660, user 0, group 3003
+[   23.548350] init: Command 'class_start main' action=vold.decrypt=trigger_restart_framework (/init.rc:651) returned 0 took 319.405ms.
+[   23.584758] init: computing context for service 'ranchu-net'
+[   23.586398] init: starting service 'ranchu-net'...
+[   23.588122] init: cannot find '/system/bin/fingerprintd', disabling 'fingerprintd': No such file or directory
+[   23.651348] init: computing context for service 'gatekeeperd'
+[   23.652935] init: starting service 'gatekeeperd'...
+[   23.686653] init: cannot find '/system/xbin/perfprofd', disabling 'perfprofd': No such file or directory
+[   23.689142] init: computing context for service 'tombstoned'
+[   23.691087] init: starting service 'tombstoned'...
+[   23.692925] init: computing context for service 'fps_hal'
+[   23.695084] init: starting service 'fps_hal'...
+[   23.696731] init: Command 'class_start late_start' action=vold.decrypt=trigger_restart_framework (/init.rc:652) returned 0 took 111.97ms.
+[   23.697956] init: Created socket '/dev/socket/tombstoned_crash', mode 666, user 1000, group 1000
+[   23.698020] init: Created socket '/dev/socket/tombstoned_intercept', mode 666, user 1000, group 1000
+[   23.699090] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[   23.921587] capability: warning: `main' uses 32-bit capabilities (legacy support in use)
+[   23.954288] type=1400 audit(1793006046.890:8): avc: denied { module_request } for pid=1346 comm="vold" kmod="crypto-cbc(aes-asm)-all" scontext=u:r:vold:s0 tcontext=u:r:kernel:s0 tclass=system permissive=0
+[   23.958917] type=1400 audit(1793006065.950:9): avc: denied { module_request } for pid=1520 comm="netd" kmod="netdev-dummy0" scontext=u:r:netd:s0 tcontext=u:r:kernel:s0 tclass=system permissive=0
+[   23.964720] type=1400 audit(1793006065.950:9): avc: denied { module_request } for pid=1520 comm="netd" kmod="netdev-dummy0" scontext=u:r:netd:s0 tcontext=u:r:kernel:s0 tclass=system permissive=0
+[   23.969284] type=1400 audit(1793006065.950:10): avc: denied { module_request } for pid=1520 comm="netd" kmod="net-pf-16-proto-5" scontext=u:r:netd:s0 tcontext=u:r:kernel:s0 tclass=system permissive=0
+[   24.035792] IPv6: ADDRCONF(NETDEV_UP): radio0-peer: link is not ready
+[   24.038908] init: computing context for service 'dhcpclient_rtr'
+[   24.040535] init: starting service 'dhcpclient_rtr'...
+[   24.214353] ieee80211 phy1: mac80211_hwsim_start
+[   24.214358] ieee80211 phy1: mac80211_hwsim_add_interface (type=2 mac_addr=02:00:00:00:01:00)
+[   24.214361] ieee80211 phy1: mac80211_hwsim_bss_info_changed(changed=0xe vif->addr=02:00:00:00:01:00)
+[   24.214362] ieee80211 phy1:   ERP_CTS_PROT: 0
+[   24.214363] ieee80211 phy1:   ERP_PREAMBLE: 0
+[   24.214364] ieee80211 phy1:   ERP_SLOT: 0
+[   24.214367] ieee80211 phy1: mac80211_hwsim_conf_tx (queue=0 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   24.214368] ieee80211 phy1: mac80211_hwsim_conf_tx (queue=1 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   24.214369] ieee80211 phy1: mac80211_hwsim_conf_tx (queue=2 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   24.214370] ieee80211 phy1: mac80211_hwsim_conf_tx (queue=3 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   24.214371] ieee80211 phy1: mac80211_hwsim_bss_info_changed(changed=0x2000 vif->addr=02:00:00:00:01:00)
+[   24.214373] ieee80211 phy1: mac80211_hwsim_config (freq=0 idle=1 ps=0 smps=auto)
+[   24.214433] IPv6: ADDRCONF(NETDEV_UP): wlan1: link is not ready
+[   24.214453] ieee80211 phy1: mac80211_hwsim_configure_filter
+[   24.217608] init: computing context for service 'ipv6proxy'
+[   24.219047] init: starting service 'ipv6proxy'...
+[   24.226294] init: computing context for service 'emu_hostapd'
+[   24.227724] init: starting service 'emu_hostapd'...
+[   24.232828] init: computing context for service 'dhcpserver'
+[   24.234261] init: starting service 'dhcpserver'...
+[   24.243333] type=1400 audit(1793006065.950:10): avc: denied { module_request } for pid=1520 comm="netd" kmod="net-pf-16-proto-5" scontext=u:r:netd:s0 tcontext=u:r:kernel:s0 tclass=system permissive=0
+[   24.243568] IPv6: ADDRCONF(NETDEV_CHANGE): radio0-peer: link becomes ready
+[   24.251134] type=1400 audit(1793006066.240:11): avc: denied { setgid } for pid=1675 comm="hostapd" capability=6 scontext=u:r:hostapd:s0 tcontext=u:r:hostapd:s0 tclass=capability permissive=0
+[   24.255750] init: Service 'ranchu-net' (pid 1542) exited with status 0
+[   24.256023] type=1400 audit(1793006066.240:12): avc: denied { setgid } for pid=1675 comm="hostapd" capability=6 scontext=u:r:hostapd:s0 tcontext=u:r:hostapd:s0 tclass=capability permissive=0
+[   24.256026] type=1400 audit(1793006066.240:13): avc: denied { setuid } for pid=1675 comm="hostapd" capability=7 scontext=u:r:hostapd:s0 tcontext=u:r:hostapd:s0 tclass=capability permissive=0
+[   24.267432] ieee80211 phy1: mac80211_hwsim_configure_filter
+[   24.267436] ieee80211 phy1: mac80211_hwsim_change_interface (old type=2, new type=3, mac_addr=02:00:00:00:01:00)
+[   24.267439] ieee80211 phy1: mac80211_hwsim_configure_filter
+[   24.267440] ieee80211 phy1: mac80211_hwsim_bss_info_changed(changed=0xe vif->addr=02:00:00:00:01:00)
+[   24.267441] ieee80211 phy1:   ERP_CTS_PROT: 0
+[   24.267442] ieee80211 phy1:   ERP_PREAMBLE: 0
+[   24.267443] ieee80211 phy1:   ERP_SLOT: 0
+[   24.267445] ieee80211 phy1: mac80211_hwsim_conf_tx (queue=0 txop=47 cw_min=3 cw_max=7 aifs=2)
+[   24.267446] ieee80211 phy1: mac80211_hwsim_conf_tx (queue=1 txop=94 cw_min=7 cw_max=15 aifs=2)
+[   24.267447] ieee80211 phy1: mac80211_hwsim_conf_tx (queue=2 txop=0 cw_min=15 cw_max=1023 aifs=3)
+[   24.267448] ieee80211 phy1: mac80211_hwsim_conf_tx (queue=3 txop=0 cw_min=15 cw_max=1023 aifs=7)
+[   24.267450] ieee80211 phy1: mac80211_hwsim_bss_info_changed(changed=0x2000 vif->addr=02:00:00:00:01:00)
+[   24.267904] ieee80211 phy1: mac80211_hwsim_configure_filter
+[   24.267927] cfg80211: Calling CRDA to update world regulatory domain
+[   24.271605] ieee80211 phy1: mac80211_hwsim_configure_filter
+[   25.707798] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[   25.994527] init: processing action (sys.sysctl.extra_free_kbytes=*)
+[   27.849487] sdcardfs version 2.0
+[   27.863996] sdcardfs: dev_name -> /data/media
+[   27.881073] sdcardfs: options -> fsuid=1023,fsgid=1023,multiuser,mask=6,userid=0,gid=1015
+[   27.883781] sdcardfs: mnt -> c93196d0
+[   27.886782] sdcardfs: mounted on top of /data/media type ext4
+[   27.889414] SELinux: initialized (dev sdcardfs, type sdcardfs), uses genfs_contexts
+[   27.889466] Remount options were mask=23,gid=9997 for vfsmnt c01049d0.
+[   27.891322] sdcardfs : options - debug:1
+[   27.892519] sdcardfs : options - gid:9997
+[   27.893779] sdcardfs : options - mask:23
+[   27.897229] Remount options were mask=7,gid=9997 for vfsmnt c22aca90.
+[   27.900930] sdcardfs : options - debug:1
+[   27.902182] sdcardfs : options - gid:9997
+[   27.903587] sdcardfs : options - mask:7
+[   28.089639] ieee80211 phy0: mac80211_hwsim_start
+[   28.089645] ieee80211 phy0: mac80211_hwsim_add_interface (type=2 mac_addr=02:00:00:44:55:66)
+[   28.089648] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0xe vif->addr=02:00:00:44:55:66)
+[   28.089650] ieee80211 phy0:   ERP_CTS_PROT: 0
+[   28.089651] ieee80211 phy0:   ERP_PREAMBLE: 0
+[   28.089653] ieee80211 phy0:   ERP_SLOT: 0
+[   28.089660] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=0 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   28.089666] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=1 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   28.089668] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=2 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   28.089670] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=3 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   28.089672] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x2000 vif->addr=02:00:00:44:55:66)
+[   28.089675] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=1 ps=0 smps=auto)
+[   28.089683] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   28.089769] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   28.206664] init: computing context for service 'wpa_supplicant'
+[   28.207949] init: starting service 'wpa_supplicant'...
+[   28.222349] init: Created socket '/dev/socket/wpa_wlan0', mode 660, user 1010, group 1010
+[   28.562974] ieee80211 phy0: mac80211_hwsim_add_interface (type=10 mac_addr=02:00:00:00:00:00)
+[   28.562979] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=0 txop=47 cw_min=3 cw_max=7 aifs=2)
+[   28.562980] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=1 txop=94 cw_min=7 cw_max=15 aifs=2)
+[   28.562982] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=2 txop=0 cw_min=15 cw_max=1023 aifs=3)
+[   28.562983] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=3 txop=0 cw_min=15 cw_max=1023 aifs=7)
+[   29.274603] ieee80211 phy1: hwsim hw_scan request
+[   29.274678] ieee80211 phy1: hw scan 2412 MHz
+[   29.391035] ieee80211 phy1: hw scan 2417 MHz
+[   29.513708] ieee80211 phy1: hw scan 2422 MHz
+[   29.630275] ieee80211 phy1: hw scan 2427 MHz
+[   29.752876] ieee80211 phy1: hw scan 2432 MHz
+[   29.870101] ieee80211 phy1: hw scan 2437 MHz
+[   29.990096] ieee80211 phy1: hw scan 2442 MHz
+[   30.110130] ieee80211 phy1: hw scan 2447 MHz
+[   30.230112] ieee80211 phy1: hw scan 2452 MHz
+[   30.350166] ieee80211 phy1: hw scan 2457 MHz
+[   30.474074] ieee80211 phy1: hw scan 2462 MHz
+[   30.521910] init: processing action (sys.boot_completed=1)
+[   30.523657] init: processing action (sys.boot_completed=1 && sys.logbootcomplete=1)
+[   30.531031] init: computing context for service 'exec 5 (/system/bin/bootstat)'
+[   30.534100] init: starting service 'exec 5 (/system/bin/bootstat)'...
+[   30.537001] init: SVC_EXEC pid 2178 (uid 0 gid 0+0 context default) started; waiting...
+[   30.576249] init: Service 'exec 5 (/system/bin/bootstat)' (pid 2178) exited with status 0 waiting took 0.049939 seconds
+[   30.578892] init: computing context for service 'exec 6 (/system/bin/bootstat)'
+[   30.590153] ieee80211 phy1: hw scan complete
+[   30.594418] init: starting service 'exec 6 (/system/bin/bootstat)'...
+[   30.600436] ieee80211 phy1: mac80211_hwsim_get_survey (idx=0)
+[   30.607418] init: SVC_EXEC pid 2188 (uid 0 gid 0+0 context default) started; waiting...
+[   30.609881] ieee80211 phy1: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   30.609887] ieee80211 phy1: add channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   30.609891] ieee80211 phy1: mac80211_hwsim_bss_info_changed(changed=0x40000 vif->addr=02:00:00:00:01:00)
+[   30.609893] ieee80211 phy1:   TX Power: 20 dBm
+[   30.609896] ieee80211 phy1: mac80211_hwsim_bss_info_changed(changed=0x4000 vif->addr=02:00:00:00:01:00)
+[   30.609927] ieee80211 phy1: change channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   30.609949] ieee80211 phy1: mac80211_hwsim_bss_info_changed(changed=0x88340 vif->addr=02:00:00:00:01:00)
+[   30.609951] ieee80211 phy1:   BCNINT: 100
+[   30.609952] ieee80211 phy1:   BCN EN: 1
+[   30.610001] ieee80211 phy1: mac80211_hwsim_bss_info_changed(changed=0x3e vif->addr=02:00:00:00:01:00)
+[   30.610003] ieee80211 phy1:   ERP_CTS_PROT: 0
+[   30.610004] ieee80211 phy1:   ERP_PREAMBLE: 0
+[   30.610006] ieee80211 phy1:   ERP_SLOT: 1
+[   30.610007] ieee80211 phy1:   HT: op_mode=0x0
+[   30.610008] ieee80211 phy1:   BASIC_RATES: 0xf
+[   30.610801] IPv6: ADDRCONF(NETDEV_CHANGE): wlan1: link becomes ready
+[   30.613974] ieee80211 phy1: mac80211_hwsim_conf_tx (queue=0 txop=47 cw_min=3 cw_max=7 aifs=1)
+[   30.613979] ieee80211 phy1: mac80211_hwsim_bss_info_changed(changed=0x2000 vif->addr=02:00:00:00:01:00)
+[   30.613991] ieee80211 phy1: mac80211_hwsim_conf_tx (queue=1 txop=94 cw_min=7 cw_max=15 aifs=1)
+[   30.613993] ieee80211 phy1: mac80211_hwsim_bss_info_changed(changed=0x2000 vif->addr=02:00:00:00:01:00)
+[   30.614000] ieee80211 phy1: mac80211_hwsim_conf_tx (queue=2 txop=0 cw_min=15 cw_max=63 aifs=3)
+[   30.614002] ieee80211 phy1: mac80211_hwsim_bss_info_changed(changed=0x2000 vif->addr=02:00:00:00:01:00)
+[   30.614008] ieee80211 phy1: mac80211_hwsim_conf_tx (queue=3 txop=0 cw_min=15 cw_max=1023 aifs=7)
+[   30.614010] ieee80211 phy1: mac80211_hwsim_bss_info_changed(changed=0x2000 vif->addr=02:00:00:00:01:00)
+[   30.614066] ieee80211 phy1: mac80211_hwsim_configure_filter
+[   30.658738] init: Service 'exec 6 (/system/bin/bootstat)' (pid 2188) exited with status 0 waiting took 0.079830 seconds
+[   30.661073] init: computing context for service 'exec 7 (/system/bin/bootstat)'
+[   30.662569] init: starting service 'exec 7 (/system/bin/bootstat)'...
+[   30.664011] init: SVC_EXEC pid 2189 (uid 0 gid 0+0 context default) started; waiting...
+[   30.675149] init: Service 'exec 7 (/system/bin/bootstat)' (pid 2189) exited with status 0 waiting took 0.014058 seconds
+[   30.678806] init: computing context for service 'exec 8 (/system/bin/bootstat)'
+[   30.681734] init: starting service 'exec 8 (/system/bin/bootstat)'...
+[   30.684240] init: SVC_EXEC pid 2190 (uid 0 gid 0+0 context default) started; waiting...
+[   30.703040] init: Service 'exec 8 (/system/bin/bootstat)' (pid 2190) exited with status 0 waiting took 0.024225 seconds
+[   30.705875] init: processing action (sys.boot_completed=1 && sys.wifitracing.started=0)
+[   31.303570] init: Command 'restorecon_recursive /sys/kernel/debug/tracing/instances/wifi' action=sys.boot_completed=1 && sys.wifitracing.started=0 (/system/etc/init/wifi-events.rc:23) returned 0 took 578.663ms.
+[   31.339768] binder_alloc: 2227: binder_alloc_buf, no vma
+[   31.341989] binder: 1649:1994 transaction failed 29189/-3, size 8-0 line 3124
+[   31.344429] binder: send failed reply for transaction 16284 to 2227:2227
+[   31.361875] binder: undelivered TRANSACTION_COMPLETE
+[   31.363118] binder: undelivered TRANSACTION_ERROR: 29189
+[   31.391446] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[   31.393166] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[   31.404091] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[   31.408022] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[   31.433305] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[   31.442445] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[   31.907493] ieee80211 phy0: hwsim hw_scan request
+[   31.907657] ieee80211 phy0: hw scan 2412 MHz
+[   31.932743] ieee80211 phy0: hw scan 2417 MHz
+[   31.960187] ieee80211 phy0: hw scan 2422 MHz
+[   31.990233] ieee80211 phy0: hw scan 2427 MHz
+[   32.020281] ieee80211 phy0: hw scan 2432 MHz
+[   32.050147] ieee80211 phy0: hw scan 2437 MHz
+[   32.080391] ieee80211 phy0: hw scan 2442 MHz
+[   32.080406] ieee80211 phy1: mac80211_hwsim_configure_filter
+[   32.110324] ieee80211 phy0: hw scan 2447 MHz
+[   32.140152] ieee80211 phy0: hw scan 2452 MHz
+[   32.173931] ieee80211 phy0: hw scan 2457 MHz
+[   32.200150] ieee80211 phy0: hw scan 2462 MHz
+[   32.230146] ieee80211 phy0: hw scan 2467 MHz
+[   32.350151] ieee80211 phy0: hw scan 2472 MHz
+[   32.470312] ieee80211 phy0: hw scan 2484 MHz
+[   32.590819] ieee80211 phy0: hw scan complete
+[   32.591084] ieee80211 phy0: hwsim hw_scan request
+[   32.591121] ieee80211 phy0: hw scan 5180 MHz
+[   32.710310] ieee80211 phy0: hw scan 5200 MHz
+[   32.830272] ieee80211 phy0: hw scan 5220 MHz
+[   32.950148] ieee80211 phy0: hw scan 5240 MHz
+[   33.070384] ieee80211 phy0: hw scan 5260 MHz
+[   33.190331] ieee80211 phy0: hw scan 5280 MHz
+[   33.310232] ieee80211 phy0: hw scan 5300 MHz
+[   33.430309] ieee80211 phy0: hw scan 5320 MHz
+[   33.560145] ieee80211 phy0: hw scan 5500 MHz
+[   33.680100] ieee80211 phy0: hw scan 5520 MHz
+[   33.800131] ieee80211 phy0: hw scan 5540 MHz
+[   33.920130] ieee80211 phy0: hw scan 5560 MHz
+[   34.040139] ieee80211 phy0: hw scan 5580 MHz
+[   34.162050] ieee80211 phy0: hw scan 5600 MHz
+[   34.230221] init: processing action (sys.sysctl.tcp_def_init_rwnd=*)
+[   34.280117] ieee80211 phy0: hw scan 5620 MHz
+[   34.400299] ieee80211 phy0: hw scan 5640 MHz
+[   34.520206] ieee80211 phy0: hw scan 5660 MHz
+[   34.640130] ieee80211 phy0: hw scan 5680 MHz
+[   34.770146] ieee80211 phy0: hw scan 5700 MHz
+[   34.890177] ieee80211 phy0: hw scan complete
+[   34.894097] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[   34.995816] wlan0: authenticate with 02:00:00:00:01:00
+[   34.997048] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   34.997050] ieee80211 phy0: add channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   34.997053] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x40000 vif->addr=02:00:00:44:55:66)
+[   34.997054] ieee80211 phy0:   TX Power: 20 dBm
+[   34.997055] ieee80211 phy0: change channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   34.997057] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x4000 vif->addr=02:00:00:44:55:66)
+[   34.997059] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0xe0 vif->addr=02:00:00:44:55:66)
+[   34.997060] ieee80211 phy0: mac80211_hwsim_bss_info_changed: BSSID changed: 02:00:00:00:01:00
+[   34.997061] ieee80211 phy0:   BCNINT: 100
+[   34.997062] ieee80211 phy0:   BASIC_RATES: 0xf
+[   34.997093] wlan0: send auth to 02:00:00:00:01:00 (try 1/3)
+[   35.003697] wlan0: authenticated
+[   35.010334] wlan0: associate with 02:00:00:00:01:00 (try 1/3)
+[   35.014402] ieee80211 phy1: change channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   35.014846] wlan0: RX AssocResp from 02:00:00:00:01:00 (capab=0x401 status=0 aid=1)
+[   35.019771] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=2 txop=0 cw_min=15 cw_max=1023 aifs=3)
+[   35.019775] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=3 txop=0 cw_min=15 cw_max=1023 aifs=7)
+[   35.019777] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=1 txop=94 cw_min=7 cw_max=15 aifs=2)
+[   35.019778] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=0 txop=47 cw_min=3 cw_max=7 aifs=2)
+[   35.019782] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x2009 vif->addr=02:00:00:44:55:66)
+[   35.019784] ieee80211 phy0:   ASSOC: assoc=1 aid=1
+[   35.019785] ieee80211 phy0:   ERP_SLOT: 1
+[   35.019789] ieee80211 phy0: change channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   35.020695] wlan0: associated
+[   35.026757] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x20000 vif->addr=02:00:00:44:55:66)
+[   35.026762] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x100000 vif->addr=02:00:00:44:55:66)
+[   35.118902] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   35.119338] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   35.185494] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x20000 vif->addr=02:00:00:44:55:66)
+[   35.185539] ieee80211 phy0: change channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   35.201710] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x20000 vif->addr=02:00:00:44:55:66)
+[   35.201724] ieee80211 phy0: change channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   35.205194] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x1000 vif->addr=02:00:00:44:55:66)
+[   35.300327] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   35.554401] type=1400 audit(1793006066.240:13): avc: denied { setuid } for pid=1675 comm="hostapd" capability=7 scontext=u:r:hostapd:s0 tcontext=u:r:hostapd:s0 tclass=capability permissive=0
+[   35.558494] type=1400 audit(1793006072.154:14): avc: granted { getattr } for pid=1807 comm=496E666C6174657254687265616420 path="/" dev="rootfs" ino=2 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:rootfs:s0 tclass=dir
+[   35.563733] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   35.890221] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   35.960193] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   36.073477] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   36.111108] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   36.115923] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   36.230339] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   36.450547] init: Service 'adbd' (pid 1384) exited with status 1
+[   36.452654] init: Sending signal 9 to service 'adbd' (pid 1384) process group...
+[   36.457958] init: kill(1384, 9) failed: No such process
+[   36.459484] init: starting service 'adbd'...
+[   36.464729] init: property_set("ro.boottime.adbd", "36464642850") failed: property already set
+[   36.469350] init: Created socket '/dev/socket/adbd', mode 660, user 1000, group 1000
+[   36.480663] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   36.487992] init: computing context for service 'mdnsd'
+[   36.489661] init: starting service 'mdnsd'...
+[   36.492145] init: property_set("ro.boottime.mdnsd", "36491739930") failed: property already set
+[   36.492287] init: Created socket '/dev/socket/mdnsd', mode 660, user 1020, group 3003
+[   36.501327] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   36.501649] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   36.506881] type=1400 audit(1793006072.244:31): avc: granted { getattr } for pid=1807 comm=496E666C6174657254687265616420 path="/" dev="rootfs" ino=2 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:rootfs:s0 tclass=dir duplicate messages suppressed
+[   36.523596] type=1400 audit(1793006073.104:32): avc: denied { search } for pid=2668 comm="mdnsd" name="run" dev="dm-0" ino=253442 scontext=u:r:mdnsd:s0 tcontext=u:object_r:varrun_file:s0 tclass=dir permissive=0
+[   36.620208] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   37.004787] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   37.100181] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   37.120163] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   37.220156] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   37.257646] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   37.350272] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   37.501811] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   37.660180] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   37.771487] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   37.870118] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   37.871927] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   37.970381] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   37.976587] init: no such service 'zygote_secondary'
+[   37.979918] init: Sending signal 9 to service 'zygote' (pid 1510) process group...
+[   38.020906] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   38.020919] binder: release 1649:1715 transaction 26532 out, still active
+[   38.023062] binder: 1398:1713 transaction failed 29189/0, size 104-12 line 2941
+[   38.023067] binder: undelivered TRANSACTION_COMPLETE
+[   38.025589] binder: release 1649:1994 transaction 26535 in, still active
+[   38.025591] binder: send failed reply for transaction 26535 to 2741:2741
+[   38.036429] binder: 1517:1963 transaction failed 29189/-22, size 60-0 line 3001
+[   38.042596] binder: 1413:1442 transaction failed 29189/-22, size 68-0 line 3001
+[   38.050940] binder: send failed reply for transaction 26532, target dead
+[   38.075614] binder: 1896:2088 transaction failed 29189/-22, size 176-0 line 3001
+[   38.081254] binder: 2741:2741 transaction failed 29189/-22, size 2524-4 line 3001
+[   38.120176] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   38.225144] init: failed to kill 1 processes for processgroup 1510
+[   38.226758] init: killProcessGroup(0, 1510, 9) failed: Success
+[   38.229214] init: processing action (init.svc.zygote=stopping)
+[   38.230962] init: Service 'zygote' (pid 1510) killed by signal 9
+[   38.232133] init: Sending signal 9 to service 'zygote' (pid 1510) process group...
+[   38.273161] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   38.281890] binder: 1517:1963 transaction failed 29189/-22, size 60-0 line 3001
+[   38.370262] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   38.443619] init: failed to kill 1 processes for processgroup 1510
+[   38.445276] init: killProcessGroup(0, 1510, 9) failed: Success
+[   38.446822] init: Untracked pid 1788 killed by signal 9
+[   38.448072] init: Untracked pid 1807 killed by signal 9
+[   38.449304] init: Untracked pid 1896 killed by signal 9
+[   38.450857] init: Untracked pid 1913 killed by signal 9
+[   38.452160] init: Untracked pid 1972 killed by signal 9
+[   38.453454] init: Untracked pid 2094 killed by signal 9
+[   38.454717] init: Untracked pid 2144 killed by signal 9
+[   38.456152] init: Untracked pid 2173 killed by signal 9
+[   38.457879] init: Untracked pid 2267 killed by signal 9
+[   38.459432] init: Untracked pid 2275 killed by signal 9
+[   38.461162] init: Untracked pid 2307 killed by signal 9
+[   38.462401] init: Untracked pid 2332 killed by signal 9
+[   38.463628] init: Untracked pid 2343 killed by signal 9
+[   38.464847] init: Untracked pid 2358 killed by signal 9
+[   38.466060] init: Untracked pid 2396 killed by signal 9
+[   38.467282] init: Untracked pid 2434 killed by signal 9
+[   38.468518] init: Untracked pid 2442 killed by signal 9
+[   38.469742] init: Untracked pid 2526 killed by signal 9
+[   38.471268] init: Untracked pid 2596 killed by signal 9
+[   38.472640] init: Untracked pid 2641 killed by signal 9
+[   38.473904] init: Untracked pid 2741 killed by signal 9
+[   38.475262] init: processing action (init.svc.zygote=stopped)
+[   38.477590] init: computing context for service 'bootanim'
+[   38.479029] init: starting service 'bootanim'...
+[   38.480654] init: property_set("ro.boottime.bootanim", "38480521710") failed: property already set
+[   38.484597] init: Sending signal 9 to service 'surfaceflinger' (pid 1413) process group...
+[   38.502107] init: Service 'surfaceflinger' (pid 1413) killed by signal 9
+[   38.503822] init: Sending signal 9 to service 'surfaceflinger' (pid 1413) process group...
+[   38.505797] init: failed to open /acct/uid_1000/pid_1413/cgroup.procs: No such file or directory
+[   38.507887] init: killProcessGroup(1000, 1413, 9) failed: Device or resource busy
+[   38.509635] init: kill(1413, 9) failed: No such process
+[   38.512221] init: Sending signal 9 to service 'netd' (pid 1520) process group...
+[   38.521197] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   38.620188] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   38.625329] init: Service 'netd' (pid 1520) killed by signal 9
+[   38.627642] init: Sending signal 9 to service 'netd' (pid 1520) process group...
+[   38.630369] init: failed to open /acct/uid_0/pid_1520/cgroup.procs: No such file or directory
+[   38.632630] init: killProcessGroup(0, 1520, 9) failed: Device or resource busy
+[   38.634386] init: Untracked pid 1543 killed by signal 9
+[   38.635645] init: Untracked pid 1546 killed by signal 9
+[   38.643314] init: computing context for service 'netd'
+[   38.644641] init: starting service 'netd'...
+[   38.645905] init: property_set("ro.boottime.netd", "38645782550") failed: property already set
+[   38.648571] init: Created socket '/dev/socket/netd', mode 660, user 0, group 1000
+[   38.650531] init: computing context for service 'surfaceflinger'
+[   38.652098] init: starting service 'surfaceflinger'...
+[   38.653535] init: property_set("ro.boottime.surfaceflinger", "38653407660") failed: property already set
+[   38.655913] init: Created socket '/dev/socket/dnsproxyd', mode 660, user 0, group 3003
+[   38.657824] init: Created socket '/dev/socket/mdns', mode 660, user 0, group 1000
+[   38.659787] init: Created socket '/dev/socket/fwmarkd', mode 660, user 0, group 3003
+[   38.662135] init: Failed to bind socket 'pdx/system/vr/display/client': No such file or directory
+[   38.664282] init: Failed to bind socket 'pdx/system/vr/display/manager': No such file or directory
+[   38.666473] init: Failed to bind socket 'pdx/system/vr/display/vsync': No such file or directory
+[   38.669037] init: computing context for service 'zygote'
+[   38.670535] init: starting service 'zygote'...
+[   38.671805] init: property_set("ro.boottime.zygote", "38671711900") failed: property already set
+[   38.674279] init: Created socket '/dev/socket/zygote', mode 660, user 0, group 1000
+[   38.677659] init: no such service 'zygote_secondary'
+[   38.762543] init: Service 'bootanim' (pid 2773) exited with status 0
+[   38.851290] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   38.851671] init: Untracked pid 1649 killed by signal 9
+[   38.905764] init: computing context for service 'bootanim'
+[   38.907273] init: starting service 'bootanim'...
+[   38.908723] init: property_set("ro.boottime.bootanim", "38908633980") failed: property already set
+[   38.970284] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   38.986388] type=1400 audit(1793006073.104:32): avc: denied { search } for pid=2668 comm="mdnsd" name="run" dev="dm-0" ino=253442 scontext=u:r:mdnsd:s0 tcontext=u:object_r:varrun_file:s0 tclass=dir permissive=0
+[   39.036439] type=1400 audit(1793006075.584:33): avc: denied { module_request } for pid=2776 comm="netd" kmod="netdev-dummy0" scontext=u:r:netd:s0 tcontext=u:r:kernel:s0 tclass=system permissive=0
+[   39.042266] type=1400 audit(1793006075.584:33): avc: denied { module_request } for pid=2776 comm="netd" kmod="netdev-dummy0" scontext=u:r:netd:s0 tcontext=u:r:kernel:s0 tclass=system permissive=0
+[   39.046522] type=1400 audit(1793006075.594:34): avc: denied { module_request } for pid=2776 comm="netd" kmod="net-pf-16-proto-5" scontext=u:r:netd:s0 tcontext=u:r:kernel:s0 tclass=system permissive=0
+[   39.192557] init: Service 'bootanim' (pid 2804) exited with status 0
+[   39.522597] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   39.621614] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   40.001680] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[   40.190942] init: processing action (sys.sysctl.extra_free_kbytes=*)
+[   40.368678] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   40.369221] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x1000 vif->addr=02:00:00:44:55:66)
+[   40.372484] binder: 1525:1525 transaction failed 29189/-22, size 108-4 line 3001
+[   40.374567] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   40.375687] init: Sending signal 9 to service 'wpa_supplicant' (pid 1919) process group...
+[   40.390249] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   40.430356] ieee80211 phy0: mac80211_hwsim_remove_interface (type=10 mac_addr=02:00:00:00:00:00)
+[   40.430362] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   40.530151] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   40.587067] init: failed to kill 1 processes for processgroup 1919
+[   40.588648] init: killProcessGroup(0, 1919, 9) failed: Success
+[   40.660354] init: Service 'wpa_supplicant' (pid 1919) killed by signal 9
+[   40.690430] wlan0: deauthenticating from 02:00:00:00:01:00 by local choice (Reason: 3=DEAUTH_LEAVING)
+[   40.690448] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   40.692803] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   40.692812] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x20000 vif->addr=02:00:00:44:55:66)
+[   40.693118] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x209f vif->addr=02:00:00:44:55:66)
+[   40.693122] ieee80211 phy0: mac80211_hwsim_bss_info_changed: BSSID changed: 00:00:00:00:00:00
+[   40.693124] ieee80211 phy0:   ASSOC: assoc=0 aid=1
+[   40.693125] ieee80211 phy0:   ERP_CTS_PROT: 0
+[   40.693127] ieee80211 phy0:   ERP_PREAMBLE: 0
+[   40.693128] ieee80211 phy0:   ERP_SLOT: 0
+[   40.693300] ieee80211 phy0:   HT: op_mode=0x0
+[   40.693302] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=0 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   40.693304] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=1 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   40.693306] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=2 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   40.693307] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=3 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   40.693310] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x4000 vif->addr=02:00:00:44:55:66)
+[   40.693313] ieee80211 phy0: remove channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   40.693320] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=1 ps=0 smps=auto)
+[   40.693844] ieee80211 phy0: mac80211_hwsim_remove_interface (type=2 mac_addr=02:00:00:44:55:66)
+[   40.693848] ieee80211 phy0: mac80211_hwsim_stop
+[   40.694481] cfg80211: Calling CRDA to update world regulatory domain
+[   40.699961] ieee80211 phy1: change channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   41.078116] binder: 1512:1632 transaction failed 29189/-22, size 180-0 line 3001
+[   41.207969] sdcardfs version 2.0
+[   41.218244] sdcardfs: dev_name -> /data/media
+[   41.223775] sdcardfs: options -> fsuid=1023,fsgid=1023,multiuser,mask=6,userid=0,gid=1015
+[   41.255159] sdcardfs: mnt -> c176f9d0
+[   41.262788] sdcardfs: mounted on top of /data/media type ext4
+[   41.268004] SELinux: initialized (dev sdcardfs, type sdcardfs), uses genfs_contexts
+[   41.268111] Remount options were mask=23,gid=9997 for vfsmnt c220fcd0.
+[   41.280448] sdcardfs : options - debug:1
+[   41.289990] sdcardfs : options - gid:9997
+[   41.294477] sdcardfs : options - mask:23
+[   41.301319] Remount options were mask=7,gid=9997 for vfsmnt c176fa90.
+[   41.304630] sdcardfs : options - debug:1
+[   41.305867] sdcardfs : options - gid:9997
+[   41.319108] sdcardfs : options - mask:7
+[   41.331139] ieee80211 phy0: mac80211_hwsim_start
+[   41.331146] ieee80211 phy0: mac80211_hwsim_add_interface (type=2 mac_addr=02:00:00:44:55:66)
+[   41.331149] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0xe vif->addr=02:00:00:44:55:66)
+[   41.331151] ieee80211 phy0:   ERP_CTS_PROT: 0
+[   41.331152] ieee80211 phy0:   ERP_PREAMBLE: 0
+[   41.331154] ieee80211 phy0:   ERP_SLOT: 0
+[   41.331157] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=0 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   41.331159] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=1 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   41.331160] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=2 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   41.331162] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=3 txop=0 cw_min=15 cw_max=1023 aifs=2)
+[   41.331164] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x2000 vif->addr=02:00:00:44:55:66)
+[   41.331166] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=1 ps=0 smps=auto)
+[   41.331755] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   41.349875] init: computing context for service 'wpa_supplicant'
+[   41.351935] init: starting service 'wpa_supplicant'...
+[   41.354169] init: property_set("ro.boottime.wpa_supplicant", "41354033330") failed: property already set
+[   41.355950] init: Created socket '/dev/socket/wpa_wlan0', mode 660, user 1010, group 1010
+[   41.373454] binder: 2825:2887 transaction failed 29189/-22, size 32-0 line 3001
+[   41.636708] ieee80211 phy0: mac80211_hwsim_add_interface (type=10 mac_addr=02:00:00:00:00:00)
+[   41.636712] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=0 txop=47 cw_min=3 cw_max=7 aifs=2)
+[   41.636714] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=1 txop=94 cw_min=7 cw_max=15 aifs=2)
+[   41.636715] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=2 txop=0 cw_min=15 cw_max=1023 aifs=3)
+[   41.636716] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=3 txop=0 cw_min=15 cw_max=1023 aifs=7)
+[   43.458657] init: processing action (sys.sysctl.tcp_def_init_rwnd=*)
+[   44.193674] init: processing action (sys.boot_completed=1)
+[   44.195472] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[   44.197449] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[   44.211211] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[   44.214480] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[   44.219379] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[   44.229876] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[   44.501309] ieee80211 phy0: hwsim hw_scan request
+[   44.501800] ieee80211 phy0: hw scan 2412 MHz
+[   44.530215] ieee80211 phy0: hw scan 2417 MHz
+[   44.560108] ieee80211 phy0: hw scan 2422 MHz
+[   44.590150] ieee80211 phy0: hw scan 2427 MHz
+[   44.620172] ieee80211 phy0: hw scan 2432 MHz
+[   44.660333] ieee80211 phy0: hw scan 2437 MHz
+[   44.690137] ieee80211 phy0: hw scan 2442 MHz
+[   44.720320] ieee80211 phy0: hw scan 2447 MHz
+[   44.750203] ieee80211 phy0: hw scan 2452 MHz
+[   44.780734] ieee80211 phy0: hw scan 2457 MHz
+[   44.810255] ieee80211 phy0: hw scan 2462 MHz
+[   44.840584] ieee80211 phy0: hw scan 2467 MHz
+[   44.960122] ieee80211 phy0: hw scan 2472 MHz
+[   45.080275] ieee80211 phy0: hw scan 2484 MHz
+[   45.200215] ieee80211 phy0: hw scan complete
+[   45.200247] ieee80211 phy0: hwsim hw_scan request
+[   45.200249] ieee80211 phy0: hw scan 5180 MHz
+[   45.320306] ieee80211 phy0: hw scan 5200 MHz
+[   45.428703] alloc_contig_range: [10700, 10bdc) PFNs busy
+[   45.440126] ieee80211 phy0: hw scan 5220 MHz
+[   45.570183] ieee80211 phy0: hw scan 5240 MHz
+[   45.681715] ieee80211 phy0: hw scan 5260 MHz
+[   45.810198] ieee80211 phy0: hw scan 5280 MHz
+[   45.930172] ieee80211 phy0: hw scan 5300 MHz
+[   46.050133] ieee80211 phy0: hw scan 5320 MHz
+[   46.171026] ieee80211 phy0: hw scan 5500 MHz
+[   46.292097] ieee80211 phy0: hw scan 5520 MHz
+[   46.410759] ieee80211 phy0: hw scan 5540 MHz
+[   46.530167] ieee80211 phy0: hw scan 5560 MHz
+[   46.650278] ieee80211 phy0: hw scan 5580 MHz
+[   46.780405] ieee80211 phy0: hw scan 5600 MHz
+[   46.900113] ieee80211 phy0: hw scan 5620 MHz
+[   47.020203] ieee80211 phy0: hw scan 5640 MHz
+[   47.140208] ieee80211 phy0: hw scan 5660 MHz
+[   47.270178] ieee80211 phy0: hw scan 5680 MHz
+[   47.391687] ieee80211 phy0: hw scan 5700 MHz
+[   47.510170] ieee80211 phy0: hw scan complete
+[   47.538471] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[   47.618996] type=1400 audit(1793006075.594:34): avc: denied { module_request } for pid=2776 comm="netd" kmod="net-pf-16-proto-5" scontext=u:r:netd:s0 tcontext=u:r:kernel:s0 tclass=system permissive=0
+[   47.640907] type=1400 audit(1793006090.431:35): avc: granted { getattr } for pid=2934 comm=496E666C6174657254687265616420 path="/" dev="rootfs" ino=2 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:rootfs:s0 tclass=dir
+[   48.020641] wlan0: authenticate with 02:00:00:00:01:00
+[   48.023674] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   48.023677] ieee80211 phy0: add channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   48.023681] ieee80211 phy0: change channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   48.023684] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x4000 vif->addr=02:00:00:44:55:66)
+[   48.023687] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0xe0 vif->addr=02:00:00:44:55:66)
+[   48.023689] ieee80211 phy0: mac80211_hwsim_bss_info_changed: BSSID changed: 02:00:00:00:01:00
+[   48.023690] ieee80211 phy0:   BCNINT: 100
+[   48.023692] ieee80211 phy0:   BASIC_RATES: 0xf
+[   48.023811] wlan0: send auth to 02:00:00:00:01:00 (try 1/3)
+[   48.043398] wlan0: authenticated
+[   48.050291] wlan0: associate with 02:00:00:00:01:00 (try 1/3)
+[   48.052571] ieee80211 phy1: change channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   48.056295] wlan0: RX AssocResp from 02:00:00:00:01:00 (capab=0x401 status=0 aid=1)
+[   48.059023] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=2 txop=0 cw_min=15 cw_max=1023 aifs=3)
+[   48.059027] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=3 txop=0 cw_min=15 cw_max=1023 aifs=7)
+[   48.059029] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=1 txop=94 cw_min=7 cw_max=15 aifs=2)
+[   48.059031] ieee80211 phy0: mac80211_hwsim_conf_tx (queue=0 txop=47 cw_min=3 cw_max=7 aifs=2)
+[   48.059035] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x102009 vif->addr=02:00:00:44:55:66)
+[   48.059036] ieee80211 phy0:   ASSOC: assoc=1 aid=1
+[   48.059038] ieee80211 phy0:   ERP_SLOT: 1
+[   48.059042] ieee80211 phy0: change channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   48.063612] wlan0: associated
+[   48.082675] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x20000 vif->addr=02:00:00:44:55:66)
+[   48.181024] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   48.470162] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   48.470169] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   48.605383] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x20000 vif->addr=02:00:00:44:55:66)
+[   48.605413] ieee80211 phy0: change channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   48.705353] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x20000 vif->addr=02:00:00:44:55:66)
+[   48.705556] ieee80211 phy0: change channel context control: 2447 MHz/width: 2/cfreqs:2437/0 MHz
+[   48.746721] ieee80211 phy0: mac80211_hwsim_bss_info_changed(changed=0x1000 vif->addr=02:00:00:44:55:66)
+[   48.762554] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   48.890733] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   49.080140] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   49.180487] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   49.210684] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   49.440339] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   49.451201] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   49.458050] ieee80211 phy0: mac80211_hwsim_configure_filter
+[   49.680287] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   49.766262] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   49.861147] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   50.018764] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   50.113128] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   51.033228] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   51.131303] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   53.035210] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   53.130264] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   54.231077] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   54.340861] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   57.045616] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   57.140531] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   62.385410] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[   64.679318] ieee80211 phy0: hwsim hw_scan request
+[   64.679748] ieee80211 phy0: hw scan 2412 MHz
+[   64.700786] ieee80211 phy0: hw scan 2417 MHz
+[   64.730154] ieee80211 phy0: hw scan 2422 MHz
+[   64.760765] ieee80211 phy0: hw scan 2427 MHz
+[   64.793754] ieee80211 phy0: hw scan 2432 MHz
+[   64.821519] ieee80211 phy0: hw scan 2437 MHz
+[   64.852156] ieee80211 phy0: hw scan 2442 MHz
+[   64.880380] ieee80211 phy0: hw scan 2447 MHz
+[   64.910161] ieee80211 phy0: hw scan 2452 MHz
+[   64.940268] ieee80211 phy0: hw scan 2457 MHz
+[   64.970949] ieee80211 phy0: hw scan 2462 MHz
+[   65.000192] ieee80211 phy0: hw scan 2467 MHz
+[   65.120577] ieee80211 phy0: hw scan 2472 MHz
+[   65.240400] ieee80211 phy0: hw scan 2484 MHz
+[   65.360148] ieee80211 phy0: hw scan complete
+[   65.360158] ieee80211 phy0: hwsim hw_scan request
+[   65.360161] ieee80211 phy0: hw scan 5180 MHz
+[   65.480244] ieee80211 phy0: hw scan 5200 MHz
+[   65.600157] ieee80211 phy0: hw scan 5220 MHz
+[   65.720441] ieee80211 phy0: hw scan 5240 MHz
+[   65.850743] ieee80211 phy0: hw scan 5260 MHz
+[   65.980370] ieee80211 phy0: hw scan 5280 MHz
+[   66.100996] ieee80211 phy0: hw scan 5300 MHz
+[   66.220179] ieee80211 phy0: hw scan 5320 MHz
+[   66.340999] ieee80211 phy0: hw scan 5500 MHz
+[   66.460326] ieee80211 phy0: hw scan 5520 MHz
+[   66.580256] ieee80211 phy0: hw scan 5540 MHz
+[   66.700240] ieee80211 phy0: hw scan 5560 MHz
+[   66.820202] ieee80211 phy0: hw scan 5580 MHz
+[   66.940198] ieee80211 phy0: hw scan 5600 MHz
+[   67.060594] ieee80211 phy0: hw scan 5620 MHz
+[   67.183012] ieee80211 phy0: hw scan 5640 MHz
+[   67.300138] ieee80211 phy0: hw scan 5660 MHz
+[   67.421564] ieee80211 phy0: hw scan 5680 MHz
+[   67.540813] ieee80211 phy0: hw scan 5700 MHz
+[   67.660789] ieee80211 phy0: hw scan complete
+[   67.660904] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   67.721225] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[   67.761878] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   72.128890] type=1400 audit(1793006090.481:52): avc: granted { getattr } for pid=2934 comm=496E666C6174657254687265616420 path="/" dev="rootfs" ino=2 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:rootfs:s0 tclass=dir duplicate messages suppressed
+[   72.153878] type=1400 audit(1793006114.139:53): avc: denied { write } for pid=3333 comm="d.process.media" name="property_service" dev="tmpfs" ino=4502 scontext=u:r:priv_app:s0:c512,c768 tcontext=u:object_r:property_socket:s0 tclass=sock_file permissive=0
+[   81.880381] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   81.983769] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   84.719731] ieee80211 phy0: hwsim hw_scan request
+[   84.720661] ieee80211 phy0: hw scan 2412 MHz
+[   84.750447] ieee80211 phy0: hw scan 2417 MHz
+[   84.780566] ieee80211 phy0: hw scan 2422 MHz
+[   84.810234] ieee80211 phy0: hw scan 2427 MHz
+[   84.841259] ieee80211 phy0: hw scan 2432 MHz
+[   84.870174] ieee80211 phy0: hw scan 2437 MHz
+[   84.900785] ieee80211 phy0: hw scan 2442 MHz
+[   84.930801] ieee80211 phy0: hw scan 2447 MHz
+[   84.961903] ieee80211 phy0: hw scan 2452 MHz
+[   84.992991] ieee80211 phy0: hw scan 2457 MHz
+[   85.022960] ieee80211 phy0: hw scan 2462 MHz
+[   85.051452] ieee80211 phy0: hw scan 2467 MHz
+[   85.171083] ieee80211 phy0: hw scan 2472 MHz
+[   85.290919] ieee80211 phy0: hw scan 2484 MHz
+[   85.412140] ieee80211 phy0: hw scan complete
+[   85.412150] ieee80211 phy0: hwsim hw_scan request
+[   85.412152] ieee80211 phy0: hw scan 5180 MHz
+[   85.530915] ieee80211 phy0: hw scan 5200 MHz
+[   85.651797] ieee80211 phy0: hw scan 5220 MHz
+[   85.770951] ieee80211 phy0: hw scan 5240 MHz
+[   85.900195] ieee80211 phy0: hw scan 5260 MHz
+[   86.011114] ieee80211 phy0: hw scan 5280 MHz
+[   86.133763] ieee80211 phy0: hw scan 5300 MHz
+[   86.263558] ieee80211 phy0: hw scan 5320 MHz
+[   86.380218] ieee80211 phy0: hw scan 5500 MHz
+[   86.500210] ieee80211 phy0: hw scan 5520 MHz
+[   86.631749] ieee80211 phy0: hw scan 5540 MHz
+[   86.750266] ieee80211 phy0: hw scan 5560 MHz
+[   86.870267] ieee80211 phy0: hw scan 5580 MHz
+[   86.991830] ieee80211 phy0: hw scan 5600 MHz
+[   87.110146] ieee80211 phy0: hw scan 5620 MHz
+[   87.231473] ieee80211 phy0: hw scan 5640 MHz
+[   87.350322] ieee80211 phy0: hw scan 5660 MHz
+[   87.471334] ieee80211 phy0: hw scan 5680 MHz
+[   87.591956] ieee80211 phy0: hw scan 5700 MHz
+[   87.710237] ieee80211 phy0: hw scan complete
+[   87.710268] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   87.728590] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[   87.820872] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   92.369650] init: processing action (qemu.adbd=start)
+[   92.371275] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[   92.377488] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[   92.383545] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[   92.391590] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[   92.397264] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[   92.402576] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  113.897359] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  113.990948] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  118.070548] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  118.190213] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  122.309264] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  124.777605] ieee80211 phy0: hwsim hw_scan request
+[  124.777774] ieee80211 phy0: hw scan 2412 MHz
+[  124.801792] ieee80211 phy0: hw scan 2417 MHz
+[  124.840217] ieee80211 phy0: hw scan 2422 MHz
+[  124.860588] ieee80211 phy0: hw scan 2427 MHz
+[  124.890399] ieee80211 phy0: hw scan 2432 MHz
+[  124.922751] ieee80211 phy0: hw scan 2437 MHz
+[  124.950384] ieee80211 phy0: hw scan 2442 MHz
+[  124.981259] ieee80211 phy0: hw scan 2447 MHz
+[  125.010823] ieee80211 phy0: hw scan 2452 MHz
+[  125.040693] ieee80211 phy0: hw scan 2457 MHz
+[  125.070240] ieee80211 phy0: hw scan 2462 MHz
+[  125.110534] ieee80211 phy0: hw scan 2467 MHz
+[  125.230260] ieee80211 phy0: hw scan 2472 MHz
+[  125.350260] ieee80211 phy0: hw scan 2484 MHz
+[  125.480182] ieee80211 phy0: hw scan complete
+[  125.480220] ieee80211 phy0: hwsim hw_scan request
+[  125.480223] ieee80211 phy0: hw scan 5180 MHz
+[  125.590296] ieee80211 phy0: hw scan 5200 MHz
+[  125.720163] ieee80211 phy0: hw scan 5220 MHz
+[  125.851047] ieee80211 phy0: hw scan 5240 MHz
+[  125.970861] ieee80211 phy0: hw scan 5260 MHz
+[  126.103524] ieee80211 phy0: hw scan 5280 MHz
+[  126.220582] ieee80211 phy0: hw scan 5300 MHz
+[  126.341421] ieee80211 phy0: hw scan 5320 MHz
+[  126.461041] ieee80211 phy0: hw scan 5500 MHz
+[  126.580200] ieee80211 phy0: hw scan 5520 MHz
+[  126.701764] ieee80211 phy0: hw scan 5540 MHz
+[  126.830961] ieee80211 phy0: hw scan 5560 MHz
+[  126.950247] ieee80211 phy0: hw scan 5580 MHz
+[  127.073542] ieee80211 phy0: hw scan 5600 MHz
+[  127.190237] ieee80211 phy0: hw scan 5620 MHz
+[  127.310934] ieee80211 phy0: hw scan 5640 MHz
+[  127.430655] ieee80211 phy0: hw scan 5660 MHz
+[  127.552651] ieee80211 phy0: hw scan 5680 MHz
+[  127.672799] ieee80211 phy0: hw scan 5700 MHz
+[  127.790806] ieee80211 phy0: hw scan complete
+[  127.790868] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  127.803741] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[  127.890391] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  152.382715] init: processing action (qemu.adbd=start)
+[  152.384901] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  152.387764] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  152.392396] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  152.396929] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  152.400618] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  152.404336] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  158.072116] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  158.180292] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  177.902657] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  178.000341] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  182.311591] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  189.110284] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  189.210367] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  204.812611] ieee80211 phy0: hwsim hw_scan request
+[  204.812858] ieee80211 phy0: hw scan 2412 MHz
+[  204.841320] ieee80211 phy0: hw scan 2417 MHz
+[  204.871166] ieee80211 phy0: hw scan 2422 MHz
+[  204.900175] ieee80211 phy0: hw scan 2427 MHz
+[  204.930230] ieee80211 phy0: hw scan 2432 MHz
+[  204.960294] ieee80211 phy0: hw scan 2437 MHz
+[  204.990367] ieee80211 phy0: hw scan 2442 MHz
+[  205.020393] ieee80211 phy0: hw scan 2447 MHz
+[  205.050336] ieee80211 phy0: hw scan 2452 MHz
+[  205.082281] ieee80211 phy0: hw scan 2457 MHz
+[  205.111161] ieee80211 phy0: hw scan 2462 MHz
+[  205.140359] ieee80211 phy0: hw scan 2467 MHz
+[  205.262832] ieee80211 phy0: hw scan 2472 MHz
+[  205.380544] ieee80211 phy0: hw scan 2484 MHz
+[  205.500346] ieee80211 phy0: hw scan complete
+[  205.500358] ieee80211 phy0: hwsim hw_scan request
+[  205.500361] ieee80211 phy0: hw scan 5180 MHz
+[  205.621639] ieee80211 phy0: hw scan 5200 MHz
+[  205.740275] ieee80211 phy0: hw scan 5220 MHz
+[  205.860821] ieee80211 phy0: hw scan 5240 MHz
+[  205.980390] ieee80211 phy0: hw scan 5260 MHz
+[  206.100342] ieee80211 phy0: hw scan 5280 MHz
+[  206.220378] ieee80211 phy0: hw scan 5300 MHz
+[  206.340764] ieee80211 phy0: hw scan 5320 MHz
+[  206.460378] ieee80211 phy0: hw scan 5500 MHz
+[  206.580317] ieee80211 phy0: hw scan 5520 MHz
+[  206.700262] ieee80211 phy0: hw scan 5540 MHz
+[  206.820350] ieee80211 phy0: hw scan 5560 MHz
+[  206.941760] ieee80211 phy0: hw scan 5580 MHz
+[  207.060483] ieee80211 phy0: hw scan 5600 MHz
+[  207.180994] ieee80211 phy0: hw scan 5620 MHz
+[  207.300418] ieee80211 phy0: hw scan 5640 MHz
+[  207.420846] ieee80211 phy0: hw scan 5660 MHz
+[  207.540347] ieee80211 phy0: hw scan 5680 MHz
+[  207.660242] ieee80211 phy0: hw scan 5700 MHz
+[  207.790186] ieee80211 phy0: hw scan complete
+[  207.790244] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  207.791752] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[  207.880287] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  212.403440] init: processing action (qemu.adbd=start)
+[  212.405384] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  212.411173] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  212.422123] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  212.428625] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  212.434888] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  212.444314] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  238.070185] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  238.170180] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  242.315191] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  269.110253] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  269.210824] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  272.419445] init: processing action (qemu.adbd=start)
+[  272.424142] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  272.426357] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  272.436193] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  272.441928] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  272.447590] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  272.458204] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  289.371088] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  289.470578] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  289.541841] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  289.641210] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  294.340758] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  294.442651] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  302.312477] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  325.030120] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  325.130266] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  332.434206] init: processing action (qemu.adbd=start)
+[  332.435580] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  332.437433] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  332.440795] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  332.443948] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  332.448096] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  332.451442] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  346.982018] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  347.110833] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  349.340699] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  349.441962] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  349.533161] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  349.650278] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  354.350259] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  354.450477] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  362.310470] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  364.881367] ieee80211 phy0: hwsim hw_scan request
+[  364.881555] ieee80211 phy0: hw scan 2412 MHz
+[  364.910101] ieee80211 phy0: hw scan 2417 MHz
+[  364.940189] ieee80211 phy0: hw scan 2422 MHz
+[  364.970258] ieee80211 phy0: hw scan 2427 MHz
+[  365.001227] ieee80211 phy0: hw scan 2432 MHz
+[  365.030301] ieee80211 phy0: hw scan 2437 MHz
+[  365.060741] ieee80211 phy0: hw scan 2442 MHz
+[  365.090156] ieee80211 phy0: hw scan 2447 MHz
+[  365.120148] ieee80211 phy0: hw scan 2452 MHz
+[  365.150195] ieee80211 phy0: hw scan 2457 MHz
+[  365.180137] ieee80211 phy0: hw scan 2462 MHz
+[  365.210642] ieee80211 phy0: hw scan 2467 MHz
+[  365.330291] ieee80211 phy0: hw scan 2472 MHz
+[  365.450109] ieee80211 phy0: hw scan 2484 MHz
+[  365.570200] ieee80211 phy0: hw scan complete
+[  365.570209] ieee80211 phy0: hwsim hw_scan request
+[  365.570212] ieee80211 phy0: hw scan 5180 MHz
+[  365.690324] ieee80211 phy0: hw scan 5200 MHz
+[  365.810134] ieee80211 phy0: hw scan 5220 MHz
+[  365.930145] ieee80211 phy0: hw scan 5240 MHz
+[  366.050113] ieee80211 phy0: hw scan 5260 MHz
+[  366.170413] ieee80211 phy0: hw scan 5280 MHz
+[  366.290207] ieee80211 phy0: hw scan 5300 MHz
+[  366.410395] ieee80211 phy0: hw scan 5320 MHz
+[  366.530457] ieee80211 phy0: hw scan 5500 MHz
+[  366.650208] ieee80211 phy0: hw scan 5520 MHz
+[  366.770156] ieee80211 phy0: hw scan 5540 MHz
+[  366.890143] ieee80211 phy0: hw scan 5560 MHz
+[  367.010119] ieee80211 phy0: hw scan 5580 MHz
+[  367.131296] ieee80211 phy0: hw scan 5600 MHz
+[  367.250223] ieee80211 phy0: hw scan 5620 MHz
+[  367.370175] ieee80211 phy0: hw scan 5640 MHz
+[  367.490239] ieee80211 phy0: hw scan 5660 MHz
+[  367.610739] ieee80211 phy0: hw scan 5680 MHz
+[  367.730120] ieee80211 phy0: hw scan 5700 MHz
+[  367.850110] ieee80211 phy0: hw scan complete
+[  367.850152] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  367.855991] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[  367.950117] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  385.273142] init: Service 'goldfish-logcat' (pid 1418) exited with status 1
+[  388.908718] .plainnotes.app invoked oom-killer: gfp_mask=0x2084d0, order=0, oom_score_adj=0
+[  388.911722] CPU: 1 PID: 3869 Comm: .plainnotes.app Tainted: G S      W      3.18.91+ #1
+[  388.913728] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[  388.916583]  00000000 00000246 c0fa1dd4 c07a9c83 c1101320 00000000 c0fa1e1c c07a913f
+[  388.918728]  c0a083cb c1101764 002084d0 00000000 00000000 c024d18f c0b07780 c0fa1e08
+[  388.920913]  c07b028e c0fa1e08 c07affa1 00000000 c0401a6c 002084d0 c11c1320 00000000
+[  388.921569] Call Trace:
+[  388.921569]  [<c07a9c83>] dump_stack+0x45/0x59
+[  388.921569]  [<c07a913f>] dump_header.isra.12+0x66/0x199
+[  388.921569]  [<c024d18f>] ? preempt_count_add+0x6a/0x7c
+[  388.921569]  [<c07b028e>] ? _raw_spin_trylock+0x11/0x5d
+[  388.921569]  [<c07affa1>] ? _raw_spin_unlock_irqrestore+0x13/0x24
+[  388.921569]  [<c0401a6c>] ? ___ratelimit+0x97/0xa1
+[  388.921569]  [<c02c099e>] oom_kill_process+0x4b/0x2d0
+[  388.921569]  [<c0236d63>] ? has_capability_noaudit+0xf/0x11
+[  388.921569]  [<c02c0f50>] out_of_memory+0x1f3/0x251
+[  388.921569]  [<c02c3ff0>] __alloc_pages_nodemask+0x6b0/0x6f4
+[  388.921569]  [<c022b0f4>] pte_alloc_one+0x17/0x38
+[  388.921569]  [<c02d9f87>] __pte_alloc+0x13/0x7b
+[  388.921569]  [<c02dbc35>] handle_mm_fault+0xe9/0x70d
+[  388.921569]  [<c02283a7>] __do_page_fault+0x23a/0x310
+[  388.921569]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[  388.921569]  [<c022855e>] do_page_fault+0xb/0xd
+[  388.921569]  [<c07b1226>] error_code+0x5a/0x60
+[  388.921569]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[  388.946611] Mem-Info:
+[  388.948060] DMA per-cpu:
+[  388.952356] CPU    0: hi:    0, btch:   1 usd:   0
+[  388.954984] CPU    1: hi:    0, btch:   1 usd:   0
+[  388.956782] Normal per-cpu:
+[  388.958158] CPU    0: hi:   90, btch:  15 usd:  28
+[  388.960835] CPU    1: hi:   90, btch:  15 usd:  10
+[  388.963021] active_anon:69075 inactive_anon:541 isolated_anon:0\x0a active_file:39 inactive_file:84 isolated_file:30\x0a unevictable:64 dirty:0 writeback:0 unstable:0\x0a free:41333 slab_reclaimable:2180 slab_unreclaimable:4199\x0a mapped:983 shmem:1395 pagetables:2393 bounce:0\x0a free_cma:40304
+[  388.977021] DMA free:1992kB min:28kB low:56kB high:64kB active_anon:1520kB inactive_anon:0kB active_file:0kB inactive_file:4kB unevictable:0kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:0kB dirty:0kB writeback:0kB mapped:24kB shmem:4kB slab_reclaimable:232kB slab_unreclaimable:600kB kernel_stack:456kB pagetables:588kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:28 all_unreclaimable? yes
+[  388.987843] lowmem_reserve[]: 0 491 491 491
+[  388.992804] Normal free:162720kB min:2816kB low:5840kB high:6544kB active_anon:274780kB inactive_anon:2164kB active_file:560kB inactive_file:648kB unevictable:256kB isolated(anon):0kB isolated(file):112kB present:507736kB managed:503052kB mlocked:256kB dirty:0kB writeback:0kB mapped:4364kB shmem:5576kB slab_reclaimable:8488kB slab_unreclaimable:16196kB kernel_stack:5120kB pagetables:8984kB unstable:0kB bounce:0kB free_cma:160592kB writeback_tmp:0kB pages_scanned:272 all_unreclaimable? no
+[  389.004892] lowmem_reserve[]: 0 0 0 0
+[  389.008423] DMA: 72*4kB (UM) 89*8kB (UM) 50*16kB (UM) 6*32kB (U) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1992kB
+[  389.016652] Normal: 22188*4kB (UMRC) 8930*8kB (URC) 5*16kB (R) 1*32kB (R) 1*64kB (R) 0*128kB 1*256kB (R) 1*512kB (R) 1*1024kB (R) 0*2048kB 0*4096kB = 162160kB
+[  389.021917] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[  389.024232] 1536 total pagecache pages
+[  389.025481] 0 pages in swap cache
+[  389.026451] Swap cache stats: add 0, delete 0, find 0/0
+[  389.027893] Free swap  = 0kB
+[  389.028750] Total swap = 0kB
+[  389.029621] 130932 pages RAM
+[  389.030573] 0 pages HighMem/MovableOnly
+[  389.031512] 3744 pages reserved
+[  389.032466] [ pid ]   uid  tgid total_vm      rss nr_ptes swapents oom_score_adj name
+[  389.034475] [ 1046]     0  1046      950      480       3        0         -1000 ueventd
+[  389.036559] [ 1334]  1036  1334     3950      688       6        0         -1000 logd
+[  389.038552] [ 1340]  1000  1340     1767      139       4        0         -1000 servicemanager
+[  389.040870] [ 1341]  1000  1341     2863      186       6        0         -1000 hwservicemanage
+[  389.043201] [ 1342]  1000  1342     1471       79       3        0         -1000 vndservicemanag
+[  389.045546] [ 1345]  1000  1345     2839      149       6        0         -1000 keymaster@3.0-s
+[  389.047853] [ 1346]     0  1346     4467      280       8        0         -1000 vold
+[  389.049857] [ 1389]  1000  1389     2148      129       5        0         -1000 allocator@1.0-s
+[  389.052213] [ 1390]  1041  1390     7663      282      12        0         -1000 audio@2.0-servi
+[  389.054469] [ 1391]  1047  1391     6050      288      10        0         -1000 provider@2.4-se
+[  389.056695] [ 1392]  1000  1392     2817      109       5        0         -1000 configstore@1.0
+[  389.058884] [ 1393]  1013  1393     4047      232       7        0         -1000 drm@1.0-service
+[  389.061164] [ 1394]  1000  1394     3061      165       6        0         -1000 gatekeeper@1.0-
+[  389.063408] [ 1395]  1000  1395     3742      161       7        0         -1000 allocator@2.0-s
+[  389.065688] [ 1396]  1000  1396    13750      268      17        0         -1000 composer@2.1-se
+[  389.067879] [ 1397]  1000  1397     2422      132       5        0         -1000 power@1.0-servi
+[  389.070156] [ 1398]  1000  1398     2849      147       5        0         -1000 sensors@1.0-ser
+[  389.072355] [ 1399]  1010  1399     3559      170       7        0         -1000 wifi@1.0-servic
+[  389.074744] [ 1400]     0  1400     2549      146       5        0         -1000 healthd
+[  389.076824] [ 1402]     0  1402     1426       82       3        0         -1000 qemu-props
+[  389.079604] [ 1403]     0  1403     1425       81       3        0         -1000 misc-pipe
+[  389.082598] [ 1408]     0  1408     1431       96       4        0         -1000 lmkd
+[  389.086410] [ 1421]  2000  1421     1406      119       4        0         -1000 sh
+[  389.089146] [ 1511]  1041  1511     8775      392      13        0         -1000 audioserver
+[  389.091854] [ 1512]  1047  1512     8011      425      13        0         -1000 cameraserver
+[  389.094436] [ 1513]  1019  1513     5913      372      11        0         -1000 drmserver
+[  389.096745] [ 1514]     0  1514     3757      243       6        0         -1000 Binder:1514_2
+[  389.098940] [ 1515]  1017  1515     3596      200       7        0         -1000 keystore
+[  389.101561] [ 1516]  1013  1516     3311      204       7        0         -1000 mediadrmserver
+[  389.104311] [ 1517]  1040  1517    13930      660      17        0         -1000 mediaextractor
+[  389.107105] [ 1518]  1013  1518     5893      379      11        0         -1000 mediametrics
+[  389.109366] [ 1519]  1013  1519    15585      633      20        0         -1000 mediaserver
+[  389.112152] [ 1523]     0  1523     3020      139       5        0         -1000 storaged
+[  389.114302] [ 1525]  1010  1525     2368      212       5        0         -1000 wificond
+[  389.116524] [ 1526]  1000  1526     3797      180       7        0         -1000 gnss@1.0-servic
+[  389.118953] [ 1527]  1046  1527     9366      722      16        0         -1000 omx@1.0-service
+[  389.126619] [ 1528]  1001  1528     4103      161       7        0         -1000 rild
+[  389.130332] [ 1562]  1000  1562     3056      162       6        0         -1000 gatekeeperd
+[  389.133546] [ 1566]  1058  1566     1432       86       3        0         -1000 tombstoned
+[  389.136855] [ 1569]  1000  1569     2472      135       5        0         -1000 fingerprint@2.1
+[  389.139490] [ 1642]     0  1642     1334       77       3        0         -1000 dhcpclient
+[  389.142172] [ 1645]     0  1645      497        9       3        0         -1000 sh
+[  389.144762] [ 1647]     0  1647      694       13       3        0         -1000 sleep
+[  389.146989] [ 1672]     0  1672     1397       85       4        0         -1000 ipv6proxy
+[  389.149004] [ 1675]     0  1675     1993      130       4        0         -1000 hostapd
+[  389.150748] [ 1677]     0  1677     1365       78       4        0         -1000 dhcpserver
+[  389.152570] [ 2662]     0  2662     3015      360       5        0         -1000 adbd
+[  389.154222] [ 2668]  1020  2668      657       75       3        0         -1000 mdnsd
+[  389.155927] [ 2776]     0  2776     5092      219       8        0         -1000 Binder:2776_2
+[  389.157719] [ 2777]  1000  2777    16805      495      23        0         -1000 surfaceflinger
+[  389.159545] [ 2778]     0  2778   226785     2327      81        0         -1000 main
+[  389.161795] [ 2793]     0  2793     1626      157       4        0         -1000 iptables-restor
+[  389.163614] [ 2794]     0  2794     1629      169       4        0         -1000 ip6tables-resto
+[  389.166031] [ 2825]  1000  2825   273868     7281     133        0          -900 system_server
+[  389.168303] [ 2922] 10049  2922   249010     2733      79        0           200 putmethod.latin
+[  389.170244] [ 2934] 10022  2934   270595    13752     107        0          -800 ndroid.systemui
+[  389.172642] [ 2973]  1001  2973   254854     3714      85        0          -800 m.android.phone
+[  389.174528] [ 3034]  1010  3034     3896      192       7        0         -1000 wpa_supplicant
+[  389.176905] [ 3117] 10002  3117   245689     2316      70        0           902 oadcastreceiver
+[  389.178783] [ 3153] 10012  3153   249765     2527      78        0           100 .android.dialer
+[  389.183101] [ 3218] 10037  3218   247287     2440      74        0           904 droid.deskclock
+[  389.185329] [ 3264] 10003  3264   245965     2473      74        0           900 viders.calendar
+[  389.187597] [ 3277] 10015  3277   254809     4686      93        0             0 droid.launcher3
+[  389.189836] [ 3333] 10007  3333   248445     3294      81        0           902 d.process.media
+[  389.192688] [ 3346] 10052  3346   245850     2311      73        0           900 id.printspooler
+[  389.194624] [ 3411]  1000  3411   245632     2271      72        0           902 ndroid.keychain
+[  389.196496] [ 3460] 10014  3460   245294     2334      71        0           904 gedprovisioning
+[  389.198374] [ 3480] 10001  3480   247603     3505      86        0           900 d.process.acore
+[  389.200619] [ 3596] 10030  3596   246551     2297      72        0           904 android.camera2
+[  389.202866] [ 3619] 10009  3619   246794     2330      73        0           904 ndroid.contacts
+[  389.205153] [ 3638] 10043  3638   248163     2620      77        0           902 m.android.email
+[  389.207754] [ 3665] 10041  3665   246614     2347      74        0           900 droid.gallery3d
+[  389.210605] [ 3695] 10057  3695   248407     3164      83        0           900 droid.messaging
+[  389.213552] [ 3716] 10017  3716   246216     2287      72        0           904 ackageinstaller
+[  389.216042] [ 3741] 10011  3741   245601     2281      73        0           902 id.ext.services
+[  389.218263] [ 3802] 10005  3802   246131     2540      73        0           100 id.defcontainer
+[  389.220630] [ 3858]     0  3858     1406       86       3        0         -1000 sh
+[  389.222644] [ 3860]     0  3860   198136     1274      58        0         -1000 main
+[  389.224652] [ 3869] 10065  3869   282995    15719      98        0             0 .plainnotes.app
+[  389.226894] Out of memory: Kill process 3333 (d.process.media) score 927 or sacrifice child
+[  389.229023] Killed process 3333 (d.process.media) total-vm:993780kB, anon-rss:13176kB, file-rss:0kB
+[  390.668847] lowmemorykiller: Killing 'ndroid.contacts' (3619), adj 906,\x0a   to free 9320kB on behalf of 'kswapd0' (522) because\x0a   cache 30828kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 92944kB above reserved
+[  390.674880] lowmemorykiller: Killing 'ndroid.contacts' (3619), adj 906,\x0a   to free 9320kB on behalf of '.plainnotes.app' (3869) because\x0a   cache 30828kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 92944kB above reserved
+[  390.680984] lowmemorykiller: Killing 'Jit thread pool' (3624), adj 906,\x0a   to free 9640kB on behalf of 'kswapd0' (522) because\x0a   cache 30828kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 92944kB above reserved
+[  390.686849] lowmemorykiller: Killing 'android.camera2' (3596), adj 906,\x0a   to free 9188kB on behalf of 'kswapd0' (522) because\x0a   cache 30676kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 94400kB above reserved
+[  390.693820] lowmemorykiller: Killing 'android.camera2' (3596), adj 906,\x0a   to free 9188kB on behalf of '.plainnotes.app' (3869) because\x0a   cache 29472kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 96304kB above reserved
+[  390.699767] lowmemorykiller: Killing 'Jit thread pool' (3602), adj 906,\x0a   to free 9300kB on behalf of '.plainnotes.app' (3869) because\x0a   cache 29472kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 96304kB above reserved
+[  391.120731] lowmemorykiller: Killing 'droid.deskclock' (3218), adj 906,\x0a   to free 9760kB on behalf of 'kswapd0' (522) because\x0a   cache 32512kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 105388kB above reserved
+[  391.126852] lowmemorykiller: Killing 'ReferenceQueueD' (3230), adj 906,\x0a   to free 10156kB on behalf of 'kswapd0' (522) because\x0a   cache 32748kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 105088kB above reserved
+[  392.439197] init: processing action (qemu.adbd=start)
+[  392.443713] init: computing context for service 'goldfish-logcat'
+[  392.446456] init: starting service 'goldfish-logcat'...
+[  392.448769] init: property_set("ro.boottime.goldfish-logcat", "392448612720") failed: property already set
+[  392.462848] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  392.472138] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  392.480262] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  392.484676] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  392.498918] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  392.503081] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  396.215229] lowmemorykiller: Killing 'gedprovisioning' (3460), adj 904,\x0a   to free 9336kB on behalf of 'kswapd0' (522) because\x0a   cache 49184kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 85772kB above reserved
+[  396.223575] lowmemorykiller: Killing 'gedprovisioning' (3460), adj 904,\x0a   to free 9336kB on behalf of 'WM.task-1' (3889) because\x0a   cache 48956kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 85912kB above reserved
+[  396.367793] lowmemorykiller: Killing 'oadcastreceiver' (3117), adj 906,\x0a   to free 9264kB on behalf of 'kswapd0' (522) because\x0a   cache 59640kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 76164kB above reserved
+[  396.379230] lowmemorykiller: Killing 'ackageinstaller' (3716), adj 906,\x0a   to free 9148kB on behalf of 'kswapd0' (522) because\x0a   cache 60344kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 75496kB above reserved
+[  396.386183] lowmemorykiller: Killing 'HeapTaskDaemon' (3727), adj 906,\x0a   to free 9392kB on behalf of 'kswapd0' (522) because\x0a   cache 61000kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 77432kB above reserved
+[  396.392014] lowmemorykiller: Killing 'm.android.email' (3638), adj 904,\x0a   to free 10480kB on behalf of 'kswapd0' (522) because\x0a   cache 61228kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 77072kB above reserved
+[  396.412718] lowmemorykiller: Killing 'id.ext.services' (3741), adj 904,\x0a   to free 9124kB on behalf of 'kswapd0' (522) because\x0a   cache 60544kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 85196kB above reserved
+[  396.425383] lowmemorykiller: Killing 'Jit thread pool' (3746), adj 904,\x0a   to free 9136kB on behalf of 'kswapd0' (522) because\x0a   cache 63616kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 82452kB above reserved
+[  396.432308] lowmemorykiller: Killing 'ndroid.keychain' (3411), adj 904,\x0a   to free 9084kB on behalf of 'kswapd0' (522) because\x0a   cache 64456kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 84116kB above reserved
+[  396.453683] lowmemorykiller: Killing 'droid.messaging' (3695), adj 902,\x0a   to free 12656kB on behalf of 'kswapd0' (522) because\x0a   cache 67884kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 83156kB above reserved
+[  396.475249] binder_alloc: 3695: binder_alloc_buf, no vma
+[  396.476453] binder: 2825:2910 transaction failed 29189/-3, size 76-0 line 3124
+[  396.480776] binder_alloc: 3411: binder_alloc_buf, no vma
+[  396.482936] binder: 2825:2910 transaction failed 29189/-3, size 76-0 line 3124
+[  396.535168] lowmemorykiller: Killing 'viders.calendar' (3264), adj 906,\x0a   to free 9892kB on behalf of 'WM.task-2' (3893) because\x0a   cache 76088kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 81168kB above reserved
+[  396.535174] lowmemorykiller: Killing 'viders.calendar' (3264), adj 906,\x0a   to free 9892kB on behalf of 'kswapd0' (522) because\x0a   cache 76088kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 81168kB above reserved
+[  396.546323] lowmemorykiller: Killing 'id.printspooler' (3346), adj 906,\x0a   to free 9248kB on behalf of 'WM.task-2' (3893) because\x0a   cache 70616kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 89756kB above reserved
+[  396.546609] lowmemorykiller: Killing 'id.printspooler' (3346), adj 906,\x0a   to free 9248kB on behalf of 'kswapd0' (522) because\x0a   cache 70616kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 89756kB above reserved
+[  396.546695] lowmemorykiller: Killing 'ReferenceQueueD' (3360), adj 906,\x0a   to free 13240kB on behalf of 'kswapd0' (522) because\x0a   cache 70616kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 89756kB above reserved
+[  396.689689] lowmemorykiller: Killing 'd.process.acore' (3480), adj 904,\x0a   to free 14020kB on behalf of 'kswapd0' (522) because\x0a   cache 73328kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 86532kB above reserved
+[  397.128530] lowmemorykiller: Killing 'droid.gallery3d' (3665), adj 902,\x0a   to free 9412kB on behalf of 'kswapd0' (522) because\x0a   cache 83276kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80360kB above reserved
+[  397.159029] lowmemorykiller: Killing 'id.defcontainer' (3802), adj 900,\x0a   to free 9532kB on behalf of 'kswapd0' (522) because\x0a   cache 85132kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 81472kB above reserved
+[  398.071411] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  398.171309] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  404.578015] lowmemorykiller: Killing 'droid.launcher3' (3277), adj 600,\x0a   to free 18732kB on behalf of 'kswapd0' (522) because\x0a   cache 75240kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 68332kB above reserved
+[  404.616967] binder: 3869:3878 DecRefs 0 refcount change on invalid ref 33 ret -22
+[  416.640683] lowmemorykiller: Killing 'id.printspooler' (3924), adj 900,\x0a   to free 9184kB on behalf of 'kswapd0' (522) because\x0a   cache 49720kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 86540kB above reserved
+[  416.692738] lowmemorykiller: Killing 'd.process.media' (4004), adj 700,\x0a   to free 10676kB on behalf of 'adbd' (2662) because\x0a   cache 65416kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 71968kB above reserved
+[  416.699224] lowmemorykiller: Killing 'Profile Saver' (4019), adj 700,\x0a   to free 11072kB on behalf of 'd.process.acore' (4031) because\x0a   cache 65492kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 71728kB above reserved
+[  416.700831] lowmemorykiller: Killing 'Profile Saver' (4019), adj 700,\x0a   to free 11072kB on behalf of 'WifiStateMachin' (2897) because\x0a   cache 66024kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 71128kB above reserved
+[  416.712243] lowmemorykiller: Killing 'com.android.mtp' (3985), adj 700,\x0a   to free 9360kB on behalf of 'kswapd0' (522) because\x0a   cache 65796kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 71104kB above reserved
+[  416.715365] lowmemorykiller: Killing 'com.android.mtp' (3985), adj 700,\x0a   to free 9360kB on behalf of 'WifiStateMachin' (2897) because\x0a   cache 66708kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 73444kB above reserved
+[  416.730681] lowmemorykiller: Killing 'externalstorage' (3965), adj 700,\x0a   to free 9116kB on behalf of 'kswapd0' (522) because\x0a   cache 72428kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 70648kB above reserved
+[  416.734758] lowmemorykiller: Killing 'externalstorage' (3965), adj 700,\x0a   to free 9116kB on behalf of 'd.process.acore' (4031) because\x0a   cache 74556kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 68608kB above reserved
+[  416.751654] binder_alloc: 3965: binder_alloc_buf, no vma
+[  416.752790] binder: 2825:3896 transaction failed 29189/-3, size 76-0 line 3124
+[  416.913238] lowmemorykiller: Killing 'nnotes.app.test' (4023), adj 700,\x0a   to free 20184kB on behalf of 'kswapd0' (522) because\x0a   cache 74944kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 68908kB above reserved
+[  418.222025] binder: 1511:1545 transaction failed 29189/-22, size 96-0 line 3001
+[  422.310898] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  422.989184] lowmemorykiller: Killing '.android.dialer' (3153), adj 900,\x0a   to free 10240kB on behalf of 'WifiStateMachin' (2897) because\x0a   cache 49508kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 86048kB above reserved
+[  422.998724] lowmemorykiller: Killing '.android.dialer' (3153), adj 900,\x0a   to free 10240kB on behalf of 'Binder:2825_1' (2836) because\x0a   cache 50572kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 85004kB above reserved
+[  423.095080] lowmemorykiller: Killing 'd.process.acore' (4031), adj 700,\x0a   to free 12932kB on behalf of 'kswapd0' (522) because\x0a   cache 70584kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 68516kB above reserved
+[  423.122111] lowmemorykiller: Killing 'd.process.media' (4088), adj 700,\x0a   to free 12160kB on behalf of 'kswapd0' (522) because\x0a   cache 72316kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 72304kB above reserved
+[  423.135276] lowmemorykiller: Killing 'externalstorage' (4070), adj 700,\x0a   to free 10008kB on behalf of 'kswapd0' (522) because\x0a   cache 73820kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 74484kB above reserved
+[  424.460231] lowmemorykiller: Killing 'oid.documentsui' (3944), adj 900,\x0a   to free 27324kB on behalf of 'kswapd0' (522) because\x0a   cache 64072kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 86560kB above reserved
+[  427.576910] lowmemorykiller: Killing 'nnotes.app.test' (4109), adj 700,\x0a   to free 12368kB on behalf of 'oid.documentsui' (4137) because\x0a   cache 75048kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 73780kB above reserved
+[  429.120114] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  429.220172] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  432.136080] lowmemorykiller: Killing 'oid.documentsui' (4137), adj 900,\x0a   to free 16056kB on behalf of 'WifiStateMachin' (2897) because\x0a   cache 66020kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 82388kB above reserved
+[  432.145179] lowmemorykiller: Killing 'oid.documentsui' (4137), adj 900,\x0a   to free 16056kB on behalf of 'tworkPolicy.uid' (2895) because\x0a   cache 66780kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 81640kB above reserved
+[  432.155872] lowmemorykiller: Killing 'Profile Saver' (4152), adj 900,\x0a   to free 25052kB on behalf of 'WifiStateMachin' (2897) because\x0a   cache 68984kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 79364kB above reserved
+[  432.165988] lowmemorykiller: Killing 'Profile Saver' (4152), adj 900,\x0a   to free 25036kB on behalf of 'Binder:2825_E' (4135) because\x0a   cache 70276kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 78072kB above reserved
+[  432.173600] lowmemorykiller: Killing 'Profile Saver' (4152), adj 900,\x0a   to free 25036kB on behalf of 'RenderThread' (4163) because\x0a   cache 70504kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 78092kB above reserved
+[  432.178477] lowmemorykiller: Killing 'Profile Saver' (4152), adj 900,\x0a   to free 25036kB on behalf of 'tworkPolicy.uid' (2895) because\x0a   cache 70884kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 77612kB above reserved
+[  432.192827] lowmemorykiller: Killing 'RenderThread' (4163), adj 900,\x0a   to free 25700kB on behalf of 'android.ui' (2841) because\x0a   cache 72456kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 75884kB above reserved
+[  432.198629] lowmemorykiller: Killing 'RenderThread' (4163), adj 900,\x0a   to free 25700kB on behalf of 'WifiStateMachin' (2897) because\x0a   cache 72228kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 76040kB above reserved
+[  432.203782] lowmemorykiller: Killing 'RenderThread' (4163), adj 900,\x0a   to free 25700kB on behalf of 'Binder:2825_E' (4135) because\x0a   cache 72000kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 76352kB above reserved
+[  435.390320] lowmemorykiller: Killing 'nnotes.app.test' (4166), adj 700,\x0a   to free 12352kB on behalf of 'kswapd0' (522) because\x0a   cache 51228kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 65252kB above reserved
+[  435.522069] lowmemorykiller: Killing 'putmethod.latin' (2922), adj 200,\x0a   to free 16156kB on behalf of 'kswapd0' (522) because\x0a   cache 39460kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 58252kB above reserved
+[  435.530593] lowmemorykiller: Killing 'Jit thread pool' (2927), adj 200,\x0a   to free 16280kB on behalf of 'kswapd0' (522) because\x0a   cache 39460kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 58192kB above reserved
+[  435.611094] binder: 2825:2825 transaction failed 29189/-22, size 100-0 line 3001
+[  440.430626] lowmemorykiller: Killing 'putmethod.latin' (4194), adj 200,\x0a   to free 11724kB on behalf of 'kswapd0' (522) because\x0a   cache 41808kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 57100kB above reserved
+[  440.440863] lowmemorykiller: Killing 'Signal Catcher' (4200), adj 200,\x0a   to free 15180kB on behalf of 'kswapd0' (522) because\x0a   cache 43476kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 55360kB above reserved
+[  440.490429] binder: release 4194:4213 transaction 125275 out, still active
+[  440.500131] binder: 2825:2825 transaction failed 29189/-22, size 100-0 line 3001
+[  440.580347] lowmemorykiller: Killing 'd.process.acore' (4214), adj 900,\x0a   to free 18016kB on behalf of 'kswapd0' (522) because\x0a   cache 54884kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 47628kB above reserved
+[  440.670921] binder: 2825:3895 transaction failed 29189/0, size 8-0 line 2941
+[  440.672428] binder: send failed reply for transaction 125275, target dead
+[  447.192342] lowmemorykiller: Killing 'd.process.acore' (4253), adj 200,\x0a   to free 16728kB on behalf of 'Binder:4253_2' (4266) because\x0a   cache 45164kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 55076kB above reserved
+[  447.212381] lowmemorykiller: Killing 'putmethod.latin' (4232), adj 200,\x0a   to free 19776kB on behalf of 'kswapd0' (522) because\x0a   cache 49800kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 50052kB above reserved
+[  447.220595] lowmemorykiller: Killing 'Binder:4253_2' (4266), adj 200,\x0a   to free 22808kB on behalf of 'Binder:4253_2' (4266) because\x0a   cache 49840kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 50028kB above reserved
+[  447.227383] lowmemorykiller: Killing 'ReferenceQueueD' (4240), adj 200,\x0a   to free 25596kB on behalf of 'kswapd0' (522) because\x0a   cache 49840kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 50028kB above reserved
+[  447.232124] lowmemorykiller: Killing 'Binder:4253_2' (4266), adj 200,\x0a   to free 22808kB on behalf of 'kswapd0' (522) because\x0a   cache 49840kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 50028kB above reserved
+[  447.270347] binder: release 4232:4252 transaction 127174 out, still active
+[  447.274698] binder: undelivered TRANSACTION_COMPLETE
+[  447.277194] binder: undelivered transaction 127277, process died.
+[  447.279942] binder: 2825:2825 transaction failed 29189/-22, size 100-0 line 3001
+[  447.283034] binder: undelivered transaction 127255, process died.
+[  447.331540] binder: 2825:2836 transaction failed 29189/0, size 8-0 line 2941
+[  447.333751] binder: send failed reply for transaction 127174, target dead
+[  450.878649] lowmemorykiller: Killing 'putmethod.latin' (4268), adj 200,\x0a   to free 19076kB on behalf of 'allocator@2.0-s' (1395) because\x0a   cache 48600kB is below limit 49184kB for oom_score_adj 100\x0a   Free memory is 48892kB above reserved
+[  450.887907] lowmemorykiller: Killing 'putmethod.latin' (4268), adj 200,\x0a   to free 18108kB on behalf of 'Binder:2934_1' (2949) because\x0a   cache 45156kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 52308kB above reserved
+[  451.030444] binder: release 4268:4287 transaction 128133 out, still active
+[  451.033227] binder: undelivered transaction 128558, process died.
+[  451.039958] binder: undelivered transaction 128555, process died.
+[  451.481471] lowmemorykiller: Killing 're-initialized>' (4288), adj 900,\x0a   to free 13156kB on behalf of 'kswapd0' (522) because\x0a   cache 30956kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 69332kB above reserved
+[  451.486628] lowmemorykiller: Killing 're-initialized>' (4288), adj 900,\x0a   to free 15100kB on behalf of 'Binder:4288_2' (4302) because\x0a   cache 32248kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 67764kB above reserved
+[  451.486698] lowmemorykiller: Killing 'Jit thread pool' (4293), adj 900,\x0a   to free 16680kB on behalf of 'Binder:4288_2' (4302) because\x0a   cache 32248kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 67764kB above reserved
+[  451.530340] binder: undelivered transaction 128845, process died.
+[  451.544331] binder: 2825:3895 transaction failed 29189/0, size 8-0 line 2941
+[  451.546557] binder: send failed reply for transaction 128133, target dead
+[  452.443899] init: processing action (qemu.adbd=start)
+[  452.453318] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  452.457122] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  452.502235] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  452.518801] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  452.527118] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  452.537723] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  458.626898] lowmemorykiller: Killing 'nnotes.app.test' (4304), adj 199,\x0a   to free 13196kB on behalf of 'droid.launcher' (4346) because\x0a   cache 40980kB is below limit 49184kB for oom_score_adj 100\x0a   Free memory is 43844kB above reserved
+[  458.648385] lowmemorykiller: Killing 'RenderThread' (4344), adj 199,\x0a   to free 19400kB on behalf of 'RenderThread' (4344) because\x0a   cache 45084kB is below limit 49184kB for oom_score_adj 100\x0a   Free memory is 38684kB above reserved
+[  458.656929] RenderThread: page allocation failure: order:0, mode:0x80d2
+[  458.665437] CPU: 0 PID: 4344 Comm: RenderThread Tainted: G S      W      3.18.91+ #1
+[  458.667365] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[  458.670094]  00000000 00000246 c722dc94 c07a9c83 00000000 000080d2 c722dcc4 c02c1c58
+[  458.670094]  c0a08789 c1039104 00000000 000080d2 00000040 00000000 000080d2 00000040
+[  458.670094]  00000000 000080d2 c722dd48 c02c3eab 000080d2 00000000 00000000 c1038cc0
+[  458.670094] Call Trace:
+[  458.670094]  [<c07a9c83>] dump_stack+0x45/0x59
+[  458.670094]  [<c02c1c58>] warn_alloc_failed+0xc4/0xd6
+[  458.670094]  [<c02c3eab>] __alloc_pages_nodemask+0x56b/0x6f4
+[  458.670094]  [<c060cd78>] binder_update_page_range+0x451/0x592
+[  458.670094]  [<c060d432>] binder_alloc_new_buf_locked+0x288/0x3e0
+[  458.670094]  [<c024d001>] ? get_iowait_load+0x1f/0x2d
+[  458.670094]  [<c060d5b2>] binder_alloc_new_buf+0x28/0x3a
+[  458.670094]  [<c0609fdd>] binder_transaction+0x76e/0x199e
+[  458.670094]  [<c060f725>] ? sync_fence_install+0xe/0x10
+[  458.670094]  [<c0610c8d>] ? goldfish_sync_fence_create+0xe0/0x123
+[  458.670094]  [<c04073bb>] ? lockref_put_or_lock+0x1e/0x2a
+[  458.670094]  [<c02f36d2>] ? __check_object_size+0x8e/0x10b
+[  458.670094]  [<c060b8b1>] binder_thread_write+0x6a4/0xd2e
+[  458.670094]  [<c02be240>] ? filemap_map_pages+0x5c/0x1ea
+[  458.670094]  [<c024d0ff>] ? get_parent_ip+0xb/0x31
+[  458.670094]  [<c060c0ed>] binder_ioctl+0x1b2/0x642
+[  458.670094]  [<c060bf3b>] ? binder_thread_write+0xd2e/0xd2e
+[  458.698665]  [<c03028a7>] do_vfs_ioctl+0x368/0x411
+[  458.698665]  [<c03bf8a2>] ? selinux_file_ioctl+0xa8/0xae
+[  458.698665]  [<c0302993>] SyS_ioctl+0x43/0x64
+[  458.698665]  [<c07b07b6>] syscall_call+0x7/0x7
+[  458.711455] Mem-Info:
+[  458.712264] DMA per-cpu:
+[  458.713158] CPU    0: hi:    0, btch:   1 usd:   0
+[  458.714517] CPU    1: hi:    0, btch:   1 usd:   0
+[  458.715953] Normal per-cpu:
+[  458.716856] CPU    0: hi:   90, btch:  15 usd:  10
+[  458.737942] CPU    1: hi:   90, btch:  15 usd:   1
+[  458.740810] active_anon:89136 inactive_anon:758 isolated_anon:0\x0a active_file:5557 inactive_file:5537 isolated_file:47\x0a unevictable:78 dirty:0 writeback:0 unstable:0\x0a free:12028 slab_reclaimable:2118 slab_unreclaimable:3586\x0a mapped:10985 shmem:1613 pagetables:1237 bounce:0\x0a free_cma:10900
+[  458.771525] DMA free:1988kB min:28kB low:56kB high:64kB active_anon:1588kB inactive_anon:0kB active_file:4kB inactive_file:0kB unevictable:0kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:0kB dirty:0kB writeback:0kB mapped:24kB shmem:4kB slab_reclaimable:236kB slab_unreclaimable:548kB kernel_stack:336kB pagetables:504kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:0 all_unreclaimable? no
+[  458.813089] lowmem_reserve[]: 0 491 491 491
+[  458.821067] Normal free:74104kB min:2816kB low:5840kB high:6544kB active_anon:355164kB inactive_anon:3032kB active_file:8136kB inactive_file:8008kB unevictable:312kB isolated(anon):0kB isolated(file):128kB present:507736kB managed:503052kB mlocked:312kB dirty:0kB writeback:0kB mapped:18076kB shmem:6448kB slab_reclaimable:8236kB slab_unreclaimable:13796kB kernel_stack:3576kB pagetables:4444kB unstable:0kB bounce:0kB free_cma:71696kB writeback_tmp:0kB pages_scanned:128 all_unreclaimable? no
+[  458.832673] lowmem_reserve[]: 0 0 0 0
+[  458.839198] DMA: 38*4kB (M) 94*8kB (UM) 54*16kB (UM) 7*32kB (UM) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1992kB
+[  458.862430] Normal: 18677*4kB (UERC) 675*8kB (RC) 10*16kB (R) 1*32kB (R) 3*64kB (R) 0*128kB 1*256kB (R) 1*512kB (R) 1*1024kB (R) 0*2048kB 0*4096kB = 82284kB
+[  458.867247] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[  458.869245] 3969 total pagecache pages
+[  458.869980] 0 pages in swap cache
+[  458.870959] Swap cache stats: add 0, delete 0, find 0/0
+[  458.872118] Free swap  = 0kB
+[  458.872710] Total swap = 0kB
+[  458.873258] 130932 pages RAM
+[  458.873832] 0 pages HighMem/MovableOnly
+[  458.874575] 3744 pages reserved
+[  458.875173] binder_alloc: 2777: binder_alloc_buf failed for page at 00000000
+[  458.876537] binder: 4304:4344 transaction failed 29201/-12, size 180-4 line 3124
+[  459.214412] lowmemorykiller: Killing 're-initialized>' (4346), adj 900,\x0a   to free 15236kB on behalf of 'Binder:4346_1' (4359) because\x0a   cache 73520kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 16028kB above reserved
+[  459.226564] lowmemorykiller: Killing 're-initialized>' (4346), adj 900,\x0a   to free 15216kB on behalf of 'Binder:2825_11' (4231) because\x0a   cache 74812kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 14548kB above reserved
+[  459.235369] lowmemorykiller: Killing 'Binder:4346_1' (4359), adj 900,\x0a   to free 21120kB on behalf of 'android.ui' (2841) because\x0a   cache 74432kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 15012kB above reserved
+[  459.300345] binder: undelivered transaction 131337, process died.
+[  459.853657] lowmemorykiller: Killing '.plainnotes.app' (3869), adj 0,\x0a   to free 230224kB on behalf of '.plainnotes.app' (3869) because\x0a   cache 37820kB is below limit 37916kB for oom_score_adj 0\x0a   Free memory is 27080kB above reserved
+[  459.858484] .plainnotes.app: page allocation failure: order:0, mode:0x80d2
+[  459.859861] CPU: 0 PID: 3869 Comm: .plainnotes.app Tainted: G S      W      3.18.91+ #1
+[  459.860108] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[  459.860108]  00000000 00000286 c0fa1c94 c07a9c83 00000000 000080d2 c0fa1cc4 c02c1c58
+[  459.860108]  c0a08789 c1101764 00000000 000080d2 00000040 00000000 000080d2 00000040
+[  459.860108]  00000000 000080d2 c0fa1d48 c02c3eab 000080d2 00000000 00000000 c1101320
+[  459.860108] Call Trace:
+[  459.860108]  [<c07a9c83>] dump_stack+0x45/0x59
+[  459.860108]  [<c02c1c58>] warn_alloc_failed+0xc4/0xd6
+[  459.860108]  [<c02c3eab>] __alloc_pages_nodemask+0x56b/0x6f4
+[  459.860108]  [<c060cd78>] binder_update_page_range+0x451/0x592
+[  459.860108]  [<c060d432>] binder_alloc_new_buf_locked+0x288/0x3e0
+[  459.860108]  [<c060d5b2>] binder_alloc_new_buf+0x28/0x3a
+[  459.860108]  [<c0609fdd>] binder_transaction+0x76e/0x199e
+[  459.860108]  [<c064d442>] ? sock_recvmsg+0x78/0x91
+[  459.860108]  [<c02f36d2>] ? __check_object_size+0x8e/0x10b
+[  459.860108]  [<c060b8b1>] binder_thread_write+0x6a4/0xd2e
+[  459.880105]  [<c024d0ff>] ? get_parent_ip+0xb/0x31
+[  459.880105]  [<c060c0ed>] binder_ioctl+0x1b2/0x642
+[  459.880105]  [<c060bf3b>] ? binder_thread_write+0xd2e/0xd2e
+[  459.880105]  [<c03028a7>] do_vfs_ioctl+0x368/0x411
+[  459.880105]  [<c03bf8a2>] ? selinux_file_ioctl+0xa8/0xae
+[  459.880105]  [<c0302993>] SyS_ioctl+0x43/0x64
+[  459.880105]  [<c07b07b6>] syscall_call+0x7/0x7
+[  459.886923] Mem-Info:
+[  459.887555] DMA per-cpu:
+[  459.888059] CPU    0: hi:    0, btch:   1 usd:   0
+[  459.888994] CPU    1: hi:    0, btch:   1 usd:   0
+[  459.889912] Normal per-cpu:
+[  459.890565] CPU    0: hi:   90, btch:  15 usd:   0
+[  459.891480] CPU    1: hi:   90, btch:  15 usd:  14
+[  459.892477] active_anon:94199 inactive_anon:561 isolated_anon:2\x0a active_file:4759 inactive_file:4732 isolated_file:58\x0a unevictable:78 dirty:2 writeback:0 unstable:0\x0a free:8930 slab_reclaimable:2122 slab_unreclaimable:3586\x0a mapped:9047 shmem:1411 pagetables:1153 bounce:0\x0a free_cma:7770
+[  459.898791] DMA free:1988kB min:28kB low:56kB high:64kB active_anon:1588kB inactive_anon:0kB active_file:8kB inactive_file:0kB unevictable:0kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:0kB dirty:0kB writeback:0kB mapped:52kB shmem:4kB slab_reclaimable:252kB slab_unreclaimable:548kB kernel_stack:360kB pagetables:464kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:0 all_unreclaimable? no
+[  459.906378] lowmem_reserve[]: 0 491 491 491
+[  459.907441] Normal free:33888kB min:2816kB low:5840kB high:6544kB active_anon:375208kB inactive_anon:2244kB active_file:18852kB inactive_file:18912kB unevictable:312kB isolated(anon):8kB isolated(file):204kB present:507736kB managed:503052kB mlocked:312kB dirty:8kB writeback:0kB mapped:35984kB shmem:5640kB slab_reclaimable:8236kB slab_unreclaimable:13796kB kernel_stack:3488kB pagetables:4148kB unstable:0kB bounce:0kB free_cma:31184kB writeback_tmp:0kB pages_scanned:296 all_unreclaimable? no
+[  459.915631] lowmem_reserve[]: 0 0 0 0
+[  459.916612] DMA: 46*4kB (UM) 94*8kB (UM) 56*16kB (UM) 5*32kB (U) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1992kB
+[  459.919591] Normal: 7942*4kB (UEMRC) 25*8kB (EMC) 10*16kB (R) 1*32kB (R) 3*64kB (R) 0*128kB 1*256kB (R) 1*512kB (R) 1*1024kB (R) 0*2048kB 0*4096kB = 34144kB
+[  459.923316] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[  459.924927] 10735 total pagecache pages
+[  459.925684] 0 pages in swap cache
+[  459.926339] Swap cache stats: add 0, delete 0, find 0/0
+[  459.927348] Free swap  = 0kB
+[  459.927930] Total swap = 0kB
+[  459.928493] 130932 pages RAM
+[  459.929087] 0 pages HighMem/MovableOnly
+[  459.929867] 3744 pages reserved
+[  459.930562] binder_alloc: 2777: binder_alloc_buf failed for page at 00000000
+[  459.932052] binder: 3869:3869 transaction failed 29201/-12, size 80-0 line 3124
+[  459.933712] lowmemorykiller: Killing 'putmethod.latin' (4321), adj 0,\x0a   to free 16080kB on behalf of 'Binder:2825_12' (4364) because\x0a   cache 36960kB is below limit 37916kB for oom_score_adj 0\x0a   Free memory is 27840kB above reserved
+[  460.000372] binder: undelivered TRANSACTION_COMPLETE
+[  460.001611] binder: undelivered transaction 131840, process died.
+[  460.003436] binder: release 4321:4366 transaction 131774 out, still active
+[  460.071463] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  460.113552] binder: release 3860:3868 transaction 131932 in, still active
+[  460.114990] binder: send failed reply for transaction 131932 to 2825:4382
+[  460.116656] binder: undelivered transaction 131953, process died.
+[  460.170330] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  460.243438] binder: 2825:3923 transaction failed 29189/0, size 1928-8 line 2941
+[  460.245306] binder: send failed reply for transaction 131774, target dead

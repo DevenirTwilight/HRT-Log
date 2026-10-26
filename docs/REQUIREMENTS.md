@@ -1470,3 +1470,11 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 ### 148.F Featherline低内存收尾（2026-10-26）
 
 负责人要求继续#125：先取最终SHA及原始工件，分别定位library/Featherline失败；不得将Process crashed、logcat清理失败直接等同LMK，证据不足标ROOT_CAUSE_NOT_PROVEN。仅修真实原因，不提高512MiB RAM/192MiB heap、不降低Argon2或样本、不删断言、不用System.gc；保留真实SAF/密码/预览/提交/重开及MED独立设备恢复验收。精确HEAD六门、三API和两低内存作业均满足后按106正常保护合并并核主线；否则Draft/NO-GO。MED OFF、真机/人工TalkBack未跑如实记，完成前不做PR-D，不签名/交付/发布。
+
+### 148.G PR-D Chrysalide v5 导入及 TransMTF 兼容性（2026-10-26）
+
+依据 `docs/cross-app-import/2026-10-26/chrysalide-mapping.md` 核验上游字段。TransMTF 当前 `meta.version=2` HRT Tracker 导出与已有 HRT Tracker 格式同构，继续复用同一 detector/parser，不另造来源或更改历史身份；保留 `timeH` epoch-hour 与 `doseMG` 实际化合物质量语义。Chrysalide 只支持导出 v5；单一既有 SAF 入口、严格 detector、一次快照、实际事务预览/回执。仅迁移 `taken=true` 且有实际 ISO 时间的记录，剂量未知并由用户显式选择既有本地药物；日期型血检及非支持集合都必须明确报告，不伪造服药剂量/漏服/采样时刻、不启用计划/库存/PK或附件。
+
+为保存 `IMPORT_CHRYSALIDE` 类型来源及剂量未知事实，批准本 PR 的最小非破坏 Room19→20 表扩展，business schema 条件性升至16；旧1–15读取及无 Chry 数据时既有备份输出语义维持，PNBAK1 外层与药代/库存/附件行为不变。ID 为本地自增值，完整导出及行内容 digest 做精确文件幂等；同ID不同内容进入歧义冲突，不能覆盖、自动关联或复活已删除事实。回收站、墓碑、PNBAK1/PNMED 集合备份必须保留来源证据。
+
+只使用合成数据，完全离线；PR-D 不得启用 MED-02。正式合并以最终 SHA 对应的必需 CI、实际 SAF/UI 验收、schema/旧备份兼容及所有审查门槛为准。未执行原生、TalkBack 或物理设备检查必须分别保留 NOT_RUN，不能以编译通过替代。

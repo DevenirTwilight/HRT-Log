@@ -208,6 +208,7 @@ fun routeIcon(route: String?): ImageVector = when (route) {
                         Text(stringResource(R.string.history_e2_eq, displayNumber(it, 2)), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
                     }
                 }
+                else if(r.origin=="IMPORT_CHRYSALIDE") Text(stringResource(R.string.history_dose_unknown),style=MaterialTheme.typography.bodySmall,color=c.onSurfaceVariant)
                 if ((r.unallocated_supply_amount ?: 0.0) > 0) Text(stringResource(R.string.history_unallocated, formatDose(r.unallocated_supply_amount!!, historyMed?.unit)), style = MaterialTheme.typography.labelSmall, color = c.tertiary)
             }
             Spacer(Modifier.width(8.dp))

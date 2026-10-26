@@ -1,0 +1,60 @@
+
+net.plainnotes.app.data.NativeCiHeapProbe:.
+net.plainnotes.app.data.LibraryCollectionAndroidTest:
+Error in restoredLibraryAddsOriginalAndExportsAllLibrariesToIndependentNewDevice(net.plainnotes.app.data.LibraryCollectionAndroidTest):
+java.lang.IllegalArgumentException: Required value was null.
+	at net.plainnotes.app.data.BackupTables.getJSONArray(BackupRows.kt:21)
+	at net.plainnotes.app.data.IndexedBackupDocument$tables$1.getJSONArray(IndexedBackupDocument.kt:15)
+	at net.plainnotes.app.data.AttachmentCandidateMetadata.compareBusiness(AttachmentCandidateMetadata.kt:81)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize$lambda$3$0(LibraryRestoreCandidate.kt:22)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.$r8$lambda$8DgrE53mQPD__utOWmOVJs20fHA(Unknown Source:0)
+	at net.plainnotes.app.data.LibraryRestoreCandidate$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction$lambda$10(RoomDatabase.android.kt:750)
+	at androidx.room.RoomDatabase$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:775)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:750)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize(LibraryRestoreCandidate.kt:20)
+	at net.plainnotes.app.data.LibraryCollectionRestore.restore(LibraryCollectionRestore.kt:141)
+	at net.plainnotes.app.data.LibraryCollectionAndroidTest$restoredLibraryAddsOriginalAndExportsAllLibrariesToIndependentNewDevice$1.invokeSuspend(LibraryCollectionAndroidTest.kt:72)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at net.plainnotes.app.data.LibraryCollectionAndroidTest.restoredLibraryAddsOriginalAndExportsAllLibrariesToIndependentNewDevice(LibraryCollectionAndroidTest.kt:49)
+
+
+Time: 10.941
+There was 1 failure:
+1) restoredLibraryAddsOriginalAndExportsAllLibrariesToIndependentNewDevice(net.plainnotes.app.data.LibraryCollectionAndroidTest)
+java.lang.IllegalArgumentException: Required value was null.
+	at net.plainnotes.app.data.BackupTables.getJSONArray(BackupRows.kt:21)
+	at net.plainnotes.app.data.IndexedBackupDocument$tables$1.getJSONArray(IndexedBackupDocument.kt:15)
+	at net.plainnotes.app.data.AttachmentCandidateMetadata.compareBusiness(AttachmentCandidateMetadata.kt:81)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize$lambda$3$0(LibraryRestoreCandidate.kt:22)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.$r8$lambda$8DgrE53mQPD__utOWmOVJs20fHA(Unknown Source:0)
+	at net.plainnotes.app.data.LibraryRestoreCandidate$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction$lambda$10(RoomDatabase.android.kt:750)
+	at androidx.room.RoomDatabase$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:775)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:750)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize(LibraryRestoreCandidate.kt:20)
+	at net.plainnotes.app.data.LibraryCollectionRestore.restore(LibraryCollectionRestore.kt:141)
+	at net.plainnotes.app.data.LibraryCollectionAndroidTest$restoredLibraryAddsOriginalAndExportsAllLibrariesToIndependentNewDevice$1.invokeSuspend(LibraryCollectionAndroidTest.kt:72)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at net.plainnotes.app.data.LibraryCollectionAndroidTest.restoredLibraryAddsOriginalAndExportsAllLibrariesToIndependentNewDevice(LibraryCollectionAndroidTest.kt:49)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1
+
+

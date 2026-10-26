@@ -12,6 +12,7 @@ internal object PublishedBusinessFixture {
             if(schema<11 && table=="lab_panel")continue
             if(schema<14 && table=="external_import_item")continue
             if(schema<15 && table=="featherline_import_item")continue
+            if(schema<16 && table==ChrysalideImportSchema.TABLE)continue
             val columns=RecordBackupCompatibility.columns.getValue(table).filterNot{(table=="supply_container" && it=="inventory_encoding") || (schema<11 && table=="lab_value" && it=="panel_id")}
             val rows=JSONArray()
             db.query("SELECT ${columns.joinToString(","){"`$it`"}} FROM `$table`").use { c ->while(c.moveToNext())rows.put(JSONObject().apply {

@@ -1,0 +1,14 @@
+<resources>
+    <string name="chry_preview">Aperçu de l’import Chrysalide</string><string name="chry_result">Résultat de l’import Chrysalide</string>
+    <string name="chry_counts">Journaux %1$d · événements à dose inconnue %2$d · ajoutables %3$d · déjà présents %4$d · conflits %5$d · prélèvements non importés %6$d · enregistrés %7$d</string>
+    <string name="chry_semantics">Seuls les événements taken=true avec un horodatage réel sont importés. La source ne fournit ni dose par prise ni fuseau; la dose reste inconnue et l’instant est conservé en UTC. La posologie du médicament n’est pas utilisée comme dose historique.</string>
+    <string name="chry_definition_policy">Les définitions source restent des éléments de preuve ; aucun schéma actuel ni rappel n’est créé.</string>
+    <string name="chry_map">Choisir un médicament HRT Log existant pour « %1$s » · %2$s · %3$s</string><string name="chry_no_targets">Aucun médicament enregistré; ces événements ne peuvent pas être associés sans risque.</string>
+    <string name="chry_event">Journal source #%1$d · %2$s · %3$s · dose réelle inconnue</string>
+    <string name="chry_not_taken">Non importé : journaux marqués taken=false (%1$d) ; aucun oubli n’est créé.</string>
+    <string name="chry_blood_unsupported">Analyses non importées : Chrysalide utilise un champ Date sans preuve de précision de prélèvement ni de fuseau.</string>
+    <string name="chry_collection_unsupported">Non importé : %1$s (%2$d)</string><string name="chry_id_policy">Les ID sont des auto-incréments locaux, pas des identifiants d’appareil. Le fichier complet et le contenu de la ligne servent à l’idempotence ; un ID réutilisé avec un contenu différent est un conflit ambigu. Les modifications locales ne sont jamais écrasées et une ligne supprimée n’est pas recréée.</string>
+    <string name="chry_confirm">Importer l’historique choisi</string>
+    <string name="history_dose_unknown">Dose réelle inconnue dans la source</string>
+    <string name="chry_new">À importer</string><string name="chry_existing">Déjà importé</string><string name="chry_deleted">Supprimé ; non recréé</string><string name="chry_conflict">Conflit ; non remplacé</string>
+</resources>

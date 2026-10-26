@@ -26,6 +26,9 @@ internal object ArchiveKdfWorkspace {
         finally {blocks.clear();params.clear()}
     }
 
+    /** Drop the zeroed 64MiB pool once an authenticated import no longer needs a password retry. */
+    @Synchronized fun releaseAfterAuthentication() = blocks.release()
+
     /** Public BC allocator contract, not a second implementation of Argon2. */
     internal class Blocks:Argon2BytesGenerator.BlockPool {
         // BC1.86 FillBlock borrows four auxiliary blocks in addition to the
@@ -39,5 +42,6 @@ internal object ArchiveKdfWorkspace {
         }
         override fun deallocate(block:Argon2BytesGenerator.Block) {block.clear()}
         fun clear() {owned.forEach {it.clear()};next=0}
+        fun release() {clear();owned.clear()}
     }
 }

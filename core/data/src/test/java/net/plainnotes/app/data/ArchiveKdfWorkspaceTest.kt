@@ -31,6 +31,12 @@ class ArchiveKdfWorkspaceTest {
         pool.clear()
         assertSame(first,pool.allocate())
     }
+    @Test fun releasedWorkspaceDropsClearedBlockReferencesAndCanAllocateAgain() {
+        val pool=ArchiveKdfWorkspace.Blocks()
+        val previous=pool.allocate()
+        pool.release()
+        assertNotSame(previous,pool.allocate())
+    }
     @Test fun wrongPasswordThenCorrectAndDifferentSaltMatchIndependentVectors() {
         for(name in listOf("v3-s7","clinical-v3")) {
             FeatherlineContainer.read(File("src/test/resources/featherline/$name.cipher").readBytes()).use {c->

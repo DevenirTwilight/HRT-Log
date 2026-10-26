@@ -1,0 +1,14 @@
+<resources>
+    <string name="chry_preview">Chrysalide 匯入預覽</string><string name="chry_result">Chrysalide 匯入結果</string>
+    <string name="chry_counts">來源紀錄 %1$d · 劑量未知事件 %2$d · 可新增 %3$d · 已存在 %4$d · 衝突 %5$d · 未匯入血檢 %6$d · 實際儲存 %7$d</string>
+    <string name="chry_semantics">僅匯入 taken=true 且有實際時間的紀錄。來源沒有逐次劑量或時區；劑量保留為未知，絕對時間以 UTC 儲存。藥物定義不會當作歷史劑量。</string>
+    <string name="chry_definition_policy">來源藥物定義僅作為證據；不會建立目前用藥方案或提醒。</string>
+    <string name="chry_map">為「%1$s」選擇 HRT Log 中已有藥物 · %2$s · %3$s</string><string name="chry_no_targets">沒有已儲存藥物，無法安全關聯這些紀錄。</string>
+    <string name="chry_event">來源紀錄 #%1$d · %2$s · %3$s · 實際劑量未知</string>
+    <string name="chry_not_taken">未匯入：來源標記為 taken=false 的紀錄（%1$d）；不會建立漏服事實。</string>
+    <string name="chry_blood_unsupported">未匯入血檢：Chrysalide 透過 Date 物件儲存日期欄位，無法證明採樣時間與時區精度。</string>
+    <string name="chry_collection_unsupported">未匯入：%1$s（%2$d）</string><string name="chry_id_policy">ID 是本機自增值，不是裝置身分。透過完整匯出與紀錄內容進行冪等識別；相同 ID 的不同內容視為歧義衝突。本機修改不會被覆蓋，原樣重匯不會復活已刪除紀錄。</string>
+    <string name="chry_confirm">匯入所選歷史</string>
+    <string name="history_dose_unknown">來源未提供實際劑量</string>
+    <string name="chry_new">將匯入</string><string name="chry_existing">已匯入</string><string name="chry_deleted">已刪除，不重建</string><string name="chry_conflict">存在衝突，不覆蓋</string>
+</resources>

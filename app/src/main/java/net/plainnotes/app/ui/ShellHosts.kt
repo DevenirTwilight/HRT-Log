@@ -53,7 +53,7 @@ import java.time.Instant
 }
 
 @Composable internal fun HistoryRecordDialogs(h: HistoryDialogs, model: NotesViewModel, meds: Map<Long, MedicationEntity>) {
-    h.editRecord?.let { r -> IntakeDialog(stringResource(if (r.status == "MISSED") R.string.history_backfill else R.string.edit), MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id), r.actual_dose ?: r.planned_dose ?: meds[r.medication_id]?.dose_per_intake ?: 1.0,
+    h.editRecord?.let { r -> IntakeDialog(stringResource(if (r.status == "MISSED") R.string.history_backfill else R.string.edit), MedicationSnapshot.decode(r.config_snapshot,r.medication_id)?.medication(r.medication_id), r.actual_dose ?: r.planned_dose ?: if(r.origin=="IMPORT_CHRYSALIDE")0.0 else meds[r.medication_id]?.dose_per_intake ?: 1.0,
         Instant.ofEpochMilli(r.taken_utc ?: r.scheduled_utc ?: System.currentTimeMillis()), { h.editRecord = null },onReference={h.referenceRecord=r}) { t, d, _ -> model.editRecord(r.id, t, d); h.editRecord = null } }
     h.referenceRecord?.let {r->RecordedReferenceDialog(r,h.referenceEpoch,model::recordedReferenceHistory){h.referenceRecord=null}}
     h.deleteRecord?.let { r -> AlertDialog(onDismissRequest = { h.deleteRecord = null }, icon = { Icon(Icons.Outlined.Delete, null) }, text = { Text(stringResource(R.string.history_delete_confirm)) },
