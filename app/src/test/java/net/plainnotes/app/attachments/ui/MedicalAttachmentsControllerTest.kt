@@ -35,6 +35,7 @@ class MedicalAttachmentsControllerTest {
         var reconcileOutcome:AttachmentFlowController.State=AttachmentFlowController.State.ReconcileRequired
         var onSaved:(()->Unit)?=null
         var previewFailure:Exception?=null
+        var publishFailure:Exception?=null
         val imports=mutableListOf<Imp>()
         val reconciles=mutableListOf<Pair<UUID,UUID>>()
         val previews=mutableListOf<Prev>()
@@ -46,7 +47,7 @@ class MedicalAttachmentsControllerTest {
         var unregistered=false
         override suspend fun documents():List<MedicalAttachmentOperations.Document> {if(listFails)error("list");return docs.toList()}
         override suspend fun pickerIntent()=Intent(Intent.ACTION_OPEN_DOCUMENT)
-        override suspend fun preview(document:UUID):MedicalAttachmentGateway.Preview=Prev(previewFailure,beforeImage).also {previews+=it}
+        override suspend fun preview(document:UUID):MedicalAttachmentGateway.Preview=Prev(previewFailure,beforeImage,publishFailure).also {previews+=it}
         override suspend fun newImport(title:String)=Imp(this,title).also {imports+=it}
         override suspend fun reconcile(operation:UUID,document:UUID):AttachmentFlowController.State {reconciles+=operation to document;return reconcileOutcome}
         override fun onRevoked(listener:()->Unit):AutoCloseable {this.listener=listener;return AutoCloseable {unregistered=true;listener()}}
@@ -61,9 +62,10 @@ class MedicalAttachmentsControllerTest {
         override fun cancel() {cancelled=true}
         override fun close() {closed=true}
     }
-    private class Prev(val failure:Exception?,val beforeImage:(()->Unit)?=null):MedicalAttachmentGateway.Preview {
+    private class Prev(val failure:Exception?,val beforeImage:(()->Unit)?=null,val publishFailure:Exception?=null):MedicalAttachmentGateway.Preview {
         val pages=mutableListOf<Bitmap>();var closed=false
         private fun page()=failure?.let {throw it} ?: Bitmap.createBitmap(8,8,Bitmap.Config.ARGB_8888).also {pages+=it}
+        override fun <T> publish(block:()->T):T {publishFailure?.let{throw it};return block()}
         override fun pdfFirstPage()=page()
         override fun image():Bitmap {beforeImage?.invoke();return page()}
         override fun release(bitmap:Bitmap) {bitmap.recycle()}
@@ -205,7 +207,7 @@ class MedicalAttachmentsControllerTest {
     @Test fun latePixelsAfterHideOrRevokeAndResumeCannotReappear()=runBlocking {
         for(resume in listOf(false,true)) {
             val fake=Fake(target).apply{docs+=doc("Photo","image/png")};val c=controller(fake);c.refresh()
-            fake.beforeImage={if(resume){fake.revoke();c.resume()}else fake.hide?.invoke()}
+            fake.beforeImage={if(resume){fake.revoke();c.resume()}else fake.hide?.invoke();assertTrue("Opening reader closes at hide, before decode returns",fake.previews.single().closed)}
             c.open((c.state.value.files as Files.Ready).items.single())
             assertEquals(Viewer.Closed,c.state.value.viewer)
             assertTrue(fake.previews.single().closed)
@@ -220,6 +222,13 @@ class MedicalAttachmentsControllerTest {
         fake.hide?.invoke();c.confirmImport("t")
         assertEquals(Import.Cancelled,c.state.value.import);assertTrue(fake.imports.isEmpty())
         c.close()
+    }
+
+    @Test fun finalNativeScopeRefusalCannotPublishAnAlreadyDecodedPage()=runBlocking {
+        val fake=Fake(target).apply{docs+=doc("Photo","image/png");publishFailure=net.plainnotes.app.data.LibraryScopeMismatch()}
+        val c=controller(fake);c.refresh();c.open((c.state.value.files as Files.Ready).items.single())
+        assertTrue(c.state.value.viewer is Viewer.Message)
+        assertTrue(fake.previews.single().closed);assertTrue(fake.previews.single().pages.all{it.isRecycled});c.close()
     }
 
 }

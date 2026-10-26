@@ -33,6 +33,7 @@ internal interface MedicalAttachmentGateway {
     fun onRevoked(listener:()->Unit):AutoCloseable
 
     interface Preview:AutoCloseable {
+        fun <T> publish(block:()->T):T=block()
         fun pdfFirstPage():Bitmap
         fun image():Bitmap
         fun release(bitmap:Bitmap)
@@ -60,6 +61,7 @@ internal class RuntimeAttachmentGateway(private val context:Context,private val 
         try {
             val viewer=AttachmentViewer(context,flow.open(document))
             return object:MedicalAttachmentGateway.Preview {
+                override fun <T> publish(block:()->T)=viewer.publishFrame(block)
                 override fun pdfFirstPage()=viewer.pdfPage(0)
                 override fun image()=viewer.image()
                 override fun release(bitmap:Bitmap)=viewer.release(bitmap)

@@ -168,22 +168,31 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
 
     @Synchronized fun open(item:Item) {
         if(closed || state.value.revoked || !item.available)return
-        closePreview()
+        closeViewer()
         val epoch=++presentationEpoch
         if(item.kind==FileKind.OTHER) {mutable.update {it.copy(viewer=Viewer.Message(item.title,Reason.NO_PREVIEW_FOR_TYPE))};return}
         mutable.update {it.copy(viewer=Viewer.Opening(item.title))}
         scope.launch {
             var opened:MedicalAttachmentGateway.Preview?=null
             try {
-                val page=withContext(io) {
-                    val p=gateway.preview(item.document).also {opened=it}
-                    if(item.kind==FileKind.PDF)p.pdfFirstPage() else p.image()
-                }
-                val owner=requireNotNull(opened)
-                synchronized(this@MedicalAttachmentsController) {
-                    if(closed || state.value.revoked || presentationEpoch!=epoch || state.value.viewer !is Viewer.Opening) {owner.close();return@launch}
-                    preview=owner
-                    mutable.update {it.copy(viewer=Viewer.Showing(item.title,page,item.kind==FileKind.PDF))}
+                withContext(io) {
+                    val owner=gateway.preview(item.document).also {opened=it}
+                    val adopted=synchronized(this@MedicalAttachmentsController) {
+                        if(closed || state.value.revoked || presentationEpoch!=epoch)false else {preview=owner;true}
+                    }
+                    if(!adopted) {owner.close();return@withContext}
+                    val page=if(item.kind==FileKind.PDF)owner.pdfFirstPage() else owner.image()
+                    val accepted=synchronized(this@MedicalAttachmentsController) {
+                        owner.publish {
+                            if(closed || state.value.revoked || presentationEpoch!=epoch || state.value.viewer !is Viewer.Opening)false
+                            else {
+                                preview=owner
+                                mutable.update {it.copy(viewer=Viewer.Showing(item.title,page,item.kind==FileKind.PDF))}
+                                true
+                            }
+                        }
+                    }
+                    if(!accepted)owner.close()
                 }
             }catch(e:CancellationException) {opened?.close();throw e}
             catch(e:Exception) {
