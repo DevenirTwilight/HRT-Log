@@ -82,5 +82,135 @@
       "sha256": "86b6c590acf057db2e701cc67ecd7a891026b1274220e3ea7d0949f813268432",
       "crc": "VERIFIED"
     }
+  },
+  "selectedLibraryOriginals": {
+    "library/med02-generation-restart/IN_SWITCH-prepare-seconds.json": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/IN_SWITCH-prepare-seconds.json",
+      "sha256": "0995700431a22fb914b6fa740833b900abfd92fe7d020bd218f90e94c3363aa3"
+    },
+    "library/med02-generation-restart/IN_SWITCH-source-seconds.json": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/IN_SWITCH-source-seconds.json",
+      "sha256": "130a3f908dba0325d80c545d1baf79eff8f21ea84c80dba7b287ca3720d3edb5"
+    },
+    "library/med02-generation-restart/IN_SWITCH-source.log": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/IN_SWITCH-source.log",
+      "sha256": "21c86216824a4db8af652d9a3912cb208d403a2c0a281b9ede76feefeb941785"
+    },
+    "library/med02-generation-restart/IN_SWITCH-verify.log": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/IN_SWITCH-verify.log",
+      "sha256": "ee70d2a4c2f54e8b8165e70ac795798a7ff62bcb6f48a46e904fc1e9f0ad2698"
+    },
+    "library/med02-generation-restart/OBJECTS_COMMITTED-prepare-seconds.json": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/OBJECTS_COMMITTED-prepare-seconds.json",
+      "sha256": "61e09c29a8faea40b104c7497382383c9a6f0fb232fd97f93428b303092c9460"
+    },
+    "library/med02-generation-restart/OBJECTS_COMMITTED-source-seconds.json": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/OBJECTS_COMMITTED-source-seconds.json",
+      "sha256": "30ccc0b56b8c7c17d49148fbc5e865da32a4894eecf8c6b645b66319a5317487"
+    },
+    "library/med02-generation-restart/OBJECTS_COMMITTED-source.log": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/OBJECTS_COMMITTED-source.log",
+      "sha256": "eaa420b9e7d630b7c1265e37ade59d895c57f113e67a6671f044a40a31d65823"
+    },
+    "library/med02-generation-restart/OBJECTS_COMMITTED-verify.log": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/OBJECTS_COMMITTED-verify.log",
+      "sha256": "27d120790712814e916c66eb2368fafa628e80c892c52bc7e8b001a8f4ead3a3"
+    },
+    "library/med02-generation-restart/PREPARED-prepare-seconds.json": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/PREPARED-prepare-seconds.json",
+      "sha256": "785ecc8e062d98349f6417d5c1bbeb9d8da266a1f9b9194fad936dfc628c67ea"
+    },
+    "library/med02-generation-restart/PREPARED-source-seconds.json": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/PREPARED-source-seconds.json",
+      "sha256": "1c893e31d5e6f63fad541d9c71881ea9052233e1840fbd24ab1ddbd1c7e899af"
+    },
+    "library/med02-generation-restart/PREPARED-source.log": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/PREPARED-source.log",
+      "sha256": "ed6645a4fd3d3d1d38883316eb0fa5658e95cfd2ab6249ec8b4e730fba481075"
+    },
+    "library/med02-generation-restart/PREPARED-verify.log": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/PREPARED-verify.log",
+      "sha256": "b56e68acbafa55a15746e97a342f94ee38c89bd97f2bd11ade3b8d62df96f811"
+    },
+    "library/med02-generation-restart/SWITCHED-source-seconds.json": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/SWITCHED-source-seconds.json",
+      "sha256": "c5692d10ef3fbaf3a934f3e8d942900c28afb21126428ea3b45696361f5e8781"
+    },
+    "library/med02-generation-restart/SWITCHED-prepare-seconds.json": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/SWITCHED-prepare-seconds.json",
+      "sha256": "16b2c9cd770eabffc6b8ba7d8bb383db327f44ee7544e54af88e8f5a8d9da508"
+    },
+    "library/med02-generation-restart/SWITCHED-source.log": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/SWITCHED-source.log",
+      "sha256": "7095e5e4a80d82a4cd77ad428a28f8ee6122b8cc598d80f5f741f24c6f0f89b8"
+    },
+    "library/med02-generation-restart/SWITCHED-verify.log": {
+      "artifactPath": "core/data/build/reports/med02-generation-restart/SWITCHED-verify.log",
+      "sha256": "311066e709138c3e168e97d1da1bd70f227a91d2258afb223b19bd1488564a0b"
+    },
+    "library/med02-collection-restart/IN_SWITCH-prepare-seconds.json": {
+      "artifactPath": "core/data/build/reports/med02-collection-restart/IN_SWITCH-prepare-seconds.json",
+      "sha256": "034600c2f22a4414db86ff75e6f44567ef4fc09cb05b25fb53cd2c2b3e1603ce"
+    },
+    "library/med02-collection-restart/IN_SWITCH-verify.log": {
+      "artifactPath": "core/data/build/reports/med02-collection-restart/IN_SWITCH-verify.log",
+      "sha256": "4f48f6cd02baae1bb331e5b40d4669e61dad5de8ad391578d2dfa3439ce7a3c5"
+    },
+    "library/med02-collection-restart/OBJECTS_COMMITTED-prepare-seconds.json": {
+      "artifactPath": "core/data/build/reports/med02-collection-restart/OBJECTS_COMMITTED-prepare-seconds.json",
+      "sha256": "441239de804030747a2313b71efc8fd3cb9e38f60f9e91039e03fdbdbdae1e62"
+    },
+    "library/med02-collection-restart/OBJECTS_COMMITTED-verify.log": {
+      "artifactPath": "core/data/build/reports/med02-collection-restart/OBJECTS_COMMITTED-verify.log",
+      "sha256": "94126f39da4fdad824d2df19d6ce869c12a43284ce9a11fec6e63e86c4515f0e"
+    },
+    "library/med02-collection-restart/PREPARED-prepare-seconds.json": {
+      "artifactPath": "core/data/build/reports/med02-collection-restart/PREPARED-prepare-seconds.json",
+      "sha256": "22f0e619a17c326637f229862d9f74507fed2271300b9a132c42af22060ae9ac"
+    },
+    "library/med02-collection-restart/PREPARED-verify.log": {
+      "artifactPath": "core/data/build/reports/med02-collection-restart/PREPARED-verify.log",
+      "sha256": "7d408dc8f70fcfc65e4c62e1ff1304b5f6c082da3242882887e48accfc1445ec"
+    },
+    "library/med02-collection-restart/SWITCHED-prepare-seconds.json": {
+      "artifactPath": "core/data/build/reports/med02-collection-restart/SWITCHED-prepare-seconds.json",
+      "sha256": "8a442c4fe95c8b7757bbf74240a391dd696ac8d2c6c76bf233a5c6c0b4de707d"
+    },
+    "library/med02-collection-restart/SWITCHED-verify.log": {
+      "artifactPath": "core/data/build/reports/med02-collection-restart/SWITCHED-verify.log",
+      "sha256": "4554c2de376541ae1bee67a2f28b6d2a7fc5e71c44b604c53aed578f34dafa28"
+    },
+    "library/med02-operation-restart/COMMITTED-verify.log": {
+      "artifactPath": "core/data/build/reports/med02-operation-restart/COMMITTED-verify.log",
+      "sha256": "96c5bf4dd42e8a1e1e07145cb00b1dcb9b75e2cb73b5416c98be57a99d2cca83"
+    },
+    "library/med02-operation-restart/IN_COMMIT-verify.log": {
+      "artifactPath": "core/data/build/reports/med02-operation-restart/IN_COMMIT-verify.log",
+      "sha256": "93e82602dd919367c5b73e6c22ceddef4813c191112ebcb123abdacf41a1be81"
+    },
+    "library/med02-operation-restart/PREPARED-verify.log": {
+      "artifactPath": "core/data/build/reports/med02-operation-restart/PREPARED-verify.log",
+      "sha256": "7d8e3acc3d03cae9b5beacb21cdd8af604ae52bbe42e7313618a460098f2be6b"
+    },
+    "library/med02-operation-restart/STAGED-verify.log": {
+      "artifactPath": "core/data/build/reports/med02-operation-restart/STAGED-verify.log",
+      "sha256": "3997fcef56f00360efea9083a1c99cd1cbc7f8bee3b37a8749fba3f312287eac"
+    },
+    "library/med02-generation-memory/fresh-device/source.json": {
+      "artifactPath": "core/data/build/reports/med02-generation-memory/fresh-device/source.json",
+      "sha256": "5d7d29f135e8b4969041e751fe0bd28dedda35f3d0ea06d29df42279ec8db48d"
+    },
+    "library/med02-generation-memory/fresh-device/target-native.log": {
+      "artifactPath": "core/data/build/reports/med02-generation-memory/fresh-device/target-native.log",
+      "sha256": "30a18ce56ea0625f4ea889af44c3e15e138e4b6487d39533ec48531900faf17f"
+    },
+    "library/med02-generation-memory/fresh-device/target.json": {
+      "artifactPath": "core/data/build/reports/med02-generation-memory/fresh-device/target.json",
+      "sha256": "d912fe103f1d2b8d37c0d44e9836525b6a07ecdcf5994ba4678e423abde294a8"
+    },
+    "library/med02-generation-memory/native-tests.log": {
+      "artifactPath": "core/data/build/reports/med02-generation-memory/native-tests.log",
+      "sha256": "505bdd4e960ea0d656d12e94e44524f2e6d7d063dd46223871572cdc1c977b97"
+    }
   }
 }
