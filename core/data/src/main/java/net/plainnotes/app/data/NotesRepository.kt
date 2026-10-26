@@ -384,6 +384,7 @@ const val BACKFILL_MAX_DAYS=731L
             }
             Trash.RECORD->{val r=requireNotNull(dao.recordById(t.ref.toLong()));require(r.deleted_at_utc!=null)
                 val back=r.copy(deleted_at_utc=null,revision=r.revision+1);dao.updateRecord(back)
+                ChrysalideReceiptStore.restore(sql(),org.json.JSONObject(t.payload_json))
                 if(back.status in listOf("ON_TIME","LATE"))allocateLegacyActualUse(dao,dao.recordById(back.id)!!)}
             Trash.PERIOD->{
                 val all=dao.historyPeriods();val deleted=HistoryPeriods.userEdits(all).filter{it.group_key==t.ref}
@@ -444,6 +445,7 @@ const val BACKFILL_MAX_DAYS=731L
         val t=trashItem(dao,id);require(t.state==Trash.TRASHED)
         MonaReceiptStore.purge(sql(),t)
         FeatherlineReceiptStore.purge(sql(),t)
+        ChrysalideReceiptStore.purge(sql(),t)
         val removed=when(t.kind) {
             in Trash.SNAPSHOT_KINDS->true
             Trash.RECORD->{val rid=t.ref.toLong()
@@ -912,6 +914,25 @@ const val BACKFILL_MAX_DAYS=731L
         val target=space;if(target!=Space.PRIMARY)throw LibraryScopeMismatch()
         return boundTransaction(target){db->FeatherlineImportWriter.preview(db.openHelper.writableDatabase,export)}
     }
+    suspend fun previewChrysalide(export:net.plainnotes.app.importer.Chrysalide.Export):ChrysalideImportPreview {
+        val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.ChrysalideMigration.plan(export)}
+        return transactionWithSql(Space.PRIMARY,mutation=false){_,raw->ChrysalideImportWriter.preview(raw,plan)}
+    }
+    suspend fun importChrysalide(export:net.plainnotes.app.importer.Chrysalide.Export,targets:Map<Long,Long>,receipt:ChrysalideCommitReceipt=ChrysalideCommitReceipt(),now:Instant=Instant.now()):ChrysalideImportSummary {
+        receipt.claim();val target=space;if(target!=Space.PRIMARY)throw LibraryScopeMismatch()
+        val parent=kotlinx.coroutines.currentCoroutineContext()[kotlinx.coroutines.Job]
+        val plan=withContext(Dispatchers.Default){net.plainnotes.app.importer.ChrysalideMigration.plan(export)}
+        return measuredSaveGate.mutation(target) {
+            withContext(Dispatchers.IO+kotlinx.coroutines.NonCancellable+transactionSpace.asContextElement(target)) {
+                fun active(){parent?.ensureActive();requestPermission()}
+                active();var selected:NotesDatabase?=null
+                val result=access.withGenerationTransaction(target,{writeBinding(target,it);selected=it},{active();writeBinding(target,requireNotNull(selected))}) {db->
+                    active();ChrysalideImportWriter.write(db.dao(),db.openHelper.writableDatabase,plan,targets,now,::active)
+                }
+                receipt.acknowledge(result);result
+            }
+        }
+    }
     suspend fun importFeatherline(export:net.plainnotes.app.importer.Featherline.Export,receipt:FeatherlineCommitReceipt=FeatherlineCommitReceipt(),now:Instant=Instant.now()):FeatherlineImportSummary {
         receipt.claim();val target=space;if(target!=Space.PRIMARY)throw LibraryScopeMismatch()
         val parent=kotlinx.coroutines.currentCoroutineContext()[kotlinx.coroutines.Job]
@@ -958,7 +979,7 @@ const val BACKFILL_MAX_DAYS=731L
             val json=boundTransaction(target) {db->
                 val raw=db.openHelper.writableDatabase
                 RegimenHistory.seed(raw)
-                InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw);ExternalImportSchema.validate(raw);FeatherlineImportSchema.validate(raw)
+                InventoryEncoding.legacyOnly(raw);ReferenceSchema.validate(raw);ExternalImportSchema.validate(raw);FeatherlineImportSchema.validate(raw);ChrysalideImportSchema.validate(raw)
                 JSONObject().put("format",BackupCodec.FORMAT_VERSION).put("schema",RecordBackupCompatibility.exportSchema(raw))
                     .put("created",Instant.now().toString()).put("tables",RawData.dump(raw))
             }

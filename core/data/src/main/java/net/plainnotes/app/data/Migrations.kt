@@ -114,5 +114,7 @@ val migration16To17=object:Migration(16,17) { override fun migrate(db:SupportSQL
 val migration17To18=object:Migration(17,18) { override fun migrate(db:SupportSQLiteDatabase)=ExternalImportSchema.migrate(db) }
 
 val migration18To19=object:Migration(18,19) { override fun migrate(db:SupportSQLiteDatabase)=FeatherlineImportSchema.migrate(db) }
+/** Chrysalide dose-unknown history and purge-resistant source identity; additive only. */
+val migration19To20=object:Migration(19,20) { override fun migrate(db:SupportSQLiteDatabase)=ChrysalideImportSchema.migrate(db) }
 
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17, migration17To18,migration18To19)
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17, migration17To18,migration18To19,migration19To20)

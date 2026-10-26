@@ -2,9 +2,11 @@ package net.plainnotes.app.data
 
 /** PNBAK1 business serialization has an independent version from Room; crypto framing is unchanged. */
 internal object RecordBackupCompatibility {
-    const val SCHEMA = 15
+    const val SCHEMA = 16
     /** Official format-2 snapshots require a newer reader. User-only backups retain schema 12. */
     fun exportSchema(db:androidx.sqlite.db.SupportSQLiteDatabase):Int {
+        if(db.query("SELECT 1 FROM chrysalide_import_item LIMIT 1").use{it.moveToFirst()} ||
+            db.query("SELECT 1 FROM dose_record WHERE origin='IMPORT_CHRYSALIDE' LIMIT 1").use{it.moveToFirst()})return 16
         if(db.query("SELECT 1 FROM featherline_import_item LIMIT 1").use{it.moveToFirst()} ||
             db.query("SELECT 1 FROM dose_record WHERE origin='IMPORT_FEATHERLINE' LIMIT 1").use{it.moveToFirst()})return 15
         if(db.query("SELECT 1 FROM external_import_item LIMIT 1").use{it.moveToFirst()} ||
@@ -12,11 +14,12 @@ internal object RecordBackupCompatibility {
         return db.query("SELECT 1 FROM reference_snapshot WHERE namespace='BDPM_FR' LIMIT 1").use{if(it.moveToFirst())13 else 12}
     }
     /** Empty new tables must not make an otherwise old-compatible backup unreadable. */
-    fun tables(schema:Int):List<String> = DOMAIN_TABLES.filterNot{(schema<14 && it==ExternalImportSchema.TABLE) || (schema<15 && it==FeatherlineImportSchema.TABLE)}
+    fun tables(schema:Int):List<String> = DOMAIN_TABLES.filterNot{(schema<14 && it==ExternalImportSchema.TABLE) || (schema<15 && it==FeatherlineImportSchema.TABLE) || (schema<16 && it==ChrysalideImportSchema.TABLE)}
     fun exportTables(db:androidx.sqlite.db.SupportSQLiteDatabase)=tables(exportSchema(db))
     fun validateReferenceVersion(schema:Int,tables:BackupTables) {
         ExternalImportSchema.validateVersion(schema,tables)
         FeatherlineImportSchema.validateVersion(schema,tables)
+        ChrysalideImportSchema.validateVersion(schema,tables)
         if(schema>=13)return
         val snapshots=tables.optJSONArray("reference_snapshot") ?: return
         for(index in 0 until snapshots.length())require(snapshots.getJSONObject(index).getString("namespace")!="BDPM_FR") {"Misdeclared BDPM backup version"}
@@ -76,5 +79,6 @@ internal object RecordBackupCompatibility {
         "history_period_revision" to listOf("id","period_key","revision","state","medication_id","identity_json","standard_json","from_date","until_date","zone","evidence_json","origin","created_utc","kind","group_key"),
         "record_annotation" to listOf("record_id","kind","created_utc"),
         "trash_item" to listOf("id","kind","ref","item_date","deleted_utc","payload_json","state")
-    ) + ReferenceSchema.columns + mapOf(ExternalImportSchema.TABLE to ExternalImportSchema.columns,FeatherlineImportSchema.TABLE to FeatherlineImportSchema.columns)
+    ) + ReferenceSchema.columns + mapOf(ExternalImportSchema.TABLE to ExternalImportSchema.columns,FeatherlineImportSchema.TABLE to FeatherlineImportSchema.columns,
+        ChrysalideImportSchema.TABLE to listOf("source_digest","source_id","source_json","target_digest","record_id","imported_utc","retention"))
 }

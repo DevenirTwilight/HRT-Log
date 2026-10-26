@@ -6,12 +6,13 @@ import org.json.JSONTokener
 
 /** Schema recognition, not filename/MIME guessing or permission to write. No new clinical rules. */
 object ImportFormatDetector {
-    enum class Source { HRT_TRACKER, TRANS_MEMO, MONA, FEATHERLINE, HRT_LOG }
+    enum class Source { HRT_TRACKER, TRANS_MEMO, MONA, FEATHERLINE, CHRYSALIDE, HRT_LOG }
     enum class Container { JSON, SQLITE, FEATHERLINE, HRT_LOG, UNKNOWN }
     sealed interface Parsed {
         class Tracker(val export:HrtTracker.Export):Parsed
         class Memo(val export:TmExport):Parsed
         class Mona(val export:net.plainnotes.app.importer.Mona.Export):Parsed
+        class Chrysalide(val export:net.plainnotes.app.importer.Chrysalide.Export):Parsed
         class EncryptedFeatherline(val archive:Featherline.Archive):Parsed
     }
     class Unknown:Exception()
@@ -75,7 +76,27 @@ object ImportFormatDetector {
             }
         }
     }
-    private val jsonRules=listOf<JsonRule>(TrackerRule,MonaRule)
+    private object ChrysalideRule:JsonRule {
+        override val source=Source.CHRYSALIDE
+        override fun recognizes(root:Any):Boolean {
+            val o=root as? JSONObject ?: return false
+            val version=o.opt("version")
+            if(version !is Number) return false
+            if(o.opt("exportedAt") !is String) return false
+            val required=listOf("medications","medicationLogs","bloodTests","physicalProgress","appointments","reminders","userProfile","journalEntries","objectives","milestones","treatmentChanges","practitioners","acts","actTodos")
+            if(required.any { o.opt(it) !is JSONArray }) return false
+            val logs=o.optJSONArray("medicationLogs")!!
+            val labs=o.optJSONArray("bloodTests")!!
+            // Empty tables are valid only when another table carries the characteristic schema.
+            val logEvidence=(0 until logs.length()).any { i->logs.optJSONObject(i)?.let {it.opt("id") is Number && it.opt("medicationId") is Number && it.opt("timestamp") is String && it.opt("taken") is Boolean}==true}
+            val labEvidence=(0 until labs.length()).any { i->labs.optJSONObject(i)?.let {it.opt("id") is Number && it.opt("date") is String && it.opt("results") is JSONArray}==true}
+            val medEvidence=(0 until (o.optJSONArray("medications")?.length()?:0)).any { i->o.optJSONArray("medications")?.optJSONObject(i)?.let {it.opt("id") is Number && it.opt("name") is String && it.opt("type") is String && it.opt("method") is String && it.opt("unit") is String}==true}
+            return logEvidence || labEvidence || medEvidence
+        }
+        override fun read(root:Any):Parsed=try { Parsed.Chrysalide(Chrysalide.readRoot(root as JSONObject)) }
+        catch(e:Chrysalide.InvalidExport) { when(e.reason){"UNSUPPORTED_VERSION"->throw Unsupported(source);"TOO_LARGE"->throw TooLarge();else->throw Damaged()} }
+    }
+    private val jsonRules=listOf<JsonRule>(TrackerRule,MonaRule,ChrysalideRule)
     fun json(text:String,onRecognized:(Source)->Unit={}):Parsed {
         bounds(text)
         val root=try {

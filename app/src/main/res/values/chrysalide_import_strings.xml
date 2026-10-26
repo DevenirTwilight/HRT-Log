@@ -1,0 +1,14 @@
+<resources>
+    <string name="chry_preview">Chrysalide import preview</string><string name="chry_result">Chrysalide import result</string>
+    <string name="chry_counts">Source logs %1$d · dose unknown events %2$d · can add %3$d · already present %4$d · conflicts %5$d · blood-test draws not imported %6$d · actually saved %7$d</string>
+    <string name="chry_semantics">Only taken=true events with a real timestamp are imported. No event dose or source timezone exists; dose remains unknown and the absolute instant is stored in UTC. Medication definitions are not treated as historical doses.</string>
+    <string name="chry_definition_policy">Source medication definitions are evidence only; no current regimen or reminders are created.</string>
+    <string name="chry_map">Choose an existing HRT Log medication for “%1$s” · %2$s · %3$s</string><string name="chry_no_targets">No saved medications are available; these events cannot be linked safely.</string>
+    <string name="chry_event">Source log #%1$d · %2$s · %3$s · actual dose unknown</string>
+    <string name="chry_not_taken">Not imported: source logs marked taken=false (%1$d); no missed-dose event is created.</string>
+    <string name="chry_blood_unsupported">Blood tests are not imported: Chrysalide stores a date-only field through a Date object, with no sample-time/time-zone precision proof.</string>
+    <string name="chry_collection_unsupported">Not imported: %1$s (%2$d)</string><string name="chry_id_policy">IDs are local auto-increment values, not device identities. The full export plus row content is used for idempotency; a reused ID with different content is treated as an ambiguous conflict. Local edits are never overwritten and deleted records stay deleted.</string>
+    <string name="chry_confirm">Import selected history</string>
+    <string name="history_dose_unknown">Dose unknown in source</string>
+    <string name="chry_new">Will import</string><string name="chry_existing">Already imported</string><string name="chry_deleted">Deleted; not recreated</string><string name="chry_conflict">Conflict; not overwritten</string>
+</resources>

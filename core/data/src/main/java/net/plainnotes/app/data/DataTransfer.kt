@@ -25,7 +25,7 @@ import javax.crypto.spec.SecretKeySpec
 /** Tables in foreign-key order (parents first). Reminder mappings are rebuilt by the scheduler and never exported. */
 internal val DOMAIN_TABLES = listOf("medication", "pk_profile", "schedule_rule", "rule_time", "slot_override", "dose_record", "supply_container", "supply_transaction",
     "retained_slot", "appointment", "checkin_item", "checkin_score", "day_note", "lab_analyte", "lab_panel", "lab_value", "pk_settings",
-    "stage_review", "symptom_check", "review_effect", "regimen_version", "regimen_rule_link", "milestone", "lab_context_revision", "visit_question", "visit_pack", "history_period_revision", "record_annotation", "trash_item") + ReferenceSchema.businessTables + listOf(ExternalImportSchema.TABLE,FeatherlineImportSchema.TABLE)
+    "stage_review", "symptom_check", "review_effect", "regimen_version", "regimen_rule_link", "milestone", "lab_context_revision", "visit_question", "visit_pack", "history_period_revision", "record_annotation", "trash_item") + ReferenceSchema.businessTables + listOf(ExternalImportSchema.TABLE,FeatherlineImportSchema.TABLE,ChrysalideImportSchema.TABLE)
 
 /** Raw-SQL maintenance that has to bypass the append-only ledger triggers: full clear and backup restore. */
 internal enum class RestoreCheckpoint { PLAINTEXT_AUTHENTICATED, INPUT_VALIDATED, STAGING_ROWS_INSERTED, STAGING_HISTORY_VALIDATED, STAGING_CLOSED, PREFLIGHT_VALIDATED, IDENTITIES_RETIRED, ROWS_DELETED, ROWS_INSERTED, HISTORY_VALIDATED, EPOCH_REPLACED }
@@ -52,7 +52,7 @@ internal object RawData {
         reconstructEmpty(db,tables,checkActive)
     }
     private fun reconstructEmpty(db:SupportSQLiteDatabase,tables:BackupTables,checkActive:()->Unit) {
-        require(listOf(13,14,15).any{tables.keys()==RecordBackupCompatibility.tables(it).toSet()})
+        require(listOf(13,14,15,16).any{tables.keys()==RecordBackupCompatibility.tables(it).toSet()})
         DOMAIN_TABLES.forEach {t->checkActive();db.query("SELECT 1 FROM $t LIMIT 1").use {check(!it.moveToFirst()) {"Candidate is not empty"}}}
         BackupValidation.validateRows(db,tables)
         val order=tables.optJSONArray("supply_transaction")?.let(LedgerReplacement::insertionOrder).orEmpty()

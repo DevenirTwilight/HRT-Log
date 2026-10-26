@@ -1,0 +1,5104 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 20,
+    "identityHash": "7497905d9d53454ccbaca4f545a22d22",
+    "entities": [
+      {
+        "tableName": "external_import_item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`source_app` TEXT NOT NULL, `source_kind` TEXT NOT NULL, `source_id` TEXT NOT NULL, `source_part` TEXT NOT NULL, `source_schema` INTEGER NOT NULL, `app_version` TEXT NOT NULL, `export_date` TEXT NOT NULL, `source_digest` TEXT NOT NULL, `source_json` TEXT, `target_digest` TEXT NOT NULL, `record_id` INTEGER, `lab_id` INTEGER, `panel_uuid` TEXT, `imported_utc` INTEGER NOT NULL, `retention` TEXT NOT NULL, PRIMARY KEY(`source_app`, `source_kind`, `source_id`, `source_part`), FOREIGN KEY(`record_id`) REFERENCES `dose_record`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`lab_id`) REFERENCES `lab_value`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "source_app",
+            "columnName": "source_app",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_kind",
+            "columnName": "source_kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_id",
+            "columnName": "source_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_part",
+            "columnName": "source_part",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_schema",
+            "columnName": "source_schema",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "app_version",
+            "columnName": "app_version",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "export_date",
+            "columnName": "export_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_digest",
+            "columnName": "source_digest",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_json",
+            "columnName": "source_json",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "target_digest",
+            "columnName": "target_digest",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_id",
+            "columnName": "record_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "lab_id",
+            "columnName": "lab_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "panel_uuid",
+            "columnName": "panel_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "imported_utc",
+            "columnName": "imported_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "retention",
+            "columnName": "retention",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "source_app",
+            "source_kind",
+            "source_id",
+            "source_part"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_external_import_item_record_id",
+            "unique": true,
+            "columnNames": [
+              "record_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_external_import_item_record_id` ON `${TABLE_NAME}` (`record_id`)"
+          },
+          {
+            "name": "index_external_import_item_lab_id",
+            "unique": true,
+            "columnNames": [
+              "lab_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_external_import_item_lab_id` ON `${TABLE_NAME}` (`lab_id`)"
+          },
+          {
+            "name": "index_external_import_item_panel_uuid",
+            "unique": false,
+            "columnNames": [
+              "panel_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_external_import_item_panel_uuid` ON `${TABLE_NAME}` (`panel_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "dose_record",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "record_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "lab_value",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "lab_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "featherline_import_item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`source_kind` TEXT NOT NULL, `source_id` TEXT NOT NULL, `source_panel_uuid` TEXT, `source_schema` INTEGER NOT NULL, `source_digest` TEXT NOT NULL, `source_json` TEXT, `target_digest` TEXT NOT NULL, `record_id` INTEGER, `lab_id` INTEGER, `panel_uuid` TEXT, `imported_utc` INTEGER NOT NULL, `retention` TEXT NOT NULL, PRIMARY KEY(`source_kind`, `source_id`), FOREIGN KEY(`record_id`) REFERENCES `dose_record`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL , FOREIGN KEY(`lab_id`) REFERENCES `lab_value`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "source_kind",
+            "columnName": "source_kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_id",
+            "columnName": "source_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_panel_uuid",
+            "columnName": "source_panel_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "source_schema",
+            "columnName": "source_schema",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_digest",
+            "columnName": "source_digest",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_json",
+            "columnName": "source_json",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "target_digest",
+            "columnName": "target_digest",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_id",
+            "columnName": "record_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "lab_id",
+            "columnName": "lab_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "panel_uuid",
+            "columnName": "panel_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "imported_utc",
+            "columnName": "imported_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "retention",
+            "columnName": "retention",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "source_kind",
+            "source_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_featherline_import_item_record_id",
+            "unique": true,
+            "columnNames": [
+              "record_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_featherline_import_item_record_id` ON `${TABLE_NAME}` (`record_id`)"
+          },
+          {
+            "name": "index_featherline_import_item_lab_id",
+            "unique": true,
+            "columnNames": [
+              "lab_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_featherline_import_item_lab_id` ON `${TABLE_NAME}` (`lab_id`)"
+          },
+          {
+            "name": "index_featherline_import_item_source_panel_uuid",
+            "unique": false,
+            "columnNames": [
+              "source_panel_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_featherline_import_item_source_panel_uuid` ON `${TABLE_NAME}` (`source_panel_uuid`)"
+          },
+          {
+            "name": "index_featherline_import_item_panel_uuid",
+            "unique": false,
+            "columnNames": [
+              "panel_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_featherline_import_item_panel_uuid` ON `${TABLE_NAME}` (`panel_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "dose_record",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "record_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "lab_value",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "lab_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "chrysalide_import_item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`source_digest` TEXT NOT NULL, `source_id` TEXT NOT NULL, `source_json` TEXT, `target_digest` TEXT NOT NULL, `record_id` INTEGER, `imported_utc` INTEGER NOT NULL, `retention` TEXT NOT NULL, PRIMARY KEY(`source_digest`), FOREIGN KEY(`record_id`) REFERENCES `dose_record`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "source_digest",
+            "columnName": "source_digest",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_id",
+            "columnName": "source_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_json",
+            "columnName": "source_json",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "target_digest",
+            "columnName": "target_digest",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_id",
+            "columnName": "record_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "imported_utc",
+            "columnName": "imported_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "retention",
+            "columnName": "retention",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "source_digest"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_chrysalide_import_item_record_id",
+            "unique": true,
+            "columnNames": [
+              "record_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_chrysalide_import_item_record_id` ON `${TABLE_NAME}` (`record_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "dose_record",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "record_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "library_collection",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`operation_uuid` TEXT NOT NULL, `request_sha256` BLOB NOT NULL, `origin_generation` TEXT NOT NULL, `origin_dataset` TEXT NOT NULL, `origin_epoch` TEXT NOT NULL, `selected_generation` TEXT NOT NULL, `members` INTEGER NOT NULL, `state` TEXT NOT NULL, `created_utc` INTEGER NOT NULL, PRIMARY KEY(`operation_uuid`))",
+        "fields": [
+          {
+            "fieldPath": "operation_uuid",
+            "columnName": "operation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "request_sha256",
+            "columnName": "request_sha256",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "origin_generation",
+            "columnName": "origin_generation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "origin_dataset",
+            "columnName": "origin_dataset",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "origin_epoch",
+            "columnName": "origin_epoch",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "selected_generation",
+            "columnName": "selected_generation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "members",
+            "columnName": "members",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "operation_uuid"
+          ]
+        }
+      },
+      {
+        "tableName": "library_collection_member",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`collection_uuid` TEXT NOT NULL, `library_uuid` TEXT NOT NULL, `operation_uuid` TEXT NOT NULL, `role` TEXT NOT NULL, PRIMARY KEY(`collection_uuid`, `library_uuid`))",
+        "fields": [
+          {
+            "fieldPath": "collection_uuid",
+            "columnName": "collection_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "library_uuid",
+            "columnName": "library_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "operation_uuid",
+            "columnName": "operation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "role",
+            "columnName": "role",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "collection_uuid",
+            "library_uuid"
+          ]
+        }
+      },
+      {
+        "tableName": "library_write_reservation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`operation_uuid` TEXT NOT NULL, `generation` TEXT NOT NULL, `dataset` TEXT NOT NULL, `epoch` TEXT NOT NULL, `request_sha256` BLOB NOT NULL, `reserved_ciphertext` INTEGER NOT NULL, `state` TEXT NOT NULL, `created_utc` INTEGER NOT NULL, PRIMARY KEY(`operation_uuid`))",
+        "fields": [
+          {
+            "fieldPath": "operation_uuid",
+            "columnName": "operation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "generation",
+            "columnName": "generation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataset",
+            "columnName": "dataset",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "epoch",
+            "columnName": "epoch",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "request_sha256",
+            "columnName": "request_sha256",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reserved_ciphertext",
+            "columnName": "reserved_ciphertext",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "operation_uuid"
+          ]
+        }
+      },
+      {
+        "tableName": "library_resource_owner",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`operation_uuid` TEXT NOT NULL, `generation_uuid` TEXT NOT NULL, `origin_generation` TEXT NOT NULL, `origin_dataset` TEXT NOT NULL, `origin_epoch` TEXT NOT NULL, `started` INTEGER NOT NULL, `released` INTEGER NOT NULL, `release_digest` BLOB, PRIMARY KEY(`operation_uuid`))",
+        "fields": [
+          {
+            "fieldPath": "operation_uuid",
+            "columnName": "operation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "generation_uuid",
+            "columnName": "generation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "origin_generation",
+            "columnName": "origin_generation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "origin_dataset",
+            "columnName": "origin_dataset",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "origin_epoch",
+            "columnName": "origin_epoch",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "started",
+            "columnName": "started",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "released",
+            "columnName": "released",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "release_digest",
+            "columnName": "release_digest",
+            "affinity": "BLOB"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "operation_uuid"
+          ]
+        }
+      },
+      {
+        "tableName": "library_resource_inventory",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`singleton` INTEGER NOT NULL, `revision` INTEGER NOT NULL, `operation_uuid` TEXT NOT NULL, `generation` TEXT NOT NULL, `dataset` TEXT NOT NULL, `epoch` TEXT NOT NULL, `payload` BLOB NOT NULL, `sha256` BLOB NOT NULL, `observed_utc` INTEGER NOT NULL, PRIMARY KEY(`singleton`))",
+        "fields": [
+          {
+            "fieldPath": "singleton",
+            "columnName": "singleton",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "revision",
+            "columnName": "revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "operation_uuid",
+            "columnName": "operation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "generation",
+            "columnName": "generation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataset",
+            "columnName": "dataset",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "epoch",
+            "columnName": "epoch",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "payload",
+            "columnName": "payload",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sha256",
+            "columnName": "sha256",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "observed_utc",
+            "columnName": "observed_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "singleton"
+          ]
+        }
+      },
+      {
+        "tableName": "library_authority",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`singleton` INTEGER NOT NULL, `active_generation` TEXT, `revision` INTEGER NOT NULL, PRIMARY KEY(`singleton`))",
+        "fields": [
+          {
+            "fieldPath": "singleton",
+            "columnName": "singleton",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active_generation",
+            "columnName": "active_generation",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "revision",
+            "columnName": "revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "singleton"
+          ]
+        }
+      },
+      {
+        "tableName": "library_candidate",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`operation_uuid` TEXT NOT NULL, `generation_uuid` TEXT NOT NULL, `dataset_uuid` TEXT NOT NULL, `epoch_uuid` TEXT NOT NULL, `state` TEXT NOT NULL, `archive_sha256` BLOB NOT NULL, `manifest` BLOB NOT NULL, `structured_sha256` BLOB NOT NULL, `structured_source` BLOB NOT NULL, `alias_plan` BLOB NOT NULL, `database_alias` TEXT NOT NULL, `reserved_aliases` INTEGER NOT NULL, `reserved_ciphertext` INTEGER NOT NULL, `created_utc` INTEGER NOT NULL, `directory_device` INTEGER, `directory_inode` INTEGER, PRIMARY KEY(`operation_uuid`))",
+        "fields": [
+          {
+            "fieldPath": "operation_uuid",
+            "columnName": "operation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "generation_uuid",
+            "columnName": "generation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataset_uuid",
+            "columnName": "dataset_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "epoch_uuid",
+            "columnName": "epoch_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "archive_sha256",
+            "columnName": "archive_sha256",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "manifest",
+            "columnName": "manifest",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "structured_sha256",
+            "columnName": "structured_sha256",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "structured_source",
+            "columnName": "structured_source",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alias_plan",
+            "columnName": "alias_plan",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "database_alias",
+            "columnName": "database_alias",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reserved_aliases",
+            "columnName": "reserved_aliases",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reserved_ciphertext",
+            "columnName": "reserved_ciphertext",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "directory_device",
+            "columnName": "directory_device",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "directory_inode",
+            "columnName": "directory_inode",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "operation_uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_library_candidate_generation_uuid",
+            "unique": true,
+            "columnNames": [
+              "generation_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_library_candidate_generation_uuid` ON `${TABLE_NAME}` (`generation_uuid`)"
+          }
+        ]
+      },
+      {
+        "tableName": "medication",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `molecule` TEXT NOT NULL, `route` TEXT, `unit` TEXT NOT NULL, `dose_per_intake` REAL NOT NULL, `container_capacity` REAL NOT NULL, `expiry_days_after_open` INTEGER, `soon_alert_minutes` INTEGER, `late_after_minutes` INTEGER, `site_rotation` INTEGER NOT NULL, `site_set` TEXT, `notifications_on` INTEGER NOT NULL, `active` INTEGER NOT NULL, `sort_order` INTEGER NOT NULL, `needs_review` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "molecule",
+            "columnName": "molecule",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "route",
+            "columnName": "route",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dose_per_intake",
+            "columnName": "dose_per_intake",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "container_capacity",
+            "columnName": "container_capacity",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expiry_days_after_open",
+            "columnName": "expiry_days_after_open",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "soon_alert_minutes",
+            "columnName": "soon_alert_minutes",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "late_after_minutes",
+            "columnName": "late_after_minutes",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "site_rotation",
+            "columnName": "site_rotation",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "site_set",
+            "columnName": "site_set",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "notifications_on",
+            "columnName": "notifications_on",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active",
+            "columnName": "active",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sort_order",
+            "columnName": "sort_order",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "needs_review",
+            "columnName": "needs_review",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "pk_profile",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`medication_id` INTEGER NOT NULL, `ester` TEXT NOT NULL, `pk_route` TEXT NOT NULL, `sl_tier` INTEGER, `gel_product_id` INTEGER, `gel_site` TEXT, `gel_area_cm2` REAL, `patch_release_ug_day` REAL, PRIMARY KEY(`medication_id`), FOREIGN KEY(`medication_id`) REFERENCES `medication`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "medication_id",
+            "columnName": "medication_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ester",
+            "columnName": "ester",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pk_route",
+            "columnName": "pk_route",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sl_tier",
+            "columnName": "sl_tier",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "gel_product_id",
+            "columnName": "gel_product_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "gel_site",
+            "columnName": "gel_site",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "gel_area_cm2",
+            "columnName": "gel_area_cm2",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "patch_release_ug_day",
+            "columnName": "patch_release_ug_day",
+            "affinity": "REAL"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "medication_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_pk_profile_medication_id",
+            "unique": false,
+            "columnNames": [
+              "medication_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_pk_profile_medication_id` ON `${TABLE_NAME}` (`medication_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "medication",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "medication_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "schedule_rule",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication_id` INTEGER NOT NULL, `kind` TEXT NOT NULL, `interval` INTEGER NOT NULL, `weekday_mask` INTEGER NOT NULL, `anchor_local` TEXT, `anchor_zone` TEXT NOT NULL, `anchor_utc` INTEGER, `effective_from_utc` INTEGER NOT NULL, `effective_until_utc` INTEGER, `effective_zone` TEXT NOT NULL, `missed_tracking_from_utc` INTEGER NOT NULL, `dose_snapshot` REAL NOT NULL, `soon_snapshot` INTEGER NOT NULL, `late_snapshot` INTEGER NOT NULL, `config_snapshot` TEXT NOT NULL, FOREIGN KEY(`medication_id`) REFERENCES `medication`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medication_id",
+            "columnName": "medication_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "interval",
+            "columnName": "interval",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weekday_mask",
+            "columnName": "weekday_mask",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anchor_local",
+            "columnName": "anchor_local",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "anchor_zone",
+            "columnName": "anchor_zone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anchor_utc",
+            "columnName": "anchor_utc",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "effective_from_utc",
+            "columnName": "effective_from_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "effective_until_utc",
+            "columnName": "effective_until_utc",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "effective_zone",
+            "columnName": "effective_zone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "missed_tracking_from_utc",
+            "columnName": "missed_tracking_from_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dose_snapshot",
+            "columnName": "dose_snapshot",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "soon_snapshot",
+            "columnName": "soon_snapshot",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "late_snapshot",
+            "columnName": "late_snapshot",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "config_snapshot",
+            "columnName": "config_snapshot",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_schedule_rule_medication_id",
+            "unique": false,
+            "columnNames": [
+              "medication_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_schedule_rule_medication_id` ON `${TABLE_NAME}` (`medication_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "medication",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "medication_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "rule_time",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `rule_id` INTEGER NOT NULL, `local_time` TEXT NOT NULL, `dose_override` REAL, FOREIGN KEY(`rule_id`) REFERENCES `schedule_rule`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rule_id",
+            "columnName": "rule_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "local_time",
+            "columnName": "local_time",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dose_override",
+            "columnName": "dose_override",
+            "affinity": "REAL"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_rule_time_rule_id_local_time",
+            "unique": true,
+            "columnNames": [
+              "rule_id",
+              "local_time"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_rule_time_rule_id_local_time` ON `${TABLE_NAME}` (`rule_id`, `local_time`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "schedule_rule",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rule_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "slot_override",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication_id` INTEGER NOT NULL, `rule_version_id` INTEGER NOT NULL, `slot_key` TEXT NOT NULL, `rescheduled_utc` INTEGER, `rescheduled_zone` TEXT, `dose_override` REAL, `skipped` INTEGER NOT NULL, FOREIGN KEY(`medication_id`) REFERENCES `medication`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`rule_version_id`) REFERENCES `schedule_rule`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medication_id",
+            "columnName": "medication_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rule_version_id",
+            "columnName": "rule_version_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "slot_key",
+            "columnName": "slot_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rescheduled_utc",
+            "columnName": "rescheduled_utc",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "rescheduled_zone",
+            "columnName": "rescheduled_zone",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "dose_override",
+            "columnName": "dose_override",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "skipped",
+            "columnName": "skipped",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_slot_override_slot_key",
+            "unique": true,
+            "columnNames": [
+              "slot_key"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_slot_override_slot_key` ON `${TABLE_NAME}` (`slot_key`)"
+          },
+          {
+            "name": "index_slot_override_medication_id",
+            "unique": false,
+            "columnNames": [
+              "medication_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_slot_override_medication_id` ON `${TABLE_NAME}` (`medication_id`)"
+          },
+          {
+            "name": "index_slot_override_rule_version_id",
+            "unique": false,
+            "columnNames": [
+              "rule_version_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_slot_override_rule_version_id` ON `${TABLE_NAME}` (`rule_version_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "medication",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "medication_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "schedule_rule",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rule_version_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "dose_record",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication_id` INTEGER NOT NULL, `rule_version_id` INTEGER, `slot_key` TEXT, `scheduled_utc` INTEGER, `scheduled_zone` TEXT, `planned_dose` REAL, `late_after_minutes_snapshot` INTEGER, `taken_utc` INTEGER, `taken_zone` TEXT, `actual_dose` REAL, `unallocated_supply_amount` REAL, `status` TEXT NOT NULL, `site` TEXT, `note` TEXT, `origin` TEXT NOT NULL, `source_record_key` TEXT, `revision` INTEGER NOT NULL, `deleted_at_utc` INTEGER, `config_snapshot` TEXT NOT NULL, FOREIGN KEY(`medication_id`) REFERENCES `medication`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`rule_version_id`) REFERENCES `schedule_rule`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medication_id",
+            "columnName": "medication_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rule_version_id",
+            "columnName": "rule_version_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "slot_key",
+            "columnName": "slot_key",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "scheduled_utc",
+            "columnName": "scheduled_utc",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "scheduled_zone",
+            "columnName": "scheduled_zone",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "planned_dose",
+            "columnName": "planned_dose",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "late_after_minutes_snapshot",
+            "columnName": "late_after_minutes_snapshot",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "taken_utc",
+            "columnName": "taken_utc",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "taken_zone",
+            "columnName": "taken_zone",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "actual_dose",
+            "columnName": "actual_dose",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "unallocated_supply_amount",
+            "columnName": "unallocated_supply_amount",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "site",
+            "columnName": "site",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "origin",
+            "columnName": "origin",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_record_key",
+            "columnName": "source_record_key",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "revision",
+            "columnName": "revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deleted_at_utc",
+            "columnName": "deleted_at_utc",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "config_snapshot",
+            "columnName": "config_snapshot",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_dose_record_slot_key",
+            "unique": true,
+            "columnNames": [
+              "slot_key"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_dose_record_slot_key` ON `${TABLE_NAME}` (`slot_key`)"
+          },
+          {
+            "name": "index_dose_record_source_record_key",
+            "unique": true,
+            "columnNames": [
+              "source_record_key"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_dose_record_source_record_key` ON `${TABLE_NAME}` (`source_record_key`)"
+          },
+          {
+            "name": "index_dose_record_medication_id",
+            "unique": false,
+            "columnNames": [
+              "medication_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_dose_record_medication_id` ON `${TABLE_NAME}` (`medication_id`)"
+          },
+          {
+            "name": "index_dose_record_rule_version_id",
+            "unique": false,
+            "columnNames": [
+              "rule_version_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_dose_record_rule_version_id` ON `${TABLE_NAME}` (`rule_version_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "medication",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "medication_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "schedule_rule",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rule_version_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "supply_container",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication_id` INTEGER NOT NULL, `capacity` REAL NOT NULL, `initial_used_amount` REAL NOT NULL, `used_amount` REAL NOT NULL, `opened_on` TEXT, `state` TEXT NOT NULL, `source_note` TEXT, `batch` TEXT, `inventory_encoding` TEXT NOT NULL DEFAULT 'LEGACY_SCALAR', FOREIGN KEY(`medication_id`) REFERENCES `medication`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medication_id",
+            "columnName": "medication_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "capacity",
+            "columnName": "capacity",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "initial_used_amount",
+            "columnName": "initial_used_amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "used_amount",
+            "columnName": "used_amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opened_on",
+            "columnName": "opened_on",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_note",
+            "columnName": "source_note",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "batch",
+            "columnName": "batch",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "inventory_encoding",
+            "columnName": "inventory_encoding",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'LEGACY_SCALAR'"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_supply_container_medication_id",
+            "unique": false,
+            "columnNames": [
+              "medication_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_supply_container_medication_id` ON `${TABLE_NAME}` (`medication_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "medication",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "medication_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "supply_transaction",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `container_id` INTEGER NOT NULL, `dose_record_id` INTEGER, `dose_revision` INTEGER, `operation_id` TEXT NOT NULL, `kind` TEXT NOT NULL, `used_delta` REAL NOT NULL, `reversal_of_id` INTEGER, `created_utc` INTEGER NOT NULL, `created_zone` TEXT NOT NULL, `reason` TEXT, FOREIGN KEY(`container_id`) REFERENCES `supply_container`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`dose_record_id`) REFERENCES `dose_record`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`reversal_of_id`) REFERENCES `supply_transaction`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "container_id",
+            "columnName": "container_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dose_record_id",
+            "columnName": "dose_record_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "dose_revision",
+            "columnName": "dose_revision",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "operation_id",
+            "columnName": "operation_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "used_delta",
+            "columnName": "used_delta",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reversal_of_id",
+            "columnName": "reversal_of_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created_zone",
+            "columnName": "created_zone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reason",
+            "columnName": "reason",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_supply_transaction_operation_id_container_id_kind",
+            "unique": true,
+            "columnNames": [
+              "operation_id",
+              "container_id",
+              "kind"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_supply_transaction_operation_id_container_id_kind` ON `${TABLE_NAME}` (`operation_id`, `container_id`, `kind`)"
+          },
+          {
+            "name": "index_supply_transaction_reversal_of_id",
+            "unique": true,
+            "columnNames": [
+              "reversal_of_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_supply_transaction_reversal_of_id` ON `${TABLE_NAME}` (`reversal_of_id`)"
+          },
+          {
+            "name": "index_supply_transaction_container_id",
+            "unique": false,
+            "columnNames": [
+              "container_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_supply_transaction_container_id` ON `${TABLE_NAME}` (`container_id`)"
+          },
+          {
+            "name": "index_supply_transaction_dose_record_id",
+            "unique": false,
+            "columnNames": [
+              "dose_record_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_supply_transaction_dose_record_id` ON `${TABLE_NAME}` (`dose_record_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "supply_container",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "container_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "dose_record",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "dose_record_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "supply_transaction",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "reversal_of_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "appointment",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `at_utc` INTEGER NOT NULL, `at_zone` TEXT NOT NULL, `location` TEXT, `practitioner` TEXT, `note` TEXT, `remind_minutes_before` INTEGER NOT NULL, `completed_utc` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "at_utc",
+            "columnName": "at_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "at_zone",
+            "columnName": "at_zone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "practitioner",
+            "columnName": "practitioner",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "remind_minutes_before",
+            "columnName": "remind_minutes_before",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completed_utc",
+            "columnName": "completed_utc",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "checkin_item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `builtin_key` TEXT, `custom_label` TEXT, `enabled` INTEGER NOT NULL, `sort_order` INTEGER NOT NULL, `legacy` INTEGER NOT NULL DEFAULT 0)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "builtin_key",
+            "columnName": "builtin_key",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "custom_label",
+            "columnName": "custom_label",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "enabled",
+            "columnName": "enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sort_order",
+            "columnName": "sort_order",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legacy",
+            "columnName": "legacy",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "checkin_score",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `item_id` INTEGER NOT NULL, `value` INTEGER NOT NULL, PRIMARY KEY(`date`, `item_id`), FOREIGN KEY(`item_id`) REFERENCES `checkin_item`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item_id",
+            "columnName": "item_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "date",
+            "item_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_checkin_score_item_id",
+            "unique": false,
+            "columnNames": [
+              "item_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_checkin_score_item_id` ON `${TABLE_NAME}` (`item_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "checkin_item",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "item_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "day_note",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `text` TEXT NOT NULL, PRIMARY KEY(`date`))",
+        "fields": [
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "date"
+          ]
+        }
+      },
+      {
+        "tableName": "lab_analyte",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`code` TEXT NOT NULL, `canonical_unit` TEXT NOT NULL, PRIMARY KEY(`code`))",
+        "fields": [
+          {
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "canonical_unit",
+            "columnName": "canonical_unit",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "code"
+          ]
+        }
+      },
+      {
+        "tableName": "lab_panel",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `uuid` TEXT NOT NULL, `sampled_utc` INTEGER NOT NULL, `sampled_zone` TEXT NOT NULL, `laboratory` TEXT, `note` TEXT, `created_utc` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sampled_utc",
+            "columnName": "sampled_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sampled_zone",
+            "columnName": "sampled_zone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "laboratory",
+            "columnName": "laboratory",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_lab_panel_uuid",
+            "unique": true,
+            "columnNames": [
+              "uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_lab_panel_uuid` ON `${TABLE_NAME}` (`uuid`)"
+          }
+        ]
+      },
+      {
+        "tableName": "lab_value",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `analyte_code` TEXT NOT NULL, `value` REAL NOT NULL, `unit` TEXT NOT NULL, `sampled_utc` INTEGER NOT NULL, `sampled_zone` TEXT NOT NULL, `reference_lower` REAL, `reference_upper` REAL, `reference_unit` TEXT, `laboratory` TEXT, `note` TEXT, `panel_id` INTEGER, FOREIGN KEY(`analyte_code`) REFERENCES `lab_analyte`(`code`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`panel_id`) REFERENCES `lab_panel`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "analyte_code",
+            "columnName": "analyte_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sampled_utc",
+            "columnName": "sampled_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sampled_zone",
+            "columnName": "sampled_zone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reference_lower",
+            "columnName": "reference_lower",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "reference_upper",
+            "columnName": "reference_upper",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "reference_unit",
+            "columnName": "reference_unit",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "laboratory",
+            "columnName": "laboratory",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "panel_id",
+            "columnName": "panel_id",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_lab_value_analyte_code",
+            "unique": false,
+            "columnNames": [
+              "analyte_code"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_lab_value_analyte_code` ON `${TABLE_NAME}` (`analyte_code`)"
+          },
+          {
+            "name": "index_lab_value_panel_id",
+            "unique": false,
+            "columnNames": [
+              "panel_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_lab_value_panel_id` ON `${TABLE_NAME}` (`panel_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "lab_analyte",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "analyte_code"
+            ],
+            "referencedColumns": [
+              "code"
+            ]
+          },
+          {
+            "table": "lab_panel",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "panel_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "pk_settings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `current_weight_kg` REAL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "current_weight_kg",
+            "columnName": "current_weight_kg",
+            "affinity": "REAL"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "retained_slot",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`slot_key` TEXT NOT NULL, `rule_id` INTEGER NOT NULL, `medication_id` INTEGER NOT NULL, `original_utc` INTEGER NOT NULL, `at_utc` INTEGER NOT NULL, `zone` TEXT NOT NULL, `dose` REAL NOT NULL, `soon_minutes` INTEGER NOT NULL, `late_minutes` INTEGER NOT NULL, `tracking_from_utc` INTEGER NOT NULL, PRIMARY KEY(`slot_key`), FOREIGN KEY(`rule_id`) REFERENCES `schedule_rule`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`medication_id`) REFERENCES `medication`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "slot_key",
+            "columnName": "slot_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rule_id",
+            "columnName": "rule_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medication_id",
+            "columnName": "medication_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "original_utc",
+            "columnName": "original_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "at_utc",
+            "columnName": "at_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "zone",
+            "columnName": "zone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dose",
+            "columnName": "dose",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "soon_minutes",
+            "columnName": "soon_minutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "late_minutes",
+            "columnName": "late_minutes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tracking_from_utc",
+            "columnName": "tracking_from_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "slot_key"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_retained_slot_rule_id",
+            "unique": false,
+            "columnNames": [
+              "rule_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_retained_slot_rule_id` ON `${TABLE_NAME}` (`rule_id`)"
+          },
+          {
+            "name": "index_retained_slot_medication_id",
+            "unique": false,
+            "columnNames": [
+              "medication_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_retained_slot_medication_id` ON `${TABLE_NAME}` (`medication_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "schedule_rule",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rule_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "medication",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "medication_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "reminder_mapping",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`opaque_id` TEXT NOT NULL, `generation` TEXT NOT NULL, `identity` TEXT NOT NULL, `trigger_utc` INTEGER NOT NULL, `sent` INTEGER NOT NULL, PRIMARY KEY(`opaque_id`))",
+        "fields": [
+          {
+            "fieldPath": "opaque_id",
+            "columnName": "opaque_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "generation",
+            "columnName": "generation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "identity",
+            "columnName": "identity",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trigger_utc",
+            "columnName": "trigger_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sent",
+            "columnName": "sent",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "opaque_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_reminder_mapping_generation",
+            "unique": false,
+            "columnNames": [
+              "generation"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_reminder_mapping_generation` ON `${TABLE_NAME}` (`generation`)"
+          }
+        ]
+      },
+      {
+        "tableName": "stage_review",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `effects_json` TEXT NOT NULL, `tolerance_note` TEXT, `risk_note` TEXT, `smoking` TEXT, `systolic` INTEGER, `diastolic` INTEGER, `weight_kg` REAL, `satisfaction` INTEGER, `satisfaction_note` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "effects_json",
+            "columnName": "effects_json",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tolerance_note",
+            "columnName": "tolerance_note",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "risk_note",
+            "columnName": "risk_note",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "smoking",
+            "columnName": "smoking",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "systolic",
+            "columnName": "systolic",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "diastolic",
+            "columnName": "diastolic",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "weight_kg",
+            "columnName": "weight_kg",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "satisfaction",
+            "columnName": "satisfaction",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "satisfaction_note",
+            "columnName": "satisfaction_note",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "symptom_check",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `group_id` TEXT NOT NULL, `note` TEXT, `context_snapshot` TEXT, PRIMARY KEY(`date`, `group_id`))",
+        "fields": [
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "group_id",
+            "columnName": "group_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "context_snapshot",
+            "columnName": "context_snapshot",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "date",
+            "group_id"
+          ]
+        }
+      },
+      {
+        "tableName": "review_effect",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`effect_id` TEXT NOT NULL, `enabled` INTEGER NOT NULL, PRIMARY KEY(`effect_id`))",
+        "fields": [
+          {
+            "fieldPath": "effect_id",
+            "columnName": "effect_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "enabled",
+            "columnName": "enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "effect_id"
+          ]
+        }
+      },
+      {
+        "tableName": "regimen_version",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medication_id` INTEGER NOT NULL, `effective_from_utc` INTEGER NOT NULL, `effective_until_utc` INTEGER, `zone` TEXT NOT NULL, `definition_json` TEXT NOT NULL, `clinical_signature` TEXT NOT NULL, `origin` TEXT NOT NULL, `recorded_at_utc` INTEGER, FOREIGN KEY(`medication_id`) REFERENCES `medication`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medication_id",
+            "columnName": "medication_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "effective_from_utc",
+            "columnName": "effective_from_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "effective_until_utc",
+            "columnName": "effective_until_utc",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "zone",
+            "columnName": "zone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "definition_json",
+            "columnName": "definition_json",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "clinical_signature",
+            "columnName": "clinical_signature",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "origin",
+            "columnName": "origin",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recorded_at_utc",
+            "columnName": "recorded_at_utc",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_regimen_version_medication_id",
+            "unique": false,
+            "columnNames": [
+              "medication_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_regimen_version_medication_id` ON `${TABLE_NAME}` (`medication_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "medication",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "medication_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "regimen_rule_link",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rule_id` INTEGER NOT NULL, `regimen_id` INTEGER NOT NULL, PRIMARY KEY(`rule_id`), FOREIGN KEY(`rule_id`) REFERENCES `schedule_rule`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`regimen_id`) REFERENCES `regimen_version`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "rule_id",
+            "columnName": "rule_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "regimen_id",
+            "columnName": "regimen_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "rule_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_regimen_rule_link_regimen_id",
+            "unique": false,
+            "columnNames": [
+              "regimen_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_regimen_rule_link_regimen_id` ON `${TABLE_NAME}` (`regimen_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "schedule_rule",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "rule_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "regimen_version",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "regimen_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "milestone",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `kind` TEXT NOT NULL, `title` TEXT, `note` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "lab_context_revision",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `lab_id` INTEGER NOT NULL, `revision` INTEGER NOT NULL, `captured_utc` INTEGER NOT NULL, `origin` TEXT NOT NULL, `context_json` TEXT NOT NULL, FOREIGN KEY(`lab_id`) REFERENCES `lab_value`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lab_id",
+            "columnName": "lab_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "revision",
+            "columnName": "revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "captured_utc",
+            "columnName": "captured_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "origin",
+            "columnName": "origin",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "context_json",
+            "columnName": "context_json",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_lab_context_revision_lab_id_revision",
+            "unique": true,
+            "columnNames": [
+              "lab_id",
+              "revision"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_lab_context_revision_lab_id_revision` ON `${TABLE_NAME}` (`lab_id`, `revision`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "lab_value",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "lab_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "visit_question",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `appointment_id` INTEGER NOT NULL, `sort_order` INTEGER NOT NULL, `text` TEXT NOT NULL, `status` TEXT NOT NULL, `answer_note` TEXT, FOREIGN KEY(`appointment_id`) REFERENCES `appointment`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appointment_id",
+            "columnName": "appointment_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sort_order",
+            "columnName": "sort_order",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "answer_note",
+            "columnName": "answer_note",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_visit_question_appointment_id",
+            "unique": false,
+            "columnNames": [
+              "appointment_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_visit_question_appointment_id` ON `${TABLE_NAME}` (`appointment_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "appointment",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "appointment_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "visit_pack",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `appointment_id` INTEGER NOT NULL, `generated_utc` INTEGER NOT NULL, `zone` TEXT NOT NULL, `range_from` TEXT NOT NULL, `range_to` TEXT NOT NULL, `sections` TEXT NOT NULL, `language` TEXT NOT NULL, `template_version` INTEGER NOT NULL, `input_digest` TEXT NOT NULL, `facts_json` TEXT NOT NULL, FOREIGN KEY(`appointment_id`) REFERENCES `appointment`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appointment_id",
+            "columnName": "appointment_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "generated_utc",
+            "columnName": "generated_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "zone",
+            "columnName": "zone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "range_from",
+            "columnName": "range_from",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "range_to",
+            "columnName": "range_to",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sections",
+            "columnName": "sections",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "template_version",
+            "columnName": "template_version",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "input_digest",
+            "columnName": "input_digest",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "facts_json",
+            "columnName": "facts_json",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_visit_pack_appointment_id",
+            "unique": false,
+            "columnNames": [
+              "appointment_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_visit_pack_appointment_id` ON `${TABLE_NAME}` (`appointment_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "appointment",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "appointment_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "history_period_revision",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `period_key` TEXT NOT NULL, `revision` INTEGER NOT NULL, `state` TEXT NOT NULL, `medication_id` INTEGER NOT NULL, `identity_json` TEXT NOT NULL, `standard_json` TEXT NOT NULL, `from_date` TEXT NOT NULL, `until_date` TEXT, `zone` TEXT NOT NULL, `evidence_json` TEXT NOT NULL, `origin` TEXT NOT NULL, `created_utc` INTEGER NOT NULL, `kind` TEXT NOT NULL DEFAULT 'CONFIRMED', `group_key` TEXT, FOREIGN KEY(`medication_id`) REFERENCES `medication`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "period_key",
+            "columnName": "period_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "revision",
+            "columnName": "revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "medication_id",
+            "columnName": "medication_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "identity_json",
+            "columnName": "identity_json",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "standard_json",
+            "columnName": "standard_json",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "from_date",
+            "columnName": "from_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "until_date",
+            "columnName": "until_date",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "zone",
+            "columnName": "zone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "evidence_json",
+            "columnName": "evidence_json",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "origin",
+            "columnName": "origin",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'CONFIRMED'"
+          },
+          {
+            "fieldPath": "group_key",
+            "columnName": "group_key",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_history_period_revision_period_key_revision",
+            "unique": true,
+            "columnNames": [
+              "period_key",
+              "revision"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_history_period_revision_period_key_revision` ON `${TABLE_NAME}` (`period_key`, `revision`)"
+          },
+          {
+            "name": "index_history_period_revision_medication_id",
+            "unique": false,
+            "columnNames": [
+              "medication_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_history_period_revision_medication_id` ON `${TABLE_NAME}` (`medication_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "medication",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "medication_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "record_annotation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`record_id` INTEGER NOT NULL, `kind` TEXT NOT NULL, `created_utc` INTEGER NOT NULL, PRIMARY KEY(`record_id`, `kind`), FOREIGN KEY(`record_id`) REFERENCES `dose_record`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "record_id",
+            "columnName": "record_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "record_id",
+            "kind"
+          ]
+        },
+        "foreignKeys": [
+          {
+            "table": "dose_record",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "record_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "trash_item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `kind` TEXT NOT NULL, `ref` TEXT NOT NULL, `item_date` TEXT NOT NULL, `deleted_utc` INTEGER NOT NULL, `payload_json` TEXT NOT NULL, `state` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ref",
+            "columnName": "ref",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "item_date",
+            "columnName": "item_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deleted_utc",
+            "columnName": "deleted_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "payload_json",
+            "columnName": "payload_json",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_trash_item_kind_ref",
+            "unique": true,
+            "columnNames": [
+              "kind",
+              "ref"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_trash_item_kind_ref` ON `${TABLE_NAME}` (`kind`, `ref`)"
+          }
+        ]
+      },
+      {
+        "tableName": "attachment_journal",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`store_uuid` TEXT NOT NULL, `operation_uuid` TEXT NOT NULL, `record_epoch` TEXT NOT NULL, `physical_generation` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `record_uuid` TEXT NOT NULL, `request_sha256` BLOB NOT NULL, `attempt_uuid` TEXT NOT NULL, `object_uuid` TEXT NOT NULL, `version_uuid` TEXT NOT NULL, `dek_handle_uuid` TEXT NOT NULL, `stage_alias_uuid` TEXT NOT NULL, `active_alias_uuid` TEXT NOT NULL, `stage_ready` INTEGER NOT NULL, `active_ready` INTEGER NOT NULL, `stage_uses` INTEGER NOT NULL, `active_uses` INTEGER NOT NULL, `proof` TEXT NOT NULL, `parent_device` INTEGER, `parent_inode` INTEGER, `file_device` INTEGER, `file_inode` INTEGER, `plaintext_sha256` BLOB, `ciphertext_sha256` BLOB, `plaintext_bytes` INTEGER, `ciphertext_bytes` INTEGER, PRIMARY KEY(`store_uuid`, `operation_uuid`), FOREIGN KEY(`store_uuid`, `operation_uuid`) REFERENCES `attachment_operation`(`store_uuid`, `operation_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "store_uuid",
+            "columnName": "store_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "operation_uuid",
+            "columnName": "operation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_epoch",
+            "columnName": "record_epoch",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "physical_generation",
+            "columnName": "physical_generation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "document_uuid",
+            "columnName": "document_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_uuid",
+            "columnName": "record_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "request_sha256",
+            "columnName": "request_sha256",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "attempt_uuid",
+            "columnName": "attempt_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "object_uuid",
+            "columnName": "object_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "version_uuid",
+            "columnName": "version_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dek_handle_uuid",
+            "columnName": "dek_handle_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stage_alias_uuid",
+            "columnName": "stage_alias_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active_alias_uuid",
+            "columnName": "active_alias_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stage_ready",
+            "columnName": "stage_ready",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active_ready",
+            "columnName": "active_ready",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stage_uses",
+            "columnName": "stage_uses",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active_uses",
+            "columnName": "active_uses",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "proof",
+            "columnName": "proof",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parent_device",
+            "columnName": "parent_device",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "parent_inode",
+            "columnName": "parent_inode",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "file_device",
+            "columnName": "file_device",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "file_inode",
+            "columnName": "file_inode",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "plaintext_sha256",
+            "columnName": "plaintext_sha256",
+            "affinity": "BLOB"
+          },
+          {
+            "fieldPath": "ciphertext_sha256",
+            "columnName": "ciphertext_sha256",
+            "affinity": "BLOB"
+          },
+          {
+            "fieldPath": "plaintext_bytes",
+            "columnName": "plaintext_bytes",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "ciphertext_bytes",
+            "columnName": "ciphertext_bytes",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "store_uuid",
+            "operation_uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_attachment_journal_store_uuid_object_uuid",
+            "unique": true,
+            "columnNames": [
+              "store_uuid",
+              "object_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_journal_store_uuid_object_uuid` ON `${TABLE_NAME}` (`store_uuid`, `object_uuid`)"
+          },
+          {
+            "name": "index_attachment_journal_store_uuid_version_uuid",
+            "unique": true,
+            "columnNames": [
+              "store_uuid",
+              "version_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_journal_store_uuid_version_uuid` ON `${TABLE_NAME}` (`store_uuid`, `version_uuid`)"
+          },
+          {
+            "name": "index_attachment_journal_stage_alias_uuid",
+            "unique": true,
+            "columnNames": [
+              "stage_alias_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_journal_stage_alias_uuid` ON `${TABLE_NAME}` (`stage_alias_uuid`)"
+          },
+          {
+            "name": "index_attachment_journal_active_alias_uuid",
+            "unique": true,
+            "columnNames": [
+              "active_alias_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_journal_active_alias_uuid` ON `${TABLE_NAME}` (`active_alias_uuid`)"
+          },
+          {
+            "name": "index_attachment_journal_store_uuid_attempt_uuid",
+            "unique": true,
+            "columnNames": [
+              "store_uuid",
+              "attempt_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_journal_store_uuid_attempt_uuid` ON `${TABLE_NAME}` (`store_uuid`, `attempt_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "attachment_operation",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid",
+              "operation_uuid"
+            ],
+            "referencedColumns": [
+              "store_uuid",
+              "operation_uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "attachment_store",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`store_uuid` TEXT NOT NULL, `logical_vault_uuid` TEXT NOT NULL, `store_state` TEXT NOT NULL, `space` TEXT NOT NULL, `record_epoch` TEXT NOT NULL, `generation` INTEGER NOT NULL, `active_generation_uuid` TEXT, `feature_enabled` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`store_uuid`), FOREIGN KEY(`store_uuid`, `active_generation_uuid`) REFERENCES `attachment_generation`(`store_uuid`, `generation_uuid`) ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "store_uuid",
+            "columnName": "store_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "logical_vault_uuid",
+            "columnName": "logical_vault_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "store_state",
+            "columnName": "store_state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "space",
+            "columnName": "space",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_epoch",
+            "columnName": "record_epoch",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "generation",
+            "columnName": "generation",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active_generation_uuid",
+            "columnName": "active_generation_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "feature_enabled",
+            "columnName": "feature_enabled",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "store_uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_attachment_store_space",
+            "unique": true,
+            "columnNames": [
+              "space"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_store_space` ON `${TABLE_NAME}` (`space`)"
+          },
+          {
+            "name": "index_attachment_store_store_uuid_record_epoch",
+            "unique": true,
+            "columnNames": [
+              "store_uuid",
+              "record_epoch"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_store_store_uuid_record_epoch` ON `${TABLE_NAME}` (`store_uuid`, `record_epoch`)"
+          },
+          {
+            "name": "index_attachment_store_store_uuid_active_generation_uuid",
+            "unique": false,
+            "columnNames": [
+              "store_uuid",
+              "active_generation_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_attachment_store_store_uuid_active_generation_uuid` ON `${TABLE_NAME}` (`store_uuid`, `active_generation_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "attachment_generation",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid",
+              "active_generation_uuid"
+            ],
+            "referencedColumns": [
+              "store_uuid",
+              "generation_uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "attachment_record_identity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`store_uuid` TEXT NOT NULL, `record_epoch` TEXT NOT NULL, `record_uuid` TEXT NOT NULL, `target_kind` TEXT NOT NULL, `legacy_id` INTEGER NOT NULL, `state` TEXT NOT NULL, `trash_id` INTEGER, `evidence_digest` BLOB NOT NULL, PRIMARY KEY(`store_uuid`, `record_epoch`, `record_uuid`), FOREIGN KEY(`store_uuid`, `record_epoch`) REFERENCES `attachment_store`(`store_uuid`, `record_epoch`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "store_uuid",
+            "columnName": "store_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_epoch",
+            "columnName": "record_epoch",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_uuid",
+            "columnName": "record_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "target_kind",
+            "columnName": "target_kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "legacy_id",
+            "columnName": "legacy_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "trash_id",
+            "columnName": "trash_id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "evidence_digest",
+            "columnName": "evidence_digest",
+            "affinity": "BLOB",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "store_uuid",
+            "record_epoch",
+            "record_uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_attachment_record_identity_store_uuid_record_epoch_target_kind_legacy_id_state",
+            "unique": false,
+            "columnNames": [
+              "store_uuid",
+              "record_epoch",
+              "target_kind",
+              "legacy_id",
+              "state"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_attachment_record_identity_store_uuid_record_epoch_target_kind_legacy_id_state` ON `${TABLE_NAME}` (`store_uuid`, `record_epoch`, `target_kind`, `legacy_id`, `state`)"
+          },
+          {
+            "name": "index_attachment_record_identity_store_uuid_record_epoch_target_kind_legacy_id",
+            "unique": true,
+            "columnNames": [
+              "store_uuid",
+              "record_epoch",
+              "target_kind",
+              "legacy_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_record_identity_store_uuid_record_epoch_target_kind_legacy_id` ON `${TABLE_NAME}` (`store_uuid`, `record_epoch`, `target_kind`, `legacy_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "attachment_store",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid",
+              "record_epoch"
+            ],
+            "referencedColumns": [
+              "store_uuid",
+              "record_epoch"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "attachment_document",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`store_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `revision` INTEGER NOT NULL, `title` TEXT NOT NULL, `category` TEXT NOT NULL, `state` TEXT NOT NULL, `active_version_uuid` TEXT, `deleted_utc` INTEGER, PRIMARY KEY(`store_uuid`, `document_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`, `active_version_uuid`) REFERENCES `attachment_version`(`store_uuid`, `document_uuid`, `version_uuid`) ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`store_uuid`) REFERENCES `attachment_store`(`store_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "store_uuid",
+            "columnName": "store_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "document_uuid",
+            "columnName": "document_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "revision",
+            "columnName": "revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "active_version_uuid",
+            "columnName": "active_version_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "deleted_utc",
+            "columnName": "deleted_utc",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "store_uuid",
+            "document_uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_attachment_document_store_uuid_document_uuid_active_version_uuid",
+            "unique": false,
+            "columnNames": [
+              "store_uuid",
+              "document_uuid",
+              "active_version_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_attachment_document_store_uuid_document_uuid_active_version_uuid` ON `${TABLE_NAME}` (`store_uuid`, `document_uuid`, `active_version_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "attachment_version",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid",
+              "document_uuid",
+              "active_version_uuid"
+            ],
+            "referencedColumns": [
+              "store_uuid",
+              "document_uuid",
+              "version_uuid"
+            ]
+          },
+          {
+            "table": "attachment_store",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid"
+            ],
+            "referencedColumns": [
+              "store_uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "attachment_version",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`store_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `version_uuid` TEXT NOT NULL, `ordinal` INTEGER NOT NULL, `object_uuid` TEXT NOT NULL, `protocol_revision` INTEGER NOT NULL, `dek_handle_uuid` TEXT NOT NULL, `plaintext_sha256` BLOB NOT NULL, `ciphertext_sha256` BLOB NOT NULL, `plaintext_bytes` INTEGER NOT NULL, `ciphertext_bytes` INTEGER NOT NULL, `mime` TEXT NOT NULL, `status` TEXT NOT NULL, PRIMARY KEY(`store_uuid`, `document_uuid`, `version_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`) REFERENCES `attachment_document`(`store_uuid`, `document_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "store_uuid",
+            "columnName": "store_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "document_uuid",
+            "columnName": "document_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "version_uuid",
+            "columnName": "version_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ordinal",
+            "columnName": "ordinal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "object_uuid",
+            "columnName": "object_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "protocol_revision",
+            "columnName": "protocol_revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dek_handle_uuid",
+            "columnName": "dek_handle_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "plaintext_sha256",
+            "columnName": "plaintext_sha256",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ciphertext_sha256",
+            "columnName": "ciphertext_sha256",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "plaintext_bytes",
+            "columnName": "plaintext_bytes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ciphertext_bytes",
+            "columnName": "ciphertext_bytes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mime",
+            "columnName": "mime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "store_uuid",
+            "document_uuid",
+            "version_uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_attachment_version_store_uuid_status",
+            "unique": false,
+            "columnNames": [
+              "store_uuid",
+              "status"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_attachment_version_store_uuid_status` ON `${TABLE_NAME}` (`store_uuid`, `status`)"
+          },
+          {
+            "name": "index_attachment_version_store_uuid_document_uuid_ordinal",
+            "unique": true,
+            "columnNames": [
+              "store_uuid",
+              "document_uuid",
+              "ordinal"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_version_store_uuid_document_uuid_ordinal` ON `${TABLE_NAME}` (`store_uuid`, `document_uuid`, `ordinal`)"
+          },
+          {
+            "name": "index_attachment_version_store_uuid_object_uuid",
+            "unique": true,
+            "columnNames": [
+              "store_uuid",
+              "object_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_version_store_uuid_object_uuid` ON `${TABLE_NAME}` (`store_uuid`, `object_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "attachment_document",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid",
+              "document_uuid"
+            ],
+            "referencedColumns": [
+              "store_uuid",
+              "document_uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "attachment_link",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`store_uuid` TEXT NOT NULL, `link_uuid` TEXT NOT NULL, `record_epoch` TEXT NOT NULL, `record_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `revision` INTEGER NOT NULL, `state` TEXT NOT NULL, PRIMARY KEY(`store_uuid`, `link_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`) REFERENCES `attachment_document`(`store_uuid`, `document_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`store_uuid`, `record_epoch`, `record_uuid`) REFERENCES `attachment_record_identity`(`store_uuid`, `record_epoch`, `record_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "store_uuid",
+            "columnName": "store_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "link_uuid",
+            "columnName": "link_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_epoch",
+            "columnName": "record_epoch",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_uuid",
+            "columnName": "record_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "document_uuid",
+            "columnName": "document_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "revision",
+            "columnName": "revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "store_uuid",
+            "link_uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_attachment_link_store_uuid_document_uuid_state",
+            "unique": false,
+            "columnNames": [
+              "store_uuid",
+              "document_uuid",
+              "state"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_attachment_link_store_uuid_document_uuid_state` ON `${TABLE_NAME}` (`store_uuid`, `document_uuid`, `state`)"
+          },
+          {
+            "name": "index_attachment_link_store_uuid_record_epoch_record_uuid_document_uuid",
+            "unique": true,
+            "columnNames": [
+              "store_uuid",
+              "record_epoch",
+              "record_uuid",
+              "document_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_link_store_uuid_record_epoch_record_uuid_document_uuid` ON `${TABLE_NAME}` (`store_uuid`, `record_epoch`, `record_uuid`, `document_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "attachment_document",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid",
+              "document_uuid"
+            ],
+            "referencedColumns": [
+              "store_uuid",
+              "document_uuid"
+            ]
+          },
+          {
+            "table": "attachment_record_identity",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid",
+              "record_epoch",
+              "record_uuid"
+            ],
+            "referencedColumns": [
+              "store_uuid",
+              "record_epoch",
+              "record_uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "attachment_operation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`store_uuid` TEXT NOT NULL, `operation_uuid` TEXT NOT NULL, `idempotency_uuid` TEXT NOT NULL, `kind` TEXT NOT NULL, `phase` TEXT NOT NULL, `expected_generation` INTEGER NOT NULL, `expected_document_revision` INTEGER, `document_uuid` TEXT, `resource_generation_uuid` TEXT, `object_uuid` TEXT, `version_uuid` TEXT, `dek_handle_uuid` TEXT, `staged_wrapped_dek` BLOB, `staged_wrapped_dek_sha256` BLOB, `reserved_bytes` INTEGER NOT NULL, `reserved_objects` INTEGER NOT NULL, `updated_utc` INTEGER NOT NULL, PRIMARY KEY(`store_uuid`, `operation_uuid`), FOREIGN KEY(`store_uuid`, `resource_generation_uuid`) REFERENCES `attachment_generation`(`store_uuid`, `generation_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`store_uuid`, `document_uuid`) REFERENCES `attachment_document`(`store_uuid`, `document_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`store_uuid`) REFERENCES `attachment_store`(`store_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "store_uuid",
+            "columnName": "store_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "operation_uuid",
+            "columnName": "operation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "idempotency_uuid",
+            "columnName": "idempotency_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phase",
+            "columnName": "phase",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expected_generation",
+            "columnName": "expected_generation",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expected_document_revision",
+            "columnName": "expected_document_revision",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "document_uuid",
+            "columnName": "document_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "resource_generation_uuid",
+            "columnName": "resource_generation_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "object_uuid",
+            "columnName": "object_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "version_uuid",
+            "columnName": "version_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "dek_handle_uuid",
+            "columnName": "dek_handle_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "staged_wrapped_dek",
+            "columnName": "staged_wrapped_dek",
+            "affinity": "BLOB"
+          },
+          {
+            "fieldPath": "staged_wrapped_dek_sha256",
+            "columnName": "staged_wrapped_dek_sha256",
+            "affinity": "BLOB"
+          },
+          {
+            "fieldPath": "reserved_bytes",
+            "columnName": "reserved_bytes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reserved_objects",
+            "columnName": "reserved_objects",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updated_utc",
+            "columnName": "updated_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "store_uuid",
+            "operation_uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_attachment_operation_store_uuid_phase",
+            "unique": false,
+            "columnNames": [
+              "store_uuid",
+              "phase"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_attachment_operation_store_uuid_phase` ON `${TABLE_NAME}` (`store_uuid`, `phase`)"
+          },
+          {
+            "name": "index_attachment_operation_store_uuid_idempotency_uuid",
+            "unique": true,
+            "columnNames": [
+              "store_uuid",
+              "idempotency_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_operation_store_uuid_idempotency_uuid` ON `${TABLE_NAME}` (`store_uuid`, `idempotency_uuid`)"
+          },
+          {
+            "name": "index_attachment_operation_store_uuid_resource_generation_uuid",
+            "unique": false,
+            "columnNames": [
+              "store_uuid",
+              "resource_generation_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_attachment_operation_store_uuid_resource_generation_uuid` ON `${TABLE_NAME}` (`store_uuid`, `resource_generation_uuid`)"
+          },
+          {
+            "name": "index_attachment_operation_store_uuid_document_uuid",
+            "unique": false,
+            "columnNames": [
+              "store_uuid",
+              "document_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_attachment_operation_store_uuid_document_uuid` ON `${TABLE_NAME}` (`store_uuid`, `document_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "attachment_generation",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid",
+              "resource_generation_uuid"
+            ],
+            "referencedColumns": [
+              "store_uuid",
+              "generation_uuid"
+            ]
+          },
+          {
+            "table": "attachment_document",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid",
+              "document_uuid"
+            ],
+            "referencedColumns": [
+              "store_uuid",
+              "document_uuid"
+            ]
+          },
+          {
+            "table": "attachment_store",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid"
+            ],
+            "referencedColumns": [
+              "store_uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "attachment_generation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`store_uuid` TEXT NOT NULL, `generation_uuid` TEXT NOT NULL, `state` TEXT NOT NULL, `manifest_digest` BLOB, `created_utc` INTEGER NOT NULL, PRIMARY KEY(`store_uuid`, `generation_uuid`), FOREIGN KEY(`store_uuid`) REFERENCES `attachment_store`(`store_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "store_uuid",
+            "columnName": "store_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "generation_uuid",
+            "columnName": "generation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "manifest_digest",
+            "columnName": "manifest_digest",
+            "affinity": "BLOB"
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "store_uuid",
+            "generation_uuid"
+          ]
+        },
+        "foreignKeys": [
+          {
+            "table": "attachment_store",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid"
+            ],
+            "referencedColumns": [
+              "store_uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "attachment_key_envelope",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`store_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `version_uuid` TEXT NOT NULL, `envelope_uuid` TEXT NOT NULL, `dek_handle_uuid` TEXT NOT NULL, `wrap_epoch` INTEGER NOT NULL, `wrapping_key_alias` TEXT NOT NULL, `wrapped_dek` BLOB NOT NULL, `created_utc` INTEGER NOT NULL, `state` TEXT NOT NULL, PRIMARY KEY(`store_uuid`, `envelope_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`, `version_uuid`) REFERENCES `attachment_version`(`store_uuid`, `document_uuid`, `version_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "store_uuid",
+            "columnName": "store_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "document_uuid",
+            "columnName": "document_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "version_uuid",
+            "columnName": "version_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "envelope_uuid",
+            "columnName": "envelope_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dek_handle_uuid",
+            "columnName": "dek_handle_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wrap_epoch",
+            "columnName": "wrap_epoch",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wrapping_key_alias",
+            "columnName": "wrapping_key_alias",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wrapped_dek",
+            "columnName": "wrapped_dek",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "store_uuid",
+            "envelope_uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_attachment_key_envelope_store_uuid_document_uuid_version_uuid_wrap_epoch",
+            "unique": true,
+            "columnNames": [
+              "store_uuid",
+              "document_uuid",
+              "version_uuid",
+              "wrap_epoch"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_attachment_key_envelope_store_uuid_document_uuid_version_uuid_wrap_epoch` ON `${TABLE_NAME}` (`store_uuid`, `document_uuid`, `version_uuid`, `wrap_epoch`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "attachment_version",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "store_uuid",
+              "document_uuid",
+              "version_uuid"
+            ],
+            "referencedColumns": [
+              "store_uuid",
+              "document_uuid",
+              "version_uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "reference_dataset",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `created_utc` INTEGER NOT NULL, PRIMARY KEY(`uuid`))",
+        "fields": [
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "uuid"
+          ]
+        }
+      },
+      {
+        "tableName": "reference_runtime",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `dataset_uuid` TEXT NOT NULL, `epoch` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataset_uuid",
+            "columnName": "dataset_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "epoch",
+            "columnName": "epoch",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "reference_identity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `dataset_uuid` TEXT NOT NULL, `kind` TEXT NOT NULL, `original_handle` INTEGER NOT NULL, `live_handle` INTEGER, `owner_uuid` TEXT, PRIMARY KEY(`uuid`), FOREIGN KEY(`dataset_uuid`) REFERENCES `reference_dataset`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`owner_uuid`) REFERENCES `reference_identity`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataset_uuid",
+            "columnName": "dataset_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "original_handle",
+            "columnName": "original_handle",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "live_handle",
+            "columnName": "live_handle",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "owner_uuid",
+            "columnName": "owner_uuid",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_reference_identity_dataset_uuid_kind_live_handle",
+            "unique": true,
+            "columnNames": [
+              "dataset_uuid",
+              "kind",
+              "live_handle"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_reference_identity_dataset_uuid_kind_live_handle` ON `${TABLE_NAME}` (`dataset_uuid`, `kind`, `live_handle`)"
+          },
+          {
+            "name": "index_reference_identity_owner_uuid",
+            "unique": false,
+            "columnNames": [
+              "owner_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_reference_identity_owner_uuid` ON `${TABLE_NAME}` (`owner_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "reference_dataset",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "dataset_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          },
+          {
+            "table": "reference_identity",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "owner_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "reference_snapshot",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `dataset_uuid` TEXT NOT NULL, `kind` TEXT NOT NULL, `namespace` TEXT NOT NULL, `source_version` TEXT NOT NULL, `payload_json` TEXT NOT NULL, `payload_sha256` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`dataset_uuid`) REFERENCES `reference_dataset`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataset_uuid",
+            "columnName": "dataset_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "namespace",
+            "columnName": "namespace",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source_version",
+            "columnName": "source_version",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "payload_json",
+            "columnName": "payload_json",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "payload_sha256",
+            "columnName": "payload_sha256",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_reference_snapshot_dataset_uuid",
+            "unique": false,
+            "columnNames": [
+              "dataset_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_reference_snapshot_dataset_uuid` ON `${TABLE_NAME}` (`dataset_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "reference_dataset",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "dataset_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "reference_event",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`operation_uuid` TEXT NOT NULL, `dataset_uuid` TEXT NOT NULL, `subject_uuid` TEXT NOT NULL, `revision` INTEGER NOT NULL, `previous_uuid` TEXT, `action` TEXT NOT NULL, `snapshot_uuid` TEXT, `request_sha256` TEXT NOT NULL, `created_utc` INTEGER NOT NULL, PRIMARY KEY(`operation_uuid`), FOREIGN KEY(`dataset_uuid`) REFERENCES `reference_dataset`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`subject_uuid`) REFERENCES `reference_identity`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`previous_uuid`) REFERENCES `reference_event`(`operation_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`snapshot_uuid`) REFERENCES `reference_snapshot`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "operation_uuid",
+            "columnName": "operation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataset_uuid",
+            "columnName": "dataset_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subject_uuid",
+            "columnName": "subject_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "revision",
+            "columnName": "revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "previous_uuid",
+            "columnName": "previous_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "action",
+            "columnName": "action",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "snapshot_uuid",
+            "columnName": "snapshot_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "request_sha256",
+            "columnName": "request_sha256",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "operation_uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_reference_event_dataset_uuid",
+            "unique": false,
+            "columnNames": [
+              "dataset_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_reference_event_dataset_uuid` ON `${TABLE_NAME}` (`dataset_uuid`)"
+          },
+          {
+            "name": "index_reference_event_subject_uuid_revision",
+            "unique": true,
+            "columnNames": [
+              "subject_uuid",
+              "revision"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_reference_event_subject_uuid_revision` ON `${TABLE_NAME}` (`subject_uuid`, `revision`)"
+          },
+          {
+            "name": "index_reference_event_previous_uuid",
+            "unique": false,
+            "columnNames": [
+              "previous_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_reference_event_previous_uuid` ON `${TABLE_NAME}` (`previous_uuid`)"
+          },
+          {
+            "name": "index_reference_event_snapshot_uuid",
+            "unique": false,
+            "columnNames": [
+              "snapshot_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_reference_event_snapshot_uuid` ON `${TABLE_NAME}` (`snapshot_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "reference_dataset",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "dataset_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          },
+          {
+            "table": "reference_identity",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "subject_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          },
+          {
+            "table": "reference_event",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "previous_uuid"
+            ],
+            "referencedColumns": [
+              "operation_uuid"
+            ]
+          },
+          {
+            "table": "reference_snapshot",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "snapshot_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "record_reference_capture",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `dataset_uuid` TEXT NOT NULL, `record_uuid` TEXT NOT NULL, `record_revision` INTEGER NOT NULL, `capture_revision` INTEGER NOT NULL, `kind` TEXT NOT NULL, `context_event_uuid` TEXT, `actual_snapshot_uuid` TEXT, `container_uuid` TEXT, `payload_sha256` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`dataset_uuid`) REFERENCES `reference_dataset`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`record_uuid`) REFERENCES `reference_identity`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`context_event_uuid`) REFERENCES `reference_event`(`operation_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`actual_snapshot_uuid`) REFERENCES `reference_snapshot`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`container_uuid`) REFERENCES `reference_identity`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataset_uuid",
+            "columnName": "dataset_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_uuid",
+            "columnName": "record_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_revision",
+            "columnName": "record_revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "capture_revision",
+            "columnName": "capture_revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "context_event_uuid",
+            "columnName": "context_event_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "actual_snapshot_uuid",
+            "columnName": "actual_snapshot_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "container_uuid",
+            "columnName": "container_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "payload_sha256",
+            "columnName": "payload_sha256",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_record_reference_capture_dataset_uuid",
+            "unique": false,
+            "columnNames": [
+              "dataset_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_record_reference_capture_dataset_uuid` ON `${TABLE_NAME}` (`dataset_uuid`)"
+          },
+          {
+            "name": "index_record_reference_capture_record_uuid_record_revision_capture_revision",
+            "unique": true,
+            "columnNames": [
+              "record_uuid",
+              "record_revision",
+              "capture_revision"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_record_reference_capture_record_uuid_record_revision_capture_revision` ON `${TABLE_NAME}` (`record_uuid`, `record_revision`, `capture_revision`)"
+          },
+          {
+            "name": "index_record_reference_capture_context_event_uuid",
+            "unique": false,
+            "columnNames": [
+              "context_event_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_record_reference_capture_context_event_uuid` ON `${TABLE_NAME}` (`context_event_uuid`)"
+          },
+          {
+            "name": "index_record_reference_capture_actual_snapshot_uuid",
+            "unique": false,
+            "columnNames": [
+              "actual_snapshot_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_record_reference_capture_actual_snapshot_uuid` ON `${TABLE_NAME}` (`actual_snapshot_uuid`)"
+          },
+          {
+            "name": "index_record_reference_capture_container_uuid",
+            "unique": false,
+            "columnNames": [
+              "container_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_record_reference_capture_container_uuid` ON `${TABLE_NAME}` (`container_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "reference_dataset",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "dataset_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          },
+          {
+            "table": "reference_identity",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "record_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          },
+          {
+            "table": "reference_event",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "context_event_uuid"
+            ],
+            "referencedColumns": [
+              "operation_uuid"
+            ]
+          },
+          {
+            "table": "reference_snapshot",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "actual_snapshot_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          },
+          {
+            "table": "reference_identity",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "container_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "measured_operation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`operation_uuid` TEXT NOT NULL, `dataset_uuid` TEXT NOT NULL, `record_uuid` TEXT, `record_revision` INTEGER, `kind` TEXT NOT NULL, `request_sha256` TEXT NOT NULL, `input_json` TEXT NOT NULL, `unallocated_quantity` TEXT, `unallocated_unit` TEXT, `unknown_reason` TEXT, `created_utc` INTEGER NOT NULL, PRIMARY KEY(`operation_uuid`), FOREIGN KEY(`dataset_uuid`) REFERENCES `reference_dataset`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`record_uuid`) REFERENCES `reference_identity`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "operation_uuid",
+            "columnName": "operation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataset_uuid",
+            "columnName": "dataset_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "record_uuid",
+            "columnName": "record_uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "record_revision",
+            "columnName": "record_revision",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "request_sha256",
+            "columnName": "request_sha256",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "input_json",
+            "columnName": "input_json",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unallocated_quantity",
+            "columnName": "unallocated_quantity",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "unallocated_unit",
+            "columnName": "unallocated_unit",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "unknown_reason",
+            "columnName": "unknown_reason",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "created_utc",
+            "columnName": "created_utc",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "operation_uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_measured_operation_dataset_uuid",
+            "unique": false,
+            "columnNames": [
+              "dataset_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_measured_operation_dataset_uuid` ON `${TABLE_NAME}` (`dataset_uuid`)"
+          },
+          {
+            "name": "index_measured_operation_record_uuid",
+            "unique": false,
+            "columnNames": [
+              "record_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_measured_operation_record_uuid` ON `${TABLE_NAME}` (`record_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "reference_dataset",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "dataset_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          },
+          {
+            "table": "reference_identity",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "record_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "measured_allocation",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `dataset_uuid` TEXT NOT NULL, `operation_uuid` TEXT NOT NULL, `container_uuid` TEXT NOT NULL, `presentation_event_uuid` TEXT NOT NULL, `ledger_entry_id` INTEGER NOT NULL, `quantity` TEXT NOT NULL, `unit` TEXT NOT NULL, `reverses_uuid` TEXT, PRIMARY KEY(`uuid`), FOREIGN KEY(`dataset_uuid`) REFERENCES `reference_dataset`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`operation_uuid`) REFERENCES `measured_operation`(`operation_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`container_uuid`) REFERENCES `reference_identity`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`presentation_event_uuid`) REFERENCES `reference_event`(`operation_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`ledger_entry_id`) REFERENCES `supply_transaction`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`reverses_uuid`) REFERENCES `measured_allocation`(`uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataset_uuid",
+            "columnName": "dataset_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "operation_uuid",
+            "columnName": "operation_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "container_uuid",
+            "columnName": "container_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "presentation_event_uuid",
+            "columnName": "presentation_event_uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ledger_entry_id",
+            "columnName": "ledger_entry_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quantity",
+            "columnName": "quantity",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reverses_uuid",
+            "columnName": "reverses_uuid",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "uuid"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_measured_allocation_dataset_uuid",
+            "unique": false,
+            "columnNames": [
+              "dataset_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_measured_allocation_dataset_uuid` ON `${TABLE_NAME}` (`dataset_uuid`)"
+          },
+          {
+            "name": "index_measured_allocation_operation_uuid",
+            "unique": false,
+            "columnNames": [
+              "operation_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_measured_allocation_operation_uuid` ON `${TABLE_NAME}` (`operation_uuid`)"
+          },
+          {
+            "name": "index_measured_allocation_container_uuid",
+            "unique": false,
+            "columnNames": [
+              "container_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_measured_allocation_container_uuid` ON `${TABLE_NAME}` (`container_uuid`)"
+          },
+          {
+            "name": "index_measured_allocation_presentation_event_uuid",
+            "unique": false,
+            "columnNames": [
+              "presentation_event_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_measured_allocation_presentation_event_uuid` ON `${TABLE_NAME}` (`presentation_event_uuid`)"
+          },
+          {
+            "name": "index_measured_allocation_ledger_entry_id",
+            "unique": true,
+            "columnNames": [
+              "ledger_entry_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_measured_allocation_ledger_entry_id` ON `${TABLE_NAME}` (`ledger_entry_id`)"
+          },
+          {
+            "name": "index_measured_allocation_reverses_uuid",
+            "unique": true,
+            "columnNames": [
+              "reverses_uuid"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_measured_allocation_reverses_uuid` ON `${TABLE_NAME}` (`reverses_uuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "reference_dataset",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "dataset_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          },
+          {
+            "table": "measured_operation",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "operation_uuid"
+            ],
+            "referencedColumns": [
+              "operation_uuid"
+            ]
+          },
+          {
+            "table": "reference_identity",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "container_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          },
+          {
+            "table": "reference_event",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "presentation_event_uuid"
+            ],
+            "referencedColumns": [
+              "operation_uuid"
+            ]
+          },
+          {
+            "table": "supply_transaction",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "ledger_entry_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "measured_allocation",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "reverses_uuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7497905d9d53454ccbaca4f545a22d22')"
+    ]
+  }
+}

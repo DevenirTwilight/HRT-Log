@@ -57,6 +57,7 @@ object Trash {
         val storedRef=if(collision)java.util.UUID.randomUUID().toString() else ref
         MonaReceiptStore.capture(db,kind,storedRef,payload)
         FeatherlineReceiptStore.capture(db,kind,storedRef,payload)
+        ChrysalideReceiptStore.capture(db,kind,storedRef,payload)
         val trashId=db.insert("trash_item",SQLiteDatabase.CONFLICT_ABORT,ContentValues().apply{put("kind",kind);put("ref",storedRef);put("item_date",date);put("deleted_utc",now);put("payload_json",payload.toString());put("state",TRASHED)})
         AttachmentIdentity.trashed(db,kind,storedRef,trashId,payload.toString())
     }

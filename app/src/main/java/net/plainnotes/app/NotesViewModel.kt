@@ -260,6 +260,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         class HtImported(val summary:net.plainnotes.app.data.HtImportSummary):DataJob
         class MonaReady(val export:net.plainnotes.app.importer.Mona.Export,val preview:MonaImportPreview,val scope:LibraryRequestScope):DataJob
         class MonaImported(val summary:MonaImportSummary,val plan:net.plainnotes.app.importer.MonaMigration.Plan):DataJob
+        class ChrysalideReady(val export:net.plainnotes.app.importer.Chrysalide.Export,val preview:ChrysalideImportPreview,val scope:LibraryRequestScope):DataJob
+        class ChrysalideImported(val summary:ChrysalideImportSummary,val preview:ChrysalideImportPreview):DataJob
         object FeatherlineWorking:DataJob
         class FeatherlinePassword(val archive:net.plainnotes.app.importer.Featherline.Archive,val scope:LibraryRequestScope,val error:Int?=null):DataJob
         class FeatherlineReady(val preview:FeatherlineImportPreview,val scope:LibraryRequestScope):DataJob
@@ -308,6 +310,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
                 DataJob.FeatherlinePassword(parsed.archive,expected)
             }
             is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Mona->DataJob.MonaReady(parsed.export,repo.previewMona(parsed.export),expected)
+            is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Chrysalide->DataJob.ChrysalideReady(parsed.export,repo.previewChrysalide(parsed.export),expected)
             is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Tracker->DataJob.HtReady(parsed.export,net.plainnotes.app.importer.HrtTracker.preview(parsed.export))
             is net.plainnotes.app.importer.ImportFormatDetector.Parsed.Memo->DataJob.ImportReady(parsed.export,net.plainnotes.app.importer.TransMemo.preview(parsed.export,ZoneId.systemDefault()))
         }}
@@ -370,6 +373,22 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             } finally {
                 receipt.committed?.let {dataJob.value=DataJob.MonaImported(it,ready.preview.plan)}
             }
+        }
+    }
+    fun runChrysalideImport(ready:DataJob.ChrysalideReady,targets:Map<Long,Long>):Job? {
+        if(!dataJob.compareAndSet(ready,DataJob.Working))return null
+        val receipt=ChrysalideCommitReceipt()
+        return viewModelScope.launch {
+            try {
+                runtime.repository();runtime.verify();runtime.checkRequest()
+                if((librarySession.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope!=ready.scope)throw LibraryScopeMismatch()
+                mutate {repo.importChrysalide(ready.export,targets,receipt)}
+                refresh().join()
+            } catch(e:CancellationException) { if(receipt.committed==null){dataJob.value=DataJob.ImportCancelled;throw e} }
+            catch(e:LibraryScopeMismatch) {runtimeFailure(e);if(receipt.committed==null)dataJob.value=DataJob.Failed(R.string.library_scope_changed)}
+            catch(_:LibraryRequestRevoked) {if(receipt.committed==null)dataJob.value=DataJob.Failed(R.string.library_request_locked)}
+            catch(_:Exception) {if(receipt.committed==null)dataJob.value=DataJob.Failed(R.string.operation_error)}
+            finally {receipt.committed?.let{dataJob.value=DataJob.ChrysalideImported(it,ready.preview)}}
         }
     }
     fun decryptFeatherline(ready:DataJob.FeatherlinePassword,password:CharArray):Job? {

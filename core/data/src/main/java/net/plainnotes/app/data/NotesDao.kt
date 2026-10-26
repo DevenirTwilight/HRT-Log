@@ -2,6 +2,7 @@ package net.plainnotes.app.data
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 @Dao interface NotesDao {
+    @Insert suspend fun chrysalideImport(value:ChrysalideImportEntity)
     @Insert suspend fun featherlineImport(row:FeatherlineImportEntity)
     @Insert suspend fun externalImport(value:ExternalImportEntity)
 
