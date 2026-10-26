@@ -2,9 +2,7 @@ package net.plainnotes.app.data
 
 import net.plainnotes.app.domain.AttachmentSession
 import org.bouncycastle.crypto.digests.SHA256Digest
-import org.bouncycastle.crypto.generators.Argon2BytesGenerator
 import org.bouncycastle.crypto.generators.HKDFBytesGenerator
-import org.bouncycastle.crypto.params.Argon2Parameters
 import org.bouncycastle.crypto.params.HKDFParameters
 import java.nio.ByteBuffer
 import java.nio.CharBuffer
@@ -74,9 +72,7 @@ internal object MedicalArchiveCrypto {
                 .onUnmappableCharacter(CodingErrorAction.REPORT).encode(CharBuffer.wrap(password))
             require(utf8.remaining() in 1..4096)
             val p=ByteArray(utf8.remaining()).also {utf8.get(it);encoded=it}
-            val params=Argon2Parameters.Builder(Argon2Parameters.ARGON2_id).withVersion(Argon2Parameters.ARGON2_VERSION_13)
-                .withSalt(header.salt()).withMemoryAsKB(65536).withIterations(3).withParallelism(1).build()
-            try {Argon2BytesGenerator().apply {init(params);generateBytes(p,root)}} finally {params.clear()}
+            ArchiveKdfWorkspace.derive(p,header.salt(),root){cap.check()}
             cap.check()
             fun key(label:String)=ByteArray(32).also {out->HKDFBytesGenerator(SHA256Digest()).apply {
                 init(HKDFParameters(root,uuidBytes(header.archive),label.toByteArray(Charsets.US_ASCII)))

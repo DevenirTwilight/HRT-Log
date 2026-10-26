@@ -1,0 +1,6 @@
+
+net.plainnotes.app.data.NativeCiHeapProbe:.
+net.plainnotes.app.data.LibraryRestoreAndroidTest:....
+net.plainnotes.app.data.LibraryLifecycleAndroidTest:....
+net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest:.INSTRUMENTATION_RESULT: shortMsg=Process crashed.
+INSTRUMENTATION_CODE: 0

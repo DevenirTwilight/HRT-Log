@@ -1466,3 +1466,7 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 ### 148.E Featherline PR-C及最小来源兼容扩展批准（2026-10-25）
 
 负责人批准 docs/cross-app-import/featherline/persistence-proposal.md：非破坏性Room18→19、独立Featherline UUID来源凭据和真实IMPORT_FEATHERLINE、含Featherline事实或保留凭据时业务Schema15；旧1–14继续可读，无Featherline时保留12/13/14输出，回收站/墓碑及普通/完整集合恢复保护完整。不改变PNBAK1/PNMEDBK1/2密码学或MED默认OFF。正式首版仅Envelope3+Snapshot7，经现有单次SAF入口完成密码认证/预览/确认/原子提交；独立兼容实现，不复制GPL。只导入可靠实际用药和原始化验，计划/库存/设置/PK等不迁移；不伪造剂量、时区或equivalentE2Mg含义。需精确SHA必需CI及真实三API验收；不签名发布，不开始PR-D。
+
+### 148.F Featherline低内存收尾（2026-10-26）
+
+负责人要求继续#125：先取最终SHA及原始工件，分别定位library/Featherline失败；不得将Process crashed、logcat清理失败直接等同LMK，证据不足标ROOT_CAUSE_NOT_PROVEN。仅修真实原因，不提高512MiB RAM/192MiB heap、不降低Argon2或样本、不删断言、不用System.gc；保留真实SAF/密码/预览/提交/重开及MED独立设备恢复验收。精确HEAD六门、三API和两低内存作业均满足后按106正常保护合并并核主线；否则Draft/NO-GO。MED OFF、真机/人工TalkBack未跑如实记，完成前不做PR-D，不签名/交付/发布。

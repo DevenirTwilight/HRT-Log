@@ -1,7 +1,5 @@
 package net.plainnotes.app.data
 
-import org.bouncycastle.crypto.generators.Argon2BytesGenerator
-import org.bouncycastle.crypto.params.Argon2Parameters
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
@@ -38,9 +36,7 @@ class FeatherlineContainer private constructor(private val bytes:ByteArray,val j
             utf8=ByteArray(encoded.remaining());encoded.get(utf8)
             if(encoded.hasArray())encoded.array().fill(0)
             salt=bytes.copyOfRange(37,53)
-            val params=Argon2Parameters.Builder(Argon2Parameters.ARGON2_id).withVersion(Argon2Parameters.ARGON2_VERSION_13)
-                .withSalt(salt).withMemoryAsKB(65536).withIterations(3).withParallelism(1).build()
-            try {Argon2BytesGenerator().apply{init(params)}.generateBytes(utf8,key)}finally{params.clear()}
+            ArchiveKdfWorkspace.derive(utf8,salt,key,::active)
             active()
             val cipher=Cipher.getInstance("AES/GCM/NoPadding")
             cipher.init(Cipher.DECRYPT_MODE,SecretKeySpec(key,"AES"),GCMParameterSpec(128,bytes.copyOfRange(53,65)))
