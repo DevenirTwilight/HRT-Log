@@ -165,7 +165,7 @@ import java.time.*
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }
 
-private fun sectionLabel(s: VisitSection) = when (s) {
+internal fun sectionLabel(s: VisitSection) = when (s) {
     VisitSection.FACTS -> R.string.visit_section_facts; VisitSection.REGIMEN -> R.string.visit_section_regimen; VisitSection.INTAKES -> R.string.visit_section_intakes
     VisitSection.LABS -> R.string.visit_section_labs; VisitSection.SYMPTOMS -> R.string.visit_section_symptoms; VisitSection.REVIEWS -> R.string.visit_section_reviews
     VisitSection.DAILY -> R.string.visit_section_daily; VisitSection.QUESTIONS -> R.string.visit_section_questions; VisitSection.PACKAGES -> R.string.visit_section_packages
@@ -183,52 +183,6 @@ private fun sectionLabel(s: VisitSection) = when (s) {
 class VisitExportRequest(val from: LocalDate, val to: LocalDate, val sections: Set<VisitSection>, val context: android.content.Context, val labels: (CheckinItemEntity) -> String,
                          val schedules: Map<Long, String>, val regimenLabels: Map<Long, String>, val unknownName: String)
 
-@Composable fun VisitPackDialog(a: AppointmentEntity, state: NotesState, extra: NotesViewModel.ExtraState, onDismiss: () -> Unit, onExport: (android.net.Uri, VisitExportRequest) -> Unit) {
-    val context = LocalContext.current; val resources = androidx.compose.ui.platform.LocalResources.current; val zone = ZoneId.systemDefault(); val today = LocalDate.now()
-    val range = remember(a, state.appointments) { VisitPlanning.defaultRange(a, state.appointments, today, zone) }
-    var from by rememberSaveable { mutableStateOf(range.from.toString()) }; var to by rememberSaveable { mutableStateOf(range.to.toString()) }
-    var chosen by rememberSaveable { mutableStateOf(VisitSection.entries.filter { it.defaultOn }.map { it.name }) }
-    var pick by remember { mutableIntStateOf(0) }
-    val labels = checkinLabels(); val schedules = state.medications.associate { it.id to scheduleText(state.schedules[it.id]) }
-    val regimenLabels = extra.regimens.associate { it.id to regimenLabel(it) }
-    val unknown = stringResource(R.string.timeline_medication_unknown)
-    val sections = chosen.map { VisitSection.valueOf(it) }.toSet()
-    val valid = from <= to && LocalDate.parse(to) <= today && sections.isNotEmpty()
-    val preview = remember(extra, state, from, to, valid) {
-        if (!valid) emptyList() else factLines(resources, VisitFacts.build(ExportData(state.medications, state.profiles, extra.records, extra.labs, extra.items, extra.scores, extra.notes,
-            schedules, labels, extra.containers, extra.symptoms, extra.reviews, extra.labContexts, extra.regimens, extra.milestones, state.appointments), a, LocalDate.parse(from), LocalDate.parse(to), zone), unknown)
-    }
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
-        if (uri != null) onExport(uri, VisitExportRequest(LocalDate.parse(from), LocalDate.parse(to), sections, context, labels, schedules, regimenLabels, unknown)); onDismiss()
-    }
-    AlertDialog(onDismissRequest = onDismiss, title = { Text(stringResource(R.string.visit_generate)) }, text = {
-        Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            ExportPrivacyNotice()
-            Text(range.previous?.let { stringResource(R.string.visit_range_previous, formatDate(Instant.ofEpochMilli(it.at_utc).atZone(zone).toLocalDate())) } ?: stringResource(R.string.visit_range_none),
-                style = MaterialTheme.typography.bodySmall, color = if (range.previous == null) NotesTheme.semantic.attention.accent else MaterialTheme.colorScheme.onSurfaceVariant) // UI-06: a note, not an error
-            TextButton(onClick = { pick = 1 }) { Text(stringResource(R.string.batch_from) + ": " + from) }
-            TextButton(onClick = { pick = 2 }) { Text(stringResource(R.string.batch_to) + ": " + to) }
-            Text(stringResource(R.string.visit_sections), style = MaterialTheme.typography.titleSmall)
-            VisitSection.entries.forEach { s ->
-                Row(Modifier.fillMaxWidth().toggleable(s.name in chosen, role = Role.Checkbox) { on -> chosen = if (on) chosen + s.name else chosen - s.name }, verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(s.name in chosen, null)
-                    Text(stringResource(sectionLabel(s)))
-                }
-            }
-            Text(stringResource(R.string.visit_sections_private), style = MaterialTheme.typography.bodySmall)
-            if (sections.isEmpty()) Text(stringResource(R.string.visit_no_section), color = MaterialTheme.colorScheme.error)
-            if (VisitSection.FACTS in sections && preview.isNotEmpty()) {
-                Text(stringResource(R.string.visit_preview), style = MaterialTheme.typography.titleSmall)
-                preview.forEach { Text(it, style = MaterialTheme.typography.bodySmall) }
-            }
-            Text(stringResource(R.string.visit_pdf_note), style = MaterialTheme.typography.bodySmall)
-        }
-    }, confirmButton = {
-        val actions=listOf(stringResource(R.string.export_pdf),stringResource(R.string.cancel))
-        AdaptiveActions(actions,contentInset=48.dp) { i,mod ->
-            if(i==0)Button(enabled=valid,onClick={launcher.launchPicker("notes-visit-${to}.pdf")},modifier=mod){Text(actions[i])}
-            else TextButton(onClick=onDismiss,modifier=mod){Text(actions[i])}
-        }
-    })
-    if (pick != 0) DatePickerModal(LocalDate.parse(if (pick == 1) from else to), { pick = 0 }) { if (it <= today) { if (pick == 1) from = it.toString() else to = it.toString() }; pick = 0 }
-}
+/** Sample 08 selection (VisitPrepDialog); same parts, defaults and export as before. */
+@Composable fun VisitPackDialog(a: AppointmentEntity, state: NotesState, extra: NotesViewModel.ExtraState, onDismiss: () -> Unit, onExport: (android.net.Uri, VisitExportRequest) -> Unit) =
+    VisitPrepDialog(a, state, extra, onDismiss, onExport)

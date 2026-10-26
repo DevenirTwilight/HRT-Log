@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Visit preparation selection after owner-approved sample 08 (REQUIREMENTS §150). -->
+<resources>
+    <string name="visit_prep_title">Préparer la consultation</string>
+    <string name="visit_prep_intro">Seul ce que vous cochez est exporté. Par défaut, seul ce qui concerne cette consultation est coché.</string>
+    <string name="visit_prep_range">Période</string>
+    <string name="visit_prep_group_visit">Consultation et traitement</string>
+    <string name="visit_prep_group_labs">Analyses</string>
+    <string name="visit_prep_group_other">Autres données</string>
+    <string name="visit_prep_tag_entered">Saisi par vous</string>
+    <string name="visit_prep_tag_summarised">Résumé des enregistrements</string>
+    <string name="visit_prep_tag_default_off">Non coché par défaut</string>
+    <string name="visit_prep_period">%1$s – %2$s</string>
+    <string name="visit_prep_toc">Contenu du PDF</string>
+    <string name="visit_prep_toc_note">Dans l’ordre de l’export. Les parties sans données sur la période peuvent être omises.</string>
+    <string name="visit_prep_external">Une fois exportées, les copies enregistrées ailleurs ne peuvent pas être récupérées par cette application.</string>
+    <plurals name="visit_prep_selected">
+        <item quantity="one">%d partie sélectionnée</item>
+        <item quantity="other">%d parties sélectionnées</item>
+    </plurals>
+    <plurals name="visit_prep_meds">
+        <item quantity="one">%d médicament</item>
+        <item quantity="other">%d médicaments</item>
+    </plurals>
+    <plurals name="visit_prep_labs">
+        <item quantity="one">%d résultat</item>
+        <item quantity="other">%d résultats</item>
+    </plurals>
+    <plurals name="visit_prep_days">
+        <item quantity="one">%d jour</item>
+        <item quantity="other">%d jours</item>
+    </plurals>
+    <plurals name="visit_prep_symptom_days">
+        <item quantity="one">%d jour avec des symptômes notés</item>
+        <item quantity="other">%d jours avec des symptômes notés</item>
+    </plurals>
+    <plurals name="visit_prep_reviews">
+        <item quantity="one">%d bilan</item>
+        <item quantity="other">%d bilans</item>
+    </plurals>
+    <plurals name="visit_prep_daily_days">
+        <item quantity="one">%d jour avec un suivi</item>
+        <item quantity="other">%d jours avec un suivi</item>
+    </plurals>
+    <plurals name="visit_prep_questions">
+        <item quantity="one">%d question</item>
+        <item quantity="other">%d questions</item>
+    </plurals>
+    <plurals name="visit_prep_milestones">
+        <item quantity="one">%d étape</item>
+        <item quantity="other">%d étapes</item>
+    </plurals>
+    <plurals name="visit_prep_packages">
+        <item quantity="one">%d boîte avec détails</item>
+        <item quantity="other">%d boîtes avec détails</item>
+    </plurals>
+</resources>
