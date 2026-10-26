@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="8" failures="0" errors="0" skipped="0" time="35.028" timestamp="2026-10-26T19:53:29" hostname="localhost">
+  <testsuite name="net.plainnotes.app.data.LibraryLifecycleAndroidTest" tests="4" failures="0" errors="0" skipped="0" time="15.451" timestamp="2026-10-26T19:53:29" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="" />
+      <property name="project" value=":core:data" />
+    </properties>
+    <testcase name="liveNeverStartedOwnerCanBeAtomicallyAbortedAndReleasedAndCannotResume" classname="net.plainnotes.app.data.LibraryLifecycleAndroidTest" time="4.483" />
+    <testcase name="unknownFileNeverBecomesAbsentAfterRestartAndPreventsCompleteExport" classname="net.plainnotes.app.data.LibraryLifecycleAndroidTest" time="1.96" />
+    <testcase name="materializedAndRetainedLibrariesCannotBeReleasedOrIgnoredByExport" classname="net.plainnotes.app.data.LibraryLifecycleAndroidTest" time="5.821" />
+    <testcase name="committedHistoryTrashAndCompleteCurrentArchiveUseExistingWriterAndReader" classname="net.plainnotes.app.data.LibraryLifecycleAndroidTest" time="3.187" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest" tests="4" failures="0" errors="0" skipped="0" time="19.224" timestamp="2026-10-26T19:53:29" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="" />
+      <property name="project" value=":core:data" />
+    </properties>
+    <testcase name="realGenerationSwitchRejectsOldFacadeAndRetainedSetExport" classname="net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest" time="5.947" />
+    <testcase name="applicationTransferFacadeAuthenticatesBeforeCommitAndKeepsOldScopeInvalid" classname="net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest" time="9.408" />
+    <testcase name="explicitAppointmentLabHistoryTrashAndFormalArchiveAreComplete" classname="net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest" time="2.987" />
+    <testcase name="hostileInputCapacityUnknownAndLostAuthorityRefuseWithoutFalseCommit" classname="net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest" time="0.882" />
+  </testsuite>
+</testsuites>

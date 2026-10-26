@@ -1,0 +1,86 @@
+{
+  "sourceSha": "9fafe3c27d563c32f5638029ff084db3e1b59d7f",
+  "mergeSha": "03f724f41e91a1a866d98de31de673594d1105af",
+  "defaultBranch": "claude/new-session-1959qb",
+  "baseSha": "9192b91a99107d41fad402a3d16622f63e1ce1ef",
+  "sourceTreeEqualsMergedTree": true,
+  "sourceChecks": "ALL_REQUIRED_PASS",
+  "requiredChecks": [
+    "jvm",
+    "android",
+    "device-tests",
+    "attachment-poc-compatibility (26)",
+    "attachment-poc-compatibility (29)",
+    "science-change-gate"
+  ],
+  "sourceAndroidPr": 40389538288,
+  "sourceAndroidPush": 40389531882,
+  "sourceScience": 40389538281,
+  "libraryAndFeatherline": 40389538449,
+  "preview": 40389538098,
+  "sourceInventoryFiles": 132,
+  "defaultAndroid": {
+    "run": 40394519910,
+    "status": "IN_PROGRESS"
+  },
+  "defaultScience": {
+    "run": 40394519787,
+    "status": "SUCCESS"
+  },
+  "nativeWholeUidByApi": "8 each / 0 failures / 0 errors / 0 skipped",
+  "nativeUiByApi": "3 each / 0 failures / 0 skipped",
+  "libraryNative": "13 + 4 + 2 PASS",
+  "generationSeams": [
+    "PREPARED",
+    "OBJECTS_COMMITTED",
+    "IN_SWITCH",
+    "SWITCHED"
+  ],
+  "collectionSeams": [
+    "PREPARED",
+    "OBJECTS_COMMITTED",
+    "IN_SWITCH",
+    "SWITCHED"
+  ],
+  "operationSeams": [
+    "PREPARED",
+    "STAGED",
+    "IN_COMMIT",
+    "COMMITTED"
+  ],
+  "freshC": "PASS_2",
+  "oldFeatherlineFailure": "FAIL_LMK_AFTER_COMMIT_RETAINED; NO_MEMORY_FIX_CLAIM",
+  "newFeatherline": "PASS_1_FULL_FLOW; SAMPLE_NOT_PEAK",
+  "physical": "NOT_RUN",
+  "manualTalkBack": "NOT_RUN",
+  "hardwarePowerLoss": "NOT_RUN",
+  "externalReview": "NOT_REVIEWED_EXTERNALLY",
+  "release": "RELEASE_NOT_AUTHORIZED",
+  "artifacts": {
+    "api26": {
+      "id": 12686145359,
+      "sha256": "5cf0cf2b50f056dc2e8445c8178e520bd5221e22d7028979cff78f56a1dd9dcb",
+      "crc": "VERIFIED"
+    },
+    "api29": {
+      "id": 12686250828,
+      "sha256": "06619fbfbc488cf4336860d3eaf7740264c5d5c7f73c7ff4101b77663c318d7f",
+      "crc": "VERIFIED"
+    },
+    "api35": {
+      "id": 12686386229,
+      "sha256": "5c897eb6498b32c63032ec17fee6a86aec1bb07a0cb7ffe8e1b9568ad9e60b2c",
+      "crc": "VERIFIED"
+    },
+    "library": {
+      "id": 12684201804,
+      "sha256": "b7c762d57f9cac5b18e46f27d6edb7ecd566dde26009fd9199c23055e0592c8d",
+      "crc": "VERIFIED"
+    },
+    "featherline": {
+      "id": 12684210113,
+      "sha256": "86b6c590acf057db2e701cc67ecd7a891026b1274220e3ea7d0949f813268432",
+      "crc": "VERIFIED"
+    }
+  }
+}

@@ -1,3 +1,11 @@
+## MED-02 V1 final evidence checkpoint — 2026-10-26
+
+#131 protected MERGED03f724f41e91a1a866d98de31de673594d1105af. Accepted source9fafe3c27d563c32f5638029ff084db3e1b59d7f: six required checks and API26/29/35 PASS; lifecycle cohort8/API zero failures/errors/skips, real medical UI3/API PASS; library13+4+2, all12 force-stop verifications and freshC PASS; Featherline and viewer512MiB192MiB PASS. Source inventory132 files verified; merged tree exactly equals tested source. No protection bypass, feature0/publicfalse, no signing/APK/Release. No StageD/E/F.
+
+Evidence-only branch evidence/med02-v1-final-9fafe3c2 has immutable original4e failures plus new raw XML/logs/source timings/resource observations and receipt at existing external-review/final-acceptance-evidence/. This branch changes documentation only, not the accepted product source; no duplicate implementation PR. Final report remains the single existing FINAL-ENGINEERING-CLOSEOUT.md path.
+
+Default03f science40394519787 SUCCESS; Android40394519910 still IN_PROGRESS. Next ONLY verify default gates, update final report/status and this evidence receipt, then stop internal feature development. Historical Featherline foregroundLMK afterCOMMIT remains FAIL; no production memory fix or universal stability is claimed. Final run proves current bounded full flow; actual ART68MiB reclamation observed, precise sole cause NOT_PROVEN. Physical512MiB/native parser/GC pressure must remain explicit external/enablement review risk, never relabelled repaired. NOT_REVIEWED_EXTERNALLY/RELEASE_NOT_AUTHORIZED; physical device/manualTalkBack/hardwarepowerloss NOT_RUN.
+
 ## #131 final acceptance takeover — 2026-10-26
 
 Remote exact4e73d700/default9192b91a; continuing existing feature/med02-stage-c-lifecycle-20261026 in /workspace/HRT-Log-med02-final-131, clean remote baseline, no new PR/stage. Original five failed native/lowmem jobs and artifacts preserved external-review/final-acceptance-evidence/4e73-original (CRC/hash checked). Host/JVM/Science and preview low-memory PASS; threeAPI facade export failed, library failed SWITCHED60s seam after13+4+2/first3seams PASS, Featherline real foregroundLMK afterCOMMIT confirmed, not logcat-clear cause.

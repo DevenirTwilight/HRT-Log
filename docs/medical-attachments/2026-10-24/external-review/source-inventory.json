@@ -1,6 +1,6 @@
 {
   "status": "NOT_REVIEWED_EXTERNALLY",
-  "note": "Corrective candidate bytes; exact PR HEAD/native and merge acceptance remain separate and pending; no external expert assessment.",
+  "note": "Accepted product source/test bytes; evidence-only branch changes docs, not these132 files. Candidate required/native/low-memory gates PASS. Final default verification tracked in receipt. No external expert assessment or release authorization.",
   "files_sha256": {
     "app/src/androidTest/AndroidManifest.xml": "5161d86ad0a8e3be77e4eb98389d8b0e1398951c4202b05795fc0c2bb37dacef",
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/AttachmentCapabilityAndroidTest.kt": "5e43f4bf6b298b956e7b18912983ab100c9faebee7380b475a473e5045ae4f2a",
@@ -138,5 +138,7 @@
   "production_base_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895",
   "acknowledgement_fix_base_sha": "70584c6f00ba167e77f2406e87d301b329db1acc",
   "baseline_sha": "9eb6d0f51db21e3629019c2757a5f35724d793a7",
-  "executable_sha": "a61f10638446a72602e514c357c7615635146cb9"
+  "executable_sha": "a61f10638446a72602e514c357c7615635146cb9",
+  "review_source_sha": "9fafe3c27d563c32f5638029ff084db3e1b59d7f",
+  "merge_sha": "03f724f41e91a1a866d98de31de673594d1105af"
 }

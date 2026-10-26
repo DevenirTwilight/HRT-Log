@@ -1,3 +1,5 @@
+> **V1 final source9fafe3c2 / protected merge03f724f4.** See [single final acceptance and handoff](FINAL-ENGINEERING-CLOSEOUT.md) and [immutable raw receipt](final-acceptance-evidence/9fafe3c2/receipt.json). This evidence-only branch changes no product source. Final default verification is pending; NOT_REVIEWED_EXTERNALLY / RELEASE_NOT_AUTHORIZED. Historical LMK is preserved, not claimed repaired. No automatic next feature stage.
+
 # MED-02 external security review package
 
 **NOT_REVIEWED_EXTERNALLY.** Current final-closeout executable freeze is `a61f10638446a72602e514c357c7615635146cb9`, based on accepted default `9192b91a99107d41fad402a3d16622f63e1ce1ef` (#130). Start with [MED-02 FINAL ENGINEERING CLOSEOUT](FINAL-ENGINEERING-CLOSEOUT.md): current call chains, finite V1 scope, test reproduction, retained failures and exact acceptance conditions. [Source inventory](source-inventory.json) hashes reviewed bytes. Final PR #131 HEAD CI must pass independently; earlier SHA evidence is historical and explicitly bounded. No external assessment or release approval has occurred.
