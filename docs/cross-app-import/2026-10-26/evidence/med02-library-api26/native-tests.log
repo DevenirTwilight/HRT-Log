@@ -1,0 +1,143 @@
+
+net.plainnotes.app.data.NativeCiHeapProbe:.
+net.plainnotes.app.data.LibraryRestoreAndroidTest:
+Error in realArchiveActivatesFreshPersistentLibraryAndRejectsOldRequestsAndReaders(net.plainnotes.app.data.LibraryRestoreAndroidTest):
+java.lang.IllegalArgumentException: Required value was null.
+	at net.plainnotes.app.data.BackupTables.getJSONArray(BackupRows.kt:21)
+	at net.plainnotes.app.data.IndexedBackupDocument$tables$1.getJSONArray(IndexedBackupDocument.kt:15)
+	at net.plainnotes.app.data.AttachmentCandidateMetadata.compareBusiness(AttachmentCandidateMetadata.kt:81)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize$lambda$3$0(LibraryRestoreCandidate.kt:22)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.$r8$lambda$8DgrE53mQPD__utOWmOVJs20fHA(Unknown Source:0)
+	at net.plainnotes.app.data.LibraryRestoreCandidate$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction$lambda$10(RoomDatabase.android.kt:750)
+	at androidx.room.RoomDatabase$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:775)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:750)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize(LibraryRestoreCandidate.kt:20)
+	at net.plainnotes.app.data.LibraryRestoreCoordinator.restoreHeld(LibraryRestoreCoordinator.kt:97)
+	at net.plainnotes.app.data.LibraryRestoreCoordinator.restore(LibraryRestoreCoordinator.kt:20)
+	at net.plainnotes.app.data.LibraryRestoreAndroidTest.realArchiveActivatesFreshPersistentLibraryAndRejectsOldRequestsAndReaders(LibraryRestoreAndroidTest.kt:134)
+..
+Error in failuresBeforeAndInsideSwitchRetainOldFactsAndReservationsWithoutAdoption(net.plainnotes.app.data.LibraryRestoreAndroidTest):
+java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at net.plainnotes.app.data.LibraryRestoreAndroidTest.failuresBeforeAndInsideSwitchRetainOldFactsAndReservationsWithoutAdoption(LibraryRestoreAndroidTest.kt:179)
+
+net.plainnotes.app.data.LibraryLifecycleAndroidTest:..
+Error in materializedAndRetainedLibrariesCannotBeReleasedOrIgnoredByExport(net.plainnotes.app.data.LibraryLifecycleAndroidTest):
+java.lang.IllegalArgumentException: Required value was null.
+	at net.plainnotes.app.data.BackupTables.getJSONArray(BackupRows.kt:21)
+	at net.plainnotes.app.data.IndexedBackupDocument$tables$1.getJSONArray(IndexedBackupDocument.kt:15)
+	at net.plainnotes.app.data.AttachmentCandidateMetadata.compareBusiness(AttachmentCandidateMetadata.kt:81)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize$lambda$3$0(LibraryRestoreCandidate.kt:22)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.$r8$lambda$8DgrE53mQPD__utOWmOVJs20fHA(Unknown Source:0)
+	at net.plainnotes.app.data.LibraryRestoreCandidate$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction$lambda$10(RoomDatabase.android.kt:750)
+	at androidx.room.RoomDatabase$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:775)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:750)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize(LibraryRestoreCandidate.kt:20)
+	at net.plainnotes.app.data.LibraryRestoreCoordinator.restoreHeld(LibraryRestoreCoordinator.kt:97)
+	at net.plainnotes.app.data.LibraryRestoreCoordinator.restore(LibraryRestoreCoordinator.kt:20)
+	at net.plainnotes.app.data.LibraryLifecycleAndroidTest.materializedAndRetainedLibrariesCannotBeReleasedOrIgnoredByExport(LibraryLifecycleAndroidTest.kt:113)
+.
+net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest:
+Error in realGenerationSwitchRejectsOldFacadeAndRetainedSetExport(net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest):
+java.lang.IllegalArgumentException: Required value was null.
+	at net.plainnotes.app.data.BackupTables.getJSONArray(BackupRows.kt:21)
+	at net.plainnotes.app.data.IndexedBackupDocument$tables$1.getJSONArray(IndexedBackupDocument.kt:15)
+	at net.plainnotes.app.data.AttachmentCandidateMetadata.compareBusiness(AttachmentCandidateMetadata.kt:81)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize$lambda$3$0(LibraryRestoreCandidate.kt:22)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.$r8$lambda$8DgrE53mQPD__utOWmOVJs20fHA(Unknown Source:0)
+	at net.plainnotes.app.data.LibraryRestoreCandidate$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction$lambda$10(RoomDatabase.android.kt:750)
+	at androidx.room.RoomDatabase$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:775)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:750)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize(LibraryRestoreCandidate.kt:20)
+	at net.plainnotes.app.data.LibraryRestoreCoordinator.restoreHeld(LibraryRestoreCoordinator.kt:97)
+	at net.plainnotes.app.data.LibraryRestoreCoordinator.restore(LibraryRestoreCoordinator.kt:20)
+	at net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest$realGenerationSwitchRejectsOldFacadeAndRetainedSetExport$1.invokeSuspend(MedicalAttachmentOperationAndroidTest.kt:102)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.realGenerationSwitchRejectsOldFacadeAndRetainedSetExport(MedicalAttachmentOperationAndroidTest.kt:94)
+..
+
+Time: 89.063
+There were 4 failures:
+1) realArchiveActivatesFreshPersistentLibraryAndRejectsOldRequestsAndReaders(net.plainnotes.app.data.LibraryRestoreAndroidTest)
+java.lang.IllegalArgumentException: Required value was null.
+	at net.plainnotes.app.data.BackupTables.getJSONArray(BackupRows.kt:21)
+	at net.plainnotes.app.data.IndexedBackupDocument$tables$1.getJSONArray(IndexedBackupDocument.kt:15)
+	at net.plainnotes.app.data.AttachmentCandidateMetadata.compareBusiness(AttachmentCandidateMetadata.kt:81)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize$lambda$3$0(LibraryRestoreCandidate.kt:22)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.$r8$lambda$8DgrE53mQPD__utOWmOVJs20fHA(Unknown Source:0)
+	at net.plainnotes.app.data.LibraryRestoreCandidate$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction$lambda$10(RoomDatabase.android.kt:750)
+	at androidx.room.RoomDatabase$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:775)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:750)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize(LibraryRestoreCandidate.kt:20)
+	at net.plainnotes.app.data.LibraryRestoreCoordinator.restoreHeld(LibraryRestoreCoordinator.kt:97)
+	at net.plainnotes.app.data.LibraryRestoreCoordinator.restore(LibraryRestoreCoordinator.kt:20)
+	at net.plainnotes.app.data.LibraryRestoreAndroidTest.realArchiveActivatesFreshPersistentLibraryAndRejectsOldRequestsAndReaders(LibraryRestoreAndroidTest.kt:134)
+2) failuresBeforeAndInsideSwitchRetainOldFactsAndReservationsWithoutAdoption(net.plainnotes.app.data.LibraryRestoreAndroidTest)
+java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at net.plainnotes.app.data.LibraryRestoreAndroidTest.failuresBeforeAndInsideSwitchRetainOldFactsAndReservationsWithoutAdoption(LibraryRestoreAndroidTest.kt:179)
+3) materializedAndRetainedLibrariesCannotBeReleasedOrIgnoredByExport(net.plainnotes.app.data.LibraryLifecycleAndroidTest)
+java.lang.IllegalArgumentException: Required value was null.
+	at net.plainnotes.app.data.BackupTables.getJSONArray(BackupRows.kt:21)
+	at net.plainnotes.app.data.IndexedBackupDocument$tables$1.getJSONArray(IndexedBackupDocument.kt:15)
+	at net.plainnotes.app.data.AttachmentCandidateMetadata.compareBusiness(AttachmentCandidateMetadata.kt:81)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize$lambda$3$0(LibraryRestoreCandidate.kt:22)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.$r8$lambda$8DgrE53mQPD__utOWmOVJs20fHA(Unknown Source:0)
+	at net.plainnotes.app.data.LibraryRestoreCandidate$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction$lambda$10(RoomDatabase.android.kt:750)
+	at androidx.room.RoomDatabase$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:775)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:750)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize(LibraryRestoreCandidate.kt:20)
+	at net.plainnotes.app.data.LibraryRestoreCoordinator.restoreHeld(LibraryRestoreCoordinator.kt:97)
+	at net.plainnotes.app.data.LibraryRestoreCoordinator.restore(LibraryRestoreCoordinator.kt:20)
+	at net.plainnotes.app.data.LibraryLifecycleAndroidTest.materializedAndRetainedLibrariesCannotBeReleasedOrIgnoredByExport(LibraryLifecycleAndroidTest.kt:113)
+4) realGenerationSwitchRejectsOldFacadeAndRetainedSetExport(net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest)
+java.lang.IllegalArgumentException: Required value was null.
+	at net.plainnotes.app.data.BackupTables.getJSONArray(BackupRows.kt:21)
+	at net.plainnotes.app.data.IndexedBackupDocument$tables$1.getJSONArray(IndexedBackupDocument.kt:15)
+	at net.plainnotes.app.data.AttachmentCandidateMetadata.compareBusiness(AttachmentCandidateMetadata.kt:81)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize$lambda$3$0(LibraryRestoreCandidate.kt:22)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.$r8$lambda$8DgrE53mQPD__utOWmOVJs20fHA(Unknown Source:0)
+	at net.plainnotes.app.data.LibraryRestoreCandidate$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction$lambda$10(RoomDatabase.android.kt:750)
+	at androidx.room.RoomDatabase$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:775)
+	at androidx.room.RoomDatabase.runInTransaction(RoomDatabase.android.kt:750)
+	at net.plainnotes.app.data.LibraryRestoreCandidate.materialize(LibraryRestoreCandidate.kt:20)
+	at net.plainnotes.app.data.LibraryRestoreCoordinator.restoreHeld(LibraryRestoreCoordinator.kt:97)
+	at net.plainnotes.app.data.LibraryRestoreCoordinator.restore(LibraryRestoreCoordinator.kt:20)
+	at net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest$realGenerationSwitchRejectsOldFacadeAndRetainedSetExport$1.invokeSuspend(MedicalAttachmentOperationAndroidTest.kt:102)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest.realGenerationSwitchRejectsOldFacadeAndRetainedSetExport(MedicalAttachmentOperationAndroidTest.kt:94)
+
+FAILURES!!!
+Tests run: 12,  Failures: 4
+
+

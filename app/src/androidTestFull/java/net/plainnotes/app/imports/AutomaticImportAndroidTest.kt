@@ -263,10 +263,16 @@ class AutomaticImportAndroidTest {
         choose("chry")
         ui.onNodeWithText(targetName).performClick()
         click(R.string.chry_confirm,false)
-        ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.ChrysalideImported || model.dataJob.value is NotesViewModel.DataJob.Failed}
+        try { ui.waitUntil(30000){model.dataJob.value is NotesViewModel.DataJob.ChrysalideImported || model.dataJob.value is NotesViewModel.DataJob.Failed} }
+        catch(failure:Throwable) {
+            val visibleRows=model.extra.value.records.count{it.origin=="IMPORT_CHRYSALIDE"}
+            android.util.Log.e("SyntheticImport","Chrysalide result wait timed out; state=${model.dataJob.value::class.java.simpleName}, visibleRows=$visibleRows",failure)
+            throw failure
+        }
         val chryResult=model.dataJob.value as NotesViewModel.DataJob.ChrysalideImported
         assertEquals(1,chryResult.summary.added);assertEquals(2,chryResult.summary.unsupported)
         click(R.string.ok,false)
+        ui.waitUntil(30000){model.extra.value.records.count{it.origin=="IMPORT_CHRYSALIDE"}==beforeChry+1}
         val chryRows=model.extra.value.records.filter{it.origin=="IMPORT_CHRYSALIDE"}
         assertEquals(1,chryRows.size);assertNull(chryRows.single().actual_dose);assertEquals(java.time.Instant.parse("2024-03-31T07:30:00Z").toEpochMilli(),chryRows.single().taken_utc);assertEquals("UTC",chryRows.single().taken_zone)
         scenario!!.close();launch();open(Destination.HISTORY)

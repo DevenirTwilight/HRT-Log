@@ -382,7 +382,13 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             try {
                 runtime.repository();runtime.verify();runtime.checkRequest()
                 if((librarySession.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope!=ready.scope)throw LibraryScopeMismatch()
-                mutate {repo.importChrysalide(ready.export,targets,receipt)}
+                mutate {
+                    repo.importChrysalide(ready.export,targets,receipt).also {
+                        // The receipt is acknowledged only after the repository transaction COMMIT.
+                        // Publish that fact before ReminderCoordinator's follow-up rebuild or UI refresh.
+                        receipt.committed?.let { committed -> dataJob.value=DataJob.ChrysalideImported(committed,ready.preview) }
+                    }
+                }
                 refresh().join()
             } catch(e:CancellationException) { if(receipt.committed==null){dataJob.value=DataJob.ImportCancelled;throw e} }
             catch(e:LibraryScopeMismatch) {runtimeFailure(e);if(receipt.committed==null)dataJob.value=DataJob.Failed(R.string.library_scope_changed)}
