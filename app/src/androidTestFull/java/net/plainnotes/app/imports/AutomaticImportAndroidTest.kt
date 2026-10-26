@@ -195,6 +195,12 @@ class AutomaticImportAndroidTest {
             throw failure
         }
     }
+    @Test fun featherlineImportRunsAsIsolatedLowMemoryFlow() {
+        try { exerciseFeatherline() } catch(failure:Throwable) {
+            android.util.Log.e("SyntheticImport", "Isolated Featherline import failed", failure)
+            throw failure
+        }
+    }
     private fun stage(value:String) {android.util.Log.i("SyntheticImport",value)}
     private fun exerciseImport() {
         stage("launch/settings");launch();data()
@@ -297,7 +303,6 @@ class AutomaticImportAndroidTest {
         instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK)
         ui.waitUntil(10000){model.dataJob.value is NotesViewModel.DataJob.ImportCancelled}
         ui.onNodeWithText(text(R.string.import_cancelled)).assertExists()
-        exerciseFeatherline()
     }
     private fun exerciseFeatherline() {
         val expected=InstrumentationRegistry.getArguments().getString("featherlineExpectedHeapMb")

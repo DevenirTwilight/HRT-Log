@@ -1,0 +1,1387 @@
+[   76.694828] Call Trace:
+[   76.694828]  [<c07a9c83>] dump_stack+0x45/0x59
+[   76.694828]  [<c02c1c58>] warn_alloc_failed+0xc4/0xd6
+[   76.694828]  [<c02c3eab>] __alloc_pages_nodemask+0x56b/0x6f4
+[   76.694828]  [<c02ee81a>] new_slab+0x1ef/0x1ff
+[   76.694828]  [<c02eff79>] __slab_alloc.isra.54.constprop.59+0x512/0x57c
+[   76.694828]  [<c04628c6>] ? alloc_indirect+0x12/0x38
+[   76.694828]  [<c02f0083>] __kmalloc+0xa0/0x156
+[   76.694828]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   76.694828]  [<c02f0083>] ? __kmalloc+0xa0/0x156
+[   76.694828]  [<c04628c6>] ? alloc_indirect+0x12/0x38
+[   76.694828]  [<c04628c6>] alloc_indirect+0x12/0x38
+[   76.694828]  [<c0462c88>] virtqueue_add_sgs+0x77/0x22d
+[   76.694828]  [<c04aa819>] __virtblk_add_req+0x125/0x12d
+[   76.694828]  [<c03ec272>] ? __blk_bios_map_sg+0x199/0x245
+[   76.694828]  [<c04aa94d>] virtio_queue_rq+0x12c/0x1ae
+[   76.694828]  [<c03eeb61>] __blk_mq_run_hw_queue+0x17a/0x240
+[   76.694828]  [<c03ef0ed>] blk_mq_run_hw_queue+0x2b/0x5e
+[   76.694828]  [<c03efdd8>] blk_sq_make_request+0x1ba/0x276
+[   76.694828]  [<c03e7f4c>] generic_make_request+0x88/0xc1
+[   76.694828]  [<c03e804c>] submit_bio+0xc7/0xf0
+[   76.694828]  [<c0383f77>] ext4_submit_bio_read+0xcb/0x17f
+[   76.694828]  [<c037053b>] ? ext4_ext_map_blocks+0x164a/0x184c
+[   76.694828]  [<c037072c>] ? ext4_ext_map_blocks+0x183b/0x184c
+[   76.694828]  [<c040e8f1>] ? __this_cpu_preempt_check+0xf/0x11
+[   76.694828]  [<c041596d>] ? __percpu_counter_add+0xba/0xd1
+[   76.694828]  [<c02f01cb>] ? kmem_cache_alloc+0x92/0x11c
+[   76.694828]  [<c02c7794>] ? release_pages+0x11f/0x17f
+[   76.694828]  [<c02c7033>] ? __pagevec_lru_add_fn+0x7c/0xe5
+[   76.694828]  [<c040e8f1>] ? __this_cpu_preempt_check+0xf/0x11
+[   76.694828]  [<c02d17f4>] ? __inc_zone_state+0x34/0x79
+[   76.694828]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   76.694828]  [<c02c7948>] ? __lru_cache_add+0x63/0x76
+[   76.694828]  [<c03e2852>] ? bio_add_page+0x70/0x7a
+[   76.694828]  [<c03846c4>] ext4_mpage_readpages+0x5b7/0x5d6
+[   76.694828]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   76.694828]  [<c0200f49>] ? __switch_to+0x1b/0x415
+[   76.694828]  [<c07affc4>] ? _raw_spin_unlock_irq+0x12/0x23
+[   76.694828]  [<c024d0ff>] ? get_parent_ip+0xb/0x31
+[   76.694828]  [<c034dadb>] ? write_end_fn+0x4d/0x4d
+[   76.694828]  [<c034db08>] ext4_readpages+0x2d/0x33
+[   76.694828]  [<c034db08>] ? ext4_readpages+0x2d/0x33
+[   76.694828]  [<c02c67ee>] __do_page_cache_readahead+0x10a/0x188
+[   76.694828]  [<c02bfe5c>] filemap_fault+0x190/0x362
+[   76.694828]  [<c02d994f>] __do_fault+0x29/0x5a
+[   76.694828]  [<c02db85b>] do_read_fault.isra.87+0x141/0x1cf
+[   76.694828]  [<c02dbe64>] handle_mm_fault+0x318/0x70d
+[   76.694828]  [<c02283a7>] __do_page_fault+0x23a/0x310
+[   76.694828]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[   76.694828]  [<c022855e>] do_page_fault+0xb/0xd
+[   76.694828]  [<c07b1226>] error_code+0x5a/0x60
+[   76.694828]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[   76.694828] Mem-Info:
+[   76.694828] DMA per-cpu:
+[   76.694828] CPU    0: hi:    0, btch:   1 usd:   0
+[   76.694828] CPU    1: hi:    0, btch:   1 usd:   0
+[   76.694828] Normal per-cpu:
+[   76.694828] CPU    0: hi:   90, btch:  15 usd:  12
+[   76.694828] CPU    1: hi:   90, btch:  15 usd:  10
+[   76.694828] active_anon:54852 inactive_anon:536 isolated_anon:0\x0a active_file:7067 inactive_file:7133 isolated_file:32\x0a unevictable:64 dirty:0 writeback:0 unstable:0\x0a free:41326 slab_reclaimable:2226 slab_unreclaimable:4137\x0a mapped:12690 shmem:1390 pagetables:2457 bounce:0\x0a free_cma:40311
+[   76.694828] DMA free:1988kB min:28kB low:56kB high:64kB active_anon:1296kB inactive_anon:0kB active_file:20kB inactive_file:0kB unevictable:4kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:4kB dirty:0kB writeback:0kB mapped:36kB shmem:4kB slab_reclaimable:216kB slab_unreclaimable:640kB kernel_stack:496kB pagetables:612kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:140 all_unreclaimable? yes
+[   76.694828] lowmem_reserve[]: 0 491 491 491
+[   76.694828] Normal free:163316kB min:2816kB low:5840kB high:6544kB active_anon:218112kB inactive_anon:2144kB active_file:28248kB inactive_file:28532kB unevictable:252kB isolated(anon):0kB isolated(file):128kB present:507736kB managed:503052kB mlocked:252kB dirty:0kB writeback:0kB mapped:50724kB shmem:5556kB slab_reclaimable:8688kB slab_unreclaimable:15908kB kernel_stack:5368kB pagetables:9216kB unstable:0kB bounce:0kB free_cma:161244kB writeback_tmp:0kB pages_scanned:568 all_unreclaimable? no
+[   76.694828] lowmem_reserve[]: 0 0 0 0
+[   76.694828] DMA: 65*4kB (UM) 52*8kB (UM) 54*16kB (UM) 14*32kB (UM) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1988kB
+[   76.694828] Normal: 21911*4kB (UERC) 9233*8kB (URC) 11*16kB (R) 1*32kB (R) 1*64kB (R) 0*128kB 0*256kB 1*512kB (R) 1*1024kB (R) 0*2048kB 0*4096kB = 163316kB
+[   76.694828] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[   76.694828] 15659 total pagecache pages
+[   76.694828] 0 pages in swap cache
+[   76.694828] Swap cache stats: add 0, delete 0, find 0/0
+[   76.694828] Free swap  = 0kB
+[   76.694828] Total swap = 0kB
+[   76.694828] 130932 pages RAM
+[   76.694828] 0 pages HighMem/MovableOnly
+[   76.694828] 3744 pages reserved
+[   76.694828] SLUB: Unable to allocate memory on node -1 (gfp=0x0)
+[   76.694828]   cache: kmalloc-512, object size: 512, buffer size: 512, default order: 1, min order: 0
+[   76.694828]   node 0: slabs: 107, objs: 1712, free: 0
+[   77.041916] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   77.160870] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   77.208733] system_server: page allocation failure: order:0, mode:0x200000
+[   77.210097] CPU: 0 PID: 2798 Comm: system_server Tainted: G S      W      3.18.91+ #1
+[   77.210097] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[   77.210097]  00000000 00000082 cee458a4 c07a9c83 00000000 00200000 cee458d4 c02c1c58
+[   77.210097]  c0a08789 c12530e4 00000000 00200000 00000010 cee45948 00200000 00000010
+[   77.210097]  00000000 00200000 cee45958 c02c3eab 00200000 00000000 00000000 c1252ca0
+[   77.210097] Call Trace:
+[   77.210097]  [<c07a9c83>] dump_stack+0x45/0x59
+[   77.210097]  [<c02c1c58>] warn_alloc_failed+0xc4/0xd6
+[   77.210097]  [<c02c3eab>] __alloc_pages_nodemask+0x56b/0x6f4
+[   77.210097]  [<c025a7ec>] ? select_task_rq_fair+0x8d3/0xb32
+[   77.210097]  [<c02ee81a>] new_slab+0x1ef/0x1ff
+[   77.210097]  [<c02eff79>] __slab_alloc.isra.54.constprop.59+0x512/0x57c
+[   77.210097]  [<c0250c20>] ? sched_clock_local+0x10/0x10e
+[   77.210097]  [<c04628c6>] ? alloc_indirect+0x12/0x38
+[   77.210097]  [<c02a38d1>] ? tracing_record_cmdline+0x1d/0x16a
+[   77.210097]  [<c02a9620>] ? probe_sched_wakeup+0x1e/0x70
+[   77.210097]  [<c02f0083>] __kmalloc+0xa0/0x156
+[   77.210097]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   77.210097]  [<c02f0083>] ? __kmalloc+0xa0/0x156
+[   77.210097]  [<c04628c6>] ? alloc_indirect+0x12/0x38
+[   77.210097]  [<c04628c6>] alloc_indirect+0x12/0x38
+[   77.210097]  [<c0462c88>] virtqueue_add_sgs+0x77/0x22d
+[   77.210097]  [<c04aa819>] __virtblk_add_req+0x125/0x12d
+[   77.210097]  [<c03ec272>] ? __blk_bios_map_sg+0x199/0x245
+[   77.210097]  [<c04aa94d>] virtio_queue_rq+0x12c/0x1ae
+[   77.210097]  [<c03eeb61>] __blk_mq_run_hw_queue+0x17a/0x240
+[   77.210097]  [<c03ef0ed>] blk_mq_run_hw_queue+0x2b/0x5e
+[   77.210097]  [<c03efdd8>] blk_sq_make_request+0x1ba/0x276
+[   77.210097]  [<c03e7f4c>] generic_make_request+0x88/0xc1
+[   77.210097]  [<c03e804c>] submit_bio+0xc7/0xf0
+[   77.210097]  [<c0383f77>] ext4_submit_bio_read+0xcb/0x17f
+[   77.210097]  [<c02ee81a>] ? new_slab+0x1ef/0x1ff
+[   77.210097]  [<c037e0ba>] ? ext4_es_free_extent+0x72/0x79
+[   77.210097]  [<c03e2b4d>] ? bvec_alloc+0x8e/0xaa
+[   77.210097]  [<c037e0ba>] ? ext4_es_free_extent+0x72/0x79
+[   77.210097]  [<c037e1eb>] ? __es_insert_extent+0x12a/0x20c
+[   77.210097]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   77.210097]  [<c02f01cb>] ? kmem_cache_alloc+0x92/0x11c
+[   77.210097]  [<c02c01f1>] ? mempool_alloc_slab+0xe/0x10
+[   77.210097]  [<c040e8f1>] ? __this_cpu_preempt_check+0xf/0x11
+[   77.210097]  [<c02d17f4>] ? __inc_zone_state+0x34/0x79
+[   77.210097]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   77.210097]  [<c02c7948>] ? __lru_cache_add+0x63/0x76
+[   77.210097]  [<c02c7b47>] ? lru_cache_add+0x8/0xa
+[   77.210097]  [<c02bea47>] ? add_to_page_cache_lru+0x79/0x82
+[   77.210097]  [<c038458c>] ext4_mpage_readpages+0x47f/0x5d6
+[   77.210097]  [<c024d18f>] ? preempt_count_add+0x6a/0x7c
+[   77.210097]  [<c07aff00>] ? _raw_spin_lock_irqsave+0x14/0x43
+[   77.210097]  [<c07affa1>] ? _raw_spin_unlock_irqrestore+0x13/0x24
+[   77.210097]  [<c029c4a3>] ? delayacct_end+0x5c/0x62
+[   77.210097]  [<c034dadb>] ? write_end_fn+0x4d/0x4d
+[   77.210097]  [<c034db08>] ext4_readpages+0x2d/0x33
+[   77.210097]  [<c034db08>] ? ext4_readpages+0x2d/0x33
+[   77.210097]  [<c02c67ee>] __do_page_cache_readahead+0x10a/0x188
+[   77.210097]  [<c02bfe5c>] filemap_fault+0x190/0x362
+[   77.210097]  [<c02d994f>] __do_fault+0x29/0x5a
+[   77.210097]  [<c02db85b>] do_read_fault.isra.87+0x141/0x1cf
+[   77.210097]  [<c02dbe64>] handle_mm_fault+0x318/0x70d
+[   77.210097]  [<c020b3d8>] ? syscall_trace_enter_phase1+0xbe/0x120
+[   77.210097]  [<c02283a7>] __do_page_fault+0x23a/0x310
+[   77.210097]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[   77.210097]  [<c022855e>] do_page_fault+0xb/0xd
+[   77.210097]  [<c07b1226>] error_code+0x5a/0x60
+[   77.210097]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[   77.210097] Mem-Info:
+[   77.210097] DMA per-cpu:
+[   77.210097] CPU    0: hi:    0, btch:   1 usd:   0
+[   77.210097] CPU    1: hi:    0, btch:   1 usd:   0
+[   77.210097] Normal per-cpu:
+[   77.210097] CPU    0: hi:   90, btch:  15 usd:  48
+[   77.210097] CPU    1: hi:   90, btch:  15 usd:  13
+[   77.210097] active_anon:55008 inactive_anon:536 isolated_anon:0\x0a active_file:8317 inactive_file:8255 isolated_file:128\x0a unevictable:64 dirty:0 writeback:0 unstable:0\x0a free:38657 slab_reclaimable:2226 slab_unreclaimable:4137\x0a mapped:15103 shmem:1390 pagetables:2457 bounce:0\x0a free_cma:37646
+[   77.210097] DMA free:1988kB min:28kB low:56kB high:64kB active_anon:1296kB inactive_anon:0kB active_file:20kB inactive_file:0kB unevictable:4kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:4kB dirty:0kB writeback:0kB mapped:36kB shmem:4kB slab_reclaimable:216kB slab_unreclaimable:640kB kernel_stack:496kB pagetables:612kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:140 all_unreclaimable? yes
+[   77.210097] lowmem_reserve[]: 0 491 491 491
+[   77.210097] Normal free:152640kB min:2816kB low:5840kB high:6544kB active_anon:218736kB inactive_anon:2144kB active_file:33248kB inactive_file:33020kB unevictable:252kB isolated(anon):0kB isolated(file):512kB present:507736kB managed:503052kB mlocked:252kB dirty:0kB writeback:0kB mapped:60376kB shmem:5556kB slab_reclaimable:8688kB slab_unreclaimable:15908kB kernel_stack:5368kB pagetables:9216kB unstable:0kB bounce:0kB free_cma:150584kB writeback_tmp:0kB pages_scanned:512 all_unreclaimable? no
+[   77.210097] lowmem_reserve[]: 0 0 0 0
+[   77.210097] DMA: 65*4kB (UM) 52*8kB (UM) 54*16kB (UM) 14*32kB (UM) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1988kB
+[   77.210097] Normal: 24574*4kB (URC) 6568*8kB (URC) 11*16kB (R) 1*32kB (R) 1*64kB (R) 0*128kB 0*256kB 1*512kB (R) 1*1024kB (R) 0*2048kB 0*4096kB = 152648kB
+[   77.210097] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[   77.210097] 18110 total pagecache pages
+[   77.210097] 0 pages in swap cache
+[   77.210097] Swap cache stats: add 0, delete 0, find 0/0
+[   77.210097] Free swap  = 0kB
+[   77.210097] Total swap = 0kB
+[   77.210097] 130932 pages RAM
+[   77.210097] 0 pages HighMem/MovableOnly
+[   77.210097] 3744 pages reserved
+[   77.210097] SLUB: Unable to allocate memory on node -1 (gfp=0x0)
+[   77.210097]   cache: kmalloc-192, object size: 192, buffer size: 192, default order: 0, min order: 0
+[   77.210097]   node 0: slabs: 304, objs: 6384, free: 0
+[   78.530189] IntentService[A: page allocation failure: order:0, mode:0x200000
+[   78.533534] CPU: 1 PID: 3676 Comm: IntentService[A Tainted: G S      W      3.18.91+ #1
+[   78.539186] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[   78.540100]  00000000 00000082 c88f18a4 c07a9c83 00000000 00200000 c88f18d4 c02c1c58
+[   78.540100]  c0a08789 c112ea44 00000000 00200000 00000010 c88f1948 00200000 00000010
+[   78.540100]  00000000 00200000 c88f1958 c02c3eab 00200000 00000000 00000000 c112e600
+[   78.540100] Call Trace:
+[   78.540100]  [<c07a9c83>] dump_stack+0x45/0x59
+[   78.540100]  [<c02c1c58>] warn_alloc_failed+0xc4/0xd6
+[   78.540100]  [<c02c3eab>] __alloc_pages_nodemask+0x56b/0x6f4
+[   78.540100]  [<c02ee81a>] new_slab+0x1ef/0x1ff
+[   78.540100]  [<c02eff79>] __slab_alloc.isra.54.constprop.59+0x512/0x57c
+[   78.540100]  [<c025235b>] ? sched_slice.isra.56+0x60/0x71
+[   78.540100]  [<c04628c6>] ? alloc_indirect+0x12/0x38
+[   78.540100]  [<c0258ade>] ? task_tick_fair+0xa14/0xc76
+[   78.540100]  [<c02766d6>] ? hrtimer_forward+0x10c/0x12b
+[   78.540100]  [<c02f0083>] __kmalloc+0xa0/0x156
+[   78.540100]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   78.540100]  [<c02f0083>] ? __kmalloc+0xa0/0x156
+[   78.540100]  [<c04628c6>] ? alloc_indirect+0x12/0x38
+[   78.540100]  [<c04628c6>] alloc_indirect+0x12/0x38
+[   78.540100]  [<c0462c88>] virtqueue_add_sgs+0x77/0x22d
+[   78.540100]  [<c04aa819>] __virtblk_add_req+0x125/0x12d
+[   78.540100]  [<c03ec272>] ? __blk_bios_map_sg+0x199/0x245
+[   78.540100]  [<c04aa94d>] virtio_queue_rq+0x12c/0x1ae
+[   78.540100]  [<c03eeb61>] __blk_mq_run_hw_queue+0x17a/0x240
+[   78.540100]  [<c03ef0ed>] blk_mq_run_hw_queue+0x2b/0x5e
+[   78.540100]  [<c03efdd8>] blk_sq_make_request+0x1ba/0x276
+[   78.540100]  [<c03e7f4c>] generic_make_request+0x88/0xc1
+[   78.540100]  [<c03e804c>] submit_bio+0xc7/0xf0
+[   78.540100]  [<c0383f77>] ext4_submit_bio_read+0xcb/0x17f
+[   78.540100]  [<c02ee81a>] ? new_slab+0x1ef/0x1ff
+[   78.540100]  [<c040e8f1>] ? __this_cpu_preempt_check+0xf/0x11
+[   78.540100]  [<c03e2b4d>] ? bvec_alloc+0x8e/0xaa
+[   78.540100]  [<c041596d>] ? __percpu_counter_add+0xba/0xd1
+[   78.540100]  [<c02f01cb>] ? kmem_cache_alloc+0x92/0x11c
+[   78.540100]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   78.540100]  [<c02f01cb>] ? kmem_cache_alloc+0x92/0x11c
+[   78.540100]  [<c02c01f1>] ? mempool_alloc_slab+0xe/0x10
+[   78.540100]  [<c040e8f1>] ? __this_cpu_preempt_check+0xf/0x11
+[   78.540100]  [<c02d17f4>] ? __inc_zone_state+0x34/0x79
+[   78.540100]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   78.540100]  [<c02c7948>] ? __lru_cache_add+0x63/0x76
+[   78.540100]  [<c03e2852>] ? bio_add_page+0x70/0x7a
+[   78.540100]  [<c03846c4>] ext4_mpage_readpages+0x5b7/0x5d6
+[   78.540100]  [<c024d18f>] ? preempt_count_add+0x6a/0x7c
+[   78.540100]  [<c07aff00>] ? _raw_spin_lock_irqsave+0x14/0x43
+[   78.540100]  [<c07affa1>] ? _raw_spin_unlock_irqrestore+0x13/0x24
+[   78.540100]  [<c029c4a3>] ? delayacct_end+0x5c/0x62
+[   78.540100]  [<c034dadb>] ? write_end_fn+0x4d/0x4d
+[   78.540100]  [<c034db08>] ext4_readpages+0x2d/0x33
+[   78.540100]  [<c034db08>] ? ext4_readpages+0x2d/0x33
+[   78.540100]  [<c02c67ee>] __do_page_cache_readahead+0x10a/0x188
+[   78.540100]  [<c02bfe5c>] filemap_fault+0x190/0x362
+[   78.540100]  [<c02d994f>] __do_fault+0x29/0x5a
+[   78.540100]  [<c02db85b>] do_read_fault.isra.87+0x141/0x1cf
+[   78.540100]  [<c02dbe64>] handle_mm_fault+0x318/0x70d
+[   78.540100]  [<c020b3d8>] ? syscall_trace_enter_phase1+0xbe/0x120
+[   78.540100]  [<c02283a7>] __do_page_fault+0x23a/0x310
+[   78.540100]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[   78.540100]  [<c022855e>] do_page_fault+0xb/0xd
+[   78.540100]  [<c07b1226>] error_code+0x5a/0x60
+[   78.540100]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[   78.540100] Mem-Info:
+[   78.540100] DMA per-cpu:
+[   78.540100] CPU    0: hi:    0, btch:   1 usd:   0
+[   78.540100] CPU    1: hi:    0, btch:   1 usd:   0
+[   78.540100] Normal per-cpu:
+[   78.540100] CPU    0: hi:   90, btch:  15 usd:  11
+[   78.540100] CPU    1: hi:   90, btch:  15 usd:   2
+[   78.540100] active_anon:55491 inactive_anon:537 isolated_anon:0\x0a active_file:4383 inactive_file:4421 isolated_file:64\x0a unevictable:64 dirty:0 writeback:0 unstable:0\x0a free:46027 slab_reclaimable:2226 slab_unreclaimable:4151\x0a mapped:8386 shmem:1391 pagetables:2459 bounce:0\x0a free_cma:45029
+[   78.540100] DMA free:1988kB min:28kB low:56kB high:64kB active_anon:1296kB inactive_anon:0kB active_file:20kB inactive_file:0kB unevictable:4kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:4kB dirty:0kB writeback:0kB mapped:36kB shmem:4kB slab_reclaimable:216kB slab_unreclaimable:640kB kernel_stack:496kB pagetables:612kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:140 all_unreclaimable? yes
+[   78.540100] lowmem_reserve[]: 0 491 491 491
+[   78.540100] Normal free:182120kB min:2816kB low:5840kB high:6544kB active_anon:220668kB inactive_anon:2148kB active_file:17512kB inactive_file:17684kB unevictable:252kB isolated(anon):0kB isolated(file):256kB present:507736kB managed:503052kB mlocked:252kB dirty:0kB writeback:0kB mapped:33508kB shmem:5560kB slab_reclaimable:8688kB slab_unreclaimable:15964kB kernel_stack:5376kB pagetables:9224kB unstable:0kB bounce:0kB free_cma:180116kB writeback_tmp:0kB pages_scanned:636 all_unreclaimable? no
+[   78.540100] lowmem_reserve[]: 0 0 0 0
+[   78.540100] DMA: 65*4kB (UM) 52*8kB (UM) 54*16kB (UM) 14*32kB (UM) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1988kB
+[   78.540100] Normal: 17190*4kB (URC) 12724*8kB (RC) 625*16kB (RC) 0*32kB 1*64kB (R) 0*128kB 0*256kB 1*512kB (R) 1*1024kB (R) 0*2048kB 0*4096kB = 182152kB
+[   78.540100] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[   78.540100] 10297 total pagecache pages
+[   78.540100] 0 pages in swap cache
+[   78.540100] Swap cache stats: add 0, delete 0, find 0/0
+[   78.540100] Free swap  = 0kB
+[   78.540100] Total swap = 0kB
+[   78.540100] 130932 pages RAM
+[   78.540100] 0 pages HighMem/MovableOnly
+[   78.540100] 3744 pages reserved
+[   78.540100] SLUB: Unable to allocate memory on node -1 (gfp=0x0)
+[   78.540100]   cache: kmalloc-192, object size: 192, buffer size: 192, default order: 0, min order: 0
+[   78.540100]   node 0: slabs: 305, objs: 6405, free: 0
+[   78.935032] AsyncTask #1: page allocation failure: order:0, mode:0x200000
+[   78.940386] CPU: 1 PID: 3410 Comm: AsyncTask #1 Tainted: G S      W      3.18.91+ #1
+[   78.943527] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[   78.943527]  00000000 00000082 cb0e3854 c07a9c83 00000000 00200000 cb0e3884 c02c1c58
+[   78.943527]  c0a08789 c1246a44 00000000 00200000 00000010 cb0e38f8 00200000 00000010
+[   78.943527]  00000000 00200000 cb0e3908 c02c3eab 00200000 00000000 00000000 c1246600
+[   78.943527] Call Trace:
+[   78.943527]  [<c07a9c83>] dump_stack+0x45/0x59
+[   78.943527]  [<c02c1c58>] warn_alloc_failed+0xc4/0xd6
+[   78.943527]  [<c02c3eab>] __alloc_pages_nodemask+0x56b/0x6f4
+[   78.943527]  [<c02ee81a>] new_slab+0x1ef/0x1ff
+[   78.943527]  [<c02eff79>] __slab_alloc.isra.54.constprop.59+0x512/0x57c
+[   78.943527]  [<c02a9620>] ? probe_sched_wakeup+0x1e/0x70
+[   78.943527]  [<c04628c6>] ? alloc_indirect+0x12/0x38
+[   78.943527]  [<c04628c6>] ? alloc_indirect+0x12/0x38
+[   78.943527]  [<c024c96e>] ? default_wake_function+0xb/0xd
+[   78.943527]  [<c02612b9>] ? autoremove_wake_function+0xf/0x2f
+[   78.943527]  [<c02f0083>] __kmalloc+0xa0/0x156
+[   78.943527]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   78.943527]  [<c02f0083>] ? __kmalloc+0xa0/0x156
+[   78.943527]  [<c04628c6>] ? alloc_indirect+0x12/0x38
+[   78.943527]  [<c04628c6>] alloc_indirect+0x12/0x38
+[   78.943527]  [<c0462c88>] virtqueue_add_sgs+0x77/0x22d
+[   78.943527]  [<c04aa819>] __virtblk_add_req+0x125/0x12d
+[   78.943527]  [<c03ec272>] ? __blk_bios_map_sg+0x199/0x245
+[   78.943527]  [<c04aa94d>] virtio_queue_rq+0x12c/0x1ae
+[   78.943527]  [<c03eeb61>] __blk_mq_run_hw_queue+0x17a/0x240
+[   78.943527]  [<c03ef0ed>] blk_mq_run_hw_queue+0x2b/0x5e
+[   78.943527]  [<c03efdd8>] blk_sq_make_request+0x1ba/0x276
+[   78.943527]  [<c03e7f4c>] generic_make_request+0x88/0xc1
+[   78.943527]  [<c03e804c>] submit_bio+0xc7/0xf0
+[   78.943527]  [<c0383f77>] ext4_submit_bio_read+0xcb/0x17f
+[   78.943527]  [<c037053b>] ? ext4_ext_map_blocks+0x164a/0x184c
+[   78.943527]  [<c037072c>] ? ext4_ext_map_blocks+0x183b/0x184c
+[   78.943527]  [<c037dca1>] ? __es_tree_search+0x4d/0x5a
+[   78.943527]  [<c037e7a6>] ? __es_remove_extent+0x2b/0x249
+[   78.943527]  [<c037e1ca>] ? __es_insert_extent+0x109/0x20c
+[   78.943527]  [<c024d0ff>] ? get_parent_ip+0xb/0x31
+[   78.943527]  [<c07b0057>] ? _raw_write_unlock+0x10/0x21
+[   78.943527]  [<c040e8f1>] ? __this_cpu_preempt_check+0xf/0x11
+[   78.943527]  [<c02d17f4>] ? __inc_zone_state+0x34/0x79
+[   78.943527]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   78.943527]  [<c02c7948>] ? __lru_cache_add+0x63/0x76
+[   78.943527]  [<c02c7b47>] ? lru_cache_add+0x8/0xa
+[   78.943527]  [<c02bea47>] ? add_to_page_cache_lru+0x79/0x82
+[   78.943527]  [<c038458c>] ext4_mpage_readpages+0x47f/0x5d6
+[   78.943527]  [<c034dadb>] ? write_end_fn+0x4d/0x4d
+[   78.943527]  [<c034db08>] ext4_readpages+0x2d/0x33
+[   78.943527]  [<c034db08>] ? ext4_readpages+0x2d/0x33
+[   78.943527]  [<c02c67ee>] __do_page_cache_readahead+0x10a/0x188
+[   78.943527]  [<c02c6a2c>] ondemand_readahead+0x1c0/0x1ca
+[   78.943527]  [<c05bd94e>] ? dm_wq_work+0x93/0x93
+[   78.943527]  [<c02c6a8d>] page_cache_async_readahead+0x57/0x62
+[   78.943527]  [<c02bfddf>] filemap_fault+0x113/0x362
+[   78.943527]  [<c02d994f>] __do_fault+0x29/0x5a
+[   78.943527]  [<c02db85b>] do_read_fault.isra.87+0x141/0x1cf
+[   78.943527]  [<c02dbe64>] handle_mm_fault+0x318/0x70d
+[   78.943527]  [<c02283a7>] __do_page_fault+0x23a/0x310
+[   78.943527]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[   78.943527]  [<c022855e>] do_page_fault+0xb/0xd
+[   78.943527]  [<c07b1226>] error_code+0x5a/0x60
+[   78.943527]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[   78.943527] Mem-Info:
+[   78.943527] DMA per-cpu:
+[   78.943527] CPU    0: hi:    0, btch:   1 usd:   0
+[   78.943527] CPU    1: hi:    0, btch:   1 usd:   0
+[   78.943527] Normal per-cpu:
+[   78.943527] CPU    0: hi:   90, btch:  15 usd:  11
+[   78.943527] CPU    1: hi:   90, btch:  15 usd:   6
+[   78.943527] active_anon:55491 inactive_anon:537 isolated_anon:0\x0a active_file:4383 inactive_file:4421 isolated_file:64\x0a unevictable:64 dirty:0 writeback:0 unstable:0\x0a free:45997 slab_reclaimable:2226 slab_unreclaimable:4151\x0a mapped:8405 shmem:1391 pagetables:2459 bounce:0\x0a free_cma:44990
+[   78.943527] DMA free:1988kB min:28kB low:56kB high:64kB active_anon:1296kB inactive_anon:0kB active_file:20kB inactive_file:0kB unevictable:4kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:4kB dirty:0kB writeback:0kB mapped:36kB shmem:4kB slab_reclaimable:216kB slab_unreclaimable:640kB kernel_stack:496kB pagetables:612kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:140 all_unreclaimable? yes
+[   78.943527] lowmem_reserve[]: 0 491 491 491
+[   78.943527] Normal free:182000kB min:2816kB low:5840kB high:6544kB active_anon:220668kB inactive_anon:2148kB active_file:17512kB inactive_file:17684kB unevictable:252kB isolated(anon):0kB isolated(file):256kB present:507736kB managed:503052kB mlocked:252kB dirty:0kB writeback:0kB mapped:33584kB shmem:5560kB slab_reclaimable:8688kB slab_unreclaimable:15964kB kernel_stack:5376kB pagetables:9224kB unstable:0kB bounce:0kB free_cma:179960kB writeback_tmp:0kB pages_scanned:636 all_unreclaimable? no
+[   78.943527] lowmem_reserve[]: 0 0 0 0
+[   78.943527] DMA: 65*4kB (UM) 52*8kB (UM) 54*16kB (UM) 14*32kB (UM) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1988kB
+[   78.943527] Normal: 17220*4kB (URC) 12754*8kB (RC) 595*16kB (RC) 0*32kB 1*64kB (R) 0*128kB 0*256kB 1*512kB (R) 1*1024kB (R) 0*2048kB 0*4096kB = 182032kB
+[   78.943527] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[   78.943527] 10316 total pagecache pages
+[   78.943527] 0 pages in swap cache
+[   78.943527] Swap cache stats: add 0, delete 0, find 0/0
+[   78.943527] Free swap  = 0kB
+[   78.943527] Total swap = 0kB
+[   78.943527] 130932 pages RAM
+[   78.943527] 0 pages HighMem/MovableOnly
+[   78.943527] 3744 pages reserved
+[   78.943527] SLUB: Unable to allocate memory on node -1 (gfp=0x0)
+[   78.943527]   cache: kmalloc-192, object size: 192, buffer size: 192, default order: 0, min order: 0
+[   78.943527]   node 0: slabs: 305, objs: 6405, free: 0
+[   81.073737] AsyncTask #2: page allocation failure: order:0, mode:0x200000
+[   81.075913] CPU: 0 PID: 3692 Comm: AsyncTask #2 Tainted: G S      W      3.18.91+ #1
+[   81.078492] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[   81.080177]  00000000 00000082 c6b6f8a4 c07a9c83 00000000 00200000 c6b6f8d4 c02c1c58
+[   81.080177]  c0a08789 c1129104 00000000 00200000 00000010 c6b6f948 00200000 00000010
+[   81.080177]  00000000 00200000 c6b6f958 c02c3eab 00200000 00000000 00000000 c1128cc0
+[   81.080177] Call Trace:
+[   81.080177]  [<c07a9c83>] dump_stack+0x45/0x59
+[   81.080177]  [<c02c1c58>] warn_alloc_failed+0xc4/0xd6
+[   81.080177]  [<c02c3eab>] __alloc_pages_nodemask+0x56b/0x6f4
+[   81.080177]  [<c0249ead>] ? ttwu_stat+0x29/0xd8
+[   81.080177]  [<c02ee81a>] new_slab+0x1ef/0x1ff
+[   81.080177]  [<c02eff79>] __slab_alloc.isra.54.constprop.59+0x512/0x57c
+[   81.080177]  [<c04628c6>] ? alloc_indirect+0x12/0x38
+[   81.080177]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   81.080177]  [<c02f09e5>] ? kmem_cache_free+0xa0/0x14a
+[   81.080177]  [<c02c0201>] ? mempool_free_slab+0xe/0x10
+[   81.080177]  [<c0264c14>] ? cpuacct_charge+0x45/0x4b
+[   81.080177]  [<c0251d21>] ? update_curr+0x114/0x181
+[   81.080177]  [<c02f0083>] __kmalloc+0xa0/0x156
+[   81.080177]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   81.080177]  [<c02f0083>] ? __kmalloc+0xa0/0x156
+[   81.080177]  [<c04628c6>] ? alloc_indirect+0x12/0x38
+[   81.080177]  [<c04628c6>] alloc_indirect+0x12/0x38
+[   81.080177]  [<c0462c88>] virtqueue_add_sgs+0x77/0x22d
+[   81.080177]  [<c04aa819>] __virtblk_add_req+0x125/0x12d
+[   81.080177]  [<c03ec272>] ? __blk_bios_map_sg+0x199/0x245
+[   81.080177]  [<c04aa94d>] virtio_queue_rq+0x12c/0x1ae
+[   81.080177]  [<c03eeb61>] __blk_mq_run_hw_queue+0x17a/0x240
+[   81.080177]  [<c03ef0ed>] blk_mq_run_hw_queue+0x2b/0x5e
+[   81.080177]  [<c03efdd8>] blk_sq_make_request+0x1ba/0x276
+[   81.080177]  [<c03e7f4c>] generic_make_request+0x88/0xc1
+[   81.080177]  [<c03e804c>] submit_bio+0xc7/0xf0
+[   81.080177]  [<c0383f77>] ext4_submit_bio_read+0xcb/0x17f
+[   81.080177]  [<c037053b>] ? ext4_ext_map_blocks+0x164a/0x184c
+[   81.080177]  [<c037072c>] ? ext4_ext_map_blocks+0x183b/0x184c
+[   81.080177]  [<c037dca1>] ? __es_tree_search+0x4d/0x5a
+[   81.080177]  [<c037e7a6>] ? __es_remove_extent+0x2b/0x249
+[   81.080177]  [<c037e1ca>] ? __es_insert_extent+0x109/0x20c
+[   81.080177]  [<c024d0ff>] ? get_parent_ip+0xb/0x31
+[   81.080177]  [<c07b0057>] ? _raw_write_unlock+0x10/0x21
+[   81.080177]  [<c037ecbd>] ? ext4_es_insert_extent+0x11f/0x14e
+[   81.080177]  [<c024d18f>] ? preempt_count_add+0x6a/0x7c
+[   81.080177]  [<c034e64a>] ? ext4_map_blocks+0x1f5/0x4ad
+[   81.080177]  [<c02c7b47>] ? lru_cache_add+0x8/0xa
+[   81.080177]  [<c038458c>] ext4_mpage_readpages+0x47f/0x5d6
+[   81.080177]  [<c024d18f>] ? preempt_count_add+0x6a/0x7c
+[   81.080177]  [<c07aff00>] ? _raw_spin_lock_irqsave+0x14/0x43
+[   81.080177]  [<c07affa1>] ? _raw_spin_unlock_irqrestore+0x13/0x24
+[   81.080177]  [<c029c4a3>] ? delayacct_end+0x5c/0x62
+[   81.080177]  [<c034dadb>] ? write_end_fn+0x4d/0x4d
+[   81.080177]  [<c034db08>] ext4_readpages+0x2d/0x33
+[   81.080177]  [<c034db08>] ? ext4_readpages+0x2d/0x33
+[   81.080177]  [<c02c67ee>] __do_page_cache_readahead+0x10a/0x188
+[   81.080177]  [<c02bfe5c>] filemap_fault+0x190/0x362
+[   81.080177]  [<c02d994f>] __do_fault+0x29/0x5a
+[   81.080177]  [<c02db85b>] do_read_fault.isra.87+0x141/0x1cf
+[   81.080177]  [<c040e8e0>] ? debug_smp_processor_id+0x12/0x14
+[   81.080177]  [<c02dbe64>] handle_mm_fault+0x318/0x70d
+[   81.080177]  [<c02283a7>] __do_page_fault+0x23a/0x310
+[   81.080177]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[   81.080177]  [<c022855e>] do_page_fault+0xb/0xd
+[   81.080177]  [<c07b1226>] error_code+0x5a/0x60
+[   81.080177]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[   81.080177] Mem-Info:
+[   81.080177] DMA per-cpu:
+[   81.080177] CPU    0: hi:    0, btch:   1 usd:   0
+[   81.080177] CPU    1: hi:    0, btch:   1 usd:   0
+[   81.080177] Normal per-cpu:
+[   81.080177] CPU    0: hi:   90, btch:  15 usd:  12
+[   81.080177] CPU    1: hi:   90, btch:  15 usd:  12
+[   81.080177] active_anon:55945 inactive_anon:539 isolated_anon:0\x0a active_file:4819 inactive_file:4862 isolated_file:117\x0a unevictable:64 dirty:0 writeback:9 unstable:0\x0a free:44631 slab_reclaimable:2227 slab_unreclaimable:4162\x0a mapped:9221 shmem:1393 pagetables:2460 bounce:0\x0a free_cma:43634
+[   81.080177] DMA free:1980kB min:28kB low:56kB high:64kB active_anon:1296kB inactive_anon:0kB active_file:12kB inactive_file:8kB unevictable:4kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:4kB dirty:0kB writeback:0kB mapped:40kB shmem:4kB slab_reclaimable:216kB slab_unreclaimable:652kB kernel_stack:488kB pagetables:612kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:0 all_unreclaimable? no
+[   81.080177] lowmem_reserve[]: 0 491 491 491
+[   81.080177] Normal free:176544kB min:2816kB low:5840kB high:6544kB active_anon:222484kB inactive_anon:2156kB active_file:19264kB inactive_file:19440kB unevictable:252kB isolated(anon):0kB isolated(file):468kB present:507736kB managed:503052kB mlocked:252kB dirty:0kB writeback:36kB mapped:36844kB shmem:5568kB slab_reclaimable:8692kB slab_unreclaimable:15996kB kernel_stack:5352kB pagetables:9228kB unstable:0kB bounce:0kB free_cma:174536kB writeback_tmp:0kB pages_scanned:828 all_unreclaimable? no
+[   81.080177] lowmem_reserve[]: 0 0 0 0
+[   81.080177] DMA: 62*4kB (UM) 53*8kB (UM) 54*16kB (UM) 14*32kB (UM) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1984kB
+[   81.080177] Normal: 18586*4kB (UERC) 11695*8kB (RC) 440*16kB (RC) 0*32kB 1*64kB (R) 0*128kB 0*256kB 1*512kB (R) 1*1024kB (R) 0*2048kB 0*4096kB = 176544kB
+[   81.080177] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[   81.080177] 11184 total pagecache pages
+[   81.080177] 0 pages in swap cache
+[   81.080177] Swap cache stats: add 0, delete 0, find 0/0
+[   81.080177] Free swap  = 0kB
+[   81.080177] Total swap = 0kB
+[   81.080177] 130932 pages RAM
+[   81.080177] 0 pages HighMem/MovableOnly
+[   81.080177] 3744 pages reserved
+[   81.080177] SLUB: Unable to allocate memory on node -1 (gfp=0x0)
+[   81.080177]   cache: kmalloc-192, object size: 192, buffer size: 192, default order: 0, min order: 0
+[   81.080177]   node 0: slabs: 307, objs: 6447, free: 0
+[   83.131699] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   83.230218] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   85.374728] type=1400 audit(1793003866.289:52): avc: granted { getattr } for pid=2902 comm=496E666C6174657254687265616420 path="/" dev="rootfs" ino=2 scontext=u:r:platform_app:s0:c512,c768 tcontext=u:object_r:rootfs:s0 tclass=dir duplicate messages suppressed
+[   85.460225] type=1400 audit(1793003902.069:53): avc: denied { write } for pid=3258 comm="d.process.media" name="property_service" dev="tmpfs" ino=4516 scontext=u:r:priv_app:s0:c512,c768 tcontext=u:object_r:property_socket:s0 tclass=sock_file permissive=0
+[   87.043851] ieee80211 phy0: hwsim hw_scan request
+[   87.044031] ieee80211 phy0: hw scan 2412 MHz
+[   87.076687] ieee80211 phy0: hw scan 2417 MHz
+[   87.101857] ieee80211 phy0: hw scan 2422 MHz
+[   87.137690] ieee80211 phy0: hw scan 2427 MHz
+[   87.160775] ieee80211 phy0: hw scan 2432 MHz
+[   87.191864] ieee80211 phy0: hw scan 2437 MHz
+[   87.224101] ieee80211 phy0: hw scan 2442 MHz
+[   87.260241] ieee80211 phy0: hw scan 2447 MHz
+[   87.290150] ieee80211 phy0: hw scan 2452 MHz
+[   87.326928] ieee80211 phy0: hw scan 2457 MHz
+[   87.350194] ieee80211 phy0: hw scan 2462 MHz
+[   87.383677] ieee80211 phy0: hw scan 2467 MHz
+[   87.503238] ieee80211 phy0: hw scan 2472 MHz
+[   87.620186] ieee80211 phy0: hw scan 2484 MHz
+[   87.750340] ieee80211 phy0: hw scan complete
+[   87.750388] ieee80211 phy0: hwsim hw_scan request
+[   87.750392] ieee80211 phy0: hw scan 5180 MHz
+[   87.863135] ieee80211 phy0: hw scan 5200 MHz
+[   87.981428] ieee80211 phy0: hw scan 5220 MHz
+[   88.101735] ieee80211 phy0: hw scan 5240 MHz
+[   88.221596] ieee80211 phy0: hw scan 5260 MHz
+[   88.345463] ieee80211 phy0: hw scan 5280 MHz
+[   88.461430] ieee80211 phy0: hw scan 5300 MHz
+[   88.580453] ieee80211 phy0: hw scan 5320 MHz
+[   88.700235] ieee80211 phy0: hw scan 5500 MHz
+[   88.820144] ieee80211 phy0: hw scan 5520 MHz
+[   88.941707] ieee80211 phy0: hw scan 5540 MHz
+[   89.060854] ieee80211 phy0: hw scan 5560 MHz
+[   89.180152] ieee80211 phy0: hw scan 5580 MHz
+[   89.302114] ieee80211 phy0: hw scan 5600 MHz
+[   89.431132] ieee80211 phy0: hw scan 5620 MHz
+[   89.551688] ieee80211 phy0: hw scan 5640 MHz
+[   89.674026] ieee80211 phy0: hw scan 5660 MHz
+[   89.790713] ieee80211 phy0: hw scan 5680 MHz
+[   89.911143] ieee80211 phy0: hw scan 5700 MHz
+[   90.040394] ieee80211 phy0: hw scan complete
+[   90.040469] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[   90.089894] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[   90.132672] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[   92.342426] init: processing action (qemu.adbd=start)
+[   92.353092] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[   92.355359] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[   92.358951] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[   92.368994] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[   92.387199] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[   92.394773] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  115.150332] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  115.250762] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  121.111024] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  121.220176] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  122.301870] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  127.620841] ieee80211 phy0: hwsim hw_scan request
+[  127.624944] ieee80211 phy0: hw scan 2412 MHz
+[  127.651865] ieee80211 phy0: hw scan 2417 MHz
+[  127.681429] ieee80211 phy0: hw scan 2422 MHz
+[  127.722260] ieee80211 phy0: hw scan 2427 MHz
+[  127.742459] ieee80211 phy0: hw scan 2432 MHz
+[  127.772921] ieee80211 phy0: hw scan 2437 MHz
+[  127.811020] ieee80211 phy0: hw scan 2442 MHz
+[  127.851370] ieee80211 phy0: hw scan 2447 MHz
+[  127.892544] ieee80211 phy0: hw scan 2452 MHz
+[  127.937741] ieee80211 phy0: hw scan 2457 MHz
+[  127.964890] ieee80211 phy0: hw scan 2462 MHz
+[  127.991548] ieee80211 phy0: hw scan 2467 MHz
+[  128.110200] ieee80211 phy0: hw scan 2472 MHz
+[  128.230347] ieee80211 phy0: hw scan 2484 MHz
+[  128.350168] ieee80211 phy0: hw scan complete
+[  128.350216] ieee80211 phy0: hwsim hw_scan request
+[  128.350219] ieee80211 phy0: hw scan 5180 MHz
+[  128.470213] ieee80211 phy0: hw scan 5200 MHz
+[  128.590867] ieee80211 phy0: hw scan 5220 MHz
+[  128.712284] ieee80211 phy0: hw scan 5240 MHz
+[  128.840203] ieee80211 phy0: hw scan 5260 MHz
+[  128.950936] ieee80211 phy0: hw scan 5280 MHz
+[  129.071166] ieee80211 phy0: hw scan 5300 MHz
+[  129.190457] ieee80211 phy0: hw scan 5320 MHz
+[  129.321280] ieee80211 phy0: hw scan 5500 MHz
+[  129.440468] ieee80211 phy0: hw scan 5520 MHz
+[  129.570194] ieee80211 phy0: hw scan 5540 MHz
+[  129.680178] ieee80211 phy0: hw scan 5560 MHz
+[  129.800778] ieee80211 phy0: hw scan 5580 MHz
+[  129.931785] ieee80211 phy0: hw scan 5600 MHz
+[  130.052879] ieee80211 phy0: hw scan 5620 MHz
+[  130.182163] ieee80211 phy0: hw scan 5640 MHz
+[  130.303184] ieee80211 phy0: hw scan 5660 MHz
+[  130.420167] ieee80211 phy0: hw scan 5680 MHz
+[  130.540556] ieee80211 phy0: hw scan 5700 MHz
+[  130.662054] ieee80211 phy0: hw scan complete
+[  130.662082] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  130.693118] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[  130.762631] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  152.352603] init: processing action (qemu.adbd=start)
+[  152.354069] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  152.356002] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  152.358694] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  152.367348] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  152.371786] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  152.375615] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  161.110430] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  161.210227] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  179.162702] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  179.262544] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  182.303897] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  192.070351] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  192.170782] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  207.457754] ieee80211 phy0: hwsim hw_scan request
+[  207.457943] ieee80211 phy0: hw scan 2412 MHz
+[  207.491883] ieee80211 phy0: hw scan 2417 MHz
+[  207.520162] ieee80211 phy0: hw scan 2422 MHz
+[  207.550831] ieee80211 phy0: hw scan 2427 MHz
+[  207.581414] ieee80211 phy0: hw scan 2432 MHz
+[  207.610548] ieee80211 phy0: hw scan 2437 MHz
+[  207.640271] ieee80211 phy0: hw scan 2442 MHz
+[  207.670552] ieee80211 phy0: hw scan 2447 MHz
+[  207.700534] ieee80211 phy0: hw scan 2452 MHz
+[  207.730347] ieee80211 phy0: hw scan 2457 MHz
+[  207.760292] ieee80211 phy0: hw scan 2462 MHz
+[  207.790315] ieee80211 phy0: hw scan 2467 MHz
+[  207.910807] ieee80211 phy0: hw scan 2472 MHz
+[  208.032729] ieee80211 phy0: hw scan 2484 MHz
+[  208.150472] ieee80211 phy0: hw scan complete
+[  208.155789] ieee80211 phy0: hwsim hw_scan request
+[  208.158559] ieee80211 phy0: hw scan 5180 MHz
+[  208.270333] ieee80211 phy0: hw scan 5200 MHz
+[  208.390398] ieee80211 phy0: hw scan 5220 MHz
+[  208.510305] ieee80211 phy0: hw scan 5240 MHz
+[  208.633720] ieee80211 phy0: hw scan 5260 MHz
+[  208.752092] ieee80211 phy0: hw scan 5280 MHz
+[  208.870212] ieee80211 phy0: hw scan 5300 MHz
+[  208.990218] ieee80211 phy0: hw scan 5320 MHz
+[  209.110240] ieee80211 phy0: hw scan 5500 MHz
+[  209.232886] ieee80211 phy0: hw scan 5520 MHz
+[  209.350747] ieee80211 phy0: hw scan 5540 MHz
+[  209.470352] ieee80211 phy0: hw scan 5560 MHz
+[  209.590240] ieee80211 phy0: hw scan 5580 MHz
+[  209.710284] ieee80211 phy0: hw scan 5600 MHz
+[  209.830263] ieee80211 phy0: hw scan 5620 MHz
+[  209.950468] ieee80211 phy0: hw scan 5640 MHz
+[  210.070269] ieee80211 phy0: hw scan 5660 MHz
+[  210.190305] ieee80211 phy0: hw scan 5680 MHz
+[  210.310584] ieee80211 phy0: hw scan 5700 MHz
+[  210.430279] ieee80211 phy0: hw scan complete
+[  210.430346] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  210.432388] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[  210.530251] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  212.377315] init: processing action (qemu.adbd=start)
+[  212.379269] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  212.387170] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  212.402919] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  212.413768] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  212.417190] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  212.426270] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  241.110226] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  241.210279] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  242.303913] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  272.150206] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  272.250306] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  272.389611] init: processing action (qemu.adbd=start)
+[  272.394682] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  272.403600] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  272.410487] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  272.420385] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  272.427093] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  272.434028] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  290.630271] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  290.840548] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  295.601307] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  295.700335] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  302.312527] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  326.070684] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  326.180551] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  332.396088] init: processing action (qemu.adbd=start)
+[  332.398018] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  332.405962] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  332.408551] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  332.419903] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  332.422201] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  332.428195] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  348.609926] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  348.700138] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  350.628011] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  350.810439] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  355.640238] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  355.740369] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  362.300553] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  363.060247] init: Service 'goldfish-logcat' (pid 1425) exited with status 1
+[  365.981641] .plainnotes.app invoked oom-killer: gfp_mask=0x2084d0, order=0, oom_score_adj=0
+[  365.983563] CPU: 0 PID: 3832 Comm: .plainnotes.app Tainted: G S      W      3.18.91+ #1
+[  365.985639] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[  365.989138]  00000000 00000286 cde11dd4 c07a9c83 ce33bfc0 00000000 cde11e1c c07a913f
+[  365.990069]  c0a083cb ce33c404 002084d0 00000000 00000000 c024d18f c0b07780 cde11e08
+[  365.993745]  c07b028e cde11e08 c07affa1 00000000 c0401a6c 002084d0 c10f0660 00000000
+[  365.993745] Call Trace:
+[  365.993745]  [<c07a9c83>] dump_stack+0x45/0x59
+[  365.993745]  [<c07a913f>] dump_header.isra.12+0x66/0x199
+[  365.993745]  [<c024d18f>] ? preempt_count_add+0x6a/0x7c
+[  365.993745]  [<c07b028e>] ? _raw_spin_trylock+0x11/0x5d
+[  365.993745]  [<c07affa1>] ? _raw_spin_unlock_irqrestore+0x13/0x24
+[  365.993745]  [<c0401a6c>] ? ___ratelimit+0x97/0xa1
+[  365.993745]  [<c02c099e>] oom_kill_process+0x4b/0x2d0
+[  365.993745]  [<c0236d63>] ? has_capability_noaudit+0xf/0x11
+[  365.993745]  [<c02c0f50>] out_of_memory+0x1f3/0x251
+[  365.993745]  [<c02c3ff0>] __alloc_pages_nodemask+0x6b0/0x6f4
+[  365.993745]  [<c022b0f4>] pte_alloc_one+0x17/0x38
+[  365.993745]  [<c02d9f87>] __pte_alloc+0x13/0x7b
+[  365.993745]  [<c02dbc35>] handle_mm_fault+0xe9/0x70d
+[  365.993745]  [<c02283a7>] __do_page_fault+0x23a/0x310
+[  365.993745]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[  365.993745]  [<c022855e>] do_page_fault+0xb/0xd
+[  365.993745]  [<c07b1226>] error_code+0x5a/0x60
+[  365.993745]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[  366.018372] Mem-Info:
+[  366.019017] DMA per-cpu:
+[  366.019632] CPU    0: hi:    0, btch:   1 usd:   0
+[  366.020903] CPU    1: hi:    0, btch:   1 usd:   0
+[  366.022053] Normal per-cpu:
+[  366.022731] CPU    0: hi:   90, btch:  15 usd:   0
+[  366.023970] CPU    1: hi:   90, btch:  15 usd:  13
+[  366.025436] active_anon:64004 inactive_anon:541 isolated_anon:0\x0a active_file:11 inactive_file:185 isolated_file:0\x0a unevictable:64 dirty:0 writeback:0 unstable:0\x0a free:46378 slab_reclaimable:2200 slab_unreclaimable:4191\x0a mapped:988 shmem:1395 pagetables:2396 bounce:0\x0a free_cma:45360
+[  366.034281] DMA free:1992kB min:28kB low:56kB high:64kB active_anon:1304kB inactive_anon:0kB active_file:8kB inactive_file:0kB unevictable:4kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:4kB dirty:0kB writeback:0kB mapped:24kB shmem:4kB slab_reclaimable:216kB slab_unreclaimable:660kB kernel_stack:408kB pagetables:612kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:8 all_unreclaimable? no
+[  366.044327] lowmem_reserve[]: 0 491 491 491
+[  366.046175] Normal free:183976kB min:2816kB low:5840kB high:6544kB active_anon:254676kB inactive_anon:2164kB active_file:112kB inactive_file:272kB unevictable:252kB isolated(anon):0kB isolated(file):0kB present:507736kB managed:503052kB mlocked:252kB dirty:0kB writeback:0kB mapped:3744kB shmem:5576kB slab_reclaimable:8584kB slab_unreclaimable:16104kB kernel_stack:5136kB pagetables:8972kB unstable:0kB bounce:0kB free_cma:181304kB writeback_tmp:0kB pages_scanned:1812 all_unreclaimable? no
+[  366.061334] lowmem_reserve[]: 0 0 0 0
+[  366.063869] DMA: 80*4kB (UM) 61*8kB (UM) 54*16kB (UM) 10*32kB (UM) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1992kB
+[  366.072484] Normal: 17004*4kB (UEMRC) 13009*8kB (UEMRC) 660*16kB (MRC) 2*32kB (R) 0*64kB 1*128kB (R) 1*256kB (R) 0*512kB 1*1024kB (R) 0*2048kB 0*4096kB = 184120kB
+[  366.082826] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[  366.085977] 1448 total pagecache pages
+[  366.087361] 0 pages in swap cache
+[  366.088911] Swap cache stats: add 0, delete 0, find 0/0
+[  366.091828] Free swap  = 0kB
+[  366.093038] Total swap = 0kB
+[  366.094224] 130932 pages RAM
+[  366.096101] 0 pages HighMem/MovableOnly
+[  366.097646] 3744 pages reserved
+[  366.098818] [ pid ]   uid  tgid total_vm      rss nr_ptes swapents oom_score_adj name
+[  366.101955] [ 1046]     0  1046      950      482       4        0         -1000 ueventd
+[  366.105040] [ 1334]  1036  1334     3950      738       7        0         -1000 logd
+[  366.108527] [ 1340]  1000  1340     1767      139       4        0         -1000 servicemanager
+[  366.112050] [ 1341]  1000  1341     2863      199       6        0         -1000 hwservicemanage
+[  366.115212] [ 1342]  1000  1342     1471       78       3        0         -1000 vndservicemanag
+[  366.119553] [ 1345]  1000  1345     2839      149       6        0         -1000 keymaster@3.0-s
+[  366.123167] [ 1346]     0  1346     4467      280       8        0         -1000 vold
+[  366.127152] [ 1389]  1000  1389     2148      128       5        0         -1000 allocator@1.0-s
+[  366.131061] [ 1390]  1041  1390     7663      303      12        0         -1000 audio@2.0-servi
+[  366.134428] [ 1391]  1047  1391     6050      284      10        0         -1000 provider@2.4-se
+[  366.138492] [ 1392]  1000  1392     2554      114       5        0         -1000 configstore@1.0
+[  366.142031] [ 1393]  1013  1393     4047      231       8        0         -1000 drm@1.0-service
+[  366.146134] [ 1394]  1000  1394     3061      165       6        0         -1000 gatekeeper@1.0-
+[  366.149538] [ 1395]  1000  1395     3742      162       7        0         -1000 allocator@2.0-s
+[  366.153724] [ 1396]  1000  1396    13750      282      18        0         -1000 composer@2.1-se
+[  366.157057] [ 1397]  1000  1397     2422      140       4        0         -1000 power@1.0-servi
+[  366.161401] [ 1398]  1000  1398     2849      146       5        0         -1000 sensors@1.0-ser
+[  366.164791] [ 1399]  1010  1399     3559      170       6        0         -1000 wifi@1.0-servic
+[  366.168874] [ 1400]     0  1400     2549      144       5        0         -1000 healthd
+[  366.172220] [ 1405]     0  1405     1426       81       3        0         -1000 qemu-props
+[  366.175418] [ 1410]     0  1410     1425       82       4        0         -1000 misc-pipe
+[  366.178351] [ 1416]     0  1416     1431       96       4        0         -1000 lmkd
+[  366.182069] [ 1426]  2000  1426     1406      119       4        0         -1000 sh
+[  366.185345] [ 1510]  1041  1510     8384      377      13        0         -1000 audioserver
+[  366.188778] [ 1511]  1047  1511     8011      435      13        0         -1000 cameraserver
+[  366.192670] [ 1512]  1019  1512     5913      371      11        0         -1000 drmserver
+[  366.195631] [ 1513]     0  1513     3757      270       6        0         -1000 Binder:1513_2
+[  366.199214] [ 1514]  1017  1514     3596      206       7        0         -1000 keystore
+[  366.202532] [ 1515]  1013  1515     3311      207       7        0         -1000 mediadrmserver
+[  366.206618] [ 1516]  1040  1516    14321      655      17        0         -1000 mediaextractor
+[  366.209931] [ 1517]  1013  1517     5893      364      11        0         -1000 mediametrics
+[  366.214095] [ 1518]  1013  1518    15585      652      19        0         -1000 mediaserver
+[  366.217374] [ 1520]     0  1520     3020      139       5        0         -1000 storaged
+[  366.221366] [ 1524]  1010  1524     2368      168       5        0         -1000 wificond
+[  366.224543] [ 1525]  1000  1525     3797      178       7        0         -1000 gnss@1.0-servic
+[  366.228636] [ 1526]  1046  1526     9494      738      16        0         -1000 omx@1.0-service
+[  366.232202] [ 1528]  1001  1528     4103      162       7        0         -1000 rild
+[  366.235940] [ 1533]  1000  1533     3056      161       6        0         -1000 gatekeeperd
+[  366.239202] [ 1536]  1058  1536     1432       85       4        0         -1000 tombstoned
+[  366.243251] [ 1540]  1000  1540     2472      136       5        0         -1000 fingerprint@2.1
+[  366.246732] [ 1652]     0  1652     1334       78       4        0         -1000 dhcpclient
+[  366.250202] [ 1655]     0  1655      497        9       4        0         -1000 sh
+[  366.253432] [ 1657]     0  1657      694       14       3        0         -1000 sleep
+[  366.256385] [ 1681]     0  1681     1397      112       4        0         -1000 ipv6proxy
+[  366.258388] [ 1684]     0  1684     1993      130       5        0         -1000 hostapd
+[  366.260580] [ 1686]     0  1686     1365       78       4        0         -1000 dhcpserver
+[  366.262433] [ 2658]     0  2658     3015      407       6        0         -1000 adbd
+[  366.264649] [ 2663]  1020  2663      657       75       4        0         -1000 mdnsd
+[  366.266649] [ 2748]     0  2748     5259      210       8        0         -1000 Binder:2748_2
+[  366.268852] [ 2749]  1000  2749    16677      483      22        0         -1000 surfaceflinger
+[  366.271026] [ 2750]     0  2750   226785     2388      80        0         -1000 main
+[  366.273096] [ 2752]     0  2752     1626      156       4        0         -1000 iptables-restor
+[  366.275032] [ 2754]     0  2754     1629      170       4        0         -1000 ip6tables-resto
+[  366.277382] [ 2798]  1000  2798   274380     7328     131        0          -900 system_server
+[  366.279561] [ 2895] 10045  2895   249147     2722      78        0           200 putmethod.latin
+[  366.282915] [ 2902] 10022  2902   270467    13649     108        0          -800 ndroid.systemui
+[  366.285973] [ 2951]  1001  2951   254854     3650      86        0          -800 m.android.phone
+[  366.288088] [ 3008]  1010  3008     3896      192       7        0         -1000 wpa_supplicant
+[  366.290415] [ 3093] 10003  3093   245424     2313      70        0           902 oadcastreceiver
+[  366.292674] [ 3125] 10018  3125   249765     2587      78        0           100 .android.dialer
+[  366.295041] [ 3189] 10037  3189   247287     2429      74        0           904 droid.deskclock
+[  366.297333] [ 3224] 10002  3224   245828     2451      74        0           900 viders.calendar
+[  366.299484] [ 3258] 10010  3258   248052     3310      81        0           902 d.process.media
+[  366.301887] [ 3282] 10013  3282   258024     4721      95        0             0 droid.launcher3
+[  366.304267] [ 3304] 10052  3304   245850     2295      72        0           902 id.printspooler
+[  366.306218] [ 3354]  1000  3354   245367     2262      72        0           902 ndroid.keychain
+[  366.308468] [ 3436] 10014  3436   245559     2315      72        0           904 gedprovisioning
+[  366.310784] [ 3487] 10004  3487   247603     3490      85        0           900 d.process.acore
+[  366.313026] [ 3567] 10033  3567   246286     2301      73        0           904 android.camera2
+[  366.315210] [ 3588] 10006  3588   246794     2326      73        0           904 ndroid.contacts
+[  366.318227] [ 3607] 10042  3607   248173     2648      79        0           900 m.android.email
+[  366.320658] [ 3637] 10041  3637   246349     2356      74        0           900 droid.gallery3d
+[  366.323809] [ 3656] 10057  3656   248407     3462      83        0           900 droid.messaging
+[  366.326334] [ 3677] 10017  3677   246216     2246      73        0           904 ackageinstaller
+[  366.329367] [ 3693] 10009  3693   245633     2261      73        0           902 id.ext.services
+[  366.331878] [ 3766] 10007  3766   246003     2616      74        0           100 id.defcontainer
+[  366.333833] [ 3822]     0  3822   198136     1323      60        0         -1000 main
+[  366.336348] [ 3832] 10065  3832   278008    10582      91        0             0 .plainnotes.app
+[  366.338784] Out of memory: Kill process 3258 (d.process.media) score 927 or sacrifice child
+[  366.341418] Killed process 3258 (d.process.media) total-vm:992208kB, anon-rss:13240kB, file-rss:0kB
+[  367.506911] ieee80211 phy0: hwsim hw_scan request
+[  367.508017] ieee80211 phy0: hw scan 2412 MHz
+[  367.530125] ieee80211 phy0: hw scan 2417 MHz
+[  367.560355] ieee80211 phy0: hw scan 2422 MHz
+[  367.590863] ieee80211 phy0: hw scan 2427 MHz
+[  367.620167] ieee80211 phy0: hw scan 2432 MHz
+[  367.650365] ieee80211 phy0: hw scan 2437 MHz
+[  367.680102] ieee80211 phy0: hw scan 2442 MHz
+[  367.710238] ieee80211 phy0: hw scan 2447 MHz
+[  367.740125] ieee80211 phy0: hw scan 2452 MHz
+[  367.770400] ieee80211 phy0: hw scan 2457 MHz
+[  367.800198] ieee80211 phy0: hw scan 2462 MHz
+[  367.830132] ieee80211 phy0: hw scan 2467 MHz
+[  367.950178] ieee80211 phy0: hw scan 2472 MHz
+[  368.070170] ieee80211 phy0: hw scan 2484 MHz
+[  368.190215] ieee80211 phy0: hw scan complete
+[  368.190251] ieee80211 phy0: hwsim hw_scan request
+[  368.190254] ieee80211 phy0: hw scan 5180 MHz
+[  368.310336] ieee80211 phy0: hw scan 5200 MHz
+[  368.430145] ieee80211 phy0: hw scan 5220 MHz
+[  368.550100] ieee80211 phy0: hw scan 5240 MHz
+[  368.667645] .plainnotes.app invoked oom-killer: gfp_mask=0x2084d0, order=0, oom_score_adj=0
+[  368.669612] CPU: 0 PID: 3832 Comm: .plainnotes.app Tainted: G S      W      3.18.91+ #1
+[  368.670098] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[  368.670098]  00000000 00000286 cde11dd4 c07a9c83 ce33bfc0 00000000 cde11e1c c07a913f
+[  368.670098]  c0a083cb ce33c404 002084d0 00000000 00000000 c024d18f c0b07780 cde11e08
+[  368.670098]  c07b028e cde11e08 c07affa1 00000000 c0401a6c 002084d0 c1228cc0 00000000
+[  368.670098] Call Trace:
+[  368.670098]  [<c07a9c83>] dump_stack+0x45/0x59
+[  368.670098]  [<c07a913f>] dump_header.isra.12+0x66/0x199
+[  368.670098]  [<c024d18f>] ? preempt_count_add+0x6a/0x7c
+[  368.683992]  [<c07b028e>] ? _raw_spin_trylock+0x11/0x5d
+[  368.683992]  [<c07affa1>] ? _raw_spin_unlock_irqrestore+0x13/0x24
+[  368.683992]  [<c0401a6c>] ? ___ratelimit+0x97/0xa1
+[  368.683992]  [<c02c099e>] oom_kill_process+0x4b/0x2d0
+[  368.683992]  [<c0236d63>] ? has_capability_noaudit+0xf/0x11
+[  368.690161]  [<c02c0f50>] out_of_memory+0x1f3/0x251
+[  368.690161]  [<c02c3ff0>] __alloc_pages_nodemask+0x6b0/0x6f4
+[  368.690161]  [<c022b0f4>] pte_alloc_one+0x17/0x38
+[  368.690161]  [<c02d9f87>] __pte_alloc+0x13/0x7b
+[  368.690161]  [<c02dbc35>] handle_mm_fault+0xe9/0x70d
+[  368.698315]  [<c02283a7>] __do_page_fault+0x23a/0x310
+[  368.698315]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[  368.698315]  [<c022855e>] do_page_fault+0xb/0xd
+[  368.698315]  [<c07b1226>] error_code+0x5a/0x60
+[  368.698315]  [<c0228553>] ? vmalloc_sync_all+0xd6/0xd6
+[  368.705227] ieee80211 phy0: hw scan 5260 MHz
+[  368.705308] Mem-Info:
+[  368.706059] DMA per-cpu:
+[  368.706901] CPU    0: hi:    0, btch:   1 usd:   0
+[  368.708443] CPU    1: hi:    0, btch:   1 usd:   0
+[  368.709880] Normal per-cpu:
+[  368.711475] CPU    0: hi:   90, btch:  15 usd:  73
+[  368.713870] CPU    1: hi:   90, btch:  15 usd:   3
+[  368.715227] active_anon:70416 inactive_anon:540 isolated_anon:0\x0a active_file:39 inactive_file:107 isolated_file:0\x0a unevictable:64 dirty:0 writeback:0 unstable:0\x0a free:40065 slab_reclaimable:2190 slab_unreclaimable:4172\x0a mapped:941 shmem:1395 pagetables:2324 bounce:0\x0a free_cma:39083
+[  368.723432] DMA free:1992kB min:28kB low:56kB high:64kB active_anon:1296kB inactive_anon:0kB active_file:8kB inactive_file:0kB unevictable:4kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:4kB dirty:0kB writeback:0kB mapped:24kB shmem:4kB slab_reclaimable:212kB slab_unreclaimable:660kB kernel_stack:400kB pagetables:628kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:56 all_unreclaimable? yes
+[  368.732611] lowmem_reserve[]: 0 491 491 491
+[  368.735925] Normal free:155928kB min:2816kB low:5840kB high:6544kB active_anon:280368kB inactive_anon:2160kB active_file:304kB inactive_file:2716kB unevictable:252kB isolated(anon):0kB isolated(file):0kB present:507736kB managed:503052kB mlocked:252kB dirty:0kB writeback:0kB mapped:5032kB shmem:5576kB slab_reclaimable:8548kB slab_unreclaimable:16028kB kernel_stack:5024kB pagetables:8668kB unstable:0kB bounce:0kB free_cma:153992kB writeback_tmp:0kB pages_scanned:2044 all_unreclaimable? no
+[  368.745943] lowmem_reserve[]: 0 0 0 0
+[  368.748033] DMA: 78*4kB (UM) 62*8kB (UM) 54*16kB (UM) 10*32kB (UM) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1992kB
+[  368.755909] Normal: 24421*4kB (UERC) 6720*8kB (UERC) 12*16kB (R) 2*32kB (R) 0*64kB 1*128kB (R) 1*256kB (R) 0*512kB 1*1024kB (R) 0*2048kB 0*4096kB = 153108kB
+[  368.764123] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[  368.766043] 2569 total pagecache pages
+[  368.766920] 0 pages in swap cache
+[  368.767731] Swap cache stats: add 0, delete 0, find 0/0
+[  368.768927] Free swap  = 0kB
+[  368.769829] Total swap = 0kB
+[  368.780101] 130932 pages RAM
+[  368.781056] 0 pages HighMem/MovableOnly
+[  368.782272] 3744 pages reserved
+[  368.783330] [ pid ]   uid  tgid total_vm      rss nr_ptes swapents oom_score_adj name
+[  368.785801] [ 1046]     0  1046      950      482       4        0         -1000 ueventd
+[  368.787830] [ 1334]  1036  1334     3950      734       7        0         -1000 logd
+[  368.789943] [ 1340]  1000  1340     1767      139       4        0         -1000 servicemanager
+[  368.797581] [ 1341]  1000  1341     2863      199       6        0         -1000 hwservicemanage
+[  368.800369] [ 1342]  1000  1342     1471       78       3        0         -1000 vndservicemanag
+[  368.802956] [ 1345]  1000  1345     2839      149       6        0         -1000 keymaster@3.0-s
+[  368.805261] [ 1346]     0  1346     4467      280       8        0         -1000 vold
+[  368.807385] [ 1389]  1000  1389     2148      128       5        0         -1000 allocator@1.0-s
+[  368.810328] [ 1390]  1041  1390     7663      303      12        0         -1000 audio@2.0-servi
+[  368.812356] [ 1391]  1047  1391     6050      284      10        0         -1000 provider@2.4-se
+[  368.814490] [ 1392]  1000  1392     2554      114       5        0         -1000 configstore@1.0
+[  368.817612] [ 1393]  1013  1393     4047      231       8        0         -1000 drm@1.0-service
+[  368.820337] ieee80211 phy0: hw scan 5280 MHz
+[  368.820344] [ 1394]  1000  1394     3061      165       6        0         -1000 gatekeeper@1.0-
+[  368.822565] [ 1395]  1000  1395     3742      162       7        0         -1000 allocator@2.0-s
+[  368.825831] [ 1396]  1000  1396    13750      282      18        0         -1000 composer@2.1-se
+[  368.828705] [ 1397]  1000  1397     2422      131       4        0         -1000 power@1.0-servi
+[  368.840207] [ 1398]  1000  1398     2849      146       5        0         -1000 sensors@1.0-ser
+[  368.843171] [ 1399]  1010  1399     3559      170       6        0         -1000 wifi@1.0-servic
+[  368.846110] [ 1400]     0  1400     2549      144       5        0         -1000 healthd
+[  368.860155] [ 1405]     0  1405     1426       81       3        0         -1000 qemu-props
+[  368.863179] [ 1410]     0  1410     1425       82       4        0         -1000 misc-pipe
+[  368.865942] [ 1416]     0  1416     1431       96       4        0         -1000 lmkd
+[  368.868602] [ 1426]  2000  1426     1406      119       4        0         -1000 sh
+[  368.870931] [ 1510]  1041  1510     8384      377      13        0         -1000 audioserver
+[  368.873697] [ 1511]  1047  1511     8011      435      13        0         -1000 cameraserver
+[  368.877565] [ 1512]  1019  1512     5913      371      11        0         -1000 drmserver
+[  368.879900] [ 1513]     0  1513     3757      270       6        0         -1000 Binder:1513_2
+[  368.889100] [ 1514]  1017  1514     3596      206       7        0         -1000 keystore
+[  368.891591] [ 1515]  1013  1515     3311      207       7        0         -1000 mediadrmserver
+[  368.894101] [ 1516]  1040  1516    14321      655      17        0         -1000 mediaextractor
+[  368.901458] [ 1517]  1013  1517     5893      364      11        0         -1000 mediametrics
+[  368.907910] [ 1518]  1013  1518    15585      652      19        0         -1000 mediaserver
+[  368.913207] [ 1520]     0  1520     3020      139       5        0         -1000 storaged
+[  368.915643] [ 1524]  1010  1524     2368      168       5        0         -1000 wificond
+[  368.924091] [ 1525]  1000  1525     3797      178       7        0         -1000 gnss@1.0-servic
+[  368.940104] ieee80211 phy0: hw scan 5300 MHz
+[  368.940111] [ 1526]  1046  1526     9494      738      16        0         -1000 omx@1.0-service
+[  368.942823] [ 1528]  1001  1528     4103      162       7        0         -1000 rild
+[  368.944611] [ 1533]  1000  1533     3056      161       6        0         -1000 gatekeeperd
+[  368.946617] [ 1536]  1058  1536     1432       85       4        0         -1000 tombstoned
+[  368.948610] [ 1540]  1000  1540     2472      136       5        0         -1000 fingerprint@2.1
+[  368.950705] [ 1652]     0  1652     1334       78       4        0         -1000 dhcpclient
+[  368.952619] [ 1655]     0  1655      497        9       4        0         -1000 sh
+[  368.954349] [ 1657]     0  1657      694       14       3        0         -1000 sleep
+[  368.956323] [ 1681]     0  1681     1397      112       4        0         -1000 ipv6proxy
+[  368.958395] [ 1684]     0  1684     1993      130       5        0         -1000 hostapd
+[  368.960975] [ 1686]     0  1686     1365       78       4        0         -1000 dhcpserver
+[  368.963168] [ 2658]     0  2658     3015      407       6        0         -1000 adbd
+[  368.965315] [ 2663]  1020  2663      657       75       4        0         -1000 mdnsd
+[  368.967309] [ 2748]     0  2748     5259      210       8        0         -1000 Binder:2748_2
+[  368.969433] [ 2749]  1000  2749    16677      484      22        0         -1000 surfaceflinger
+[  368.971698] [ 2750]     0  2750   226785     2388      80        0         -1000 main
+[  368.974367] [ 2752]     0  2752     1626      156       4        0         -1000 iptables-restor
+[  368.976855] [ 2754]     0  2754     1629      170       4        0         -1000 ip6tables-resto
+[  368.979485] [ 2798]  1000  2798   274380     7350     131        0          -900 system_server
+[  368.981959] [ 2895] 10045  2895   249147     2722      78        0           200 putmethod.latin
+[  368.983978] [ 2902] 10022  2902   270467    13650     108        0          -800 ndroid.systemui
+[  368.985988] [ 2951]  1001  2951   254854     3650      86        0          -800 m.android.phone
+[  368.987996] [ 3008]  1010  3008     3896      192       7        0         -1000 wpa_supplicant
+[  368.990170] [ 3093] 10003  3093   245424     2313      70        0           902 oadcastreceiver
+[  368.993245] [ 3125] 10018  3125   249765     2587      78        0           100 .android.dialer
+[  368.995904] [ 3189] 10037  3189   247287     2429      74        0           904 droid.deskclock
+[  368.998471] [ 3224] 10002  3224   245828     2451      74        0           900 viders.calendar
+[  369.001375] [ 3282] 10013  3282   258024     4721      95        0             0 droid.launcher3
+[  369.004042] [ 3304] 10052  3304   245850     2295      72        0           902 id.printspooler
+[  369.006303] [ 3354]  1000  3354   245367     2262      72        0           904 ndroid.keychain
+[  369.008769] [ 3436] 10014  3436   245559     2315      72        0           904 gedprovisioning
+[  369.011235] [ 3487] 10004  3487   247603     3490      85        0           900 d.process.acore
+[  369.013522] [ 3567] 10033  3567   246286     2301      73        0           906 android.camera2
+[  369.016092] [ 3588] 10006  3588   246794     2326      73        0           906 ndroid.contacts
+[  369.018520] [ 3607] 10042  3607   248173     2648      79        0           902 m.android.email
+[  369.021321] [ 3637] 10041  3637   246349     2356      74        0           900 droid.gallery3d
+[  369.024132] [ 3656] 10057  3656   248407     3462      83        0           900 droid.messaging
+[  369.027063] [ 3677] 10017  3677   246216     2246      73        0           904 ackageinstaller
+[  369.030168] [ 3693] 10009  3693   245633     2261      73        0           902 id.ext.services
+[  369.032442] [ 3766] 10007  3766   246003     2616      74        0             0 id.defcontainer
+[  369.034786] [ 3822]     0  3822   198136     1273      60        0         -1000 main
+[  369.037349] [ 3832] 10065  3832   287313    18601     100        0             0 .plainnotes.app
+[  369.039646] Out of memory: Kill process 3487 (d.process.acore) score 926 or sacrifice child
+[  369.042272] Killed process 3487 (d.process.acore) total-vm:990412kB, anon-rss:13960kB, file-rss:0kB
+[  369.060096] ieee80211 phy0: hw scan 5320 MHz
+[  369.180232] ieee80211 phy0: hw scan 5500 MHz
+[  369.300183] ieee80211 phy0: hw scan 5520 MHz
+[  369.420116] ieee80211 phy0: hw scan 5540 MHz
+[  369.540184] ieee80211 phy0: hw scan 5560 MHz
+[  369.660101] ieee80211 phy0: hw scan 5580 MHz
+[  369.780105] ieee80211 phy0: hw scan 5600 MHz
+[  369.900163] ieee80211 phy0: hw scan 5620 MHz
+[  370.030117] ieee80211 phy0: hw scan 5640 MHz
+[  370.150126] ieee80211 phy0: hw scan 5660 MHz
+[  370.205001] WifiStateMachin invoked oom-killer: gfp_mask=0x80d2, order=0, oom_score_adj=-900
+[  370.207083] CPU: 0 PID: 2870 Comm: WifiStateMachin Tainted: G S      W      3.18.91+ #1
+[  370.209200] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[  370.210107]  00000000 00000246 caac9c14 c07a9c83 c55f2ca0 00000000 caac9c5c c07a913f
+[  370.210107]  c0a083cb c55f30e4 000080d2 00000000 fffffc7c c024d18f c0b07780 caac9c48
+[  370.210107]  c07b028e caac9c48 c07affa1 00000000 c0401a6c 000080d2 c112aca0 00000000
+[  370.210107] Call Trace:
+[  370.210107]  [<c07a9c83>] dump_stack+0x45/0x59
+[  370.210107]  [<c07a913f>] dump_header.isra.12+0x66/0x199
+[  370.210107]  [<c024d18f>] ? preempt_count_add+0x6a/0x7c
+[  370.210107]  [<c07b028e>] ? _raw_spin_trylock+0x11/0x5d
+[  370.210107]  [<c07affa1>] ? _raw_spin_unlock_irqrestore+0x13/0x24
+[  370.210107]  [<c0401a6c>] ? ___ratelimit+0x97/0xa1
+[  370.210107]  [<c02c099e>] oom_kill_process+0x4b/0x2d0
+[  370.210107]  [<c0272fe8>] ? rcu_read_unlock_special+0x140/0x172
+[  370.210107]  [<c02c0f50>] out_of_memory+0x1f3/0x251
+[  370.210107]  [<c02c3ff0>] __alloc_pages_nodemask+0x6b0/0x6f4
+[  370.210107]  [<c060cd78>] binder_update_page_range+0x451/0x592
+[  370.210107]  [<c060d432>] binder_alloc_new_buf_locked+0x288/0x3e0
+[  370.210107]  [<c060d5b2>] binder_alloc_new_buf+0x28/0x3a
+[  370.210107]  [<c0609fdd>] binder_transaction+0x76e/0x199e
+[  370.210107]  [<c029c4a3>] ? delayacct_end+0x5c/0x62
+[  370.210107]  [<c02f0bf2>] ? kfree+0x142/0x16b
+[  370.210107]  [<c060cff3>] ? binder_delete_free_buffer+0x13a/0x142
+[  370.210107]  [<c060cff3>] ? binder_delete_free_buffer+0x13a/0x142
+[  370.210107]  [<c02f36d2>] ? __check_object_size+0x8e/0x10b
+[  370.210107]  [<c060b8b1>] binder_thread_write+0x6a4/0xd2e
+[  370.210107]  [<c02be240>] ? filemap_map_pages+0x5c/0x1ea
+[  370.210107]  [<c024d0ff>] ? get_parent_ip+0xb/0x31
+[  370.210107]  [<c060c0ed>] binder_ioctl+0x1b2/0x642
+[  370.210107]  [<c060bf3b>] ? binder_thread_write+0xd2e/0xd2e
+[  370.210107]  [<c03028a7>] do_vfs_ioctl+0x368/0x411
+[  370.210107]  [<c03bf8a2>] ? selinux_file_ioctl+0xa8/0xae
+[  370.210107]  [<c0302993>] SyS_ioctl+0x43/0x64
+[  370.210107]  [<c07b07b6>] syscall_call+0x7/0x7
+[  370.254981] Mem-Info:
+[  370.255801] DMA per-cpu:
+[  370.256489] CPU    0: hi:    0, btch:   1 usd:   0
+[  370.257934] CPU    1: hi:    0, btch:   1 usd:   0
+[  370.259381] Normal per-cpu:
+[  370.260380] CPU    0: hi:   90, btch:  15 usd:   0
+[  370.261525] CPU    1: hi:   90, btch:  15 usd:   0
+[  370.262648] active_anon:74314 inactive_anon:540 isolated_anon:0\x0a active_file:437 inactive_file:462 isolated_file:26\x0a unevictable:64 dirty:0 writeback:0 unstable:0\x0a free:35529 slab_reclaimable:2187 slab_unreclaimable:4159\x0a mapped:1817 shmem:1395 pagetables:2244 bounce:0\x0a free_cma:34537
+[  370.269889] DMA free:1992kB min:28kB low:56kB high:64kB active_anon:1296kB inactive_anon:0kB active_file:0kB inactive_file:8kB unevictable:4kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:4kB dirty:0kB writeback:0kB mapped:24kB shmem:4kB slab_reclaimable:212kB slab_unreclaimable:660kB kernel_stack:400kB pagetables:628kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:64 all_unreclaimable? yes
+[  370.279097] ieee80211 phy0: hw scan 5680 MHz
+[  370.288615] lowmem_reserve[]: 0 491 491 491
+[  370.293785] Normal free:143900kB min:2816kB low:5840kB high:6544kB active_anon:295960kB inactive_anon:2160kB active_file:68kB inactive_file:212kB unevictable:252kB isolated(anon):0kB isolated(file):0kB present:507736kB managed:503052kB mlocked:252kB dirty:0kB writeback:0kB mapped:3644kB shmem:5576kB slab_reclaimable:8536kB slab_unreclaimable:15976kB kernel_stack:4912kB pagetables:8348kB unstable:0kB bounce:0kB free_cma:141844kB writeback_tmp:0kB pages_scanned:1680 all_unreclaimable? yes
+[  370.305234] lowmem_reserve[]: 0 0 0 0
+[  370.309326] DMA: 84*4kB (UM) 59*8kB (UM) 54*16kB (UM) 10*32kB (UM) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1992kB
+[  370.322854] Normal: 27178*4kB (UERC) 3963*8kB (UERC) 12*16kB (R) 2*32kB (R) 0*64kB 1*128kB (R) 1*256kB (R) 0*512kB 1*1024kB (R) 0*2048kB 0*4096kB = 142080kB
+[  370.331807] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[  370.334667] 2904 total pagecache pages
+[  370.335737] 0 pages in swap cache
+[  370.336775] Swap cache stats: add 0, delete 0, find 0/0
+[  370.338182] Free swap  = 0kB
+[  370.339075] Total swap = 0kB
+[  370.339980] 130932 pages RAM
+[  370.341247] 0 pages HighMem/MovableOnly
+[  370.342381] 3744 pages reserved
+[  370.343389] [ pid ]   uid  tgid total_vm      rss nr_ptes swapents oom_score_adj name
+[  370.345609] [ 1046]     0  1046      950      482       4        0         -1000 ueventd
+[  370.347759] [ 1334]  1036  1334     3950      734       7        0         -1000 logd
+[  370.349810] [ 1340]  1000  1340     1767      139       4        0         -1000 servicemanager
+[  370.352231] [ 1341]  1000  1341     2863      199       6        0         -1000 hwservicemanage
+[  370.354615] [ 1342]  1000  1342     1471       78       3        0         -1000 vndservicemanag
+[  370.356917] [ 1345]  1000  1345     2839      149       6        0         -1000 keymaster@3.0-s
+[  370.359169] [ 1346]     0  1346     4467      280       8        0         -1000 vold
+[  370.361335] [ 1389]  1000  1389     2148      128       5        0         -1000 allocator@1.0-s
+[  370.363693] [ 1390]  1041  1390     7663      303      12        0         -1000 audio@2.0-servi
+[  370.365603] [ 1391]  1047  1391     6050      284      10        0         -1000 provider@2.4-se
+[  370.367455] [ 1392]  1000  1392     2554      114       5        0         -1000 configstore@1.0
+[  370.369396] [ 1393]  1013  1393     4047      231       8        0         -1000 drm@1.0-service
+[  370.371290] [ 1394]  1000  1394     3061      165       6        0         -1000 gatekeeper@1.0-
+[  370.373154] [ 1395]  1000  1395     3742      162       7        0         -1000 allocator@2.0-s
+[  370.375030] [ 1396]  1000  1396    13750      282      18        0         -1000 composer@2.1-se
+[  370.376830] [ 1397]  1000  1397     2422      131       4        0         -1000 power@1.0-servi
+[  370.378669] [ 1398]  1000  1398     2849      146       5        0         -1000 sensors@1.0-ser
+[  370.390087] [ 1399]  1010  1399     3559      170       6        0         -1000 wifi@1.0-servic
+[  370.390245] ieee80211 phy0: hw scan 5700 MHz
+[  370.391873] [ 1400]     0  1400     2549      144       5        0         -1000 healthd
+[  370.394181] [ 1405]     0  1405     1426       81       3        0         -1000 qemu-props
+[  370.396228] [ 1410]     0  1410     1425       82       4        0         -1000 misc-pipe
+[  370.398396] [ 1416]     0  1416     1431       96       4        0         -1000 lmkd
+[  370.404155] [ 1426]  2000  1426     1406      119       4        0         -1000 sh
+[  370.406248] [ 1510]  1041  1510     8384      377      13        0         -1000 audioserver
+[  370.408650] [ 1511]  1047  1511     8011      435      13        0         -1000 cameraserver
+[  370.414472] [ 1512]  1019  1512     5913      371      11        0         -1000 drmserver
+[  370.418486] [ 1513]     0  1513     3757      270       6        0         -1000 Binder:1513_2
+[  370.420845] [ 1514]  1017  1514     3596      206       7        0         -1000 keystore
+[  370.422930] [ 1515]  1013  1515     3311      207       7        0         -1000 mediadrmserver
+[  370.425151] [ 1516]  1040  1516    14321      655      17        0         -1000 mediaextractor
+[  370.427356] [ 1517]  1013  1517     5893      364      11        0         -1000 mediametrics
+[  370.430196] [ 1518]  1013  1518    15585      652      19        0         -1000 mediaserver
+[  370.432339] [ 1520]     0  1520     3020      139       5        0         -1000 storaged
+[  370.434631] [ 1524]  1010  1524     2368      168       5        0         -1000 wificond
+[  370.443069] [ 1525]  1000  1525     3797      226       7        0         -1000 gnss@1.0-servic
+[  370.445095] [ 1526]  1046  1526     9494      738      16        0         -1000 omx@1.0-service
+[  370.447101] [ 1528]  1001  1528     4103      162       7        0         -1000 rild
+[  370.448914] [ 1533]  1000  1533     3056      161       6        0         -1000 gatekeeperd
+[  370.451159] [ 1536]  1058  1536     1432       85       4        0         -1000 tombstoned
+[  370.453107] [ 1540]  1000  1540     2472      136       5        0         -1000 fingerprint@2.1
+[  370.455251] [ 1652]     0  1652     1334       78       4        0         -1000 dhcpclient
+[  370.457276] [ 1655]     0  1655      497        9       4        0         -1000 sh
+[  370.459129] [ 1657]     0  1657      694       14       3        0         -1000 sleep
+[  370.461226] [ 1681]     0  1681     1397      112       4        0         -1000 ipv6proxy
+[  370.463137] [ 1684]     0  1684     1993      130       5        0         -1000 hostapd
+[  370.465088] [ 1686]     0  1686     1365       78       4        0         -1000 dhcpserver
+[  370.467014] [ 2658]     0  2658     3015      407       6        0         -1000 adbd
+[  370.468829] [ 2663]  1020  2663      657       75       4        0         -1000 mdnsd
+[  370.470918] [ 2748]     0  2748     5259      210       8        0         -1000 Binder:2748_2
+[  370.473256] [ 2749]  1000  2749    16677      484      22        0         -1000 surfaceflinger
+[  370.475473] [ 2750]     0  2750   226785     2388      80        0         -1000 main
+[  370.477465] [ 2752]     0  2752     1626      156       4        0         -1000 iptables-restor
+[  370.479697] [ 2754]     0  2754     1629      170       4        0         -1000 ip6tables-resto
+[  370.482033] [ 2798]  1000  2798   274380     7370     131        0          -900 system_server
+[  370.484463] [ 2895] 10045  2895   249147     2722      78        0           200 putmethod.latin
+[  370.486884] [ 2902] 10022  2902   270467    13650     108        0          -800 ndroid.systemui
+[  370.489097] [ 2951]  1001  2951   254854     3650      86        0          -800 m.android.phone
+[  370.491555] [ 3008]  1010  3008     3896      192       7        0         -1000 wpa_supplicant
+[  370.493772] [ 3093] 10003  3093   245424     2313      70        0           902 oadcastreceiver
+[  370.495930] [ 3125] 10018  3125   249765     2587      78        0           100 .android.dialer
+[  370.498175] [ 3189] 10037  3189   247287     2429      74        0           904 droid.deskclock
+[  370.500413] [ 3224] 10002  3224   245828     2451      74        0           900 viders.calendar
+[  370.502672] [ 3282] 10013  3282   258024     4721      95        0             0 droid.launcher3
+[  370.505721] [ 3304] 10052  3304   245850     2295      72        0           902 id.printspooler
+[  370.507997] [ 3354]  1000  3354   245367     2262      72        0           904 ndroid.keychain
+[  370.510356] ieee80211 phy0: hw scan complete
+[  370.510399] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  370.510688] [ 3436] 10014  3436   245559     2315      72        0           904 gedprovisioning
+[  370.513004] [ 3567] 10033  3567   246286     2301      73        0           906 android.camera2
+[  370.523374] [ 3588] 10006  3588   246794     2326      73        0           906 ndroid.contacts
+[  370.526167] [ 3607] 10042  3607   248173     2648      79        0           902 m.android.email
+[  370.529120] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[  370.531811] [ 3637] 10041  3637   246349     2356      74        0           900 droid.gallery3d
+[  370.534854] [ 3656] 10057  3656   248672     3462      83        0           900 droid.messaging
+[  370.537742] [ 3677] 10017  3677   246216     2246      73        0           904 ackageinstaller
+[  370.544043] [ 3693] 10009  3693   245633     2261      73        0           902 id.ext.services
+[  370.552459] [ 3766] 10007  3766   245730     2623      74        0           900 id.defcontainer
+[  370.556099] [ 3822]     0  3822   198136     1273      60        0         -1000 main
+[  370.558977] [ 3832] 10065  3832   291791    24358     105        0             0 .plainnotes.app
+[  370.564668] Out of memory: Kill process 3656 (droid.messaging) score 926 or sacrifice child
+[  370.566812] Killed process 3656 (droid.messaging) total-vm:994688kB, anon-rss:13848kB, file-rss:0kB
+[  370.620150] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  370.827083] lowmemorykiller: Killing 'android.camera2' (3567), adj 906,\x0a   to free 9204kB on behalf of 'Binder:2798_A' (3297) because\x0a   cache 40700kB is below limit 105536kB for oom_score_adj 906\x0a   Free memory is 105516kB above reserved
+[  385.006792] lowmemorykiller: Killing 'droid.deskclock' (3189), adj 904,\x0a   to free 9716kB on behalf of 'kswapd0' (529) because\x0a   cache 62568kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80880kB above reserved
+[  385.013882] lowmemorykiller: Killing 'droid.deskclock' (3189), adj 904,\x0a   to free 9716kB on behalf of 'system_server' (2798) because\x0a   cache 64696kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 78756kB above reserved
+[  385.045814] lowmemorykiller: Killing 'ndroid.contacts' (3588), adj 904,\x0a   to free 9304kB on behalf of 'kswapd0' (529) because\x0a   cache 59964kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 86124kB above reserved
+[  385.093641] lowmemorykiller: Killing 'gedprovisioning' (3436), adj 904,\x0a   to free 9260kB on behalf of 'kswapd0' (529) because\x0a   cache 68660kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 78664kB above reserved
+[  385.115340] lowmemorykiller: Killing 'ndroid.keychain' (3354), adj 904,\x0a   to free 9048kB on behalf of 'kswapd0' (529) because\x0a   cache 70220kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 77152kB above reserved
+[  385.122565] lowmemorykiller: Killing 'FinalizerWatchd' (3365), adj 904,\x0a   to free 9208kB on behalf of 'kswapd0' (529) because\x0a   cache 70980kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 76500kB above reserved
+[  385.129108] lowmemorykiller: Killing 'id.ext.services' (3693), adj 904,\x0a   to free 9044kB on behalf of 'kswapd0' (529) because\x0a   cache 71208kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 78380kB above reserved
+[  385.145344] lowmemorykiller: Killing 'ackageinstaller' (3677), adj 904,\x0a   to free 8984kB on behalf of 'kswapd0' (529) because\x0a   cache 67940kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 83976kB above reserved
+[  385.152782] lowmemorykiller: Killing 'm.android.email' (3607), adj 902,\x0a   to free 10592kB on behalf of 'kswapd0' (529) because\x0a   cache 68320kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 83844kB above reserved
+[  385.158429] lowmemorykiller: Killing 'Jit thread pool' (3613), adj 902,\x0a   to free 10604kB on behalf of 'kswapd0' (529) because\x0a   cache 68308kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 85832kB above reserved
+[  385.164167] lowmemorykiller: Killing 'oadcastreceiver' (3093), adj 902,\x0a   to free 9252kB on behalf of 'kswapd0' (529) because\x0a   cache 68308kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 85832kB above reserved
+[  385.183801] binder_alloc: 3607: binder_alloc_buf, no vma
+[  385.187796] binder: 2798:2883 transaction failed 29189/-3, size 76-0 line 3124
+[  385.198683] binder_alloc: 3093: binder_alloc_buf, no vma
+[  385.200855] binder: 2798:2883 transaction failed 29189/-3, size 76-0 line 3124
+[  385.205573] binder_alloc: 3677: binder_alloc_buf, no vma
+[  385.212053] binder: 2798:2883 transaction failed 29189/-3, size 76-0 line 3124
+[  385.238194] lowmemorykiller: Killing 'id.printspooler' (3304), adj 906,\x0a   to free 9188kB on behalf of 'kswapd0' (529) because\x0a   cache 76508kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 84892kB above reserved
+[  385.278243] lowmemorykiller: Killing 'viders.calendar' (3224), adj 904,\x0a   to free 9804kB on behalf of 'kswapd0' (529) because\x0a   cache 81848kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 81156kB above reserved
+[  385.292688] lowmemorykiller: Killing 'droid.gallery3d' (3637), adj 902,\x0a   to free 9424kB on behalf of 'kswapd0' (529) because\x0a   cache 82588kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 83404kB above reserved
+[  385.302337] lowmemorykiller: Killing 'Jit thread pool' (3642), adj 902,\x0a   to free 14984kB on behalf of 'kswapd0' (529) because\x0a   cache 82512kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 83404kB above reserved
+[  385.446896] lowmemorykiller: Killing 'id.defcontainer' (3766), adj 900,\x0a   to free 9512kB on behalf of 'kswapd0' (529) because\x0a   cache 86524kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 83340kB above reserved
+[  388.145036] alloc_contig_range: [fa00, fac9) PFNs busy
+[  388.148067] alloc_contig_range: [fc00, fcc9) PFNs busy
+[  392.400692] init: processing action (qemu.adbd=start)
+[  392.402937] init: computing context for service 'goldfish-logcat'
+[  392.443008] init: starting service 'goldfish-logcat'...
+[  392.558962] init: property_set("ro.boottime.goldfish-logcat", "392558171390") failed: property already set
+[  392.562437] init: Command 'start goldfish-logcat' action=qemu.adbd=start (/init.ranchu.rc:81) returned 0 took 160.011ms.
+[  392.565391] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  392.570112] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  392.582380] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  392.609258] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  392.612321] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  392.616865] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  401.030421] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  401.130221] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  403.246569] lowmemorykiller: Killing 'id.printspooler' (3879), adj 900,\x0a   to free 9228kB on behalf of 'kswapd0' (529) because\x0a   cache 58632kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 86524kB above reserved
+[  420.980218] lowmemorykiller: Killing 'd.process.acore' (3903), adj 900,\x0a   to free 12900kB on behalf of 'Binder:4010_3' (4024) because\x0a   cache 43964kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 85244kB above reserved
+[  420.980353] lowmemorykiller: Killing 'd.process.acore' (3903), adj 900,\x0a   to free 12900kB on behalf of 'kswapd0' (529) because\x0a   cache 44040kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 85184kB above reserved
+[  422.300581] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  423.917630] binder: 1510:1577 transaction failed 29189/-22, size 96-0 line 3001
+[  427.606454] lowmemorykiller: Killing 'oid.documentsui' (3931), adj 900,\x0a   to free 20468kB on behalf of 'RenderThread' (3969) because\x0a   cache 75048kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 81116kB above reserved
+[  427.631772] lowmemorykiller: Killing 'oid.documentsui' (3931), adj 900,\x0a   to free 20400kB on behalf of 'android.ui' (2814) because\x0a   cache 79936kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 76428kB above reserved
+[  427.666558] lowmemorykiller: Killing 'RenderThread' (3969), adj 900,\x0a   to free 30720kB on behalf of 'RenderThread' (3969) because\x0a   cache 81868kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 74484kB above reserved
+[  427.673769] lowmemorykiller: Killing 'RenderThread' (3969), adj 900,\x0a   to free 30640kB on behalf of 'kswapd0' (529) because\x0a   cache 81488kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 74532kB above reserved
+[  427.680130] RenderThread: page allocation failure: order:0, mode:0xd0
+[  427.681685] CPU: 1 PID: 3969 Comm: RenderThread Tainted: G S      W      3.18.91+ #1
+[  427.683367] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[  427.685588]  00000000 00000286 c990fcf8 c07a9c83 00000000 000000d0 c990fd28 c02c1c58
+[  427.687341]  c0a08789 c10b50c4 00000000 000000d0 00000040 00000000 000000d0 00000040
+[  427.688998]  00000000 000000d0 c990fdac c02c3eab 000000d0 00000000 00000000 c10b4c80
+[  427.690090] Call Trace:
+[  427.690090]  [<c07a9c83>] dump_stack+0x45/0x59
+[  427.690090]  [<c02c1c58>] warn_alloc_failed+0xc4/0xd6
+[  427.690090]  [<c02c3eab>] __alloc_pages_nodemask+0x56b/0x6f4
+[  427.690090]  [<c02c4043>] __get_free_pages+0xf/0x1f
+[  427.690090]  [<c0611fee>] goldfish_pipe_open+0x72/0x1ff
+[  427.690090]  [<c03ba154>] ? inode_has_perm+0x25/0x2f
+[  427.690090]  [<c04796a9>] misc_open+0xf0/0x10d
+[  427.690090]  [<c02f8626>] chrdev_open+0x112/0x130
+[  427.690090]  [<c02f3aed>] do_dentry_open+0x1f9/0x25a
+[  427.690090]  [<c02fc8ce>] ? __inode_permission2+0x73/0x78
+[  427.690090]  [<c02f8514>] ? cdev_put+0x1a/0x1a
+[  427.690090]  [<c02f4952>] vfs_open+0x47/0x50
+[  427.690090]  [<c02ffcd0>] do_last+0x77a/0xa5a
+[  427.690090]  [<c0300466>] path_openat+0x4b6/0x4ea
+[  427.690090]  [<c0300b2c>] do_filp_open+0x25/0x5e
+[  427.690090]  [<c02f4c19>] do_sys_open+0x12e/0x1a7
+[  427.690090]  [<c02f4cc2>] SyS_openat+0x16/0x18
+[  427.690090]  [<c07b07b6>] syscall_call+0x7/0x7
+[  427.712342] Mem-Info:
+[  427.712959] DMA per-cpu:
+[  427.713645] CPU    0: hi:    0, btch:   1 usd:   0
+[  427.714723] CPU    1: hi:    0, btch:   1 usd:   0
+[  427.716320] Normal per-cpu:
+[  427.717091] CPU    0: hi:   90, btch:  15 usd:  14
+[  427.718293] CPU    1: hi:   90, btch:  15 usd:   0
+[  427.730097] active_anon:70771 inactive_anon:557 isolated_anon:0\x0a active_file:11079 inactive_file:10109 isolated_file:32\x0a unevictable:78 dirty:0 writeback:0 unstable:0\x0a free:19937 slab_reclaimable:2147 slab_unreclaimable:3760\x0a mapped:18658 shmem:1412 pagetables:1626 bounce:0\x0a free_cma:18963
+[  427.736209] DMA free:1992kB min:28kB low:56kB high:64kB active_anon:1232kB inactive_anon:0kB active_file:20kB inactive_file:40kB unevictable:4kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:4kB dirty:0kB writeback:0kB mapped:100kB shmem:4kB slab_reclaimable:228kB slab_unreclaimable:660kB kernel_stack:424kB pagetables:568kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:0 all_unreclaimable? no
+[  427.749703] lowmem_reserve[]: 0 491 491 491
+[  427.750900] Normal free:77176kB min:2816kB low:5840kB high:6544kB active_anon:281956kB inactive_anon:2228kB active_file:44200kB inactive_file:41192kB unevictable:308kB isolated(anon):0kB isolated(file):128kB present:507736kB managed:503052kB mlocked:308kB dirty:0kB writeback:0kB mapped:74760kB shmem:5644kB slab_reclaimable:8360kB slab_unreclaimable:14380kB kernel_stack:4264kB pagetables:5936kB unstable:0kB bounce:0kB free_cma:75280kB writeback_tmp:0kB pages_scanned:264 all_unreclaimable? no
+[  427.764310] lowmem_reserve[]: 0 0 0 0
+[  427.771701] DMA: 71*4kB (UM) 52*8kB (UM) 55*16kB (UM) 13*32kB (UM) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1996kB
+[  427.779076] Normal: 19209*4kB (UERC) 15*8kB (R) 12*16kB (R) 4*32kB (R) 0*64kB 1*128kB (R) 1*256kB (R) 0*512kB 1*1024kB (R) 0*2048kB 0*4096kB = 78684kB
+[  427.801250] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[  427.803054] 20323 total pagecache pages
+[  427.803985] 0 pages in swap cache
+[  427.827076] Swap cache stats: add 0, delete 0, find 0/0
+[  427.828615] Free swap  = 0kB
+[  427.834084] Total swap = 0kB
+[  427.834864] 130932 pages RAM
+[  427.835589] 0 pages HighMem/MovableOnly
+[  427.836483] 3744 pages reserved
+[  427.837254] Could not alloc pipe command buffer!
+[  428.443134] binder: 3832:3841 DecRefs 0 refcount change on invalid ref 36 ret -22
+[  429.407367] binder: 3832:3855 IncRefs 0 refcount change on invalid ref 36 ret -22
+[  429.409239] binder: 3832:3855 Acquire 1 refcount change on invalid ref 36 ret -22
+[  429.411377] binder: transaction release 117948 bad handle 36, ret = -22
+[  431.382256] lowmemorykiller: Killing 'com.android.mtp' (3972), adj 900,\x0a   to free 9340kB on behalf of 'kswapd0' (529) because\x0a   cache 74936kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 83916kB above reserved
+[  431.990288] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  432.090552] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  440.030451] lowmemorykiller: Killing 'oid.documentsui' (4046), adj 900,\x0a   to free 21640kB on behalf of 'android.ui' (2814) because\x0a   cache 71544kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80168kB above reserved
+[  440.039464] lowmemorykiller: Killing 'RenderThread' (4066), adj 900,\x0a   to free 29316kB on behalf of 'android.ui' (2814) because\x0a   cache 69568kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 81928kB above reserved
+[  440.120713] binder: undelivered transaction 122628, process died.
+[  440.122758] binder: undelivered transaction 122629, process died.
+[  452.405060] init: processing action (qemu.adbd=start)
+[  452.406645] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  452.408743] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  452.413055] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  452.421255] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  452.424359] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  452.427336] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  453.260279] lowmemorykiller: Killing 'externalstorage' (3952), adj 902,\x0a   to free 9096kB on behalf of 'kswapd0' (529) because\x0a   cache 78660kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 76024kB above reserved
+[  453.266530] lowmemorykiller: Killing 'Binder:3952_2' (3965), adj 902,\x0a   to free 9252kB on behalf of 'kswapd0' (529) because\x0a   cache 79320kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 75364kB above reserved
+[  453.272579] lowmemorykiller: Killing 'd.process.media' (3991), adj 900,\x0a   to free 9920kB on behalf of 'kswapd0' (529) because\x0a   cache 79380kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 77292kB above reserved
+[  453.279599] lowmemorykiller: Killing 'Jit thread pool' (3996), adj 900,\x0a   to free 9976kB on behalf of 'kswapd0' (529) because\x0a   cache 79592kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 77232kB above reserved
+[  454.022270] alloc_contig_range: [fa00, fac9) PFNs busy
+[  463.030168] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  463.041029] lowmemorykiller: Killing 'd.process.acore' (4084), adj 700,\x0a   to free 12732kB on behalf of 'kswapd0' (529) because\x0a   cache 63076kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 75172kB above reserved
+[  463.049088] lowmemorykiller: Killing 'nnotes.app.test' (4010), adj 700,\x0a   to free 12608kB on behalf of 'kswapd0' (529) because\x0a   cache 63152kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 74952kB above reserved
+[  463.130284] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  471.338638] lowmemorykiller: Killing '.android.dialer' (3125), adj 902,\x0a   to free 10320kB on behalf of 'kswapd0' (529) because\x0a   cache 68256kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 78600kB above reserved
+[  471.341708] lowmemorykiller: Killing '.android.dialer' (3125), adj 902,\x0a   to free 10320kB on behalf of 'RenderThread' (4130) because\x0a   cache 68676kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 78116kB above reserved
+[  471.355163] lowmemorykiller: Killing 'oid.documentsui' (4107), adj 900,\x0a   to free 16140kB on behalf of 'kswapd0' (529) because\x0a   cache 67784kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 83248kB above reserved
+[  471.362600] lowmemorykiller: Killing 'RenderThread' (4130), adj 900,\x0a   to free 24148kB on behalf of 'kswapd0' (529) because\x0a   cache 68544kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 82648kB above reserved
+[  480.169259] lowmemorykiller: Killing 'oid.documentsui' (4159), adj 900,\x0a   to free 16024kB on behalf of 'WifiStateMachin' (2870) because\x0a   cache 64228kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 82028kB above reserved
+[  480.176935] lowmemorykiller: Killing 'oid.documentsui' (4159), adj 900,\x0a   to free 16024kB on behalf of 'Binder:2798_C' (3867) because\x0a   cache 65216kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80964kB above reserved
+[  480.178498] lowmemorykiller: Killing 'oid.documentsui' (4159), adj 900,\x0a   to free 16024kB on behalf of 'android.ui' (2814) because\x0a   cache 65672kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80424kB above reserved
+[  480.192595] lowmemorykiller: Killing 'Binder:4159_2' (4172), adj 900,\x0a   to free 23900kB on behalf of 'RenderThread' (4179) because\x0a   cache 65444kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80376kB above reserved
+[  480.202598] lowmemorykiller: Killing 'Binder:4159_2' (4172), adj 900,\x0a   to free 23832kB on behalf of 'android.ui' (2814) because\x0a   cache 64912kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80952kB above reserved
+[  482.299623] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  485.408757] alloc_contig_range: [fc00, fcc9) PFNs busy
+[  494.070187] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  494.170387] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  501.913570] lowmemorykiller: Killing 'oid.documentsui' (4190), adj 900,\x0a   to free 15904kB on behalf of 'WifiService' (2869) because\x0a   cache 70844kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 70104kB above reserved
+[  501.929104] lowmemorykiller: Killing 'RenderThread' (4210), adj 900,\x0a   to free 25840kB on behalf of 'DefaultDispatch' (3855) because\x0a   cache 72668kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 68272kB above reserved
+[  501.938701] lowmemorykiller: Killing 'RenderThread' (4210), adj 900,\x0a   to free 25832kB on behalf of 'WifiService' (2869) because\x0a   cache 73048kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 67996kB above reserved
+[  501.949949] RenderThread: page allocation failure: order:0, mode:0xd0
+[  501.954835] CPU: 0 PID: 4210 Comm: RenderThread Tainted: G S      W      3.18.91+ #1
+[  501.956714] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[  501.958918]  00000000 00000246 c834dcf8 c07a9c83 00000000 000000d0 c834dd28 c02c1c58
+[  501.960667]  c0a08789 c7eafd64 00000000 000000d0 00000040 00000000 000000d0 00000040
+[  501.961842]  00000000 000000d0 c834ddac c02c3eab 000000d0 00000000 00000000 c7eaf920
+[  501.961842] Call Trace:
+[  501.961842]  [<c07a9c83>] dump_stack+0x45/0x59
+[  501.961842]  [<c02c1c58>] warn_alloc_failed+0xc4/0xd6
+[  501.961842]  [<c02c3eab>] __alloc_pages_nodemask+0x56b/0x6f4
+[  501.961842]  [<c02c4043>] __get_free_pages+0xf/0x1f
+[  501.961842]  [<c0611fee>] goldfish_pipe_open+0x72/0x1ff
+[  501.961842]  [<c03ba154>] ? inode_has_perm+0x25/0x2f
+[  501.961842]  [<c04796a9>] misc_open+0xf0/0x10d
+[  501.961842]  [<c02f8626>] chrdev_open+0x112/0x130
+[  501.961842]  [<c02f3aed>] do_dentry_open+0x1f9/0x25a
+[  501.961842]  [<c02fc8ce>] ? __inode_permission2+0x73/0x78
+[  501.961842]  [<c02f8514>] ? cdev_put+0x1a/0x1a
+[  501.961842]  [<c02f4952>] vfs_open+0x47/0x50
+[  501.961842]  [<c02ffcd0>] do_last+0x77a/0xa5a
+[  501.961842]  [<c0300466>] path_openat+0x4b6/0x4ea
+[  501.961842]  [<c0300b2c>] do_filp_open+0x25/0x5e
+[  501.961842]  [<c02f4c19>] do_sys_open+0x12e/0x1a7
+[  501.961842]  [<c02f4cc2>] SyS_openat+0x16/0x18
+[  501.961842]  [<c07b07b6>] syscall_call+0x7/0x7
+[  501.984091] Mem-Info:
+[  501.989118] DMA per-cpu:
+[  501.997412] CPU    0: hi:    0, btch:   1 usd:   0
+[  501.998416] CPU    1: hi:    0, btch:   1 usd:   0
+[  501.999327] Normal per-cpu:
+[  501.999918] CPU    0: hi:   90, btch:  15 usd:  13
+[  502.000934] CPU    1: hi:   90, btch:  15 usd:  85
+[  502.001824] active_anon:74878 inactive_anon:564 isolated_anon:0\x0a active_file:8966 inactive_file:8863 isolated_file:32\x0a unevictable:78 dirty:0 writeback:3 unstable:0\x0a free:19488 slab_reclaimable:2130 slab_unreclaimable:3622\x0a mapped:16149 shmem:1420 pagetables:1347 bounce:0\x0a free_cma:18254
+[  502.007734] DMA free:1988kB min:28kB low:56kB high:64kB active_anon:1200kB inactive_anon:0kB active_file:4kB inactive_file:4kB unevictable:4kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:4kB dirty:0kB writeback:0kB mapped:32kB shmem:4kB slab_reclaimable:232kB slab_unreclaimable:632kB kernel_stack:536kB pagetables:520kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:0 all_unreclaimable? no
+[  502.015297] lowmem_reserve[]: 0 491 491 491
+[  502.034943] Normal free:85744kB min:2816kB low:5840kB high:6544kB active_anon:298468kB inactive_anon:2256kB active_file:30768kB inactive_file:30684kB unevictable:308kB isolated(anon):0kB isolated(file):368kB present:507736kB managed:503052kB mlocked:308kB dirty:0kB writeback:12kB mapped:60308kB shmem:5676kB slab_reclaimable:8288kB slab_unreclaimable:13856kB kernel_stack:3808kB pagetables:4868kB unstable:0kB bounce:0kB free_cma:83676kB writeback_tmp:0kB pages_scanned:328 all_unreclaimable? no
+[  502.044770] lowmem_reserve[]: 0 0 0 0
+[  502.046683] DMA: 100*4kB (UM) 61*8kB (UM) 55*16kB (UM) 7*32kB (UM) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 1992kB
+[  502.059584] Normal: 20972*4kB (UEMRC) 137*8kB (MRC) 11*16kB (R) 5*32kB (R) 0*64kB 1*128kB (R) 1*256kB (R) 0*512kB 1*1024kB (R) 0*2048kB 0*4096kB = 86728kB
+[  502.066703] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[  502.069075] 16692 total pagecache pages
+[  502.070252] 0 pages in swap cache
+[  502.071991] Swap cache stats: add 0, delete 0, find 0/0
+[  502.073612] Free swap  = 0kB
+[  502.075042] Total swap = 0kB
+[  502.076166] 130932 pages RAM
+[  502.079149] 0 pages HighMem/MovableOnly
+[  502.081829] 3744 pages reserved
+[  502.082610] Could not alloc pipe command buffer!
+[  509.820541] lowmemorykiller: Killing 'nnotes.app.test' (4131), adj 700,\x0a   to free 12280kB on behalf of 'kswapd0' (529) because\x0a   cache 73212kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 73188kB above reserved
+[  509.825589] lowmemorykiller: Killing 'droid.launcher3' (3282), adj 600,\x0a   to free 18252kB on behalf of 'Binder:2798_9' (3295) because\x0a   cache 72908kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 73544kB above reserved
+[  512.407970] init: processing action (qemu.adbd=start)
+[  512.409255] init: processing action (sys.usb.config=adb && sys.usb.configfs=0)
+[  512.413652] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  512.416725] init: write_file: Unable to open '/sys/class/android_usb/android0/idVendor': No such file or directory
+[  512.419321] init: write_file: Unable to open '/sys/class/android_usb/android0/idProduct': No such file or directory
+[  512.422218] init: write_file: Unable to open '/sys/class/android_usb/android0/functions': No such file or directory
+[  512.424824] init: write_file: Unable to open '/sys/class/android_usb/android0/enable': No such file or directory
+[  512.867374] lowmemorykiller: Killing 'oid.documentsui' (4217), adj 900,\x0a   to free 30444kB on behalf of 'android.anim' (2843) because\x0a   cache 74356kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 81572kB above reserved
+[  512.877684] lowmemorykiller: Killing 'Profile Saver' (4231), adj 900,\x0a   to free 35992kB on behalf of 'RenderThread' (4237) because\x0a   cache 75268kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80684kB above reserved
+[  512.883940] lowmemorykiller: Killing 'Profile Saver' (4231), adj 900,\x0a   to free 35972kB on behalf of 'android.anim' (2843) because\x0a   cache 75344kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80696kB above reserved
+[  512.884385] lowmemorykiller: Killing 'Profile Saver' (4231), adj 900,\x0a   to free 35908kB on behalf of 'Binder:2798_C' (3867) because\x0a   cache 75192kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80596kB above reserved
+[  512.907621] lowmemorykiller: Killing 'RenderThread' (4237), adj 900,\x0a   to free 37388kB on behalf of 'RenderThread' (4237) because\x0a   cache 77852kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 78028kB above reserved
+[  512.914420] lowmemorykiller: Killing 'RenderThread' (4237), adj 900,\x0a   to free 37292kB on behalf of 'Binder:2798_C' (3867) because\x0a   cache 77776kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 77876kB above reserved
+[  512.922347] lowmemorykiller: Killing 'RenderThread' (4237), adj 900,\x0a   to free 37228kB on behalf of 'android.ui' (2814) because\x0a   cache 77852kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 77916kB above reserved
+[  512.974734] RenderThread: page allocation failure: order:0, mode:0xd0
+[  512.979860] CPU: 0 PID: 4237 Comm: RenderThread Tainted: G S      W      3.18.91+ #1
+[  512.981343] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[  512.981343]  00000000 00000246 c7915cf8 c07a9c83 00000000 000000d0 c7915d28 c02c1c58
+[  512.985614]  c0a08789 c1247d64 00000000 000000d0 00000040 00000000 000000d0 00000040
+[  512.985614]  00000000 000000d0 c7915dac c02c3eab 000000d0 00000000 00000000 c1247920
+[  512.985614] Call Trace:
+[  512.985614]  [<c07a9c83>] dump_stack+0x45/0x59
+[  512.985614]  [<c02c1c58>] warn_alloc_failed+0xc4/0xd6
+[  512.985614]  [<c02c3eab>] __alloc_pages_nodemask+0x56b/0x6f4
+[  512.985614]  [<c02c4043>] __get_free_pages+0xf/0x1f
+[  512.985614]  [<c0611fee>] goldfish_pipe_open+0x72/0x1ff
+[  512.985614]  [<c03ba154>] ? inode_has_perm+0x25/0x2f
+[  512.985614]  [<c04796a9>] misc_open+0xf0/0x10d
+[  512.985614]  [<c02f8626>] chrdev_open+0x112/0x130
+[  512.985614]  [<c02f3aed>] do_dentry_open+0x1f9/0x25a
+[  512.985614]  [<c02fc8ce>] ? __inode_permission2+0x73/0x78
+[  512.985614]  [<c02f8514>] ? cdev_put+0x1a/0x1a
+[  512.985614]  [<c02f4952>] vfs_open+0x47/0x50
+[  512.985614]  [<c02ffcd0>] do_last+0x77a/0xa5a
+[  512.985614]  [<c0300466>] path_openat+0x4b6/0x4ea
+[  512.985614]  [<c0300b2c>] do_filp_open+0x25/0x5e
+[  512.985614]  [<c02f4c19>] do_sys_open+0x12e/0x1a7
+[  512.985614]  [<c02f4cc2>] SyS_openat+0x16/0x18
+[  512.985614]  [<c07b07b6>] syscall_call+0x7/0x7
+[  513.020991] Mem-Info:
+[  513.021785] DMA per-cpu:
+[  513.024762] CPU    0: hi:    0, btch:   1 usd:   0
+[  513.027482] CPU    1: hi:    0, btch:   1 usd:   0
+[  513.029403] Normal per-cpu:
+[  513.030795] CPU    0: hi:   90, btch:  15 usd:   0
+[  513.032132] CPU    1: hi:   90, btch:  15 usd:  51
+[  513.034556] active_anon:71449 inactive_anon:558 isolated_anon:0\x0a active_file:9334 inactive_file:8902 isolated_file:81\x0a unevictable:78 dirty:0 writeback:0 unstable:0\x0a free:22721 slab_reclaimable:2131 slab_unreclaimable:3603\x0a mapped:16841 shmem:1416 pagetables:1247 bounce:0\x0a free_cma:21689
+[  513.058230] DMA free:1992kB min:28kB low:56kB high:64kB active_anon:1220kB inactive_anon:0kB active_file:40kB inactive_file:32kB unevictable:4kB isolated(anon):0kB isolated(file):0kB present:15992kB managed:5700kB mlocked:4kB dirty:0kB writeback:0kB mapped:80kB shmem:4kB slab_reclaimable:248kB slab_unreclaimable:632kB kernel_stack:504kB pagetables:460kB unstable:0kB bounce:0kB free_cma:0kB writeback_tmp:0kB pages_scanned:0 all_unreclaimable? no
+[  513.078304] lowmem_reserve[]: 0 491 491 491
+[  513.084275] Normal free:107388kB min:2816kB low:5840kB high:6544kB active_anon:284576kB inactive_anon:2232kB active_file:27316kB inactive_file:27224kB unevictable:308kB isolated(anon):0kB isolated(file):128kB present:507736kB managed:503052kB mlocked:308kB dirty:0kB writeback:0kB mapped:53224kB shmem:5660kB slab_reclaimable:8276kB slab_unreclaimable:13780kB kernel_stack:3648kB pagetables:4528kB unstable:0kB bounce:0kB free_cma:100744kB writeback_tmp:0kB pages_scanned:896 all_unreclaimable? no
+[  513.096668] lowmem_reserve[]: 0 0 0 0
+[  513.102557] DMA: 93*4kB (UEM) 58*8kB (UEM) 53*16kB (EM) 10*32kB (EM) 0*64kB 0*128kB 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB = 2004kB
+[  513.118943] Normal: 25421*4kB (UEMRC) 769*8kB (UMRC) 24*16kB (RC) 5*32kB (R) 0*64kB 1*128kB (R) 1*256kB (R) 0*512kB 1*1024kB (R) 0*2048kB 0*4096kB = 109788kB
+[  513.124087] Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=4096kB
+[  513.126026] 14112 total pagecache pages
+[  513.129167] 0 pages in swap cache
+[  513.133949] Swap cache stats: add 0, delete 0, find 0/0
+[  513.141790] Free swap  = 0kB
+[  513.142481] Total swap = 0kB
+[  513.143179] 130932 pages RAM
+[  513.143904] 0 pages HighMem/MovableOnly
+[  513.144820] 3744 pages reserved
+[  513.147982] Could not alloc pipe command buffer!
+[  514.018406] alloc_contig_range: [fb00, fc00) PFNs busy
+[  518.558125] lowmemorykiller: Killing 'oid.documentsui' (4267), adj 900,\x0a   to free 24216kB on behalf of 'kswapd0' (529) because\x0a   cache 72412kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 84332kB above reserved
+[  518.565181] lowmemorykiller: Killing 'Jit thread pool' (4272), adj 900,\x0a   to free 31172kB on behalf of 'kswapd0' (529) because\x0a   cache 73048kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 83864kB above reserved
+[  525.110387] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  525.210256] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  527.530058] ieee80211 phy0: hwsim hw_scan request
+[  527.530158] ieee80211 phy0: hw scan 2412 MHz
+[  527.560313] ieee80211 phy0: hw scan 2417 MHz
+[  527.590212] ieee80211 phy0: hw scan 2422 MHz
+[  527.620149] ieee80211 phy0: hw scan 2427 MHz
+[  527.650277] ieee80211 phy0: hw scan 2432 MHz
+[  527.680236] ieee80211 phy0: hw scan 2437 MHz
+[  527.710114] ieee80211 phy0: hw scan 2442 MHz
+[  527.740169] ieee80211 phy0: hw scan 2447 MHz
+[  527.770175] ieee80211 phy0: hw scan 2452 MHz
+[  527.800144] ieee80211 phy0: hw scan 2457 MHz
+[  527.840166] ieee80211 phy0: hw scan 2462 MHz
+[  527.870277] ieee80211 phy0: hw scan 2467 MHz
+[  527.990161] ieee80211 phy0: hw scan 2472 MHz
+[  528.110143] ieee80211 phy0: hw scan 2484 MHz
+[  528.230181] ieee80211 phy0: hw scan complete
+[  528.230226] ieee80211 phy0: hwsim hw_scan request
+[  528.230229] ieee80211 phy0: hw scan 5180 MHz
+[  528.350346] ieee80211 phy0: hw scan 5200 MHz
+[  528.470289] ieee80211 phy0: hw scan 5220 MHz
+[  528.590305] ieee80211 phy0: hw scan 5240 MHz
+[  528.710167] ieee80211 phy0: hw scan 5260 MHz
+[  528.830205] ieee80211 phy0: hw scan 5280 MHz
+[  528.950174] ieee80211 phy0: hw scan 5300 MHz
+[  529.070107] ieee80211 phy0: hw scan 5320 MHz
+[  529.190583] ieee80211 phy0: hw scan 5500 MHz
+[  529.310157] ieee80211 phy0: hw scan 5520 MHz
+[  529.433344] ieee80211 phy0: hw scan 5540 MHz
+[  529.550234] ieee80211 phy0: hw scan 5560 MHz
+[  529.608568] lowmemorykiller: Killing 'oid.documentsui' (4299), adj 900,\x0a   to free 15608kB on behalf of 'Thread-4' (4324) because\x0a   cache 71604kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80508kB above reserved
+[  529.616151] lowmemorykiller: Killing 'oid.documentsui' (4299), adj 900,\x0a   to free 17216kB on behalf of 'WifiStateMachin' (2870) because\x0a   cache 72440kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 79608kB above reserved
+[  529.670174] ieee80211 phy0: hw scan 5580 MHz
+[  529.790297] ieee80211 phy0: hw scan 5600 MHz
+[  529.910119] ieee80211 phy0: hw scan 5620 MHz
+[  530.030236] ieee80211 phy0: hw scan 5640 MHz
+[  530.150119] ieee80211 phy0: hw scan 5660 MHz
+[  530.270319] ieee80211 phy0: hw scan 5680 MHz
+[  530.390133] ieee80211 phy0: hw scan 5700 MHz
+[  530.510208] ieee80211 phy0: hw scan complete
+[  530.510241] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  530.516718] ieee80211 phy0: mac80211_hwsim_get_survey (idx=0)
+[  530.610140] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  538.732094] lowmemorykiller: Killing 'oid.documentsui' (4329), adj 900,\x0a   to free 30852kB on behalf of 'tworkPolicy.uid' (2868) because\x0a   cache 64416kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 85380kB above reserved
+[  542.300307] healthd: battery l=100 v=5000 t=25.0 h=2 st=2 chg=a
+[  544.924943] lowmemorykiller: Killing 'oid.documentsui' (4358), adj 900,\x0a   to free 24160kB on behalf of 'android.ui' (2814) because\x0a   cache 75424kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 83964kB above reserved
+[  548.174444] alloc_contig_range: [fb00, fbc9) PFNs busy
+[  548.756457] alloc_contig_range: [fa00, fac9) PFNs busy
+[  559.897175] lowmemorykiller: Killing 'droid.launcher3' (4386), adj 600,\x0a   to free 17472kB on behalf of 'kswapd0' (529) because\x0a   cache 63508kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 73740kB above reserved
+[  560.014133] lowmemorykiller: Killing 'oid.documentsui' (4415), adj 900,\x0a   to free 24680kB on behalf of 'kswapd0' (529) because\x0a   cache 86020kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 61740kB above reserved
+[  560.557286] alloc_contig_range: [10200, 102c1) PFNs busy
+[  561.030211] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=0 smps=auto)
+[  561.130302] ieee80211 phy0: mac80211_hwsim_config (freq=0 idle=0 ps=1 smps=auto)
+[  567.837284] lowmemorykiller: Killing 'oid.documentsui' (4445), adj 900,\x0a   to free 22884kB on behalf of 'RenderThread' (4465) because\x0a   cache 66208kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 84764kB above reserved
+[  567.849869] lowmemorykiller: Killing 'RenderThread' (4465), adj 900,\x0a   to free 28588kB on behalf of 'RenderThread' (4465) because\x0a   cache 71072kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80000kB above reserved
+[  567.855201] lowmemorykiller: Killing 'RenderThread' (4465), adj 900,\x0a   to free 28584kB on behalf of 'android.ui' (2814) because\x0a   cache 70768kB is below limit 86576kB for oom_score_adj 900\x0a   Free memory is 80100kB above reserved
+[  569.043106] lowmemorykiller: Killing 'nnotes.app.test' (4242), adj 700,\x0a   to free 12672kB on behalf of 'DefaultDispatch' (3855) because\x0a   cache 45256kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 73384kB above reserved
+[  569.061013] lowmemorykiller: Killing 'nnotes.app.test' (4242), adj 700,\x0a   to free 12672kB on behalf of 'kswapd0' (529) because\x0a   cache 46472kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 71988kB above reserved
+[  569.065815] lowmemorykiller: Killing 'Signal Catcher' (4248), adj 700,\x0a   to free 12684kB on behalf of 'DefaultDispatch' (3855) because\x0a   cache 46320kB is below limit 75304kB for oom_score_adj 300\x0a   Free memory is 72248kB above reserved
+[  569.329089] lowmemorykiller: Killing 'putmethod.latin' (2895), adj 200,\x0a   to free 17464kB on behalf of 'kswapd0' (529) because\x0a   cache 38132kB is below limit 60456kB for oom_score_adj 200\x0a   Free memory is 51844kB above reserved
+[  569.334149] lowmemorykiller: Killing 'putmethod.latin' (2895), adj 200,\x0a   to free 17464kB on behalf of 'HeapTaskDaemon' (3843) because\x0a   cache 39804kB is below limit 49184kB for oom_score_adj 100\x0a   Free memory is 48544kB above reserved
+[  569.336055] lowmemorykiller: Killing 'Jit thread pool' (2908), adj 200,\x0a   to free 17600kB on behalf of 'HeapTaskDaemon' (3843) because\x0a   cache 39652kB is below limit 49184kB for oom_score_adj 100\x0a   Free memory is 49064kB above reserved
+[  569.411214] binder: undelivered TRANSACTION_COMPLETE
+[  569.413449] binder: undelivered transaction 178603, process died.
+[  569.424408] binder: 2798:2798 transaction failed 29189/-22, size 100-0 line 3001
+[  569.538297] lowmemorykiller: Killing '.plainnotes.app' (3832), adj 0,\x0a   to free 246840kB on behalf of 'kswapd0' (529) because\x0a   cache 34720kB is below limit 37916kB for oom_score_adj 0\x0a   Free memory is 33344kB above reserved
+[  569.781307] binder: undelivered transaction 178807, process died.

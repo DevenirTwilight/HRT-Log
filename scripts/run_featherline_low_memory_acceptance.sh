@@ -19,7 +19,7 @@ if ! adb logcat -c > "$report/logcat-clear.txt" 2>&1; then
   cat "$report/logcat-clear.txt"
 fi
 set +e
-adb shell am instrument -w -e class net.plainnotes.app.imports.AutomaticImportAndroidTest -e featherlineExpectedHeapMb 192 net.plainnotes.app.test/androidx.test.runner.AndroidJUnitRunner > "$report/native.txt" 2>&1
+adb shell am instrument -w -e class net.plainnotes.app.imports.AutomaticImportAndroidTest#featherlineImportRunsAsIsolatedLowMemoryFlow -e featherlineExpectedHeapMb 192 net.plainnotes.app.test/androidx.test.runner.AndroidJUnitRunner > "$report/native.txt" 2>&1
 result=$?
 adb logcat -d > "$report/logcat.txt"
 adb shell dmesg > "$report/kernel.txt" 2>&1
