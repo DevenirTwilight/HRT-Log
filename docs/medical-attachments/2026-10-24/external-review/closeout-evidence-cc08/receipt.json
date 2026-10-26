@@ -1,0 +1,25 @@
+{
+  "source": "cc08b99e5a33e2716e2af5e0e86c3953fbc04614",
+  "android_pr_run": 40363115035,
+  "android_push_run": 40363107565,
+  "push_failed_job": 121713554506,
+  "single_retry_success_job": 121730008290,
+  "failure_artifact": 12669629204,
+  "failure_zip_sha256": "ed4f66d0a40731df4129eb5ed2bd1210ab2abad41ad9c03f01afbeee2cb74f84",
+  "root_cause": "NOT_PROVEN: five unit test wait/async-state failures; same-source PR full run and one bounded failed-job retry succeeded. Assertions unchanged.",
+  "native_artifacts": {
+    "26": [
+      12670837158,
+      "3aabe03a7855fd677783d65f94d7fff9e846e27657fc8fafa1efb961ac68d2bf"
+    ],
+    "29": [
+      12670811342,
+      "3a40ed87a32c0da6fce17ca0633cf0b127001f18b34e2a4c9468fff3be9d8a3e"
+    ],
+    "35": [
+      12670913237,
+      "c71a7cb9e3b6d57e3adfde02b62fb94b5f361a08c54b51c3c121ccae1685b26f"
+    ]
+  },
+  "scope": "Original SHA evidence only; does not certify subsequent final source."
+}

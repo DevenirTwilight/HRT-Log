@@ -1533,3 +1533,10 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 ## 151. MED-02 Stage C lifecycle integration（2026-10-26）
 
 负责人要求基于最新主线、避开#130资料包选择界面，将现有附件UI接真实AppLock/后台/伪装/数据集生命周期但不开放入口；只复用RuntimeLibrarySession，清屏先于资源释放、迟到渲染拒绝、实际COMMIT与只读核对保持。保留release-isolation守卫，内部ViewModel接口须在读真实runtime前检查OFF门。Android8 PDF继续fail-closed而长期产品策略待确认，WebP不透明；多页及unlink/trash/restore/permanent删除本轮仅提案、均不实施。更新已有外审包和源码清单，新增测试区分真实事件/合成模型/真机未跑，不重跑ABC，不改密码学/配额/schema/备份/PK/库存/导入，不签名发布。独立外审及明确启用批准仍必须满足。
+
+
+## 152. MED-02 最终工程收尾与 V1 冻结（2026-10-26）
+
+负责人要求在现有#131内收尾，不再新增无限阶段。V1限明确就诊/单项化验关联、SAF/确认/真实COMMIT/列表/认证读取、受限JPEG/PNG、API28+ PDF第一页、完整医疗备份恢复及真实锁定/伪装/切库撤权。API26/27 PDF继续拒绝预览但允许加密保存备份，WebP不透明；多页/OCR/搜索/云/自动分析均非首版必需。修复实际断点：生产记录页组合、完整医疗transfer应用层接线、最终像素发布权限栅栏；复用原格式、authority、budget与恢复器，无迁移/密码学变更。
+
+正式入口/真实原件/永久销毁仍OFF，外审NOT_REVIEWED_EXTERNALLY。解除关联/回收站/恢复用户操作若缺独立语义与授权则DEFERRED/OWNER_DECISION_REQUIRED，误选可确认前取消，已确认原件保留，不虚报释放容量。旧库/失败候选资源不自动删除。最终准确HEAD检查全过、无工程阻塞、源码及外审证据一致后方可ENGINEERING_COMPLETE与READY_FOR_EXTERNAL_REVIEW；始终RELEASE_NOT_AUTHORIZED，不能把AI内审当独立外审。启用还须外审/必要真机与人工无障碍/负责人明确批准及受审的门控兼容补丁；不把当前DB只允许0的元数据约束说成可直接设1。按§106保护合并，不签名发布。单一报告位于docs/medical-attachments/2026-10-24/external-review/FINAL-ENGINEERING-CLOSEOUT.md。

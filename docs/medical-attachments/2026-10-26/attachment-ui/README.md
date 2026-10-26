@@ -1,3 +1,5 @@
+> **Final closeout supersedes candidate status below:** see [single final report](../../2026-10-24/external-review/FINAL-ENGINEERING-CLOSEOUT.md). Production record-page and full medical-transfer components now compile with scoped adapters and lifecycle binding but no public routes. Final exact-source CI/native acceptance is required; earlier #129/Stage C counts remain historical. The lifecycle gap described in the old “上线前仍缺” section has been implemented; public placement/metadata enabling, external review and physical/manual acceptance remain separate. No unlink/trash/restore/destruction UI is added.
+
 # MED-02 医疗附件交互界面（隔离，默认关闭）— 2026-10-26
 
 依据：负责人任务书“MED-02 下一阶段：收尾 #128，开发默认关闭的附件交互界面”（2026-10-26），REQUIREMENTS §149。

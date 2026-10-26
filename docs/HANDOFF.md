@@ -3931,3 +3931,12 @@ Baseline9eb6d0f51db21e3629019c2757a5f35724d793a7 (#129 merged; #128 merged), #13
 Stage C local checks: Python attachment-release-isolation5 and attachment-design-validation61 PASS;110 current source hashes and unchanged no-main-source-to-UI-reference assertion PASS. Kotlin/Compose/native additions NOT_RUN locally (no Android compiler); CI required. #130 still OPEN682c42a8 immediately before candidate freeze. No release route or isolation guard weakening.
 
 Stage C final ownership check: presentation hide now also cancels a chosen-but-unconfirmed file (never starts an import); real factory takes an explicit LifecycleOwner and closes its controller on destruction, preventing rotation from retaining URI/reader state even if coroutine scope survives. Scripted selection-cancel test added. This closes a specific lifetime gap, not a change to COMMIT or SAF picker authority. Final updated source requires new CI; earlier candidate results do not certify it.
+
+
+## MED-02 final engineering closeout — executable freeze a61f1063 (2026-10-26)
+
+继续同一个#131，未另建阶段或PR。已无损合入#130的默认分支9192b91a；两份需求保留为§150资料包、§151生命周期，新增§152最终冻结。补实际断点：生产MedicalAttachmentRecordPage复用已验收合成宿主内容/SAF/返回；MedicalLibraryTransferPage/Controller→RuntimeMedicalLibraryGateway→Repository MedicalLibraryTransfer→原PNMEDBK1/2读写与单rootCOMMIT恢复器，完整认证后显式确认、真实回执、UNKNOWN只读核对、已证实pending逻辑中止（不删对象/key/不退budget）。可先保护备份当前集合再重新选择恢复，拒绝覆盖原恢复URI。最终Bitmap发布再过既有native读scope栅栏；Opening reader撤权即关闭。无公开route、无新authority/schema/格式/配额/跨应用改动。
+
+最终代码/测试冻结a61f10638446a72602e514c357c7615635146cb9；本地局部80项零失败4项既有skip，最后新增安全备份的控制器6项零失败skip，app/core AndroidTest编译PASS，Python隔离5+设计61PASS。API26/29/35新增真实facade及app adapter测试、适用低内存及最终HEAD六门槛仍PENDING，绝不借旧源绿灯。库低内存原12合同保留+新增1=13，原集合/新设备C测试不删不缩。旧cc08 push5项异步单测FAIL原件已保留，PR同源与一次有界failed-job重试PASS，ROOT_CAUSE_NOT_PROVEN，不能叫首次全过；原始ZIPhash与选取HTML/nativeXML见既有外审包closeout-evidence-cc08。
+
+下一步：冻结文档/源码哈希后推送一次最终#131 HEAD；读取其必需CI/native/低内存真实结果，精准修缺陷，全部达标按§106正常受保护合并并查主线。不取消有效检查，不重复启动旧源CI。单一最终报告与132项文件hash在既有external-review/，当前验收PENDING不能先称ENGINEERING_COMPLETE。公开/真实原件/销毁OFF，NOT_REVIEWED_EXTERNALLY。真机/人工TalkBack/硬断电NOT_RUN。unlink/trash/restore UI推迟并要求负责人接受首版误加文件保留限制；永久删除另批。通过最后工程门槛后核心开发结束，不再自动创建StageD/E/F，外审/真机与明确启用批准交还负责人。
