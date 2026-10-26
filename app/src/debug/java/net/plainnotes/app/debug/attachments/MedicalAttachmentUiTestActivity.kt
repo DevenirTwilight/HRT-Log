@@ -39,7 +39,10 @@ class MedicalAttachmentUiTestActivity:ComponentActivity() {
     internal var target by mutableStateOf<MedicalAttachmentOperations.Target?>(null)
     internal var message by mutableStateOf("SYNTHETIC loading")
     private var ready by mutableStateOf(false)
+    /** The system picker covers this page; like the app's background grace period, that alone does not lock. */
+    private var awaitingPicker=false
     private val select=registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {result->
+        awaitingPicker=false
         val c=controller ?: return@registerForActivityResult
         // Never an arbitrary original: anything other than the synthetic provider counts as cancelled.
         val synthetic=result.data?.data?.authority==AttachmentOperationTestActivity.AUTHORITY
@@ -77,7 +80,7 @@ class MedicalAttachmentUiTestActivity:ComponentActivity() {
                         OutlinedButton({fixture.runtime.invalidate()},enabled=ready) {Text("Switch data")}
                     }
                     if(c!=null && ui!=null)MedicalAttachmentsSection(ui,targetLabel(),
-                        onAdd={lifecycleScope.launch {c.startImport()?.let {select.launch(it.putExtra(DocumentsContract.EXTRA_INITIAL_URI,
+                        onAdd={lifecycleScope.launch {c.startImport()?.let {awaitingPicker=true;select.launch(it.putExtra(DocumentsContract.EXTRA_INITIAL_URI,
                             DocumentsContract.buildDocumentUri(AttachmentOperationTestActivity.AUTHORITY,"samples")))}}},
                         onConfirm=c::confirmImport,
                         onCancelImport=c::cancelImport,onCheckStatus=c::checkStatus,onDismissMessage=c::dismissImportMessage,onRetry=c::refresh,onOpen=c::open)
@@ -94,7 +97,7 @@ class MedicalAttachmentUiTestActivity:ComponentActivity() {
         controller=MedicalAttachmentsController(RuntimeAttachmentGateway(applicationContext,fixture.runtime,next),lifecycleScope).also {it.refresh()}
     }
     override fun onResume() {super.onResume();if(::fixture.isInitialized)lifecycleScope.launch {try {fixture.runtime.resume();controller?.resume()}catch(_:Exception){}}}
-    override fun onStop() {if(::fixture.isInitialized)fixture.runtime.pause();super.onStop()}
+    override fun onStop() {if(::fixture.isInitialized && !awaitingPicker)fixture.runtime.pause();super.onStop()}
     override fun onSaveInstanceState(out:Bundle) {
         out.putString("fixture",fixture.id.toString());target?.let {out.putString("target_kind",it.kind.name);out.putLong("target_id",it.id)}
         (fixture.runtime.state.value as? RuntimeLibrarySession.State.Ready)?.scope?.let {out.putStringArrayList("scope",it.encoded())}

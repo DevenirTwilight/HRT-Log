@@ -81,6 +81,8 @@ class MedicalAttachmentsControllerTest {
         val fake=Fake(target);val c=controller(fake)
         assertNotNull(c.startImport());c.picked(picked,"Visit document")
         assertEquals(Import.Confirming("Visit document"),c.state.value.import)
+        c.resume() // An ordinary onResume (back from the picker) keeps the pending confirmation.
+        assertEquals(Import.Confirming("Visit document"),c.state.value.import)
         assertTrue("Choosing must not create an operation",fake.imports.isEmpty())
         c.cancelImport()
         assertEquals(Import.Cancelled,c.state.value.import);assertTrue(fake.imports.isEmpty())

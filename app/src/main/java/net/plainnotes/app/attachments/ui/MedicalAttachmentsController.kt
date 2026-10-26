@@ -213,7 +213,8 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
     }
     /** Access granted again (unlock): list only; the viewer never reopens by itself. */
     fun resume() {
-        if(closed || state.value.ended)return
+        // Ordinary onResume (e.g. back from the system picker) must not reset a pending confirmation.
+        if(closed || state.value.ended || !state.value.revoked)return
         mutable.update {it.copy(revoked=false,import=if(unresolved!=null)Import.Unknown else Import.Idle)}
         refresh()
     }

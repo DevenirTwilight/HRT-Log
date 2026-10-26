@@ -1,3 +1,15 @@
+## MED-02 阶段 B：隔离的医疗附件交互界面（进行中）— 2026-10-26
+
+- 分支 `feature/med02-attachment-ui-20261026`，工作树 /home/user/wt-medui。目前基于 #128 分支；#128 受保护合并后，再合入默认分支并开独立 PR。REQUIREMENTS §149；规范与验收见 `docs/medical-attachments/2026-10-26/attachment-ui/README.md`。
+- 已完成：
+  - 网关：`attachments/ui/MedicalAttachmentGateway.kt`，生产实现只走 RuntimeLibrarySession、AttachmentFlowController、AttachmentViewer；
+  - 状态机：`MedicalAttachmentsController.kt`；
+  - Compose：`MedicalAttachmentsUi.kt`；
+  - 四语言 `medical_attachments.xml`；
+  - debug 宿主 `MedicalAttachmentUiTestActivity`：不导出，FLAG_SECURE，只用合成数据、模拟器、合成 DocumentsProvider，已加入正式版隔离检查。
+- 本地测试：控制器 10 项、界面 48 项（4 项因 Robolectric 对话框限制跳过）、守卫 3 项均通过。模拟器端到端 `MedicalAttachmentUiAndroidTest` 已编译，等 CI 的 API26/35 例行仪器测试执行。
+- 注意：WIP 推送触发的 CI 已手动取消，避免浪费；正式验证在开 PR 后跑。
+
 ## MED-02 #128 API26 失败定位与修复 — 2026-10-26
 
 - #128（`security/med02-preview-20261026`）在 e9220e6c 上两次必需运行的 `attachment-poc-compatibility (26)` 都失败，同样 5 项：`TinkPdfGate2AndroidTest` 正常 PDF 报 "file not in PDF format or corrupted"。基线 ccd51332 和同一 SHA 的 API29/35 都通过。
