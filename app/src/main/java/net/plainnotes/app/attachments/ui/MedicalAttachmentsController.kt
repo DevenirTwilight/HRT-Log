@@ -70,12 +70,11 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
 
     fun refresh() {
         if(closed || state.value.revoked)return
-        val epoch=presentationEpoch
         scope.launch {
             mutable.update {it.copy(files=if(it.files is Files.Ready)it.files else Files.Loading)}
             val loaded=loadFiles()
             synchronized(this@MedicalAttachmentsController) {
-                if(!closed && !state.value.revoked && presentationEpoch==epoch)mutable.update {it.copy(files=loaded ?: Files.Failed)}
+                if(!closed && !state.value.revoked && !state.value.ended)mutable.update {it.copy(files=loaded ?: Files.Failed)}
             }
         }
     }
