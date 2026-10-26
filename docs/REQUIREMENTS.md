@@ -1488,3 +1488,18 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 负责人要求先保护收尾#127再基于最新主线补齐MED-02预览输入/native解码/生命周期及低内存验收，复用生产viewer/session/provider防护与既有证据，只测试缺口、不重跑ABC。合成PDF/JPEG/PNG/WebP和有界畸形输入，记录实际采样而非峰值；同一已有external-review包绑定源码/未验证风险及UI合同。无漏洞证据不重构密码学或存储；不扩备份协议/配额，真实入口/原件/永久删除OFF，外审状态NOT_REVIEWED_EXTERNALLY。独立审核及负责人另行启用批准仍是开放门槛。
 
 **147.K 补记（2026-10-26，AI 处置，待负责人确认）**：#128 在 API26 上发现 Android 8.0/8.1 `PdfRenderer` 框架缺陷（打开失败的对象在回收时多减一次 pdfium 进程级初始化计数，之后同一进程内所有 PDF 都无法打开；Android 9 已修复，AOSP 源码已核对）。按“失败即关闭”的最小修复：API < 28 上 `AttachmentViewer` 不做 PDF 页面预览，在创建任何代理或渲染器之前拒绝；PDF 仍加密保存、可列出、可备份、可经认证读取，图片预览不受影响，API ≥ 28 行为不变。若以后要在 8.x 上提供 PDF 预览，只能另行评审隔离进程方案。
+
+## 149. MED-02 隔离的医疗附件交互界面（2026-10-26）
+
+负责人任务书“MED-02 下一阶段：收尾 #128，开发默认关闭的附件交互界面”：先以最小成本收尾 #128，再为已有附件后端做可交互、可审查、可验证的 Compose 界面，为独立外审和正式开放做准备。不重新实现安全架构，不重跑已验收的加密、备份和恢复。
+
+- **入口**：只在 debug 构建、合成数据、模拟器上的隔离宿主中进入；不进入正式导航；`feature_enabled=0`、`PUBLIC_ENTRY_ENABLED=false`、`NOT_REVIEWED_EXTERNALLY` 保持不变。真实医疗原件 OFF，永久删除 OFF。
+- **关联**：只关联明确存在的就诊或单个化验身份，不按日期、文件名或整数编号猜测。
+- **复用**：只复用 `AttachmentFlowController`、`MedicalAttachmentOperations`、`AttachmentViewer` 和 `RuntimeLibrarySession`，不建第二套存储或解密流程。PDF 用已有的单页受限预览；WebP 仍按不透明二进制处理，不改 MIME 白名单和备份语义。
+- **保存与结果**：只有真实 COMMIT 回执才显示“已保存”。提交后刷新失败不能显示“未保存”。结果不确定时只做只读核对，不重读文件，不重复写入。取消导入不留下待提交操作。
+- **撤权**：锁定、伪装、数据集切换时立即失效，并清除界面持有的已渲染页面引用。返回或关闭时释放读取句柄。Activity 重建不凭旧 URI 恢复授权。
+- **界面规范**：沿用 Material 3 Expressive；四种语言；320dp 和两倍字体；TalkBack 语义；对用户隐藏加密细节；不用“绝对安全”“永久删除”等用语。
+- **本轮不做**：解除关联、回收站、永久删除。
+- **禁止**：重写 Tink/AES-GCM，改 SQLCipher/KeyStore，改 PNBAK1/PNMEDBK1/PNMEDBK2，新增不必要的 Room Schema，扩大配额，改 PK/库存/BDPM/跨应用导入，加 INTERNET 权限，把真实医疗文件放进测试或证据。
+- **验收必须区分**：UI 演示、真实生产接口调用、实际 COMMIT、经认证读取、独立外部安全审查。物理设备、人工 TalkBack、外审未执行时如实标为 NOT_RUN/PENDING。
+- **交付**：交互规范与验收见 `docs/medical-attachments/2026-10-26/attachment-ui/README.md`。PR 按 §106 自动合并。不签名，不交付 APK。
