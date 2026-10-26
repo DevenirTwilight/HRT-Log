@@ -11,6 +11,14 @@
   - debug 宿主 `MedicalAttachmentUiTestActivity`：不导出，FLAG_SECURE，只用合成数据、模拟器、合成 DocumentsProvider，已加入正式版隔离检查。
 - 本地测试：控制器 10 项、界面 48 项（4 项因 Robolectric 对话框限制跳过）、守卫 3 项均通过。模拟器端到端 `MedicalAttachmentUiAndroidTest` 已编译，等 CI 的 API26/35 例行仪器测试执行。
 - 注意：WIP 推送触发的 CI 已手动取消，避免浪费；正式验证在开 PR 后跑。
+- 2026-10-26 15:40 进度：
+  - #128 已合并（d6221397）。
+  - #129（1e455dd9）上，端到端测试 `MedicalAttachmentUiAndroidTest` 在 API35 和 API26 通过。
+  - API29 卡住 45 分钟被取消：#129 和 #130 各一次，卡在 #128 新增的 `validPdfStillRendersAfterUnopenablePdf`；同一 SHA 的 push 运行通过过一次，所以是偶发。
+  - 推断原因：API 28 以上 `PdfRenderer` 打开失败后，其 finalizer 仍会关闭传入的描述符，与 `dispose()` 并发关闭同一个描述符编号。
+  - 修复（在 #129 中）：给 `PdfRenderer` 传 `dup()`，每个描述符只有一个关闭方；测试加 120 秒看门狗，卡住时把所有线程栈打到 logcat。
+  - 外审 README 末节与 inventory 哈希已更新。
+  - 默认分支 d6221397 的 API29 失败是镜像下载损坏（测试前），已重跑一次。#130 的 API29 已评论并重跑一次。
 
 ## MED-02 #128 API26 失败定位与修复 — 2026-10-26
 
