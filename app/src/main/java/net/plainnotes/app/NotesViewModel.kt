@@ -28,6 +28,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     private val bootstrapRepository=repository.pinnedTo(Space.PRIMARY)
     private val runtime=net.plainnotes.app.runtime.RuntimeLibrarySession(bootstrapRepository,savedState)
     private val repo get()=runtime.currentRepository()
+    internal val libraryRuntime get()=runtime
+    fun sensitivePresentationHidden()=runtime.hideSensitivePresentation()
     val librarySession=runtime.state
     private var referenceController:net.plainnotes.app.reference.MedicationReferenceController?=null
     val medicationReferences get()=requireNotNull(referenceController)

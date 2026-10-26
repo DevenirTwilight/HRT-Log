@@ -90,3 +90,11 @@ Fix:
 - The test's `measured()` gained a 120 s watchdog that logs all thread stacks (`SyntheticViewerHang`), so a recurrence leaves evidence instead of a silent timeout.
 
 This fix needs new API29 CI results; the historical hung runs are kept.
+
+## Stage C actual lifecycle candidate (2026-10-26)
+
+Accepted baseline9eb6d0f5 (#129); final candidate identity is the Stage C PR HEAD and current source-inventory hashes, not prior API results. Review call chain: MainActivity.onPause → NotesViewModel.sensitivePresentationHidden → RuntimeLibrarySession.hideSensitivePresentation → RuntimeAttachmentGateway.onHidden → MedicalAttachmentsController.closeViewer. Runtime pause/invalidate/close additionally notify then revoke existing protected capabilities. Ended dataset scopes cannot resume. A presentation epoch prevents old native render returns from publishing after hide/revoke/resume/new-open; it is not permission. Internal ViewModel factory checks PUBLIC_ENTRY_ENABLED before touching real runtime/targets, with no main navigation references and unchanged release guard.
+
+SAF, Tink/key wrapping, ProxyFD, SQLCipher and collection/root COMMIT implementation unchanged. Actual receipt remains authoritative despite refresh/revoke; unknown outcomes require read-only reconcile. API26/27 PDF remains refused. Native parser memory/corpus results retain their exact #128 hashes, not credited anew. See attachment-ui/README Stage C proposal for bounded demand-paging and separate unlink/trash/restore/destruction decision table: none implemented/approved here, no resource release or key destruction.
+
+New tests are PENDING: real AppLock/background/recreation and real disguise-exit event witnesses plus scripted late-pixel result race. Expert must independently review MainActivity, runtime notification/authority ordering, controller state/publication, Compose bitmap ownership and release payload isolation. These layers do not establish a full user-enabled path, hardware memory erasure, recent-task screenshot confidentiality under user-enabled capture, native parser exploit resistance or physical-device behavior. Formal real-original entry remains OFF, external status NOT_REVIEWED_EXTERNALLY, physical/TalkBack/power-loss NOT_RUN. Independent findings/remediation acceptance and separate owner enablement approval are required.

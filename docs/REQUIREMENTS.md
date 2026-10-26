@@ -1513,3 +1513,7 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 - **只改选择界面**：把现有就诊资料包的选择对话框改成样图 08 的样式（分组、来源标签、敏感项默认不选、已选数量、导出前目录预览、导出后副本无法由本应用收回的说明）。只用已有的结构化资料；不导出附件原件；不改 PDF 内容、`Exports.kt` 和资料包摘要。正式版可见。
 - **浓度估算曲线暂不做进清单**：它会触及 PK 显示的受保护边界，需要单独批准。
 - 实现走单独的 PR，不并入本节的附件界面 PR。
+
+### 150. MED-02 Stage C lifecycle integration（2026-10-26）
+
+负责人要求基于最新主线、避开#130资料包选择界面，将现有附件UI接真实AppLock/后台/伪装/数据集生命周期但不开放入口；只复用RuntimeLibrarySession，清屏先于资源释放、迟到渲染拒绝、实际COMMIT与只读核对保持。保留release-isolation守卫，内部ViewModel接口须在读真实runtime前检查OFF门。Android8 PDF继续fail-closed而长期产品策略待确认，WebP不透明；多页及unlink/trash/restore/permanent删除本轮仅提案、均不实施。更新已有外审包和源码清单，新增测试区分真实事件/合成模型/真机未跑，不重跑ABC，不改密码学/配额/schema/备份/PK/库存/导入，不签名发布。独立外审及明确启用批准仍必须满足。

@@ -365,4 +365,18 @@ class InAppNavigationLockAndroidTest {
         scenario!!.close(); scenario = null
         launch(); assertLocked("new launch after the activity finished")
     }
+    @Test fun realActivityPauseAndRecreationHideSensitivePresentation() {
+        val activity=launch();unlock()
+        val hidden=AtomicInteger()
+        var registration:AutoCloseable?=null
+        activity.onActivity {registration=androidx.lifecycle.ViewModelProvider(it)[net.plainnotes.app.NotesViewModel::class.java].libraryRuntime.observePresentationHidden {hidden.incrementAndGet()}}
+        try {
+            activity.moveToState(Lifecycle.State.CREATED)
+            assertTrue(hidden.get()>0)
+            activity.moveToState(Lifecycle.State.RESUMED)
+            val before=hidden.get();activity.recreate()
+            assertTrue(hidden.get()>before)
+        } finally {registration?.close()}
+    }
+
 }

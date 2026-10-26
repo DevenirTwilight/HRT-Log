@@ -117,7 +117,7 @@ class LockState : androidx.lifecycle.ViewModel() {
         if (Disguise.enabled(this) && !Session.pickerActive(sessionGeneration) && !isChangingConfigurations) { Session.lock(sessionGeneration);contentVisible=false }
     }
     override fun onResume() { super.onResume(); ScreenCapture.apply(this, UiPrefs(this).allowScreenshots, Disguise.enabled(this)); if(!initialized || !authorized())return; if(!locked) {model.runtimeResumed();model.sync();deliverReminder()}; if (Disguise.enabled(this)) shake.register(getSystemService(SensorManager::class.java)) }
-    override fun onPause() { super.onPause(); shake.unregister(getSystemService(SensorManager::class.java)) }
+    override fun onPause() { if(initialized)model.sensitivePresentationHidden(); super.onPause(); shake.unregister(getSystemService(SensorManager::class.java)) }
 
     /** An old task cannot redirect a newer PRIVATE/PRIMARY session during task replacement. */
     private fun authorized():Boolean {

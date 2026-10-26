@@ -17,6 +17,8 @@ import java.util.UUID
  * file name or bare number. No Room, path, key or URI persistence is reachable through this boundary.
  */
 internal interface MedicalAttachmentGateway {
+    val scopeEnded:Boolean get()=false
+    fun onHidden(listener:()->Unit):AutoCloseable=AutoCloseable {}
     val target:MedicalAttachmentOperations.Target
     suspend fun documents():List<MedicalAttachmentOperations.Document>
     /** The system picker for one transient document; choosing creates no operation. */
@@ -48,6 +50,8 @@ internal interface MedicalAttachmentGateway {
  * AttachmentFlowController/AttachmentViewer. No second store or decryption path exists. */
 internal class RuntimeAttachmentGateway(private val context:Context,private val runtime:RuntimeLibrarySession,
     override val target:MedicalAttachmentOperations.Target):MedicalAttachmentGateway {
+    override val scopeEnded get()=runtime.ended
+    override fun onHidden(listener:()->Unit)=runtime.observePresentationHidden(listener)
     private suspend fun browse()=runtime.attachments(target,BROWSE_TITLE)
     override suspend fun documents()=browse().use {it.documents()}
     override suspend fun pickerIntent()=browse().use {it.pickerIntent()}

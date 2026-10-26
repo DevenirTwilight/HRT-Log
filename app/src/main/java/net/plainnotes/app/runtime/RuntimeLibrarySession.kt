@@ -24,6 +24,7 @@ class RuntimeLibrarySession(private val source:NotesRepository,private val saved
     @Volatile private var allowed=true
     private var frozen:LibraryRequestScope?=null
     private var bound:NotesRepository?=null
+    internal val ended get()=closed
     fun currentRepository():NotesRepository {checkRequest();return bound ?: throw LibraryRequestRevoked()}
     fun checkRequest() {if(closed || !allowed)throw LibraryRequestRevoked()}
     suspend fun initialize(onBound:(NotesRepository)->Unit={}):NotesRepository {
@@ -53,6 +54,15 @@ class RuntimeLibrarySession(private val source:NotesRepository,private val saved
         val expected=frozen ?: return
         if(source.currentGenerationScope()!=expected) {invalidate(R.string.library_scope_changed);throw LibraryScopeMismatch()}
     }
+    // Presentation invalidation is notification only, never an unlock grant or another authority.
+    private val hiddenListeners=mutableSetOf<()->Unit>()
+    internal fun observePresentationHidden(listener:()->Unit):AutoCloseable {
+        synchronized(hiddenListeners) {checkRequest();hiddenListeners+=listener}
+        return AutoCloseable {synchronized(hiddenListeners) {hiddenListeners-=listener}}
+    }
+    fun hideSensitivePresentation() {
+        synchronized(hiddenListeners) {hiddenListeners.toList()}.forEach {runCatching {it()}}
+    }
     private val protectedResources=mutableSetOf<AutoCloseable>()
     private fun releaseProtected() {
         val owned=synchronized(protectedResources) {protectedResources.toList().also {protectedResources.clear()}}
@@ -76,15 +86,15 @@ class RuntimeLibrarySession(private val source:NotesRepository,private val saved
                 net.plainnotes.app.data.MedicalAttachmentOperations.Import(operation,document,target,title),::checkRequest)
         }catch(e:Throwable) {synchronized(protectedResources) {protectedResources-=revoke};session.revoke();throw e}
     }
-    fun pause() {allowed=false;releaseProtected()}
+    fun pause() {allowed=false;hideSensitivePresentation();releaseProtected()}
     suspend fun resume() {initialized.await();verify();if(!closed)allowed=true}
     fun invalidate(message:Int=R.string.library_scope_changed) {
-        closed=true;allowed=false;releaseProtected()
+        closed=true;allowed=false;hideSensitivePresentation();releaseProtected()
         // A late suspended verify must not downgrade acknowledgement of a real COMMIT.
         // This only preserves its terminal explanation; permissions remain revoked.
         mutable.update {old->if((old as? State.Unavailable)?.message==R.string.library_change_committed)old else State.Unavailable(message)}
     }
-    fun close() {closed=true;allowed=false;releaseProtected()}
+    fun close() {closed=true;allowed=false;hideSensitivePresentation();releaseProtected()}
     companion object {
         const val SAVED_SCOPE="library.request.scope"
         const val RESTORED="library.request.restored"

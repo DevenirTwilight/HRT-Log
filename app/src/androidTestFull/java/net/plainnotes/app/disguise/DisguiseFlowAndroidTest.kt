@@ -232,4 +232,20 @@ class DisguiseFlowAndroidTest {
         val info=context.packageManager.getActivityInfo(ComponentName(context,PrivateNotesActivity::class.java),0)
         assertFalse(info.exported);assertEquals(context.getString(R.string.private_notes),info.loadLabel(context.packageManager).toString())
     }
+    @Test fun actualDisguiseExitHidesPrimarySensitivePresentation() {
+        configure(Disguise.Shell.CALCULATOR);Session.begin(UnlockTarget.PRIMARY)
+        val activity=ActivityScenario.launch<MainActivity>(Intent(context,MainActivity::class.java))
+        val hidden=java.util.concurrent.atomic.AtomicInteger()
+        var registration:AutoCloseable?=null
+        try {
+            await(MainActivity::class.java)
+            activity.onActivity {owner->
+                registration=androidx.lifecycle.ViewModelProvider(owner)[net.plainnotes.app.NotesViewModel::class.java].libraryRuntime.observePresentationHidden {hidden.incrementAndGet()}
+                Disguise.exit(owner)
+            }
+            await(CalculatorActivity::class.java)
+            assertTrue(hidden.get()>0)
+        }finally {registration?.close();activity.close()}
+    }
+
 }
