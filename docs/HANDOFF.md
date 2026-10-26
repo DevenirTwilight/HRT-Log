@@ -1,4 +1,17 @@
-## MED-02 阶段 B：隔离的医疗附件交互界面（进行中）— 2026-10-26
+## 就诊资料选择界面按样图 08 改版 — 2026-10-26
+
+- 负责人批准第八张样图，范围为只改选择界面，浓度曲线暂不做（REQUIREMENTS §150）。分支 `feature/visit-prep-08-20261026`，工作树 /home/user/wt-visitprep。
+- 新增 `visit/VisitPrepLayout.kt`（分组、来源、导出顺序）、`ui/VisitPrepDialog.kt`、四语言 `visit_prep.xml`。`VisitPackDialog` 签名不变，改为调用新对话框；`sectionLabel` 从 private 改为 internal。
+- 测试：
+  - `VisitPrepLayoutTest`：对照真实 PDF 渲染的章节顺序；
+  - `VisitPrepDialogTest`：4 种语言 × 320dp/2 倍、411dp/1 倍，覆盖默认值、标签、计数和目录；
+  - 原有 `VisitPackTest`、`PlainExportEntryTest`、`TranslationsTest` 保持通过。
+- #130 进度：
+  - #130 首次 API29 卡住（与本 PR 无关，见下节），重跑一次通过；
+  - #129 合并后，已把默认分支合入 #130，REQUIREMENTS/HANDOFF 冲突保留双方内容；
+  - 等新 SHA 的 CI 通过后按 §106 自动合并。
+
+## MED-02 阶段 B：隔离的医疗附件交互界面（#129 已合并）— 2026-10-26
 
 - 2026-10-26 负责人澄清：批准的是**第八张样图**（为就诊准备资料），不是 AI 当时的计划。AI 误读后提前开了 #129，已取消其自动合并并转回草稿，等 #128 合并后再继续；8.x PDF 处置仍待确认；第八张图的实现范围待负责人确认。#128 已转为可审并开启自动合并（等最后一次 `android` 重跑）。完整 JVM 测试 2455 项 0 失败，lint 通过。界面参考了库中样图 06、07（见规范文档“参考样图”一节）。
 
@@ -19,6 +32,8 @@
   - 修复（在 #129 中）：给 `PdfRenderer` 传 `dup()`，每个描述符只有一个关闭方；测试加 120 秒看门狗，卡住时把所有线程栈打到 logcat。
   - 外审 README 末节与 inventory 哈希已更新。
   - 默认分支 d6221397 的 API29 失败是镜像下载损坏（测试前），已重跑一次。#130 的 API29 已评论并重跑一次。
+- 2026-10-26 16:07：#129 以 a40a9fc7 合并（合并提交 9eb6d0f5）。该 SHA 的 push 和 PR 两次 CI 全绿，其中 API29 两次通过、API26 通过、API35 device-tests 通过、viewer-api26-512m 通过。端到端测试在 API26/29/35 均通过。
+- 仍未做：物理设备、人工 TalkBack、伪装模式实际切换（NOT_RUN）；独立外审（PENDING）；8.x PDF 处置待负责人确认；公开入口未授权。
 
 ## MED-02 #128 API26 失败定位与修复 — 2026-10-26
 
