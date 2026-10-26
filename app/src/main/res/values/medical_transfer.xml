@@ -21,4 +21,5 @@
     <string name="med_transfer_cancelled">Cancelled. An export file may be incomplete; no restore success is implied.</string>
     <string name="med_transfer_revoked">Access ended. Reopen after authorization; no file is reopened automatically.</string>
     <string name="med_transfer_password_note">This password protects a portable medical archive. It is not the app PIN. It is never saved; keep a separate copy.</string>
+    <string name="med_transfer_backup_first">Back up current data first; then select the restore file again</string>
 </resources>

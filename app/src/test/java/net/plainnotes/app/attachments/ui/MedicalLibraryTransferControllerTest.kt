@@ -75,4 +75,11 @@ class MedicalLibraryTransferControllerTest {
         assertTrue(password.all{it=='\u0000'});assertEquals(0,f.reads);assertEquals(Phase.CANCELLED,c.state.value.phase);c.close()
     }
 
+    @Test fun safetyBackupCannotOverwriteTheSelectedRestoreFileOrQueueARestore() {
+        val f=Fake();val c=c(f)
+        c.choose(Mode.RESTORE);c.picked(picked);c.password("SYNTHETIC password".toCharArray())
+        assertTrue(c.prepareSafetyBackup());assertNotNull(c.choose(Mode.EXPORT));c.picked(picked)
+        assertEquals(Phase.FAILED,c.state.value.phase);assertEquals(0,f.exports);assertEquals(0,f.restores);c.close()
+    }
+
 }

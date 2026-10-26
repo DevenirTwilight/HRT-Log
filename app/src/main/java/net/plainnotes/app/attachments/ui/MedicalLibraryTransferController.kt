@@ -26,6 +26,8 @@ internal class MedicalLibraryTransferController(private val gateway:MedicalLibra
     private val epoch=AtomicLong()
     @Volatile private var closed=false
     private var uri:Uri?=null
+    private var restoreSource:Uri?=null
+    private var protectionSource:Uri?=null
     private val hidden=gateway.onHidden {
         if(!closed && state.value.phase in setOf(Phase.PASSWORD,Phase.WORKING,Phase.REVIEW,Phase.RESTORING))cancel()
     }
@@ -37,7 +39,9 @@ internal class MedicalLibraryTransferController(private val gateway:MedicalLibra
             if(state.value.phase!=Phase.RESTORED && !(state.value.phase==Phase.CHECKED && (fact==null || fact.committed || fact.phase=="ABORTED")))return null
             saved.remove<String>(OPERATION)
         }
-        uri=null;gateway.cancel()
+        epoch.incrementAndGet();uri=null
+        if(mode==Mode.RESTORE){restoreSource=null;protectionSource=null}
+        gateway.cancel()
         mutable.value=State(Phase.PICKING,mode)
         return Intent(if(mode==Mode.EXPORT)Intent.ACTION_CREATE_DOCUMENT else Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE);type=if(mode==Mode.EXPORT)"application/octet-stream" else "*/*"
@@ -47,13 +51,18 @@ internal class MedicalLibraryTransferController(private val gateway:MedicalLibra
     fun picked(result:ActivityResult) {
         if(closed || state.value.revoked || state.value.phase!=Phase.PICKING)return
         val selected=result.data?.data
-        if(result.resultCode!=Activity.RESULT_OK || selected?.scheme!="content") {mutable.update {it.copy(phase=Phase.CANCELLED)};return}
+        if(result.resultCode!=Activity.RESULT_OK || selected?.scheme!="content") {uri=null;restoreSource=null;protectionSource=null;mutable.update {it.copy(phase=Phase.CANCELLED)};return}
+        if(state.value.mode==Mode.EXPORT && selected==protectionSource) {
+            protectionSource=null;mutable.update {it.copy(phase=Phase.FAILED)};return
+        }
+        protectionSource=null
         uri=selected;mutable.update {it.copy(phase=Phase.PASSWORD)}
     }
     fun password(password:CharArray) {
         val selected=uri
         if(closed || state.value.revoked || state.value.phase!=Phase.PASSWORD || selected==null) {password.fill('\u0000');return}
         uri=null;val mode=requireNotNull(state.value.mode);val token=epoch.get()
+        restoreSource=if(mode==Mode.RESTORE)selected else null
         mutable.update {it.copy(phase=Phase.WORKING)}
         val work=scope.launch {
             try {
@@ -64,17 +73,28 @@ internal class MedicalLibraryTransferController(private val gateway:MedicalLibra
                 }
                 if(!closed && token==epoch.get())mutable.update {it.copy(phase=Phase.EXPORTED)}
             }catch(e:CancellationException) {throw e}catch(_:Exception) {
-                if(!closed && token==epoch.get())mutable.update {it.copy(phase=Phase.FAILED)}
+                if(!closed && token==epoch.get()) {restoreSource=null;mutable.update {it.copy(phase=Phase.FAILED)}}
             }finally {password.fill('\u0000')}
         }
         work.invokeOnCompletion {error->
             password.fill('\u0000')
-            if(error is CancellationException && !closed && token==epoch.get())mutable.update {if(it.phase==Phase.WORKING)it.copy(phase=Phase.CANCELLED)else it}
+            if(error is CancellationException && !closed && token==epoch.get()) {
+                restoreSource=null;protectionSource=null
+                mutable.update {if(it.phase==Phase.WORKING)it.copy(phase=Phase.CANCELLED)else it}
+            }
         }
+    }
+    /** Existing pre-restore protection choice: export CURRENT data, then require a fresh file selection. */
+    fun prepareSafetyBackup():Boolean {
+        if(closed || state.value.revoked || state.value.phase!=Phase.REVIEW)return false
+        val source=restoreSource ?: return false
+        cancel();protectionSource=source
+        return true
     }
     fun confirmRestore() {
         val source=state.value.prepared ?: return
         if(closed || state.value.revoked || state.value.phase!=Phase.REVIEW)return
+        restoreSource=null
         saved[OPERATION]=source.operation.toString()
         mutable.update {it.copy(phase=Phase.RESTORING)}
         val work=scope.launch {
@@ -118,17 +138,17 @@ internal class MedicalLibraryTransferController(private val gateway:MedicalLibra
     fun cancel() {
         if(closed)return
         val uncertain=state.value.phase==Phase.RESTORING || (operation()!=null && state.value.phase in setOf(Phase.UNKNOWN,Phase.CHECKED))
-        epoch.incrementAndGet();uri=null
+        epoch.incrementAndGet();uri=null;restoreSource=null;protectionSource=null
         mutable.update {it.copy(phase=if(uncertain)Phase.UNKNOWN else Phase.CANCELLED,prepared=null)}
         gateway.cancel()
     }
     private fun revoke() {
-        epoch.incrementAndGet();uri=null
+        epoch.incrementAndGet();uri=null;restoreSource=null;protectionSource=null
         mutable.update {State(if(operation()!=null)Phase.UNKNOWN else Phase.REVOKED,revoked=true)}
         gateway.cancel()
     }
     override fun close() {
-        closed=true;epoch.incrementAndGet();uri=null
+        closed=true;epoch.incrementAndGet();uri=null;restoreSource=null;protectionSource=null
         mutable.value=State(Phase.REVOKED,revoked=true)
         hidden.close();revocation.close();gateway.close()
     }

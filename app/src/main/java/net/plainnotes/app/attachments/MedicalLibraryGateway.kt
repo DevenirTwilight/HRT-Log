@@ -63,13 +63,14 @@ internal class RuntimeMedicalLibraryGateway(private val context:Context,private 
             require(uri.scheme=="content")
             committedReceipt=null
             val lease=acquire()
+            var physical:ParcelFileDescriptor?=null
             try {
-                val fd=requireNotNull(context.contentResolver.openFileDescriptor(uri,"r"))
+                val fd=requireNotNull(context.contentResolver.openFileDescriptor(uri,"r")).also {physical=it}
                 val channel=ParcelFileDescriptor.AutoCloseInputStream(fd).channel
                 val candidate=lease.backend.prepare(lease.cap,password,channel)
                 synchronized(monitor) {if(current!==lease || closed) {candidate.close();throw LibraryRequestRevoked()};prepared=candidate}
                 MedicalLibraryGateway.Prepared(candidate.operation,candidate.summary)
-            }catch(t:Throwable) {release(lease);throw t}
+            }catch(t:Throwable) {runCatching {physical?.close()};release(lease);throw t}
         }
     }finally {password.fill('\u0000')}
     override suspend fun restore():MedicalLibraryTransfer.Committed {

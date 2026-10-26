@@ -21,4 +21,5 @@
     <string name="med_transfer_cancelled">已取消。匯出檔案可能不完整，不代表還原成功。</string>
     <string name="med_transfer_revoked">存取已結束。授權後請重新開啟，不會自動重開檔案。</string>
     <string name="med_transfer_password_note">這是可攜帶醫療封存的密碼，不是應用程式 PIN。密碼不會儲存，請另行保管。</string>
+    <string name="med_transfer_backup_first">先備份目前資料，完成後重新選擇還原檔案</string>
 </resources>

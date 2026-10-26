@@ -58,6 +58,7 @@ import net.plainnotes.app.attachments.ui.MedicalLibraryTransferController.*
             Phase.REVIEW->state.prepared?.let {ready->
                 Text(stringResource(R.string.med_transfer_preview,ready.summary.format,ready.summary.libraries,ready.summary.versions))
                 Text(stringResource(R.string.med_transfer_switch_warning))
+                OutlinedButton({if(controller.prepareSafetyBackup())onChoose(Mode.EXPORT)}) {Text(stringResource(R.string.med_transfer_backup_first))}
                 Button(controller::confirmRestore) {Text(stringResource(R.string.med_transfer_confirm))}
             }
             Phase.EXPORTED->Text(stringResource(R.string.med_transfer_exported))

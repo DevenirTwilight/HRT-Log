@@ -21,4 +21,5 @@
     <string name="med_transfer_cancelled">Annulé. Le fichier exporté peut être incomplet ; cela ne confirme aucune restauration.</string>
     <string name="med_transfer_revoked">Accès terminé. Rouvrez après autorisation ; aucun fichier ne se rouvre automatiquement.</string>
     <string name="med_transfer_password_note">Ce mot de passe protège une archive médicale portable, ce ne sont pas les chiffres du verrou. Il ne sera pas conservé ; gardez-en une copie.</string>
+    <string name="med_transfer_backup_first">Sauvegarder les données actuelles, puis choisir à nouveau le fichier à restaurer</string>
 </resources>

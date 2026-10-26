@@ -21,4 +21,5 @@
     <string name="med_transfer_cancelled">已取消。导出文件可能不完整，不代表恢复成功。</string>
     <string name="med_transfer_revoked">访问已结束。授权后请重新打开，不会自动重开文件。</string>
     <string name="med_transfer_password_note">这是可携带医疗归档的密码，不是应用 PIN。密码不会保存，请另行保管。</string>
+    <string name="med_transfer_backup_first">先备份当前资料，完成后重新选择恢复文件</string>
 </resources>
