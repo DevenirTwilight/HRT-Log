@@ -26,7 +26,7 @@
     "app/src/androidTest/java/net/plainnotes/app/attachments/AttachmentOperationAndroidTest.kt": "9fe0e5bee35d44a99d37b9c2ddc0bed2c66030b4f89653769b0da49e48afdb06",
     "app/src/androidTest/java/net/plainnotes/app/attachments/SyntheticDocumentsProvider.java": "065ae5587565a99ff664ed0af902992792ec8aef89e53131fa79e52a3b54aebc",
     "app/src/androidTestFull/java/net/plainnotes/app/disguise/DisguiseFlowAndroidTest.kt": "b26b92506b61aaa082078eaf25fa7d85a188aa3a07f4c66e49f4014880db0ce2",
-    "app/src/androidTestFull/java/net/plainnotes/app/shell/InAppNavigationLockAndroidTest.kt": "d5a042bb0f2b649081fd8c1f3bf2650a10eb8c8ebc10561fe8f1823b7c62e54b",
+    "app/src/androidTestFull/java/net/plainnotes/app/shell/InAppNavigationLockAndroidTest.kt": "e72d6f745befc6be48ed98c3d03c7e87b8fa8750a1850e3d25397d2e34ea1be8",
     "app/src/debug/java/net/plainnotes/app/debug/SyntheticLibraryScope.kt": "74d538b5ed450449779954f4776b70807b035b7ea573ca34609b7f8ea0b54c39",
     "app/src/debug/java/net/plainnotes/app/debug/attachments/AttachmentOperationTestActivity.kt": "b89b4604cae1cf0a400d400cf5849c614e4d173470036771f76203374b8b2b08",
     "app/src/debug/java/net/plainnotes/app/debug/attachments/SyntheticAttachmentFixture.kt": "009c1e7a5c8dbab6541a65af57c0b16ca48c9b0d55b44f531277c3cfa146b9e5",

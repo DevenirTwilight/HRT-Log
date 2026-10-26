@@ -379,4 +379,19 @@ class InAppNavigationLockAndroidTest {
         } finally {registration?.close()}
     }
 
+    @Test fun actualAppLockExpiryRevokesProtectedResourcesAndUnlockDoesNotRestoreThem() {
+        UiPrefs(context).lockAfterMillis=0L
+        val activity=launch();unlock()
+        val revoked=java.util.concurrent.atomic.AtomicBoolean(false)
+        var registration:AutoCloseable?=null
+        activity.onActivity {registration=androidx.lifecycle.ViewModelProvider(it)[net.plainnotes.app.NotesViewModel::class.java].libraryRuntime.protect(AutoCloseable{revoked.set(true)})}
+        try {
+            activity.moveToState(Lifecycle.State.CREATED)
+            ui.waitUntil(10000){revoked.get()}
+            activity.moveToState(Lifecycle.State.RESUMED)
+            assertLocked("actual background lock expired")
+            unlock();assertTrue(revoked.get())
+        }finally {registration?.close()}
+    }
+
 }
