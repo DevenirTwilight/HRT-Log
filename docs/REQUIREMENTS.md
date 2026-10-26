@@ -1482,3 +1482,7 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 ### 148.H Whole-source integration closeout（2026-10-26）
 
 负责人要求先正常保护收尾#126、复用已有全来源验收，修真实用户问题并以独立小PR提交；明确TransMTF同构格式标签不改变来源身份。后续格式先核实许可、真实导出/单位/身份及用户价值，最多选择一个证据充分来源，不为数量新增适配器或迁移。保留低内存失败和重试、真机/TalkBack未执行状态；MED继续OFF、备份外层/PK/库存/权限/签名发布不变。
+
+### 147.K Preview safety and review package refresh（2026-10-26）
+
+负责人要求先保护收尾#127再基于最新主线补齐MED-02预览输入/native解码/生命周期及低内存验收，复用生产viewer/session/provider防护与既有证据，只测试缺口、不重跑ABC。合成PDF/JPEG/PNG/WebP和有界畸形输入，记录实际采样而非峰值；同一已有external-review包绑定源码/未验证风险及UI合同。无漏洞证据不重构密码学或存储；不扩备份协议/配额，真实入口/原件/永久删除OFF，外审状态NOT_REVIEWED_EXTERNALLY。独立审核及负责人另行启用批准仍是开放门槛。
