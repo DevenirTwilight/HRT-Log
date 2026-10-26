@@ -99,6 +99,11 @@ class AutomaticImportAndroidTest {
         return root.findAccessibilityNodeInfosByViewId("${root.packageName}:id/$id").firstOrNull(::shown)
     }
     private fun rootsOpen()=systemId("drawer_roots")!=null
+    private fun loadedImportDirectory()=!rootsOpen() &&
+        (systemNode("SYNTHETIC IMPORT")!=null || systemNode("SYNTHETIC exports")!=null) &&
+        (systemId("dir_list")?.childCount ?: 0)>0 &&
+        listOf("SYNTHETIC tracker.db","SYNTHETIC memo.json","SYNTHETIC mona.db","SYNTHETIC featherline.json","SYNTHETIC invalid.json")
+            .any {systemNode(it)!=null}
     private fun settlePicker() {instrumentation.uiAutomation.waitForIdle(300,3000)}
     private fun selectImportRoot() {
         var rootAction:AccessibilityNodeInfo?=null
@@ -120,7 +125,14 @@ class AutomaticImportAndroidTest {
         click(R.string.import_other_apps)
         waitSystem("DocumentsUI"){pickerRoot()!=null}
         settlePicker()
-        if(systemNode(name)==null) {
+        // Reopening the picker restores its prior directory asynchronously. Do
+        // not reselect that same root while its first root-document request is
+        // pending (API26 DocumentStack.push rejects the duplicate callback).
+        // A requested file below the viewport also does not mean the root is wrong.
+        waitSystem("initial directory loaded or roots available") {
+            rootsOpen() || (systemId("dir_list")?.childCount ?: 0)>0 || systemId("message")!=null
+        }
+        if(!loadedImportDirectory()) {
             if(!rootsOpen()) {
                 var navigation:AccessibilityNodeInfo?=null
                 waitSystem("main toolbar navigation") {
@@ -139,7 +151,7 @@ class AutomaticImportAndroidTest {
         // The fifth synthetic file can be below the viewport in DocumentsUI grid mode.
         // Navigate the real RecyclerView using advertised accessibility actions, not a
         // larger display, fixed coordinates, direct URI, or a changed source fixture.
-        waitSystem("loaded synthetic directory"){!rootsOpen() && (systemId("dir_list")?.childCount ?: 0)>0}
+        waitSystem("loaded synthetic directory"){!rootsOpen() && loadedImportDirectory()}
         var backwards=true;var scrolls=0
         waitSystem(name){
             if(rootsOpen())false

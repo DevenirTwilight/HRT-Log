@@ -1,0 +1,65 @@
+[
+  {
+    "artifact": "75f-attachment-poc-api29.zip",
+    "sha256": "59e897e59d9786955ed65b90766ab09140be75fa433f47dd4906157f8670b3aa",
+    "saf": [
+      {
+        "path": "app/build/reports/import-a-native/connected/debug/flavors/full/TEST-emulator-5554 - 10-_app-full.xml",
+        "suite": {
+          "tests": "1",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "31.547",
+          "timestamp": "2026-10-26T06:01:35",
+          "hostname": "localhost"
+        },
+        "tests": [
+          "realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory"
+        ]
+      }
+    ]
+  },
+  {
+    "artifact": "75f-device-test-results.zip",
+    "sha256": "8b9d7aa28aac9d2e298e90af81057ef163172fe6e22130e698c3fb181052b656",
+    "saf": [
+      {
+        "path": "app/build/reports/import-a-native/connected/debug/flavors/full/TEST-emulator-5554 - 15-_app-full.xml",
+        "suite": {
+          "tests": "1",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "29.889",
+          "timestamp": "2026-10-26T06:00:27",
+          "hostname": "localhost"
+        },
+        "tests": [
+          "realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory"
+        ]
+      }
+    ]
+  },
+  {
+    "artifact": "75f-attachment-poc-api26.zip",
+    "sha256": "34898eab230f393e0e2c27df20b967ab1414d47fe2cc7b639122a355314c731f",
+    "saf": [
+      {
+        "path": "app/build/reports/import-a-native/connected/debug/flavors/full/TEST-emulator-5554 - 8.0.0-_app-full.xml",
+        "suite": {
+          "tests": "1",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "24.211",
+          "timestamp": "2026-10-26T06:00:47",
+          "hostname": "localhost"
+        },
+        "tests": [
+          "realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory"
+        ]
+      }
+    ]
+  }
+]

@@ -26,15 +26,22 @@ class LibraryCollectionRestartAndroidTest {
         val marker=File(app.filesDir,"synthetic-collection-restart-ready")
         if(phase=="prepare") {
             check(!marker.exists())
-            val file=File.createTempFile("synthetic-collection-restart-",".cipher",app.cacheDir)
-            LibraryRestoreAndroidTest.SourceBundle(app).use {source->LibraryRestoreAndroidTest.RootFixture(app).use {a->
+            // The four fault cases restore the SAME encrypted fixture. Generate
+            // it once, not again inside every60s live-seam startup window. Each
+            // case still authenticates it and reconstructs a fresh target in a
+            // separate process; neither KDF nor any restore work is bypassed.
+            val file=File(app.cacheDir,"synthetic-collection-restart-fixture.cipher")
+            if(seam=="PREPARED") {
+                check(file.createNewFile())
+                LibraryRestoreAndroidTest.SourceBundle(app).use {source->LibraryRestoreAndroidTest.RootFixture(app).use {a->
                 MedicalArchiveReader.read(a.session.issue(),source.password(),FileInputStream(source.file).channel).use {
                     LibraryRestoreCoordinator(a.access).restore(a.scope,a.session.issue(),UUID.randomUUID(),it)
                 }
                 val db=a.access.get(Space.PRIMARY);val scope=requireNotNull(AttachmentIdentity.current(db.openHelper.writableDatabase))
                 val session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
                 try {LibraryCollectionCapture(a.access).write(scope,session.issue(),UUID.randomUUID(),password(),file.outputStream())}finally {session.revoke()}
-            }}
+                }}
+            } else check(file.isFile && file.length()>80)
             val target=LibraryRestoreAndroidTest.RootFixture(app);val original=hash(target.facts());val operation=UUID.randomUUID()
             MedicalCollectionReader.read(target.session.issue(),password(),FileInputStream(file).channel).use {archive->
                 LibraryCollectionRestore(target.access,checkpoint={boundary->if(boundary.name==seam) {
@@ -78,7 +85,8 @@ class LibraryCollectionRestartAndroidTest {
                 }
                 assertEquals(m.getString("oldHash"),hash(target.facts()))
             }
-            check(file.delete());check(marker.delete())
+            if(seam=="SWITCHED")check(file.delete())
+            check(marker.delete())
         }
     }
 }
