@@ -66,8 +66,9 @@ class MedicalAttachmentUiTestActivity:ComponentActivity() {
             val c=controller
             val ui=c?.state?.collectAsState()?.value
             BackHandler(ui?.viewer!=null && ui.viewer!=MedicalAttachmentsController.Viewer.Closed) {c?.closeViewer()}
-            Box(Modifier.fillMaxSize()) {
-                Column(Modifier.padding(16.dp).fillMaxWidth().verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+            // Synthetic test controls stay reachable above the page; the viewer covers only the page area below them.
+            Column(Modifier.fillMaxSize()) {
+                Column(Modifier.padding(horizontal=16.dp,vertical=8.dp).fillMaxWidth(),verticalArrangement=Arrangement.spacedBy(8.dp)) {
                     Text("MED-02 SYNTHETIC / PUBLIC OFF")
                     Text(message)
                     Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
@@ -79,13 +80,17 @@ class MedicalAttachmentUiTestActivity:ComponentActivity() {
                         OutlinedButton({lifecycleScope.launch {try {fixture.runtime.resume();controller?.resume();message="SYNTHETIC unlocked"}catch(_:Exception){message="SYNTHETIC unlock refused"}}},enabled=ready) {Text("Unlock")}
                         OutlinedButton({fixture.runtime.invalidate()},enabled=ready) {Text("Switch data")}
                     }
-                    if(c!=null && ui!=null)MedicalAttachmentsSection(ui,targetLabel(),
-                        onAdd={lifecycleScope.launch {c.startImport()?.let {awaitingPicker=true;select.launch(it.putExtra(DocumentsContract.EXTRA_INITIAL_URI,
-                            DocumentsContract.buildDocumentUri(AttachmentOperationTestActivity.AUTHORITY,"samples")))}}},
-                        onConfirm=c::confirmImport,
-                        onCancelImport=c::cancelImport,onCheckStatus=c::checkStatus,onDismissMessage=c::dismissImportMessage,onRetry=c::refresh,onOpen=c::open)
                 }
-                if(c!=null && ui!=null)MedicalAttachmentViewer(ui.viewer,c::closeViewer)
+                Box(Modifier.fillMaxWidth().weight(1f)) {
+                    Column(Modifier.padding(16.dp).fillMaxSize().verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+                        if(c!=null && ui!=null)MedicalAttachmentsSection(ui,targetLabel(),
+                            onAdd={lifecycleScope.launch {c.startImport()?.let {awaitingPicker=true;select.launch(it.putExtra(DocumentsContract.EXTRA_INITIAL_URI,
+                                DocumentsContract.buildDocumentUri(AttachmentOperationTestActivity.AUTHORITY,"samples")))}}},
+                            onConfirm=c::confirmImport,
+                            onCancelImport=c::cancelImport,onCheckStatus=c::checkStatus,onDismissMessage=c::dismissImportMessage,onRetry=c::refresh,onOpen=c::open)
+                    }
+                    if(c!=null && ui!=null)MedicalAttachmentViewer(ui.viewer,c::closeViewer)
+                }
             }
         }}}
     }

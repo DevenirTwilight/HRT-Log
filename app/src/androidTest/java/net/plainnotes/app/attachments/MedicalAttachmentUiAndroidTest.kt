@@ -37,8 +37,15 @@ class MedicalAttachmentUiAndroidTest {
         while(SystemClock.uptimeMillis()<end) {if(condition())return;Thread.sleep(100)}
         fail("Synthetic timeout: $label")
     }
-    private fun tap(tag:String) {ui.waitUntil(30000) {ui.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()};ui.onNodeWithTag(tag).performScrollTo().assertIsEnabled().performClick()}
-    private fun button(text:String) {ui.waitUntil(30000) {ui.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty()};ui.onNodeWithText(text).performScrollTo().assertIsEnabled().performClick()}
+    /** Dialog buttons, the viewer and the fixed test controls have no scrolling parent; only scroll where there is one. */
+    private fun press(matcher:SemanticsMatcher) {
+        ui.waitUntil(30000) {ui.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty()}
+        val node=ui.onNode(matcher)
+        if(ui.onAllNodes(matcher and hasAnyAncestor(hasScrollAction())).fetchSemanticsNodes().isNotEmpty())node.performScrollTo()
+        node.assertIsEnabled().performClick()
+    }
+    private fun tap(tag:String)=press(hasTestTag(tag))
+    private fun button(text:String)=press(hasText(text))
     /** One real touch on the actual system DocumentsUI entry (same technique as AttachmentOperationAndroidTest). */
     private fun pick(name:String) {
         var selected:Rect?=null
