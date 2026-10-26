@@ -20,7 +20,7 @@ if [ "$result" -eq 0 ]; then
   result=$?
   cat "$report/native-tests.log"
   if [ "$result" -eq 0 ]; then
-    python3 -c 'from pathlib import Path; t=Path("core/data/build/reports/med02-generation-memory/native-tests.log").read_text(); assert "OK (12 tests)" in t and not any(x in t for x in ("FAILURES!!!","INSTRUMENTATION_FAILED","INSTRUMENTATION_STATUS_CODE: -3")), "All twelve real native tests must run and pass"'
+    python3 -c 'from pathlib import Path; t=Path("core/data/build/reports/med02-generation-memory/native-tests.log").read_text(); assert "OK (13 tests)" in t and not any(x in t for x in ("FAILURES!!!","INSTRUMENTATION_FAILED","INSTRUMENTATION_STATUS_CODE: -3")), "All original twelve native tests plus the application transfer facade contract must run and pass"'
     result=$?
   fi
 fi
