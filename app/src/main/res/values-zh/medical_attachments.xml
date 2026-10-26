@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MED-02 attachment UI (REQUIREMENTS §149). Not reachable from release navigation. -->
+<resources>
+    <string name="attach_section">附件</string>
+    <string name="attach_add">添加文件</string>
+    <string name="attach_empty">这条记录还没有附件。</string>
+    <string name="attach_kind_pdf">PDF</string>
+    <string name="attach_kind_image">图片</string>
+    <string name="attach_kind_other">其他文件</string>
+    <string name="attach_status_saved">已保存</string>
+    <string name="attach_status_unavailable">不可用</string>
+    <string name="attach_item_description">%1$s，%2$s，%3$s</string>
+    <string name="attach_confirm_title">添加这个文件？</string>
+    <string name="attach_confirm_target">将添加到：%1$s</string>
+    <string name="attach_confirm_name">名称</string>
+    <string name="attach_confirm_action">添加</string>
+    <string name="attach_saving">正在保存文件…</string>
+    <string name="attach_saved">文件已保存。</string>
+    <string name="attach_saved_list_stale">文件已保存，但列表没能刷新。</string>
+    <string name="attach_not_saved">文件没有保存。</string>
+    <string name="attach_cancelled">没有添加文件。</string>
+    <string name="attach_unknown">还不能确认文件是否已保存。</string>
+    <string name="attach_check">检查状态</string>
+    <string name="attach_checking">正在检查…</string>
+    <string name="attach_dismiss">知道了</string>
+    <string name="attach_hidden">应用锁定时不显示文件。</string>
+    <string name="attach_data_changed">数据已切换。请重新打开此页面查看文件。</string>
+    <string name="attach_list_failed">没能加载文件。</string>
+    <string name="attach_retry">重试</string>
+    <string name="attach_default_visit">就诊文件</string>
+    <string name="attach_default_lab">化验单</string>
+    <string name="viewer_close">关闭预览</string>
+    <string name="viewer_opening">正在打开…</string>
+    <string name="viewer_page">%1$s的预览，第一页</string>
+    <string name="viewer_image">%1$s的预览</string>
+    <string name="viewer_pdf_first_page">只显示第一页。</string>
+    <string name="viewer_pdf_unsupported">PDF 预览需要 Android 9 或更高版本。文件仍然保存着。</string>
+    <string name="viewer_no_preview">这种文件无法在这里预览。文件仍然保存着。</string>
+    <string name="viewer_failed">这个文件没能显示。</string>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MED-02 attachment UI (REQUIREMENTS §149). Not reachable from release navigation. -->
+<resources>
+    <string name="attach_section">Attached files</string>
+    <string name="attach_add">Add a file</string>
+    <string name="attach_empty">No files are attached to this record yet.</string>
+    <string name="attach_kind_pdf">PDF</string>
+    <string name="attach_kind_image">Image</string>
+    <string name="attach_kind_other">Other file</string>
+    <string name="attach_status_saved">Saved</string>
+    <string name="attach_status_unavailable">Not available</string>
+    <string name="attach_item_description">%1$s, %2$s, %3$s</string>
+    <string name="attach_confirm_title">Attach this file?</string>
+    <string name="attach_confirm_target">It will be attached to: %1$s</string>
+    <string name="attach_confirm_name">Name</string>
+    <string name="attach_confirm_action">Attach</string>
+    <string name="attach_saving">Saving the file…</string>
+    <string name="attach_saved">File saved.</string>
+    <string name="attach_saved_list_stale">File saved. The list couldn’t be refreshed.</string>
+    <string name="attach_not_saved">The file wasn’t saved.</string>
+    <string name="attach_cancelled">No file was attached.</string>
+    <string name="attach_unknown">It isn’t confirmed yet whether the file was saved.</string>
+    <string name="attach_check">Check status</string>
+    <string name="attach_checking">Checking…</string>
+    <string name="attach_dismiss">Dismiss</string>
+    <string name="attach_hidden">Files are hidden while the app is locked.</string>
+    <string name="attach_data_changed">The data has changed. Reopen this page to see its files.</string>
+    <string name="attach_list_failed">The files couldn’t be loaded.</string>
+    <string name="attach_retry">Try again</string>
+    <string name="attach_default_visit">Visit document</string>
+    <string name="attach_default_lab">Lab report</string>
+    <string name="viewer_close">Close preview</string>
+    <string name="viewer_opening">Opening…</string>
+    <string name="viewer_page">Preview of %1$s, first page</string>
+    <string name="viewer_image">Preview of %1$s</string>
+    <string name="viewer_pdf_first_page">Only the first page is shown.</string>
+    <string name="viewer_pdf_unsupported">PDF preview needs Android 9 or later. The file is still saved.</string>
+    <string name="viewer_no_preview">This type of file can’t be previewed here. The file is still saved.</string>
+    <string name="viewer_failed">This file couldn’t be displayed.</string>
+</resources>
