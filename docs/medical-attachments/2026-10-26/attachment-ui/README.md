@@ -72,7 +72,7 @@
 | UI 演示（无后端） | `MedicalAttachmentsUiTest`：Robolectric，4 种语言 × 320dp/2 倍字体与 411dp/1 倍字体，检查文字、48dp 触控区域、TalkBack 标签和角色、实时区域、撤权后清空 | 本地通过（48 项，4 项按设计跳过：411dp 对话框是 Robolectric 已知限制，由模拟器测试覆盖） |
 | 状态机（假网关） | `MedicalAttachmentsControllerTest`：取消不留操作、只有回执算保存、提交后刷新失败仍算已保存、结果不确定时只读核对、撤权先清空、切库永久失效 | 本地通过（10 项） |
 | 隔离守卫 | `MedicalAttachmentUiGuardTest` | 本地通过（3 项） |
-| 真实生产接口调用、实际 COMMIT、经认证读取 | `MedicalAttachmentUiAndroidTest`（模拟器）：<br>- 合成记录 → 真实 DocumentsUI 选择 → 明确确认 → 实际 COMMIT；<br>- 经认证读取，字节与原文件相同，只关联到该记录；<br>- 打开查看器 → 关闭后回收；<br>- 锁定后清空页面，旧请求被拒；解锁不自动打开；<br>- 切换数据后旧读取被拒，输出清零；<br>- 取消和页面重建不留操作 | 待 CI（API26 与 API35 例行仪器测试会运行） |
+| 真实生产接口调用、实际 COMMIT、经认证读取 | `MedicalAttachmentUiAndroidTest`（模拟器）：<br>- 合成记录 → 真实 DocumentsUI 选择 → 明确确认 → 实际 COMMIT；<br>- 经认证读取，字节与原文件相同，只关联到该记录；<br>- 打开查看器 → 关闭后回收；<br>- 锁定后清空页面，旧请求被拒；解锁不自动打开；<br>- 切换数据后旧读取被拒，输出清零；<br>- 取消和页面重建不留操作 | 待 CI：API35 的 device-tests 会运行全部 app 仪器测试；API26/29 矩阵作业已加入这个类（`android.yml` 中仪器测试类列表） |
 | 物理设备、人工 TalkBack | — | NOT_RUN |
 | 伪装模式实际切换 | 与锁定共用同一条撤权路径（`RuntimeLibrarySession` 的 pause/invalidate），但合成宿主里没有伪装开关 | NOT_RUN（本轮未单独验证） |
 | 独立外部安全审查 | — | PENDING / NOT_REVIEWED_EXTERNALLY |
