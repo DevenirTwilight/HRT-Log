@@ -81,7 +81,10 @@ class AttachmentOperationTestActivity:ComponentActivity() {
                 val rows=requireNotNull(flow).documents();val saved=rows.single {it.document==document && it.state=="ACTIVE" && it.linkState=="ACTIVE"}
                 val bitmap=withContext(Dispatchers.IO) {
                     viewer?.close();val v=AttachmentViewer(this@AttachmentOperationTestActivity,requireNotNull(flow).open(saved.document)).also {viewer=it}
-                    when(saved.mime) {"application/pdf"->v.pdfPage(0);"image/png","image/jpeg"->v.image();else->{v.prefix();null}}
+                    when(saved.mime) {
+                        // Android 8.x: no page preview (AttachmentViewer.PdfPreviewUnsupported); the authenticated read is still verified.
+                        "application/pdf"->try {v.pdfPage(0)}catch(_:AttachmentViewer.PdfPreviewUnsupported) {v.prefix();null}
+                        "image/png","image/jpeg"->v.image();else->{v.prefix();null}}
                 }
                 fixture.runtime.checkRequest();image=bitmap;message="SYNTHETIC read verified"
             }catch(_:Exception) {image=null;message="SYNTHETIC view refused"}}}) {Text("Read saved attachment")}

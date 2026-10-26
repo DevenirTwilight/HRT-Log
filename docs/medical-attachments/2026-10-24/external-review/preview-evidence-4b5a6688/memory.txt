@@ -1,0 +1,3 @@
+viewer=formats api=26 sampled_not_peak=true sampled_java_max_bytes=2097704 sampled_native_max_bytes=5871736 sampled_pss_max_kib=111022 memory_samples=53 max_heap_bytes=201326592
+viewer=closed api=26 sampled_not_peak=true sampled_java_max_bytes=1716680 sampled_native_max_bytes=6624032 sampled_pss_max_kib=120834 memory_samples=3 max_heap_bytes=201326592
+viewer=malformed api=26 sampled_not_peak=true sampled_java_max_bytes=3224008 sampled_native_max_bytes=7433280 sampled_pss_max_kib=120408 memory_samples=31 max_heap_bytes=201326592

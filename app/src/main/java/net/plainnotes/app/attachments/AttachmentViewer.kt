@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.pdf.PdfRenderer
+import android.os.Build
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.ParcelFileDescriptor
@@ -41,6 +42,11 @@ internal class AttachmentViewer(private val context:Context,private val read:Med
     }
     fun pdfPage(index:Int,width:Int=512):Bitmap=synchronized(monitor) {
         valid();require(width in 1..2048);check(synchronized(images) {images.isEmpty()}) {"Release the previous page"}
+        // Android 8.0/8.1 PdfRenderer sets mInput before nativeCreate; when a document cannot be
+        // opened, its finalizer later calls nativeClose(0) and unbalances pdfium's process-wide init
+        // count, so every later PDF in the process fails (AOSP O doClose; fixed in P). Untrusted
+        // bytes therefore never reach PdfRenderer there: refuse before any proxy or renderer exists.
+        if(Build.VERSION.SDK_INT<Build.VERSION_CODES.P)throw PdfPreviewUnsupported()
         if(pdf==null) {
             val handler=HandlerThread("attachment-view-reader").apply {start()}.also {thread=it}
             val callbacks=object:ProxyFileDescriptorCallback() {
@@ -87,5 +93,7 @@ internal class AttachmentViewer(private val context:Context,private val read:Med
             try {pdf?.close()}finally {pdf=null;try {descriptor?.close()}finally {descriptor=null;thread?.quitSafely();thread=null}}
         }
     }
+    /** The stored PDF stays encrypted and readable; only the on-device page preview is refused. */
+    class PdfPreviewUnsupported:UnsupportedOperationException("PDF preview requires Android 9 or later")
     companion object {private val cleanup=CoroutineScope(SupervisorJob()+Dispatchers.IO)}
 }
