@@ -1478,3 +1478,7 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 为保存 `IMPORT_CHRYSALIDE` 类型来源及剂量未知事实，批准本 PR 的最小非破坏 Room19→20 表扩展，business schema 条件性升至16；旧1–15读取及无 Chry 数据时既有备份输出语义维持，PNBAK1 外层与药代/库存/附件行为不变。ID 为本地自增值，完整导出及行内容 digest 做精确文件幂等；同ID不同内容进入歧义冲突，不能覆盖、自动关联或复活已删除事实。回收站、墓碑、PNBAK1/PNMED 集合备份必须保留来源证据。
 
 只使用合成数据，完全离线；PR-D 不得启用 MED-02。正式合并以最终 SHA 对应的必需 CI、实际 SAF/UI 验收、schema/旧备份兼容及所有审查门槛为准。未执行原生、TalkBack 或物理设备检查必须分别保留 NOT_RUN，不能以编译通过替代。
+
+### 148.H Whole-source integration closeout（2026-10-26）
+
+负责人要求先正常保护收尾#126、复用已有全来源验收，修真实用户问题并以独立小PR提交；明确TransMTF同构格式标签不改变来源身份。后续格式先核实许可、真实导出/单位/身份及用户价值，最多选择一个证据充分来源，不为数量新增适配器或迁移。保留低内存失败和重试、真机/TalkBack未执行状态；MED继续OFF、备份外层/PK/库存/权限/签名发布不变。
