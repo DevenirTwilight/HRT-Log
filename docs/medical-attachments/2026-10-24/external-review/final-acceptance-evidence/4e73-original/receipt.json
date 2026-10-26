@@ -1,0 +1,22 @@
+{
+  "source": "4e73d700e239a1835fe1b4ad717f214fbfdc9c31",
+  "baseline": "9192b91a99107d41fad402a3d16622f63e1ce1ef",
+  "run": "40383702676",
+  "artifacts": {
+    "library": {
+      "id": 12679833796,
+      "sha256": "417d25715e88b67b54bf79d3fbfcbd981b292c2b242f9fc150e9898a9479850a"
+    },
+    "featherline": {
+      "id": 12679907922,
+      "sha256": "b425fe6ad22262a22e509d9d7fb74f5693502ecc317a40cc7b5baba1cd3cd5d2"
+    }
+  },
+  "zip_crc": "VERIFIED",
+  "nativeThreeApi": "FAIL_OWNER_OR_SET_NOT_PROVEN",
+  "library": "FAIL_SWITCHED_STARTUP_60_SECONDS",
+  "featherline": "FAIL_FOREGROUND_LMK_AFTER_COMMIT",
+  "physical": "NOT_RUN",
+  "manualTalkBack": "NOT_RUN",
+  "hardwarePowerLoss": "NOT_RUN"
+}

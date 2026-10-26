@@ -1,0 +1,694 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="298" failures="0" errors="0" skipped="11" time="477.438" timestamp="2026-10-26T17:18:00" hostname="localhost">
+  <testsuite name="net.plainnotes.app.BdpmOfflineRestartAndroidTest" tests="1" failures="0" errors="0" skipped="1" time="0.012" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="freshOfflineProcessStillReadsInstalledOfficialCatalogue" classname="net.plainnotes.app.BdpmOfflineRestartAndroidTest" time="0.012">
+      <skipped />
+    </testcase>
+  </testsuite>
+  <testsuite name="net.plainnotes.app.BdpmReferenceFlowAndroidTest" tests="3" failures="0" errors="0" skipped="0" time="11.489" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="realAppEntrySelectsOfficialPackageConfirmsAndReopensWithoutDoseStockOrProfileChanges" classname="net.plainnotes.app.BdpmReferenceFlowAndroidTest" time="6.976" />
+    <testcase name="unsavedDraftCanBrowseGenuineProductButCannotLinkAndReturnsUnchanged" classname="net.plainnotes.app.BdpmReferenceFlowAndroidTest" time="2.874" />
+    <testcase name="realFilesystemFailureRetryAndNoMatchAreDistinctAndPreserveUserData" classname="net.plainnotes.app.BdpmReferenceFlowAndroidTest" time="1.639" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.AttachmentCapabilityAndroidTest" tests="5" failures="0" errors="0" skipped="0" time="0.138" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="closingOwnerRevokesAlreadyOpenedReader" classname="net.plainnotes.app.attachmentpoc.AttachmentCapabilityAndroidTest" time="0.081" />
+    <testcase name="readerCloseDuringDeliveryDoesNotRevokeSibling" classname="net.plainnotes.app.attachmentpoc.AttachmentCapabilityAndroidTest" time="0.027" />
+    <testcase name="externallyClosedLegacyOwnerCannotLeakThroughSafeAdapter" classname="net.plainnotes.app.attachmentpoc.AttachmentCapabilityAndroidTest" time="0.001" />
+    <testcase name="revokedBeforeBusinessPublicationCannotReturnCapability" classname="net.plainnotes.app.attachmentpoc.AttachmentCapabilityAndroidTest" time="0.001" />
+    <testcase name="revokeAfterDecryptionBeforeDeliveryErasesResponse" classname="net.plainnotes.app.attachmentpoc.AttachmentCapabilityAndroidTest" time="0.028" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.AttachmentCapabilityPreviewAndroidTest" tests="3" failures="0" errors="0" skipped="0" time="0.055" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="cancelledDecodedImageCannotPublishBitmapAndOriginalBytesStayUnchanged" classname="net.plainnotes.app.attachmentpoc.AttachmentCapabilityPreviewAndroidTest" time="0.002" />
+    <testcase name="proxyRevocationAfterDecryptBeforeDeliveryErasesResponse" classname="net.plainnotes.app.attachmentpoc.AttachmentCapabilityPreviewAndroidTest" time="0.052" />
+    <testcase name="closingOwnerRevokesExistingProxyAndRendererWithoutPlaintextFile" classname="net.plainnotes.app.attachmentpoc.AttachmentCapabilityPreviewAndroidTest" time="0.001" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" tests="20" failures="0" errors="0" skipped="0" time="0.931" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="eachCommitFaultLeavesOldObjectReadableAndNoPartialReady" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.001" />
+    <testcase name="reorderedRepeatedAndMissingBlocksRejected" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.001" />
+    <testcase name="hundredEncryptedObjectsRemainIndependentAndOnlyChosenObjectsOpen" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.127" />
+    <testcase name="inputErrorAndInjectedNoSpaceNeverPublishObject" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.001" />
+    <testcase name="foreignBlockSplicingRejected" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.026" />
+    <testcase name="noncesDistinctAndFinalReserved" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.001" />
+    <testcase name="nonprogressingProviderAndQuotaAreBounded" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.253" />
+    <testcase name="boundariesEmptyExactPartialAndMultipleBlocks" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.077" />
+    <testcase name="largeUnknownLengthStreamingHasConstantAlgorithmBuffers" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.403" />
+    <testcase name="bodyTagAndEndManifestTamperRejected" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.002" />
+    <testcase name="nistAes256GcmKnownAnswer" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.001" />
+    <testcase name="mutationAfterOpenNeverReturnsUnauthenticatedBytes" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.002" />
+    <testcase name="cancellationDuringUnknownLengthStreamCleansOnlyOwnPart" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.001" />
+    <testcase name="headerEveryFieldTamperRejected" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.0" />
+    <testcase name="retriesUseNewKeyNonceAndObjectEvenSameIdentity" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.004" />
+    <testcase name="wrongKeyRejected" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.001" />
+    <testcase name="closedReaderAndOwnerStayRevoked" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.001" />
+    <testcase name="wrongObjectVersionAndSpaceRejected" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.001" />
+    <testcase name="randomReadsCrossBlocksAndReopen" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.027" />
+    <testcase name="truncatedMissingFooterAndTrailingGarbageRejected" classname="net.plainnotes.app.attachmentpoc.AttachmentCryptoAndroidTest" time="0.001" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.AttachmentFilesystemDesignAndroidTest" tests="3" failures="0" errors="0" skipped="0" time="0.028" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="noFollowRejectsLeafSymlink" classname="net.plainnotes.app.attachmentpoc.AttachmentFilesystemDesignAndroidTest" time="0.001" />
+    <testcase name="exclusiveCreationCannotReplaceExistingOwnedTargetAndDirectorySyncWorks" classname="net.plainnotes.app.attachmentpoc.AttachmentFilesystemDesignAndroidTest" time="0.001" />
+    <testcase name="hardlinkCandidateIsDeniedWithoutChangingEitherFile" classname="net.plainnotes.app.attachmentpoc.AttachmentFilesystemDesignAndroidTest" time="0.026" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.AttachmentPreviewAndroidTest" tests="6" failures="0" errors="0" skipped="0" time="2.066" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="damagedPdfAndIncompleteCipherNeverReachRenderer" classname="net.plainnotes.app.attachmentpoc.AttachmentPreviewAndroidTest" time="0.001" />
+    <testcase name="dimensionsBombAndInvalidImageRejectedBeforeBitmapAllocation" classname="net.plainnotes.app.attachmentpoc.AttachmentPreviewAndroidTest" time="0.0" />
+    <testcase name="jpegPngWebpBoundedThumbnailOriginalBytesAndMimeMismatch" classname="net.plainnotes.app.attachmentpoc.AttachmentPreviewAndroidTest" time="0.252" />
+    <testcase name="actualKeystoreDeviceWrapPortableRestoreAndMissingAlias" classname="net.plainnotes.app.attachmentpoc.AttachmentPreviewAndroidTest" time="1.532" />
+    <testcase name="pdfPublicProxyMultiPageJumpZoomReopenRevokeAndNoPlaintextFile" classname="net.plainnotes.app.attachmentpoc.AttachmentPreviewAndroidTest" time="0.079" />
+    <testcase name="largePdfUsesStreamAndBoundedPageWithActualMemoryObservation" classname="net.plainnotes.app.attachmentpoc.AttachmentPreviewAndroidTest" time="0.202" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.AttachmentRestartAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="0.026" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="interruptedSyntheticImport" classname="net.plainnotes.app.attachmentpoc.AttachmentRestartAndroidTest" time="0.026" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.AttachmentSourceAndroidTest" tests="3" failures="0" errors="0" skipped="0" time="0.055" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="providerMimeCannotOverrideActualFileMagic" classname="net.plainnotes.app.attachmentpoc.AttachmentSourceAndroidTest" time="0.027" />
+    <testcase name="actualReliablePipeProviderErrorRollsBackImport" classname="net.plainnotes.app.attachmentpoc.AttachmentSourceAndroidTest" time="0.002" />
+    <testcase name="realContentResolverUnknownSizePipeEncryptsToCompleteObject" classname="net.plainnotes.app.attachmentpoc.AttachmentSourceAndroidTest" time="0.026" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.B2ImportAndroidTest" tests="8" failures="0" errors="0" skipped="0" time="3.023" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="everyPrecommitFailureKeepsOldPointerAndCipher" classname="net.plainnotes.app.attachmentpoc.B2ImportAndroidTest" time="1.858" />
+    <testcase name="providerUnknownLengthErrorAndStallNeverPublish" classname="net.plainnotes.app.attachmentpoc.B2ImportAndroidTest" time="0.077" />
+    <testcase name="repeatedAttemptAndConcurrentStaleRevisionCannotOverwrite" classname="net.plainnotes.app.attachmentpoc.B2ImportAndroidTest" time="0.001" />
+    <testcase name="cleanupFailureRetainsOwnedEvidenceAndForeignFiles" classname="net.plainnotes.app.attachmentpoc.B2ImportAndroidTest" time="0.027" />
+    <testcase name="boundedTransportIntegratesWithoutPublishingOversizedSource" classname="net.plainnotes.app.attachmentpoc.B2ImportAndroidTest" time="0.001" />
+    <testcase name="acknowledgementFailureAfterCommitDoesNotDeleteActive" classname="net.plainnotes.app.attachmentpoc.B2ImportAndroidTest" time="0.001" />
+    <testcase name="twoConcurrentImportersShareOneCasWinner" classname="net.plainnotes.app.attachmentpoc.B2ImportAndroidTest" time="0.579" />
+    <testcase name="revokeBeforeDuringAndAfterAuthenticationPreventsCommit" classname="net.plainnotes.app.attachmentpoc.B2ImportAndroidTest" time="0.479" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.B2InputPolicyAndroidTest" tests="4" failures="0" errors="0" skipped="0" time="0.004" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="fakePdfSignatureDoesNotAuthorizeLibraryOrPreview" classname="net.plainnotes.app.attachmentpoc.B2InputPolicyAndroidTest" time="0.001" />
+    <testcase name="highCompressionDimensionsAreRejectedBeforeDecodeWithoutChangingOriginal" classname="net.plainnotes.app.attachmentpoc.B2InputPolicyAndroidTest" time="0.001" />
+    <testcase name="pdfJpegPngWebpSignaturesAndMimeConflicts" classname="net.plainnotes.app.attachmentpoc.B2InputPolicyAndroidTest" time="0.001" />
+    <testcase name="displayNamesArePlainNamesNeverPaths" classname="net.plainnotes.app.attachmentpoc.B2InputPolicyAndroidTest" time="0.001" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.B2StreamingAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="0.001" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="corruptFinalSegmentCannotObtainAuthenticatedReader" classname="net.plainnotes.app.attachmentpoc.B2StreamingAndroidTest" time="0.001" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest" tests="9" failures="0" errors="0" skipped="0" time="0.362" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="ownerCloseAndSessionRevokePreventExistingChildRead" classname="net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest" time="0.001" />
+    <testcase name="changedBlockAfterOpenIsReauthenticatedWithoutDelivery" classname="net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest" time="0.027" />
+    <testcase name="zeroOneBlockBoundariesOneAndSixteenMiBRoundTripAndSeek" classname="net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest" time="0.253" />
+    <testcase name="sixteenMiBPlusOneExplicitlyRejected" classname="net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest" time="0.051" />
+    <testcase name="revokeAfterCompleteAuthenticationBeforeLeaseRejects" classname="net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest" time="0.0" />
+    <testcase name="revokeAfterDecryptBeforeDeliveryNeverCopiesPlaintext" classname="net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest" time="0.001" />
+    <testcase name="streamingInputErrorCannotProduceAuthenticatedObject" classname="net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest" time="0.027" />
+    <testcase name="validOlderCipherTupleFailsTrustedCommitment" classname="net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest" time="0.001" />
+    <testcase name="truncatedTrailingReorderedCopiedMissingAndWrongDomainRejected" classname="net.plainnotes.app.attachmentpoc.B2StreamingMatrixAndroidTest" time="0.001" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.KernelProxyFdGate3AndroidTest" tests="2" failures="0" errors="0" skipped="0" time="0.329" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="dupDescriptorOutlivesOwnersCloseButNotRevocation" classname="net.plainnotes.app.attachmentpoc.KernelProxyFdGate3AndroidTest" time="0.177" />
+    <testcase name="kernelReadsReachCallbackAndRevocationStopsNewPlaintext" classname="net.plainnotes.app.attachmentpoc.KernelProxyFdGate3AndroidTest" time="0.152" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.ProductionViewerSafetyAndroidTest" tests="4" failures="0" errors="0" skipped="0" time="0.23" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="jpegPngWebpAndPdfPublishReleaseAndRevoke" classname="net.plainnotes.app.attachmentpoc.ProductionViewerSafetyAndroidTest" time="0.026" />
+    <testcase name="validPdfStillRendersAfterUnopenablePdf" classname="net.plainnotes.app.attachmentpoc.ProductionViewerSafetyAndroidTest" time="0.102" />
+    <testcase name="closedOrRevokedCapabilityCannotPublishBytesOrPixels" classname="net.plainnotes.app.attachmentpoc.ProductionViewerSafetyAndroidTest" time="0.051" />
+    <testcase name="malformedTruncatedAndOversizeRasterRefused" classname="net.plainnotes.app.attachmentpoc.ProductionViewerSafetyAndroidTest" time="0.051" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachmentpoc.TinkPdfGate2AndroidTest" tests="6" failures="0" errors="0" skipped="0" time="0.283" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="revokedAfterDecryptBeforeDeliveryZerosProxyResponse" classname="net.plainnotes.app.attachmentpoc.TinkPdfGate2AndroidTest" time="0.052" />
+    <testcase name="actualTinkMultipageProxyJumpScaleReopenNoPlaintextFallback" classname="net.plainnotes.app.attachmentpoc.TinkPdfGate2AndroidTest" time="0.076" />
+    <testcase name="ownerRevocationDuringNativePageLifetimeRejectsBitmapAndSerializesRendererClose" classname="net.plainnotes.app.attachmentpoc.TinkPdfGate2AndroidTest" time="0.051" />
+    <testcase name="corruptedTailIsRejectedBeforePdfRendererObtainsDescriptor" classname="net.plainnotes.app.attachmentpoc.TinkPdfGate2AndroidTest" time="0.026" />
+    <testcase name="ownerCloseRecyclesNativeBitmapAndRevokesExistingProxy" classname="net.plainnotes.app.attachmentpoc.TinkPdfGate2AndroidTest" time="0.027" />
+    <testcase name="pathnameReplacementKeepsPinnedOriginalButNewOpenFailsCommitment" classname="net.plainnotes.app.attachmentpoc.TinkPdfGate2AndroidTest" time="0.051" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachments.MedicalAttachmentUiAndroidTest" tests="2" failures="0" errors="0" skipped="0" time="15.363" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="cancellingLeavesNoOperationAndRecreationKeepsNoPickerResultOrPreview" classname="net.plainnotes.app.attachments.MedicalAttachmentUiAndroidTest" time="6.232" />
+    <testcase name="pngAndPdfImportCommitListViewReleaseLockAndDataSwitch" classname="net.plainnotes.app.attachments.MedicalAttachmentUiAndroidTest" time="9.131" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.calendar.CalendarIntakeAndroidTest" tests="2" failures="0" errors="0" skipped="0" time="4.5" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="oneSaveThenBackNavigationLeavesExactlyOneIntake" classname="net.plainnotes.app.calendar.CalendarIntakeAndroidTest" time="2.789" />
+    <testcase name="cancelAndSystemBackOnTheIntakeDialogWriteNothing" classname="net.plainnotes.app.calendar.CalendarIntakeAndroidTest" time="1.711" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.conc.CalibrationEligibilityAndroidTest" tests="4" failures="0" errors="0" skipped="0" time="0.307" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="olderOnTreatmentSampleCannotAdd500AsBaseline" classname="net.plainnotes.app.conc.CalibrationEligibilityAndroidTest" time="0.101" />
+    <testcase name="missingFrozenContextCannotAdd220AsBaseline" classname="net.plainnotes.app.conc.CalibrationEligibilityAndroidTest" time="0.077" />
+    <testcase name="eligibleActualIntakeStillCalibratesWithFixedSlRate" classname="net.plainnotes.app.conc.CalibrationEligibilityAndroidTest" time="0.077" />
+    <testcase name="switchOffUsesPopulationAndKeepsObservationAndVersion" classname="net.plainnotes.app.conc.CalibrationEligibilityAndroidTest" time="0.052" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.conc.CausalTimeAndroidTest" tests="4" failures="0" errors="0" skipped="0" time="0.481" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="qualifiedLaterLabCannotChangeHistoricReadoutOrAnyBand" classname="net.plainnotes.app.conc.CausalTimeAndroidTest" time="0.151" />
+    <testcase name="backwardsRepeatedQueriesAndFutureModificationPreserveHistoricState" classname="net.plainnotes.app.conc.CausalTimeAndroidTest" time="0.152" />
+    <testcase name="newlyGeneratedPdfChartDoesNotBridgeTheCausalFitBoundary" classname="net.plainnotes.app.conc.CausalTimeAndroidTest" time="0.102" />
+    <testcase name="exactSamplingMillisecondBoundaryAndForecastUseOnlyAvailableLabs" classname="net.plainnotes.app.conc.CausalTimeAndroidTest" time="0.076" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.conc.OutlierDispositionAndroidTest" tests="3" failures="0" errors="0" skipped="0" time="0.405" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="actualAllWarningObservationIsUsedNotExcluded" classname="net.plainnotes.app.conc.OutlierDispositionAndroidTest" time="0.076" />
+    <testcase name="historicalQueriesCannotBorrowFutureWarningOrUsedState" classname="net.plainnotes.app.conc.OutlierDispositionAndroidTest" time="0.177" />
+    <testcase name="partialRemovalMatchesIndependentRetainedSubset" classname="net.plainnotes.app.conc.OutlierDispositionAndroidTest" time="0.152" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.debug.UnifiedConcentrationAndroidTest" tests="6" failures="0" errors="0" skipped="0" time="10.342" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="mixedRoutesArePartialAndOnlyOtherRoutesUseCompatibilityCalibration" classname="net.plainnotes.app.debug.UnifiedConcentrationAndroidTest" time="1.612" />
+    <testcase name="observedLabsCannotCalibrateM2OnAndroid" classname="net.plainnotes.app.debug.UnifiedConcentrationAndroidTest" time="1.11" />
+    <testcase name="m2AndOriginalUnitSurviveRecreationAndRotation" classname="net.plainnotes.app.debug.UnifiedConcentrationAndroidTest" time="1.738" />
+    <testcase name="actualProductPreviewReportsPeakAccuracyAndAndroidPerformance" classname="net.plainnotes.app.debug.UnifiedConcentrationAndroidTest" time="0.63" />
+    <testcase name="originalUiHasOnlyM2ReferenceAndOneChart" classname="net.plainnotes.app.debug.UnifiedConcentrationAndroidTest" time="0.806" />
+    <testcase name="thirtyDaySyntheticHistoryReportsAndroidComputeAndProcessMemory" classname="net.plainnotes.app.debug.UnifiedConcentrationAndroidTest" time="4.446" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.demo.DemoArchiveAndroidTest" tests="3" failures="0" errors="0" skipped="0" time="10.027" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="fullScriptedFlow" classname="net.plainnotes.app.demo.DemoArchiveAndroidTest" time="7.128" />
+    <testcase name="overviewScreens" classname="net.plainnotes.app.demo.DemoArchiveAndroidTest" time="0.811" />
+    <testcase name="inboxCategoriesSearchDetailBackAndBin" classname="net.plainnotes.app.demo.DemoArchiveAndroidTest" time="2.088" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.demo.DemoCompatAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="1.187" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="opensLinksGoesBackAndResets" classname="net.plainnotes.app.demo.DemoCompatAndroidTest" time="1.187" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" tests="17" failures="0" errors="0" skipped="0" time="43.082" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="calculatorPublicUseAndPrivateCodeOpenNotesAndBackReturnsOnlyToCalculator" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="2.717" />
+    <testcase name="ordinaryAppLockCannotBeBypassedByATargetToken" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="0.428" />
+    <testcase name="alternateCodeChangesAndRemovalPreserveMainCodeAndEraseOnlyPrivateContent" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="2.713" />
+    <testcase name="realSecretWithOrdinaryPinConfiguredOpensPrimaryWithoutASecondPinAndBackLocks" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="1.865" />
+    <testcase name="aSecretResultDeliveredAfterLeavingAShellCannotOpenEitherProtectedTarget" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="1.158" />
+    <testcase name="privateNotesCrudAndRotationStayInsidePrivateActivity" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="1.866" />
+    <testcase name="primaryDocumentPickerIsTheOnlyBackgroundException" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="1.31" />
+    <testcase name="wrongSecretsRemainOrdinaryShellInput" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="3.619" />
+    <testcase name="backgroundAndRecreatedClosedSessionReturnToShell" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="1.785" />
+    <testcase name="unsetAlternateSameCodesAndSharedRateLimitAreHandledWithoutAnAuthTarget" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="3.212" />
+    <testcase name="applicationKeepsItsRealIdentityAndPrivateIsNotExported" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="0.403" />
+    <testcase name="directMainIntentAndPrivateTokenCannotAuthenticatePrimary" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="11.07" />
+    <testcase name="publicNotesPersistAndItsPrivateCodeUsesTheSamePrivateNotesSpace" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="2.817" />
+    <testcase name="actualDisguiseExitHidesPrimarySensitivePresentation" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="0.983" />
+    <testcase name="disablingDisguiseRemovesPrivateAccessAndRestoresOnlyNormalLauncher" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="5.472" />
+    <testcase name="revokingAnOpenPrivateSessionImmediatelyReturnsToTheShell" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="0.706" />
+    <testcase name="setupCompletionCannotReopenAnActivityThatLeftOrReplaceANewerPrivateSession" classname="net.plainnotes.app.disguise.DisguiseFlowAndroidTest" time="0.958" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.disguise.PrivateStorageAndroidTest" tests="3" failures="0" errors="0" skipped="0" time="0.077" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="erasingTheSpaceDestroysItsKeyAndLeavesUnrelatedDataAlone" classname="net.plainnotes.app.disguise.PrivateStorageAndroidTest" time="0.026" />
+    <testcase name="createEditReopenAndDeleteUseTheIndependentEncryptedFile" classname="net.plainnotes.app.disguise.PrivateStorageAndroidTest" time="0.026" />
+    <testcase name="missingKeyAndTamperedCiphertextFailWithoutReplacingExistingNotes" classname="net.plainnotes.app.disguise.PrivateStorageAndroidTest" time="0.025" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.disguise.ProcessRestartAndroidTest" tests="2" failures="0" errors="0" skipped="2" time="0.0" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="prepare" classname="net.plainnotes.app.disguise.ProcessRestartAndroidTest" time="0.0">
+      <skipped />
+    </testcase>
+    <testcase name="verifyFreshProcess" classname="net.plainnotes.app.disguise.ProcessRestartAndroidTest" time="0.0">
+      <skipped />
+    </testcase>
+  </testsuite>
+  <testsuite name="net.plainnotes.app.export.SublingualPdfAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="0.532" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="newReportsForEveryRouteMixAreValidAndFollowTheRule" classname="net.plainnotes.app.export.SublingualPdfAndroidTest" time="0.532" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.labs.LabPanelRestartAndroidTest" tests="2" failures="0" errors="0" skipped="2" time="0.0" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="prepare" classname="net.plainnotes.app.labs.LabPanelRestartAndroidTest" time="0.0">
+      <skipped />
+    </testcase>
+    <testcase name="verifyFreshProcess" classname="net.plainnotes.app.labs.LabPanelRestartAndroidTest" time="0.0">
+      <skipped />
+    </testcase>
+  </testsuite>
+  <testsuite name="net.plainnotes.app.medical.MedicalRecordsAndroidTest" tests="40" failures="0" errors="0" skipped="0" time="33.158" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="editorExplainsPastVisitAndOriginalTimezone[en/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.758" />
+    <testcase name="visitTimezoneCanBeExplicitlyCorrectedWithoutLosingLocalClockOrId[en/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="1.465" />
+    <testcase name="archiveHasDiscoverableCorrectionAndHistoryRoutes[en/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="1.413" />
+    <testcase name="editorSubmitsSameRecordOnceWithOriginalInstantAndZone[en/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.757" />
+    <testcase name="correctionCancelWritesNothingAndExplicitConfirmWritesOnce[en/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.708" />
+    <testcase name="archiveSeparatesConfirmationAndDoesNotListFutureAppointments[en/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="1.01" />
+    <testcase name="failedSaveKeepsDraftAndVisibleRetry[en/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.755" />
+    <testcase name="existingLabDetailsExposeTheSavedValueAndEditRoute[en/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.681" />
+    <testcase name="labRangeIsContextOnlyAndOpensTheOriginalLab[en/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.603" />
+    <testcase name="cancellingEditorWritesNothing[en/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.707" />
+    <testcase name="editorExplainsPastVisitAndOriginalTimezone[zh-CN/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.784" />
+    <testcase name="visitTimezoneCanBeExplicitlyCorrectedWithoutLosingLocalClockOrId[zh-CN/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="1.841" />
+    <testcase name="archiveHasDiscoverableCorrectionAndHistoryRoutes[zh-CN/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="1.033" />
+    <testcase name="editorSubmitsSameRecordOnceWithOriginalInstantAndZone[zh-CN/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.657" />
+    <testcase name="correctionCancelWritesNothingAndExplicitConfirmWritesOnce[zh-CN/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.755" />
+    <testcase name="archiveSeparatesConfirmationAndDoesNotListFutureAppointments[zh-CN/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.98" />
+    <testcase name="failedSaveKeepsDraftAndVisibleRetry[zh-CN/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.633" />
+    <testcase name="existingLabDetailsExposeTheSavedValueAndEditRoute[zh-CN/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.58" />
+    <testcase name="labRangeIsContextOnlyAndOpensTheOriginalLab[zh-CN/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.681" />
+    <testcase name="cancellingEditorWritesNothing[zh-CN/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.656" />
+    <testcase name="editorExplainsPastVisitAndOriginalTimezone[zh-TW/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.733" />
+    <testcase name="visitTimezoneCanBeExplicitlyCorrectedWithoutLosingLocalClockOrId[zh-TW/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="1.416" />
+    <testcase name="archiveHasDiscoverableCorrectionAndHistoryRoutes[zh-TW/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.933" />
+    <testcase name="editorSubmitsSameRecordOnceWithOriginalInstantAndZone[zh-TW/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.632" />
+    <testcase name="correctionCancelWritesNothingAndExplicitConfirmWritesOnce[zh-TW/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.603" />
+    <testcase name="archiveSeparatesConfirmationAndDoesNotListFutureAppointments[zh-TW/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.909" />
+    <testcase name="failedSaveKeepsDraftAndVisibleRetry[zh-TW/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.681" />
+    <testcase name="existingLabDetailsExposeTheSavedValueAndEditRoute[zh-TW/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.657" />
+    <testcase name="labRangeIsContextOnlyAndOpensTheOriginalLab[zh-TW/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.606" />
+    <testcase name="cancellingEditorWritesNothing[zh-TW/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.632" />
+    <testcase name="editorExplainsPastVisitAndOriginalTimezone[fr/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.605" />
+    <testcase name="visitTimezoneCanBeExplicitlyCorrectedWithoutLosingLocalClockOrId[fr/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="1.343" />
+    <testcase name="archiveHasDiscoverableCorrectionAndHistoryRoutes[fr/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="1.03" />
+    <testcase name="editorSubmitsSameRecordOnceWithOriginalInstantAndZone[fr/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.732" />
+    <testcase name="correctionCancelWritesNothingAndExplicitConfirmWritesOnce[fr/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.708" />
+    <testcase name="archiveSeparatesConfirmationAndDoesNotListFutureAppointments[fr/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.855" />
+    <testcase name="failedSaveKeepsDraftAndVisibleRetry[fr/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.759" />
+    <testcase name="existingLabDetailsExposeTheSavedValueAndEditRoute[fr/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.557" />
+    <testcase name="labRangeIsContextOnlyAndOpensTheOriginalLab[fr/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.629" />
+    <testcase name="cancellingEditorWritesNothing[fr/320dp/2x]" classname="net.plainnotes.app.medical.MedicalRecordsAndroidTest" time="0.681" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.medical.MedicalRecordsRestartAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="2.334" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="persistedMedicalRecords" classname="net.plainnotes.app.medical.MedicalRecordsRestartAndroidTest" time="2.334" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.privacy.BackupCompletionAndroidTest" tests="3" failures="0" errors="0" skipped="0" time="3.892" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="actualExportRecordsTimeAndWipeClearsTheOperationMetadata" classname="net.plainnotes.app.privacy.BackupCompletionAndroidTest" time="2.321" />
+    <testcase name="passwordAndDestinationDoNotSurviveRecreation" classname="net.plainnotes.app.privacy.BackupCompletionAndroidTest" time="0.988" />
+    <testcase name="pickerCancellationDoesNotAskForPasswordOrRecordSuccess" classname="net.plainnotes.app.privacy.BackupCompletionAndroidTest" time="0.583" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.privacy.ImportCleanupRestartAndroidTest" tests="2" failures="0" errors="0" skipped="2" time="0.027" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="prepare" classname="net.plainnotes.app.privacy.ImportCleanupRestartAndroidTest" time="0.001">
+      <skipped />
+    </testcase>
+    <testcase name="verifyFreshProcess" classname="net.plainnotes.app.privacy.ImportCleanupRestartAndroidTest" time="0.026">
+      <skipped />
+    </testcase>
+  </testsuite>
+  <testsuite name="net.plainnotes.app.privacy.PlainExportPrivacyAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="0.858" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="encryptedBackupOpensItsOwnPasswordFlowWithoutPlainExportNotice" classname="net.plainnotes.app.privacy.PlainExportPrivacyAndroidTest" time="0.858" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.privacy.PrivacyNoticeDeviceAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="1.862" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="noticeOpensReadsSurvivesRecreationAndClosesWithBack" classname="net.plainnotes.app.privacy.PrivacyNoticeDeviceAndroidTest" time="1.862" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.privacy.PrivacyNoticeLockAndDisguiseAndroidTest" tests="2" failures="0" errors="0" skipped="0" time="6.412" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="lockScreenShowsNoPrivacyNotice" classname="net.plainnotes.app.privacy.PrivacyNoticeLockAndDisguiseAndroidTest" time="0.813" />
+    <testcase name="disguiseShellShowsNoPrivacyNoticeOrRealName" classname="net.plainnotes.app.privacy.PrivacyNoticeLockAndDisguiseAndroidTest" time="5.599" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.privacy.RestoreProcessDeathAndroidTest" tests="2" failures="0" errors="0" skipped="2" time="1.586" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="prepareOpenPasswordAndWaitForExternalKill" classname="net.plainnotes.app.privacy.RestoreProcessDeathAndroidTest" time="0.704">
+      <skipped />
+    </testcase>
+    <testcase name="freshProcessHasNoPendingRestoreOrPassword" classname="net.plainnotes.app.privacy.RestoreProcessDeathAndroidTest" time="0.882">
+      <skipped />
+    </testcase>
+  </testsuite>
+  <testsuite name="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" tests="9" failures="0" errors="0" skipped="0" time="36.033" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="successfulBackupStillRequiresExplicitRestoreAndKeepsUrisDistinct" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="5.936" />
+    <testcase name="cancelledChoiceDoesNotTouchData" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="3.316" />
+    <testcase name="failedBackupReturnsToChoiceAndCannotRestore" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="4.546" />
+    <testcase name="damagedRestoreLeavesAllDataUnchanged" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="3.697" />
+    <testcase name="wrongRestorePasswordLeavesAllDataUnchanged" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="4.167" />
+    <testcase name="cancelledRestorePasswordDoesNotChangeData" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="3.694" />
+    <testcase name="cancelledBackupPickerDoesNotRestore" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="3.519" />
+    <testcase name="sourceCannotBeOverwrittenByProtectionBackup" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="3.441" />
+    <testcase name="recreationDropsPendingSourceOutputAndPassword" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="3.717" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.privacy.WipeStockAlertsAndroidTest" tests="2" failures="0" errors="0" skipped="0" time="2.346" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="confirmedWipeClearsCurrentAndLegacyMarkers" classname="net.plainnotes.app.privacy.WipeStockAlertsAndroidTest" time="1.715" />
+    <testcase name="cancellingTheDialogKeepsMarkers" classname="net.plainnotes.app.privacy.WipeStockAlertsAndroidTest" time="0.631" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.security.ScreenshotSettingAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="1.664" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="mainWindowFollowsTheSetting" classname="net.plainnotes.app.security.ScreenshotSettingAndroidTest" time="1.664" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.settings.SettingsButtonsAndroidTest" tests="24" failures="0" errors="0" skipped="0" time="93.645" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[en/320dp/1]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="4.022" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[en/320dp/1.3]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.995" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[en/320dp/2]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.922" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[en/411dp/1]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="4.369" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[en/411dp/1.3]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.893" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[en/411dp/2]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.844" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[zh-CN/320dp/1]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.816" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[zh-CN/320dp/1.3]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.867" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[zh-CN/320dp/2]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.896" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[zh-CN/411dp/1]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.79" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[zh-CN/411dp/1.3]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.817" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[zh-CN/411dp/2]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.844" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[zh-TW/320dp/1]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.893" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[zh-TW/320dp/1.3]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.824" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[zh-TW/320dp/2]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.944" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[zh-TW/411dp/1]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.868" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[zh-TW/411dp/1.3]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.843" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[zh-TW/411dp/2]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.869" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[fr/320dp/1]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.924" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[fr/320dp/1.3]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.85" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[fr/320dp/2]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.946" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[fr/411dp/1]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.82" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[fr/411dp/1.3]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.871" />
+    <testcase name="allSettingsChoicesRemainButtonsWithALockActuallyEnabled[fr/411dp/2]" classname="net.plainnotes.app.settings.SettingsButtonsAndroidTest" time="3.918" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.shell.AfterIntakePromptAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="1.791" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="savingAnIntakeOffersTheWellbeingCheckInAndItsActionOpensThePage" classname="net.plainnotes.app.shell.AfterIntakePromptAndroidTest" time="1.791" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" tests="15" failures="0" errors="0" skipped="0" time="64.077" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="13.11" />
+    <testcase name="recreationWhileInBackgroundDoesNotSkipAutoLock" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.014" />
+    <testcase name="configurationRecreationKeepsTheSessionAndPage" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.667" />
+    <testcase name="leavingWithImmediateAutoLockStillLocks" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="1.984" />
+    <testcase name="centerRecreationKeepsOpenWindowButActualLeaveStillLocks" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.945" />
+    <testcase name="immediateAutoLockDoesNotTreatRecreationAsLeaving" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="1.963" />
+    <testcase name="actualAppLockExpiryRevokesProtectedResourcesAndUnlockDoesNotRestoreThem" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.718" />
+    <testcase name="fileIntentMonitorBlocksDocumentActionsWithoutBlockingTheApp" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="1.662" />
+    <testcase name="labsDrawerMedicalAndConcentrationShareNewHomeAndExistingBatchForm" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="4.252" />
+    <testcase name="realActivityPauseAndRecreationHideSensitivePresentation" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="1.989" />
+    <testcase name="populatedLabDraftSurvivesRotationAndIsDiscardedOnActualLock" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="17.531" />
+    <testcase name="notesDisguiseNavigationAndRecreationKeepTheSession" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.945" />
+    <testcase name="shortLeaveKeepsSessionButFinishingLocks" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.361" />
+    <testcase name="calculatorDisguiseNavigationAndRecreationKeepTheSession" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="3.17" />
+    <testcase name="internalNavigationNeverAsksForThePinAgain" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.766" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.shell.NotificationEntryAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="0.834" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="notificationSlotOpensTheIntakeDialogOnce" classname="net.plainnotes.app.shell.NotificationEntryAndroidTest" time="0.834" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.shell.ReminderTestDeviceTest" tests="3" failures="0" errors="0" skipped="0" time="19.17" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="scheduledTestTravelsTheRealAlarmChain" classname="net.plainnotes.app.shell.ReminderTestDeviceTest" time="5.547" />
+    <testcase name="highReliabilityTestUsesTheSystemAlarmClockAndArrives" classname="net.plainnotes.app.shell.ReminderTestDeviceTest" time="5.545" />
+    <testcase name="scheduledTestSurvivesReturnsToTheApp" classname="net.plainnotes.app.shell.ReminderTestDeviceTest" time="8.078" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.shell.RuntimeRequestUiAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="2.762" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="restoreInvalidatesOldPageAndOnlyExplicitNewOwnerCanModifySameInteger" classname="net.plainnotes.app.shell.RuntimeRequestUiAndroidTest" time="2.762" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.stock.HomeAddStockAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="2.822" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="homeAddStockMatchesTheStockPage" classname="net.plainnotes.app.stock.HomeAddStockAndroidTest" time="2.822" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.stock.PackageHistoryAndroidTest" tests="24" failures="0" errors="0" skipped="0" time="60.019" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="detailsReturnRetainsPositionAndReopeningResetsHistory[en/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="1.461" />
+    <testcase name="mixedGroupsAnd100VoidedRowsRegroupImmediatelyWithoutStaleActions[en/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="2.695" />
+    <testcase name="activeGroupsAlsoHaveIndependentTwentyRowBatches[en/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="0.881" />
+    <testcase name="homeKeepsOneSummaryAndZeroValidPackagesRemainUntracked[en/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="2.339" />
+    <testcase name="all500SameDateRowsHaveStableOrderAndNeverComposeTheWholeHistory[en/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="5.135" />
+    <testcase name="firstPagesAt1_20_21_100_500StartCollapsedAndAreCapped[en/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="2.746" />
+    <testcase name="detailsReturnRetainsPositionAndReopeningResetsHistory[zh-CN/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="1.309" />
+    <testcase name="mixedGroupsAnd100VoidedRowsRegroupImmediatelyWithoutStaleActions[zh-CN/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="2.738" />
+    <testcase name="activeGroupsAlsoHaveIndependentTwentyRowBatches[zh-CN/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="0.831" />
+    <testcase name="homeKeepsOneSummaryAndZeroValidPackagesRemainUntracked[zh-CN/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="2.309" />
+    <testcase name="all500SameDateRowsHaveStableOrderAndNeverComposeTheWholeHistory[zh-CN/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="5.006" />
+    <testcase name="firstPagesAt1_20_21_100_500StartCollapsedAndAreCapped[zh-CN/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="2.819" />
+    <testcase name="detailsReturnRetainsPositionAndReopeningResetsHistory[zh-TW/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="1.363" />
+    <testcase name="mixedGroupsAnd100VoidedRowsRegroupImmediatelyWithoutStaleActions[zh-TW/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="2.741" />
+    <testcase name="activeGroupsAlsoHaveIndependentTwentyRowBatches[zh-TW/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="0.834" />
+    <testcase name="homeKeepsOneSummaryAndZeroValidPackagesRemainUntracked[zh-TW/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="2.386" />
+    <testcase name="all500SameDateRowsHaveStableOrderAndNeverComposeTheWholeHistory[zh-TW/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="5.007" />
+    <testcase name="firstPagesAt1_20_21_100_500StartCollapsedAndAreCapped[zh-TW/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="2.718" />
+    <testcase name="detailsReturnRetainsPositionAndReopeningResetsHistory[fr/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="1.287" />
+    <testcase name="mixedGroupsAnd100VoidedRowsRegroupImmediatelyWithoutStaleActions[fr/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="2.647" />
+    <testcase name="activeGroupsAlsoHaveIndependentTwentyRowBatches[fr/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="0.832" />
+    <testcase name="homeKeepsOneSummaryAndZeroValidPackagesRemainUntracked[fr/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="2.209" />
+    <testcase name="all500SameDateRowsHaveStableOrderAndNeverComposeTheWholeHistory[fr/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="4.979" />
+    <testcase name="firstPagesAt1_20_21_100_500StartCollapsedAndAreCapped[fr/320dp/2x]" classname="net.plainnotes.app.stock.PackageHistoryAndroidTest" time="2.747" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" tests="24" failures="0" errors="0" skipped="0" time="24.554" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="talkBackActionAndScrollableConfirmationStayAccessibleAtLargeFont[en/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.185" />
+    <testcase name="staleOrRemovedRecordsDismissConfirmationWithoutSubmission[en/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.164" />
+    <testcase name="skippedHistoryRowIsAnEnabledCorrectionEntry[en/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="0.684" />
+    <testcase name="cancellationDoesNotSubmitAnyCorrection[en/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="0.884" />
+    <testcase name="confirmationSubmitsTheSelectedVersionOnceAndRefreshesHistory[en/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.083" />
+    <testcase name="takenAndBothMissedKindsKeepTheirOriginalActionsWithoutUndo[en/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.386" />
+    <testcase name="talkBackActionAndScrollableConfirmationStayAccessibleAtLargeFont[zh-CN/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="0.96" />
+    <testcase name="staleOrRemovedRecordsDismissConfirmationWithoutSubmission[zh-CN/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.181" />
+    <testcase name="skippedHistoryRowIsAnEnabledCorrectionEntry[zh-CN/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="0.605" />
+    <testcase name="cancellationDoesNotSubmitAnyCorrection[zh-CN/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="0.908" />
+    <testcase name="confirmationSubmitsTheSelectedVersionOnceAndRefreshesHistory[zh-CN/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.031" />
+    <testcase name="takenAndBothMissedKindsKeepTheirOriginalActionsWithoutUndo[zh-CN/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.16" />
+    <testcase name="talkBackActionAndScrollableConfirmationStayAccessibleAtLargeFont[zh-TW/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="0.959" />
+    <testcase name="staleOrRemovedRecordsDismissConfirmationWithoutSubmission[zh-TW/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.21" />
+    <testcase name="skippedHistoryRowIsAnEnabledCorrectionEntry[zh-TW/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="0.68" />
+    <testcase name="cancellationDoesNotSubmitAnyCorrection[zh-TW/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="0.957" />
+    <testcase name="confirmationSubmitsTheSelectedVersionOnceAndRefreshesHistory[zh-TW/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.131" />
+    <testcase name="takenAndBothMissedKindsKeepTheirOriginalActionsWithoutUndo[zh-TW/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.362" />
+    <testcase name="talkBackActionAndScrollableConfirmationStayAccessibleAtLargeFont[fr/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="0.884" />
+    <testcase name="staleOrRemovedRecordsDismissConfirmationWithoutSubmission[fr/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.183" />
+    <testcase name="skippedHistoryRowIsAnEnabledCorrectionEntry[fr/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="0.657" />
+    <testcase name="cancellationDoesNotSubmitAnyCorrection[fr/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="0.832" />
+    <testcase name="confirmationSubmitsTheSelectedVersionOnceAndRefreshesHistory[fr/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.085" />
+    <testcase name="takenAndBothMissedKindsKeepTheirOriginalActionsWithoutUndo[fr/320dp/2x]" classname="net.plainnotes.app.stock.UndoSkippedHistoryAndroidTest" time="1.383" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.stock.UndoSkippedRestartAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="2.238" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="persistedCorrection" classname="net.plainnotes.app.stock.UndoSkippedRestartAndroidTest" time="2.238" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.stock.VoidedPackageRestartAndroidTest" tests="2" failures="0" errors="0" skipped="2" time="0.002" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="prepare" classname="net.plainnotes.app.stock.VoidedPackageRestartAndroidTest" time="0.001">
+      <skipped />
+    </testcase>
+    <testcase name="verifyFreshProcess" classname="net.plainnotes.app.stock.VoidedPackageRestartAndroidTest" time="0.001">
+      <skipped />
+    </testcase>
+  </testsuite>
+  <testsuite name="net.plainnotes.app.timeline.TimelineAndroidTest" tests="6" failures="0" errors="0" skipped="0" time="6.377" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="simpleModeImportedDetailHidesFrozenMedicationNames" classname="net.plainnotes.app.timeline.TimelineAndroidTest" time="0.582" />
+    <testcase name="twiceDailyWithPartialDaysAppearsInsideOnePeriodAndOpensAllOriginalRows" classname="net.plainnotes.app.timeline.TimelineAndroidTest" time="0.706" />
+    <testcase name="largeFontHistoricalTimelineScrollsToTheExactOldSource" classname="net.plainnotes.app.timeline.TimelineAndroidTest" time="2.92" />
+    <testcase name="sameDaySavedChangesWithExistingImportedHistoryCanOpenTimeline" classname="net.plainnotes.app.timeline.TimelineAndroidTest" time="0.832" />
+    <testcase name="sameRegimenAcrossOctoberSixHasOneOrdinaryPeriodAndAllSources" classname="net.plainnotes.app.timeline.TimelineAndroidTest" time="0.631" />
+    <testcase name="oldImportedHistoryWithoutARegimenOpensExactSources" classname="net.plainnotes.app.timeline.TimelineAndroidTest" time="0.706" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.wellbeing.WellbeingAndroidTest" tests="2" failures="0" errors="0" skipped="0" time="1.235" timestamp="2026-10-26T17:18:00" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="optionalDailyLevelsDoNotWriteUntilTheUserChooses" classname="net.plainnotes.app.wellbeing.WellbeingAndroidTest" time="0.705" />
+    <testcase name="longMultilingualAppointmentSummaryHasValidNativePages" classname="net.plainnotes.app.wellbeing.WellbeingAndroidTest" time="0.53" />
+  </testsuite>
+</testsuites>

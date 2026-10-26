@@ -56,6 +56,12 @@ const val BACKFILL_MAX_DAYS=731L
     }
     /** Invalidation is a wake-up only; every consumer still queries the sole native authority. */
     /** Internal OFF attachment integration: only an explicitly bound PRIMARY request may create it. */
+    suspend fun medicalLibraryTransfer():MedicalLibraryTransfer=withContext(Dispatchers.IO) {
+        check(space==Space.PRIMARY)
+        val expected=requireNotNull(requestScope) {"Freeze the library before medical transfer"}
+        databaseFor(Space.PRIMARY)
+        MedicalLibraryTransfer(access,expected,requestPermission)
+    }
     suspend fun medicalAttachments():MedicalAttachmentOperations=withContext(Dispatchers.IO) {
         check(space==Space.PRIMARY)
         val expected=requireNotNull(requestScope) {"Freeze the displayed library before attachment work"}

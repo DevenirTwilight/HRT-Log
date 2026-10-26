@@ -63,13 +63,19 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
     private var unresolved:Pair<UUID,UUID>?=null
     private var preview:MedicalAttachmentGateway.Preview?=null
     private var job:Job?=null
-    private val revocation=gateway.onRevoked {if(!closed)revoke()}
+    private var presentationEpoch=0L
+    private val hidden=gateway.onHidden {hidePresentation()}
+    private val revocation=try {gateway.onRevoked {if(!closed) {if(gateway.scopeEnded)libraryChanged()else revoke()}}}
+        catch(t:Throwable) {hidden.close();throw t}
 
     fun refresh() {
         if(closed || state.value.revoked)return
         scope.launch {
             mutable.update {it.copy(files=if(it.files is Files.Ready)it.files else Files.Loading)}
-            mutable.update {it.copy(files=loadFiles() ?: Files.Failed)}
+            val loaded=loadFiles()
+            synchronized(this@MedicalAttachmentsController) {
+                if(!closed && !state.value.revoked && !state.value.ended)mutable.update {it.copy(files=loaded ?: Files.Failed)}
+            }
         }
     }
     private suspend fun loadFiles():Files.Ready?=try {
@@ -80,7 +86,7 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
 
     /** Returns the system picker intent. Choosing a file creates no operation and reads nothing. */
     suspend fun startImport():Intent? {
-        if(closed || state.value.revoked || state.value.import==Import.Saving || state.value.import==Import.Checking)return null
+        if(picking || closed || state.value.revoked || state.value.import==Import.Saving || state.value.import==Import.Checking)return null
         chosen=null;picking=true
         mutable.update {it.copy(import=Import.Idle)}
         return try {gateway.pickerIntent()}catch(e:CancellationException) {throw e}catch(_:Exception) {picking=false;null}
@@ -126,7 +132,7 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
                 unresolved=null
                 // The COMMIT is real; a later list failure must not turn it into "not saved".
                 val files=loadFiles()
-                mutable.update {it.copy(import=Import.Saved(listStale=files==null),files=files ?: it.files)}
+                mutable.update {it.copy(import=Import.Saved(listStale=files==null),files=if(it.revoked)Files.Loading else files ?: it.files)}
             }
             AttachmentFlowController.State.Failed->{unresolved=null;mutable.update {it.copy(import=Import.NotSaved)}}
             AttachmentFlowController.State.Cancelled->{unresolved=null;mutable.update {it.copy(import=Import.Cancelled)}}
@@ -148,7 +154,7 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
             when(outcome) {
                 is AttachmentFlowController.State.Saved-> {
                     unresolved=null;val files=loadFiles()
-                    mutable.update {it.copy(import=Import.Saved(listStale=files==null),files=files ?: it.files)}
+                    mutable.update {it.copy(import=Import.Saved(listStale=files==null),files=if(it.revoked)Files.Loading else files ?: it.files)}
                 }
                 AttachmentFlowController.State.Failed->{unresolved=null;mutable.update {it.copy(import=Import.NotSaved)}}
                 else->mutable.update {it.copy(import=Import.Unknown)}
@@ -160,31 +166,49 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
         if(current is Import.Saved || current==Import.NotSaved || current==Import.Cancelled)mutable.update {it.copy(import=Import.Idle)}
     }
 
-    fun open(item:Item) {
+    @Synchronized fun open(item:Item) {
         if(closed || state.value.revoked || !item.available)return
-        closePreview()
+        closeViewer()
+        val epoch=++presentationEpoch
         if(item.kind==FileKind.OTHER) {mutable.update {it.copy(viewer=Viewer.Message(item.title,Reason.NO_PREVIEW_FOR_TYPE))};return}
         mutable.update {it.copy(viewer=Viewer.Opening(item.title))}
         scope.launch {
             var opened:MedicalAttachmentGateway.Preview?=null
             try {
-                val page=withContext(io) {
-                    val p=gateway.preview(item.document).also {opened=it}
-                    if(item.kind==FileKind.PDF)p.pdfFirstPage() else p.image()
+                withContext(io) {
+                    val owner=gateway.preview(item.document).also {opened=it}
+                    val adopted=synchronized(this@MedicalAttachmentsController) {
+                        if(closed || state.value.revoked || presentationEpoch!=epoch)false else {preview=owner;true}
+                    }
+                    if(!adopted) {owner.close();return@withContext}
+                    val page=if(item.kind==FileKind.PDF)owner.pdfFirstPage() else owner.image()
+                    val accepted=synchronized(this@MedicalAttachmentsController) {
+                        owner.publish {
+                            if(closed || state.value.revoked || presentationEpoch!=epoch || state.value.viewer !is Viewer.Opening)false
+                            else {
+                                preview=owner
+                                mutable.update {it.copy(viewer=Viewer.Showing(item.title,page,item.kind==FileKind.PDF))}
+                                true
+                            }
+                        }
+                    }
+                    if(!accepted)owner.close()
                 }
-                val owner=requireNotNull(opened)
-                if(closed || state.value.revoked || state.value.viewer !is Viewer.Opening) {owner.close();return@launch}
-                preview=owner
-                mutable.update {it.copy(viewer=Viewer.Showing(item.title,page,item.kind==FileKind.PDF))}
             }catch(e:CancellationException) {opened?.close();throw e}
             catch(e:Exception) {
                 opened?.close()
-                if(!state.value.revoked)mutable.update {it.copy(viewer=Viewer.Message(item.title,if(e is AttachmentViewer.PdfPreviewUnsupported)Reason.PDF_NEEDS_ANDROID_9 else Reason.FAILED))}
+                synchronized(this@MedicalAttachmentsController) {
+                    if(!state.value.revoked && presentationEpoch==epoch)mutable.update {it.copy(viewer=Viewer.Message(item.title,if(e is AttachmentViewer.PdfPreviewUnsupported)Reason.PDF_NEEDS_ANDROID_9 else Reason.FAILED))}
+                }
             }
         }
     }
+    /** A real pause also discards an unconfirmed selection, never a committed receipt. */
+    @Synchronized private fun hidePresentation() {closeViewer();cancelImport()}
+
     /** Leaving the viewer: forget the page first, then release pixels and close the reader. */
-    fun closeViewer() {
+    @Synchronized fun closeViewer() {
+        presentationEpoch++
         mutable.update {it.copy(viewer=Viewer.Closed)}
         closePreview()
     }
@@ -194,7 +218,8 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
     }
 
     /** Lock or disguise: hide everything at once. Access may be granted again later (resume). */
-    fun revoke() {
+    @Synchronized fun revoke() {
+        presentationEpoch++
         mutable.update {State(files=Files.Loading,revoked=true)}
         val owned=preview;preview=null
         runCatching {owned?.close()}
@@ -207,23 +232,25 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
         attempt=null
     }
     /** The data this page was opened for is no longer current. Old identities are never re-bound. */
-    fun libraryChanged() {
+    @Synchronized fun libraryChanged() {
         revoke();unresolved=null
         mutable.update {State(files=Files.Loading,revoked=true,ended=true)}
     }
     /** Access granted again (unlock): list only; the viewer never reopens by itself. */
-    fun resume() {
+    @Synchronized fun resume() {
         // Ordinary onResume (e.g. back from the system picker) must not reset a pending confirmation.
         if(closed || state.value.ended || !state.value.revoked)return
         mutable.update {it.copy(revoked=false,import=if(unresolved!=null)Import.Unknown else Import.Idle)}
         refresh()
     }
-    override fun close() {
+    @Synchronized override fun close() {
+        presentationEpoch++
         if(closed)return
         closed=true
         mutable.update {State(files=Files.Loading,revoked=true)}
         runCatching {preview?.close()};preview=null
         discardAttempt()
+        runCatching {hidden.close()}
         runCatching {revocation.close()}
     }
 }

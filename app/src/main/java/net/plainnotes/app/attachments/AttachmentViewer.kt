@@ -87,6 +87,9 @@ internal class AttachmentViewer(private val context:Context,private val read:Med
         try {var p=0;while(p<b.size) {val n=read.readAt(p.toLong(),b,p,b.size-p);check(n>0);p+=n};read.publish {check(!closed);synchronized(images) {prefixes.forEach {it.fill(0)};prefixes.clear();prefixes+=b};b}}
         catch(e:Throwable) {b.fill(0);throw e}
     }
+    /** The final UI publication must share the existing native scope/capability fence, not
+     * merely rely on an asynchronously delivered dataset-change notification. Caller is on IO. */
+    fun <T> publishFrame(block:()->T):T=read.publish {check(!closed);block()}
     fun release(bitmap:Bitmap)=synchronized(images) {if(images.remove(bitmap))bitmap.recycle()}
     override fun close() {
         try {revocation.close()}finally {read.close()}

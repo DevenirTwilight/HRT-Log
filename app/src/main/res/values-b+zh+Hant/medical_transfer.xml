@@ -1,0 +1,25 @@
+<resources>
+    <string name="med_transfer_title">完整醫療備份</string>
+    <string name="med_transfer_scope">包含記錄、全部保留資料庫及附件版本。一般 HRT Log 記錄備份不含檔案原件。</string>
+    <string name="med_transfer_export">匯出完整備份</string>
+    <string name="med_transfer_restore">還原完整備份</string>
+    <string name="med_transfer_picking">請在系統選擇器中選擇檔案。</string>
+    <string name="med_transfer_preview">備份格式 %1$d · 資料庫 %2$d · 附件版本 %3$d</string>
+    <string name="med_transfer_switch_warning">確認後將建立新的作用中資料庫，並保留舊庫。還原未完成時，原有資料保持不變。</string>
+    <string name="med_transfer_confirm">確認完整還原</string>
+    <string name="med_transfer_exported">完整加密封存已寫入。請另行保管密碼。</string>
+    <string name="med_transfer_restored">還原已完成。請重新開啟資料庫，舊頁面不能繼續使用。</string>
+    <string name="med_transfer_reopen">重新開啟資料庫</string>
+    <string name="med_transfer_unknown">還原結果尚不確定。請核對狀態，不要再次提交同一檔案。</string>
+    <string name="med_transfer_check">僅核對狀態</string>
+    <string name="med_transfer_not_found">目前資料庫尚未確認這次還原已完成。新任務必須由你重新選擇檔案。</string>
+    <string name="med_transfer_committed">此操作已提交，但可能不再是目前作用中資料庫。請重新開啟核對。</string>
+    <string name="med_transfer_pending">這次還原尚未完成。原有資料仍保留，不會自動重試。</string>
+    <string name="med_transfer_abort">取消未完成還原</string>
+    <string name="med_transfer_abort_warning">僅將已核對的待完成操作標為中止。密文、金鑰及已用預留繼續保留，不承諾釋放空間。</string>
+    <string name="med_transfer_failed">無法完成。原因可能是密碼、格式、損壞、權限或空間，尚未確認還原成功；輸出檔案可能不完整。</string>
+    <string name="med_transfer_cancelled">已取消。匯出檔案可能不完整，不代表還原成功。</string>
+    <string name="med_transfer_revoked">存取已結束。授權後請重新開啟，不會自動重開檔案。</string>
+    <string name="med_transfer_password_note">這是可攜帶醫療封存的密碼，不是應用程式 PIN。密碼不會儲存，請另行保管。</string>
+    <string name="med_transfer_backup_first">先備份目前資料，完成後重新選擇還原檔案</string>
+</resources>

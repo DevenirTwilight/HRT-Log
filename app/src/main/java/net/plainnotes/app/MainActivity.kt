@@ -98,7 +98,10 @@ class LockState : androidx.lifecycle.ViewModel() {
         if(!authorized() || locked)return
         // A NEW ViewModel/saved-state owner, never a mutable retag of old callbacks or integers.
         if(Disguise.enabled(this))Session.begin(UnlockTarget.PRIMARY)
-        startActivity(Intent(this,MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK));finish()
+        startActivity(Intent(this,MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            model.pendingLibraryOperation()?.let {putExtra(net.plainnotes.app.runtime.RuntimeLibrarySession.RESTORE_OPERATION,it)}
+        });finish()
     }
     override fun onStart() {
         super.onStart()
@@ -117,7 +120,7 @@ class LockState : androidx.lifecycle.ViewModel() {
         if (Disguise.enabled(this) && !Session.pickerActive(sessionGeneration) && !isChangingConfigurations) { Session.lock(sessionGeneration);contentVisible=false }
     }
     override fun onResume() { super.onResume(); ScreenCapture.apply(this, UiPrefs(this).allowScreenshots, Disguise.enabled(this)); if(!initialized || !authorized())return; if(!locked) {model.runtimeResumed();model.sync();deliverReminder()}; if (Disguise.enabled(this)) shake.register(getSystemService(SensorManager::class.java)) }
-    override fun onPause() { super.onPause(); shake.unregister(getSystemService(SensorManager::class.java)) }
+    override fun onPause() { if(initialized)model.sensitivePresentationHidden(); super.onPause(); shake.unregister(getSystemService(SensorManager::class.java)) }
 
     /** An old task cannot redirect a newer PRIVATE/PRIMARY session during task replacement. */
     private fun authorized():Boolean {

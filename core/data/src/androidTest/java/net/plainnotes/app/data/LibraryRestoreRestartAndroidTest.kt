@@ -20,21 +20,29 @@ class LibraryRestoreRestartAndroidTest {
     private fun hash(b:ByteArray)=MedicalArchiveCrypto.hex(MessageDigest.getInstance("SHA-256").digest(b))
     @Test fun persistentAuthorityChoosesExactlyOldOrVerifiedNewAfterProcessDeath() {
         val args=InstrumentationRegistry.getArguments();val phase=args.getString("generation_phase")
-        assumeTrue(phase in listOf("prepare","verify"))
+        assumeTrue(phase in listOf("source","prepare","verify"))
         val seam=requireNotNull(args.getString("generation_seam"))
         require(seam in setOf("PREPARED","OBJECTS_COMMITTED","IN_SWITCH","SWITCHED"))
         val app=InstrumentationRegistry.getInstrumentation().targetContext
         val marker=File(app.filesDir,"synthetic-generation-restart-ready")
+        val sourceFile=File(app.cacheDir,"synthetic-library-bootstrap.cipher")
+        if(phase=="source") {
+            check(!marker.exists() && !sourceFile.exists())
+            LibraryRestoreAndroidTest.SourceBundle(app).use {source->
+                source.file.inputStream().use {input->sourceFile.outputStream().use {out->input.copyTo(out);out.fd.sync()}}
+            } // All source-device aliases are gone before the restore process begins.
+            return
+        }
         if(phase=="prepare") {
             check(!marker.exists()) {"Prior synthetic run must be reconciled, not overwritten"}
-            val source=LibraryRestoreAndroidTest.SourceBundle(app)
+            check(sourceFile.isFile)
             val target=LibraryRestoreAndroidTest.RootFixture(app)
             val old=target.facts();val operation=UUID.randomUUID()
-            MedicalArchiveReader.read(target.session.issue(),source.password(),FileInputStream(source.file).channel).use {archive->
+            MedicalArchiveReader.read(target.session.issue(),"SYNTHETIC generation archive".toCharArray(),FileInputStream(sourceFile).channel).use {archive->
                 LibraryRestoreCoordinator(target.access) {boundary->if(boundary.name==seam) {
                     val generation=target.raw.query("SELECT generation_uuid FROM library_candidate WHERE operation_uuid=?",arrayOf(operation.toString())).use {check(it.moveToFirst());it.getString(0)}
                     val json=JSONObject().put("seam",seam).put("pid",Process.myPid()).put("root",target.id.toString())
-                        .put("archive",source.file.name).put("operation",operation.toString()).put("generation",generation)
+                        .put("archive",sourceFile.name).put("operation",operation.toString()).put("generation",generation)
                         .put("dataset",target.scope.dataset).put("epoch",target.scope.epoch).put("oldHash",hash(old))
                     marker.outputStream().use {out->out.write(json.toString().toByteArray(Charsets.UTF_8));out.fd.sync()}
                     check(!CountDownLatch(1).await(90,TimeUnit.SECONDS));error("Runner did not kill the live seam")

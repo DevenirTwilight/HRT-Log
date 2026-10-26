@@ -1,0 +1,25 @@
+<resources>
+    <string name="med_transfer_title">完整医疗备份</string>
+    <string name="med_transfer_scope">包含记录、全部保留资料库及附件版本。普通 HRT Log 记录备份不含文件原件。</string>
+    <string name="med_transfer_export">导出完整备份</string>
+    <string name="med_transfer_restore">恢复完整备份</string>
+    <string name="med_transfer_picking">请在系统选择器中选择文件。</string>
+    <string name="med_transfer_preview">备份格式 %1$d · 资料库 %2$d · 附件版本 %3$d</string>
+    <string name="med_transfer_switch_warning">确认后将创建新的活动资料库，并保留旧库。恢复未完成时，原有资料保持不变。</string>
+    <string name="med_transfer_confirm">确认完整恢复</string>
+    <string name="med_transfer_exported">完整加密归档已写入。请单独保管密码。</string>
+    <string name="med_transfer_restored">恢复已完成。请重新打开资料库，旧页面不能继续使用。</string>
+    <string name="med_transfer_reopen">重新打开资料库</string>
+    <string name="med_transfer_unknown">恢复结果尚不确定。请核对状态，不要再次提交同一文件。</string>
+    <string name="med_transfer_check">仅核对状态</string>
+    <string name="med_transfer_not_found">当前资料库尚未确认这次恢复已完成。新任务必须由你重新选择文件。</string>
+    <string name="med_transfer_committed">此操作已经提交，但可能不再是当前活动库。请重新打开核对。</string>
+    <string name="med_transfer_pending">这次恢复尚未完成。原有资料仍保留，不会自动重试。</string>
+    <string name="med_transfer_abort">取消未完成恢复</string>
+    <string name="med_transfer_abort_warning">仅将已核对的待完成操作标为中止。密文、密钥及已用预留继续保留，不承诺释放空间。</string>
+    <string name="med_transfer_failed">无法完成。原因可能是密码、格式、损坏、权限或空间，尚未确认恢复成功；输出文件可能不完整。</string>
+    <string name="med_transfer_cancelled">已取消。导出文件可能不完整，不代表恢复成功。</string>
+    <string name="med_transfer_revoked">访问已结束。授权后请重新打开，不会自动重开文件。</string>
+    <string name="med_transfer_password_note">这是可携带医疗归档的密码，不是应用 PIN。密码不会保存，请另行保管。</string>
+    <string name="med_transfer_backup_first">先备份当前资料，完成后重新选择恢复文件</string>
+</resources>

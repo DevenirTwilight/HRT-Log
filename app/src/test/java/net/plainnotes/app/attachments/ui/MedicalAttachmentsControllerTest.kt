@@ -35,14 +35,19 @@ class MedicalAttachmentsControllerTest {
         var reconcileOutcome:AttachmentFlowController.State=AttachmentFlowController.State.ReconcileRequired
         var onSaved:(()->Unit)?=null
         var previewFailure:Exception?=null
+        var publishFailure:Exception?=null
         val imports=mutableListOf<Imp>()
         val reconciles=mutableListOf<Pair<UUID,UUID>>()
         val previews=mutableListOf<Prev>()
+        override var scopeEnded=false
+        var beforeImage:(()->Unit)?=null
+        var hide:(()->Unit)?=null
+        override fun onHidden(listener:()->Unit):AutoCloseable {hide=listener;return AutoCloseable{hide=null}}
         var listener:(()->Unit)?=null
         var unregistered=false
         override suspend fun documents():List<MedicalAttachmentOperations.Document> {if(listFails)error("list");return docs.toList()}
         override suspend fun pickerIntent()=Intent(Intent.ACTION_OPEN_DOCUMENT)
-        override suspend fun preview(document:UUID):MedicalAttachmentGateway.Preview=Prev(previewFailure).also {previews+=it}
+        override suspend fun preview(document:UUID):MedicalAttachmentGateway.Preview=Prev(previewFailure,beforeImage,publishFailure).also {previews+=it}
         override suspend fun newImport(title:String)=Imp(this,title).also {imports+=it}
         override suspend fun reconcile(operation:UUID,document:UUID):AttachmentFlowController.State {reconciles+=operation to document;return reconcileOutcome}
         override fun onRevoked(listener:()->Unit):AutoCloseable {this.listener=listener;return AutoCloseable {unregistered=true;listener()}}
@@ -57,11 +62,12 @@ class MedicalAttachmentsControllerTest {
         override fun cancel() {cancelled=true}
         override fun close() {closed=true}
     }
-    private class Prev(val failure:Exception?):MedicalAttachmentGateway.Preview {
+    private class Prev(val failure:Exception?,val beforeImage:(()->Unit)?=null,val publishFailure:Exception?=null):MedicalAttachmentGateway.Preview {
         val pages=mutableListOf<Bitmap>();var closed=false
         private fun page()=failure?.let {throw it} ?: Bitmap.createBitmap(8,8,Bitmap.Config.ARGB_8888).also {pages+=it}
+        override fun <T> publish(block:()->T):T {publishFailure?.let{throw it};return block()}
         override fun pdfFirstPage()=page()
-        override fun image()=page()
+        override fun image():Bitmap {beforeImage?.invoke();return page()}
         override fun release(bitmap:Bitmap) {bitmap.recycle()}
         override fun close() {closed=true;pages.forEach {it.recycle()}}
     }
@@ -79,7 +85,7 @@ class MedicalAttachmentsControllerTest {
 
     @Test fun choosingCreatesNoOperationAndCancelLeavesNothingPending()=runBlocking {
         val fake=Fake(target);val c=controller(fake)
-        assertNotNull(c.startImport());c.picked(picked,"Visit document")
+        assertNotNull(c.startImport());assertNull("Only one picker may be pending",c.startImport());c.picked(picked,"Visit document")
         assertEquals(Import.Confirming("Visit document"),c.state.value.import)
         c.resume() // An ordinary onResume (back from the picker) keeps the pending confirmation.
         assertEquals(Import.Confirming("Visit document"),c.state.value.import)
@@ -192,10 +198,37 @@ class MedicalAttachmentsControllerTest {
 
     @Test fun dataSwitchEndsThePageForGood()=runBlocking {
         val fake=Fake(target).apply {docs+=doc("Photo","image/png")};val c=controller(fake);c.refresh()
-        c.libraryChanged()
+        fake.scopeEnded=true;fake.revoke()
         assertTrue(c.state.value.ended);assertTrue(c.state.value.revoked)
         c.resume();c.refresh()
         assertTrue(c.state.value.ended);assertEquals(Files.Loading,c.state.value.files)
         c.close();assertTrue(fake.unregistered)
     }
+    @Test fun latePixelsAfterHideOrRevokeAndResumeCannotReappear()=runBlocking {
+        for(resume in listOf(false,true)) {
+            val fake=Fake(target).apply{docs+=doc("Photo","image/png")};val c=controller(fake);c.refresh()
+            fake.beforeImage={if(resume){fake.revoke();c.resume()}else fake.hide?.invoke();assertTrue("Opening reader closes at hide, before decode returns",fake.previews.single().closed)}
+            c.open((c.state.value.files as Files.Ready).items.single())
+            assertEquals(Viewer.Closed,c.state.value.viewer)
+            assertTrue(fake.previews.single().closed)
+            assertTrue(fake.previews.single().pages.all{it.isRecycled})
+            c.close()
+        }
+    }
+
+    @Test fun pauseDiscardsUnconfirmedSelectionWithoutStartingAnImport()=runBlocking {
+        val fake=Fake(target);val c=controller(fake)
+        c.startImport();c.picked(picked,"t")
+        fake.hide?.invoke();c.confirmImport("t")
+        assertEquals(Import.Cancelled,c.state.value.import);assertTrue(fake.imports.isEmpty())
+        c.close()
+    }
+
+    @Test fun finalNativeScopeRefusalCannotPublishAnAlreadyDecodedPage()=runBlocking {
+        val fake=Fake(target).apply{docs+=doc("Photo","image/png");publishFailure=net.plainnotes.app.data.LibraryScopeMismatch()}
+        val c=controller(fake);c.refresh();c.open((c.state.value.files as Files.Ready).items.single())
+        assertTrue(c.state.value.viewer is Viewer.Message)
+        assertTrue(fake.previews.single().closed);assertTrue(fake.previews.single().pages.all{it.isRecycled});c.close()
+    }
+
 }

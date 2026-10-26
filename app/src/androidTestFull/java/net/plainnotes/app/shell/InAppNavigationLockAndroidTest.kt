@@ -365,4 +365,33 @@ class InAppNavigationLockAndroidTest {
         scenario!!.close(); scenario = null
         launch(); assertLocked("new launch after the activity finished")
     }
+    @Test fun realActivityPauseAndRecreationHideSensitivePresentation() {
+        val activity=launch();unlock()
+        val hidden=AtomicInteger()
+        var registration:AutoCloseable?=null
+        activity.onActivity {registration=androidx.lifecycle.ViewModelProvider(it)[net.plainnotes.app.NotesViewModel::class.java].libraryRuntime.observePresentationHidden {hidden.incrementAndGet()}}
+        try {
+            activity.moveToState(Lifecycle.State.CREATED)
+            assertTrue(hidden.get()>0)
+            activity.moveToState(Lifecycle.State.RESUMED)
+            val before=hidden.get();activity.recreate()
+            assertTrue(hidden.get()>before)
+        } finally {registration?.close()}
+    }
+
+    @Test fun actualAppLockExpiryRevokesProtectedResourcesAndUnlockDoesNotRestoreThem() {
+        UiPrefs(context).lockAfterMillis=0L
+        val activity=launch();unlock()
+        val revoked=java.util.concurrent.atomic.AtomicBoolean(false)
+        var registration:AutoCloseable?=null
+        activity.onActivity {registration=androidx.lifecycle.ViewModelProvider(it)[net.plainnotes.app.NotesViewModel::class.java].libraryRuntime.protect(AutoCloseable{revoked.set(true)})}
+        try {
+            activity.moveToState(Lifecycle.State.CREATED)
+            ui.waitUntil(10000){revoked.get()}
+            activity.moveToState(Lifecycle.State.RESUMED)
+            assertLocked("actual background lock expired")
+            unlock();assertTrue(revoked.get())
+        }finally {registration?.close()}
+    }
+
 }

@@ -1,3 +1,5 @@
+> **Final closeout supersedes candidate status below:** see [single final report](../../2026-10-24/external-review/FINAL-ENGINEERING-CLOSEOUT.md). Production record-page and full medical-transfer components now compile with scoped adapters and lifecycle binding but no public routes. Final exact-source CI/native acceptance is required; earlier #129/Stage C counts remain historical. The lifecycle gap described in the old “上线前仍缺” section has been implemented; public placement/metadata enabling, external review and physical/manual acceptance remain separate. No unlink/trash/restore/destruction UI is added.
+
 # MED-02 医疗附件交互界面（隔离，默认关闭）— 2026-10-26
 
 依据：负责人任务书“MED-02 下一阶段：收尾 #128，开发默认关闭的附件交互界面”（2026-10-26），REQUIREMENTS §149。
@@ -85,3 +87,26 @@
 4. 解除关联和回收站的交互规范与授权；永久删除另行授权。
 5. 产品决定：Android 8.x 是否要通过隔离进程提供 PDF 预览；是否支持多页 PDF 浏览（目前只显示第一页）。
 6. WebP 仍按不透明二进制处理（不在 MIME 白名单内），本轮没有改变。
+
+## Stage C lifecycle candidate — 2026-10-26 (not yet accepted)
+
+Baseline `9eb6d0f51db21e3629019c2757a5f35724d793a7`; #130 still OPEN at682c42a8 during branch creation. No visit-pack selection files modified. MainActivity.onPause → NotesViewModel.sensitivePresentationHidden → existing RuntimeLibrarySession notification → RuntimeAttachmentGateway.onHidden → controller.closeViewer. This clears UI state before resource teardown, including rotation and real disguise exit. Notification conveys no authorization. Runtime pause/invalidate/close still performs actual capability revocation; an ended runtime terminates the page. The file-picker pause clears only viewing, preserving existing SAF permission semantics; confirmed imports still use original runtime authority and receipts. No auto-reopen or persisted URI/capability is added.
+
+Production ViewModel integration is an internal extension in the UI package, with PUBLIC_ENTRY_ENABLED checked before accessing the runtime/record. There is no formal route, menu, deep link or notification entry. Existing release-isolation guard remains unchanged. Debug synthetic hosts still bind only their isolated runtime. Future proposed locations are explicit visit detail or individual lab detail, subject to separate owner enablement approval.
+
+Controller rendering has a monotonic presentation epoch and synchronized publication: close/revoke/end invalidates old render completions even after resume or a new Opening state. Epoch is ordering only, not a second scope/authority. Refreshes cannot republish old list data after revoke. Existing real COMMIT and read-only reconcile rules remain; no change to storage transactions.
+
+Tests added: real MainActivity AppLock/background/recreation event witness; actual Disguise.exit to calculator event witness; scripted controller late-render rejection. These are different evidence layers: native event transport is not a complete formal-user attachment flow, and scripted races are not native decoder races. Prior #129 synthetic UI/storage/native results remain with their source SHA; new candidate tests are PENDING until CI, physical/TalkBack/power interruption NOT_RUN. Do not claim all Stage C scenarios accepted solely from compilation.
+
+### Product decisions (proposal only; no lifecycle actions implemented)
+
+API26/27 PDF remains fail-closed; current encrypted file storage unchanged. Long-term Android8 policy still needs owner confirmation. WebP stays opaque. Multi-page is deferred: propose authenticated renderer pageCount only after successful open, bounded current page, release before demand-loading previous/next, no prefetch, request epoch to discard fast-navigation/lock/background results. Add explicit page index/total to Preview, verify API28/29/35 plus native malformed documents and low-memory page-turn/revocation races before implementation; do not call pageCount on Android8 or manufacture totals from filenames.
+
+| Action | Recommended semantics (NOT APPROVED/NOT IMPLEMENTED here) |
+|---|---|
+| Unlink | Append link-history change for explicit target; retain object, versions and other links; no quota/key release. |
+| Trash | Soft state change; retain all history and ciphertext in full backup/RETAINED inventory; no budget release. |
+| Restore | Restore object availability only after scope/integrity check; relationships need explicit validated confirmation, no automatic resurrection. |
+| Permanent destruction | Separate protocol/authorization: prove ownership and no references in ACTIVE/RETAINED/pending operations; account for backups outside app control and unrecoverable key loss. Retain authorized minimal evidence; never promise erasure of external backups. No deletion or reclaimed quota before a durable, independently reviewed destruction outcome. |
+
+All four actions wait for explicit approval; no handlers or public controls added. Retained generations and non-reclaimable key reservations remain counted until an approved release/destruction protocol proves otherwise.

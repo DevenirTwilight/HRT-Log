@@ -1,0 +1,25 @@
+<resources>
+    <string name="med_transfer_title">Complete medical backup</string>
+    <string name="med_transfer_scope">Includes records, all retained libraries and retained attachment versions. The ordinary HRT Log record backup does not include original files.</string>
+    <string name="med_transfer_export">Export complete backup</string>
+    <string name="med_transfer_restore">Restore complete backup</string>
+    <string name="med_transfer_picking">Choose one file in the system picker.</string>
+    <string name="med_transfer_preview">Backup format %1$d · libraries %2$d · attachment versions %3$d</string>
+    <string name="med_transfer_switch_warning">Confirmation creates a new active library and retains the old one. Existing data stays intact if restoration does not complete.</string>
+    <string name="med_transfer_confirm">Confirm full restore</string>
+    <string name="med_transfer_exported">Complete encrypted archive written. Keep the password separately.</string>
+    <string name="med_transfer_restored">Restore completed. Reopen the library; previous screens cannot be reused.</string>
+    <string name="med_transfer_reopen">Reopen library</string>
+    <string name="med_transfer_unknown">Restoration is not yet confirmed. Check its status; do not submit the file again.</string>
+    <string name="med_transfer_check">Check status only</string>
+    <string name="med_transfer_not_found">This library has no confirmed restoration for this operation. A new task requires an explicit new file selection.</string>
+    <string name="med_transfer_committed">This operation committed; it may no longer be the active library. Reopen to inspect.</string>
+    <string name="med_transfer_pending">This restoration is incomplete. Existing data remains; no automatic retry will run.</string>
+    <string name="med_transfer_abort">Cancel incomplete restore</string>
+    <string name="med_transfer_abort_warning">This only marks the verified pending operation aborted. Ciphertext, keys and used reservations remain retained; no space is promised back.</string>
+    <string name="med_transfer_failed">Unable to complete. Password, format, corruption, authorization or storage may be the cause. No restore success is confirmed; an output file may be incomplete.</string>
+    <string name="med_transfer_cancelled">Cancelled. An export file may be incomplete; no restore success is implied.</string>
+    <string name="med_transfer_revoked">Access ended. Reopen after authorization; no file is reopened automatically.</string>
+    <string name="med_transfer_password_note">This password protects a portable medical archive. It is not the app PIN. It is never saved; keep a separate copy.</string>
+    <string name="med_transfer_backup_first">Back up current data first; then select the restore file again</string>
+</resources>

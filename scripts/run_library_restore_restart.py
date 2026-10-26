@@ -19,7 +19,25 @@ def main(test_class="LibraryRestoreRestartAndroidTest", report=REPORT, marker_na
         base = ["adb", "shell", "am", "instrument", "-w", "-e", "class",
                 f"net.plainnotes.app.data.{test_class}#persistentAuthorityChoosesExactlyOldOrVerifiedNewAfterProcessDeath",
                 "-e", "generation_seam", seam, "-e", "generation_phase"]
+        # The old watchdog included unrelated creation/encryption of four source
+        # objects before the restore began. Keep both phases bounded and measured,
+        # not a longer live-restore deadline or a smaller source fixture.
+        if test_class == "LibraryRestoreRestartAndroidTest":
+            started = time.monotonic()
+            try:
+                source = subprocess.run(base + ["source", COMPONENT], capture_output=True, text=True, timeout=60)
+            except subprocess.TimeoutExpired as failure:
+                output = failure.stdout or b""
+                if isinstance(output, bytes):
+                    output = output.decode("utf-8", errors="replace")
+                (report / f"{seam}-source-timeout.log").write_text(output)
+                raise
+            (report / f"{seam}-source.log").write_text(source.stdout + source.stderr)
+            assert source.returncode == 0 and "OK (1 test)" in source.stdout
+            assert not any(s in source.stdout for s in ("FAILURES!!!", "INSTRUMENTATION_FAILED", "INSTRUMENTATION_STATUS_CODE: -3"))
+            (report / f"{seam}-source-seconds.json").write_text(json.dumps({"sourceSeconds": time.monotonic() - started}))
         process = subprocess.Popen(base + ["prepare", COMPONENT], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        prepared_started = time.monotonic()
         try:
             deadline = time.monotonic() + 60
             while time.monotonic() < deadline:
@@ -35,6 +53,7 @@ def main(test_class="LibraryRestoreRestartAndroidTest", report=REPORT, marker_na
             else:
                 raise AssertionError("Generation seam not reached within bounded startup")
             assert process.poll() is None
+            (report / f"{seam}-prepare-seconds.json").write_text(json.dumps({"prepareSeconds": time.monotonic() - prepared_started}))
             subprocess.run(["adb", "shell", "am", "force-stop", PACKAGE], check=True)
             output, _ = process.communicate(timeout=20)
             (report / f"{seam}-killed.log").write_text(output)
@@ -46,7 +65,8 @@ def main(test_class="LibraryRestoreRestartAndroidTest", report=REPORT, marker_na
         finally:
             if process.poll() is None:
                 subprocess.run(["adb", "shell", "am", "force-stop", PACKAGE], check=True)
-                process.communicate(timeout=20)
+                output, _ = process.communicate(timeout=20)
+                (report / f"{seam}-prepare-failure.log").write_text(output)
 
 
 if __name__ == "__main__":
