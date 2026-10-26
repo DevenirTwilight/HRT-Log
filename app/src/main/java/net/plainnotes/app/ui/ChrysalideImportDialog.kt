@@ -29,7 +29,7 @@ import net.plainnotes.app.data.*
                 Text(stringResource(R.string.chry_map,source.name,source.method.orEmpty(),source.unit.orEmpty()),style=MaterialTheme.typography.labelLarge)
                 if(medications.isEmpty())Text(stringResource(R.string.chry_no_targets),color=MaterialTheme.colorScheme.error)
                 medications.forEach{target->Row(Modifier.fillMaxWidth().selectable(targets[source.id]==target.id,role=Role.RadioButton){targets[source.id]=target.id}.padding(vertical=4.dp),verticalAlignment=Alignment.CenterVertically){
-                    RadioButton(targets[source.id]==target.id,{targets[source.id]=target.id});Text(target.name,style=MaterialTheme.typography.bodyMedium)
+                    RadioButton(targets[source.id]==target.id,null);Text(target.name,style=MaterialTheme.typography.bodyMedium)
                 }}
             }
             preview.plan.intakes.zip(preview.items).take(40).forEach{(item,review)->

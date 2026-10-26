@@ -268,6 +268,7 @@ class AutomaticImportAndroidTest {
         assertEquals(beforeChry,model.extra.value.records.count{it.origin=="IMPORT_CHRYSALIDE"})
         choose("chry")
         val targetChoice=ui.onNode(hasText(targetName) and hasClickAction())
+        targetChoice.performScrollTo()
         targetChoice.performTouchInput { click() }
         ui.waitForIdle()
         targetChoice.assertIsSelected()

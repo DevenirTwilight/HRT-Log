@@ -42,6 +42,9 @@ class FeatherlineContainer private constructor(private val bytes:ByteArray,val j
             cipher.init(Cipher.DECRYPT_MODE,SecretKeySpec(key,"AES"),GCMParameterSpec(128,bytes.copyOfRange(53,65)))
             cipher.updateAAD(bytes,0,65)
             compressed=try {cipher.doFinal(bytes,65,bytes.size-65)}catch(_:AEADBadTagException){throw Authentication()}
+            // Successful tag verification closes the retry window; let low-memory devices
+            // reclaim the cleared Argon2 workspace before gzip/JSON/history work continues.
+            ArchiveKdfWorkspace.releaseAfterAuthentication()
             active()
             val output=object:ByteArrayOutputStream(minOf(jsonBytes,65536)) {fun clear(){buf.fill(0);reset()}}
             val block=ByteArray(8192)
