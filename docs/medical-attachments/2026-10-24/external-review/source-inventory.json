@@ -143,12 +143,16 @@
     "scripts/run_med02_security_restart.py": "e09cc9e76b075c59a1e83f8a35335c96eb1072d1d78f4611c4d51532393077f6",
     "scripts/run_med02_security_native.py": "7acb6605ae2abe9f842bc6c1b82a1083d784c1b70aeb9a26a30f5e727421d804",
     "app/src/main/java/net/plainnotes/app/attachments/AttachmentReconciliationStore.kt": "a962fb734edb4e7d5623ff61bba984463f9f894de0f8361f6f740bf35fdcaf17",
-    "core/data/src/main/java/net/plainnotes/app/data/AttachmentProviderStreams.kt": "d515f98d89c240eefd5860c53867676f6776ab35f0341e41b3fcba8868cf581b"
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentProviderStreams.kt": "d515f98d89c240eefd5860c53867676f6776ab35f0341e41b3fcba8868cf581b",
+    ".github/workflows/med02-security-regressions.yml": "6a8a615eabbd2baf5050881070224cdeb544e6e1b235c4fca2c93e048ae43df6",
+    "scripts/configure_ansm_native_runtime.py": "4cf9e69fdfc76b7d589f998b58f3f2771071abde44a974908cf32291fd3d7c61",
+    "scripts/test_configure_ansm_native_runtime.py": "208a9d5716315c966e43e674955e264e2b1c7198f4ba3d0f2fda0094d199990e"
   },
   "production_base_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895",
   "acknowledgement_fix_base_sha": "70584c6f00ba167e77f2406e87d301b329db1acc",
   "baseline_sha": "9eb6d0f51db21e3629019c2757a5f35724d793a7",
-  "executable_sha": "4f059f25e2a15762a575daee84d189bf124bd591",
+  "executable_sha": "d5dc3d48c4f8908650b7a18818233c65a65dac9b",
   "security_fix_baseline_sha": "03f724f41e91a1a866d98de31de673594d1105af",
-  "validation_status": "WIPE_FOLLOWUP_TARGETED_24_PASS_FINAL_EXACT_HEAD_CI_PENDING"
+  "validation_status": "PRODUCTION_TARGETED_24_AND_6c_FOUR_API_PASS_API27_OPTIN_235_PASS_FINAL_HEAD_CI_PENDING",
+  "production_fix_sha": "4f059f25"
 }
