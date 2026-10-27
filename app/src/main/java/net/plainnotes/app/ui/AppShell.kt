@@ -144,6 +144,7 @@ class UiPrefs(context: Context) {
     val labDialogs = labUi.dialogs
     var pickStart by remember { mutableStateOf(false) }
     val today = LocalDate.now()
+    var medicalBackupOpen by remember { mutableStateOf(false) }
     var medicalOrigin by rememberSaveable { mutableStateOf(false) }
     // Only a hub-launched page returns to the hub. Drawer and calendar routes remain independent.
     var medicalChild by rememberSaveable { mutableStateOf<Destination?>(null) }
@@ -285,7 +286,8 @@ class UiPrefs(context: Context) {
                     timelineActions=TimelineActions(model::editTimeline,model::deletePeriod),addHost=timelineAdd,onLabPanel={labDialogs.panel=it})
                 Destination.MEDICAL -> MedicalRecordsScreen(state.appointments,{visitId=it.id;medicalOrigin=true;destination=Destination.VISITS},
                     {model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true},{openMedicalChild(Destination.LABS)},{openMedicalChild(Destination.TIMELINE)},{destination=Destination.SETTINGS},pad,
-                    onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount(),onVisits={openMedicalChild(Destination.VISITS)})
+                    onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount(),onVisits={openMedicalChild(Destination.VISITS)},
+                    onMedicalBackup=if(net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) ({medicalBackupOpen=true}) else null)
                 Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it;if(it==null && medicalOrigin){medicalOrigin=false;destination=Destination.MEDICAL} }, { appointment = true }, pad,
                     medical=medicalOrigin,onMedicalEdit={model.clearMedicalVisitSave();medicalDialogs.edit=it;medicalDialogs.editing=true},onLab={medicalDialogs.lab=it.id})
                 Destination.HISTORY -> { val historySnapshot=extra;HistoryScreen(state, historySnapshot.records, { historyDialogs.referenceEpoch=historySnapshot.referenceEpoch;historyDialogs.editRecord = it }, { historyDialogs.deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { historyDialogs.batch = true }, onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,labels=historyLabels,onExtra={r,on->model.setExtra(r.id,on)},onClearSelection={importedRecordIds=null},onUndoSkip={model.undoSkipped(it)}) }
@@ -297,6 +299,9 @@ class UiPrefs(context: Context) {
         }
     }
 
+    }
+    if(medicalBackupOpen && net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) {
+        MedicalLibraryTransferDialog(model,onLibraryReopen) {medicalBackupOpen=false}
     }
     val meds = state.medications.associateBy { it.id }
     importedLink?.let { link -> ImportedPlanDialog(link, meds[link.record.medication_id], model::closeImportedLink) { key -> model.linkImported(link.record.id, key) } }

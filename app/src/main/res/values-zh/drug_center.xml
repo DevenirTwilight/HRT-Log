@@ -1,16 +1,16 @@
 <resources>
     <string name="drug_center_title">药品资料中心</string>
     <string name="drug_center_region">法国 · ANSM / BDPM 参考</string>
-    <string name="drug_center_official_off">官方目录暂未开放。目前仅可使用您已保存的产品来源。这不是中国药品目录。</string>
+    <string name="drug_center_official_off">法国 BDPM 药品身份和包装可离线搜索；完整 RCP/Notice 正文及监管动态尚不可用。</string>
     <string name="drug_center_user_sources">当前可用：搜索本地保存的用户填写产品来源，或将其关联到现有药物。这些资料尚未核验。</string>
-    <string name="drug_center_search">离线搜索商品资料</string>
+    <string name="drug_center_search">搜索 BDPM 与已保存资料</string>
     <string name="drug_center_medications">我的药物</string>
-    <string name="drug_center_empty">尚无药物。仍可浏览已保存来源；也可在“药物方案”中手动创建药物。</string>
+    <string name="drug_center_empty">尚无药物，仍可浏览 BDPM 和已保存资料。可在用药方案中创建药物。</string>
     <string name="drug_center_open_reference">查看或关联产品来源 · 不改变剂量</string>
     <string name="drug_center_identity">产品身份与来源</string>
-    <string name="drug_center_identity_body">现有详情显示用户填写的成分、规格、剂型、途径、CIS/CIP、来源版本和日期。缺失字段保持未知；名称相同不代表等效。</string>
+    <string name="drug_center_identity_body">产品详情区分官方 BDPM 身份和未核验的用户资料；按实际来源展示成分、规格、剂型、途径、CIS/CIP 与来源日期。缺失字段仍为未知，同名不代表等效。</string>
     <string name="drug_center_packaging">包装信息</string>
-    <string name="drug_center_packaging_body">用户填写的 CIP 是所声明的包装身份，不代表已核实的可用库存。此处尚无结构化包装容量，不进行换算或库存扣减。</string>
+    <string name="drug_center_packaging_body">CIS 标识药品，CIP 标识包装。包装资料不等于已确认可用库存，不会自动换算或扣减库存。</string>
     <string name="drug_center_rcp">RCP · 专业产品资料</string>
     <string name="drug_center_notice">Notice · 患者说明书</string>
     <string name="drug_center_documents_off">此中心尚未启用。独立说明书核实与导航审查仍在进行。来源网页不等于已核验的说明书正文。</string>

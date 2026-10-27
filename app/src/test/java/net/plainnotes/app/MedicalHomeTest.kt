@@ -66,7 +66,7 @@ class MedicalHomeTest {
         var actions=0
         ui.setContent { NotesTheme(ThemeMode.LIGHT) { MedicalRecordsScreen(emptyList(), {actions++}, {actions++}, {actions++}, {actions++}, {actions++}, PaddingValues(), now=now) } }
         val intents=org.robolectric.Shadows.shadowOf(ui.activity)
-        for(tag in listOf("medical-future-files","medical-future-originals","medical-future-practitioners","medical-future-visit-links","medical-future-lab-links","medical-future-organize")) {
+        for(tag in listOf("medical-future-files","medical-future-practitioners","medical-future-organize")) {
             list.performScrollToNode(hasTestTag(tag))
             ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
             ui.onNodeWithTag("center-unavailable-dialog").assertExists()

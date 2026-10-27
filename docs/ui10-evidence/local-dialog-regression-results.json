@@ -1,0 +1,9 @@
+[
+  {
+    "suite": "net.plainnotes.app.AppShellBackNavigationTest",
+    "tests": "18",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  }
+]

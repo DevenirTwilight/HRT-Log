@@ -32,11 +32,7 @@ import java.time.LocalDate
 @Composable fun DataSection(model: NotesViewModel, scheduleTexts: Map<Long, String>,onLibraryReopen:()->Unit={}) {
     var medicalBackupOpen by remember {mutableStateOf(false)}
     if(medicalBackupOpen && net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) {
-        androidx.compose.ui.window.Dialog(onDismissRequest={medicalBackupOpen=false},properties=androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth=false)) {
-            Surface(Modifier.fillMaxSize()) {
-                net.plainnotes.app.attachments.ui.MedicalLibraryTransferPage(model,onReopen=onLibraryReopen,onBack={medicalBackupOpen=false})
-            }
-        }
+        MedicalLibraryTransferDialog(model,onLibraryReopen) {medicalBackupOpen=false}
     }
     val context = LocalContext.current
     val job by model.dataJob.collectAsStateWithLifecycle()
@@ -294,4 +290,13 @@ import java.time.LocalDate
     net.plainnotes.app.importer.ImportFormatDetector.Source.FEATHERLINE->"Featherline"
     net.plainnotes.app.importer.ImportFormatDetector.Source.CHRYSALIDE->"Chrysalide"
     net.plainnotes.app.importer.ImportFormatDetector.Source.HRT_LOG->"HRT Log"
+}
+
+/** Shared authenticated production page; callers only own navigation, never a second transfer engine. */
+@Composable internal fun MedicalLibraryTransferDialog(model:NotesViewModel,onLibraryReopen:()->Unit,onDismiss:()->Unit) {
+    androidx.compose.ui.window.Dialog(onDismissRequest=onDismiss,properties=androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth=false)) {
+        Surface(Modifier.fillMaxSize()) {
+            net.plainnotes.app.attachments.ui.MedicalLibraryTransferPage(model,onReopen=onLibraryReopen,onBack=onDismiss)
+        }
+    }
 }

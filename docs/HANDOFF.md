@@ -4077,3 +4077,12 @@ PR133 LAB导航最小收敛：源审计发现LabsScreen内部详情的附件按�
 PR133 a0真实MainActivity API35已通过就诊SAF/COMMIT/新Activity/认证预览、真实关闭与指定关联解除，进入LAB。新失败原完整语义树证明：result2行bounds(32,489)-(288,555)中心(160,522)被lab-open-batch悬浮按钮(141,520)-(304,576)覆盖，测试触摸错开新增表单并无保存。只改原生用例，点击真实语义行左20%未遮挡区域，仍走MainActivity/详情/附件/SAF，所有LAB目标身份/实际COMMIT/重开/恢复断言保留；没有调用VM或直接URI替代，未修改无关Labs UI。11秒AndroidTest编译PASS。原XML含完整树/原logcat/工件SHA已入evidence/a0fd447d。a0四API安全专项PASS、Featherline512MiB PASS（不抵消3e LMK历史），最终仍待这一测试输入修正后的精确SHA全部门槛。
 
 PR133 155 API29真实流程已通过就诊全链、LAB=2/panel=1 SAF/COMMIT/认证读取、PNMEDBK2真实导出/认证prepare/实际root COMMIT、旧scope拒绝及新MainActivity作用域初始化。最后测试在新Activity仅runtime Ready后立即performScrollTo查恢复后的row2，尚未等待异步NotesViewModel医疗快照，出现即时缺节点（无等待），原XML/工件SHA已入evidence/155043ff。只补有界可观察等待：state非loading且extra中存在该LAB、真实语义节点已组成；随后保持全部原触摸/恢复附件UUID/认证像素/保留解除关系断言，不引入sleep/重放/跳过，不改生产代码。新AndroidTest编译PASS（9秒）。继续最终精确源码CI，公共入口ON，不能把部分完成写为整个用例PASS。
+
+
+## UI-10 医疗中心真实入口与占位收敛 — 2026-10-27
+
+独立 feature/ui10-enable-implemented-modules（/workspace/HRT-Log-ui10），精确基线 0daeb63cc47f7baac6c603735dd6307c085bbe08，无并行 UI-10 PR。注意本地 origin 默认分支 tracking ref 曾停在旧 #125；已显式 fetch 默认分支并以 GitHub branch API 确认 #134 后基线，没有以旧 ref 开发交付。医疗中心新增就诊附件、单项 LAB 附件、完整医疗备份实际导航；共享原 DataSection 的生产 transfer Dialog，未复制引擎。仅统一文件浏览、医生独立档案、分类摘要/任意文件导出保留准确未开放说明。四语范围明确 JPEG/PNG、Android9+ PDF首页/Android8保存备份。BDPM现有身份/包装入口不变，五项监管/正文未开放不变；ComingSoonScreen 无实际未就绪 Destination。旧 ref2_official_off 资源无生产引用，不代表当前身份目录状态；不为无引用历史字符串破坏原文资源冻结。
+
+旧占位测试仅保留真正未实现三项；新增 hub 入口及返回/无写入检查，四语/320dp/2倍字/主题矩阵继续；现有真实 MainActivity 产品合同从医疗中心进入就诊与 LAB，保留原 SAF/COMMIT/读取/目标 ID/恢复断言。定向编译与回归正在运行，原生及最终 CI PENDING，不能先标 PASS。PUBLIC_ENTRY_ENABLED=true 保持，不改数据层、协议、资源限额或权限，不签名/交付/Release。
+
+UI-10 本地证据更新：生产与AndroidTest编译PASS。首次测试未传离线Robolectric目录导致MavenArtifactFetcher连接失败；原日志保存ui10-evidence。正确离线参数后130项中129 PASS，唯一FAIL是新增返回测试直接给底层Activity发Back，未发给当前Dialog；仅将该测试改为对话框窗口Back，所有实际返回/不写入断言保留，AppShell全套随后PASS（27秒）。其余已执行：医疗/药品矩阵各48组、中心四语主题8、药品真实NotesApp导航1、MedicalHome4、Ui05MedicalHome3全部PASS。药品中心合并两个完全相同onBrowse按钮为单一catalogue入口，四语明确BDPM身份/包装与用户来源边界，五项真正未实现卡仍OFF。原生MainActivity及最终必需CI等待PR，不将上述本地测试冒充原生。

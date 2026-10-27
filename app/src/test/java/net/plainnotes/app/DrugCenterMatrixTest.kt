@@ -39,15 +39,13 @@ class DrugCenterMatrixTest(private val locale:String,private val width:Int,priva
             ui.runOnIdle{contrast=mode}
             ui.onNodeWithTag("drug-center-close").assertIsDisplayed().assertHasClickAction()
             val list=ui.onNodeWithTag("drug-center-list")
-            list.performScrollToNode(hasTestTag("drug-center-browse"))
-            ui.onNodeWithTag("drug-center-browse").assertIsDisplayed().assertHasClickAction().performClick()
+            list.performScrollToNode(hasTestTag("drug-center-catalogue"))
+            ui.onNodeWithTag("drug-center-catalogue").assertIsDisplayed().assertHasClickAction().performClick()
             list.performScrollToNode(hasTestTag("drug-center-medication:7"))
             ui.onNodeWithTag("drug-center-medication:7").assertIsDisplayed().performClick()
             for(tag in listOf("drug-center-identity","drug-center-packaging")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assert(hasClickAction().not())
             }
-            list.performScrollToNode(hasTestTag("drug-center-catalogue"))
-            ui.onNodeWithTag("drug-center-catalogue").assertIsDisplayed().assertHasClickAction().performClick()
             for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply","drug-center-recalls")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
                 ui.onNodeWithTag("center-unavailable-dialog").assertExists()
@@ -67,7 +65,7 @@ class DrugCenterMatrixTest(private val locale:String,private val width:Int,priva
                 File(folder,"${locale}_${width}dp_${font}x_${if(dark)"dark" else "light"}_${mode.name}.png").outputStream().use{image.compress(Bitmap.CompressFormat.PNG,100,it)}
             }
         }
-        assertEquals("browse and official catalogue callbacks",6,browsed);assertEquals("medication callback",3,linked)
+        assertEquals("single shared catalogue callback",3,browsed);assertEquals("medication callback",3,linked)
         ui.onAllNodesWithTag("attachment-add").assertCountEquals(0)
     }
 }

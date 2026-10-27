@@ -5,14 +5,14 @@
     <string name="center_fr_catalogue_reason">La diffusion des données officielles attend la validation des sources et des conditions de réutilisation.</string>
     <string name="center_shortages">Pénuries de médicaments</string>
     <string name="center_recalls">Rappels et annonces réglementaires</string>
-    <string name="center_med_files">Bibliothèque de documents médicaux</string>
+    <string name="center_med_files">Navigateur unifié de fichiers médicaux</string>
     <string name="center_med_originals">PDF, images, ordonnances et dossiers originaux</string>
     <string name="center_med_practitioners">Dossiers des médecins et établissements</string>
     <string name="center_med_visit_links">Associer des documents aux consultations</string>
     <string name="center_med_lab_links">Associer des documents aux analyses</string>
-    <string name="center_med_organize">Organiser, résumer et exporter les documents médicaux</string>
-    <string name="center_med_files_reason">L’importation et le stockage des originaux attendent la revue de sécurité. Aucun fichier n’est sélectionné ni enregistré ici.</string>
+    <string name="center_med_organize">Classement, résumés et export individuel de fichiers</string>
+    <string name="center_med_files_reason">Les pièces jointes sont disponibles dans les consultations et résultats individuels. Aucun navigateur indépendant de toute la bibliothèque n’est implémenté.</string>
     <string name="center_med_practitioners_reason">Les dossiers indépendants ne sont pas disponibles. Les informations existantes restent dans les consultations.</string>
-    <string name="center_med_links_reason">Les associations de documents ne sont pas disponibles. Aucun lien n’est déduit des dates.</string>
-    <string name="center_med_organize_reason">L’organisation des documents n’est pas disponible. Le dossier de consultation PDF reste exportable depuis une consultation.</string>
+    <string name="center_med_links_reason">Choisissez une consultation ou un résultat individuel, puis ouvrez les pièces jointes pour ajouter ou consulter les fichiers chiffrés. Aperçu JPEG/PNG et première page PDF sous Android 9 ou ultérieur. Sous Android 8, les PDF peuvent être enregistrés et sauvegardés sans aperçu intégré.</string>
+    <string name="center_med_organize_reason">Le classement indépendant, les résumés et l’export arbitraire de fichiers ne sont pas implémentés. Le dossier PDF est accessible depuis une consultation ; la sauvegarde médicale chiffrée complète est accessible ci-dessus.</string>
 </resources>

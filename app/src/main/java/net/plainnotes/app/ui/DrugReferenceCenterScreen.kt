@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import net.plainnotes.app.R
 import net.plainnotes.app.data.MedicationEntity
 
-/** A view over the existing medication/reference APIs. No catalogue, clinical advice or inventory writes. */
+/** A view over the existing medication/reference APIs. No clinical advice or inventory writes. */
 @Composable fun DrugReferenceCenterScreen(medications:List<MedicationEntity>,onBrowse:()->Unit,
     onReference:(MedicationEntity)->Unit,contentPadding:PaddingValues,onPlans:(()->Unit)?=null,onStock:(()->Unit)?=null) {
     LazyColumn(Modifier.fillMaxSize().testTag("drug-center-list"),contentPadding=PaddingValues(
@@ -23,13 +23,12 @@ import net.plainnotes.app.data.MedicationEntity
         item("region") {Text(stringResource(R.string.drug_center_region),style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()})}
         item("source-scope") {Text(stringResource(R.string.drug_center_short_scope))}
         item("browse") {
-            Button(onClick=onBrowse,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("drug-center-browse")) {
+            Button(onClick=onBrowse,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("drug-center-catalogue")) {
                 Text(stringResource(R.string.drug_center_search))
             }
         }
         onPlans?.let { open -> item("plans") {OutlinedButton(open,Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("drug-center-plans")){Text(stringResource(R.string.medications))}} }
         onStock?.let { open -> item("stock") {OutlinedButton(open,Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("drug-center-stock")){Text(stringResource(R.string.stock))}} }
-        item("catalogue") {OutlinedButton(onClick=onBrowse,modifier=Modifier.fillMaxWidth().heightIn(min=56.dp).testTag("drug-center-catalogue")){Text(stringResource(R.string.bdpm_title))}}
         item("medications") { Text(stringResource(R.string.drug_center_medications),style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics{heading()}) }
         if(medications.isEmpty())item("empty") {Text(stringResource(R.string.drug_center_empty))}
         items(medications.sortedWith(compareByDescending<MedicationEntity>{it.active}.thenBy{it.sort_order}.thenBy{it.id}),key={"medication:${it.id}"}) {medication->
