@@ -1,3 +1,10 @@
+## MED-02 #132 原生首轮失败与针对性通过 — 2026-10-27
+
+- 唯一PR https://github.com/DevenirTwilight/HRT-Log/pull/132，Draft；pre-final2470ca2d，F01提交0f7c88a2、F02 e358b0a8、F03 cdfe354f。不能合并。
+- 本地针对性AppLock2/controller14/neutral-store1/output-close1=18项PASS/0fail/0error/0skip，app/core AndroidTest编译PASS；5+61静态守卫PASS。原始XML和环境失败/复测日志已保留。不是原生运行。
+- 真实Android首轮push40461145091/PR40461203361均FAIL。API26 F01实际死亡/fresh PID恢复PASS；F02尚未实际提交成功；F03/F04未取得provider，不能称漏洞验证失败或F04确认。API27在configure脚本白名单拒绝，实际测试NOT_RUN。原始artifact12715230402 ZIP及joblog保留evidence/2470-*。
+- 平台Android8 DocumentsProvider.attachInfo实际字节码要求exported/grantUriPermissions/MANAGE_DOCUMENTS；测试manifest原exportedfalse导致无法初始化。仅修测试APK声明并保留权限。F02改用既有公开合成只读provider（不伪造SAF grant），加opens计数；既有真实DocumentsUI验收不替换。补27白名单和Robolectric27离线依赖，heap仍192m。下一步只看新源码原生原件；F04保留POTENTIAL。最终精确SHA必需CI/低内存仍待跑全。
+
 ## MED-02 有限安全修复接手 — 2026-10-27
 
 - 单一分支security/med02-f01-f04-20261027，基线默认03f724f4；#131实际head9fafe3c2已于2026-10-26T20:18:50Z合并，其所列作业均SUCCESS，原始快照已保存。旧审计BLOCKED_ENGINEERING仅是当时文档状态，不能继续称#131未合并；历史LMK原件及根因未证明仍保留。

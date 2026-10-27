@@ -28,7 +28,7 @@ class AttachmentReconciliationRestartAndroidTest {
             val attempt=gateway.newImport("SYNTHETIC recovery")
             try {
                 gateway.retain(attempt.operation,attempt.document)
-                val uri=DocumentsContract.buildDocumentUri("net.plainnotes.app.test.synthetic-medflow","binary")
+                val uri=android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-attachments/unknown")
                 attempt.selected(ActivityResult(Activity.RESULT_OK,Intent().setData(uri)))
                 assertTrue(attempt.state.value is AttachmentFlowController.State.Saved)
                 assertEquals(1,gateway.documents().size)
@@ -45,7 +45,7 @@ class AttachmentReconciliationRestartAndroidTest {
             fixture.initialize()
             val gateway=RuntimeAttachmentGateway(app,fixture.runtime,fixture.target)
             val pending=requireNotNull(gateway.pending())
-            val before=app.contentResolver.call(android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-medflow"),"openCount",null,null)!!.getInt("count")
+            val before=app.contentResolver.call(android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-attachments"),"openCount",null,null)!!.getInt("count")
             val c=MedicalAttachmentsController(gateway,jobs,Dispatchers.Unconfined)
             try {
                 assertEquals(MedicalAttachmentsController.Import.Unknown,c.state.value.import)
@@ -54,7 +54,7 @@ class AttachmentReconciliationRestartAndroidTest {
                 withTimeout(15000) {c.state.first {it.import is MedicalAttachmentsController.Import.Saved}}
                 assertNull(gateway.pending())
                 assertEquals(listOf(pending.second),gateway.documents().map {it.document})
-                val after=app.contentResolver.call(android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-medflow"),"openCount",null,null)!!.getInt("count")
+                val after=app.contentResolver.call(android.net.Uri.parse("content://net.plainnotes.app.test.synthetic-attachments"),"openCount",null,null)!!.getInt("count")
                 assertEquals("Read-only reconciliation must not reopen the original",before,after)
             }finally {c.close()}
         }finally {jobs.cancel();fixture.close();prefs.edit().clear().commit()}

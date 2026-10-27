@@ -13,6 +13,8 @@ result=subprocess.run(['adb','shell','am','instrument','-w','-e','class',
     'net.plainnotes.app.data.MedicalCollectionRevocationAndroidTest','-e','securityPipes','1',
     'net.plainnotes.app.data.test/androidx.test.runner.AndroidJUnitRunner'],capture_output=True,text=True,timeout=180)
 (report/'pipes-original.log').write_text(result.stdout+result.stderr)
+logcat=subprocess.run(['adb','logcat','-d','-v','threadtime'],capture_output=True,text=True)
+(report/'provider-logcat.txt').write_text(logcat.stdout+logcat.stderr)
 for name in ['security-f03-observation.json','security-f04-observation.json']:
     observation=subprocess.run(['adb','shell','run-as','net.plainnotes.app.data.test','cat','files/'+name],capture_output=True,text=True)
     (report/name).write_text(observation.stdout+observation.stderr)

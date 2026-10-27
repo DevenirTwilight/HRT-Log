@@ -6,7 +6,7 @@ import time
 
 
 def configure(execute=subprocess.check_output, pause=time.sleep, clock=time.monotonic, expected_api="26"):
-    if expected_api not in ("26", "29", "35"):
+    if expected_api not in ("26", "27", "29", "35"):
         raise ValueError("Only the explicit synthetic CI API matrix is allowed")
     def adb(*args):
         return execute(['adb', *args], text=True).strip()
@@ -46,5 +46,5 @@ def configure(execute=subprocess.check_output, pause=time.sleep, clock=time.mono
 
 if __name__ == '__main__':
     parser=argparse.ArgumentParser()
-    parser.add_argument("--api",choices=("26","29","35"),default="26")
+    parser.add_argument("--api",choices=("26","27","29","35"),default="26")
     configure(expected_api=parser.parse_args().api)

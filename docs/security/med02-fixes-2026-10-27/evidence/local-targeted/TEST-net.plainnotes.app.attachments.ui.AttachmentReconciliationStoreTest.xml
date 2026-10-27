@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.attachments.ui.AttachmentReconciliationStoreTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-27T06:35:38.456Z" hostname="317a4b1aa7a1" time="8.054">
+  <properties/>
+  <testcase name="onlyNeutralIdentitiesSurviveReconstructionAndCannotCrossScopeOrTypedTarget" classname="net.plainnotes.app.attachments.ui.AttachmentReconciliationStoreTest" time="7.493"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

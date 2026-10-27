@@ -1,5 +1,5 @@
 {
-  "status": "NOT_REVIEWED_EXTERNALLY / SECURITY_FIX_VALIDATION_PENDING",
+  "status": "NOT_REVIEWED_EXTERNALLY",
   "note": "2026-10-27 bounded F01–F03 fix inventory; original 9fafe3c2 audit bytes retained in docs/security/med02-fixes-2026-10-27/evidence/original-audit-evidence.zip. Exact final CI pending; no feature enablement or external certification.",
   "files_sha256": {
     "app/src/androidTest/AndroidManifest.xml": "5161d86ad0a8e3be77e4eb98389d8b0e1398951c4202b05795fc0c2bb37dacef",
@@ -22,11 +22,11 @@
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/ProductionViewerSafetyAndroidTest.kt": "580d264fe8c8e5c5719c9b08dd90c4675cc39d74a02feb0211dca9548f0fd9d1",
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/SampledMemory.kt": "517d6dc7d90efdde2ca422d3f99f81ef645295e8235329a6dc1cdb3377a6bf93",
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/SyntheticEmulatorGuard.java": "a054fd8128c7e77bc177833c823c7aa21b16335f1013e726b76f3d95618de249",
-    "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/SyntheticStreamProvider.java": "d047b0d9e6b545ec6f9062c86ad1aac6cf80663cb42efa2d76d90f3e9d973fbe",
+    "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/SyntheticStreamProvider.java": "d90ad09ec6e013fae286b8b24d396b3b125b223c12ae6835ede5a9d791c6db08",
     "app/src/androidTest/java/net/plainnotes/app/attachmentpoc/TinkPdfGate2AndroidTest.kt": "d6c8dec7d66bf421d64782e235192a5a21540a940823c52320f0627bf3c66e88",
     "app/src/androidTest/java/net/plainnotes/app/attachments/AttachmentOperationAndroidTest.kt": "9fe0e5bee35d44a99d37b9c2ddc0bed2c66030b4f89653769b0da49e48afdb06",
     "app/src/androidTest/java/net/plainnotes/app/attachments/MedicalAttachmentUiAndroidTest.kt": "4b237ebcd3015acb1946d13174eb4428fba4d10c5a91643b0d04e3b54e5c9ad3",
-    "app/src/androidTest/java/net/plainnotes/app/attachments/SyntheticDocumentsProvider.java": "26b2e7e6e2b9af7b4c896c7fcf823e081684e9dff0e6582317087acf40446ea8",
+    "app/src/androidTest/java/net/plainnotes/app/attachments/SyntheticDocumentsProvider.java": "065ae5587565a99ff664ed0af902992792ec8aef89e53131fa79e52a3b54aebc",
     "app/src/androidTest/java/net/plainnotes/app/attachments/SyntheticMedicalArchiveProvider.java": "d3beecc74eaf2b5cac4768a452d6843df26ccb440e62f153c8bc3a878831e446",
     "app/src/androidTestFull/java/net/plainnotes/app/disguise/DisguiseFlowAndroidTest.kt": "b26b92506b61aaa082078eaf25fa7d85a188aa3a07f4c66e49f4014880db0ce2",
     "app/src/androidTestFull/java/net/plainnotes/app/shell/InAppNavigationLockAndroidTest.kt": "e72d6f745befc6be48ed98c3d03c7e87b8fa8750a1850e3d25397d2e34ea1be8",
@@ -138,15 +138,16 @@
     "app/src/main/java/net/plainnotes/app/attachments/ui/AttachmentReconciliationStore.kt": "492cfcc998dcec9e29b28ebe31d70d1cd0703437a92a5cc4cd36c664906a72b3",
     "core/data/src/main/java/net/plainnotes/app/data/RevocableArchiveOutput.kt": "5cc76b56e7e105639bc5f93f8112afa5deca1bbcdc9c8c82aa18d6d6b35af26c",
     "app/src/androidTestFull/java/net/plainnotes/app/security/AppLockAtomicRestartAndroidTest.kt": "1cd944c4e096becfb2318b2687491ebc88bb78d223f01eefc0e10b9e6da3ebfe",
-    "app/src/androidTest/java/net/plainnotes/app/attachments/AttachmentReconciliationRestartAndroidTest.kt": "622a267f7db7d080ce8a3eff87e45ce384674042afd6d87c1023a92f67204465",
+    "app/src/androidTest/java/net/plainnotes/app/attachments/AttachmentReconciliationRestartAndroidTest.kt": "5fe6951159f80461896ae31089dba34e061d8f69fe5b7dfc73f23d5e4b74223b",
     "core/data/src/androidTest/java/net/plainnotes/app/data/MedicalCollectionRevocationAndroidTest.kt": "1fec03a59476fca7d0876e77b921708d8e67f0bd4871124302e4ca53f3cac993",
     "core/data/src/androidTest/java/net/plainnotes/app/data/SyntheticSecurityDocumentsProvider.java": "29c6b859f0a818a334cee60a6bd1be00610d0846f0f7d26055340b94b206fe39",
     "scripts/run_med02_security_restart.py": "8e68a562569a6d948456f6c8b4f879ff694830b470b9602542d9a6bafdec05e0",
-    "scripts/run_med02_security_native.py": "5e0ea624e31276a26ce3edeb8a643c57be2a865237ff25e4d4dde63f90318c12"
+    "scripts/run_med02_security_native.py": "7acb6605ae2abe9f842bc6c1b82a1083d784c1b70aeb9a26a30f5e727421d804"
   },
   "production_base_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895",
   "acknowledgement_fix_base_sha": "70584c6f00ba167e77f2406e87d301b329db1acc",
   "baseline_sha": "9eb6d0f51db21e3629019c2757a5f35724d793a7",
-  "executable_sha": "a61f10638446a72602e514c357c7615635146cb9",
-  "security_fix_baseline_sha": "03f724f41e91a1a866d98de31de673594d1105af"
+  "executable_sha": "cdfe354fc2869a9936e863c99406cb5c53bb7b76",
+  "security_fix_baseline_sha": "03f724f41e91a1a866d98de31de673594d1105af",
+  "validation_status": "SECURITY_FIX_VALIDATION_PENDING"
 }
