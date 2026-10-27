@@ -1,0 +1,58 @@
+[
+  {
+    "file": "TEST-net.plainnotes.app.data.ReferenceMigrationTest.xml",
+    "tests": "18",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  {
+    "file": "TEST-net.plainnotes.app.data.HistoricalVisitTest.xml",
+    "tests": "18",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  {
+    "file": "TEST-net.plainnotes.app.data.LabPanelDataTest.xml",
+    "tests": "14",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  {
+    "file": "TEST-net.plainnotes.app.data.AttachmentFoundationTest.xml",
+    "tests": "33",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  {
+    "file": "TEST-net.plainnotes.app.data.AttachmentMigrationTest.xml",
+    "tests": "9",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  {
+    "file": "TEST-net.plainnotes.app.data.Ansm03b0InventoryTest.xml",
+    "tests": "13",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  {
+    "file": "TEST-net.plainnotes.app.attachments.ui.MedicalAttachmentsUiTest.xml",
+    "tests": "8",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  {
+    "file": "TEST-net.plainnotes.app.Ui08PdfSummaryUnchangedTest.xml",
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  }
+]

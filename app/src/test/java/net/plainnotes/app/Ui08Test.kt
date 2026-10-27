@@ -321,7 +321,16 @@ class Ui08PdfSummaryUnchangedTest {
             assertTrue("$dir licence element", start >= 0 && end > start)
             val licence = current.substring(start, end)
             assertEquals("$dir exact approved attribution edit", 1, Regex(Regex.escape(added)).findAll(licence).count())
-            val text = current.replaceRange(start, end, licence.replace(added, original))
+            var text = current.replaceRange(start, end, licence.replace(added, original))
+            // §154 authorizes precisely two privacy statements, not arbitrary PDF/string changes.
+            // Verify each new element's immutable approved hash before normalizing to the base.
+            val approved = org.json.JSONObject(File("src/test/resources/med02-approved-privacy-activation.json").readText()).getJSONObject(dir)
+            for (name in listOf("privacy_notice_backup_body", "privacy_notice_changes_body")) {
+                val element = requireNotNull(Regex("<string name=\"$name\">.*?</string>").find(text))
+                val evidence = approved.getJSONObject(name)
+                assertEquals("$dir exact approved $name", evidence.getString("approvedSha256"), sha(element.value.toByteArray()))
+                text = text.replaceRange(element.range, evidence.getString("original"))
+            }
             val a = text.indexOf("<!-- UI-08 (REQUIREMENTS §140)"); val b = text.lastIndexOf("</resources>")
             assertTrue(dir, a in 0 until b)
             assertEquals(dir, digest, sha((text.substring(0, a) + text.substring(b)).toByteArray()))

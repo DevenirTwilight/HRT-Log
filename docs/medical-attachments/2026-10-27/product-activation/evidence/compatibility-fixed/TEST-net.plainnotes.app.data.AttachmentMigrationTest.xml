@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.AttachmentMigrationTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-27T13:13:09.243Z" hostname="42f8489b32d3" time="13.381">
+  <properties/>
+  <testcase name="room15LifecycleMigrationRollsBackWithoutInventingOwnership" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="4.387"/>
+  <testcase name="twoEncryptedDatabasesKeepSameIntegerTargetsAndAttachmentNamespaceSeparate" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="1.021"/>
+  <testcase name="publishedRoom20UpgradesWithoutRewritingRowsAndOldReaderRefusesRoom21" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="1.292"/>
+  <testcase name="nativeMigrationFailureRollsBackDDLAndLeavesOriginalRoom9Readable" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="0.912"/>
+  <testcase name="nativeOldestSchemaMigrationChainValidatesRoom10" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="0.42"/>
+  <testcase name="room13JournalMigrationPreservesLegacyUnknownAndRollsBackOnFailure" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="1.414"/>
+  <testcase name="encryptedRoom9MigratesAllLegacyRowsIndicesGuardsAndReopens" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="1.31"/>
+  <testcase name="room14AuthorityFailureRetainsOriginalDatasetAndLeavesNoPartialControlTables" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="0.858"/>
+  <testcase name="room16CollectionMigrationIsAdditiveAndInterruptedDdlRollsBack" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="1.416"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

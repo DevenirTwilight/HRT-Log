@@ -9,24 +9,32 @@ import java.util.UUID
  * key envelopes, a durable generation or current-library pointers. No portable serialization.
  */
 internal object AttachmentCandidateMetadata {
-    fun reconstruct(db:SupportSQLiteDatabase,tables:BackupTables,p:AttachmentRestorePreflight.Plan,checkActive:()->Unit) {
+    /** An archive does not authorize enabling attachments. Existing callers reconstruct OFF;
+     * a trusted activation flow may explicitly validate an enabled candidate. */
+    fun reconstruct(db:SupportSQLiteDatabase,tables:BackupTables,p:AttachmentRestorePreflight.Plan,checkActive:()->Unit) =
+        reconstruct(db,tables,p,0,checkActive)
+
+    fun reconstruct(db:SupportSQLiteDatabase,tables:BackupTables,p:AttachmentRestorePreflight.Plan,
+        featureEnabled:Int,checkActive:()->Unit) {
         RawData.reconstructIsolated(db,tables,checkActive)
         compareBusiness(db,tables,checkActive)
-        write(db,p)
+        write(db,p,featureEnabled)
         val expected=p.manifest.copy(dataset=p.namespace.dataset,epoch=p.namespace.epoch)
         check(read(db)==normalized(expected)) {"Candidate metadata changed history"}
-        verifyTargets(db,p);checkActive()
+        verifyTargets(db,p,featureEnabled);checkActive()
     }
-    fun write(db:SupportSQLiteDatabase,p:AttachmentRestorePreflight.Plan) {
+    fun write(db:SupportSQLiteDatabase,p:AttachmentRestorePreflight.Plan,featureEnabled:Int=0) {
+        require(featureEnabled in 0..1) {"Invalid candidate activation value"}
         check(db.inTransaction())
+        if(featureEnabled==1)check(db.version>=21) {"Enabled candidate requires Room21"}
         val ddl=listOf(
-            "CREATE TEMP TABLE rc_scope(dataset TEXT PRIMARY KEY,epoch TEXT NOT NULL,generation TEXT NOT NULL,vault TEXT NOT NULL,feature_enabled INTEGER NOT NULL CHECK(feature_enabled=0))",
+            "CREATE TEMP TABLE rc_scope(dataset TEXT PRIMARY KEY,epoch TEXT NOT NULL,generation TEXT NOT NULL,vault TEXT NOT NULL,feature_enabled INTEGER NOT NULL CHECK(feature_enabled IN(0,1)))",
             "CREATE TEMP TABLE rc_identity(uuid TEXT PRIMARY KEY,kind TEXT NOT NULL,source_id INTEGER NOT NULL,target_id INTEGER,state TEXT NOT NULL,trash_id INTEGER,evidence TEXT NOT NULL,UNIQUE(kind,target_id))",
             "CREATE TEMP TABLE rc_document(uuid TEXT PRIMARY KEY,revision INTEGER NOT NULL,title TEXT NOT NULL,category TEXT NOT NULL,state TEXT NOT NULL,active TEXT NOT NULL,deleted INTEGER,FOREIGN KEY(uuid,active) REFERENCES rc_version(document,version) DEFERRABLE INITIALLY DEFERRED)",
             "CREATE TEMP TABLE rc_version(document TEXT NOT NULL,ordinal INTEGER NOT NULL,version TEXT PRIMARY KEY,object TEXT NOT NULL UNIQUE,vault TEXT NOT NULL,attempt TEXT NOT NULL,dek TEXT NOT NULL,plain_bytes INTEGER NOT NULL,cipher_bytes INTEGER NOT NULL,plain_hash TEXT NOT NULL,cipher_hash TEXT NOT NULL,mime TEXT NOT NULL,UNIQUE(document,version),UNIQUE(document,ordinal),FOREIGN KEY(document) REFERENCES rc_document(uuid) DEFERRABLE INITIALLY DEFERRED)",
             "CREATE TEMP TABLE rc_link(uuid TEXT PRIMARY KEY,record TEXT NOT NULL,document TEXT NOT NULL,revision INTEGER NOT NULL,state TEXT NOT NULL,FOREIGN KEY(record) REFERENCES rc_identity(uuid),FOREIGN KEY(document) REFERENCES rc_document(uuid))")
         ddl.forEach(db::execSQL)
-        db.execSQL("INSERT INTO rc_scope VALUES(?,?,?,?,0)",arrayOf(p.namespace.dataset.toString(),p.namespace.epoch.toString(),p.namespace.generation.toString(),p.manifest.logicalVault.toString()))
+        db.execSQL("INSERT INTO rc_scope VALUES(?,?,?,?,?)",arrayOf(p.namespace.dataset.toString(),p.namespace.epoch.toString(),p.namespace.generation.toString(),p.manifest.logicalVault.toString(),featureEnabled))
         p.manifest.records.forEach {r->db.execSQL("INSERT INTO rc_identity VALUES(?,?,?,?,?,?,?)",arrayOf(r.uuid.toString(),r.kind.name,r.sourceId,p.mapping.getValue(r.uuid).localId,r.state,r.trashId,r.evidenceSha256))}
         p.manifest.documents.forEach {d->db.execSQL("INSERT INTO rc_document VALUES(?,?,?,?,?,?,?)",arrayOf(d.uuid.toString(),d.revision,d.title,d.category,d.state,d.activeVersion.toString(),d.deletedUtc))}
         p.manifest.versions.forEach {v->db.execSQL("INSERT INTO rc_version VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",arrayOf(v.document.toString(),v.ordinal,v.context.version.toString(),v.context.objectId.toString(),v.context.logicalVault.toString(),v.context.attempt.toString(),v.context.dekHandle.toString(),v.manifest.plaintextBytes,v.manifest.ciphertextBytes,v.manifest.plaintextSha256,v.manifest.ciphertextSha256,v.mime))}
@@ -47,7 +55,8 @@ internal object AttachmentCandidateMetadata {
         val links=rows("SELECT uuid,record,document,revision,state FROM rc_link ORDER BY uuid") {c->AttachmentBackupManifest.Link(c.uuid(0),c.uuid(1),c.uuid(2),c.getLong(3),c.getString(4))}
         return AttachmentBackupManifest(root.first,root.second,root.third,records,documents,versions,links).also {it.validate()}
     }
-    fun verifyTargets(db:SupportSQLiteDatabase,p:AttachmentRestorePreflight.Plan) {
+    fun verifyTargets(db:SupportSQLiteDatabase,p:AttachmentRestorePreflight.Plan,featureEnabled:Int=0) {
+        require(featureEnabled in 0..1) {"Invalid expected candidate activation"}
         for(schema in listOf("main","temp"))db.query("PRAGMA $schema.foreign_key_check").use {check(!it.moveToFirst()) {"Candidate foreign-key closure failed"}}
         db.query("SELECT uuid,kind,target_id,state FROM rc_identity").use {c->while(c.moveToNext()) {
             val id=UUID.fromString(c.getString(0));val t=p.mapping.getValue(id)
@@ -60,7 +69,7 @@ internal object AttachmentCandidateMetadata {
             }
         }}
         db.query("SELECT COUNT(*) FROM attachment_store").use {check(it.moveToFirst() && it.getLong(0)==0L)}
-        db.query("SELECT feature_enabled FROM rc_scope").use {check(it.moveToFirst() && it.getLong(0)==0L)}
+        db.query("SELECT feature_enabled FROM rc_scope").use {check(it.moveToFirst() && it.getLong(0)==featureEnabled.toLong() && !it.moveToNext())}
     }
     /** Exact full-row multiset comparison, not counts/hashes or a second business validator.
      * This local scalar notation is NOT the pending portable canonical manifest grammar.

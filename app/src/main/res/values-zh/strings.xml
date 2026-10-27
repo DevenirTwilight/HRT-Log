@@ -1115,7 +1115,7 @@
     <string name="privacy_notice_export_title">导出文件不加密</string>
     <string name="privacy_notice_export_body">CSV、PDF 报告和就诊资料包导出的都是明文文件。保存位置由你在 Android 文件选择器中决定，该位置可能属于云服务或其他应用。保存之后，HRT 日志 无法控制、保护或收回这些副本。</string>
     <string name="privacy_notice_backup_title">加密备份（.pnbak）</string>
-    <string name="privacy_notice_backup_body">备份使用你设置的密码加密（Argon2id，32 MiB、3 轮，然后 AES-256-GCM）。备份包含你的结构化记录，回收站中的项目在清除前也包含在内；不包含私密笔记、伪装“笔记”中的文字、设置或医疗附件文件（应用不保存附件）。忘记的备份密码无法找回。</string>
+    <string name="privacy_notice_backup_body">备份使用你设置的密码加密（Argon2id，32 MiB、3 轮，然后 AES-256-GCM）。普通 .pnbak 备份包含结构化记录，但不包含医疗附件、私密笔记、伪装笔记中的文字或设置。医疗文件单独加密保存在这台设备上；完整医疗备份（.pnmedbk2，PNMEDBK2）可包含受支持的附件。系统文件选择器可能把备份存到其他应用或云服务。解除关联不会删除已保存的文件或释放空间。忘记的备份密码无法找回。</string>
     <string name="privacy_notice_import_title">导入</string>
     <string name="privacy_notice_import_body">Trans Memo 和 HRT Tracker 文件只有在你通过 Android 文件选择器选中后才会被读取。Trans Memo 文件会被复制到应用的私有存储中读取，读取完成后删除该副本。</string>
     <string name="privacy_notice_notify_title">通知</string>
@@ -1125,7 +1125,7 @@
     <string name="privacy_notice_delete_title">删除数据</string>
     <string name="privacy_notice_delete_body">“删除全部数据”会删除这台手机上的记录数据库及其密钥，以及应用设置、提醒与库存提醒数据、应用锁和伪装设置；卸载应用会删除应用数据。你导出的文件、保存的备份，以及其他应用或云服务中的副本不会被删除。</string>
     <string name="privacy_notice_changes_title">如果应用发生变化</string>
-    <string name="privacy_notice_changes_body">将来如果加入医疗文件存储、同步、分享或建议类功能，会在发布前更新并复核本说明。</string>
+    <string name="privacy_notice_changes_body">目前支持医疗文件存储。未来新增同步、分享或建议功能前，需要重新审核并更新本说明。</string>
     <!-- UI-01 (2026-10-15) -->
     <string name="today_progress">已服 %1$d / %2$d</string>
     <string name="today_next">下一次</string>

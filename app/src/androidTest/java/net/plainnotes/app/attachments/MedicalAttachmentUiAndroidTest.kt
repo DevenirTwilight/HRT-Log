@@ -165,7 +165,7 @@ class MedicalAttachmentUiAndroidTest {
                 try {withContext(Dispatchers.IO) {staleRead.readAt(0,zeros,0,zeros.size)};fail("Old page read after data switch")}catch(_:IllegalStateException) {}
                 assertTrue(zeros.all {it==0.toByte()})
                 staleRead.close();staleFlow.close()
-                assertEquals(0,a.fixture.access.get(Space.PRIMARY).openHelper.writableDatabase.query("SELECT feature_enabled FROM attachment_store WHERE store_state='CURRENT'").use {it.moveToFirst();it.getInt(0)})
+                assertEquals(1,a.fixture.access.get(Space.PRIMARY).openHelper.writableDatabase.query("SELECT feature_enabled FROM attachment_store WHERE store_state='CURRENT'").use {it.moveToFirst();it.getInt(0)})
             }finally {scenario.close();activity?.fixture?.let(::cleanup)}
         }
     }

@@ -1115,7 +1115,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="privacy_notice_export_title">Exports are not encrypted</string>
     <string name="privacy_notice_export_body">CSV, PDF report and visit pack exports are plain files. You choose where to save them in Android\'s file picker, and that place may belong to a cloud service or another app. Once saved, HRT Log cannot control, protect or take back those copies.</string>
     <string name="privacy_notice_backup_title">Encrypted backups (.pnbak)</string>
-    <string name="privacy_notice_backup_body">A backup is encrypted with the password you choose (Argon2id with 32 MiB and 3 passes, then AES-256-GCM). It contains your structured records, including items in the recycle bin until you purge them. It does not contain private notes, Notes disguise text, settings or medical file attachments; the app does not store attachments. A forgotten backup password cannot be recovered.</string>
+    <string name="privacy_notice_backup_body">A backup is encrypted with the password you choose (Argon2id with 32 MiB and 3 passes, then AES-256-GCM). The ordinary .pnbak backup includes structured records but excludes medical attachments, private notes, Notes disguise text and settings. Medical files are stored encrypted on this device. A separate complete medical backup (.pnmedbk2, PNMEDBK2) is available for the supported files. The system file picker may save backups to another app or a cloud provider. Removing a link does not erase a saved medical file or reclaim space. Lost backup passwords cannot be recovered.</string>
     <string name="privacy_notice_import_title">Imports</string>
     <string name="privacy_notice_import_body">Trans Memo and HRT Tracker files are read only after you pick them in Android\'s file picker. A Trans Memo file is copied into the app\'s private storage to be read, and that copy is deleted afterwards.</string>
     <string name="privacy_notice_notify_title">Notifications</string>
@@ -1125,7 +1125,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
     <string name="privacy_notice_delete_title">Deleting data</string>
     <string name="privacy_notice_delete_body">“Delete all data” removes the records database and its key on this phone, together with the app\'s settings, reminder and stock-alert data, app lock and disguise settings; uninstalling removes the app\'s data. Files you exported, backups you saved and copies held by other apps or cloud services are not removed.</string>
     <string name="privacy_notice_changes_title">If the app changes</string>
-    <string name="privacy_notice_changes_body">If medical file storage, sync, sharing or advice features are ever added, this notice will be updated and reviewed before they are released.</string>
+    <string name="privacy_notice_changes_body">Medical file storage is supported. Changes to synchronization, sharing or advice functions require a new review and an updated notice before release.</string>
     <!-- UI-01 (2026-10-15) -->
     <string name="today_progress">%1$d of %2$d taken</string>
     <string name="today_next">Next</string>

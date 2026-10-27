@@ -4014,3 +4014,60 @@ Stage C final ownership check: presentation hide now also cancels a chosen-but-u
 仅测试最小补丁增加严格本地化Recent+可见导航+空dir_list且drawer未开条件；仍30秒，所有真实SAF/目录/文件身份/密码/COMMIT/重开/幂等断言保留。本地AndroidTest编译进行中，尚无新源原生PASS。下一步编译成功后一次推送最终HEAD，读取自动必要CI及低内存结果，不另开PR、不循环重跑。全门槛成功无审查/冲突后按106正常Ready/保护合并并查主线；失败保留Draft和精确阻断。F01–03修复保留，F04 POTENTIAL、历史LMK根因未知、真机/TalkBack/硬断电/独立外审未跑；feature0/publicfalse/NOT_REVIEWED_EXTERNALLY/RELEASE_NOT_AUTHORIZED。
 
 本次测试补丁本地 `:app:compileFullDebugAndroidTestKotlin` PASS（2m42s），只证明编译；真实SAF/低内存及最终必需CI仍待新HEAD，不冒充原生通过。
+
+
+## MED-02 production activation 实施中 — 2026-10-27
+
+工作树/workspace/HRT-Log-med02-activation，feature/med02-production-activation，基线f0c4ea9a（主线三工作流PASS）。已开始真实生产代码：Room21迁移链、AttachmentActivationSchema安装扩展原store触发器合法0/1（保留其他约束）、事务内校验当前dataset/epoch的显式activate；迁移不自动启用或改写临床数据。SchemaGuards在21打开时安装兼容约束；旧版本Room拒绝21回退。新增迁移边/错scope/非法flag/事务回滚测试。当前仅数据库底座在实现，UI仍OFF；compileDebugKotlin运行中，测试/恢复/正式导航/管理/隐私/内部准入/Release/CI未完成，不可Ready或合并。必须继续备份元数据0约束兼容审查、真实入口和全部验收，不能将这一切片冒充产品完成。新政策已记154，外审事实保留，永久删除与公开发行未授权。
+
+Room21底座本地compileDebugKotlin PASS；新增AttachmentActivationTest PASS，验证旧OFF guard拒绝1、20→21 guard扩展不变身份、错误dataset拒绝、非法2拒绝、未提交回滚无残留。首个测试源码误用Room.use导致编译FAIL，已改显式try/finally.close，未改断言；后续定向测试PASS。仍未证明真实旧文件升级/恢复/完整产品路径，保持正式入口OFF，未创建可合并PR。
+
+正式导航续作：VisitsScreen就诊详情接MedicalAttachmentRecordPage，用现有AppointmentEntity.id；MedicalLabDetail接单项LabValue.id，LabsScreen与医疗中心共用该宿主，严格不传panel_id。两入口仍受PUBLIC_ENTRY_ENABLED保护，尚未开放。LabDetailDialog保留原四参API，新带附件回调版本独立命名，避免破坏原产品/测试调用；编译中发现的缺布局import/旧签名兼容问题已修正。隔离守卫改为只允许ShellHosts与VisitsScreen这两个审核过的记录宿主引用scoped Page，仍拒绝其他来源/直接网关/控制器，debug与manifest守卫保留。实际MainActivity导航原生测试未运行。
+
+更正上一轮错误推断：AttachmentCandidateMetadata.rc_scope.feature_enabled=0是始终隔离的TEMP候选表，不是源归档生产flag字段，write始终显式0，不能视为已证明的完整恢复阻塞；不放松该隔离约束。真正生产启用及恢复后授权接线仍须实现/验证。不得据此直接翻PUBLIC开关；当前正式产品仍未完成。
+
+继续正式产品接线（2773b645之后）：DataSection增加现有MedicalLibraryTransferPage的受门控入口，AppShell传入MainActivity的onLibraryReopen，成功切库不复用旧ViewModel。MedicalAttachmentOperations新增activate，复用work/cap/AttachmentTransaction权限与当前scope校验；生产RuntimeAttachmentGateway在列表/选择及新导入前幂等激活，仅PUBLIC门开启时调用，UNKNOWN reconcile不激活。UPDATE限定feature_enabled=0，避免重复读取造成store失效循环。当前UI/持久自动激活条件仍由PUBLIC=false关闭，正式启用需管理/完整端到端验收，不能宣称产品完成。第一次新接线编译+UI guard PASS；最终微调后core activation+UI guard定向回归正在执行。没有KDF/格式/配额变更。
+
+最终上述定向回归PASS（17秒，core AttachmentActivationTest及app MedicalAttachmentUiGuardTest）；仅JVM/编译证据，不代替MainActivity原生验收。
+
+
+## PR133 Room21 retained-library compatibility follow-up — 2026-10-27
+
+On HEAD 63ad86b2, API26/29 native CI failed original lifecycle/collection tests: clean retained library expectation REFUSED observed UNKNOWN; full collection export saw OWNER_OR_SET_NOT_PROVEN. An inspection found LibraryResourceFacts.scan and LibraryCollectionCapture hardcoded supported retained SQLCipher database versions 15..20 even though current Room is 21. Bounded code patch accepts version 21 in both retained readers, without changing credential handling, archive framing, authentication, ownership proof, record/attachment data or quota. Root-cause hypothesis needs confirmation by exact new-SHA original native tests; prior failures remain recorded, not waived. Public attachment entry still OFF until unlink, four-language/privacy synchronization, real MainActivity SAF/restore E2E, review and required final CI pass. No signed/released APK.
+
+
+## PR133 single-link management UI — 2026-10-27
+
+Production MedicalAttachmentRecordPage now offers explicit user confirmation before retracting a single current-record link. The existing scoped RuntimeAttachmentGateway/AttachmentFlowController/MedicalAttachmentOperations perform the transaction; list view hides retracted links; the controller represents possible post-commit uncertainty without replaying unlink. Ciphertext, document metadata, other relationships, backup content and storage budget remain intact. Added targeted native facade regression in previous commit. Pending fresh-source compile/CI, 4-language notices and final integration E2E; public entry still OFF at this checkpoint.
+
+
+## PR133 bounded production entry conversion — 2026-10-27
+
+The production-activation branch now sets AttachmentFlowController.PUBLIC_ENTRY_ENABLED=true after adding Room21 scoped activation, real visit/individual LAB + full medical-transfer routes, non-destructive exact-link retraction UI/transaction and four-locale privacy notice. This is SOURCE ENABLEMENT IN DRAFT PR, NOT a merged user installation or PUBLIC RELEASE. Preserved authenticating runtime/capability/dataset/epoch gates, existing backup protection, no INTERNET, and test/demo release isolation. PRIVACY.md and docs/privacy-evidence.md now distinguish ordinary PNBAK1 from full PNMEDBK2; unlink retains object/space. Required precise final HEAD compilation, native MainActivity SAF/backup recovery/E2E and security CI must pass before protected merge. F04 POTENTIAL, external audit NOT_REVIEWED_EXTERNALLY, physical/TalkBack/hard-power-loss NOT_RUN; no signed APK or public Release authorized.
+
+
+## PR133 最终产品验收接手 — 2026-10-27
+
+实时远端df0aacf0，独立工作树/workspace/HRT-Log-med02-activation，初始clean，无本地修改丢失。公共入口ON保留。该源JVM/Science/四API安全专项/Featherline512MiB PASS；library低内存FAIL在旧合同要求QUARANTINED关联仍列出；三API原生FAIL在旧PUBLIC=false断言，并非retained15..21修复再次失败。原件40505845804/40505846101，原job日志在本次产品验收evidence。修正旧假设同时加强对持久QUARANTINED保留/不可读取/无关LAB不受影响的检查，未改变生产列表、完整导出或归属守卫。另更新现有合成RuntimeGateway合同的真实激活flag=1。
+
+补齐真正缺失的MainActivity正式入口原生合同（非合成UI宿主）：显式就诊及LAB(panel id不同)、真实DocumentsUI/确认/COMMIT/重开/认证像素/单条解除，以及真实运行时PNMEDBK2导出、认证恢复、新Activity/旧scope拒绝和恢复后关联。仅文件provider和种子医疗事实为合成；归档适配器使用真实生产代码，但未将其直接调用冒充归档SAF按钮端到端。以现有三API工作流执行一次，保留独立XML。另补从发布Room20 schema实际创建的升级/回滚/旧reader拒绝合同，复用现有JVM及SQLCipher原生迁移套件。当前编译/定向回归进行中，新增原生均PENDING，不能Ready或合并。真实设备/TalkBack/硬断电NOT_RUN；无签名交付发布授权。
+
+定向编译/回归完成：App/core AndroidTest编译PASS；AttachmentActivationTest、MedicalAttachmentUiGuardTest PASS；实际发布Room20→21迁移合同1 PASS（0 fail/error/skip）；Python Release隔离5 PASS。必要证据与真实MainActivity合同范围见docs/medical-attachments/2026-10-27/product-activation/acceptance.md。下一步推送这一候选读取自动CI；新入口/迁移原生未运行前不标PASS。源码冻结后最终状态以#133精确HEAD Actions及PR正文链接的不可变最终receipt为准，不将历史PENDING段落视为实时远端结论。
+
+## PR133 主机与真实产品验收精确修复 — 2026-10-27
+
+旧df主机最终21 core+1 app FAIL原HTML已入库：最新版Room断言仍20、注入迁移链未延伸21、0/1合法范围旧负向、两条批准隐私文案使UI08整文件摘要不匹配。逐一修正当前版本/链尾/非法值2；保留所有历史输入、注入reached与回滚断言。隐私只按批准的每元素SHA精确归一，两条外全部原PDF/资源摘要不变。由此真正复现六条历史升级Missing attachment store guard：生产20→21事务先复用AttachmentSchema.install标准守卫安装，再扩展激活，未新Schema或改事实。105项数据+8项四语确认+1项PDF冻结PASS，本地后续controller/activation及AndroidTest编译PASS。首次新单测缺少scroll父项的夹具误用也保留失败，不称产品缺陷。
+
+31fd原生：library512MiB实际14项PASS但旧脚本只接受13，严格计数同步14；Featherline512MiB PASS。三API真实MainActivity测试保留失败：26/29已走通就诊SAF/COMMIT/新Activity/认证PNG，到解除关联两动作同行处timeout，现拆行及补实际语义树；发现可见UNKNOWN时只允许现有只读核对，不重放。35在SAF取消回调丢失，Page误将MainActivity已在onStart消费的lock豁免当结果授权；两Page改核对awaiting owner+generation+runtime，而不是要求豁免尚未消费。底层权限/实际commit守卫不变。下一步推这一实际修复，验收新SHA必要CI与真实路径；尚不可Ready。local Release在并行任务时Gradle daemon消失，NOT_COMPLETED、根因未知，原日志保留；以最终CI无签名Release为准。公共入口始终ON，不签名/交付/发版/销毁。
+
+## PR133 正式页触摸区域与Release守卫修正 — 2026-10-27
+
+3e三API均到解除确认的第二动作247行FAIL；结合实际宿主源码定位VisitDetail附件分支没有消费Scaffold contentPadding，预览关闭按钮处于顶栏菜单触摸区。最小Box.padding修复，原生新增真实close/menu坐标不重叠及viewer实际消失断言，避免语义存在却触摸错控件。还区分DocumentsUI根抽屉Back和真正取消，仍全部真实SAF。当前compileFullDebugAndroidTestKotlin PASS。Standalone serial unsigned FullRelease在3e PASS(8m30s)，Manifest身份/NoINTERNET PASS；旧B2全局禁止Tink标记在正式入口启用后误拒绝已批准生产依赖，按144/154只将Tink DEX命名空间归类为正式依赖，Manifest仍拒绝，所有真实PoC/provider/test/资源禁止保留，并补批准库混合测试标记仍拒绝等负向；6Python及现有实际unsigned APK隔离PASS，不交付且该APK不是下一候选源码。
+
+3e library低内存整条工作流SUCCESS；Featherline低内存真实LMK（PID3849，错误密码拒绝后、下一次认证前，kernel anon245648KiB不是峰值）。kernel/logcat/memory/native原件入库，没有声称修复或排除所有根因，没有动Importer/KDF或预算。下一次是随真实MED02源码修正的正常最终CI，不进行同源反复筛绿；若仍有实际阻断精准处理/如实保留。公共入口ON，Ready/合并仍等准确最终六门/受影响原生与安全验收。最终状态以#133精确HEAD及正文的永久receipt为准。
+
+PR133 LAB导航最小收敛：源审计发现LabsScreen内部详情的附件按钮只设置medicalDialogs.lab，外层MedicalLabDetail又默认打开详情，导致重复中间页。增加仅内存的labAttachmentTarget（明确LabValue ID，非panel ID），仅该按钮预置为附件目的地，宿主dispose清除匹配意图；普通就诊/医疗中心的查看化验详情入口保持原行为。App/core不增Schema、无持久化新状态。App AndroidTest编译和MedicalAttachmentUiGuardTest PASS（32秒）；最终同源MainActivity单次附件按钮→LAB=2/panel=1的实际路径仍以CI为准，不能仅凭编译称PASS。
+
+PR133 a0真实MainActivity API35已通过就诊SAF/COMMIT/新Activity/认证预览、真实关闭与指定关联解除，进入LAB。新失败原完整语义树证明：result2行bounds(32,489)-(288,555)中心(160,522)被lab-open-batch悬浮按钮(141,520)-(304,576)覆盖，测试触摸错开新增表单并无保存。只改原生用例，点击真实语义行左20%未遮挡区域，仍走MainActivity/详情/附件/SAF，所有LAB目标身份/实际COMMIT/重开/恢复断言保留；没有调用VM或直接URI替代，未修改无关Labs UI。11秒AndroidTest编译PASS。原XML含完整树/原logcat/工件SHA已入evidence/a0fd447d。a0四API安全专项PASS、Featherline512MiB PASS（不抵消3e LMK历史），最终仍待这一测试输入修正后的精确SHA全部门槛。
+
+PR133 155 API29真实流程已通过就诊全链、LAB=2/panel=1 SAF/COMMIT/认证读取、PNMEDBK2真实导出/认证prepare/实际root COMMIT、旧scope拒绝及新MainActivity作用域初始化。最后测试在新Activity仅runtime Ready后立即performScrollTo查恢复后的row2，尚未等待异步NotesViewModel医疗快照，出现即时缺节点（无等待），原XML/工件SHA已入evidence/155043ff。只补有界可观察等待：state非loading且extra中存在该LAB、真实语义节点已组成；随后保持全部原触摸/恢复附件UUID/认证像素/保留解除关系断言，不引入sleep/重放/跳过，不改生产代码。新AndroidTest编译PASS（9秒）。继续最终精确源码CI，公共入口ON，不能把部分完成写为整个用例PASS。

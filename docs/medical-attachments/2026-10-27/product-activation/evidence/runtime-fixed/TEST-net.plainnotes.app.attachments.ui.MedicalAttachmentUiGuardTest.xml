@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.attachments.ui.MedicalAttachmentUiGuardTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-27T13:17:31.014Z" hostname="42f8489b32d3" time="0.1">
+  <properties/>
+  <testcase name="wordingIsCalmAndHonestInAllLanguages" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentUiGuardTest" time="0.023"/>
+  <testcase name="onlyReviewedProductionHostsReferenceScopedUi" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentUiGuardTest" time="0.069"/>
+  <testcase name="uiPackageHasNoStorageKeysPathsOrSecondDecryption" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentUiGuardTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

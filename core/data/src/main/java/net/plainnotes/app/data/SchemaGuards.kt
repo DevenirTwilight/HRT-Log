@@ -55,6 +55,7 @@ object SchemaGuards : RoomDatabase.Callback() {
         LibraryLifecycleSchema.install(db)
         LibraryCollectionSchema.install(db)
         AttachmentSchema.install(db)
+        AttachmentActivationSchema.install(db)
         ReferenceSchema.install(db)
         InventoryEncoding.install(db)
         ExternalImportSchema.install(db)

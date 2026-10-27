@@ -45,7 +45,11 @@ class MedicalAttachmentOperationAndroidTest {
                 val current=service.open(cap,target,r.document);service.trash(cap,r.document,2)
                 reject {current.readAt(0,bytes,0,bytes.size)};current.close()
                 service.restore(cap,r.document,3)
-                assertEquals("QUARANTINED",service.documents(cap,target).single().linkState)
+                assertTrue("Restoring content never re-associates it with the current record",service.documents(cap,target).isEmpty())
+                f.raw.query("SELECT state FROM attachment_link WHERE document_uuid=?",arrayOf(r.document.toString())).use {
+                    assertTrue(it.moveToFirst());assertEquals("QUARANTINED",it.getString(0));assertFalse(it.moveToNext())
+                }
+                assertEquals(1,service.documents(cap,labTarget).size) // Unrelated active relationship remains visible.
                 reject {runBlocking {service.open(cap,target,r.document)}} // Restore is not automatic reassociation.
                 assertEquals(MedicalAttachmentOperations.Export.COMPLETE,service.exportEligibility(cap))
                 val out=ByteArrayOutputStream();val password="SYNTHETIC facade archive".toCharArray()
@@ -55,6 +59,30 @@ class MedicalAttachmentOperationAndroidTest {
                     assertTrue(a.wholeArchiveAuthenticated);assertEquals(3,a.manifest().versions.size)
                 }}finally {file.delete();password.fill('\u0000')}
                 assertEquals(0L,f.raw.query("SELECT feature_enabled FROM attachment_store WHERE store_state='CURRENT'").use {it.moveToFirst();it.getLong(0)})
+            }finally {cap.close()}
+        }
+    }
+    @Test fun explicitUnlinkRetainsCiphertextAndOtherAttachments()=runBlocking {
+        LibraryRestoreAndroidTest.RootFixture(app).use {f->
+            val repo=NotesRepository(f.access).forGeneration(scope(f)).pinnedTo(Space.PRIMARY)
+            val service=repo.medicalAttachments()
+            val target=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,2)
+            val cap=f.session.issue()
+            try {
+                val first=MedicalAttachmentOperations.Import(UUID.randomUUID(),UUID.randomUUID(),target,"SYNTHETIC unlink first")
+                val second=MedicalAttachmentOperations.Import(UUID.randomUUID(),UUID.randomUUID(),target,"SYNTHETIC unlink second")
+                service.import(cap,first,uri("unknown"))
+                service.import(cap,second,uri("unknown"))
+                assertEquals(2,service.documents(cap,target).size)
+                assertTrue(service.unlink(cap,target,first.document))
+                assertFalse(service.unlink(cap,target,first.document))
+                assertEquals(listOf(second.document),service.documents(cap,target).map {it.document})
+                reject {runBlocking {service.open(cap,target,first.document)}}
+                val opened=service.open(cap,target,second.document);opened.close()
+                f.raw.query("SELECT state FROM attachment_document WHERE document_uuid=?",arrayOf(first.document.toString()))
+                    .use {assertTrue(it.moveToFirst());assertEquals("ACTIVE",it.getString(0))}
+                f.raw.query("SELECT state FROM attachment_link WHERE document_uuid=?",arrayOf(first.document.toString()))
+                    .use {assertTrue(it.moveToFirst());assertEquals("RETRACTED",it.getString(0))}
             }finally {cap.close()}
         }
     }

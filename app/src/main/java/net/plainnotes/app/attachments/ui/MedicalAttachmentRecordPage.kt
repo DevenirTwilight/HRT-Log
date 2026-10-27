@@ -22,7 +22,7 @@ import net.plainnotes.app.data.MedicalAttachmentOperations
 import net.plainnotes.app.security.Session
 import net.plainnotes.app.security.launchPicker
 
-/** Compiled real-record candidate, intentionally unreachable from release navigation.
+/** Production real-record page; runtime authorization and scoped activation remain mandatory.
  * OFF is checked before the ViewModel/runtime is touched. No URI or capability is saved. */
 @Composable internal fun MedicalAttachmentRecordPage(model:NotesViewModel,target:MedicalAttachmentOperations.Target,targetLabel:String,onBack:()->Unit) {
     if(!AttachmentFlowController.PUBLIC_ENTRY_ENABLED)return
@@ -34,7 +34,13 @@ import net.plainnotes.app.security.launchPicker
     var awaiting by remember(controller) {mutableStateOf(false)}
     val title=stringResource(if(target.kind==MedicalAttachmentOperations.Kind.LAB)R.string.attach_default_lab else R.string.attach_default_visit)
     val picker=key(controller) {rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {result->
-        val accepted=awaiting && Session.consumePicker(generation)
+        // MainActivity consumes the one-shot lock exemption in onStart. ActivityResult
+        // delivery can precede OR follow it across Android versions. That exemption is
+        // not the result's authority: the pending owner, session and scoped runtime are.
+        val accepted=awaiting && generation==Session.generation &&
+            Session.target!=net.plainnotes.app.security.UnlockTarget.PRIVATE &&
+            runCatching {model.libraryRuntime.checkRequest()}.isSuccess
+        Session.consumePicker(generation)
         awaiting=false
         if(accepted)controller.picked(result,title)
     }}
@@ -53,7 +59,7 @@ import net.plainnotes.app.security.launchPicker
     }},onExit=onBack)
 }
 
-/** Shared by the OFF production candidate and the existing guarded synthetic host.
+/** Shared by the production page and the existing guarded synthetic host.
  * The caller supplies its already-scoped controller; no alternate authorization exists here. */
 @Composable internal fun MedicalAttachmentRecordContent(controller:MedicalAttachmentsController,targetLabel:String,onAdd:()->Unit,onExit:(()->Unit)?=null) {
     val state by controller.state.collectAsState()
@@ -64,7 +70,8 @@ import net.plainnotes.app.security.launchPicker
         Column(Modifier.padding(16.dp).fillMaxSize().verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             MedicalAttachmentsSection(state,targetLabel,onAdd=onAdd,onConfirm=controller::confirmImport,
                 onCancelImport=controller::cancelImport,onCheckStatus=controller::checkStatus,
-                onDismissMessage=controller::dismissImportMessage,onRetry=controller::refresh,onOpen=controller::open)
+                onDismissMessage=controller::dismissImportMessage,onRetry=controller::refresh,onOpen=controller::open,
+                onUnlink=controller::unlink,onDismissUnlinkMessage=controller::dismissUnlinkMessage)
         }
         MedicalAttachmentViewer(state.viewer,controller::closeViewer)
     }

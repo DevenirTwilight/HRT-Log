@@ -24,6 +24,7 @@ import net.plainnotes.app.attachments.ui.MedicalAttachmentsController.Import
 import net.plainnotes.app.attachments.ui.MedicalAttachmentsController.Item
 import net.plainnotes.app.attachments.ui.MedicalAttachmentsController.Reason
 import net.plainnotes.app.attachments.ui.MedicalAttachmentsController.Viewer
+import net.plainnotes.app.attachments.ui.MedicalAttachmentsController.UnlinkStatus
 import net.plainnotes.app.attachments.ui.MedicalAttachmentsController.State as AttachmentsState
 import net.plainnotes.app.ui.GroupedItem
 import net.plainnotes.app.ui.NotesTheme
@@ -34,7 +35,9 @@ import net.plainnotes.app.ui.StatusPill
  * owns the work. Encryption details stay out of the UI. Not reachable from release navigation.
  */
 @Composable internal fun MedicalAttachmentsSection(state:AttachmentsState,targetLabel:String,onAdd:()->Unit,onConfirm:(String)->Unit,onCancelImport:()->Unit,
-    onCheckStatus:()->Unit,onDismissMessage:()->Unit,onRetry:()->Unit,onOpen:(Item)->Unit,modifier:Modifier=Modifier) {
+    onCheckStatus:()->Unit,onDismissMessage:()->Unit,onRetry:()->Unit,onOpen:(Item)->Unit,modifier:Modifier=Modifier,
+    onUnlink:((Item)->Unit)?=null,onDismissUnlinkMessage:()->Unit={}) {
+    var pendingUnlink by remember {mutableStateOf<Item?>(null)}
     Column(modifier.fillMaxWidth().testTag("attachments"),verticalArrangement=Arrangement.spacedBy(12.dp)) {
         Text(stringResource(R.string.attach_section),style=MaterialTheme.typography.titleMedium,modifier=Modifier.semantics {heading()})
         when {
@@ -42,6 +45,13 @@ import net.plainnotes.app.ui.StatusPill
             state.revoked->Notice(stringResource(R.string.attach_hidden),"attachments-hidden")
             else-> {
                 ImportStatus(state.import,onCheckStatus,onDismissMessage)
+                when(state.unlinkStatus) {
+                    UnlinkStatus.WORKING->Notice(stringResource(R.string.attach_unlink_working),"attachments-unlink-status")
+                    UnlinkStatus.REMOVED->Message(stringResource(R.string.attach_unlink_done),Modifier.testTag("attachments-unlink-status"),onDismissUnlinkMessage)
+                    UnlinkStatus.REMOVED_LIST_STALE->Message(stringResource(R.string.attach_unlink_list_stale),Modifier.testTag("attachments-unlink-status"),onDismissUnlinkMessage)
+                    UnlinkStatus.UNKNOWN->Notice(stringResource(R.string.attach_unlink_unknown),"attachments-unlink-status")
+                    UnlinkStatus.IDLE->{}
+                }
                 when(val files=state.files) {
                     Files.Loading->LinearProgressIndicator(Modifier.fillMaxWidth().testTag("attachments-loading"))
                     Files.Failed->Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
@@ -50,9 +60,15 @@ import net.plainnotes.app.ui.StatusPill
                     }
                     is Files.Ready->if(files.items.isEmpty())
                         Text(stringResource(R.string.attach_empty),color=MaterialTheme.colorScheme.onSurfaceVariant,modifier=Modifier.testTag("attachments-empty"))
-                    else Column(verticalArrangement=Arrangement.spacedBy(2.dp)) {files.items.forEachIndexed {i,item->AttachmentRow(item,i,files.items.size,onOpen)}}
+                    else Column(verticalArrangement=Arrangement.spacedBy(2.dp)) {files.items.forEachIndexed {i,item->
+                        AttachmentRow(item,i,files.items.size,onOpen,
+                            onUnlink=if(onUnlink!=null && state.unlinkStatus==UnlinkStatus.IDLE &&
+                                state.import !is Import.Confirming &&
+                                state.import !in setOf(Import.Saving,Import.Checking,Import.Unknown)) ({pendingUnlink=item}) else null)
+                    }}
                 }
-                val saving=state.import==Import.Saving || state.import==Import.Checking || state.import==Import.Unknown
+                val saving=state.import==Import.Saving || state.import==Import.Checking || state.import==Import.Unknown ||
+                    state.unlinkStatus in setOf(UnlinkStatus.WORKING,UnlinkStatus.UNKNOWN)
                 Button(onAdd,Modifier.heightIn(min=48.dp).testTag("attachments-add"),enabled=!saving && state.import !is Import.Confirming) {
                     Icon(Icons.Outlined.Add,null);Spacer(Modifier.width(8.dp));Text(stringResource(R.string.attach_add))
                 }
@@ -60,6 +76,15 @@ import net.plainnotes.app.ui.StatusPill
         }
     }
     (state.import as? Import.Confirming)?.takeIf {!state.revoked}?.let {ConfirmDialog(it.title,targetLabel,onConfirm,onCancelImport)}
+    pendingUnlink?.takeIf {!state.revoked && !state.ended && state.unlinkStatus==UnlinkStatus.IDLE}?.let {item->
+        AlertDialog(onDismissRequest={pendingUnlink=null},
+            title={Text(stringResource(R.string.attach_unlink_title))},
+            text={Text(stringResource(R.string.attach_unlink_explain,item.title))},
+            confirmButton={TextButton(onClick={pendingUnlink=null;onUnlink?.invoke(item)},modifier=Modifier.testTag("attachments-unlink-confirm")) {
+                Text(stringResource(R.string.attach_unlink_action))
+            }},
+            dismissButton={TextButton(onClick={pendingUnlink=null}) {Text(stringResource(R.string.cancel))}})
+    }
 }
 
 @Composable private fun Notice(text:String,tag:String) {
@@ -92,10 +117,11 @@ import net.plainnotes.app.ui.StatusPill
 }
 
 /** Sample 06 (docs/design/claude-ui-2026-10-17): a tinted file tile, title, type line; unavailable files say so in grey. */
-@Composable private fun AttachmentRow(item:Item,index:Int,count:Int,onOpen:(Item)->Unit) {
+@Composable private fun AttachmentRow(item:Item,index:Int,count:Int,onOpen:(Item)->Unit,onUnlink:(()->Unit)?=null) {
     val kind=stringResource(when(item.kind) {FileKind.PDF->R.string.attach_kind_pdf;FileKind.IMAGE->R.string.attach_kind_image;FileKind.OTHER->R.string.attach_kind_other})
     val status=stringResource(if(item.available)R.string.attach_status_saved else R.string.attach_status_unavailable)
     val description=stringResource(R.string.attach_item_description,item.title,kind,status)
+    Column {
     GroupedItem(index,count,onClick=if(item.available) ({onOpen(item)}) else null) {
         Row(Modifier.fillMaxWidth().heightIn(min=72.dp).padding(horizontal=16.dp,vertical=12.dp).testTag("attachment:${item.document}")
             .clearAndSetSemantics {contentDescription=description;if(item.available)role=Role.Button},
@@ -107,6 +133,10 @@ import net.plainnotes.app.ui.StatusPill
                 if(!item.available)Text(status,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.outline)
             }
         }
+    }
+    onUnlink?.let {action->TextButton(action,modifier=Modifier.heightIn(min=48.dp).testTag("attachment-unlink:${item.document}")) {
+        Text(stringResource(R.string.attach_unlink_action))
+    }}
     }
 }
 

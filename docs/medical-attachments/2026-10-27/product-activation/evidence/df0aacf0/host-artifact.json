@@ -1,0 +1,11 @@
+{
+  "sourceSha": "df0aacf0ef52faccf7233cb5a88e627abb7482c3",
+  "run": 40505845804,
+  "artifact": 12734934368,
+  "sha256": "8f62d54657e4634fc5eec0e451a2c50dd1e5293ffdc2e24aa168fd5f09ee3e37",
+  "zipCrc": "PASS",
+  "coreFailures": 21,
+  "appFailures": 1,
+  "rawHtmlRetained": "selected unmodified originals in this directory",
+  "note": "No APK or user data committed; test files are synthetic."
+}

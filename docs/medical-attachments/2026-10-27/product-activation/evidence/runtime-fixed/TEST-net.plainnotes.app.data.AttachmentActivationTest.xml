@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.AttachmentActivationTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-27T13:17:19.638Z" hostname="42f8489b32d3" time="4.333">
+  <properties/>
+  <testcase name="migrationPreservesIdentityAndActivationRefusesOtherDatasetsAndInvalidFlags" classname="net.plainnotes.app.data.AttachmentActivationTest" time="3.807"/>
+  <testcase name="reconstructedCandidateRequiresExplicitMatchingActivationState" classname="net.plainnotes.app.data.AttachmentActivationTest" time="0.178"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

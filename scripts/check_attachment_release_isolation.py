@@ -7,13 +7,16 @@ R8 must not be relied on to remove an accidentally registered experimental provi
 from pathlib import Path
 import zipfile
 
-FORBIDDEN=(b'net/plainnotes/poc/', b'net.plainnotes.poc.', b'com/google/crypto/tink/',
-           b'com.google.crypto.tink.', b'SYNPOC01', b'DRAFT-ONLY-OBJ0!', b'B2-TEST-ONLY',
+FORBIDDEN=(b'net/plainnotes/poc/', b'net.plainnotes.poc.', b'SYNPOC01', b'DRAFT-ONLY-OBJ0!', b'B2-TEST-ONLY',
            b'SyntheticStreamProvider', b'attachmentpoc', b'Gate2StreamProvider', b'B2-SECURITY-GATE2-TEST-ONLY', b'Gate2PeerProvider', b'KernelProxyFdGate3', b'B3Vault', b'HRTLOG-B3-TEST-ONLY',
            b'net/plainnotes/app/debug/demo/', b'MedicalArchiveDemoActivity', b'DemoRepository',
            b'net/plainnotes/app/debug/catalog/', b'CatalogPrototypeActivity', b'SYNTH-CIS-', b'DraftMedicalArchive', b'MED02-DRAFT-ONLY-V0', b'AttachmentOperationTestActivity', b'SyntheticAttachmentDatabase',
            b'SyntheticDocumentsProvider', b'synthetic-medflow-', b'net.plainnotes.app.test.synthetic-medflow',
            b'MedicalAttachmentUiTestActivity', b'SyntheticMedicalArchiveProvider', b'SyntheticSecurityDocumentsProvider')
+# §144/154: Tink is now the approved production Streaming AEAD implementation.
+# Its DEX namespace is no longer evidence of POC leakage. Still forbid registering
+# it as an Android component, and retain every actual POC/test namespace/format guard.
+PRODUCTION_CRYPTO_NAMESPACES=(b'com/google/crypto/tink/', b'com.google.crypto.tink.')
 # MED-02B6: the synthetic document-library demo exists only in the debug build; its resources must not reach release.
 RESOURCE_FORBIDDEN=(b'demo_banner', b'demo_launcher_label', b'SYNTHETIC DEMO', b'cat_synthetic', b'SYNTHETIC EXAMPLES')
 
@@ -24,7 +27,7 @@ def check_apk(path):
         assert dex, 'No DEX payload to verify'
         for name in dex+['AndroidManifest.xml']:
             value=apk.read(name)
-            for marker in FORBIDDEN:
+            for marker in FORBIDDEN+(PRODUCTION_CRYPTO_NAMESPACES if name=='AndroidManifest.xml' else ()):
                 assert marker not in value and marker.decode().encode('utf-16-le') not in value, f'Test-only marker {marker!r} in {name}'
         if 'resources.arsc' in apk.namelist():
             table=apk.read('resources.arsc')

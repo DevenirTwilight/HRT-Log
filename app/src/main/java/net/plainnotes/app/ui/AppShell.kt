@@ -254,7 +254,7 @@ class UiPrefs(context: Context) {
                     content = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                         { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,selector,m2Only=true) })
                 Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labDialogs.labEdit = it; labDialogs.labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)},
-                    extra.labPanels,{labDialogs.panel=it.id},{labDialogs.saveAs=it})
+                    extra.labPanels,{labDialogs.panel=it.id},{labDialogs.saveAs=it},onAttachments=if(net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) ({medicalDialogs.labAttachmentTarget=it.id;medicalDialogs.lab=it.id}) else null)
                 Destination.SETTINGS -> {
                     val lockOn = remember(settingsPage) { net.plainnotes.app.security.AppLock(context).enabled }
                     val backup by model.backupHistory.state.collectAsState()
@@ -271,7 +271,7 @@ class UiPrefs(context: Context) {
                             PrivacySection(state.medications.count { it.active }, simpleMode) { simpleMode = it; prefs.simpleMode = it }
                             net.plainnotes.app.disguise.DisguiseSection(model::destroyLegacyPrivateData, onRoutingChanged = { model.sync() }, backup = model::backupTo)
                         },
-                        dataSlot = { DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) }) },
+                        dataSlot = { DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) },onLibraryReopen) },
                         binSlot = { RecycleBinSection(state, extra, model::restoreTrash, model::purgeTrash, model::emptyTrash) },
                         testStatus = reminderTest, onRefreshTest = model::refreshReminderTest)
                 }
@@ -317,7 +317,7 @@ class UiPrefs(context: Context) {
     HistoryBatchDialog(historyDialogs, model, state, snackbar)
     if (manual) ManualIntakeDialog(state.medications.filter { it.active }, ::siteFor, { manual = false }) { id, t, d, site, extraDose -> model.manual(id, t, d, site, extraDose); manual = false; afterIntake() }
     MedicalVisitEditor(medicalDialogs, model, medicalSave)
-    MedicalLabDetail(medicalDialogs, labDialogs, extra)
+    MedicalLabDetail(medicalDialogs, labDialogs, extra, model)
     if (appointment) AppointmentDialog({ appointment = false }) { model.appointment(it); appointment = false }
     LabPanelHost(labDialogs, model, extra)
     LabEditDialog(labDialogs, model, extra.labs, labUi)

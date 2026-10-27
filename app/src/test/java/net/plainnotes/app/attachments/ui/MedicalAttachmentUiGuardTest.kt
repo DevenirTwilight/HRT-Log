@@ -5,17 +5,26 @@ import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
 
-/** MED-02 attachment UI isolation (REQUIREMENTS §149): no release entry, no storage internals, honest wording. */
+/** MED-02 production entry isolation: only reviewed record hosts, no raw storage, honest wording. */
 class MedicalAttachmentUiGuardTest {
     private val main=File("src/main/java/net/plainnotes/app")
     private val ui=File(main,"attachments/ui")
 
-    @Test fun noReleaseSourceOutsideTheUiPackageReachesIt() {
-        assertFalse(AttachmentFlowController.PUBLIC_ENTRY_ENABLED)
+    @Test fun onlyReviewedProductionHostsReferenceScopedUi() {
+        assertTrue(AttachmentFlowController.PUBLIC_ENTRY_ENABLED)
         val names=listOf("MedicalAttachmentsSection","MedicalAttachmentViewer","MedicalAttachmentsController","RuntimeAttachmentGateway","MedicalAttachmentGateway","medicalAttachmentsForRecord","MedicalAttachmentRecordPage","MedicalAttachmentRecordContent","MedicalLibraryTransferPage","MedicalLibraryTransferContent","MedicalLibraryTransferController")
         val reaching=main.walkTopDown().filter {it.isFile && it.extension=="kt" && !it.path.startsWith(ui.path)}
             .filter {f->val text=f.readText();names.any {it in text}}.map {it.path}.toList()
-        assertEquals("Only the debug synthetic host may open the attachment UI",emptyList<String>(),reaching)
+        val approved=listOf(File(main,"ui/DataSection.kt").path,File(main,"ui/ShellHosts.kt").path,File(main,"ui/VisitsScreen.kt").path)
+        assertEquals("Only explicit record hosts may reference the scoped page",approved.sorted(),reaching.sorted())
+        approved.forEach {path->
+            val source=File(path).readText()
+            assertTrue(source.contains("AttachmentFlowController.PUBLIC_ENTRY_ENABLED"))
+            if(!path.endsWith("DataSection.kt"))assertTrue(source.contains("MedicalAttachmentOperations.Target("))
+            else assertTrue(source.contains("onReopen=onLibraryReopen"))
+            assertFalse(source.contains("RuntimeAttachmentGateway("))
+            assertFalse(source.contains("MedicalAttachmentsController("))
+        }
         val debugHost=File("src/debug/java/net/plainnotes/app/debug/attachments/MedicalAttachmentUiTestActivity.kt").readText()
         assertTrue(debugHost.contains("FLAG_SECURE") && debugHost.contains("SyntheticAttachmentFixture") && debugHost.contains("AttachmentOperationTestActivity.AUTHORITY"))
         val manifest=File("src/debug/AndroidManifest.xml").readText()

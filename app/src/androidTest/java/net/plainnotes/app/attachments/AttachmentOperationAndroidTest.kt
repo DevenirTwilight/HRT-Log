@@ -98,7 +98,7 @@ class AttachmentOperationAndroidTest {
         }
     }
     @Test fun realSafPdfPngBinaryCommitReopenAndViewWithExistingAssociations()=runBlocking {
-        assertFalse(AttachmentFlowController.PUBLIC_ENTRY_ENABLED)
+        assertTrue("Public routing is enabled; authorization still belongs to the runtime",AttachmentFlowController.PUBLIC_ENTRY_ENABLED)
         for(kind in listOf("pdf","png","binary")) {
             var activity:AttachmentOperationTestActivity?=null
             val scenario=ActivityScenario.launch(AttachmentOperationTestActivity::class.java)

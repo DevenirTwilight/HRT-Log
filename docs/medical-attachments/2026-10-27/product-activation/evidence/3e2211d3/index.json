@@ -1,0 +1,18 @@
+{
+  "source": "3e2211d39bc42bae111d371033bf22f629e3e5ce",
+  "nativeRun": 40510936308,
+  "api29Artifact": 12737422107,
+  "api29Sha256": "f659f0fcea8e4d38cef53396c6e6e0ebd7d873bfe19e2d1e7c9cb2fe0574d65b",
+  "lowMemoryRun": 40510936297,
+  "libraryJob": 122212345750,
+  "libraryConclusion": "SUCCESS",
+  "featherlineArtifact": 12737062361,
+  "featherlineSha256": "0759545d73ff665d2c35d4a3d90c4a139bb84412da7eb7ada46c5a81cb992364",
+  "featherlineConclusion": "FAIL_LMK",
+  "featherlinePhase": "wrong password rejected; process killed before subsequent authentication completed",
+  "pid": 3849,
+  "kernelAnonKiBAtKill": 245648,
+  "kernelAnonIsNotPeak": true,
+  "localRelease": "COMPILED_UNSIGNED; obsolete Tink blanket ban failed; production-aware guard correction separately tested",
+  "subsequentNative": "PENDING until corrected source actually runs"
+}

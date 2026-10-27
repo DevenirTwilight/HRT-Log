@@ -1,0 +1,16 @@
+{
+  "source": "155043ff5f9c0991e7973f14cfa2c81a459fe1c9",
+  "run": 40516380478,
+  "artifact": 12739199280,
+  "sha256": "6c5620ac9d8139ce749190ac74a133af1d7e64e7de5bfe8e1115db12fa918caf",
+  "crc": "PASS",
+  "original": "FAIL: result row looked up immediately after post-restore runtime Ready, before the asynchronous medical snapshot",
+  "completedBeforeFailure": [
+    "real visit import/authenticated reopen/preview/unlink",
+    "individual LAB2 vs panel1 real SAF/COMMIT/authenticated read",
+    "real PNMEDBK2 export/authenticated prepare/real root restore COMMIT",
+    "old runtime denied",
+    "new MainActivity scope initialized"
+  ],
+  "correction": "bounded observable model snapshot and row readiness before actual touch; no production change"
+}

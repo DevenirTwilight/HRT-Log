@@ -37,4 +37,11 @@
     <string name="viewer_pdf_unsupported">L’aperçu des PDF nécessite Android 9 ou une version ultérieure. Le fichier reste enregistré.</string>
     <string name="viewer_no_preview">Ce type de fichier ne peut pas être affiché ici. Le fichier reste enregistré.</string>
     <string name="viewer_failed">Ce fichier n’a pas pu être affiché.</string>
+    <string name="attach_unlink_action">Détacher</string>
+    <string name="attach_unlink_title">Retirer ce lien ?</string>
+    <string name="attach_unlink_explain">Détacher « %1$s » de cet enregistrement ? Le fichier conservé, ses autres liens et l’espace occupé resteront inchangés.</string>
+    <string name="attach_unlink_working">Suppression du lien…</string>
+    <string name="attach_unlink_done">Le lien a été retiré. Le fichier reste conservé.</string>
+    <string name="attach_unlink_list_stale">Le lien a été retiré, mais la liste n’a pas été actualisée.</string>
+    <string name="attach_unlink_unknown">Le résultat est incertain. Rouvrez cet enregistrement pour vérifier avant de recommencer.</string>
 </resources>

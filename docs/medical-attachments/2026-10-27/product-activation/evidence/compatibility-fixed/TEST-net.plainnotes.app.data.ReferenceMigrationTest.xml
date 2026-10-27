@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.ReferenceMigrationTest" tests="18" skipped="0" failures="0" errors="0" timestamp="2026-10-27T13:13:47.651Z" hostname="42f8489b32d3" time="17.238">
+  <properties/>
+  <testcase name="canonicalUuidPredicateMatchesThePlatformOracleAcrossVersionsAndMalformedForms" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.066"/>
+  <testcase name="utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.05"/>
+  <testcase name="failedElevenToTwelveFenceRollsBackWithAllReferenceFactsAndEpochIntact" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="1.118"/>
+  <testcase name="monaSeventeenToEighteenIsAdditiveAndFailedUpgradeRollsBack" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="1.571"/>
+  <testcase name="unsupportedMeasurementsInOldRoomElevenAreRejectedWithoutClearingAnything" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.593"/>
+  <testcase name="featherlineEighteenToNineteenIsAdditiveAndFailedUpgradeRollsBack" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="1.568"/>
+  <testcase name="publishedRoomTwelveMayLackEncodingButClaimedThirteenMustRejectIt" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.048"/>
+  <testcase name="storedColumnFenceMatchesTheOriginalPerColumnOracleForNullTypesAndLateRows" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.151"/>
+  <testcase name="oldRoomElevenReaderCannotOpenTheNewMeasurementFormat" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="1.706"/>
+  <testcase name="syntheticFixtureByteCounterMatchesWholePlatformDocumentWithoutMutatingRows" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.058"/>
+  <testcase name="backupPlaintextOwnerClearsSuccessFailureAndRejectedTransfers" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.022"/>
+  <testcase name="everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="6.554"/>
+  <testcase name="failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.889"/>
+  <testcase name="streamedMeasuredBackupMatchesWholeDocumentBytesAndRemainsReadOnly" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.352"/>
+  <testcase name="cancellationAfterPlaintextCaptureRollsBackAndClearsBeforeTransactionReturns" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.414"/>
+  <testcase name="failedMainTwelveToThirteenFenceKeepsPanelLinksLegacyBitsAndEpoch" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.911"/>
+  <testcase name="boundedBackupPlaintextChunksAreExactAndWipedOnSuccessAndFailure" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.021"/>
+  <testcase name="roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="1.131"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

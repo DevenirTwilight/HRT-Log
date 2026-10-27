@@ -1,0 +1,10 @@
+{
+  "source": "a0fd447d4645e90273d76c361ef4bdb0d7d3b068",
+  "run": 40514382249,
+  "artifact": 12739066586,
+  "sha256": "a0b5a5d1a18fc284986a8624073fce5576c149cf724d50f2670c077ce682d565",
+  "crc": "PASS",
+  "native": "FAIL; actual row touch opened unrelated add-batch UI, original assertions retained",
+  "proof": "result2 bounds x32..288 y489..555, center(160,522) overlaps lab-open-batch x141..304 y520..576",
+  "correction": "test touches unobscured left20percent of actual row; no production Labs design or callbacks bypassed"
+}

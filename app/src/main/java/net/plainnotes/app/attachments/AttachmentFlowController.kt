@@ -12,7 +12,7 @@ import net.plainnotes.app.domain.AttachmentSession
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
 
-/** OFF application use case, constructed only by RuntimeLibrarySession. No paths/Room/keys.
+/** Scoped production use case, constructed only by RuntimeLibrarySession. No paths/Room/keys.
  * One controller owns one immutable operation. New selection requires an explicit new controller.
  * No URI, plaintext, unlock grant or pending write is persisted/replayed on process restart.
  */
@@ -100,7 +100,9 @@ internal class AttachmentFlowController(
         session.issue().let {cap->try {backend.recover(cap)}finally {cap.close()}}
         reconcile()
     }
+    suspend fun activate()=session.issue().let {cap->try {permission();check(!closed.get());backend.activate(cap)}finally {cap.close()}}
     suspend fun documents()=session.issue().let {cap->try {permission();backend.documents(cap,request.target)}finally {cap.close()}}
+    suspend fun unlink(document:UUID)=session.issue().let {cap->try {permission();check(!closed.get());backend.unlink(cap,request.target,document)}finally {cap.close()}}
     suspend fun open(document:UUID):MedicalAttachmentOperations.Read {
         permission();check(!closed.get());val cap=session.issue()
         try {
@@ -118,7 +120,8 @@ internal class AttachmentFlowController(
         }
     }
     companion object {
-        /** This is not a user/debug enable toggle. No main navigation or release entry calls it. */
-        const val PUBLIC_ENTRY_ENABLED=false
+        /** Product navigation is allowed only through the authorized runtime and Room21 scoped
+         * activation; this constant alone never grants access to records or decrypted files. */
+        const val PUBLIC_ENTRY_ENABLED=true
     }
 }

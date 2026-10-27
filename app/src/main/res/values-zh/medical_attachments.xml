@@ -37,4 +37,11 @@
     <string name="viewer_pdf_unsupported">PDF 预览需要 Android 9 或更高版本。文件仍然保存着。</string>
     <string name="viewer_no_preview">这种文件无法在这里预览。文件仍然保存着。</string>
     <string name="viewer_failed">这个文件没能显示。</string>
+    <string name="attach_unlink_action">解除关联</string>
+    <string name="attach_unlink_title">解除这条关联？</string>
+    <string name="attach_unlink_explain">要将“%1$s”从这条记录中解除关联吗？文件本身、其他关联以及占用的空间都会保留。</string>
+    <string name="attach_unlink_working">正在解除关联…</string>
+    <string name="attach_unlink_done">关联已解除，保存的文件仍然保留。</string>
+    <string name="attach_unlink_list_stale">关联已解除，但列表未能刷新。</string>
+    <string name="attach_unlink_unknown">暂时无法确认结果。请重新打开这条记录检查，不要立即重复操作。</string>
 </resources>

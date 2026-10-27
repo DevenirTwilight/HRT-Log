@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.attachments.ui.MedicalLibraryTransferControllerTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-27T13:17:36.699Z" hostname="42f8489b32d3" time="0.286">
+  <properties/>
+  <testcase name="pauseDiscardsPasswordSelectionButPickerReturnDoesNotGrantAccessAfterRevocation" classname="net.plainnotes.app.attachments.ui.MedicalLibraryTransferControllerTest" time="0.04"/>
+  <testcase name="unknownOnlyChecksAndExplicitAbortRequiresVerifiedPendingJournal" classname="net.plainnotes.app.attachments.ui.MedicalLibraryTransferControllerTest" time="0.041"/>
+  <testcase name="selectionAndCancellationNeverWriteAndAuthenticationRequiresConfirmation" classname="net.plainnotes.app.attachments.ui.MedicalLibraryTransferControllerTest" time="0.034"/>
+  <testcase name="commitSurvivesRevocationAndLostReplyWithoutAnotherRestore" classname="net.plainnotes.app.attachments.ui.MedicalLibraryTransferControllerTest" time="0.049"/>
+  <testcase name="cancelledScopeBeforeDispatchStillErasesOwnedPassword" classname="net.plainnotes.app.attachments.ui.MedicalLibraryTransferControllerTest" time="0.028"/>
+  <testcase name="safetyBackupCannotOverwriteTheSelectedRestoreFileOrQueueARestore" classname="net.plainnotes.app.attachments.ui.MedicalLibraryTransferControllerTest" time="0.088"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

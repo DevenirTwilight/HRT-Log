@@ -1,5 +1,7 @@
 package net.plainnotes.app.ui
 
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.Delete
@@ -114,14 +116,31 @@ import java.time.Instant
     var editing by mutableStateOf(false)
     var edit by mutableStateOf<AppointmentEntity?>(null)
     var lab by mutableStateOf<Long?>(null)
+    // Transient destination intent, always an individual LabValue ID, never a panel ID.
+    var labAttachmentTarget by mutableStateOf<Long?>(null)
 }
 
 @Composable internal fun MedicalVisitEditor(m: MedicalDialogs, model: NotesViewModel, save: net.plainnotes.app.medical.MedicalVisitSaveState) {
     if(m.editing)MedicalVisitDialog(m.edit,save,{if(!save.saving){m.editing=false;m.edit=null;model.clearMedicalVisitSave()}}){model.saveMedicalVisit(it,m.edit)}
 }
 
-@Composable internal fun MedicalLabDetail(m: MedicalDialogs, l: LabDialogs, extra: NotesViewModel.ExtraState) {
-    m.lab?.let{id->extra.labs.firstOrNull{it.id==id}?.let{v->LabDetailDialog(v,extra.labContexts.filter{it.lab_id==id},{m.lab=null}){m.lab=null;l.labEdit=v}}}
+@Composable internal fun MedicalLabDetail(m: MedicalDialogs, l: LabDialogs, extra: NotesViewModel.ExtraState, model:NotesViewModel) {
+    m.lab?.let {id->
+        extra.labs.firstOrNull {it.id==id}?.let {v->
+            var attachments by remember(id) {mutableStateOf(m.labAttachmentTarget==id)}
+            DisposableEffect(id) {onDispose {if(m.labAttachmentTarget==id)m.labAttachmentTarget=null}}
+            if(attachments && net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) {
+                androidx.compose.ui.window.Dialog(onDismissRequest={attachments=false},properties=androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth=false)) {
+                    Surface(Modifier.fillMaxSize()) {
+                        net.plainnotes.app.attachments.ui.MedicalAttachmentRecordPage(model,
+                            net.plainnotes.app.data.MedicalAttachmentOperations.Target(net.plainnotes.app.data.MedicalAttachmentOperations.Kind.LAB,v.id),
+                            analyteLabel(v.analyte_code),onBack={attachments=false})
+                    }
+                }
+            } else LabDetailDialogWithAttachments(v,extra.labContexts.filter {it.lab_id==id},{m.lab=null},
+                onAttachments=if(net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) ({attachments=true}) else null) {m.lab=null;l.labEdit=v}
+        }
+    }
 }
 
 /** Medications page: archive confirmation. */
