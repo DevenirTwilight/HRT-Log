@@ -1,6 +1,7 @@
 package net.plainnotes.app.attachments
 
 import android.content.Context
+import android.content.SharedPreferences
 import net.plainnotes.app.data.LibraryRequestScope
 import net.plainnotes.app.data.MedicalAttachmentOperations
 import java.security.MessageDigest
@@ -11,6 +12,7 @@ import java.util.UUID
  * Synchronous commit precedes dispatch. A corrupt checkpoint refuses new operations.
  */
 internal class AttachmentReconciliationStore(context:Context,scope:LibraryRequestScope,target:MedicalAttachmentOperations.Target) {
+    private val ownerEpoch=synchronized(monitor) {wipeEpoch}
     private val prefs=context.getSharedPreferences("attachment-reconciliation-v1",Context.MODE_PRIVATE)
     private val key=MessageDigest.getInstance("SHA-256").digest(
         (scope.encoded()+listOf(target.kind.name,target.id.toString())).joinToString("\u0000").toByteArray()
@@ -23,6 +25,7 @@ internal class AttachmentReconciliationStore(context:Context,scope:LibraryReques
         ids[0] to ids[1]
     }
     fun retain(operation:UUID,document:UUID)=synchronized(monitor) {
+        check(ownerEpoch==wipeEpoch) {"Reconciliation owner ended by data wipe"}
         val pair=operation to document
         check(pending().let {it==null || it==pair}) {"Reconcile the existing attachment operation"}
         check(prefs.edit().putString(key,"$operation|$document").commit()) {"Cannot retain reconciliation identity"}
@@ -31,5 +34,14 @@ internal class AttachmentReconciliationStore(context:Context,scope:LibraryReques
         check(pending()==(operation to document)) {"Wrong reconciliation identity"}
         check(prefs.edit().remove(key).commit()) {"Cannot acknowledge reconciliation"}
     }
-    private companion object {val monitor=Any()}
+    companion object {
+        private val monitor=Any()
+        private var wipeEpoch=0L
+        /** Serialize with retain so a delayed old request cannot recreate wiped identities. */
+        fun clearAll(prefs:SharedPreferences)=synchronized(monitor) {
+            check(prefs.edit().clear().commit()) {"Cannot clear reconciliation identities"}
+            wipeEpoch++
+            check(prefs.all.isEmpty()) {"Reconciliation identities remain"}
+        }
+    }
 }

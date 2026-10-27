@@ -74,3 +74,12 @@ F03每项仍验证根事务及时释放、全部业务事实相等及LEGACY auth
 本地补充 lint 与最终针对性并发运行引起资源压力，已主动终止；未完成部分标 NOT_RUN，日志 final-local-aborted.log / local-lint-aborted.log 留存。只调整本地调度串行复测，不改变 CI 预算或任何断言。最终完整 lint 由精确 SHA CI 执行。
 
 最终初始化失败清理后的本地串行复测 PASS：21项JVM（0 fail/error/skip），app/core AndroidTest编译 PASS，日志 final-local-serial-pass.log / final-local-targeted XML保留。此前资源压力中止部分仍NOT_RUN。下一步固定最终SHA完整CI，不以本地代替原生/低内存验证。
+
+## MED-02 #132 全套CI发现擦除遗漏，有限补正 — 2026-10-27
+
+- 6d8273b1四API专用原生push40472207972全部PASS，原件在最终交付证据；本地21项PASS。但完整Android 40472208031 FAIL：2486项、1 fail、561 skip，唯一失败是原有LocalDataWipeCoverageTest，指出F02新存储attachment-reconciliation-v1未接入删除全部数据。原始HTML/作业日志保留在evidence/6d-*；不是放宽守卫。
+- 最小补正：生产wipeAll真实清除该存储并检查commit与空状态；与retain共用锁、擦除epoch使旧owner不能在wipe后写回中性ID。新回归验证所有scope清空、旧owner拒绝及新owner正常。算法/格式/schema/配额/开关/预算不变。先相关针对性回归再冻结新精确HEAD完整CI，当前NOT_RUN。
+- 6d实际branch低内存40472224042：Featherline PASS，library FAIL；13项base+heap及3项集合编解码/认证/破坏拒绝PASS，完整业务集成PID3959 adj0被kernel OOM killer杀死（anon RSS130356KiB），后续重启阶段NOT_RUN。PR预览40472213786 library PASS、Featherline FAIL，前台PID3892 adj0被LMK杀死（222100KiB）。两份原ZIP保留，分配根因NOT_PROVEN。不能互相替代或宣称后续绿修复根因；禁止为绿调整RAM/heap/数据/断言或无根据反复重试。
+- 唯一Draft #132维持阻断，不合并、不签名/发布/启用。新HEAD仍需完整必需/四API/低内存结果；最终CI回执和未验证范围写PR及交付包，避免为记录结果无限改变SHA。OFF / NOT_REVIEWED_EXTERNALLY。
+
+擦除补正后针对性回归 PASS：24项JVM（0 fail/error/skip），app/core AndroidTest编译PASS，原XML和日志见wipe-targeted-*；70项静态约束PASS。下一步推本次新HEAD，运行完整精确SHA CI、四API安全原生和分支HEAD低内存两项。6d低内存FAIL仍未修复根因；保持Draft直到全部条件满足，否则禁止合并。

@@ -1,0 +1,67 @@
+{
+  "conclusion": "success",
+  "event": "push",
+  "headSha": "6d8273b1edefc5b184180345a0199b438672d571",
+  "jobs": [
+    {
+      "completedAt": "2026-10-27T08:15:22Z",
+      "conclusion": "success",
+      "databaseId": 122081756315,
+      "name": "science-change-gate",
+      "startedAt": "2026-10-27T08:15:09Z",
+      "status": "completed",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 2,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Classify science changes",
+          "number": 3,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Gate trigger matrix and change-range tests",
+          "number": 4,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "number": 8,
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 9,
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/40472208027/job/122081756315"
+    },
+    {
+      "completedAt": "2026-10-27T08:15:23Z",
+      "conclusion": "skipped",
+      "databaseId": 122081858774,
+      "name": "research-deep",
+      "startedAt": "2026-10-27T08:15:23Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/40472208027/job/122081858774"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/DevenirTwilight/HRT-Log/actions/runs/40472208027",
+  "workflowName": "Science validation"
+}

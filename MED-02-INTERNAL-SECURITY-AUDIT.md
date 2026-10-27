@@ -13,6 +13,8 @@
 
 后续 db6053b0 精确HEAD的 API29 CI 暴露 fcntlInt 非公开 API 回归（FAIL），Featherline 精确HEAD低内存作业也发生前台 LMK（FAIL）；原件保留。随后公开 FileChannel 修正 dbac92c3 在747ed6e2的API26/27/29/35原生针对性测试全部PASS（40469859893）；F04仍POTENTIAL。最终精确SHA完整CI尚未封账，不得称已合并或LMK根因已修复。
 
+后续6d8273b1四API专用原生仍PASS，但完整CI发现中性检查点未纳入删除全部数据（原守卫FAIL），正在补正生产擦除及迟到请求回写。该HEAD低内存业务集成与PR预览Featherline均有前台OOM/LMK证据；仍未合并，未证明分配根因已修复。
+
 本轮获授权的有限修复状态另见[修复记录](docs/security/med02-fixes-2026-10-27/README.md)。下面保留原审计发现和当轮执行边界；F01–F03原始CONFIRMED不因代码修复删除，修复验证与F04的真实Android判定单独记录。原始报告和探针完整封存在[原evidence ZIP](docs/security/med02-fixes-2026-10-27/evidence/original-audit-evidence.zip)。仍NOT_REVIEWED_EXTERNALLY，不构成独立第三方认证，附件仍OFF。
 
 ## 结论与适用边界

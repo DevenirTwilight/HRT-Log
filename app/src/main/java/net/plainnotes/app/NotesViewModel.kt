@@ -504,6 +504,8 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             // Stock-alert markers go first, so an interrupted wipe never leaves them behind a fresh database (ids restart).
             check(net.plainnotes.app.reminder.StockAlerts.clear(app)){"stock alerts not cleared"}
             mutate{repo.destroyAll()}
+            net.plainnotes.app.attachments.AttachmentReconciliationStore.clearAll(
+                app.getSharedPreferences("attachment-reconciliation-v1",android.content.Context.MODE_PRIVATE))
             net.plainnotes.app.disguise.Disguise.disable(app); repo.destroy(net.plainnotes.app.data.Space.DECOY)
             app.getSharedPreferences("prefs",android.content.Context.MODE_PRIVATE).edit().clear().commit()
             backupHistory.clear()
