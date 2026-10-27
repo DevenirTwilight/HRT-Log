@@ -117,8 +117,9 @@ class LabUi03HomeTest {
         ui.setContent { NotesTheme(ThemeMode.LIGHT) { LabsScreen(listOf(tiny), emptyList(), {}, {}, PaddingValues()) } }
         scroll("lab-group-row:1")
         ui.onNodeWithTag("lab-group-row:1").assert(hasContentDescription("4.0E-4", substring = true)).performClick()
-        ui.onNodeWithText("4.0E-4 10³/mm³").assertExists()
-        ui.onNodeWithText(ui.activity.getString(R.string.lab_range_value, "1.0E-4", "5.0E-4", "10³/mm³")).assertExists()
+        // UI-10: the result page shows the value and its unit as separate large and small text of one spoken unit.
+        ui.onNodeWithTag("lab-hero").assert(hasText("4.0E-4")).assert(hasText("10³/mm³"))
+        ui.onNodeWithTag("lab-detail-range").assert(hasText(ui.activity.getString(R.string.lab_page_range_both, "1.0E-4", "5.0E-4", "10³/mm³")))
         assertEquals(0.0004, tiny.value, 0.0)
     }
 

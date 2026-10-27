@@ -78,10 +78,12 @@ class MedicalAttachmentProductAndroidTest {
     private fun button(id:Int)=press(hasText(text(id)))
     private fun visit() {
         open(Destination.MEDICAL)
+        // UI-10: the Files area lists the visit files entrance; the visit page itself carries the related files inline.
+        tag("medical-tab:files")
         ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-visit-attachments"))
         tag("medical-visit-attachments")
         press(hasText("SYNTHETIC product clinician",substring=true))
-        button(R.string.attach_section)
+        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments").fetchSemanticsNodes().isNotEmpty()}
     }
     private fun back() {
         // Use actual system BACK dispatch. Espresso's default root can still be
@@ -102,7 +104,8 @@ class MedicalAttachmentProductAndroidTest {
         // Tap its unobscured label side, relative to the actual semantic row bounds.
         // This is still a real touch on the existing result, not a ViewModel/URI shortcut.
         row.performTouchInput {click(androidx.compose.ui.geometry.Offset(width*0.2f,center.y))}
-        button(R.string.attach_section)
+        // UI-10: one full-screen result page whose related files are part of it; no button in between.
+        ui.waitUntil(30000) {ui.onAllNodesWithTag("lab-detail").fetchSemanticsNodes().isNotEmpty() && ui.onAllNodesWithTag("attachments").fetchSemanticsNodes().isNotEmpty()}
     }
     private fun waitSystem(label:String,predicate:()->Boolean) {
         val end=SystemClock.uptimeMillis()+30000
@@ -284,11 +287,14 @@ class MedicalAttachmentProductAndroidTest {
             ui.waitUntil(30000) {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
             assertEquals(saved.document,read(visit).document)
         }
+        // The link action is in the row's overflow menu.
+        tag("attachment-more:${saved.document}")
         tag("attachment-unlink:${saved.document}")
         tag("attachments-unlink-confirm")
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
         runBlocking {model.libraryRuntime.attachments(visit,"SYNTHETIC unlinked").use {assertTrue(it.documents().isEmpty())}}
         back();open(Destination.MEDICAL)
+        tag("medical-tab:records")
         ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-labs"))
         tag("medical-labs")
         labDetail(lab.id)
@@ -300,13 +306,13 @@ class MedicalAttachmentProductAndroidTest {
         // Archive SAF/confirmation widgets have separate existing controller tests; do not claim those here.
         back()
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments").fetchSemanticsNodes().isEmpty()}
-        back()
         ui.waitUntil(30000) {
             var focused=false
             scenario!!.onActivity {focused=it.hasWindowFocus()}
             focused
         }
         open(Destination.MEDICAL)
+        tag("medical-tab:files")
         ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-complete-backup"))
         tag("medical-complete-backup")
         ui.onNodeWithText(text(R.string.med_transfer_scope)).assertExists()

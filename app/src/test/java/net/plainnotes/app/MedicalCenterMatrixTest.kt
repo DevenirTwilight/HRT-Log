@@ -39,19 +39,20 @@ class MedicalCenterMatrixTest(private val locale:String,private val width:Int,pr
         for(mode in Contrast.entries) {
             ui.runOnIdle{contrast=mode}
             val list=ui.onNodeWithTag("medical-list")
-            for(tag in listOf("medical-center-visits","medical-center-prepare","medical-center-pack","medical-visit-attachments")) {
-                list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
-            }
-            for(tag in listOf("medical-labs","medical-history","medical-complete-backup")) {
+            // Records area: every existing entrance stays reachable.
+            ui.onNodeWithTag("medical-tab:records").assertIsDisplayed().performClick()
+            for(tag in listOf("medical-center-visits","medical-labs","medical-history")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
             }
             list.performScrollToNode(hasTestTag("medical-bin"));ui.onNodeWithTag("medical-bin").assertIsDisplayed()
-            for(tag in listOf("medical-future-files","medical-future-practitioners","medical-future-organize")) {
+            // Files area: add, browse by record, backup, and the one honest "not available yet" card.
+            ui.onNodeWithTag("medical-tab:files").assertIsDisplayed().performClick()
+            list.performScrollToNode(hasTestTag("medical-add-file"));ui.onNodeWithTag("medical-add-file").assertIsDisplayed().assertHasClickAction()
+            for(tag in listOf("medical-visit-attachments","medical-lab-attachments","medical-complete-backup")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
-                ui.onNodeWithTag("center-unavailable-dialog").assertExists()
-                ui.onNodeWithTag("center-unavailable-close").assertIsDisplayed().performClick()
-                ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
             }
+            list.performScrollToNode(hasTestTag("medical-files-soon"));ui.onNodeWithTag("medical-files-soon").assertIsDisplayed()
+            ui.onNodeWithTag("medical-tab:records").performClick()
             list.performScrollToIndex(0)
             if(System.getenv("CENTER_SHOTS")=="1" && width==320 && font==2f && !landscape && mode==Contrast.HIGH) {
                 ui.waitForIdle();val view=ui.activity.window.decorView
@@ -62,7 +63,7 @@ class MedicalCenterMatrixTest(private val locale:String,private val width:Int,pr
                 File(folder,"${locale}_${width}dp_${font}x_${if(dark)"dark" else "light"}_${mode.name}.png").outputStream().use{image.compress(Bitmap.CompressFormat.PNG,100,it)}
             }
         }
-        assertEquals(12,visits);assertEquals(3,labs);assertEquals(3,timeline);assertEquals(3,backups)
+        assertEquals(6,visits);assertEquals(6,labs);assertEquals(3,timeline);assertEquals(3,backups)
         ui.onAllNodesWithTag("attachment-add").assertCountEquals(0)
     }
 }

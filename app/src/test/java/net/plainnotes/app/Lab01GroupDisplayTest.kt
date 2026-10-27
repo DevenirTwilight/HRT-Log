@@ -80,7 +80,8 @@ class Lab01GroupDisplayTest {
         ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag("lab-group-row:2"))
         ui.onNodeWithTag("lab-group-row:2").performClick()
         ui.onNode(isDialog()).assertExists()
-        ui.onNode(hasClickAction() and hasText(s(R.string.edit)) and hasAnyAncestor(isDialog())).performClick()
+        // UI-10: the result page's edit action is a labelled text button, or just its pencil (named "Edit") at large font on a narrow screen.
+        ui.onNode(hasClickAction() and hasTestTag("lab-detail-edit") and (hasText(s(R.string.edit)) or hasContentDescription(s(R.string.edit))) and hasAnyAncestor(isDialog())).performClick()
         assertEquals(labs[1], edited)
         ui.onNode(isDialog()).assertDoesNotExist()
     }

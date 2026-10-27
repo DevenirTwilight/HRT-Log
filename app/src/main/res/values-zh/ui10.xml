@@ -1,6 +1,0 @@
-<resources>
-    <string name="ui10_attachments">医疗附件</string>
-    <string name="ui10_visit_attachments">就诊附件</string>
-    <string name="ui10_lab_attachments">单项化验附件</string>
-    <string name="ui10_attachment_scope">选择具体就诊或单项化验，再打开“附件”添加或查看加密文件。支持 JPEG/PNG 预览；Android 9 及以上支持 PDF 第一页预览。Android 8 可保存与备份 PDF，不提供内置预览。</string>
-</resources>

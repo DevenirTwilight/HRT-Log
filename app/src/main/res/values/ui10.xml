@@ -1,6 +1,0 @@
-<resources>
-    <string name="ui10_attachments">Medical attachments</string>
-    <string name="ui10_visit_attachments">Visit attachments</string>
-    <string name="ui10_lab_attachments">Lab result attachments</string>
-    <string name="ui10_attachment_scope">Choose a visit or an individual lab result, then open Attachments to add or view encrypted files. JPEG/PNG preview is supported; PDF preview shows the first page on Android 9+. On Android 8, PDFs can be saved and backed up without an in-app preview.</string>
-</resources>

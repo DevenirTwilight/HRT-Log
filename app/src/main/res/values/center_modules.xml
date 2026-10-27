@@ -5,14 +5,8 @@
     <string name="center_fr_catalogue_reason">Official data distribution awaits source and reuse approval.</string>
     <string name="center_shortages">Medicine shortages</string>
     <string name="center_recalls">Recalls and regulatory notices</string>
-    <string name="center_med_files">Unified medical file browser</string>
     <string name="center_med_originals">Original PDFs, images, prescriptions and records</string>
-    <string name="center_med_practitioners">Doctor and institution profiles</string>
     <string name="center_med_visit_links">Link files to visits</string>
     <string name="center_med_lab_links">Link files to lab records</string>
-    <string name="center_med_organize">File classification, summaries and individual export</string>
-    <string name="center_med_files_reason">Attachments are available within visits and individual lab results. A separate library-wide file browser is not implemented.</string>
-    <string name="center_med_practitioners_reason">Separate profiles are not implemented. Existing doctor and institution details remain in visits.</string>
     <string name="center_med_links_reason">Choose a visit or an individual lab result, then open Attachments to add or view encrypted files. JPEG/PNG preview is supported; PDF preview shows the first page on Android 9+. On Android 8, PDFs can be saved and backed up without an in-app preview.</string>
-    <string name="center_med_organize_reason">Independent file organization, summaries and arbitrary file export are not implemented. Visit pack PDFs are available from a visit; complete encrypted medical backup is available above.</string>
 </resources>

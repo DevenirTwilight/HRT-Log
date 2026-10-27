@@ -76,20 +76,10 @@ import java.time.*
 }
 
 @Composable private fun VisitDetail(a: AppointmentEntity, state: NotesState, extra: NotesViewModel.ExtraState, model: NotesViewModel, onBack: () -> Unit, contentPadding: PaddingValues, medical:Boolean=false,onMedicalEdit:(AppointmentEntity)->Unit={},onLab:(LabValueEntity)->Unit={}) {
-    // This page remains guarded until activation, backup compatibility and release isolation are verified.
-    var attachmentsOpen by remember(a.id) { mutableStateOf(false) }
-    if (attachmentsOpen && net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) {
-        // Unlike the normal LazyColumn below, the full-page attachment viewer must
-        // consume the shell insets itself. Otherwise its close button sits UNDER the
-        // real app bar and a touch opens the drawer instead of closing the preview.
-        Box(Modifier.fillMaxSize().padding(contentPadding)) {
-            net.plainnotes.app.attachments.ui.MedicalAttachmentRecordPage(
-                model, net.plainnotes.app.data.MedicalAttachmentOperations.Target(
-                    net.plainnotes.app.data.MedicalAttachmentOperations.Kind.APPOINTMENT, a.id),
-                stringResource(R.string.appointment), onBack={attachmentsOpen=false})
-        }
-        return
-    }
+    // Related files of this explicit visit; null while the guarded attachment capability is off.
+    val files = net.plainnotes.app.attachments.ui.rememberRecordFiles(model, net.plainnotes.app.data.MedicalAttachmentOperations.Target(
+        net.plainnotes.app.data.MedicalAttachmentOperations.Kind.APPOINTMENT, a.id))
+    val filesLabel = choiceLabel(a.type.ifBlank { "OTHER" }) + " · " + formatDate(Instant.ofEpochMilli(a.at_utc).atZone(ZoneId.of(a.at_zone)).toLocalDate())
     var edit by remember { mutableStateOf(false) }
     var remove by remember { mutableStateOf(false) }
     var medicalRemove by remember { mutableStateOf<AppointmentEntity?>(null) }
@@ -98,6 +88,7 @@ import java.time.*
     var generate by rememberSaveable { mutableStateOf(false) }
     val questions = extra.visitQuestions.filter { it.appointment_id == a.id }.sortedWith(compareBy({ it.sort_order }, { it.id }))
     val packs = extra.visitPacks.filter { it.appointment_id == a.id }.sortedByDescending { it.generated_utc }
+    Box(Modifier.fillMaxSize()) {
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 32.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { TextButton(onClick = onBack) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, null); Spacer(Modifier.width(8.dp)); Text(stringResource(if(medical)R.string.medical_records else R.string.visits)) } }
@@ -116,9 +107,7 @@ import java.time.*
                 }
             }
         }
-        if (net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) item {
-            OutlinedButton(onClick={attachmentsOpen=true}) { Text(stringResource(R.string.attach_section)) }
-        }
+        if (files != null) item("visit-files") { net.plainnotes.app.attachments.ui.RecordFilesSection(files, filesLabel, Modifier.padding(top = 4.dp)) }
         item {
             SectionCard(stringResource(if (a.completed_utc != null) R.string.visit_completed else R.string.visit_not_confirmed)) {
                 a.completed_utc?.let { Text(formatDateTime(Instant.ofEpochMilli(it)), style = MaterialTheme.typography.bodySmall) }
@@ -156,6 +145,9 @@ import java.time.*
                 packs.forEach { p -> Text(formatDateTime(Instant.ofEpochMilli(p.generated_utc)) + " · " + p.range_from + " – " + p.range_to + " · " + p.input_digest.take(12), style = MaterialTheme.typography.bodySmall) }
             }
         }
+    }
+        // The file page covers only the page area below the shell's app bar, so its own back arrow stays reachable.
+        if (files != null) Box(Modifier.fillMaxSize().padding(contentPadding)) { net.plainnotes.app.attachments.ui.RecordFilesViewer(files, filesLabel) }
     }
     if (edit) AppointmentDialog({ edit = false }, a) { model.appointment(it); edit = false }
     if (remove) AlertDialog(onDismissRequest = { remove = false }, icon = { Icon(Icons.Outlined.Delete, null) }, text = { Text(stringResource(R.string.visit_delete_confirm)) },
