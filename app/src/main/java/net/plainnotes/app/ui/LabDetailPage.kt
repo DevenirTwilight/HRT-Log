@@ -137,8 +137,9 @@ import java.time.ZoneId
                 val current = other.id == v.id
                 val summary = analyteLabel(other.analyte_code) + " · " + labReportNumber(other.value) + " " + other.unit
                 GroupedItem(i, draw.labs.size, color = if (current) c.secondaryContainer else c.surfaceContainerLowest, onClick = if (current) null else ({ onOpenResult(other) }),
-                    modifier = Modifier.testTag("lab-draw-result:${other.id}")) {
-                    Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp).semantics(mergeDescendants = true) {
+                    modifier = if (current) Modifier else Modifier.testTag("lab-draw-result:${other.id}")) {
+                    // The current result is not a button: its own row carries the tag and the selected state; the others are tagged on their clickable item.
+                    Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp).then(if (current) Modifier.testTag("lab-draw-result:${other.id}") else Modifier).semantics(mergeDescendants = true) {
                         if (current) selected = true else role = androidx.compose.ui.semantics.Role.Button
                     }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         Text(summary, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, fontWeight = if (current) FontWeight.Bold else FontWeight.Normal)

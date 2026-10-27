@@ -316,6 +316,7 @@ class Ui10RedesignTest(private val locale: String, private val width: Int, priva
         ui.onNodeWithTag("file-target:visit:1").assertHasClickAction()
         shot("add_file_target_visits", dialog = true)
         ui.onNodeWithTag("file-target-kind:1").performClick()
+        ui.onNodeWithTag("file-target-labs").performScrollToNode(hasTestTag("file-target:lab:1"))
         ui.onNodeWithTag("file-target:lab:1").assertHasClickAction()
         shot("add_file_target_labs", dialog = true)
         ui.onNodeWithTag("file-target:lab:1").performClick()
