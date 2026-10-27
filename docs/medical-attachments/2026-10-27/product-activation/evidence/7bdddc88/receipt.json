@@ -21,7 +21,17 @@
   "medicalLibraryLowMemory": {
     "run": 40519149572,
     "job": 122241475263,
-    "conclusion": "SUCCESS"
+    "conclusion": "SUCCESS",
+    "artifact": 12740668163,
+    "sha256": "8575b9ebc9dcbf3d4e744a6f2285fcc394f305a2daae815d1e7c5a0a8908fe07",
+    "zipCrc": "PASS",
+    "base": "PASS_14",
+    "collection": "PASS_4",
+    "integration": "PASS_2",
+    "generationRestart": "PASS_4_SEAMS",
+    "collectionRestart": "PASS_4_SEAMS",
+    "operationRestart": "PASS_4_SEAMS",
+    "independentFreshDevice": "PASS_2; different AndroidId, same transferred encrypted archive hash,192MiB heap"
   },
   "separateFeatherlineLowMemory": {
     "run": 40519149572,
@@ -56,5 +66,20 @@
     "physical-phone full backup SAF widgets"
   ],
   "externalReview": "NOT_REVIEWED_EXTERNALLY",
-  "signatureDeliveryRelease": "NOT_AUTHORIZED"
+  "signatureDeliveryRelease": "NOT_AUTHORIZED",
+  "prApi26": {
+    "job": 122242051466,
+    "artifact": 12741319217,
+    "sha256": "8058d0cacbe5665c4b0797f0b03ab198fe29fb4d116a6d68f20da03c224fa283",
+    "zipCrc": "PASS",
+    "realProductCase": "PASS;1 test,0 failures/errors/skips,20.808s suite"
+  },
+  "prApi29": {
+    "job": 122242050918,
+    "conclusion": "SUCCESS",
+    "artifact": 12742338684,
+    "sha256": "bb13ef571c730490ca0f227efb29a7a9cc395077ff5adfc6f58ef85bd76a148f",
+    "zipCrc": "PASS",
+    "realProductCase": "PASS;1 test,0 failures/errors/skips,22.689s suite"
+  }
 }
