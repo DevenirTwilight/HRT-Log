@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>药品资料中心 · 重做</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.sh{font-size:14px;font-weight:700;color:#006A63;margin:28px 8px 10px;letter-spacing:.2px}
+.row{display:flex;align-items:center;gap:14px;background:#FFFFFF;padding:14px 16px;min-height:44px}
+.badge{width:40px;height:40px;border-radius:14px;background:#EEF5F3;color:#006A63;display:flex;align-items:center;justify-content:center;flex:none}
+.t1{font-size:16px;font-weight:600;color:#161D1C;line-height:1.3}
+.t2{font-size:13px;color:#3F4947;line-height:1.4;margin-top:2px}
+.tag{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.spring{transition:transform .35s cubic-bezier(.34,1.56,.64,1),background-color .2s}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width:390px;min-height:1500px;box-sizing:border-box;background:#F4FBF9;color:#161D1C;font-family:'Noto Sans SC',sans-serif;padding-bottom:32px;">
+
+  <!-- 顶栏：返回 -->
+  <div style="height:64px;display:flex;align-items:center;gap:4px;padding:0 8px 0 4px;">
+    <button aria-label="返回" style="width:48px;height:48px;border:0;border-radius:24px;background:transparent;color:#161D1C;display:flex;align-items:center;justify-content:center;">
+      <svg class="ic" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg>
+    </button>
+    <div style="font-size:22px;font-weight:500;">药品资料中心</div>
+  </div>
+
+  <div style="padding:0 16px;">
+    <!-- 主卡：范围 + 搜索 -->
+    <div style="background:#B8EDE6;color:#00201D;border-radius:32px;padding:22px 20px 20px;">
+      <div class="tag" style="background:rgba(255,255,255,.65);color:#00504A;">
+        <svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px;margin-right:4px;"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21z"/><path d="M12 12.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4z"/></svg>
+        法国 · ANSM / BDPM 参考
+      </div>
+      <div style="font-size:24px;font-weight:800;line-height:1.25;margin-top:14px;letter-spacing:-.2px;">查找商品资料</div>
+      <div style="font-size:14px;line-height:1.55;margin-top:6px;color:#1F3A37;">只读参考：显示官方目录和你自己录入的资料。不提供用药建议，也不会改动剂量、方案或库存。</div>
+      <button class="spring" style="margin-top:18px;width:100%;height:56px;border:0;border-radius:999px;background:#FFFFFF;color:#3F4947;display:flex;align-items:center;gap:12px;padding:0 20px;font-size:15px;box-shadow:0 1px 2px rgba(0,0,0,.08);">
+        <svg class="ic" viewBox="0 0 24 24" style="color:#006A63;"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg>
+        搜索 BDPM 与已保存资料
+      </button>
+    </div>
+
+    <!-- 我的药物 -->
+    <div class="sh" style="display:flex;justify-content:space-between;align-items:baseline;">
+      <span>我的药物</span><span style="font-size:12px;font-weight:500;color:#3F4947;">点开可查看或关联产品来源</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:3px;">
+      <sc-for list="{{meds}}" as="m" hint-placeholder-count="3">
+        <div class="row" style="border-radius:{{m.radius}};opacity:{{m.op}};">
+          <div class="badge"><svg class="ic" viewBox="0 0 24 24"><path d="M10.5 20.5a5 5 0 0 1-7-7l6-6a5 5 0 0 1 7 7z"/><path d="M8.5 8.5l7 7"/></svg></div>
+          <div style="flex:1;min-width:0;">
+            <div class="t1">{{m.name}}</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
+              <span class="tag" style="background:{{m.tagBg}};color:{{m.tagFg}};">{{m.status}}</span>
+              <sc-if value="{{m.archived}}" hint-placeholder-val="{{ false }}"><span class="tag" style="background:#E3EAE8;color:#3F4947;">已归档</span></sc-if>
+            </div>
+          </div>
+          <svg class="ic" viewBox="0 0 24 24" style="color:#6F7977;flex:none;"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
+      </sc-for>
+    </div>
+    <div style="font-size:12px;color:#3F4947;margin:8px 8px 0;line-height:1.5;">关联资料只记录“这条药物对应哪种商品”，不改变剂量。</div>
+
+    <!-- 资料来源 -->
+    <div class="sh">资料来源</div>
+    <div style="display:flex;flex-direction:column;gap:3px;">
+      <div class="row" style="border-radius:24px 24px 6px 6px;">
+        <div class="badge"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l7.5 3v5.5c0 4.5-3.2 8-7.5 9.5-4.3-1.5-7.5-5-7.5-9.5V6z"/><path d="M8.8 12.2l2.2 2.2 4.3-4.4"/></svg></div>
+        <div style="flex:1;"><div class="t1">BDPM 官方目录</div><div class="t2">已随应用离线提供 · 版本 2026-09</div></div>
+        <span class="tag" style="background:#9EF2E8;color:#00201D;">官方</span>
+      </div>
+      <div class="row" style="border-radius:6px 6px 24px 24px;">
+        <div class="badge" style="background:#FFDBCE;color:#8E4D35;"><svg class="ic" viewBox="0 0 24 24"><path d="M4 20h4l10.5-10.5a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></div>
+        <div style="flex:1;"><div class="t1">我录入的资料</div><div class="t2">3 条 · 来自商品包装或网页，未经核实</div></div>
+        <span class="tag" style="background:#FFDBCE;color:#5C2410;">未核实</span>
+      </div>
+    </div>
+
+    <!-- 了解这些资料（可展开） -->
+    <div class="sh">了解这些资料</div>
+    <div style="display:flex;flex-direction:column;gap:3px;">
+      <sc-for list="{{infos}}" as="f" hint-placeholder-count="2">
+        <div style="background:#FFFFFF;border-radius:{{f.radius}};">
+          <button onClick="{{f.toggle}}" aria-expanded="{{f.exp}}" style="width:100%;border:0;background:transparent;display:flex;align-items:center;gap:14px;padding:14px 16px;text-align:left;color:#161D1C;">
+            <div class="badge"><svg class="ic" viewBox="0 0 24 24"><path d="{{f.icon}}"/></svg></div>
+            <div style="flex:1;"><div class="t1">{{f.title}}</div><div class="t2">{{f.sub}}</div></div>
+            <svg class="ic spring" viewBox="0 0 24 24" style="color:#6F7977;transform:{{f.rot}};"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <sc-if value="{{f.open}}" hint-placeholder-val="{{ false }}">
+            <div style="padding:0 20px 18px 70px;font-size:14px;line-height:1.6;color:#3F4947;">{{f.body}}</div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- 尚未开放 -->
+    <div class="sh" style="color:#3F4947;">尚未开放的模块</div>
+    <div style="display:flex;flex-direction:column;gap:3px;">
+      <sc-for list="{{future}}" as="u" hint-placeholder-count="5">
+        <div class="row" style="border-radius:{{u.radius}};background:#EEF5F3;padding:12px 16px;">
+          <svg class="ic" viewBox="0 0 24 24" style="color:#6F7977;flex:none;width:22px;height:22px;"><path d="{{u.icon}}"/></svg>
+          <div style="flex:1;"><div style="font-size:15px;font-weight:500;color:#3F4947;">{{u.name}}</div></div>
+          <span class="tag" style="background:transparent;border:1px solid #BEC9C6;color:#3F4947;font-weight:500;">尚未开放</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="font-size:12px;color:#3F4947;margin:10px 8px 0;line-height:1.5;">这些模块开放前不显示任何内容，以免与官方信息混淆。</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { open: 0 }; }
+  renderVals() {
+    var self = this;
+    function rad(i, n) { return n === 1 ? '24px' : (i === 0 ? '24px 24px 6px 6px' : (i === n - 1 ? '6px 6px 24px 24px' : '6px')); }
+    var medData = [
+      { name: '药物 A · 雌二醇 2 mg', status: '已关联 BDPM 官方资料', kind: 'ok' },
+      { name: '药物 B · 醋酸环丙孕酮', status: '已关联我录入的资料', kind: 'user' },
+      { name: '药物 C · 雌二醇凝胶', status: '未关联产品来源', kind: 'none', archived: true }
+    ];
+    var meds = medData.map(function (m, i) {
+      var c = m.kind === 'ok' ? ['#9EF2E8', '#00201D'] : (m.kind === 'user' ? ['#FFDBCE', '#5C2410'] : ['#E3EAE8', '#3F4947']);
+      return { name: m.name, status: m.status, tagBg: c[0], tagFg: c[1], archived: !!m.archived, op: m.archived ? '0.72' : '1', radius: rad(i, medData.length) };
+    });
+    var infoData = [
+      { title: '产品身份与来源', sub: '名称、成分、规格、CIS 编号', icon: 'M5 4h10l4 4v12H5zM15 4v4h4M8.5 12h7M8.5 16h5', body: '每条资料都标明来源：BDPM 官方目录，或你自己录入、尚未核实的资料。两者分开显示，不会混在一起。' },
+      { title: '包装信息', sub: '包装规格与 CIP13 编号', icon: 'M4 8l8-4 8 4v8l-8 4-8-4zM4 8l8 4 8-4M12 12v8', body: '可以只关联产品，也可以指定具体包装。包装信息只作参考，不会改变库存数量。' }
+    ];
+    var infos = infoData.map(function (f, i) {
+      var open = self.state.open === i;
+      return { title: f.title, sub: f.sub, icon: f.icon, body: f.body, open: open, exp: open ? 'true' : 'false', rot: open ? 'rotate(180deg)' : 'rotate(0deg)', radius: rad(i, infoData.length),
+        toggle: function () { self.setState({ open: open ? -1 : i }); } };
+    });
+    var futureData = [
+      { name: '产品特性摘要（RCP）', icon: 'M6 3h9l4 4v14H6zM9 11h7M9 15h7M9 19h4' },
+      { name: '说明书（Notice）', icon: 'M4 5.5C6.5 4 9.5 4 12 5.5 14.5 4 17.5 4 20 5.5V19c-2.5-1.5-5.5-1.5-8 0-2.5-1.5-5.5-1.5-8 0zM12 5.5V19' },
+      { name: '安全信息', icon: 'M12 3l7.5 3v5.5c0 4.5-3.2 8-7.5 9.5-4.3-1.5-7.5-5-7.5-9.5V6zM12 8.5v4M12 15.8v.2' },
+      { name: '药品短缺信息', icon: 'M4 8l8-4 8 4v8l-8 4-8-4zM4 8l8 4 8-4M12 12v8' },
+      { name: '召回及监管公告', icon: 'M4 10v4h3l6 4V6L7 10zM17 9a4 4 0 0 1 0 6' }
+    ];
+    var future = futureData.map(function (u, i) { return { name: u.name, icon: u.icon, radius: rad(i, futureData.length) }; });
+    return { meds: meds, infos: infos, future: future };
+  }
+}
+</script>
+</body>
+</html>
