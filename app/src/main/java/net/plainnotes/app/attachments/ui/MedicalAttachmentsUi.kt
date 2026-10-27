@@ -45,7 +45,9 @@ import net.plainnotes.app.ui.StatusPill
  */
 @Composable internal fun MedicalAttachmentsSection(state:AttachmentsState,targetLabel:String,onAdd:()->Unit,onConfirm:(String)->Unit,onCancelImport:()->Unit,
     onCheckStatus:()->Unit,onDismissMessage:()->Unit,onRetry:()->Unit,onOpen:(Item)->Unit,modifier:Modifier=Modifier,
-    onUnlink:((Item)->Unit)?=null,onDismissUnlinkMessage:()->Unit={}) {
+    onUnlink:((Item)->Unit)?=null,onDismissUnlinkMessage:()->Unit={},
+    /** Offered only when the file library can link an already stored file (not available yet); null draws nothing. */
+    onChooseExisting:(()->Unit)?=null) {
     var pendingUnlink by remember {mutableStateOf<Item?>(null)}
     Column(modifier.fillMaxWidth().testTag("attachments"),verticalArrangement=Arrangement.spacedBy(12.dp)) {
         val ready=(state.files as? Files.Ready)?.takeIf {!state.revoked && !state.ended}
@@ -82,13 +84,14 @@ import net.plainnotes.app.ui.StatusPill
                             OutlinedButton(onRetry,Modifier.heightIn(min=48.dp)) {Text(stringResource(R.string.attach_retry))}
                         }
                     }
-                    is Files.Ready->if(files.items.isEmpty())EmptyFiles(canAdd,onAdd)
+                    is Files.Ready->if(files.items.isEmpty())EmptyFiles(canAdd,onAdd,onChooseExisting)
                     else {
                         Column(verticalArrangement=Arrangement.spacedBy(3.dp)) {files.items.forEachIndexed {i,item->
                             AttachmentRow(item,i,files.items.size,onOpen,
                                 onUnlink=if(onUnlink!=null && state.unlinkStatus==UnlinkStatus.IDLE && canAdd) ({pendingUnlink=item}) else null)
                         }}
                         AddButton(canAdd,onAdd,prominent=false)
+                        ChooseExisting(canAdd,onChooseExisting)
                     }
                 }
             }
@@ -113,7 +116,11 @@ import net.plainnotes.app.ui.StatusPill
     if(prominent)Button(onAdd,modifier,enabled=enabled,content=content) else FilledTonalButton(onAdd,modifier,enabled=enabled,content=content)
 }
 
-@Composable private fun EmptyFiles(canAdd:Boolean,onAdd:()->Unit) {
+@Composable private fun ChooseExisting(enabled:Boolean,onChoose:(()->Unit)?) {
+    if(onChoose!=null)OutlinedButton(onChoose,Modifier.fillMaxWidth().heightIn(min=56.dp).testTag("attachments-choose-existing"),enabled=enabled) {Text(stringResource(R.string.attach_choose_existing))}
+}
+
+@Composable private fun EmptyFiles(canAdd:Boolean,onAdd:()->Unit,onChooseExisting:(()->Unit)?=null) {
     Surface(Modifier.fillMaxWidth().testTag("attachments-empty"),shape=Corners.card,color=MaterialTheme.colorScheme.surfaceContainerLow) {
         Column(Modifier.padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
             Surface(shape=MaterialTheme.shapes.large,color=MaterialTheme.colorScheme.secondaryContainer) {
@@ -122,6 +129,7 @@ import net.plainnotes.app.ui.StatusPill
             Text(stringResource(R.string.attach_empty_title),style=MaterialTheme.typography.titleMedium)
             Text(stringResource(R.string.attach_empty),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
             AddButton(canAdd,onAdd,prominent=true)
+            ChooseExisting(canAdd,onChooseExisting)
         }
     }
 }
@@ -198,7 +206,7 @@ import net.plainnotes.app.ui.StatusPill
 }
 
 /** File-type tile; the short code is a visual mark only (the localized type is read by TalkBack). */
-@Composable private fun FileTile(kind:FileKind,available:Boolean) {
+@Composable internal fun FileTile(kind:FileKind,available:Boolean) {
     val (container,content)=when {
         !available->MaterialTheme.colorScheme.surfaceContainerHigh to MaterialTheme.colorScheme.outline
         kind==FileKind.PDF->MaterialTheme.colorScheme.secondaryContainer to MaterialTheme.colorScheme.onSecondaryContainer
@@ -285,8 +293,8 @@ import net.plainnotes.app.ui.StatusPill
 }
 
 @Composable private fun LinkedRecord(label:String) {
-    Surface(Modifier.fillMaxWidth().testTag("attachment-viewer-linked"),shape=Corners.card,color=MaterialTheme.colorScheme.surfaceContainerLow) {
-        Row(Modifier.padding(16.dp).semantics(mergeDescendants=true) {},verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {
+    Surface(Modifier.fillMaxWidth(),shape=Corners.card,color=MaterialTheme.colorScheme.surfaceContainerLow) {
+        Row(Modifier.padding(16.dp).semantics(mergeDescendants=true) {}.testTag("attachment-viewer-linked"),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {
             Surface(Modifier.size(40.dp),shape=MaterialTheme.shapes.medium,color=MaterialTheme.colorScheme.secondaryContainer) {
                 Box(contentAlignment=Alignment.Center) {Icon(Icons.Outlined.Link,null,Modifier.size(20.dp),tint=MaterialTheme.colorScheme.onSecondaryContainer)}
             }

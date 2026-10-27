@@ -5,14 +5,8 @@
     <string name="center_fr_catalogue_reason">官方数据分发仍待来源与再利用许可审核。</string>
     <string name="center_shortages">药品短缺信息</string>
     <string name="center_recalls">召回及监管公告</string>
-    <string name="center_med_files">统一医疗文件浏览</string>
     <string name="center_med_originals">PDF、图片、处方及病历原件</string>
-    <string name="center_med_practitioners">医生与医疗机构独立档案</string>
     <string name="center_med_visit_links">文件与就诊记录关联</string>
     <string name="center_med_lab_links">文件与化验记录关联</string>
-    <string name="center_med_organize">文件分类、摘要与单文件导出</string>
-    <string name="center_med_files_reason">就诊和单项化验内已可管理附件，独立的全库文件浏览器尚未实现。</string>
-    <string name="center_med_practitioners_reason">独立档案尚未实现；已有医生与机构信息仍可在就诊记录中查看和编辑。</string>
     <string name="center_med_links_reason">选择具体就诊或单项化验，再打开“附件”添加或查看加密文件。支持 JPEG/PNG 预览；Android 9 及以上支持 PDF 第一页预览。Android 8 可保存与备份 PDF，不提供内置预览。</string>
-    <string name="center_med_organize_reason">独立文件整理、摘要和任意文件导出尚未实现。就诊内可导出资料包 PDF；上方可进入完整加密医疗备份。</string>
 </resources>

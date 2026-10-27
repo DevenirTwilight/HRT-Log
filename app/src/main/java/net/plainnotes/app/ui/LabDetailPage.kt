@@ -38,10 +38,16 @@ import java.time.ZoneId
                               files: (@Composable () -> Unit)? = null, overlay: (@Composable () -> Unit)? = null) {
     Box(modifier.fillMaxSize()) {
         Scaffold(topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.lab_page_title), Modifier.semantics { heading() }) },
-                navigationIcon = { IconButton(onBack, Modifier.testTag("lab-detail-back")) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, stringResource(R.string.ui10_back)) } },
-                actions = { TextButton(onEdit, Modifier.heightIn(min = 48.dp).testTag("lab-detail-edit")) {
-                    Icon(Icons.Outlined.Edit, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.edit)) } })
+            // At large font or on a narrow screen the edit action keeps its pencil and speaks its name instead of drawing it,
+            // so the title never wraps over the page.
+            val roomy = LocalDensity.current.fontScale <= 1.3f && androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 360
+            TopAppBar(title = { Text(stringResource(R.string.lab_page_title), Modifier.semantics { heading() }, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) },
+                navigationIcon = { IconButton(onBack, Modifier.size(48.dp).testTag("lab-detail-back")) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, stringResource(R.string.ui10_back)) } },
+                actions = {
+                    if (roomy) TextButton(onEdit, Modifier.heightIn(min = 48.dp).testTag("lab-detail-edit")) {
+                        Icon(Icons.Outlined.Edit, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.edit)) }
+                    else IconButton(onEdit, Modifier.size(48.dp).testTag("lab-detail-edit")) { Icon(Icons.Outlined.Edit, stringResource(R.string.edit)) }
+                })
         }, containerColor = MaterialTheme.colorScheme.surface) { inner ->
             Column(Modifier.padding(inner).fillMaxSize().verticalScroll(rememberScrollState()).padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 32.dp)
                 .testTag("lab-detail"), verticalArrangement = Arrangement.spacedBy(24.dp)) {

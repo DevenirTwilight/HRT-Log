@@ -37,6 +37,17 @@ class MedicalAttachmentUiGuardTest {
         assertTrue(File("../scripts/check_attachment_release_isolation.py").readText().contains("b'MedicalAttachmentUiTestActivity'"))
     }
 
+    /** UI-10: the file library, file page, file-first add flow and record outcome wait for the MED-03 backend; no production file may reach them. */
+    @Test fun fileLibraryComposablesAreNotReachableFromProductionNavigation() {
+        val library=File(ui,"library")
+        val names=listOf("MedicalFileLibraryScreen","MedicalFileDetailPage","AddDocumentDetails","RecordFileOutcomeCard","LibraryCapabilities")
+        val reaching=main.walkTopDown().filter {it.isFile && it.extension=="kt" && !it.path.startsWith(library.path)}
+            .filter {f->val text=f.readText();names.any {it in text}}.map {it.path}.toList()
+        assertEquals("No production file may use the file library composables yet",emptyList<String>(),reaching)
+        val forbidden=listOf("androidx.room","SupportSQLite","java.io.File","KeyStore","Cipher","Tink","AttachmentPersistentStore","openFileDescriptor","takePersistableUriPermission","SharedPreferences","Bundle","RuntimeLibrarySession")
+        library.listFiles()!!.filter {it.extension=="kt"}.forEach {f->val text=f.readText();forbidden.forEach {assertFalse("${f.name} uses $it",it in text)}}
+    }
+
     @Test fun uiPackageHasNoStorageKeysPathsOrSecondDecryption() {
         val forbidden=listOf("androidx.room","SupportSQLite","java.io.File","KeyStore","Cipher","Tink","AttachmentPersistentStore","AttachmentObjectStreams",
             "AttachmentDeviceKeys","openFileDescriptor","takePersistableUriPermission","SharedPreferences","putParcelable","Bundle")
