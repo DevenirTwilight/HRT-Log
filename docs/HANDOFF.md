@@ -1,3 +1,11 @@
+## 任务编号勘误：UI-10 与 MED-03（2026-10-27）
+
+负责人明确纠正分类：**UI-* 仅负责界面设计与交互接线**；医疗附件对象、回收/恢复、显式关联、文件库及完整备份等业务开发必须归入 **MED-* 系列**。2026-10-27 的 UI-10 / PR #135 是真实的 UI 接线任务，保留历史编号和已合并证据。此前建议将“完整医疗附件管理闭环”命名为 UI-11 是错误分类，现更正为 **MED-03（尚未批准实施的候选）**。不要为了纠错重命名已合并 PR 或改写历史 commits / 旧失败收据；本说明为其后续勘误。已合并 PR #133/#134/#135 的代码状态和 MED-02 正式入口不因本次编号修正而更改。
+
+候选 MED-03 需首先确认底层 `trash/restore` 语义：逻辑恢复对象不自动恢复旧 record links；普通用户目前只有指定关联解除，不能把它误称为完整附件回收站。缺少全库浏览或安全 relink 合同时如实保持 PARTIAL/OFF。永久密文/key 删除、来源不明关联和自动恢复旧身份均不获授权。本轮仅文档治理，不代表功能开发、CI 或 APK 交付。权威编号规则见 `docs/REQUIREMENTS.md` §156；Backlog 最新勘误见 `docs/BACKLOG.md` 顶部。
+
+---
+
 ## PR133已合并；主线返回键测试同步修复 — 2026-10-27
 
 #133真实最终7bdddc88的push/PR六门全部PASS，三API真实MainActivity全链PASS；正常保护合并ff54396bc96db4264c26bfb0cb930a2244dbd176，PUBLIC_ENTRY_ENABLED=true，文件树和已验源码一致。主线Science40524888999及安全40524889000四API均SUCCESS；主线Android40524889046/API35 job122261639387实际FAIL：全链已完成就诊/LAB真实SAF/COMMIT/认证读，line285连续Espresso.pressBack在关闭附件Dialog的焦点交接期选中无焦点Activity，RootViewWithoutFocusException。原XML/工件SHA已保存证据分支f8c06ac9，不能将旧失败重标通过。
