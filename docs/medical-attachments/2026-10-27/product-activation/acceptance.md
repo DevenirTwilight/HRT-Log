@@ -192,3 +192,37 @@ perform the same real touch. Do not remove the subsequent original document UUID
 authenticated preview or retained-unlink assertions. No production changes or sleeps.
 Native test compilation PASS; full exact-source result remains pending. Original
 failure and unmodified artifact SHA/XML retained under evidence/155043ff.
+
+## Final frozen-source results (7bdddc88)
+
+Production source is 7bdddc8850b83c083ea9d2abe4e90c3bb59da75c. This evidence
+branch is documentation only and is NOT an application build or replacement PR.
+PR Android run40519149329: real MainActivity product case PASS on API26/29/35,
+1 case each, 0 failures/errors/skips, suite20.808/22.689/20.588 seconds.
+API29/API35 whole jobs SUCCESS; API26 uploaded successful case and all steps,
+job/check settlement still awaited. Same-source push host run40519142188 SUCCESS:
+data659 (0 failures/skips); App2495 (0 failures,561 original skips), PeriodStability5
+PASS. Unsigned fullRelease/No INTERNET/test-payload isolation/source ledger PASS.
+The product case drives actual visit/LAB SAF, cancel, confirmed COMMIT, new Activity,
+authenticated PNG, exact unlink, typed result2 not panel1, real PNMEDBK2 transfer
+adapter and restored actual Activity. It does not claim backup file-picker widget
+interaction, physical phone or manual TalkBack coverage.
+
+MED02 library512MiB run40519149572/job122241475263 SUCCESS: base14, archive4,
+collection2, generation/collection/operation four death seams each, independent
+fresh AVD2 PASS; source and target Android IDs differ, transferred archive hash
+matches, target heap192MiB. Four API security run40519149422 SUCCESS.
+
+Separate non-protected Featherline512MiB job122241475849 FAIL: actual kernel LMK
+at initial wrong-password KDF, PID3921, anon217276KiB observed at termination,
+not total/peak RSS. Its importer/KDF/ViewModel/runner files are unchanged versus
+f0c4ea9a; this does NOT establish the allocation root cause or claim the whole App
+has passed all low-memory paths. Preserve this failure and do not rerun unchanged
+source, raise limits or omit checks to select a green result. Shared workflow is
+FAIL, its MED02 library job is independently SUCCESS. No claim of Feath repair.
+
+Protected six checks and exact PR host finalization still pending at this checkpoint.
+No merge before those actual conditions settle. F04 remains POTENTIAL; external
+review NOT_REVIEWED_EXTERNALLY. Owner §154 permits scoped internal admission;
+no independent certification, signature, APK delivery, tag/Release or permanent
+file/key deletion. Exact raw originals, artifact identities and limits are in receipt.json.

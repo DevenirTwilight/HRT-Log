@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="1" failures="0" errors="0" skipped="0" time="20.588" timestamp="2026-10-27T14:23:16" hostname="localhost">
+  <testsuite name="net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="20.179" timestamp="2026-10-27T14:23:16" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="mainActivityVisitAndIndividualLabSafCommitReopenPreviewUnlinkAndTransfer" classname="net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest" time="20.179" />
+  </testsuite>
+</testsuites>

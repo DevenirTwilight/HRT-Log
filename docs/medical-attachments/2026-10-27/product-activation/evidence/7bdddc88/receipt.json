@@ -81,5 +81,26 @@
     "sha256": "bb13ef571c730490ca0f227efb29a7a9cc395077ff5adfc6f58ef85bd76a148f",
     "zipCrc": "PASS",
     "realProductCase": "PASS;1 test,0 failures/errors/skips,22.689s suite"
+  },
+  "sameSourcePushHost": {
+    "run": 40519142188,
+    "job": 122241887192,
+    "conclusion": "SUCCESS",
+    "artifact": 12742263090,
+    "sha256": "1d04d6468fcef957c4f11f4b5b33efa3c06cd2fdbfa549fb0a344fce79ff4620",
+    "zipCrc": "PASS",
+    "data": "659 tests;0 failures/skips",
+    "app": "2495 tests;0 failures;561 skipped",
+    "PeriodStabilityTest": "5 PASS;0 failure/error/skip",
+    "release": "unsigned fullRelease compilation,No INTERNET,POC/ANSM test payload isolation,source ledger PASS"
+  },
+  "prApi35": {
+    "run": 40519149329,
+    "job": 122242051427,
+    "conclusion": "SUCCESS",
+    "artifact": 12742967606,
+    "sha256": "28a825d444bbdd6ae1e2fa6654fde7e7a4c2bddfb317678c4b3347de7fa5e044",
+    "zipCrc": "PASS",
+    "realProductCase": "PASS;1 test,0 failures/errors/skips,20.588s suite"
   }
 }
