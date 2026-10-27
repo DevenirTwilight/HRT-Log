@@ -6,5 +6,8 @@
         <provider android:name="net.plainnotes.app.data.Gate2PeerProvider"
             android:authorities="net.plainnotes.app.data.test.synthetic.gate2peer" android:exported="false"
             android:process=":gate2peer" />
+        <provider android:name="net.plainnotes.app.data.SyntheticSecurityDocumentsProvider"
+            android:authorities="net.plainnotes.app.data.test.security-provider" android:exported="false"
+            android:process=":securityprovider" />
     </application>
 </manifest>
