@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui10_back">Retour</string>
+    <string name="lab_page_title">Résultat d’analyse</string>
+    <string name="lab_page_report">Détails du rapport</string>
+    <string name="lab_page_sampled">Prélevé</string>
+    <string name="lab_page_range">Intervalle de référence</string>
+    <string name="lab_page_range_both">%1$s – %2$s %3$s</string>
+    <string name="lab_page_range_min">au moins %1$s %2$s</string>
+    <string name="lab_page_range_max">au plus %1$s %2$s</string>
+    <string name="lab_page_laboratory">Laboratoire</string>
+    <string name="lab_page_nothing_more">Aucun laboratoire, intervalle de référence ni note n’a été saisi. Modifiez ce résultat pour les ajouter.</string>
+    <string name="lab_page_context">Contexte du prélèvement</string>
+    <string name="attach_empty_title">Aucun fichier</string>
+    <plurals name="attach_count">
+        <item quantity="one">%d fichier</item>
+        <item quantity="many">%d fichiers</item>
+        <item quantity="other">%d fichiers</item>
+    </plurals>
+    <string name="attach_more">Autres actions pour %1$s</string>
+    <string name="viewer_linked_record">Enregistrement associé</string>
+    <string name="viewer_details">Détails</string>
+    <string name="viewer_detail_type">Type</string>
+    <string name="viewer_detail_preview">Aperçu</string>
+    <string name="viewer_preview_first_page">Première page seulement</string>
+    <string name="viewer_preview_full">Image entière</string>
+    <string name="mh_tab_records">Dossiers</string>
+    <string name="mh_tab_files">Fichiers</string>
+    <string name="mh_labs_tile">Résultats d’analyse</string>
+    <plurals name="mh_lab_count">
+        <item quantity="one">%d résultat</item>
+        <item quantity="many">%d résultats</item>
+        <item quantity="other">%d résultats</item>
+    </plurals>
+    <string name="mh_visits_tile">Rendez-vous et consultations</string>
+    <string name="mh_files_title">Fichiers médicaux</string>
+    <string name="mh_files_body">Gardez les rapports, ordonnances et photos avec la consultation ou le résultat d’analyse auquel ils appartiennent. Les fichiers restent sur ce téléphone.</string>
+    <string name="mh_add_file">Ajouter un fichier médical</string>
+    <string name="mh_by_record">Parcourir par enregistrement</string>
+    <string name="mh_visit_files">Fichiers de consultation</string>
+    <string name="mh_visit_files_body">Ouvrez une consultation pour ajouter ou voir ses fichiers.</string>
+    <string name="mh_lab_files">Fichiers de résultats</string>
+    <string name="mh_lab_files_body">Ouvrez un résultat pour ajouter ou voir ses fichiers.</string>
+    <string name="mh_backup_body">Sauvegardez ou restaurez tous les fichiers médicaux avec leurs associations.</string>
+    <string name="mh_soon_title">Pas encore disponible</string>
+    <string name="mh_soon_body">Une bibliothèque unique, la recherche et les catégories, les fichiers sans enregistrement, la restauration depuis la corbeille et les fiches de médecins et d’établissements ne sont pas encore disponibles. Rien n’est enregistré pour eux.</string>
+    <string name="mh_target_title">Ajouter un fichier à…</string>
+    <string name="mh_target_help">Choisissez l’enregistrement auquel appartient le fichier. Aucune association automatique par date ou par nom.</string>
+    <string name="mh_target_visit">Consultation</string>
+    <string name="mh_target_lab">Résultat d’analyse</string>
+    <string name="mh_target_no_visits">Aucune consultation n’est enregistrée.</string>
+    <string name="mh_target_no_labs">Aucun résultat d’analyse n’est enregistré.</string>
+    <string name="mh_target_close">Fermer</string>
+</resources>

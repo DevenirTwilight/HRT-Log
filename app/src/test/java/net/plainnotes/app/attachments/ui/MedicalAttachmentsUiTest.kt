@@ -186,12 +186,15 @@ class MedicalAttachmentsUiTest(private val locale:String,private val width:Int,p
         var selected:Item?=null
         ui.setContent {NotesTheme {MedicalAttachmentsSection(UiState(files=Files.Ready(listOf(image,pdf))),"Synthetic visit",{},{},{},{},{},{},{},
             onUnlink={selected=it})}}
+        // UI-10: the link action sits in each row's overflow menu, never as a loose button under the row.
+        ui.onNodeWithTag("attachment-unlink:${image.document}").assertDoesNotExist()
+        ui.onNodeWithTag("attachment-more:${image.document}").assertHasClickAction().performClick()
         ui.onNodeWithTag("attachment-unlink:${image.document}").performClick()
         ui.onNodeWithTag("attachments-unlink-confirm").assertExists()
         assertNull("Opening the confirmation must not write",selected)
         ui.onNodeWithTag("attachments-unlink-confirm").performClick()
         assertEquals(image,selected)
-        ui.onNodeWithTag("attachment-unlink:${pdf.document}").assertExists()
+        ui.onNodeWithTag("attachment-more:${pdf.document}").assertExists()
     }
 
 }

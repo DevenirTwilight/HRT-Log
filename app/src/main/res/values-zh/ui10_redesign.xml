@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui10_back">返回</string>
+    <string name="lab_page_title">化验结果</string>
+    <string name="lab_page_report">报告信息</string>
+    <string name="lab_page_sampled">采样时间</string>
+    <string name="lab_page_range">参考区间</string>
+    <string name="lab_page_range_both">%1$s – %2$s %3$s</string>
+    <string name="lab_page_range_min">不低于 %1$s %2$s</string>
+    <string name="lab_page_range_max">不高于 %1$s %2$s</string>
+    <string name="lab_page_laboratory">检测机构</string>
+    <string name="lab_page_nothing_more">没有填写检测机构、参考区间或备注。编辑这条结果可以补充。</string>
+    <string name="lab_page_context">采样背景</string>
+    <string name="attach_empty_title">还没有文件</string>
+    <plurals name="attach_count">
+        <item quantity="other">%d 个文件</item>
+    </plurals>
+    <string name="attach_more">%1$s 的更多操作</string>
+    <string name="viewer_linked_record">关联的记录</string>
+    <string name="viewer_details">详细信息</string>
+    <string name="viewer_detail_type">类型</string>
+    <string name="viewer_detail_preview">预览</string>
+    <string name="viewer_preview_first_page">仅第一页</string>
+    <string name="viewer_preview_full">整张图片</string>
+    <string name="mh_tab_records">医疗记录</string>
+    <string name="mh_tab_files">医疗文件</string>
+    <string name="mh_labs_tile">化验结果</string>
+    <plurals name="mh_lab_count">
+        <item quantity="other">%d 条</item>
+    </plurals>
+    <string name="mh_visits_tile">预约与就诊</string>
+    <string name="mh_files_title">医疗文件</string>
+    <string name="mh_files_body">把报告、处方和照片放在它们所属的就诊或化验结果里。文件只保存在这部手机上。</string>
+    <string name="mh_add_file">添加医疗文件</string>
+    <string name="mh_by_record">按记录查看</string>
+    <string name="mh_visit_files">就诊文件</string>
+    <string name="mh_visit_files_body">打开一次就诊，添加或查看它的文件。</string>
+    <string name="mh_lab_files">化验结果文件</string>
+    <string name="mh_lab_files_body">打开一条结果，添加或查看它的文件。</string>
+    <string name="mh_backup_body">把全部医疗文件和它们的关联一起备份或恢复。</string>
+    <string name="mh_soon_title">暂未开放</string>
+    <string name="mh_soon_body">统一的文件库、搜索和分类、没有关联记录的文件、从回收站恢复，以及医生和医疗机构档案，目前还没有开放，也不会为它们保存任何内容。</string>
+    <string name="mh_target_title">添加文件到…</string>
+    <string name="mh_target_help">选择文件所属的记录。不会按日期或名称自动关联。</string>
+    <string name="mh_target_visit">就诊</string>
+    <string name="mh_target_lab">化验结果</string>
+    <string name="mh_target_no_visits">还没有就诊记录。</string>
+    <string name="mh_target_no_labs">还没有化验结果。</string>
+    <string name="mh_target_close">关闭</string>
+</resources>

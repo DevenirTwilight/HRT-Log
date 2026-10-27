@@ -22,10 +22,14 @@ import net.plainnotes.app.data.MedicalAttachmentOperations
 import net.plainnotes.app.security.Session
 import net.plainnotes.app.security.launchPicker
 
-/** Production real-record page; runtime authorization and scoped activation remain mandatory.
- * OFF is checked before the ViewModel/runtime is touched. No URI or capability is saved. */
-@Composable internal fun MedicalAttachmentRecordPage(model:NotesViewModel,target:MedicalAttachmentOperations.Target,targetLabel:String,onBack:()->Unit) {
-    if(!AttachmentFlowController.PUBLIC_ENTRY_ENABLED)return
+/** One record's attachments as the production UI uses them: the scoped controller and the system-picker launcher.
+ * Shared by the visit page, the lab result page and the full-page host so there is exactly one authorization path. */
+internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd:()->Unit)
+
+/** Production real-record files. Runtime authorization and scoped activation remain mandatory.
+ * OFF is checked before the ViewModel/runtime is touched (null when OFF). No URI or capability is saved. */
+@Composable internal fun rememberRecordFiles(model:NotesViewModel,target:MedicalAttachmentOperations.Target):RecordFiles? {
+    if(!AttachmentFlowController.PUBLIC_ENTRY_ENABLED)return null
     val context=LocalContext.current
     val owner=LocalLifecycleOwner.current
     val scope=rememberCoroutineScope()
@@ -49,14 +53,38 @@ import net.plainnotes.app.security.launchPicker
         controller.close()
     }}
     LaunchedEffect(controller) {controller.refresh()}
-    MedicalAttachmentRecordContent(controller,targetLabel,onAdd={scope.launch {
+    return remember(controller,picker) {RecordFiles(controller) {scope.launch {
         controller.startImport()?.let {intent->
             awaiting=true
             try {picker.launchPicker(intent)}catch(_:Exception) {
                 awaiting=false;controller.picked(ActivityResult(Activity.RESULT_CANCELED,null),title)
             }
         }
-    }},onExit=onBack)
+    }}}
+}
+
+/** Full-page host kept for the guarded flows that still open the files on their own page. */
+@Composable internal fun MedicalAttachmentRecordPage(model:NotesViewModel,target:MedicalAttachmentOperations.Target,targetLabel:String,onBack:()->Unit) {
+    val files=rememberRecordFiles(model,target) ?: return
+    MedicalAttachmentRecordContent(files.controller,targetLabel,onAdd=files.onAdd,onExit=onBack)
+}
+
+/** The related-files block of a record page: stateless over the controller's state. */
+@Composable internal fun RecordFilesSection(files:RecordFiles,targetLabel:String,modifier:Modifier=Modifier) {
+    val state by files.controller.state.collectAsState()
+    val controller=files.controller
+    MedicalAttachmentsSection(state,targetLabel,onAdd=files.onAdd,onConfirm=controller::confirmImport,
+        onCancelImport=controller::cancelImport,onCheckStatus=controller::checkStatus,
+        onDismissMessage=controller::dismissImportMessage,onRetry=controller::refresh,onOpen=controller::open,modifier=modifier,
+        onUnlink=controller::unlink,onDismissUnlinkMessage=controller::dismissUnlinkMessage)
+}
+
+/** The page-sized file page over a record page. System BACK closes it first; nothing stale stays when it is closed or revoked. */
+@Composable internal fun RecordFilesViewer(files:RecordFiles,targetLabel:String,modifier:Modifier=Modifier) {
+    val state by files.controller.state.collectAsState()
+    val open=state.viewer!=MedicalAttachmentsController.Viewer.Closed
+    BackHandler(open) {files.controller.closeViewer()}
+    MedicalAttachmentViewer(state.viewer,files.controller::closeViewer,modifier,targetLabel)
 }
 
 /** Shared by the production page and the existing guarded synthetic host.
@@ -73,6 +101,6 @@ import net.plainnotes.app.security.launchPicker
                 onDismissMessage=controller::dismissImportMessage,onRetry=controller::refresh,onOpen=controller::open,
                 onUnlink=controller::unlink,onDismissUnlinkMessage=controller::dismissUnlinkMessage)
         }
-        MedicalAttachmentViewer(state.viewer,controller::closeViewer)
+        MedicalAttachmentViewer(state.viewer,controller::closeViewer,targetLabel=targetLabel)
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.shape.CircleShape
@@ -20,6 +21,13 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Timeline
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.VerifiedUser
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
@@ -33,74 +41,207 @@ import net.plainnotes.app.medical.*
 import java.time.*
 
 /**
- * A view over existing records, never a second clinical store or an inferred visit/lab association (§87: closeness in
- * time is never shown as a link). Attachments are managed through explicit visit / individual LAB targets; future modules only explain their status. [onConfirm] is wired to the same existing write the
- * visit detail's "Confirm the visit took place" uses in the medical archive (saveMedicalVisit → completed_utc, with its
- * stale-record check); it is undone with "Retract" in that detail.
+ * UI-10: the medical archive in two areas. "Records" is what happened (next visit, visits waiting for confirmation, confirmed
+ * visits, lab results, the treatment timeline); "Files" is where documents live. A view over existing records, never a second
+ * clinical store or an inferred visit/lab association (§87: closeness in time is never shown as a link). Files are managed
+ * through an explicit visit or an individual lab result; the "Add medical file" action first asks which record. Features that
+ * do not exist yet are described once, in one card. [onConfirm] is wired to the same existing write the visit detail's
+ * "Confirm the visit took place" uses (saveMedicalVisit → completed_utc, with its stale-record check); it is undone with
+ * "Retract" in that detail.
  */
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable fun MedicalRecordsScreen(appointments:List<AppointmentEntity>,onVisit:(AppointmentEntity)->Unit,onAdd:()->Unit,
     onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,contentPadding:PaddingValues,onConfirm:(AppointmentEntity)->Unit={onVisit(it)},
-    questionCounts:Map<Long,Int> = emptyMap(),now:Instant=Instant.now(),onVisits:(()->Unit)?=null,onMedicalBackup:(()->Unit)?=null) {
+    questionCounts:Map<Long,Int> = emptyMap(),now:Instant=Instant.now(),onVisits:(()->Unit)?=null,onMedicalBackup:(()->Unit)?=null,
+    labs:List<LabValueEntity> = emptyList(),onLab:((LabValueEntity)->Unit)?=null,initialTab:Int=0,onTabChange:(Int)->Unit={}) {
     val past=MedicalRecordIndex.past(appointments,now)
     val confirmed=past.filter{it.completed_utc!=null}
     val unconfirmed=past.filter{it.completed_utc==null}
     val next=appointments.filter{it.at_utc>now.toEpochMilli()}.minWithOrNull(compareBy<AppointmentEntity>{it.at_utc}.thenBy{it.id})
     val byYear=confirmed.groupBy{Instant.ofEpochMilli(it.at_utc).atZone(ZoneId.of(it.at_zone)).year}
-    LazyColumn(Modifier.fillMaxSize().testTag("medical-list"),contentPadding=PaddingValues(start=16.dp,end=16.dp,
-        top=contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-        // UI-05 F: "Record a past visit" ([onAdd]) is AppShell's top bar "+" (MedicalAddAction), no longer a list button.
-        onVisits?.let { visits ->
-            item("center-heading") {MedicalHeading(stringResource(R.string.medical_center_overview))}
-            item("center-visits") {RelatedCard(Icons.AutoMirrored.Outlined.EventNote,stringResource(R.string.medical_center_visits),"medical-center-visits",visits)}
-            item("center-prepare") {RelatedCard(Icons.AutoMirrored.Outlined.EventNote,stringResource(R.string.medical_center_prepare),"medical-center-prepare",visits)}
-            item("center-pack") {RelatedCard(Icons.AutoMirrored.Outlined.EventNote,stringResource(R.string.medical_center_pack),"medical-center-pack",visits)}
-            item("center-help") {Text(stringResource(R.string.medical_center_choose_visit),style=MaterialTheme.typography.bodySmall)}
+    // The Files area exists only where the guarded attachment capability is wired in.
+    val filesAvailable=onVisits!=null || onMedicalBackup!=null
+    var tab by rememberSaveable{mutableIntStateOf(initialTab)}
+    var choosing by remember{mutableStateOf(false)}
+    Column(Modifier.fillMaxSize()) {
+        if(filesAvailable)PrimaryTabRow(tab,Modifier.padding(top=contentPadding.calculateTopPadding()).testTag("medical-tabs")) {
+            Tab(tab==0,{tab=0;onTabChange(0)},Modifier.heightIn(min=48.dp).testTag("medical-tab:records"),text={Text(stringResource(R.string.mh_tab_records))})
+            Tab(tab==1,{tab=1;onTabChange(1)},Modifier.heightIn(min=48.dp).testTag("medical-tab:files"),text={Text(stringResource(R.string.mh_tab_files))})
         }
-        next?.let{a->item("next"){NextVisitCard(a,questionCounts[a.id] ?: 0,now,onVisit)}}
-        if(unconfirmed.isNotEmpty())item("unconfirmed"){MedicalHeading(stringResource(R.string.medical_were_you_there))}
-        items(unconfirmed,key={"visit:${it.id}"}) { MedicalVisitCard(it,questionCounts[it.id] ?: 0,onVisit,onConfirm) }
-        if(past.isEmpty())item("empty"){Text(stringResource(R.string.medical_empty))}
-        if(confirmed.isNotEmpty())item("confirmed"){MedicalHeading(stringResource(R.string.medical_confirmed))}
-        // UI-05 F: one inset white list per year (newest year first, as before), each visit a row; a tap opens it as before.
-        byYear.forEach{(year,rows)->
-            item("year:$year"){Text(year.toString(),style=MaterialTheme.typography.labelLarge,color=MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier=Modifier.semantics{heading()}.testTag("medical-year:$year"))}
-            item("year-list:$year"){
-                // UI-07 E: each visit its own container in a connected grouped list; the row keeps its own click and tag.
-                Column(Modifier.fillMaxWidth().testTag("medical-year-list:$year"),verticalArrangement=Arrangement.spacedBy(GroupedGap)) {
-                    rows.forEachIndexed{i,a-> GroupedItem(i,rows.size){MedicalVisitRow(a,questionCounts[a.id] ?: 0,onVisit)} }
+        LazyColumn(Modifier.fillMaxSize().testTag("medical-list"),contentPadding=PaddingValues(start=16.dp,end=16.dp,
+            top=if(filesAvailable)16.dp else contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+            if(!filesAvailable || tab==0)recordsArea(next,unconfirmed,past.isEmpty(),confirmed,byYear,questionCounts,now,onVisit,onConfirm,onVisits,onLabs,onHistory,onTrash,labs.size)
+            else filesArea(onVisits,onLabs,onMedicalBackup,onAddFile={choosing=true})
+        }
+    }
+    if(choosing)AddFileTargetDialog(appointments,labs,onVisit={choosing=false;onVisit(it)},onLab=onLab?.let{open->{v:LabValueEntity->choosing=false;open(v)}},onDismiss={choosing=false})
+}
+
+private fun LazyListScope.recordsArea(next:AppointmentEntity?,unconfirmed:List<AppointmentEntity>,noVisits:Boolean,confirmed:List<AppointmentEntity>,byYear:Map<Int,List<AppointmentEntity>>,
+    questionCounts:Map<Long,Int>,now:Instant,onVisit:(AppointmentEntity)->Unit,onConfirm:(AppointmentEntity)->Unit,onVisits:(()->Unit)?,onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,labCount:Int) {
+    // UI-05 F: "Record a past visit" is AppShell's top bar "+" (MedicalAddAction), not a list button.
+    next?.let{a->item("next"){NextVisitCard(a,questionCounts[a.id] ?: 0,now,onVisit)}}
+    if(unconfirmed.isNotEmpty())item("unconfirmed"){MedicalHeading(stringResource(R.string.medical_were_you_there))}
+    items(unconfirmed,key={"visit:${it.id}"}) { MedicalVisitCard(it,questionCounts[it.id] ?: 0,onVisit,onConfirm) }
+    if(noVisits)item("empty"){Text(stringResource(R.string.medical_empty))}
+    if(confirmed.isNotEmpty())item("confirmed"){MedicalHeading(stringResource(R.string.medical_confirmed))}
+    // UI-05 F: one inset white list per year (newest year first), each visit a row; a tap opens it as before.
+    byYear.forEach{(year,rows)->
+        item("year:$year"){Text(year.toString(),style=MaterialTheme.typography.labelLarge,color=MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier=Modifier.semantics{heading()}.testTag("medical-year:$year"))}
+        item("year-list:$year"){
+            // UI-07 E: each visit its own container in a connected grouped list; the row keeps its own click and tag.
+            Column(Modifier.fillMaxWidth().testTag("medical-year-list:$year"),verticalArrangement=Arrangement.spacedBy(GroupedGap)) {
+                rows.forEachIndexed{i,a-> GroupedItem(i,rows.size){MedicalVisitRow(a,questionCounts[a.id] ?: 0,onVisit)} }
+            }
+        }
+    }
+    item("related") { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
+        MedicalHeading(stringResource(R.string.medical_related))
+        Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max),horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+            HubTile(Icons.Outlined.Science,stringResource(R.string.mh_labs_tile),pluralStringResource(R.plurals.mh_lab_count,labCount,labCount),"medical-labs",onLabs,Modifier.weight(1f).fillMaxHeight())
+            HubTile(Icons.Outlined.Timeline,stringResource(R.string.medical_timeline),null,"medical-history",onHistory,Modifier.weight(1f).fillMaxHeight())
+        }
+        onVisits?.let{visits->RelatedCard(Icons.AutoMirrored.Outlined.EventNote,stringResource(R.string.mh_visits_tile),"medical-center-visits",visits)}
+    } }
+    item("bin") { TextButton(onClick=onTrash,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("medical-bin")){Text(stringResource(R.string.medical_bin))} }
+}
+
+private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedicalBackup:(()->Unit)?,onAddFile:()->Unit) {
+    item("files-hero") {
+        val c=MaterialTheme.colorScheme
+        Surface(Modifier.fillMaxWidth().testTag("medical-files-hero"),shape=Corners.card,color=c.secondaryContainer,contentColor=c.onSecondaryContainer) {
+            Column(Modifier.padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+                Surface(Modifier.size(48.dp),shape=Corners.full,color=c.surfaceContainerLowest,contentColor=c.primary) {
+                    Box(contentAlignment=Alignment.Center){Icon(Icons.Outlined.Description,null,Modifier.size(26.dp))}
+                }
+                Text(stringResource(R.string.mh_files_title),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold,modifier=Modifier.semantics{heading()})
+                Text(stringResource(R.string.mh_files_body),style=MaterialTheme.typography.bodyMedium)
+                Button(onAddFile,Modifier.fillMaxWidth().heightIn(min=56.dp).testTag("medical-add-file")) {
+                    Icon(Icons.Outlined.Add,null);Spacer(Modifier.width(8.dp));Text(stringResource(R.string.mh_add_file))
                 }
             }
         }
-        item("related") { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
-            MedicalHeading(stringResource(R.string.medical_related))
-            RelatedCard(Icons.Outlined.Timeline,stringResource(R.string.medical_timeline),"medical-history",onHistory)
-        } }
-        item("attachments-heading") {MedicalHeading(stringResource(R.string.ui10_attachments))}
-        item("attachments-scope") {Text(stringResource(R.string.ui10_attachment_scope))}
-        onVisits?.let { visits -> item("visit-attachments") {
-            RelatedCard(Icons.Outlined.Description,stringResource(R.string.ui10_visit_attachments),"medical-visit-attachments",visits)
-        } }
-        item("lab-attachments") {RelatedCard(Icons.Outlined.Science,stringResource(R.string.ui10_lab_attachments),"medical-labs",onLabs)}
-        onMedicalBackup?.let { backup -> item("medical-backup") {
-            RelatedCard(Icons.Outlined.Description,stringResource(R.string.med_transfer_title),"medical-complete-backup",backup)
-        } }
-        item("future-heading") {MedicalHeading(stringResource(R.string.center_future_modules))}
-        item("future-files") {UnavailableModuleCard(R.string.center_med_files,R.string.center_med_files_reason,"medical-future-files")}
-        item("future-practitioners") {UnavailableModuleCard(R.string.center_med_practitioners,R.string.center_med_practitioners_reason,"medical-future-practitioners")}
-        item("future-organize") {UnavailableModuleCard(R.string.center_med_organize,R.string.center_med_organize_reason,"medical-future-organize")}
-        item("bin") { TextButton(onClick=onTrash,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("medical-bin")){Text(stringResource(R.string.medical_bin))} }
+    }
+    item("files-by-record") { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
+        MedicalHeading(stringResource(R.string.mh_by_record))
+        Column(verticalArrangement=Arrangement.spacedBy(GroupedGap)) {
+            val rows=listOfNotNull(onVisits?.let{Triple(Icons.AutoMirrored.Outlined.EventNote,R.string.mh_visit_files to R.string.mh_visit_files_body,"medical-visit-attachments" to it)},
+                Triple(Icons.Outlined.Science,R.string.mh_lab_files to R.string.mh_lab_files_body,"medical-lab-attachments" to onLabs))
+            rows.forEachIndexed{i,(icon,text,action)->
+                GroupedItem(i,rows.size,onClick=action.second,modifier=Modifier.testTag(action.first)) {
+                    Row(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {
+                        Surface(Modifier.size(40.dp),shape=CircleShape,color=MaterialTheme.colorScheme.secondaryContainer) {
+                            Box(contentAlignment=Alignment.Center){Icon(icon,null,Modifier.size(20.dp),tint=MaterialTheme.colorScheme.onSecondaryContainer)}
+                        }
+                        Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(2.dp)) {
+                            Text(stringResource(text.first),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
+                            Text(stringResource(text.second),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,null)
+                    }
+                }
+            }
+        }
+    } }
+    onMedicalBackup?.let{backup->item("files-backup") {
+        Surface(backup,Modifier.fillMaxWidth().testTag("medical-complete-backup"),shape=Corners.card,color=MaterialTheme.colorScheme.surfaceContainerLow) {
+            Row(Modifier.padding(16.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {
+                Icon(Icons.Outlined.VerifiedUser,null,tint=MaterialTheme.colorScheme.primary)
+                Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(2.dp)) {
+                    Text(stringResource(R.string.med_transfer_title),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
+                    Text(stringResource(R.string.mh_backup_body),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,null)
+            }
+        }
+    }}
+    item("files-soon") {
+        Surface(Modifier.fillMaxWidth().testTag("medical-files-soon"),shape=Corners.card,color=MaterialTheme.colorScheme.surfaceContainerLow) {
+            Row(Modifier.padding(16.dp).semantics(mergeDescendants=true){},horizontalArrangement=Arrangement.spacedBy(16.dp)) {
+                Icon(Icons.Outlined.Info,null,tint=MaterialTheme.colorScheme.onSurfaceVariant)
+                Column(verticalArrangement=Arrangement.spacedBy(4.dp)) {
+                    Text(stringResource(R.string.mh_soon_title),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
+                    Text(stringResource(R.string.mh_soon_body),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+        }
     }
 }
+
 @Composable private fun MedicalHeading(text:String)=Text(text,style=sectionTitleStyle,modifier=Modifier.semantics{heading()})
 
+/** Sample 05: a tinted tile with an icon, a title and a one-line summary (not a bordered row). */
+@Composable private fun HubTile(icon:androidx.compose.ui.graphics.vector.ImageVector,title:String,summary:String?,tag:String,onClick:()->Unit,modifier:Modifier=Modifier) {
+    Surface(onClick,modifier.heightIn(min=96.dp).testTag(tag),shape=Corners.card,color=MaterialTheme.colorScheme.surfaceContainerLow) {
+        Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+            Icon(icon,null,tint=MaterialTheme.colorScheme.primary)
+            Text(title,style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
+            summary?.let{Text(it,style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)}
+        }
+    }
+}
+
 @Composable private fun RelatedCard(icon:androidx.compose.ui.graphics.vector.ImageVector,label:String,tag:String,onClick:()->Unit) {
-    OutlinedCard(onClick,Modifier.fillMaxWidth().heightIn(min=56.dp).testTag(tag)) {
+    Surface(onClick,Modifier.fillMaxWidth().heightIn(min=56.dp).testTag(tag),shape=Corners.card,color=MaterialTheme.colorScheme.surfaceContainerLow) {
         Row(Modifier.padding(16.dp),verticalAlignment=Alignment.CenterVertically) {
             Icon(icon,null,tint=MaterialTheme.colorScheme.primary);Spacer(Modifier.width(12.dp))
             Text(label,style=MaterialTheme.typography.titleSmall,modifier=Modifier.weight(1f))
             Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,null)
+        }
+    }
+}
+
+/**
+ * "Add medical file": the file always belongs to an explicit record, so the first step is choosing it. Visits and lab results
+ * are listed newest first; nothing is suggested by date or by name. Choosing opens that record's own page, where the related
+ * files and the single add action are. A lab result opens the individual result, never a panel.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable private fun AddFileTargetDialog(appointments:List<AppointmentEntity>,labs:List<LabValueEntity>,onVisit:(AppointmentEntity)->Unit,onLab:((LabValueEntity)->Unit)?,onDismiss:()->Unit) {
+    var kind by remember{mutableIntStateOf(0)}
+    val visits=remember(appointments){appointments.sortedWith(compareByDescending<AppointmentEntity>{it.at_utc}.thenByDescending{it.id})}
+    val results=remember(labs){labs.sortedWith(compareByDescending<LabValueEntity>{it.sampled_utc}.thenByDescending{it.id})}
+    androidx.compose.ui.window.Dialog(onDismissRequest=onDismiss,properties=androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth=false)) {
+        Surface(Modifier.fillMaxSize().testTag("file-target-dialog")) {
+            Scaffold(topBar={TopAppBar(title={Text(stringResource(R.string.mh_target_title),Modifier.semantics{heading()})},
+                navigationIcon={IconButton(onDismiss,Modifier.testTag("file-target-close")){Icon(Icons.Outlined.Close,stringResource(R.string.mh_target_close))}})},
+                containerColor=MaterialTheme.colorScheme.surface) {inner->
+                Column(Modifier.padding(inner).fillMaxSize().padding(horizontal=16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+                    Text(stringResource(R.string.mh_target_help),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                        listOf(R.string.mh_target_visit,R.string.mh_target_lab).forEachIndexed{i,label->
+                            SegmentedButton(kind==i,{kind=i},SegmentedButtonDefaults.itemShape(i,2),Modifier.heightIn(min=48.dp).testTag("file-target-kind:$i")){Text(stringResource(label))}
+                        }
+                    }
+                    if(kind==0) {
+                        if(visits.isEmpty())Text(stringResource(R.string.mh_target_no_visits))
+                        else LazyColumn(Modifier.fillMaxSize().testTag("file-target-visits"),verticalArrangement=Arrangement.spacedBy(GroupedGap),contentPadding=PaddingValues(bottom=24.dp)) {
+                            itemsIndexed(visits,key={_,a->"v:${a.id}"}){i,a->
+                                GroupedItem(i,visits.size,onClick={onVisit(a)},modifier=Modifier.testTag("file-target:visit:${a.id}")) {
+                                    Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(2.dp)) {
+                                        Text(choiceLabel(a.type.ifBlank{"OTHER"}),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
+                                        Text(listOfNotNull(visitWhen(a),a.practitioner?.takeIf{it.isNotBlank()}).joinToString(" · "),style=MaterialTheme.typography.bodyMedium)
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        if(results.isEmpty()||onLab==null)Text(stringResource(R.string.mh_target_no_labs))
+                        else LazyColumn(Modifier.fillMaxSize().testTag("file-target-labs"),verticalArrangement=Arrangement.spacedBy(GroupedGap),contentPadding=PaddingValues(bottom=24.dp)) {
+                            itemsIndexed(results,key={_,v->"l:${v.id}"}){i,v->
+                                val local=Instant.ofEpochMilli(v.sampled_utc).atZone(ZoneId.of(v.sampled_zone))
+                                GroupedItem(i,results.size,onClick={onLab(v)},modifier=Modifier.testTag("file-target:lab:${v.id}")) {
+                                    Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(2.dp)) {
+                                        Text(analyteLabel(v.analyte_code)+" · "+displayNumber(v.value)+" "+v.unit,style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
+                                        Text(formatDate(local.toLocalDate())+" · "+formatTime(local.toLocalTime()),style=MaterialTheme.typography.bodyMedium)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

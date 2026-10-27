@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- UI-10 (REQUIREMENTS §157): lab result page, related files, file page, medical records hub. -->
+<resources>
+    <string name="ui10_back">Back</string>
+    <string name="lab_page_title">Lab result</string>
+    <string name="lab_page_report">Report details</string>
+    <string name="lab_page_sampled">Sampled</string>
+    <string name="lab_page_range">Reference range</string>
+    <string name="lab_page_range_both">%1$s – %2$s %3$s</string>
+    <string name="lab_page_range_min">at least %1$s %2$s</string>
+    <string name="lab_page_range_max">at most %1$s %2$s</string>
+    <string name="lab_page_laboratory">Laboratory</string>
+    <string name="lab_page_nothing_more">No laboratory, reference range or note was entered. Edit this result to add them.</string>
+    <string name="lab_page_context">Sample context</string>
+    <string name="attach_empty_title">No files yet</string>
+    <plurals name="attach_count">
+        <item quantity="one">%d file</item>
+        <item quantity="other">%d files</item>
+    </plurals>
+    <string name="attach_more">More actions for %1$s</string>
+    <string name="viewer_linked_record">Linked record</string>
+    <string name="viewer_details">Details</string>
+    <string name="viewer_detail_type">Type</string>
+    <string name="viewer_detail_preview">Preview</string>
+    <string name="viewer_preview_first_page">First page only</string>
+    <string name="viewer_preview_full">Whole image</string>
+    <string name="mh_tab_records">Records</string>
+    <string name="mh_tab_files">Files</string>
+    <string name="mh_labs_tile">Lab results</string>
+    <plurals name="mh_lab_count">
+        <item quantity="one">%d result</item>
+        <item quantity="other">%d results</item>
+    </plurals>
+    <string name="mh_visits_tile">Appointments and visits</string>
+    <string name="mh_files_title">Medical files</string>
+    <string name="mh_files_body">Keep reports, prescriptions and photos with the visit or lab result they belong to. Files stay on this phone.</string>
+    <string name="mh_add_file">Add medical file</string>
+    <string name="mh_by_record">Browse by record</string>
+    <string name="mh_visit_files">Visit files</string>
+    <string name="mh_visit_files_body">Open a visit to add or view its files.</string>
+    <string name="mh_lab_files">Lab result files</string>
+    <string name="mh_lab_files_body">Open a result to add or view its files.</string>
+    <string name="mh_backup_body">Back up or restore every medical file together with its links.</string>
+    <string name="mh_soon_title">Not available yet</string>
+    <string name="mh_soon_body">One library for all files, search and categories, files without a record, restoring from the bin, and doctor and clinic profiles aren’t available yet. Nothing is stored for them.</string>
+    <string name="mh_target_title">Add a file to…</string>
+    <string name="mh_target_help">Choose the record the file belongs to. Files are never linked by date or by name.</string>
+    <string name="mh_target_visit">Visit</string>
+    <string name="mh_target_lab">Lab result</string>
+    <string name="mh_target_no_visits">No visits are recorded yet.</string>
+    <string name="mh_target_no_labs">No lab results are recorded yet.</string>
+    <string name="mh_target_close">Close</string>
+</resources>

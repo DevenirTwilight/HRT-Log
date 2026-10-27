@@ -62,21 +62,15 @@ class MedicalHomeTest {
         assertTrue("newest year first", y26 < y25)
     }
 
-    @Test fun futureFileEntriesOnlyExplainStatusAndNeverLaunchImporter() {
+    @Test fun withoutTheFileCapabilityThereIsNoFilesAreaAndNoImporter() {
         var actions=0
         ui.setContent { NotesTheme(ThemeMode.LIGHT) { MedicalRecordsScreen(emptyList(), {actions++}, {actions++}, {actions++}, {actions++}, {actions++}, PaddingValues(), now=now) } }
         val intents=org.robolectric.Shadows.shadowOf(ui.activity)
-        for(tag in listOf("medical-future-files","medical-future-practitioners","medical-future-organize")) {
-            list.performScrollToNode(hasTestTag(tag))
-            ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
-            ui.onNodeWithTag("center-unavailable-dialog").assertExists()
-            ui.onNode(hasText(s(R.string.center_not_open)) and hasAnyAncestor(hasTestTag("center-unavailable-dialog"))).assertExists()
-            ui.onAllNodesWithTag("attachment-add").assertCountEquals(0)
-            ui.onAllNodesWithTag("medical-save").assertCountEquals(0)
-            assertNull("No picker, document viewer or external activity",intents.nextStartedActivity)
-            ui.onNodeWithTag("center-unavailable-close").performClick()
-            ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
-        }
+        ui.onAllNodesWithTag("medical-tabs").assertCountEquals(0)
+        ui.onAllNodesWithTag("medical-add-file").assertCountEquals(0)
+        ui.onAllNodesWithTag("attachment-add").assertCountEquals(0)
+        ui.onAllNodesWithTag("medical-save").assertCountEquals(0)
+        assertNull("No picker, document viewer or external activity",intents.nextStartedActivity)
         assertEquals("No real action callback",0,actions)
     }
 
