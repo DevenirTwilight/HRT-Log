@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Bound the disposable API26 CI emulator's real ART heap; refuses physical devices."""
+"""Bound disposable CI emulator ART heap; API27 requires MED-02 security opt-in."""
 import argparse
 import subprocess
 import time
 
 
-def configure(execute=subprocess.check_output, pause=time.sleep, clock=time.monotonic, expected_api="26"):
-    if expected_api not in ("26", "29", "35"):
+def configure(execute=subprocess.check_output, pause=time.sleep, clock=time.monotonic, expected_api="26", security_api27=False):
+    if expected_api not in ("26", "29", "35") and not (expected_api=="27" and security_api27):
         raise ValueError("Only the explicit synthetic CI API matrix is allowed")
     def adb(*args):
         return execute(['adb', *args], text=True).strip()
@@ -46,5 +46,7 @@ def configure(execute=subprocess.check_output, pause=time.sleep, clock=time.mono
 
 if __name__ == '__main__':
     parser=argparse.ArgumentParser()
-    parser.add_argument("--api",choices=("26","29","35"),default="26")
-    configure(expected_api=parser.parse_args().api)
+    parser.add_argument("--api",choices=("26","27","29","35"),default="26")
+    parser.add_argument("--security-api27",action="store_true",help="Allow API27 only for the dedicated MED-02 security matrix")
+    args=parser.parse_args()
+    configure(expected_api=args.api,security_api27=args.security_api27)

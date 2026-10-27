@@ -14,7 +14,8 @@ internal object MedicalCollectionWriter {
     data class Receipt(val collection:UUID,val bytes:Long,val libraries:Int,val objects:Int) {val activatable=false}
     fun write(sources:List<Source>,active:UUID,parent:AttachmentSession.Capability,password:CharArray,target:OutputStream):Receipt {
         var child:AttachmentSession.Capability?=null
-        val sink=object:FilterOutputStream(target) {
+        val owned=if(target is RevocableArchiveOutput)target else RevocableArchiveOutput(target)
+        val sink=object:FilterOutputStream(owned) {
             var count=0L;private var closed=false
             override fun write(b:Int)=write(byteArrayOf(b.toByte()),0,1)
             override fun write(b:ByteArray,off:Int,len:Int) {check(!closed);child?.check();require(len>=0 && len<=MedicalArchiveCrypto.MAX_WIRE-count);out.write(b,off,len);count+=len}
@@ -22,6 +23,7 @@ internal object MedicalCollectionWriter {
         }
         try {
             val cap=parent.fork().also {child=it}
+            cap.own(AutoCloseable { owned.revoke() })
             require(sources.size in 1..8 && sources.map {it.id}.toSet().size==sources.size)
             val ordered=sources.sortedBy {it.id.toString()}
             val manifests=ordered.associate {it.id to it.snapshot.manifest()}

@@ -1,0 +1,2 @@
+While synthetic provider close blocks: revoke returned=false, further publication denied=true
+After provider released: revoke returned=true

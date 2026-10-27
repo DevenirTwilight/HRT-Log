@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.RevocableArchiveOutputTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-27T06:35:14.926Z" hostname="317a4b1aa7a1" time="0.024">
+  <properties/>
+  <testcase name="revocationDoesNotRunBlockingCloseOnCallerAndWorkerObservesCloseFailure" classname="net.plainnotes.app.data.RevocableArchiveOutputTest" time="0.012"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

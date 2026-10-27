@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.LocalDataWipeCoverageTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-27T08:49:17.216Z" hostname="317a4b1aa7a1" time="0.504">
+  <properties/>
+  <testcase name="everyPreferenceStoreIsClearedByDeleteAllData" classname="net.plainnotes.app.LocalDataWipeCoverageTest" time="0.467"/>
+  <testcase name="stockAlertsAreClearedBeforeTheDatabaseAndVerifiedAtTheEnd" classname="net.plainnotes.app.LocalDataWipeCoverageTest" time="0.017"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

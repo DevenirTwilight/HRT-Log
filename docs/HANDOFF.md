@@ -1,3 +1,56 @@
+## MED-02 #132 API27专用配置接线修正 — 2026-10-27
+
+- 6c6eee90生产代码在四API专用原生40476432331全部PASS，本地24项及仪器编译PASS。完整PR Android主构建/单元/lint/隔离步骤通过后，235前身的233 Python守卫发现通用性能矩阵应默认拒绝27（原test_ansm_native_performance，AttributeError暴露错误接线）；原日志保留6c-pr-android-full-failed.log.gz。
+- 修正仅脚本/workflow/新回归：通用configure继续只允许26/29/35；27必须由专用MED-02安全工作流显式--security-api27。原性能矩阵守卫不改；设备身份/模拟器/root/192MiB检查不改，新测试验证opt-in不能绕过。全235 Python测试PASS（security-api27-all-python-pass.log）；生产AppLock/UNKNOWN/擦除/IO代码不再改变。下一精确SHA完整CI待执行。
+- 6c实际branch lowmem40476452481两个作业PASS（含后续完整重启）；PR预览40476438280 Featherline PASS/library FAIL：base13、集合编解码4、业务集成2、generation四阶段和attachment operation四阶段重启均PASS；集合PREPARED准备60秒内未到seam，脚本finally force-stop，不是已证明OOM，根因NOT_PROVEN，集合恢复/后续阶段NOT_RUN。原ZIP/全日志保留；不增时限/预算/减数据，不为绿反复重试。旧6d/db605实际OOM/LMK原件仍保留。
+- 仍唯一Draft #132、禁止合并失败候选；推接线修正后的精确SHA运行完整必需+四API+低内存，结果通过全部条件后才正常保护merge，否则维持阻断。最终PR回执/证据包记录精确结果；OFF / NOT_REVIEWED_EXTERNALLY。
+
+## MED-02 #132 全套CI发现擦除遗漏，有限补正 — 2026-10-27
+
+- 6d8273b1四API专用原生push40472207972全部PASS，原件在最终交付证据；本地21项PASS。但完整Android 40472208031 FAIL：2486项、1 fail、561 skip，唯一失败是原有LocalDataWipeCoverageTest，指出F02新存储attachment-reconciliation-v1未接入删除全部数据。原始HTML/作业日志保留在evidence/6d-*；不是放宽守卫。
+- 最小补正：生产wipeAll真实清除该存储并检查commit与空状态；与retain共用锁、擦除epoch使旧owner不能在wipe后写回中性ID。新回归验证所有scope清空、旧owner拒绝及新owner正常。算法/格式/schema/配额/开关/预算不变。先相关针对性回归再冻结新精确HEAD完整CI，当前NOT_RUN。
+- 6d实际branch低内存40472224042：Featherline PASS，library FAIL；13项base+heap及3项集合编解码/认证/破坏拒绝PASS，完整业务集成PID3959 adj0被kernel OOM killer杀死（anon RSS130356KiB），后续重启阶段NOT_RUN。PR预览40472213786 library PASS、Featherline FAIL，前台PID3892 adj0被LMK杀死（222100KiB）。两份原ZIP保留，分配根因NOT_PROVEN。不能互相替代或宣称后续绿修复根因；禁止为绿调整RAM/heap/数据/断言或无根据反复重试。
+- 唯一Draft #132维持阻断，不合并、不签名/发布/启用。新HEAD仍需完整必需/四API/低内存结果；最终CI回执和未验证范围写PR及交付包，避免为记录结果无限改变SHA。OFF / NOT_REVIEWED_EXTERNALLY。
+
+## MED-02 #132 四API针对性通过，冻结最终SHA — 2026-10-27
+
+- 747ed6e2 push40469859893：API26/27/29/35专用原生均PASS；原ZIP/run JSON已存修复evidence。F01实际死亡恢复和缺key拒绝重建（26/27）PASS；F02真实COMMIT→force-stop→fresh PID只读核对（四API）PASS；F03阻塞pipe远端release前worker退出/根事务释放/业务事实不变/无成功回执四API均PASS。F04主线程阻塞未复现（1/1/23/8ms），其他provider/真机仍POTENTIAL。
+- dbac92c3公开FileChannel替代API29失败fcntl，不绕过隐藏API。最终仅补分配失败stream清理和文档/evidence/inventory。本地70静态项PASS，相关JVM和仪器编译复测；原db605 API29/自动导入超时/前台LMK失败证据不覆盖。
+- 下一步推本次最终HEAD，完整精确SHA CI+四API专用+实际branch HEAD低内存两作业；结果写唯一#132 PR描述和最终交付回执，不因记录绿色再改SHA。全部相关/必需检查成功且无冲突/未解决评审后才ready正常保护merge（无admin），合并后查默认CI。失败则保留Draft并留证，不松断言/预算。OFF / NOT_REVIEWED_EXTERNALLY，物理设备/独立外审NOT_RUN，无签名发布授权。
+
+## 精确 HEAD db6053b0 失败与公开 API 修正 — 2026-10-27
+
+- 最终候选 db6053b0 的 API29 兼容性作业 FAIL：`Os.fcntlInt` 在该平台抛 `NoSuchMethodError`；SDK API 表确认该符号自 API30 才公开。API26/27 专用安全回归虽 PASS（含缺 key 不重建），不能替代 API29。API26 AutomaticImport 超时 FAIL，根因尚未证明，保留原件，不放宽断言。
+- 精确分支 lowmem 40466469228：library PASS，Featherline FAIL，内核记录前台进程 LMK；分配根因 NOT_PROVEN，不将后续绿色改称已修复。原 ZIP、API29/低内存失败日志存 evidence/db605-*。
+- 撤销非公开 fcntl 路径，改用公开 FileChannel 的 interruptible close；清理仍有界且 off-main，正常 IO 等待关闭失败。输入持有并清零固定 64KiB direct buffer，避免隐式临时缓存残留；不改密码学、格式、事务或配额。阻塞 open/FUSE/OEM 的可中断性仍未证明，不保证通用截止时间。
+- 本地针对性 AppLock/controller/store/UI guard/output-close 回归及 app/core 仪器源码编译 PASS。新的真实管道验证扩展 API26/27/29/35，当前 NOT_RUN；先验证再冻结精确 SHA 完整 CI。仍唯一 Draft #132，不合并失败候选。OFF / NOT_REVIEWED_EXTERNALLY。
+
+## MED-02 #132 针对性原生通过，准备最终精确SHA — 2026-10-27
+
+- 6eb350ba push40464182728两API均SUCCESS；PR40464190169也SUCCESS。原始两ZIP和完整receipt已保存。API26/27 F01真实PID死亡/恢复，F02实际COMMIT后fresh PID只读核对（opens不增），F03原provider release前worker退出/根事务可写/业务事实不变/无成功返回均PASS。撤权API26=1ms/API27=2ms，输出close不在main。F04主线程close阻塞未复现，读worker退出问题已有限修正；整体其他设备/provider仍POTENTIAL。
+- F01 0f7c88a2、F02 e358b0a8、F03 cdfe354f+22524070；最后补TEST-OWNED缺key不重建负向断言，随最终CI执行。原始失败/guard失败均保留，断言没放宽，算法/格式/schema/配额/开关不变。
+- 当前只做封版文档和额外负向断言，不再改生产。下一步固定此后的最终HEAD，等待完整必需CI、API26/29/35、专用security26/27及lowmem两作业全部合格，再ready并按§106正常merge（禁止admin）。如有实际失败只最小修正并留证。最终精确SHA/run/merge结果写PR描述与交付回执，避免为记录绿不断改变受测SHA；合并后复验默认分支CI。本次记录封版时PR仍唯一#132、Draft；之后状态以PR及最终交付回执为准。物理设备/硬件断电/人工TalkBack/独立外审NOT_RUN，真实附件及签名发布OFF。
+
+## MED-02 #132 真实管道证据后的有限IO修复 — 2026-10-27
+
+- 55c62f3e原生push40462163586/PR40462167902均FAIL。API26/27 F01和F02实际PID死亡/恢复/真实COMMIT+只读核对均PASS；原始两ZIP和log已保留。F03 revoke主线程仅1/2ms、close不在main，但worker未退出；F04 close同样1/2ms返回，读worker仍等待provider。故F04“主线程同步close阻塞”未复现，保留POTENTIAL；确证关闭PFD不能打断既有pipe IO。不能松动worker退出断言来绿。55c低内存library/Featherline均SUCCESS，不能代替新IO源码。
+- 新修复只在SAF descriptor边界加O_NONBLOCK+50ms poll+既有cap撤权检查；每次worker IO持有dup防FD编号复用，进度停滞30s拒绝。原件输入仍单次open/16MiB有界读取；可靠pipe EOF保留checkError。PNMEDBK2格式/加密/schema/quota/断言均不改。输出仍用原bounded off-main close；不重构通用AttachmentSession线程模型，阻塞open/regular/FUSE忽略NONBLOCK仍是残余风险。
+- 相关本地回归发现UI包禁止存储的原守卫失败（旧XML保留），已把中性检查点存储移到application attachments层；未改守卫。修正后相关suite通过（既有4个dialog skip保留），新IO针对性与app/core AndroidTest编译PASS。下一步推新源码，只验证同一原始真实pipe/PID断言，再固定最终SHA跑完整必需CI。PR仍Draft，不合并/启用/签名发布。
+
+## MED-02 #132 原生首轮失败与针对性通过 — 2026-10-27
+
+- 唯一PR https://github.com/DevenirTwilight/HRT-Log/pull/132，Draft；pre-final2470ca2d，F01提交0f7c88a2、F02 e358b0a8、F03 cdfe354f。不能合并。
+- 本地针对性AppLock2/controller14/neutral-store1/output-close1=18项PASS/0fail/0error/0skip，app/core AndroidTest编译PASS；5+61静态守卫PASS。原始XML和环境失败/复测日志已保留。不是原生运行。
+- 真实Android首轮push40461145091/PR40461203361均FAIL。API26 F01实际死亡/fresh PID恢复PASS；F02尚未实际提交成功；F03/F04未取得provider，不能称漏洞验证失败或F04确认。API27在configure脚本白名单拒绝，实际测试NOT_RUN。原始artifact12715230402 ZIP及joblog保留evidence/2470-*。
+- 平台Android8 DocumentsProvider.attachInfo实际字节码要求exported/grantUriPermissions/MANAGE_DOCUMENTS；测试manifest原exportedfalse导致无法初始化。仅修测试APK声明并保留权限。F02改用既有公开合成只读provider（不伪造SAF grant），加opens计数；既有真实DocumentsUI验收不替换。补27白名单和Robolectric27离线依赖，heap仍192m。下一步只看新源码原生原件；F04保留POTENTIAL。最终精确SHA必需CI/低内存仍待跑全。
+
+## MED-02 有限安全修复接手 — 2026-10-27
+
+- 单一分支security/med02-f01-f04-20261027，基线默认03f724f4；#131实际head9fafe3c2已于2026-10-26T20:18:50Z合并，其所列作业均SUCCESS，原始快照已保存。旧审计BLOCKED_ENGINEERING仅是当时文档状态，不能继续称#131未合并；历史LMK原件及根因未证明仍保留。
+- 原审计/evidence ZIP保留于docs/security/med02-fixes-2026-10-27/evidence/original-audit-evidence.zip。F01检查backup-only且认证只取既有key；F02中性检查点在dispatch前commit、按scope/typed target隔离、UNKNOWN不重放；F03只将该writer输出注册到bounded异步close，成功路径等待关闭。尚未宣称native PASS。
+- 针对性Robolectric/worker回归及AndroidTest编译正在本地跑；初始缺JDK编译器、直接网络连接和新JDK CA错误原件保留scratch，已安装独立SDK/JDK并使用会话proxy与系统Java CA，无TLS关闭。没有本地KVM；真实API26/27 pipe/provider/PID死亡通过新增专用GitHub作业验证。
+- F04目前POTENTIAL；必须读实际native原始结果，不用宿主任意InputStream.close假定真实provider利用成功。正式入口/feature/外审/格式/配额/schema/PK/签名发布不变。下一步：针对性结果、最小修复真实失败、只开一个PR，然后最终SHA必需CI及适用低内存，再正常保护合并。
+
 ## #131 final acceptance takeover — 2026-10-26
 
 Remote exact4e73d700/default9192b91a; continuing existing feature/med02-stage-c-lifecycle-20261026 in /workspace/HRT-Log-med02-final-131, clean remote baseline, no new PR/stage. Original five failed native/lowmem jobs and artifacts preserved external-review/final-acceptance-evidence/4e73-original (CRC/hash checked). Host/JVM/Science and preview low-memory PASS; threeAPI facade export failed, library failed SWITCHED60s seam after13+4+2/first3seams PASS, Featherline real foregroundLMK afterCOMMIT confirmed, not logcat-clear cause.
@@ -3948,3 +4001,16 @@ Stage C final ownership check: presentation hide now also cancels a chosen-but-u
 最终代码/测试冻结a61f10638446a72602e514c357c7615635146cb9；本地局部80项零失败4项既有skip，最后新增安全备份的控制器6项零失败skip，app/core AndroidTest编译PASS，Python隔离5+设计61PASS。API26/29/35新增真实facade及app adapter测试、适用低内存及最终HEAD六门槛仍PENDING，绝不借旧源绿灯。库低内存原12合同保留+新增1=13，原集合/新设备C测试不删不缩。旧cc08 push5项异步单测FAIL原件已保留，PR同源与一次有界failed-job重试PASS，ROOT_CAUSE_NOT_PROVEN，不能叫首次全过；原始ZIPhash与选取HTML/nativeXML见既有外审包closeout-evidence-cc08。
 
 下一步：冻结文档/源码哈希后推送一次最终#131 HEAD；读取其必需CI/native/低内存真实结果，精准修缺陷，全部达标按§106正常受保护合并并查主线。不取消有效检查，不重复启动旧源CI。单一最终报告与132项文件hash在既有external-review/，当前验收PENDING不能先称ENGINEERING_COMPLETE。公开/真实原件/销毁OFF，NOT_REVIEWED_EXTERNALLY。真机/人工TalkBack/硬断电NOT_RUN。unlink/trash/restore UI推迟并要求负责人接受首版误加文件保留限制；永久删除另批。通过最后工程门槛后核心开发结束，不再自动创建StageD/E/F，外审/真机与明确启用批准交还负责人。
+
+最终初始化失败清理后的本地串行复测 PASS：21项JVM（0 fail/error/skip），app/core AndroidTest编译 PASS，日志 final-local-serial-pass.log / final-local-targeted XML保留。此前资源压力中止部分仍NOT_RUN。下一步固定最终SHA完整CI，不以本地代替原生/低内存验证。
+
+擦除补正后针对性回归 PASS：24项JVM（0 fail/error/skip），app/core AndroidTest编译PASS，原XML和日志见wipe-targeted-*；70项静态约束PASS。下一步推本次新HEAD，运行完整精确SHA CI、四API安全原生和分支HEAD低内存两项。6d低内存FAIL仍未修复根因；保持Draft直到全部条件满足，否则禁止合并。
+
+
+## PR132 最终验收继续 — 2026-10-27
+
+唯一PR132/分支security/med02-f01-f04-20261027，基线06e4fa97，无其他未合并共享修改。06e正式Android/Science/四API安全专项PASS；PR40480396404仅Featherline低内存FAIL，分支40480442930两项PASS不可替代。原fail/pass ZIP、job日志与SHA在docs/security/med02-fixes-2026-10-27/evidence/picker-06e-comparison。已证明测试就绪谓词不接受合法可导航空Recent，尚未选择合成root；系统provider首更新延迟底层原因NOT_PROVEN，系统内存压力存在但本次没有前台app/选择器被杀证据。
+
+仅测试最小补丁增加严格本地化Recent+可见导航+空dir_list且drawer未开条件；仍30秒，所有真实SAF/目录/文件身份/密码/COMMIT/重开/幂等断言保留。本地AndroidTest编译进行中，尚无新源原生PASS。下一步编译成功后一次推送最终HEAD，读取自动必要CI及低内存结果，不另开PR、不循环重跑。全门槛成功无审查/冲突后按106正常Ready/保护合并并查主线；失败保留Draft和精确阻断。F01–03修复保留，F04 POTENTIAL、历史LMK根因未知、真机/TalkBack/硬断电/独立外审未跑；feature0/publicfalse/NOT_REVIEWED_EXTERNALLY/RELEASE_NOT_AUTHORIZED。
+
+本次测试补丁本地 `:app:compileFullDebugAndroidTestKotlin` PASS（2m42s），只证明编译；真实SAF/低内存及最终必需CI仍待新HEAD，不冒充原生通过。

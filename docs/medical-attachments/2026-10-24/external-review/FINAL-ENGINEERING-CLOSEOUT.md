@@ -1,5 +1,7 @@
 # MED-02 V1 FINAL ACCEPTANCE & HANDOFF
 
+> 2026-10-27 correction: the checkpoint below is historical. #131 head9fafe3c27d563c32f5638029ff084db3e1b59d7f was merged normally as03f724f41e91a1a866d98de31de673594d1105af on2026-10-26T20:18:50Z; its listed CI jobs are SUCCESS. See [retained GitHub receipt](../../../security/med02-fixes-2026-10-27/evidence/pr131-merged.json) and [bounded security follow-up](../../../security/med02-fixes-2026-10-27/README.md). Do not continue to report #131 as Draft/unmerged. Original failures and unproven LMK allocator cause remain historical evidence, not relabelled fixed. No external certification or feature enablement follows from merge.
+
 2026-10-26. **NOT_REVIEWED_EXTERNALLY / RELEASE_NOT_AUTHORIZED**.
 
 

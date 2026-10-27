@@ -52,7 +52,7 @@ import net.plainnotes.app.ui.StatusPill
                         Text(stringResource(R.string.attach_empty),color=MaterialTheme.colorScheme.onSurfaceVariant,modifier=Modifier.testTag("attachments-empty"))
                     else Column(verticalArrangement=Arrangement.spacedBy(2.dp)) {files.items.forEachIndexed {i,item->AttachmentRow(item,i,files.items.size,onOpen)}}
                 }
-                val saving=state.import==Import.Saving || state.import==Import.Checking
+                val saving=state.import==Import.Saving || state.import==Import.Checking || state.import==Import.Unknown
                 Button(onAdd,Modifier.heightIn(min=48.dp).testTag("attachments-add"),enabled=!saving && state.import !is Import.Confirming) {
                     Icon(Icons.Outlined.Add,null);Spacer(Modifier.width(8.dp));Text(stringResource(R.string.attach_add))
                 }

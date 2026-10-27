@@ -25,14 +25,19 @@ class AppLock(private val context: Context, private val file: String = "lock.bin
     private val store get() = AtomicFile(File(context.noBackupFilesDir, file))
     private val failuresKey = "${file}_failures"; private val untilKey = "${file}_until"
 
-    val enabled get() = store.baseFile.exists()
+    // AtomicFile on API26/27 can leave ONLY .bak after the backup rename. That is
+    // still an enabled lock, including when recovery/decryption later fails.
+    val enabled get() = runCatching {
+        store.baseFile.exists() || File(store.baseFile.path + ".bak").exists()
+    }.getOrDefault(true)
     var biometric: Boolean
         get() = prefs.getBoolean("lock_biometric", false)
         set(v) { prefs.edit().putBoolean("lock_biometric", v).apply() }
 
-    private fun key(): SecretKey {
+    private fun key(create: Boolean = false): SecretKey {
         val ks = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
         (ks.getKey(alias, null) as? SecretKey)?.let { return it }
+        check(create && !enabled) { "Existing lock key unavailable; credentials retained" }
         val g = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
         g.init(KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
             .setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).setKeySize(256).build())
@@ -52,7 +57,7 @@ class AppLock(private val context: Context, private val file: String = "lock.bin
         require(validPin(pin))
         val salt = ByteArray(16).also(SecureRandom()::nextBytes)
         val plain = salt + hash(pin, salt)
-        val c = Cipher.getInstance("AES/GCM/NoPadding"); c.init(Cipher.ENCRYPT_MODE, key())
+        val c = Cipher.getInstance("AES/GCM/NoPadding"); c.init(Cipher.ENCRYPT_MODE, key(create = true))
         val out = store.startWrite()
         try { out.write(c.iv + c.doFinal(plain)); store.finishWrite(out) } catch (e: Exception) { store.failWrite(out); throw e }
         prefs.edit().putInt(failuresKey, 0).putLong(untilKey, 0).apply()

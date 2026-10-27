@@ -1,0 +1,3 @@
+Injected death immediately after Android 8 AtomicFile backup rename
+Interrupted-update fixture: base=false backup=true AppLock.enabled=false
+Android 8 AtomicFile.readFully recovered original credential: true

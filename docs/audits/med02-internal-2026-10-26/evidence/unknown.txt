@@ -1,0 +1,3 @@
+After synthetic COMMIT and lost response: state=Unknown, imports=1, commit facts=1
+startImport while UNKNOWN returned picker: true; state=Idle
+New operation/document UUID accepted: imports=2, distinct commit facts=2; state=Saved(listStale=false); first unresolved identity no longer checkable
