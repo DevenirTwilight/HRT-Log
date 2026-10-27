@@ -4014,3 +4014,10 @@ Stage C final ownership check: presentation hide now also cancels a chosen-but-u
 仅测试最小补丁增加严格本地化Recent+可见导航+空dir_list且drawer未开条件；仍30秒，所有真实SAF/目录/文件身份/密码/COMMIT/重开/幂等断言保留。本地AndroidTest编译进行中，尚无新源原生PASS。下一步编译成功后一次推送最终HEAD，读取自动必要CI及低内存结果，不另开PR、不循环重跑。全门槛成功无审查/冲突后按106正常Ready/保护合并并查主线；失败保留Draft和精确阻断。F01–03修复保留，F04 POTENTIAL、历史LMK根因未知、真机/TalkBack/硬断电/独立外审未跑；feature0/publicfalse/NOT_REVIEWED_EXTERNALLY/RELEASE_NOT_AUTHORIZED。
 
 本次测试补丁本地 `:app:compileFullDebugAndroidTestKotlin` PASS（2m42s），只证明编译；真实SAF/低内存及最终必需CI仍待新HEAD，不冒充原生通过。
+
+
+## MED-02 production activation 实施中 — 2026-10-27
+
+工作树/workspace/HRT-Log-med02-activation，feature/med02-production-activation，基线f0c4ea9a（主线三工作流PASS）。已开始真实生产代码：Room21迁移链、AttachmentActivationSchema安装扩展原store触发器合法0/1（保留其他约束）、事务内校验当前dataset/epoch的显式activate；迁移不自动启用或改写临床数据。SchemaGuards在21打开时安装兼容约束；旧版本Room拒绝21回退。新增迁移边/错scope/非法flag/事务回滚测试。当前仅数据库底座在实现，UI仍OFF；compileDebugKotlin运行中，测试/恢复/正式导航/管理/隐私/内部准入/Release/CI未完成，不可Ready或合并。必须继续备份元数据0约束兼容审查、真实入口和全部验收，不能将这一切片冒充产品完成。新政策已记154，外审事实保留，永久删除与公开发行未授权。
+
+Room21底座本地compileDebugKotlin PASS；新增AttachmentActivationTest PASS，验证旧OFF guard拒绝1、20→21 guard扩展不变身份、错误dataset拒绝、非法2拒绝、未提交回滚无残留。首个测试源码误用Room.use导致编译FAIL，已改显式try/finally.close，未改断言；后续定向测试PASS。仍未证明真实旧文件升级/恢复/完整产品路径，保持正式入口OFF，未创建可合并PR。
