@@ -1,8 +1,8 @@
-## 任务编号勘误：UI-10 与 MED-03（2026-10-27）
+## 任务编号二次更正：撤销 UI-10 归类，改为 MED-02-EXPOSE（2026-10-27）
 
-负责人明确纠正分类：**UI-* 仅负责界面设计与交互接线**；医疗附件对象、回收/恢复、显式关联、文件库及完整备份等业务开发必须归入 **MED-* 系列**。2026-10-27 的 UI-10 / PR #135 是真实的 UI 接线任务，保留历史编号和已合并证据。此前建议将“完整医疗附件管理闭环”命名为 UI-11 是错误分类，现更正为 **MED-03（尚未批准实施的候选）**。不要为了纠错重命名已合并 PR 或改写历史 commits / 旧失败收据；本说明为其后续勘误。已合并 PR #133/#134/#135 的代码状态和 MED-02 正式入口不因本次编号修正而更改。
+负责人指出：**前后端接通并非新 UI 设计，不得占用 UI 系列任务编号**。核对 PR #135 的 diff 后确认，它只有现有附件/医疗备份的实际导航接线、现成入口卡片、过时占位清理、简单文案及测试，没有交付独立新 UI 方案。因此原先对其“UI-10 编号保留正确”的判断**撤销**；PR #135 正式按产品集成归入 **MED-02-EXPOSE**。**UI-10 当前空缺**，仅留给真正的新 UI/UX 设计任务。原定“UI-11 医疗附件管理闭环”仍更正为 MED-03 候选（未批准）。规则见 REQUIREMENTS §156，最新 BACKLOG 顶部。
 
-候选 MED-03 需首先确认底层 `trash/restore` 语义：逻辑恢复对象不自动恢复旧 record links；普通用户目前只有指定关联解除，不能把它误称为完整附件回收站。缺少全库浏览或安全 relink 合同时如实保持 PARTIAL/OFF。永久密文/key 删除、来源不明关联和自动恢复旧身份均不获授权。本轮仅文档治理，不代表功能开发、CI 或 APK 交付。权威编号规则见 `docs/REQUIREMENTS.md` §156；Backlog 最新勘误见 `docs/BACKLOG.md` 顶部。
+保留 PR #135 原有 Git 合并 SHA、CI、历史测试和 legacy 资源文件名以维持审计追溯；旧记录写“UI-10”只是当时误标，不代表本次修改重新设计了界面。不要把历史错误分类继续传播到新的功能开发提示词或交接。MED-02 入口 ON、不更改附件安全/备份/数据处理、不授权签名或公开发布。本轮仅文档与元数据纠正。
 
 ---
 
@@ -4087,12 +4087,12 @@ PR133 a0真实MainActivity API35已通过就诊SAF/COMMIT/新Activity/认证预�
 PR133 155 API29真实流程已通过就诊全链、LAB=2/panel=1 SAF/COMMIT/认证读取、PNMEDBK2真实导出/认证prepare/实际root COMMIT、旧scope拒绝及新MainActivity作用域初始化。最后测试在新Activity仅runtime Ready后立即performScrollTo查恢复后的row2，尚未等待异步NotesViewModel医疗快照，出现即时缺节点（无等待），原XML/工件SHA已入evidence/155043ff。只补有界可观察等待：state非loading且extra中存在该LAB、真实语义节点已组成；随后保持全部原触摸/恢复附件UUID/认证像素/保留解除关系断言，不引入sleep/重放/跳过，不改生产代码。新AndroidTest编译PASS（9秒）。继续最终精确源码CI，公共入口ON，不能把部分完成写为整个用例PASS。
 
 
-## UI-10 医疗中心真实入口与占位收敛 — 2026-10-27
+## MED-02-EXPOSE 医疗中心真实入口与占位收敛（原误称 UI-10） — 2026-10-27
 
 独立 feature/ui10-enable-implemented-modules（/workspace/HRT-Log-ui10），精确基线 0daeb63cc47f7baac6c603735dd6307c085bbe08，无并行 UI-10 PR。注意本地 origin 默认分支 tracking ref 曾停在旧 #125；已显式 fetch 默认分支并以 GitHub branch API 确认 #134 后基线，没有以旧 ref 开发交付。医疗中心新增就诊附件、单项 LAB 附件、完整医疗备份实际导航；共享原 DataSection 的生产 transfer Dialog，未复制引擎。仅统一文件浏览、医生独立档案、分类摘要/任意文件导出保留准确未开放说明。四语范围明确 JPEG/PNG、Android9+ PDF首页/Android8保存备份。BDPM现有身份/包装入口不变，五项监管/正文未开放不变；ComingSoonScreen 无实际未就绪 Destination。旧 ref2_official_off 资源无生产引用，不代表当前身份目录状态；不为无引用历史字符串破坏原文资源冻结。
 
 旧占位测试仅保留真正未实现三项；新增 hub 入口及返回/无写入检查，四语/320dp/2倍字/主题矩阵继续；现有真实 MainActivity 产品合同从医疗中心进入就诊与 LAB，保留原 SAF/COMMIT/读取/目标 ID/恢复断言。定向编译与回归正在运行，原生及最终 CI PENDING，不能先标 PASS。PUBLIC_ENTRY_ENABLED=true 保持，不改数据层、协议、资源限额或权限，不签名/交付/Release。
 
-UI-10 本地证据更新：生产与AndroidTest编译PASS。首次测试未传离线Robolectric目录导致MavenArtifactFetcher连接失败；原日志保存ui10-evidence。正确离线参数后130项中129 PASS，唯一FAIL是新增返回测试直接给底层Activity发Back，未发给当前Dialog；仅将该测试改为对话框窗口Back，所有实际返回/不写入断言保留，AppShell全套随后PASS（27秒）。其余已执行：医疗/药品矩阵各48组、中心四语主题8、药品真实NotesApp导航1、MedicalHome4、Ui05MedicalHome3全部PASS。药品中心合并两个完全相同onBrowse按钮为单一catalogue入口，四语明确BDPM身份/包装与用户来源边界，五项真正未实现卡仍OFF。原生MainActivity及最终必需CI等待PR，不将上述本地测试冒充原生。
+MED-02-EXPOSE（旧名 UI-10）本地证据更新：生产与AndroidTest编译PASS。首次测试未传离线Robolectric目录导致MavenArtifactFetcher连接失败；原日志保存ui10-evidence。正确离线参数后130项中129 PASS，唯一FAIL是新增返回测试直接给底层Activity发Back，未发给当前Dialog；仅将该测试改为对话框窗口Back，所有实际返回/不写入断言保留，AppShell全套随后PASS（27秒）。其余已执行：医疗/药品矩阵各48组、中心四语主题8、药品真实NotesApp导航1、MedicalHome4、Ui05MedicalHome3全部PASS。药品中心合并两个完全相同onBrowse按钮为单一catalogue入口，四语明确BDPM身份/包装与用户来源边界，五项真正未实现卡仍OFF。原生MainActivity及最终必需CI等待PR，不将上述本地测试冒充原生。
 
-UI-10 首轮1439原生保留真实FAIL：API35 PR40557152041/job122376148218及API26 push122375990485在产品合同276行仍查Menu；从新hub入口进入后，真实顶栏是medical-center-back。此前已完成真实就诊SAF/COMMIT/新Activity/认证预览；不是丢数据或保存失败。只将原几何安全断言的对象改为实际返回按钮，仍要求viewer close在真实顶栏下方、仍必须真实触摸关闭；其余业务断言不变。原XML及artifact ID/SHA在ui10-evidence。1439安全PR40557152049/API35在安装emulator报ZipFile unknown archive，未启动设备/未执行测试；原job122376147317和完整日志已保留于PR评论及/workspace/ui10-ci-evidence，仅同源该失败job做一次有界重试，其他安全API全PASS。新测试输入修正后的精确源码仍须CI，不借1439通过项冒充最终全过；不修改生产安全路径或放宽断言。
+MED-02-EXPOSE（旧名 UI-10）首轮1439原生保留真实FAIL：API35 PR40557152041/job122376148218及API26 push122375990485在产品合同276行仍查Menu；从新hub入口进入后，真实顶栏是medical-center-back。此前已完成真实就诊SAF/COMMIT/新Activity/认证预览；不是丢数据或保存失败。只将原几何安全断言的对象改为实际返回按钮，仍要求viewer close在真实顶栏下方、仍必须真实触摸关闭；其余业务断言不变。原XML及artifact ID/SHA在ui10-evidence。1439安全PR40557152049/API35在安装emulator报ZipFile unknown archive，未启动设备/未执行测试；原job122376147317和完整日志已保留于PR评论及/workspace/ui10-ci-evidence，仅同源该失败job做一次有界重试，其他安全API全PASS。新测试输入修正后的精确源码仍须CI，不借1439通过项冒充最终全过；不修改生产安全路径或放宽断言。
