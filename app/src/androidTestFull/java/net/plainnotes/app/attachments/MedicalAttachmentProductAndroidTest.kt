@@ -273,8 +273,8 @@ class MedicalAttachmentProductAndroidTest {
         press(hasContentDescription(label))
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
         val closeBounds=ui.onNodeWithTag("attachment-viewer-close").fetchSemanticsNode().boundsInRoot
-        val menuBounds=ui.onNodeWithContentDescription(text(R.string.menu)).fetchSemanticsNode().boundsInRoot
-        assertTrue("Preview close must be below the real shell app bar, not covered by its menu",closeBounds.top>=menuBounds.bottom)
+        val navigationBounds=ui.onNodeWithTag("medical-center-back").assertExists().fetchSemanticsNode().boundsInRoot
+        assertTrue("Preview close must be below the real shell app bar, not covered by its Back button",closeBounds.top>=navigationBounds.bottom)
         tag("attachment-viewer-close")
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment-viewer").fetchSemanticsNodes().isEmpty()}
         // A retained uncertain result is resolved only by the visible, read-only action.
