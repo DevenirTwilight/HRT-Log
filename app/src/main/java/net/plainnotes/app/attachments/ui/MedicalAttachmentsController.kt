@@ -47,11 +47,14 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
         data class Message(val title:String,val reason:Reason):Viewer
     }
     enum class Reason { PDF_NEEDS_ANDROID_9, NO_PREVIEW_FOR_TYPE, FAILED }
+    enum class UnlinkStatus { IDLE, WORKING, REMOVED, REMOVED_LIST_STALE, UNKNOWN }
     data class State(val files:Files=Files.Loading,val import:Import=Import.Idle,val viewer:Viewer=Viewer.Closed,
         /** Lock/disguise/data switch: nothing from this record is shown until access is granted again. */
         val revoked:Boolean=false,
         /** The screen's data scope ended (data switch/restore): this page can never read again. */
-        val ended:Boolean=false)
+        val ended:Boolean=false,
+        val unlinkStatus:UnlinkStatus=UnlinkStatus.IDLE,
+        val unlinking:UUID?=null)
 
     private var unresolved:Pair<UUID,UUID>?=gateway.pending()
     private val mutable=MutableStateFlow(State(import=if(unresolved==null)Import.Idle else Import.Unknown))
@@ -86,7 +89,9 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
 
     /** Returns the system picker intent. Choosing a file creates no operation and reads nothing. */
     suspend fun startImport():Intent? {
-        if(picking || closed || state.value.revoked || unresolved!=null || state.value.import in setOf(Import.Unknown,Import.Saving,Import.Checking))return null
+        if(picking || closed || state.value.revoked || unresolved!=null ||
+            state.value.unlinkStatus in setOf(UnlinkStatus.WORKING,UnlinkStatus.UNKNOWN) ||
+            state.value.import in setOf(Import.Unknown,Import.Saving,Import.Checking))return null
         chosen=null;picking=true
         mutable.update {it.copy(import=Import.Idle)}
         return try {gateway.pickerIntent()}catch(e:CancellationException) {throw e}catch(_:Exception) {picking=false;null}
@@ -154,6 +159,41 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
         // Failure to durably clear keeps new writes blocked, even after a COMMIT receipt.
         if(runCatching {gateway.resolved(operation,document)}.isSuccess)unresolved=null
     }
+    /** Result ambiguity must never start an implicit repeated write. */
+    @Synchronized fun unlink(item:Item) {
+        val current=state.value
+        if(closed || current.revoked || current.ended ||
+            current.unlinkStatus in setOf(UnlinkStatus.WORKING,UnlinkStatus.UNKNOWN) ||
+            current.import is Import.Confirming ||
+            current.import in setOf(Import.Saving,Import.Checking,Import.Unknown) ||
+            unresolved!=null || picking || job?.isActive==true)return
+        val visible=current.files as? Files.Ready ?: return
+        if(!item.available || visible.items.none {it.document==item.document && it.available})return
+        closeViewer()
+        mutable.update {it.copy(unlinking=item.document,unlinkStatus=UnlinkStatus.WORKING)}
+        scope.launch {
+            val result=try {withContext(io) {gateway.unlink(item.document)}}
+                catch(e:CancellationException) {throw e}catch(_:Exception) {null}
+            val latest=loadFiles()
+            synchronized(this@MedicalAttachmentsController) {
+                if(closed || state.value.revoked || state.value.ended)return@synchronized
+                val gone=latest?.items?.none {it.document==item.document}
+                val status=when {
+                    result==true && latest!=null->UnlinkStatus.REMOVED
+                    result==true->UnlinkStatus.REMOVED_LIST_STALE
+                    latest!=null && gone==true->UnlinkStatus.REMOVED
+                    result==false && latest!=null->UnlinkStatus.IDLE
+                    else->UnlinkStatus.UNKNOWN
+                }
+                mutable.update {it.copy(unlinking=null,unlinkStatus=status,files=latest ?: it.files)}
+            }
+        }
+    }
+    fun dismissUnlinkMessage() {
+        if(state.value.unlinkStatus in setOf(UnlinkStatus.REMOVED,UnlinkStatus.REMOVED_LIST_STALE))
+            mutable.update {it.copy(unlinkStatus=UnlinkStatus.IDLE)}
+    }
+
     /** Read-only status of the unresolved attempt with the same identities. */
     fun checkStatus() {
         val (operation,document)=unresolved ?: return

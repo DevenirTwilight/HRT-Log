@@ -64,7 +64,8 @@ import net.plainnotes.app.security.launchPicker
         Column(Modifier.padding(16.dp).fillMaxSize().verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             MedicalAttachmentsSection(state,targetLabel,onAdd=onAdd,onConfirm=controller::confirmImport,
                 onCancelImport=controller::cancelImport,onCheckStatus=controller::checkStatus,
-                onDismissMessage=controller::dismissImportMessage,onRetry=controller::refresh,onOpen=controller::open)
+                onDismissMessage=controller::dismissImportMessage,onRetry=controller::refresh,onOpen=controller::open,
+                onUnlink=controller::unlink,onDismissUnlinkMessage=controller::dismissUnlinkMessage)
         }
         MedicalAttachmentViewer(state.viewer,controller::closeViewer)
     }

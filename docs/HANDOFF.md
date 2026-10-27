@@ -4034,3 +4034,8 @@ Room21底座本地compileDebugKotlin PASS；新增AttachmentActivationTest PASS�
 ## PR133 Room21 retained-library compatibility follow-up — 2026-10-27
 
 On HEAD 63ad86b2, API26/29 native CI failed original lifecycle/collection tests: clean retained library expectation REFUSED observed UNKNOWN; full collection export saw OWNER_OR_SET_NOT_PROVEN. An inspection found LibraryResourceFacts.scan and LibraryCollectionCapture hardcoded supported retained SQLCipher database versions 15..20 even though current Room is 21. Bounded code patch accepts version 21 in both retained readers, without changing credential handling, archive framing, authentication, ownership proof, record/attachment data or quota. Root-cause hypothesis needs confirmation by exact new-SHA original native tests; prior failures remain recorded, not waived. Public attachment entry still OFF until unlink, four-language/privacy synchronization, real MainActivity SAF/restore E2E, review and required final CI pass. No signed/released APK.
+
+
+## PR133 single-link management UI — 2026-10-27
+
+Production MedicalAttachmentRecordPage now offers explicit user confirmation before retracting a single current-record link. The existing scoped RuntimeAttachmentGateway/AttachmentFlowController/MedicalAttachmentOperations perform the transaction; list view hides retracted links; the controller represents possible post-commit uncertainty without replaying unlink. Ciphertext, document metadata, other relationships, backup content and storage budget remain intact. Added targeted native facade regression in previous commit. Pending fresh-source compile/CI, 4-language notices and final integration E2E; public entry still OFF at this checkpoint.
