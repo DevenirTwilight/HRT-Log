@@ -1,0 +1,12 @@
+android	pass	21m57s	https://github.com/DevenirTwilight/HRT-Log/actions/runs/40519142188/job/122241887192	
+android	pass	32m35s	https://github.com/DevenirTwilight/HRT-Log/actions/runs/40519149329/job/122242051034	
+attachment-poc-compatibility (26)	pass	25m55s	https://github.com/DevenirTwilight/HRT-Log/actions/runs/40519142188/job/122241887728	
+attachment-poc-compatibility (26)	pass	25m33s	https://github.com/DevenirTwilight/HRT-Log/actions/runs/40519149329/job/122242051466	
+attachment-poc-compatibility (29)	pass	16m48s	https://github.com/DevenirTwilight/HRT-Log/actions/runs/40519142188/job/122241887324	
+attachment-poc-compatibility (29)	pass	24m38s	https://github.com/DevenirTwilight/HRT-Log/actions/runs/40519149329/job/122242050918	
+device-tests	pass	30m10s	https://github.com/DevenirTwilight/HRT-Log/actions/runs/40519142188/job/122241887633	
+device-tests	pass	28m30s	https://github.com/DevenirTwilight/HRT-Log/actions/runs/40519149329/job/122242051427	
+jvm	pass	1m38s	https://github.com/DevenirTwilight/HRT-Log/actions/runs/40519142188/job/122241886797	
+jvm	pass	1m26s	https://github.com/DevenirTwilight/HRT-Log/actions/runs/40519149329/job/122242050701	
+science-change-gate	pass	19s	https://github.com/DevenirTwilight/HRT-Log/actions/runs/40519142160/job/122241073778	
+science-change-gate	pass	15s	https://github.com/DevenirTwilight/HRT-Log/actions/runs/40519149359/job/122241100550	

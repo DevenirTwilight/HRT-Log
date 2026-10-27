@@ -226,3 +226,17 @@ No merge before those actual conditions settle. F04 remains POTENTIAL; external
 review NOT_REVIEWED_EXTERNALLY. Owner §154 permits scoped internal admission;
 no independent certification, signature, APK delivery, tag/Release or permanent
 file/key deletion. Exact raw originals, artifact identities and limits are in receipt.json.
+
+## Protected merge receipt
+
+All six protected checks on exact7bdddc88 PASS, both push and PR. No unresolved
+review threads or conflicts. Normal Ready + squash auto merge, matched head, no
+admin override: PR133 MERGED 2026-10-27T14:49:38Z, ff54396bc96db4264c26bfb0cb930a2244dbd176.
+Actual default claude/new-session-1959qb fetched and PUBLIC_ENTRY_ENABLED=true.
+Source/merge trees both95f132496434e9ce81f3c010db117cfb68e0d80a, exact equality.
+Scoped internal MED02 admission PASS under owner154; separate optional Featherline
+LMK failure remains recorded, not a universal low-memory or independent external
+certification claim. No bypass, skip, signing, delivery or release.
+Mainline automatically started40524889046 Android /40524889000 security /
+40524888999 Science, currently PENDING. Continue checking actual results; no new
+manual rerun or further development phase.

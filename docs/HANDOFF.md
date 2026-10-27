@@ -1,3 +1,11 @@
+## PR133 已受保护合并，最终主线复核进行中 — 2026-10-27
+
+#133最终源码7bdddc8850b83c083ea9d2abe4e90c3bb59da75c的六门（push/PR均）全部PASS，无冲突/未解决审查；正常gh pr ready及gh pr merge --squash --auto --match-head-commit执行，未用admin。2026-10-27T14:49:38Z已合并ff54396bc96db4264c26bfb0cb930a2244dbd176到实际默认分支claude/new-session-1959qb；源码树均95f132496434e9ce81f3c010db117cfb68e0d80a完全一致，PUBLIC_ENTRY_ENABLED=true。
+
+API26/29/35真实MainActivity→就诊/单项LAB→DocumentsUI→确认→COMMIT→重进→认证预览→指定单条解除→PNMEDBK2实际网关恢复→新Activity认证读取均PASS；备份选择器控件全程未实测，不冒充。Room20→21现有guard迁移/多库/旧scope及负向已验。MED02512MiB完整作业及fresh C、12处强停重启PASS，四API安全PASS。独立非保护Featherline512MiB真实LMK仍FAIL，未定位分配根因，未改标通过/重跑挑绿；不宣称整个App所有低内存路径合格。此风险已在合并前PR公开保留。
+
+主线自动CI：Android40524889046、安全40524889000、Science40524888999现PENDING，继续只复核这些，不再触发新原生轮次或开发阶段。证据、原件、逐项范围及状态见本分支docs/medical-attachments/2026-10-27/product-activation/evidence/7bdddc88/receipt.json。本分支仅文档不是应用源，不合入产品、不用于构建；生产和合并SHA在上。签名/交付APK/tag/Release/永久删除均未执行。NOT_REVIEWED_EXTERNALLY、F04 POTENTIAL；真机/人工TalkBack/硬断电NOT_RUN。用户手机必须更新APK。下一步等待已运行主线CI、记录准确结果，结束本阶段，不开D/E/F或其它PR。
+
 ## PR133 最终验收实时证据（2026-10-27）
 
 本证据分支只存文档/原件，不是生产源码、不用于构建或合并。生产冻结源7bdddc8850b83c083ea9d2abe4e90c3bb59da75c，#133当前仍Draft，公共入口ON。API26/29最终PR真实MainActivity全链用例均1PASS、0 fail/error/skip，已独立核原XML（suite20.808/22.689秒）；API29 PR整作业及同源push Android主构建/未签名Release/隔离SUCCESS。附件库512MiB整作业SUCCESS，base14、归档4、集合2、三类各四阶段强停核对及独立新AVD恢复2项均实际PASS；四API安全专项SUCCESS。API35原生整作业也SUCCESS、真实全链1PASS/0失败/0跳过（suite20.588秒）；最终PR主构建及其它已运行检查收尾仍PENDING，不得提前合并。

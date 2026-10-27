@@ -1,10 +1,10 @@
 {
   "sourceSha": "7bdddc8850b83c083ea9d2abe4e90c3bb59da75c",
-  "mergeSha": null,
+  "mergeSha": "ff54396bc96db4264c26bfb0cb930a2244dbd176",
   "defaultBranch": "claude/new-session-1959qb",
   "pr": 133,
   "publicEntry": "ON",
-  "status": "FINAL_ACCEPTANCE_IN_PROGRESS",
+  "status": "PRODUCT_ACCEPTED_MERGED_MAINLINE_CI_PENDING",
   "api29": {
     "run": 40519142188,
     "event": "push",
@@ -72,7 +72,8 @@
     "artifact": 12741319217,
     "sha256": "8058d0cacbe5665c4b0797f0b03ab198fe29fb4d116a6d68f20da03c224fa283",
     "zipCrc": "PASS",
-    "realProductCase": "PASS;1 test,0 failures/errors/skips,20.808s suite"
+    "realProductCase": "PASS;1 test,0 failures/errors/skips,20.808s suite",
+    "conclusion": "SUCCESS"
   },
   "prApi29": {
     "job": 122242050918,
@@ -102,5 +103,18 @@
     "sha256": "28a825d444bbdd6ae1e2fa6654fde7e7a4c2bddfb317678c4b3347de7fa5e044",
     "zipCrc": "PASS",
     "realProductCase": "PASS;1 test,0 failures/errors/skips,20.588s suite"
-  }
+  },
+  "mergedAt": "2026-10-27T14:49:38Z",
+  "prState": "MERGED",
+  "productionTree": "95f132496434e9ce81f3c010db117cfb68e0d80a",
+  "mergeTree": "95f132496434e9ce81f3c010db117cfb68e0d80a",
+  "requiredChecksResult": "PASS_ALL_6_PUSH_AND_PR",
+  "internalAdmission": "MED02_PASS_OWNER_154;separate_optional_Featherline_LMK_not_claimed_fixed",
+  "mainlineRuns": {
+    "android": 40524889046,
+    "security": 40524889000,
+    "science": 40524888999
+  },
+  "mainlineCi": "PENDING",
+  "prAndroidResult": "SUCCESS"
 }
