@@ -4029,3 +4029,8 @@ Room21底座本地compileDebugKotlin PASS；新增AttachmentActivationTest PASS�
 继续正式产品接线（2773b645之后）：DataSection增加现有MedicalLibraryTransferPage的受门控入口，AppShell传入MainActivity的onLibraryReopen，成功切库不复用旧ViewModel。MedicalAttachmentOperations新增activate，复用work/cap/AttachmentTransaction权限与当前scope校验；生产RuntimeAttachmentGateway在列表/选择及新导入前幂等激活，仅PUBLIC门开启时调用，UNKNOWN reconcile不激活。UPDATE限定feature_enabled=0，避免重复读取造成store失效循环。当前UI/持久自动激活条件仍由PUBLIC=false关闭，正式启用需管理/完整端到端验收，不能宣称产品完成。第一次新接线编译+UI guard PASS；最终微调后core activation+UI guard定向回归正在执行。没有KDF/格式/配额变更。
 
 最终上述定向回归PASS（17秒，core AttachmentActivationTest及app MedicalAttachmentUiGuardTest）；仅JVM/编译证据，不代替MainActivity原生验收。
+
+
+## PR133 Room21 retained-library compatibility follow-up — 2026-10-27
+
+On HEAD 63ad86b2, API26/29 native CI failed original lifecycle/collection tests: clean retained library expectation REFUSED observed UNKNOWN; full collection export saw OWNER_OR_SET_NOT_PROVEN. An inspection found LibraryResourceFacts.scan and LibraryCollectionCapture hardcoded supported retained SQLCipher database versions 15..20 even though current Room is 21. Bounded code patch accepts version 21 in both retained readers, without changing credential handling, archive framing, authentication, ownership proof, record/attachment data or quota. Root-cause hypothesis needs confirmation by exact new-SHA original native tests; prior failures remain recorded, not waived. Public attachment entry still OFF until unlink, four-language/privacy synchronization, real MainActivity SAF/restore E2E, review and required final CI pass. No signed/released APK.
