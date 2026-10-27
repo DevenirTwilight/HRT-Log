@@ -1,0 +1,15 @@
+{
+  "sourceSha": "7bdddc8850b83c083ea9d2abe4e90c3bb59da75c",
+  "mergeSha": "ff54396bc96db4264c26bfb0cb930a2244dbd176",
+  "tree": "95f132496434e9ce81f3c010db117cfb68e0d80a",
+  "fileName": "app-full-release-unsigned.apk",
+  "bytes": 13960964,
+  "sha256": "59e0177f1d76d3b8ce170906c2da86286424a53d09177e7f44eda5430add4187",
+  "unsignedVerified": true,
+  "build": "PASS;9m25s;175 tasks;serial;no-daemon",
+  "manifestNoInternet": "PASS",
+  "pocPayloadIsolation": "PASS",
+  "ansmTestIsolation": "PASS",
+  "delivery": "NOT_AUTHORIZED_NOT_DELIVERED",
+  "release": "NOT_CREATED"
+}
