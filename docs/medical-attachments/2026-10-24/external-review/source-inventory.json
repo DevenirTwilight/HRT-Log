@@ -135,20 +135,20 @@
     "scripts/check_attachment_release_isolation.py": "04b9319c55c898a0c9c43d05513fa0e664f2cc2ba96656d14a639cc23bc530d7",
     "scripts/run_library_low_memory_acceptance.sh": "e96d29e4a8944b42fba5d8a6f2c9ad732db8613ea2d8949774121765829d6bee",
     "app/src/main/java/net/plainnotes/app/security/AppLock.kt": "4ab0357e0b31ba2a2782fc52929b62aa3c25f646c0ca0ec167078c1abef69ae7",
-    "core/data/src/main/java/net/plainnotes/app/data/RevocableArchiveOutput.kt": "5cc76b56e7e105639bc5f93f8112afa5deca1bbcdc9c8c82aa18d6d6b35af26c",
+    "core/data/src/main/java/net/plainnotes/app/data/RevocableArchiveOutput.kt": "40cb17995ecdc701bd4f217e0d01459318e4dc3dc33217efae2df7a2be6a21d4",
     "app/src/androidTestFull/java/net/plainnotes/app/security/AppLockAtomicRestartAndroidTest.kt": "cddb2be1e207d8291ce13eaaaddf0da8c77f765024f4b2f8a253831b7c3d6aa9",
     "app/src/androidTest/java/net/plainnotes/app/attachments/AttachmentReconciliationRestartAndroidTest.kt": "5fe6951159f80461896ae31089dba34e061d8f69fe5b7dfc73f23d5e4b74223b",
-    "core/data/src/androidTest/java/net/plainnotes/app/data/MedicalCollectionRevocationAndroidTest.kt": "077e5a92f530baf3c42322afab6c1138e6b092ef8fe76160a8365289dbecc1d2",
+    "core/data/src/androidTest/java/net/plainnotes/app/data/MedicalCollectionRevocationAndroidTest.kt": "e10ffa41bf9b7fe5ff419c8510668fe1d016a3d5046cc7bfc1145ebb5c001e7d",
     "core/data/src/androidTest/java/net/plainnotes/app/data/SyntheticSecurityDocumentsProvider.java": "29c6b859f0a818a334cee60a6bd1be00610d0846f0f7d26055340b94b206fe39",
-    "scripts/run_med02_security_restart.py": "8e68a562569a6d948456f6c8b4f879ff694830b470b9602542d9a6bafdec05e0",
+    "scripts/run_med02_security_restart.py": "e09cc9e76b075c59a1e83f8a35335c96eb1072d1d78f4611c4d51532393077f6",
     "scripts/run_med02_security_native.py": "7acb6605ae2abe9f842bc6c1b82a1083d784c1b70aeb9a26a30f5e727421d804",
     "app/src/main/java/net/plainnotes/app/attachments/AttachmentReconciliationStore.kt": "17844550ac512db86d138d977600c5fad4ab8fd78ef885fe857d85011e227551",
-    "core/data/src/main/java/net/plainnotes/app/data/AttachmentProviderStreams.kt": "63d9d155ab807745f123b1e5af905f44c3e3a40a63e54d61802c2c5805e22074"
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentProviderStreams.kt": "632ddf601b597dcfec6606649ef8fb55623d67b423ea622ffe3e0e8e31a7b436"
   },
   "production_base_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895",
   "acknowledgement_fix_base_sha": "70584c6f00ba167e77f2406e87d301b329db1acc",
   "baseline_sha": "9eb6d0f51db21e3629019c2757a5f35724d793a7",
-  "executable_sha": "22524070a30bee82a8c3ba8e53fd44915ee0d6d9",
+  "executable_sha": "dbac92c3",
   "security_fix_baseline_sha": "03f724f41e91a1a866d98de31de673594d1105af",
-  "validation_status": "TARGETED_NATIVE_6eb350ba_PASS_FINAL_HEAD_CI_NOT_RUN_AT_FREEZE"
+  "validation_status": "PUBLIC_CHANNEL_TARGETED_NATIVE_NOT_RUN_FINAL_CI_PENDING"
 }
