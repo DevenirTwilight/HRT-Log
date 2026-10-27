@@ -35,7 +35,7 @@
     "app/src/debug/java/net/plainnotes/app/debug/attachments/MedicalAttachmentUiTestActivity.kt": "ed5a83e2114d4174c065ae342052a2aff80d78ed6d99effd49efe27796251b35",
     "app/src/debug/java/net/plainnotes/app/debug/attachments/SyntheticAttachmentFixture.kt": "009c1e7a5c8dbab6541a65af57c0b16ca48c9b0d55b44f531277c3cfa146b9e5",
     "app/src/main/java/net/plainnotes/app/MainActivity.kt": "88954d68dd6f3f74cbd9f7d3a16f4ae59c4784ef1f544de5329403c48e8aa115",
-    "app/src/main/java/net/plainnotes/app/NotesViewModel.kt": "e5f24b5d1d6f262b4d7c0e0c2007c4576c6c717c67fa109fba5b12013b132cd0",
+    "app/src/main/java/net/plainnotes/app/NotesViewModel.kt": "1c468ffc871726420e00dcd5fbba454aa29c63d2b430f90a1aa4c4bb22e13195",
     "app/src/main/java/net/plainnotes/app/attachments/AttachmentFlowController.kt": "f475ca209de7ad939b779d3b8a79f19abeece3a8e79a557ccaee622b410b3c00",
     "app/src/main/java/net/plainnotes/app/attachments/AttachmentViewer.kt": "24b0192b7ccba15a2c6370678451237e167eebd163270aeb18d70b14080d5f4d",
     "app/src/main/java/net/plainnotes/app/attachments/MedicalLibraryGateway.kt": "2a8e4369f32f48b17f530450805451a984c4079b1801742b1aa51f45d09257be",
@@ -142,13 +142,13 @@
     "core/data/src/androidTest/java/net/plainnotes/app/data/SyntheticSecurityDocumentsProvider.java": "29c6b859f0a818a334cee60a6bd1be00610d0846f0f7d26055340b94b206fe39",
     "scripts/run_med02_security_restart.py": "e09cc9e76b075c59a1e83f8a35335c96eb1072d1d78f4611c4d51532393077f6",
     "scripts/run_med02_security_native.py": "7acb6605ae2abe9f842bc6c1b82a1083d784c1b70aeb9a26a30f5e727421d804",
-    "app/src/main/java/net/plainnotes/app/attachments/AttachmentReconciliationStore.kt": "17844550ac512db86d138d977600c5fad4ab8fd78ef885fe857d85011e227551",
+    "app/src/main/java/net/plainnotes/app/attachments/AttachmentReconciliationStore.kt": "a962fb734edb4e7d5623ff61bba984463f9f894de0f8361f6f740bf35fdcaf17",
     "core/data/src/main/java/net/plainnotes/app/data/AttachmentProviderStreams.kt": "d515f98d89c240eefd5860c53867676f6776ab35f0341e41b3fcba8868cf581b"
   },
   "production_base_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895",
   "acknowledgement_fix_base_sha": "70584c6f00ba167e77f2406e87d301b329db1acc",
   "baseline_sha": "9eb6d0f51db21e3629019c2757a5f35724d793a7",
-  "executable_sha": "dc58f4afa8462633e29ffdbd8ed7cb830b261f52",
+  "executable_sha": "4f059f25e2a15762a575daee84d189bf124bd591",
   "security_fix_baseline_sha": "03f724f41e91a1a866d98de31de673594d1105af",
-  "validation_status": "TARGETED_NATIVE_747ed6e2_FOUR_API_PASS_FINAL_EXACT_HEAD_CI_PENDING"
+  "validation_status": "WIPE_FOLLOWUP_TARGETED_24_PASS_FINAL_EXACT_HEAD_CI_PENDING"
 }
