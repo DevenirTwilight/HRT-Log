@@ -62,7 +62,7 @@ class MedicalAttachmentProductAndroidTest {
     private fun press(matcher:SemanticsMatcher) {
         try {ui.waitUntil(30000) {ui.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty()}}
         catch(e:androidx.compose.ui.test.ComposeTimeoutException) {
-            throw AssertionError("Missing $matcher; production tree: "+ui.onAllNodes(isRoot(),useUnmergedTree=true).printToString(),e)
+            throw AssertionError("Missing $matcher; production tree: "+ui.onAllNodes(isRoot(),useUnmergedTree=true).printToString(maxDepth=24),e)
         }
         val node=ui.onNode(matcher)
         if(ui.onAllNodes(matcher and hasAnyAncestor(hasScrollAction())).fetchSemanticsNodes().isNotEmpty())node.performScrollTo()
@@ -223,7 +223,16 @@ class MedicalAttachmentProductAndroidTest {
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
         ui.onNodeWithTag("attachments-empty").assertExists()
         tag("attachments-add")
-        waitSystem("cancel real picker") {pickerRoot()!=null}
+        waitSystem("settled real picker before cancellation") {
+            settlePicker()
+            pickerRoot()!=null && (rootsOpen() || systemId("dir_list")!=null || systemId("message")!=null)
+        }
+        // On a fresh API35 installation DocumentsUI may initially show its roots drawer.
+        // A Back there only closes that pane; cancel the actual picker, not just its drawer.
+        if(rootsOpen()) {
+            assertTrue(instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK))
+            waitSystem("roots drawer closed before cancellation") {pickerRoot()!=null && !rootsOpen()}
+        }
         assertTrue(instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK))
         ui.waitUntil(30000) {ui.onAllNodesWithText(text(R.string.attach_cancelled)).fetchSemanticsNodes().isNotEmpty()}
         runBlocking {model.libraryRuntime.attachments(visit,"SYNTHETIC cancelled").use {assertTrue(it.documents().isEmpty())}}
@@ -235,7 +244,11 @@ class MedicalAttachmentProductAndroidTest {
         val label=context.getString(R.string.attach_item_description,saved.title,text(R.string.attach_kind_image),text(R.string.attach_status_saved))
         press(hasContentDescription(label))
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
+        val closeBounds=ui.onNodeWithTag("attachment-viewer-close").fetchSemanticsNode().boundsInRoot
+        val menuBounds=ui.onNodeWithContentDescription(text(R.string.menu)).fetchSemanticsNode().boundsInRoot
+        assertTrue("Preview close must be below the real shell app bar, not covered by its menu",closeBounds.top>=menuBounds.bottom)
         tag("attachment-viewer-close")
+        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment-viewer").fetchSemanticsNodes().isEmpty()}
         // A retained uncertain result is resolved only by the visible, read-only action.
         // Never repeat SAF input or encryption to make a management action available.
         if(ui.onAllNodesWithTag("attachments-check").fetchSemanticsNodes().isNotEmpty()) {

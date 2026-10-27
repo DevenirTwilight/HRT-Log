@@ -4059,3 +4059,9 @@ The production-activation branch now sets AttachmentFlowController.PUBLIC_ENTRY_
 旧df主机最终21 core+1 app FAIL原HTML已入库：最新版Room断言仍20、注入迁移链未延伸21、0/1合法范围旧负向、两条批准隐私文案使UI08整文件摘要不匹配。逐一修正当前版本/链尾/非法值2；保留所有历史输入、注入reached与回滚断言。隐私只按批准的每元素SHA精确归一，两条外全部原PDF/资源摘要不变。由此真正复现六条历史升级Missing attachment store guard：生产20→21事务先复用AttachmentSchema.install标准守卫安装，再扩展激活，未新Schema或改事实。105项数据+8项四语确认+1项PDF冻结PASS，本地后续controller/activation及AndroidTest编译PASS。首次新单测缺少scroll父项的夹具误用也保留失败，不称产品缺陷。
 
 31fd原生：library512MiB实际14项PASS但旧脚本只接受13，严格计数同步14；Featherline512MiB PASS。三API真实MainActivity测试保留失败：26/29已走通就诊SAF/COMMIT/新Activity/认证PNG，到解除关联两动作同行处timeout，现拆行及补实际语义树；发现可见UNKNOWN时只允许现有只读核对，不重放。35在SAF取消回调丢失，Page误将MainActivity已在onStart消费的lock豁免当结果授权；两Page改核对awaiting owner+generation+runtime，而不是要求豁免尚未消费。底层权限/实际commit守卫不变。下一步推这一实际修复，验收新SHA必要CI与真实路径；尚不可Ready。local Release在并行任务时Gradle daemon消失，NOT_COMPLETED、根因未知，原日志保留；以最终CI无签名Release为准。公共入口始终ON，不签名/交付/发版/销毁。
+
+## PR133 正式页触摸区域与Release守卫修正 — 2026-10-27
+
+3e三API均到解除确认的第二动作247行FAIL；结合实际宿主源码定位VisitDetail附件分支没有消费Scaffold contentPadding，预览关闭按钮处于顶栏菜单触摸区。最小Box.padding修复，原生新增真实close/menu坐标不重叠及viewer实际消失断言，避免语义存在却触摸错控件。还区分DocumentsUI根抽屉Back和真正取消，仍全部真实SAF。当前compileFullDebugAndroidTestKotlin PASS。Standalone serial unsigned FullRelease在3e PASS(8m30s)，Manifest身份/NoINTERNET PASS；旧B2全局禁止Tink标记在正式入口启用后误拒绝已批准生产依赖，按144/154只将Tink DEX命名空间归类为正式依赖，Manifest仍拒绝，所有真实PoC/provider/test/资源禁止保留，并补批准库混合测试标记仍拒绝等负向；6Python及现有实际unsigned APK隔离PASS，不交付且该APK不是下一候选源码。
+
+3e library低内存整条工作流SUCCESS；Featherline低内存真实LMK（PID3849，错误密码拒绝后、下一次认证前，kernel anon245648KiB不是峰值）。kernel/logcat/memory/native原件入库，没有声称修复或排除所有根因，没有动Importer/KDF或预算。下一次是随真实MED02源码修正的正常最终CI，不进行同源反复筛绿；若仍有实际阻断精准处理/如实保留。公共入口ON，Ready/合并仍等准确最终六门/受影响原生与安全验收。最终状态以#133精确HEAD及正文的永久receipt为准。

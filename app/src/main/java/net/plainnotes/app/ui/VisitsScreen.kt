@@ -79,10 +79,15 @@ import java.time.*
     // This page remains guarded until activation, backup compatibility and release isolation are verified.
     var attachmentsOpen by remember(a.id) { mutableStateOf(false) }
     if (attachmentsOpen && net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) {
-        net.plainnotes.app.attachments.ui.MedicalAttachmentRecordPage(
-            model, net.plainnotes.app.data.MedicalAttachmentOperations.Target(
-                net.plainnotes.app.data.MedicalAttachmentOperations.Kind.APPOINTMENT, a.id),
-            stringResource(R.string.appointment), onBack={attachmentsOpen=false})
+        // Unlike the normal LazyColumn below, the full-page attachment viewer must
+        // consume the shell insets itself. Otherwise its close button sits UNDER the
+        // real app bar and a touch opens the drawer instead of closing the preview.
+        Box(Modifier.fillMaxSize().padding(contentPadding)) {
+            net.plainnotes.app.attachments.ui.MedicalAttachmentRecordPage(
+                model, net.plainnotes.app.data.MedicalAttachmentOperations.Target(
+                    net.plainnotes.app.data.MedicalAttachmentOperations.Kind.APPOINTMENT, a.id),
+                stringResource(R.string.appointment), onBack={attachmentsOpen=false})
+        }
         return
     }
     var edit by remember { mutableStateOf(false) }

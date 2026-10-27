@@ -1,6 +1,6 @@
 import tempfile,unittest,zipfile
 from pathlib import Path
-from check_attachment_release_isolation import check_apk,FORBIDDEN,RESOURCE_FORBIDDEN
+from check_attachment_release_isolation import check_apk,FORBIDDEN,RESOURCE_FORBIDDEN,PRODUCTION_CRYPTO_NAMESPACES
 class ReleaseIsolationTest(unittest.TestCase):
     def apk(self,path,dex=b'dex\n035\x00SyntheticAllowed',manifest=b'manifest',second=None):
         with zipfile.ZipFile(path,'w') as z:
@@ -18,6 +18,17 @@ class ReleaseIsolationTest(unittest.TestCase):
                         self.apk(p,dex=marker if mode=='dex' else b'dex',second=marker if mode=='secondary' else None,
                                  manifest=marker.decode().encode('utf-16-le') if mode=='manifest' else b'manifest')
                         with self.assertRaises(AssertionError):check_apk(p)
+    def test_approved_crypto_in_dex_never_authorizes_test_code_or_manifest_components(self):
+        with tempfile.TemporaryDirectory() as root:
+            p=Path(root)/'crypto.apk'
+            for marker in PRODUCTION_CRYPTO_NAMESPACES:
+                self.apk(p,dex=b'dex'+marker,second=b'dex'+marker)
+                self.assertEqual(2,check_apk(p))
+                self.apk(p,manifest=marker.decode().encode('utf-16-le'))
+                with self.assertRaises(AssertionError):check_apk(p)
+                for test_marker in FORBIDDEN:
+                    self.apk(p,dex=b'dex'+marker+test_marker)
+                    with self.assertRaises(AssertionError):check_apk(p)
     def test_demo_resources_rejected(self):
         with tempfile.TemporaryDirectory() as root:
             p=Path(root)/'demo.apk'

@@ -123,3 +123,36 @@ session and current runtime, clear the exemption idempotently and preserve all
 backend request/capability/generation/confirmation gates. No process-restored URI
 or grant exists. Final real-native evidence must confirm the fix; compilation alone
 cannot do so. Original failures stay FAIL and are retained under evidence/31fd715e.
+
+## Actual product-layout and release-payload correction
+
+3e2211d3 API26/29/35 all progressed to the SECOND unlink action, the confirmation
+button. The first unlink action's touch had not produced that dialog after closing
+preview. Source inspection shows VisitDetail returned the full-page viewer without
+consuming Scaffold contentPadding. Its close control occupies the app bar's menu
+hit area; a test could click the wrong real control while still finding underlying
+semantics. Wrap the existing record page in the existing contentPadding. This is
+one host-layout correction, not a visual redesign or viewer rewrite. The native
+case now asserts close.top >= realMenu.bottom and waits for the viewer to actually
+close before touching management. Deep semantics diagnostics remain on failure.
+The system-cancel precondition also distinguishes closing DocumentsUI's initial
+roots drawer from cancelling the actual picker. Both use observable nodes, no sleeps.
+
+Local production/test compilation PASS. A standalone serial FullRelease build at
+3e completed unsigned (8m30s), and correct app identity/no INTERNET manifest checks
+PASS. The old B2 guard then refused the legitimate production Tink namespace. Under
+§144/154 Tink is already the approved production implementation: allow its namespace
+in DEX, still forbid it in the manifest and retain EVERY actual PoC/test/provider,
+format marker and demo-resource rejection. Added a regression that approved Tink
+never licenses a co-located test marker and cannot become a manifest component.
+All6 Python checks and the actual unsigned APK payload guard now PASS. No Tink
+version/code/crypto or R8/signing configuration changed. This local APK is not the
+final source candidate and is NOT delivered; exact-final-source CI must rebuild it.
+
+3e library512MiB SUCCESS through the full actual workflow. Featherline512MiB FAIL:
+kernel explicitly killed foreground PID3849 after wrong-password rejection, before
+the next authentication completed (245648KiB anon at kill, NOT peak/RSS). Preserve
+kernel/logcat/measurements/native originals. The earlier clear-log warning is not
+the cause. This is a real historical/concurrent low-memory risk; no memory limit,
+fixture, test assertion or importer/KDF code is changed to force a pass. Final
+source's actual low-memory result remains to be recorded honestly, not assumed.
