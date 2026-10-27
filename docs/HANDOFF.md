@@ -1,3 +1,9 @@
+## PR133已合并；主线返回键测试同步修复 — 2026-10-27
+
+#133真实最终7bdddc88的push/PR六门全部PASS，三API真实MainActivity全链PASS；正常保护合并ff54396bc96db4264c26bfb0cb930a2244dbd176，PUBLIC_ENTRY_ENABLED=true，文件树和已验源码一致。主线Science40524888999及安全40524889000四API均SUCCESS；主线Android40524889046/API35 job122261639387实际FAIL：全链已完成就诊/LAB真实SAF/COMMIT/认证读，line285连续Espresso.pressBack在关闭附件Dialog的焦点交接期选中无焦点Activity，RootViewWithoutFocusException。原XML/工件SHA已保存证据分支f8c06ac9，不能将旧失败重标通过。
+
+本窄补丁仅修改AndroidTest：真实Android BACK输入替代Espresso默认root匹配，观察附件页实际消失、第二次BACK后Activity真实焦点恢复，再继续同一Settings/归档/恢复/旧scope拒绝/新Activity认证预览断言。不改生产文件、Schema、密码学、来源、导航或配额，不增加sleep/重试/跳测。#133不重开、功能不复制，仅修主线最终复核发现的测试同步缺口；下一准确SHA编译/针对性原生和六门仍待执行，保持据实PENDING。不扩大研究或重跑旧P4。独立非保护Featherline512MiB原始LMK仍FAIL、未声称修复；MED02512MiB完整恢复/12seams/fresh C已PASS。无签名/APK交付/tag/Release/永久删除。
+
 ## MED-02 #132 API27专用配置接线修正 — 2026-10-27
 
 - 6c6eee90生产代码在四API专用原生40476432331全部PASS，本地24项及仪器编译PASS。完整PR Android主构建/单元/lint/隔离步骤通过后，235前身的233 Python守卫发现通用性能矩阵应默认拒绝27（原test_ansm_native_performance，AttributeError暴露错误接线）；原日志保留6c-pr-android-full-failed.log.gz。
