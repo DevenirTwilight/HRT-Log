@@ -76,6 +76,15 @@ import java.time.*
 }
 
 @Composable private fun VisitDetail(a: AppointmentEntity, state: NotesState, extra: NotesViewModel.ExtraState, model: NotesViewModel, onBack: () -> Unit, contentPadding: PaddingValues, medical:Boolean=false,onMedicalEdit:(AppointmentEntity)->Unit={},onLab:(LabValueEntity)->Unit={}) {
+    // This page remains guarded until activation, backup compatibility and release isolation are verified.
+    var attachmentsOpen by remember(a.id) { mutableStateOf(false) }
+    if (attachmentsOpen && net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) {
+        net.plainnotes.app.attachments.ui.MedicalAttachmentRecordPage(
+            model, net.plainnotes.app.data.MedicalAttachmentOperations.Target(
+                net.plainnotes.app.data.MedicalAttachmentOperations.Kind.APPOINTMENT, a.id),
+            stringResource(R.string.appointment), onBack={attachmentsOpen=false})
+        return
+    }
     var edit by remember { mutableStateOf(false) }
     var remove by remember { mutableStateOf(false) }
     var medicalRemove by remember { mutableStateOf<AppointmentEntity?>(null) }
@@ -101,6 +110,9 @@ import java.time.*
                     else TextButton(onClick={if(medical)medicalRemove=a else remove=true},modifier=mod){Text(stringResource(R.string.visit_delete))}
                 }
             }
+        }
+        if (net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) item {
+            OutlinedButton(onClick={attachmentsOpen=true}) { Text(stringResource(R.string.attach_section)) }
         }
         item {
             SectionCard(stringResource(if (a.completed_utc != null) R.string.visit_completed else R.string.visit_not_confirmed)) {
