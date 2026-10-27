@@ -11,6 +11,8 @@
 
 2026-10-27有限修复：F01/F02/F03已实现；6eb350ba的真实API26/27针对性作业40464182728通过（含实际PID死亡、COMMIT后只读核对、阻塞管道worker/根事务检查）。F04主线程close阻塞在这些样本中NOT_REPRODUCED，其他平台/IO仍POTENTIAL；正式最终HEAD CI与合并状态以修复记录和最终交付回执为准。
 
+后续 db6053b0 精确HEAD的 API29 CI 暴露 fcntlInt 非公开 API 回归（FAIL），Featherline 精确HEAD低内存作业也发生前台 LMK（FAIL）；原件保留。正在以公开 FileChannel 修正传输并扩展四 API 原生验证，尚不得称最终验证完成或已合并。
+
 本轮获授权的有限修复状态另见[修复记录](docs/security/med02-fixes-2026-10-27/README.md)。下面保留原审计发现和当轮执行边界；F01–F03原始CONFIRMED不因代码修复删除，修复验证与F04的真实Android判定单独记录。原始报告和探针完整封存在[原evidence ZIP](docs/security/med02-fixes-2026-10-27/evidence/original-audit-evidence.zip)。仍NOT_REVIEWED_EXTERNALLY，不构成独立第三方认证，附件仍OFF。
 
 ## 结论与适用边界

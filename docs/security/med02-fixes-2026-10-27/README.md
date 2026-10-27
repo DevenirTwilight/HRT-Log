@@ -47,3 +47,11 @@ F03 testcase还真实验证根事务在5秒内重新取得、全部业务事实�
 生产修复提交：F01 0f7c88a2；F02 e358b0a8（中性存储移至application层见22524070）；F03 cdfe354f 的所有权修复和22524070 的真实管道修正。其余提交保留证据/测试接线，不占第二PR。补充F01 TEST-OWNED alias失效后不得重建key/替换原凭据的负向断言，等待最终CI的API26/27执行；不操作真实密钥。
 
 **本记录先于最终HEAD CI封版。** 该文档提交之后的完整CI结果以[#132 checks](https://github.com/DevenirTwilight/HRT-Log/pull/132/checks)及最终交付回执记录的精确SHA、run ID和merge SHA为准；不得拿6eb针对性结果冒充后续文档提交的最终CI。只有全部必需/相关原生/低内存成功且无冲突和未解决评审时才正常保护合并；Draft/失败时禁止合并。不再为记录CI绿而反复产生新源码SHA。
+
+## 精确 HEAD db6053b0 失败与公开 API 修正 — 2026-10-27
+
+- 最终候选 db6053b0 的 API29 兼容性作业 FAIL：`Os.fcntlInt` 在该平台抛 `NoSuchMethodError`；SDK API 表确认该符号自 API30 才公开。API26/27 专用安全回归虽 PASS（含缺 key 不重建），不能替代 API29。API26 AutomaticImport 超时 FAIL，根因尚未证明，保留原件，不放宽断言。
+- 精确分支 lowmem 40466469228：library PASS，Featherline FAIL，内核记录前台进程 LMK；分配根因 NOT_PROVEN，不将后续绿色改称已修复。原 ZIP、API29/低内存失败日志存 evidence/db605-*。
+- 撤销非公开 fcntl 路径，改用公开 FileChannel 的 interruptible close；清理仍有界且 off-main，正常 IO 等待关闭失败。输入持有并清零固定 64KiB direct buffer，避免隐式临时缓存残留；不改密码学、格式、事务或配额。阻塞 open/FUSE/OEM 的可中断性仍未证明，不保证通用截止时间。
+- 本地针对性 AppLock/controller/store/UI guard/output-close 回归及 app/core 仪器源码编译 PASS。新的真实管道验证扩展 API26/27/29/35，当前 NOT_RUN；先验证再冻结精确 SHA 完整 CI。仍唯一 Draft #132，不合并失败候选。OFF / NOT_REVIEWED_EXTERNALLY。
+

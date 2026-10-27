@@ -1,3 +1,10 @@
+## 精确 HEAD db6053b0 失败与公开 API 修正 — 2026-10-27
+
+- 最终候选 db6053b0 的 API29 兼容性作业 FAIL：`Os.fcntlInt` 在该平台抛 `NoSuchMethodError`；SDK API 表确认该符号自 API30 才公开。API26/27 专用安全回归虽 PASS（含缺 key 不重建），不能替代 API29。API26 AutomaticImport 超时 FAIL，根因尚未证明，保留原件，不放宽断言。
+- 精确分支 lowmem 40466469228：library PASS，Featherline FAIL，内核记录前台进程 LMK；分配根因 NOT_PROVEN，不将后续绿色改称已修复。原 ZIP、API29/低内存失败日志存 evidence/db605-*。
+- 撤销非公开 fcntl 路径，改用公开 FileChannel 的 interruptible close；清理仍有界且 off-main，正常 IO 等待关闭失败。输入持有并清零固定 64KiB direct buffer，避免隐式临时缓存残留；不改密码学、格式、事务或配额。阻塞 open/FUSE/OEM 的可中断性仍未证明，不保证通用截止时间。
+- 本地针对性 AppLock/controller/store/UI guard/output-close 回归及 app/core 仪器源码编译 PASS。新的真实管道验证扩展 API26/27/29/35，当前 NOT_RUN；先验证再冻结精确 SHA 完整 CI。仍唯一 Draft #132，不合并失败候选。OFF / NOT_REVIEWED_EXTERNALLY。
+
 ## MED-02 #132 针对性原生通过，准备最终精确SHA — 2026-10-27
 
 - 6eb350ba push40464182728两API均SUCCESS；PR40464190169也SUCCESS。原始两ZIP和完整receipt已保存。API26/27 F01真实PID死亡/恢复，F02实际COMMIT后fresh PID只读核对（opens不增），F03原provider release前worker退出/根事务可写/业务事实不变/无成功返回均PASS。撤权API26=1ms/API27=2ms，输出close不在main。F04主线程close阻塞未复现，读worker退出问题已有限修正；整体其他设备/provider仍POTENTIAL。

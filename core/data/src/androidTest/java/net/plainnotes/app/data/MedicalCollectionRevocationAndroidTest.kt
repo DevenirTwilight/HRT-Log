@@ -32,7 +32,7 @@ class MedicalCollectionRevocationAndroidTest {
     private fun waitForNativeIo(worker:Thread) {
         val until=SystemClock.elapsedRealtime()+15000
         while(SystemClock.elapsedRealtime()<until) {
-            if(worker.stackTrace.any {it.className=="libcore.io.IoBridge" || it.className=="libcore.io.Linux"})return
+            if(worker.stackTrace.any {it.className=="libcore.io.IoBridge" || it.className=="libcore.io.Linux" || (it.className=="sun.nio.ch.FileDispatcherImpl" && it.methodName in setOf("read0","write0"))})return
             check(worker.isAlive) {"Worker ended before entering native pipe IO"}
             Thread.sleep(10)
         }

@@ -10,34 +10,40 @@ import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
-/** PNMEDBK2 target ownership only. Revocation never calls external close on its caller.
- * Normal worker completion waits for close and propagates failures before any receipt.
- * Four outstanding closes bound both threads and queued retained descriptors. No caller-runs.
- * This cannot promise to terminate an arbitrary OS/provider primitive that ignores close.
+/** Bounded external provider cleanup. Revocation schedules; normal IO completion awaits errors.
+ * Four outstanding resources bound both retained descriptors and queued closes. No caller-runs.
  */
-internal class RevocableArchiveOutput(private val target:OutputStream):OutputStream() {
+internal class RevocableProviderClose(private val resource:AutoCloseable) {
     private val closing=AtomicBoolean(false)
     private val finished=CompletableFuture<Unit>()
-    init {check(slots.tryAcquire()) {"Archive output cleanup busy"}}
-    override fun write(value:Int) {check(!closing.get());target.write(value)}
-    override fun write(bytes:ByteArray,offset:Int,length:Int) {check(!closing.get());target.write(bytes,offset,length)}
-    override fun flush() {check(!closing.get());target.flush()}
+    init {check(slots.tryAcquire()) {"Provider cleanup busy"}}
+    fun checkOpen() {check(!closing.get()) {"Provider stream closed"}}
     fun revoke() {
         if(closing.compareAndSet(false,true))closer.execute {
-            try {target.close();finished.complete(Unit)}
+            try {resource.close();finished.complete(Unit)}
             catch(t:Throwable) {finished.completeExceptionally(t)}
             finally {slots.release()}
         }
     }
-    override fun close() {
+    fun await() {
         revoke()
         try {finished.get()}
-        catch(e:ExecutionException) {throw IOException("Archive output close failed",e.cause)}
-        catch(e:InterruptedException) {Thread.currentThread().interrupt();throw IOException("Archive output close interrupted",e)}
+        catch(e:ExecutionException) {throw IOException("Provider close failed",e.cause)}
+        catch(e:InterruptedException) {Thread.currentThread().interrupt();throw IOException("Provider close interrupted",e)}
     }
     private companion object {
         val slots=Semaphore(4)
         val closer=ThreadPoolExecutor(2,2,0,TimeUnit.MILLISECONDS,ArrayBlockingQueue<Runnable>(4),
-            {r->Thread(r,"medical-archive-close").apply {isDaemon=true}})
+            {r->Thread(r,"attachment-provider-close").apply {isDaemon=true}})
     }
+}
+
+/** PNMEDBK2 target ownership. No external close runs on the revocation caller. */
+internal class RevocableArchiveOutput(private val target:OutputStream):OutputStream() {
+    private val cleanup=RevocableProviderClose(target)
+    override fun write(value:Int) {cleanup.checkOpen();target.write(value)}
+    override fun write(bytes:ByteArray,offset:Int,length:Int) {cleanup.checkOpen();target.write(bytes,offset,length)}
+    override fun flush() {cleanup.checkOpen();target.flush()}
+    fun revoke()=cleanup.revoke()
+    override fun close()=cleanup.await()
 }
