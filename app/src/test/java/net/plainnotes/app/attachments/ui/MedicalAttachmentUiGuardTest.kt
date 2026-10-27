@@ -15,12 +15,13 @@ class MedicalAttachmentUiGuardTest {
         val names=listOf("MedicalAttachmentsSection","MedicalAttachmentViewer","MedicalAttachmentsController","RuntimeAttachmentGateway","MedicalAttachmentGateway","medicalAttachmentsForRecord","MedicalAttachmentRecordPage","MedicalAttachmentRecordContent","MedicalLibraryTransferPage","MedicalLibraryTransferContent","MedicalLibraryTransferController")
         val reaching=main.walkTopDown().filter {it.isFile && it.extension=="kt" && !it.path.startsWith(ui.path)}
             .filter {f->val text=f.readText();names.any {it in text}}.map {it.path}.toList()
-        val approved=listOf(File(main,"ui/ShellHosts.kt").path,File(main,"ui/VisitsScreen.kt").path)
+        val approved=listOf(File(main,"ui/DataSection.kt").path,File(main,"ui/ShellHosts.kt").path,File(main,"ui/VisitsScreen.kt").path)
         assertEquals("Only explicit record hosts may reference the scoped page",approved.sorted(),reaching.sorted())
         approved.forEach {path->
             val source=File(path).readText()
             assertTrue(source.contains("AttachmentFlowController.PUBLIC_ENTRY_ENABLED"))
-            assertTrue(source.contains("MedicalAttachmentOperations.Target("))
+            if(!path.endsWith("DataSection.kt"))assertTrue(source.contains("MedicalAttachmentOperations.Target("))
+            else assertTrue(source.contains("onReopen=onLibraryReopen"))
             assertFalse(source.contains("RuntimeAttachmentGateway("))
             assertFalse(source.contains("MedicalAttachmentsController("))
         }

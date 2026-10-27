@@ -271,7 +271,7 @@ class UiPrefs(context: Context) {
                             PrivacySection(state.medications.count { it.active }, simpleMode) { simpleMode = it; prefs.simpleMode = it }
                             net.plainnotes.app.disguise.DisguiseSection(model::destroyLegacyPrivateData, onRoutingChanged = { model.sync() }, backup = model::backupTo)
                         },
-                        dataSlot = { DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) }) },
+                        dataSlot = { DataSection(model, state.medications.associate { it.id to scheduleText(state.schedules[it.id]) },onLibraryReopen) },
                         binSlot = { RecycleBinSection(state, extra, model::restoreTrash, model::purgeTrash, model::emptyTrash) },
                         testStatus = reminderTest, onRefreshTest = model::refreshReminderTest)
                 }

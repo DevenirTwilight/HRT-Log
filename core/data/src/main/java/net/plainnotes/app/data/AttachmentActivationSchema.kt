@@ -31,7 +31,7 @@ internal object AttachmentActivationSchema {
     fun activate(db:SupportSQLiteDatabase,expected:AttachmentIdentity.Scope) {
         check(db.inTransaction() && db.version>=21)
         check(AttachmentIdentity.current(db)==expected) {"Attachment dataset changed"}
-        db.execSQL("UPDATE attachment_store SET feature_enabled=1 WHERE store_uuid=? AND record_epoch=? AND store_state='CURRENT' AND space='PRIMARY'",arrayOf(expected.dataset,expected.epoch))
+        db.execSQL("UPDATE attachment_store SET feature_enabled=1 WHERE store_uuid=? AND record_epoch=? AND store_state='CURRENT' AND space='PRIMARY' AND feature_enabled=0",arrayOf(expected.dataset,expected.epoch))
         db.query("SELECT feature_enabled FROM attachment_store WHERE store_uuid=? AND record_epoch=?",arrayOf(expected.dataset,expected.epoch)).use {check(it.moveToFirst() && it.getInt(0)==1)}
     }
 }

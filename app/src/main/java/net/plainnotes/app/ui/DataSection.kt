@@ -29,7 +29,15 @@ import net.plainnotes.app.importer.TmExport
 import net.plainnotes.app.importer.TransMemo
 import java.time.LocalDate
 
-@Composable fun DataSection(model: NotesViewModel, scheduleTexts: Map<Long, String>) {
+@Composable fun DataSection(model: NotesViewModel, scheduleTexts: Map<Long, String>,onLibraryReopen:()->Unit={}) {
+    var medicalBackupOpen by remember {mutableStateOf(false)}
+    if(medicalBackupOpen && net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) {
+        androidx.compose.ui.window.Dialog(onDismissRequest={medicalBackupOpen=false},properties=androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth=false)) {
+            Surface(Modifier.fillMaxSize()) {
+                net.plainnotes.app.attachments.ui.MedicalLibraryTransferPage(model,onReopen=onLibraryReopen,onBack={medicalBackupOpen=false})
+            }
+        }
+    }
     val context = LocalContext.current
     val job by model.dataJob.collectAsStateWithLifecycle()
     var backupUri by remember { mutableStateOf<android.net.Uri?>(null) }
@@ -70,6 +78,9 @@ import java.time.LocalDate
     val pdfLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { it?.let { u -> model.exportPdf(u, pdfChoice.first, pdfChoice.second, context, labels, scheduleTexts) } }
 
     SectionCard(stringResource(R.string.data)) {
+        if(net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) {
+            DataRow(Icons.Outlined.Folder,stringResource(R.string.med_transfer_title),stringResource(R.string.med_transfer_scope)) {medicalBackupOpen=true}
+        }
         DataRow(Icons.Outlined.MoveToInbox, stringResource(R.string.import_other_apps), stringResource(R.string.import_other_apps_desc)) {
             model.clearDataJob()
             importScope=(model.librarySession.value as? net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready)?.scope

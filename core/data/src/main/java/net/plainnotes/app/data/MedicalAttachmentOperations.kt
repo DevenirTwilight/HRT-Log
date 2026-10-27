@@ -45,6 +45,10 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
             block(db,s)
         }
     }
+    /** Explicit idempotent activation in the existing authorized native transaction. */
+    suspend fun activate(cap:AttachmentSession.Capability)=work(cap) {db,s->
+        AttachmentTransaction.commit(db,s,cap) {permission();AttachmentActivationSchema.activate(db.openHelper.writableDatabase,s)}
+    }
     private fun record(db:NotesDatabase,s:AttachmentIdentity.Scope,cap:AttachmentSession.Capability,t:Target)=
         AttachmentTransaction.commit(db,s,cap) {
             permission()

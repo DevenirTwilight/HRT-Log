@@ -62,7 +62,9 @@ internal class RuntimeAttachmentGateway(private val context:Context,private val 
     override fun resolved(operation:UUID,document:UUID)=recovery.resolved(operation,document)
     override val scopeEnded get()=runtime.ended
     override fun onHidden(listener:()->Unit)=runtime.observePresentationHidden(listener)
-    private suspend fun browse()=runtime.attachments(target,BROWSE_TITLE)
+    private suspend fun browse()=runtime.attachments(target,BROWSE_TITLE).also {flow->
+        try {if(AttachmentFlowController.PUBLIC_ENTRY_ENABLED)flow.activate()}catch(t:Throwable) {flow.close();throw t}
+    }
     override suspend fun documents()=browse().use {it.documents()}
     override suspend fun pickerIntent()=browse().use {it.pickerIntent()}
     override suspend fun preview(document:UUID):MedicalAttachmentGateway.Preview {
@@ -81,6 +83,7 @@ internal class RuntimeAttachmentGateway(private val context:Context,private val 
     override suspend fun newImport(title:String):MedicalAttachmentGateway.Import {
         check(pending()==null) {"Reconcile existing attachment operation first"}
         val flow=runtime.attachments(target,title)
+        try {if(AttachmentFlowController.PUBLIC_ENTRY_ENABLED)flow.activate()}catch(t:Throwable) {flow.close();throw t}
         return object:MedicalAttachmentGateway.Import {
             override val operation get()=flow.request.operation
             override val document get()=flow.request.document
