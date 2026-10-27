@@ -22,7 +22,9 @@ import net.plainnotes.app.attachments.ui.MedicalAttachmentsController.Viewer
 import net.plainnotes.app.attachments.ui.MedicalAttachmentsController.State as UiState
 import net.plainnotes.app.attachments.ui.MedicalAttachmentsSection
 import net.plainnotes.app.data.AppointmentEntity
+import net.plainnotes.app.data.LabPanelEntity
 import net.plainnotes.app.data.LabValueEntity
+import net.plainnotes.app.ui.LabDraw
 import net.plainnotes.app.ui.LabDetailPage
 import net.plainnotes.app.ui.MedicalRecordsScreen
 import net.plainnotes.app.ui.NotesTheme
@@ -61,6 +63,10 @@ class Ui10RedesignTest(private val locale: String, private val width: Int, priva
 
     private val lab = LabValueEntity(1, "E2", 142.0, "pg/mL", Instant.parse("2026-10-07T08:30:00Z").toEpochMilli(), "UTC", 30.0, 200.0, "pg/mL", "Synthetic laboratory", "Synthetic note")
     private val bare = LabValueEntity(2, "T", 0.9, "ng/mL", Instant.parse("2026-10-07T08:30:00Z").toEpochMilli(), "UTC")
+    private val panel = LabPanelEntity(7, "synthetic-panel", Instant.parse("2026-10-07T08:30:00Z").toEpochMilli(), "UTC", "Synthetic laboratory", null, 1L)
+    private fun member(id: Long, code: String, v: Double, unit: String) = LabValueEntity(id, code, v, unit, panel.sampled_utc, "UTC", laboratory = "Synthetic laboratory", panel_id = 7)
+    /** One blood draw with five results: the unit a person means by "a lab test". */
+    private val fiveResults = listOf(member(11, "E2", 142.0, "pg/mL"), member(12, "T", 0.9, "ng/mL"), member(13, "FSH", 4.0, "IU/L"), member(14, "LH", 3.0, "IU/L"), member(15, "PRL", 9.0, "ng/mL"))
     private val pdf = Item(UUID.randomUUID(), "Synthetic lab report", FileKind.PDF, true)
     private val image = Item(UUID.randomUUID(), "Synthetic lab photo", FileKind.IMAGE, true)
     private val gone = Item(UUID.randomUUID(), "Synthetic old scan", FileKind.OTHER, false)
@@ -150,6 +156,45 @@ class Ui10RedesignTest(private val locale: String, private val width: Int, priva
         ui.onAllNodesWithTag("attachments-count").assertCountEquals(0)
     }
 
+    // --- one blood test has several results ------------------------------------------------------------------------------
+
+    @Test fun labPageKeepsTheWholeBloodTestInReachAndSaysFilesAreForOneResult() {
+        setup()
+        var opened: LabValueEntity? = null; var drawOpened = 0
+        val current = fiveResults[1]
+        ui.setContent { NotesTheme(mode) { LabDetailPage(current, emptyList(), {}, {}, draw = LabDraw(panel, fiveResults), onOpenResult = { opened = it }, onOpenDraw = { drawOpened++ },
+            files = { MedicalAttachmentsSection(UiState(files = Files.Ready(emptyList())), "Synthetic result", {}, {}, {}, {}, {}, {}, {}, scopeNote = s(R.string.lab_page_files_scope, "Testosterone")) }) } }
+        // The other four results of the same draw are listed; this one is marked and not a button.
+        ui.onNodeWithTag("lab-detail-same-draw").assertExists()
+        ui.onNode(hasText(s(R.string.lab_page_same_draw), substring = true) and hasAnyAncestor(hasTestTag("lab-detail-same-draw"))).assertExists()
+        for (r in fiveResults) ui.onNodeWithTag("lab-draw-result:${r.id}").performScrollTo().assertExists()
+        ui.onNodeWithTag("lab-draw-result:${current.id}").assertIsSelected().assertHasNoClickAction()
+        ui.onNodeWithTag("lab-draw-result:${fiveResults[0].id}").assertHasClickAction().performClick(); assertEquals(fiveResults[0], opened)
+        ui.onNodeWithTag("lab-detail-open-draw").performScrollTo().assertHasClickAction().performClick(); assertEquals(1, drawOpened)
+        // The files block says plainly what the files are linked to; nothing about the whole blood test is offered.
+        ui.onNodeWithTag("attachments-scope").performScrollTo().assertExists()
+        ui.onAllNodesWithText(s(R.string.lab_page_files_scope, "Testosterone")).assertCountEquals(1)
+        val order = listOf("lab-hero", "lab-detail-same-draw", "lab-detail-report", "attachments").map { y(it) }
+        assertEquals("result, its blood test, report details, files", order.sorted(), order)
+        shot("lab_page_same_draw")
+        ui.onNodeWithTag("attachments").performScrollTo(); shot("lab_page_scope_note")
+    }
+
+    @Test fun labPageOfASingleResultHasNoBloodTestSectionAndNoScopeNote() {
+        setup()
+        ui.setContent { NotesTheme(mode) { LabDetailPage(bare, emptyList(), {}, {}, draw = LabDraw(null, listOf(bare)), files = { MedicalAttachmentsSection(UiState(files = Files.Ready(emptyList())), "x", {}, {}, {}, {}, {}, {}, {}) }) } }
+        ui.onAllNodesWithTag("lab-detail-same-draw").assertCountEquals(0)
+        ui.onAllNodesWithTag("attachments-scope").assertCountEquals(0)
+    }
+
+    @Test fun displayGroupOfResultsIsListedButOffersNoWholeTestAction() {
+        setup()
+        ui.setContent { NotesTheme(mode) { LabDetailPage(fiveResults[0].copy(panel_id = null), emptyList(), {}, {}, draw = LabDraw(null, fiveResults.take(3).map { it.copy(panel_id = null) })) } }
+        ui.onNodeWithTag("lab-detail-same-draw").assertExists()
+        ui.onAllNodesWithTag("lab-detail-open-draw").assertCountEquals(0)
+        ui.onNodeWithTag("lab-detail-display-group").performScrollTo().assertExists()
+    }
+
     // --- file page --------------------------------------------------------------------------------------------------------
 
     @Test fun filePageShowsPreviewTypeTitleLinkedRecordAndDetails() {
@@ -186,9 +231,9 @@ class Ui10RedesignTest(private val locale: String, private val width: Int, priva
 
     // --- medical records hub ----------------------------------------------------------------------------------------------
 
-    private fun hub(withFiles: Boolean = true, onVisit: (AppointmentEntity) -> Unit = {}, onLab: ((LabValueEntity) -> Unit)? = null, labs: List<LabValueEntity> = listOf(lab, bare)) {
+    private fun hub(withFiles: Boolean = true, onVisit: (AppointmentEntity) -> Unit = {}, onLab: ((LabValueEntity) -> Unit)? = null, labs: List<LabValueEntity> = listOf(lab, bare), panels: List<LabPanelEntity> = emptyList()) {
         ui.setContent { NotesTheme(mode) { Scaffold { pad -> MedicalRecordsScreen(visits, onVisit, {}, {}, {}, {}, pad, questionCounts = mapOf(1L to 3), now = now,
-            onVisits = if (withFiles) ({}) else null, onMedicalBackup = if (withFiles) ({}) else null, labs = labs, onLab = onLab) } } }
+            onVisits = if (withFiles) ({}) else null, onMedicalBackup = if (withFiles) ({}) else null, labs = labs, onLab = onLab, labPanels = panels) } } }
     }
 
     @Test fun hubRecordsAreaLeadsWithTheNextVisitAndTilesNotACardPile() {
@@ -226,6 +271,37 @@ class Ui10RedesignTest(private val locale: String, private val width: Int, priva
         setup(); hub(withFiles = false)
         ui.onAllNodesWithTag("medical-tabs").assertCountEquals(0)
         ui.onAllNodesWithTag("medical-add-file").assertCountEquals(0)
+    }
+
+    @Test fun addFileOffersLabResultsPerBloodTestNotAsAFlatListOfResults() {
+        assumeTrue("Dialog windows are exercised at 320 dp only", width == 320)
+        setup()
+        var picked: LabValueEntity? = null
+        // One five-result draw (a real panel) and one separate single result.
+        hub(onLab = { picked = it }, labs = fiveResults + bare, panels = listOf(panel))
+        ui.onNodeWithTag("medical-tab:files").performClick()
+        ui.onNodeWithTag("medical-add-file").performClick()
+        ui.onNodeWithTag("file-target-kind:1").performClick()
+        ui.onNodeWithTag("file-target-lab-help").assertExists()
+        // The five results are one group, not five unrelated rows; the single result is its own group.
+        ui.onNodeWithTag("file-target-draw:7").assertExists()
+        ui.onAllNodes(hasTestTag("file-target-draw:7")).assertCountEquals(1)
+        for (r in fiveResults) ui.onNode(hasTestTag("file-target:lab:${r.id}") and hasAnyAncestor(hasTestTag("file-target-draw:7")), useUnmergedTree = true).assertExists()
+        ui.onNodeWithTag("file-target-labs").performScrollToNode(hasTestTag("file-target:lab:${bare.id}"))
+        ui.onNode(hasTestTag("file-target:lab:${bare.id}") and hasAnyAncestor(hasTestTag("file-target-draw:7")), useUnmergedTree = true).assertDoesNotExist()
+        shot("add_file_target_grouped", dialog = true)
+        // A file is still linked to one explicit result.
+        ui.onNodeWithTag("file-target-labs").performScrollToNode(hasTestTag("file-target:lab:12"))
+        ui.onNodeWithTag("file-target:lab:12").performClick()
+        assertEquals(fiveResults[1], picked)
+    }
+
+    @Test fun hubLabTileCountsBloodTestsAndNamesTheirResults() {
+        setup(); hub(labs = fiveResults + bare, panels = listOf(panel))
+        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-labs"))
+        // Two blood tests (the panel and the separate result) with six results in all.
+        val draws = ui.activity.resources.getQuantityString(R.plurals.mh_lab_draws, 2, 2)
+        ui.onNodeWithTag("medical-labs").assert(hasText("$draws · ${s(R.string.lab_group_count, 6)}"))
     }
 
     @Test fun addFileFirstAsksForAnExplicitRecordAndNeverPicksByDate() {

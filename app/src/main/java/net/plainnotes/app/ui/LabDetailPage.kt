@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -35,7 +36,9 @@ import java.time.ZoneId
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun LabDetailPage(v: LabValueEntity, contexts: List<LabContextEntity>, onBack: () -> Unit, onEdit: () -> Unit, modifier: Modifier = Modifier,
-                              files: (@Composable () -> Unit)? = null, overlay: (@Composable () -> Unit)? = null) {
+                              files: (@Composable () -> Unit)? = null, overlay: (@Composable () -> Unit)? = null,
+                              /** The blood test this result belongs to (a real panel, or a display group); results of the same draw are listed and open in place. */
+                              draw: LabDraw? = null, onOpenResult: (LabValueEntity) -> Unit = {}, onOpenDraw: (() -> Unit)? = null) {
     Box(modifier.fillMaxSize()) {
         Scaffold(topBar = {
             // At large font or on a narrow screen the edit action keeps its pencil and speaks its name instead of drawing it,
@@ -52,6 +55,7 @@ import java.time.ZoneId
             Column(Modifier.padding(inner).fillMaxSize().verticalScroll(rememberScrollState()).padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 32.dp)
                 .testTag("lab-detail"), verticalArrangement = Arrangement.spacedBy(24.dp)) {
                 LabHero(v)
+                if (draw != null && draw.labs.size > 1) SameDraw(v, draw, onOpenResult, onOpenDraw)
                 ReportDetails(v)
                 files?.invoke()
                 SampleContext(v, contexts)
@@ -121,6 +125,32 @@ import java.time.ZoneId
     }
 }
 
+/** One blood test has several results. The others stay one tap away, and a real panel can be opened as a whole. */
+@Composable private fun SameDraw(v: LabValueEntity, draw: LabDraw, onOpenResult: (LabValueEntity) -> Unit, onOpenDraw: (() -> Unit)?) {
+    val c = MaterialTheme.colorScheme
+    Column(Modifier.testTag("lab-detail-same-draw"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(stringResource(R.string.lab_page_same_draw) + " · " + stringResource(R.string.lab_group_count, draw.labs.size), style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold, modifier = Modifier.semantics { heading() })
+        Column(verticalArrangement = Arrangement.spacedBy(GroupedGap)) {
+            draw.labs.forEachIndexed { i, other ->
+                val current = other.id == v.id
+                val summary = analyteLabel(other.analyte_code) + " · " + labReportNumber(other.value) + " " + other.unit
+                GroupedItem(i, draw.labs.size, color = if (current) c.secondaryContainer else c.surfaceContainerLowest, onClick = if (current) null else ({ onOpenResult(other) }),
+                    modifier = Modifier.testTag("lab-draw-result:${other.id}")) {
+                    Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp).semantics(mergeDescendants = true) {
+                        if (current) selected = true else role = androidx.compose.ui.semantics.Role.Button
+                    }, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Text(summary, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, fontWeight = if (current) FontWeight.Bold else FontWeight.Normal)
+                        if (current) Text(stringResource(R.string.lab_page_current), style = MaterialTheme.typography.labelMedium, color = c.onSecondaryContainer)
+                    }
+                }
+            }
+        }
+        if (onOpenDraw != null) OutlinedButton(onOpenDraw, Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("lab-detail-open-draw")) { Text(stringResource(R.string.lab_panel_open)) }
+        else Text(stringResource(R.string.lab_home_display_only), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant, modifier = Modifier.testTag("lab-detail-display-group"))
+    }
+}
+
 @Composable private fun SampleContext(v: LabValueEntity, contexts: List<LabContextEntity>) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(stringResource(R.string.lab_page_context), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.semantics { heading() })
@@ -132,8 +162,9 @@ import java.time.ZoneId
 
 /** The page over the whole screen: its own window, so system BACK dismisses it and nothing is nested in a dialog. */
 @Composable fun LabDetailFullscreen(v: LabValueEntity, contexts: List<LabContextEntity>, onBack: () -> Unit, onEdit: () -> Unit,
-                                    files: (@Composable () -> Unit)? = null, overlay: (@Composable () -> Unit)? = null) {
+                                    files: (@Composable () -> Unit)? = null, overlay: (@Composable () -> Unit)? = null,
+                                    draw: LabDraw? = null, onOpenResult: (LabValueEntity) -> Unit = {}, onOpenDraw: (() -> Unit)? = null) {
     Dialog(onDismissRequest = onBack, properties = DialogProperties(usePlatformDefaultWidth = false)) {
-        Surface(Modifier.fillMaxSize()) { LabDetailPage(v, contexts, onBack, onEdit, files = files, overlay = overlay) }
+        Surface(Modifier.fillMaxSize()) { LabDetailPage(v, contexts, onBack, onEdit, files = files, overlay = overlay, draw = draw, onOpenResult = onOpenResult, onOpenDraw = onOpenDraw) }
     }
 }

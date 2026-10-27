@@ -130,9 +130,14 @@ import java.time.Instant
             val label=analyteLabel(v.analyte_code)
             val files=net.plainnotes.app.attachments.ui.rememberRecordFiles(model,
                 net.plainnotes.app.data.MedicalAttachmentOperations.Target(net.plainnotes.app.data.MedicalAttachmentOperations.Kind.LAB,v.id))
+            // The draw this result belongs to, from the same grouping the labs list uses (a real panel, or a display group).
+            val draw=labDraws(extra.labs,extra.labPanels).firstOrNull {d->d.labs.any {it.id==id}}
+            val multi=draw!=null && draw.labs.size>1
+            val scope=if(multi)stringResource(R.string.lab_page_files_scope,label) else null
             LabDetailFullscreen(v,extra.labContexts.filter {it.lab_id==id},{m.lab=null},{m.lab=null;l.labEdit=v},
-                files=files?.let {f->{net.plainnotes.app.attachments.ui.RecordFilesSection(f,label)}},
-                overlay=files?.let {f->{net.plainnotes.app.attachments.ui.RecordFilesViewer(f,label)}})
+                files=files?.let {f->{net.plainnotes.app.attachments.ui.RecordFilesSection(f,label,scopeNote=scope)}},
+                overlay=files?.let {f->{net.plainnotes.app.attachments.ui.RecordFilesViewer(f,label)}},
+                draw=draw,onOpenResult={m.lab=it.id},onOpenDraw=draw?.panel?.let {p->{m.lab=null;l.panel=p.id}})
         }
     }
 }

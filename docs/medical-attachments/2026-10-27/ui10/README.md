@@ -35,7 +35,9 @@
 
 ## 4. 化验批次
 
-当前 MED-02 目标只有单项 `LabValue.id`。合同里 `RecordTarget` 把 `LabPanel` 与 `LabValue` 分成两种目标，`DocumentLink` 在页面上显示「整份报告 / 单项结果」。UI-10 没有把 panel ID 传给只支持 LAB 的接口，也不按日期推断关联。批次关联由 MED-03 实现和验收。
+**一次化验有多项数据，一份报告对应整次。** 当前 MED-02 目标只有单项 `LabValue.id`（第一版的收窄，不是产品原则）；负责人 2026-10-27 授权 MED-03 做整次化验目标（`MED03_PANEL_TARGET_REQUIREMENTS.md`），并要求先做缓解。已做的缓解：结果页「同一次化验」区块（列出同批结果、可打开整次化验）、文件区块的“只关联这一项”说明、添加文件的选择页按一次化验分组、医疗档案的化验砖统计“n 次化验 · m 项”。
+
+合同里 `RecordTarget` 把 `LabPanel` 与 `LabValue` 分成两种目标，`DocumentLink` 在页面上显示「整份报告 / 单项结果」。UI-10 没有把 panel ID 传给只支持 LAB 的接口，也不按日期推断关联。批次关联由 MED-03 实现和验收。
 
 ## 5. 验收
 

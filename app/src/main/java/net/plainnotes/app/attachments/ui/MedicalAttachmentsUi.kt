@@ -47,7 +47,9 @@ import net.plainnotes.app.ui.StatusPill
     onCheckStatus:()->Unit,onDismissMessage:()->Unit,onRetry:()->Unit,onOpen:(Item)->Unit,modifier:Modifier=Modifier,
     onUnlink:((Item)->Unit)?=null,onDismissUnlinkMessage:()->Unit={},
     /** Offered only when the file library can link an already stored file (not available yet); null draws nothing. */
-    onChooseExisting:(()->Unit)?=null) {
+    onChooseExisting:(()->Unit)?=null,
+    /** What the files are linked to when that is narrower than the page suggests (one result of a multi-result blood test). */
+    scopeNote:String?=null) {
     var pendingUnlink by remember {mutableStateOf<Item?>(null)}
     Column(modifier.fillMaxWidth().testTag("attachments"),verticalArrangement=Arrangement.spacedBy(12.dp)) {
         val ready=(state.files as? Files.Ready)?.takeIf {!state.revoked && !state.ended}
@@ -61,6 +63,7 @@ import net.plainnotes.app.ui.StatusPill
                 }
             }
         }
+        if(scopeNote!=null && !state.revoked && !state.ended)Text(scopeNote,Modifier.testTag("attachments-scope"),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
         when {
             state.ended->Banner(stringResource(R.string.attach_data_changed),"attachments-ended")
             state.revoked->Banner(stringResource(R.string.attach_hidden),"attachments-hidden")

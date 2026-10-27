@@ -102,4 +102,11 @@
     <plurals name="lib_linked_n">
         <item quantity="other">已關聯 %d 筆紀錄</item>
     </plurals>
+    <string name="lab_page_same_draw">同一次化驗</string>
+    <string name="lab_page_current">目前這項</string>
+    <string name="lab_page_files_scope">檔案只關聯這一項（%1$s），不關聯整次化驗。整次化驗的關聯暫未開放。</string>
+    <string name="mh_target_lab_help">一份檔案只能關聯到其中一項結果。整次化驗的關聯暫未開放。</string>
+    <plurals name="mh_lab_draws">
+        <item quantity="other">%d 次化驗</item>
+    </plurals>
 </resources>

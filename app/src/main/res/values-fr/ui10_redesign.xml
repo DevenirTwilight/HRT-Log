@@ -110,4 +110,13 @@
         <item quantity="many">Associé à %d enregistrements</item>
         <item quantity="other">Associé à %d enregistrements</item>
     </plurals>
+    <string name="lab_page_same_draw">Même prélèvement</string>
+    <string name="lab_page_current">Ce résultat</string>
+    <string name="lab_page_files_scope">Les fichiers sont associés à ce seul résultat (%1$s), pas à tout le prélèvement. L’association à un prélèvement entier n’est pas encore disponible.</string>
+    <string name="mh_target_lab_help">Un fichier peut être associé à un résultat. L’association à un prélèvement entier n’est pas encore disponible.</string>
+    <plurals name="mh_lab_draws">
+        <item quantity="one">%d prélèvement</item>
+        <item quantity="many">%d prélèvements</item>
+        <item quantity="other">%d prélèvements</item>
+    </plurals>
 </resources>

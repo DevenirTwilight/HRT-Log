@@ -53,7 +53,8 @@ import java.time.*
 @Composable fun MedicalRecordsScreen(appointments:List<AppointmentEntity>,onVisit:(AppointmentEntity)->Unit,onAdd:()->Unit,
     onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,contentPadding:PaddingValues,onConfirm:(AppointmentEntity)->Unit={onVisit(it)},
     questionCounts:Map<Long,Int> = emptyMap(),now:Instant=Instant.now(),onVisits:(()->Unit)?=null,onMedicalBackup:(()->Unit)?=null,
-    labs:List<LabValueEntity> = emptyList(),onLab:((LabValueEntity)->Unit)?=null,initialTab:Int=0,onTabChange:(Int)->Unit={}) {
+    labs:List<LabValueEntity> = emptyList(),onLab:((LabValueEntity)->Unit)?=null,initialTab:Int=0,onTabChange:(Int)->Unit={},
+    labPanels:List<LabPanelEntity> = emptyList()) {
     val past=MedicalRecordIndex.past(appointments,now)
     val confirmed=past.filter{it.completed_utc!=null}
     val unconfirmed=past.filter{it.completed_utc==null}
@@ -62,6 +63,8 @@ import java.time.*
     // The Files area exists only where the guarded attachment capability is wired in.
     val filesAvailable=onVisits!=null || onMedicalBackup!=null
     var tab by rememberSaveable{mutableIntStateOf(initialTab)}
+    // A lab result tile counts blood tests (draws), not single results; the results are named too.
+    val drawCount=remember(labs,labPanels){labDraws(labs,labPanels).size}
     var choosing by remember{mutableStateOf(false)}
     Column(Modifier.fillMaxSize()) {
         if(filesAvailable)PrimaryTabRow(tab,Modifier.padding(top=contentPadding.calculateTopPadding()).testTag("medical-tabs")) {
@@ -70,15 +73,15 @@ import java.time.*
         }
         LazyColumn(Modifier.fillMaxSize().testTag("medical-list"),contentPadding=PaddingValues(start=16.dp,end=16.dp,
             top=if(filesAvailable)16.dp else contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-            if(!filesAvailable || tab==0)recordsArea(next,unconfirmed,past.isEmpty(),confirmed,byYear,questionCounts,now,onVisit,onConfirm,onVisits,onLabs,onHistory,onTrash,labs.size)
+            if(!filesAvailable || tab==0)recordsArea(next,unconfirmed,past.isEmpty(),confirmed,byYear,questionCounts,now,onVisit,onConfirm,onVisits,onLabs,onHistory,onTrash,drawCount,labs.size)
             else filesArea(onVisits,onLabs,onMedicalBackup,onAddFile={choosing=true})
         }
     }
-    if(choosing)AddFileTargetDialog(appointments,labs,onVisit={choosing=false;onVisit(it)},onLab=onLab?.let{open->{v:LabValueEntity->choosing=false;open(v)}},onDismiss={choosing=false})
+    if(choosing)AddFileTargetDialog(appointments,labs,labPanels,onVisit={choosing=false;onVisit(it)},onLab=onLab?.let{open->{v:LabValueEntity->choosing=false;open(v)}},onDismiss={choosing=false})
 }
 
 private fun LazyListScope.recordsArea(next:AppointmentEntity?,unconfirmed:List<AppointmentEntity>,noVisits:Boolean,confirmed:List<AppointmentEntity>,byYear:Map<Int,List<AppointmentEntity>>,
-    questionCounts:Map<Long,Int>,now:Instant,onVisit:(AppointmentEntity)->Unit,onConfirm:(AppointmentEntity)->Unit,onVisits:(()->Unit)?,onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,labCount:Int) {
+    questionCounts:Map<Long,Int>,now:Instant,onVisit:(AppointmentEntity)->Unit,onConfirm:(AppointmentEntity)->Unit,onVisits:(()->Unit)?,onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,drawCount:Int,resultCount:Int) {
     // UI-05 F: "Record a past visit" is AppShell's top bar "+" (MedicalAddAction), not a list button.
     next?.let{a->item("next"){NextVisitCard(a,questionCounts[a.id] ?: 0,now,onVisit)}}
     if(unconfirmed.isNotEmpty())item("unconfirmed"){MedicalHeading(stringResource(R.string.medical_were_you_there))}
@@ -99,7 +102,7 @@ private fun LazyListScope.recordsArea(next:AppointmentEntity?,unconfirmed:List<A
     item("related") { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
         MedicalHeading(stringResource(R.string.medical_related))
         Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max),horizontalArrangement=Arrangement.spacedBy(12.dp)) {
-            HubTile(Icons.Outlined.Science,stringResource(R.string.mh_labs_tile),pluralStringResource(R.plurals.mh_lab_count,labCount,labCount),"medical-labs",onLabs,Modifier.weight(1f).fillMaxHeight())
+            HubTile(Icons.Outlined.Science,stringResource(R.string.mh_labs_tile),pluralStringResource(R.plurals.mh_lab_draws,drawCount,drawCount)+" · "+stringResource(R.string.lab_group_count,resultCount),"medical-labs",onLabs,Modifier.weight(1f).fillMaxHeight())
             HubTile(Icons.Outlined.Timeline,stringResource(R.string.medical_timeline),null,"medical-history",onHistory,Modifier.weight(1f).fillMaxHeight())
         }
         onVisits?.let{visits->RelatedCard(Icons.AutoMirrored.Outlined.EventNote,stringResource(R.string.mh_visits_tile),"medical-center-visits",visits)}
@@ -198,10 +201,11 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
  * files and the single add action are. A lab result opens the individual result, never a panel.
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable private fun AddFileTargetDialog(appointments:List<AppointmentEntity>,labs:List<LabValueEntity>,onVisit:(AppointmentEntity)->Unit,onLab:((LabValueEntity)->Unit)?,onDismiss:()->Unit) {
+@Composable private fun AddFileTargetDialog(appointments:List<AppointmentEntity>,labs:List<LabValueEntity>,panels:List<LabPanelEntity>,onVisit:(AppointmentEntity)->Unit,onLab:((LabValueEntity)->Unit)?,onDismiss:()->Unit) {
     var kind by remember{mutableIntStateOf(0)}
     val visits=remember(appointments){appointments.sortedWith(compareByDescending<AppointmentEntity>{it.at_utc}.thenByDescending{it.id})}
-    val results=remember(labs){labs.sortedWith(compareByDescending<LabValueEntity>{it.sampled_utc}.thenByDescending{it.id})}
+    // Lab results are offered per blood test, newest first, the same grouping as the labs page; a file still links to one result.
+    val draws=remember(labs,panels){labDraws(labs,panels)}
     androidx.compose.ui.window.Dialog(onDismissRequest=onDismiss,properties=androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth=false)) {
         Surface(Modifier.fillMaxSize().testTag("file-target-dialog")) {
             Scaffold(topBar={TopAppBar(title={Text(stringResource(R.string.mh_target_title),Modifier.semantics{heading()})},
@@ -227,14 +231,28 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
                             }
                         }
                     } else {
-                        if(results.isEmpty()||onLab==null)Text(stringResource(R.string.mh_target_no_labs))
-                        else LazyColumn(Modifier.fillMaxSize().testTag("file-target-labs"),verticalArrangement=Arrangement.spacedBy(GroupedGap),contentPadding=PaddingValues(bottom=24.dp)) {
-                            itemsIndexed(results,key={_,v->"l:${v.id}"}){i,v->
-                                val local=Instant.ofEpochMilli(v.sampled_utc).atZone(ZoneId.of(v.sampled_zone))
-                                GroupedItem(i,results.size,onClick={onLab(v)},modifier=Modifier.testTag("file-target:lab:${v.id}")) {
-                                    Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(2.dp)) {
-                                        Text(analyteLabel(v.analyte_code)+" · "+displayNumber(v.value)+" "+v.unit,style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
-                                        Text(formatDate(local.toLocalDate())+" · "+formatTime(local.toLocalTime()),style=MaterialTheme.typography.bodyMedium)
+                        if(draws.isEmpty()||onLab==null)Text(stringResource(R.string.mh_target_no_labs))
+                        else {
+                            Text(stringResource(R.string.mh_target_lab_help),Modifier.testTag("file-target-lab-help"),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                            LazyColumn(Modifier.fillMaxSize().testTag("file-target-labs"),verticalArrangement=Arrangement.spacedBy(16.dp),contentPadding=PaddingValues(bottom=24.dp)) {
+                                items(draws,key={d->d.panel?.let{"p:${it.id}"} ?: "g:${d.labs.first().id}"}){d->
+                                    val first=d.labs.first();val local=Instant.ofEpochMilli(d.panel?.sampled_utc ?: first.sampled_utc).atZone(ZoneId.of(d.panel?.sampled_zone ?: first.sampled_zone))
+                                    val place=(d.panel?.laboratory ?: first.laboratory)?.trim()?.takeIf{it.isNotEmpty()}
+                                    val when_=formatDate(local.toLocalDate())+" · "+formatTime(local.toLocalTime())
+                                    Column(Modifier.testTag("file-target-draw:${d.panel?.id ?: "g${first.id}"}"),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+                                        // One header per blood test with several results; a single result keeps its own date line.
+                                        if(d.labs.size>1)Text(listOfNotNull(when_,place,stringResource(R.string.lab_group_count,d.labs.size)).joinToString(" · "),
+                                            style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold,modifier=Modifier.semantics{heading()})
+                                        Column(verticalArrangement=Arrangement.spacedBy(GroupedGap)) {
+                                            d.labs.forEachIndexed{i,v->
+                                                GroupedItem(i,d.labs.size,onClick={onLab(v)},modifier=Modifier.testTag("file-target:lab:${v.id}")) {
+                                                    Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(2.dp)) {
+                                                        Text(analyteLabel(v.analyte_code)+" · "+displayNumber(v.value)+" "+v.unit,style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
+                                                        if(d.labs.size==1)Text(when_+(place?.let{" · $it"} ?: ""),style=MaterialTheme.typography.bodyMedium)
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }

@@ -107,4 +107,12 @@
         <item quantity="one">Linked to %d record</item>
         <item quantity="other">Linked to %d records</item>
     </plurals>
+    <string name="lab_page_same_draw">Same blood test</string>
+    <string name="lab_page_current">This result</string>
+    <string name="lab_page_files_scope">Files are linked to this result only (%1$s), not to the whole blood test. Linking a whole blood test isn’t available yet.</string>
+    <string name="mh_target_lab_help">A file can be linked to one result. Linking a whole blood test isn’t available yet.</string>
+    <plurals name="mh_lab_draws">
+        <item quantity="one">%d blood test</item>
+        <item quantity="other">%d blood tests</item>
+    </plurals>
 </resources>

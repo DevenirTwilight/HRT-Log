@@ -18,7 +18,7 @@ UI 层不新建第二套实体、数据库、解密流程或状态系统；下�
 |---|---|---|
 | `DocumentSummary` | `document: UUID`、`title`、`kind: PDF/IMAGE/OTHER`、`link: Unlinked/Linked(count)`、`category?`、`addedLabel?` | 只有后端提供的字段才画；日期、机构、大小不从文件名或历史推断 |
 | `DocumentDetail` | `summary`、`links: List<DocumentLink>`、`sizeLabel?`、`inBin` | |
-| `DocumentLink` / `RecordTarget` | `Visit(id,label)`、`LabValue(id,label)`、`LabPanel(id,label,valueCount)` | 面板与单项是不同目标，互不推断 |
+| `DocumentLink` / `RecordTarget` | `Visit(id,label)`、`LabValue(id,label)`、`LabPanel(id,label,valueCount)` | 面板与单项是不同目标，互不推断。**整次化验目标已获负责人授权（2026-10-27），需求见 `MED03_PANEL_TARGET_REQUIREMENTS.md`** |
 | `ImportDraft` / `ImportState` | 文件名、标题、类别?、`LinkChoice`（已有就诊 / 已有化验或批次 / 新建记录并关联 / 暂不关联）、已选记录? | 状态沿用 `Import`：Idle、Confirming、Saving、Saved、NotSaved、Cancelled、Unknown、Checking |
 | `LinkOperationState` | 沿用 `UnlinkStatus`（IDLE、WORKING、REMOVED、REMOVED_LIST_STALE、UNKNOWN），扩展到 link | 未知结果只读核对，不重放 |
 | `RecoveryState` | `inBin`，恢复结果同上三态 | 永久删除不在范围内 |
@@ -37,6 +37,7 @@ UI 层不新建第二套实体、数据库、解密流程或状态系统；下�
 | 选择一次就诊/一项化验作为添加目标 | 可用 | 纯 UI，复用已加载的记录列表 |
 | 新建化验/就诊后直接添加文件 | **MED-03（小）** | 保存接口需返回已保存记录的稳定身份（`saveMedicalVisit`/`saveLabs` 目前只回成功标志）；保存成功与文件提交保持两个独立结果 |
 | 没有关联的文件导入、统一文件库列表 | **MED-03** | 独立文件身份 + `list(filter)` 返回 `DocumentSummary`；导入时 `link=Unlinked` |
+| 整次化验（LabPanel）作为附件目标 | **MED-03（已授权 2026-10-27）** | 独立目标类型、Room 迁移、备份兼容；规格见 `MED03_PANEL_TARGET_REQUIREMENTS.md` |
 | 给已存文件添加关联（访视、单项、批次） | **MED-03** | `link(document, RecordTarget)`，幂等、原子；`LabPanel` 另有目标类型 |
 | 选择已有文件（记录页） | **MED-03** | 同上，列表来自统一文件库 |
 | 搜索标题/类别、类别统计、待整理计数 | **MED-03** | 类别字段 + 计数投影；只在用户设置后有类别 |

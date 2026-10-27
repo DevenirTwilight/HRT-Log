@@ -70,13 +70,13 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
 }
 
 /** The related-files block of a record page: stateless over the controller's state. */
-@Composable internal fun RecordFilesSection(files:RecordFiles,targetLabel:String,modifier:Modifier=Modifier) {
+@Composable internal fun RecordFilesSection(files:RecordFiles,targetLabel:String,modifier:Modifier=Modifier,scopeNote:String?=null) {
     val state by files.controller.state.collectAsState()
     val controller=files.controller
     MedicalAttachmentsSection(state,targetLabel,onAdd=files.onAdd,onConfirm=controller::confirmImport,
         onCancelImport=controller::cancelImport,onCheckStatus=controller::checkStatus,
         onDismissMessage=controller::dismissImportMessage,onRetry=controller::refresh,onOpen=controller::open,modifier=modifier,
-        onUnlink=controller::unlink,onDismissUnlinkMessage=controller::dismissUnlinkMessage)
+        onUnlink=controller::unlink,onDismissUnlinkMessage=controller::dismissUnlinkMessage,scopeNote=scopeNote)
 }
 
 /** The page-sized file page over a record page. System BACK closes it first; nothing stale stays when it is closed or revoked. */
