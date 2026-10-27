@@ -116,5 +116,7 @@
     "science": 40524888999
   },
   "mainlineCi": "PENDING",
-  "prAndroidResult": "SUCCESS"
+  "prAndroidResult": "SUCCESS",
+  "mainlineScience": "SUCCESS",
+  "mainlineSecurity": "SUCCESS_ALL_API26_27_29_35"
 }
