@@ -22,7 +22,7 @@ import net.plainnotes.app.data.MedicalAttachmentOperations
 import net.plainnotes.app.security.Session
 import net.plainnotes.app.security.launchPicker
 
-/** Compiled real-record candidate, intentionally unreachable from release navigation.
+/** Production real-record page; runtime authorization and scoped activation remain mandatory.
  * OFF is checked before the ViewModel/runtime is touched. No URI or capability is saved. */
 @Composable internal fun MedicalAttachmentRecordPage(model:NotesViewModel,target:MedicalAttachmentOperations.Target,targetLabel:String,onBack:()->Unit) {
     if(!AttachmentFlowController.PUBLIC_ENTRY_ENABLED)return
@@ -53,7 +53,7 @@ import net.plainnotes.app.security.launchPicker
     }},onExit=onBack)
 }
 
-/** Shared by the OFF production candidate and the existing guarded synthetic host.
+/** Shared by the production page and the existing guarded synthetic host.
  * The caller supplies its already-scoped controller; no alternate authorization exists here. */
 @Composable internal fun MedicalAttachmentRecordContent(controller:MedicalAttachmentsController,targetLabel:String,onAdd:()->Unit,onExit:(()->Unit)?=null) {
     val state by controller.state.collectAsState()

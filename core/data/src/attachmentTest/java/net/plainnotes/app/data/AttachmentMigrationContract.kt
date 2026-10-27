@@ -275,4 +275,59 @@ abstract class AttachmentMigrationContract {
         } finally {opened.forEach{it.close()};names.forEach{context.deleteDatabase(it)};passwords.forEach{it.fill(0)}}
     }
 
+    @Test fun publishedRoom20UpgradesWithoutRewritingRowsAndOldReaderRefusesRoom21()=runBlocking {
+        val name="synthetic-room20-activation-${UUID.randomUUID()}.db"
+        val pass=ByteArray(32) { (it+19).toByte() }
+        var room:NotesDatabase?=null
+        fun rows(db:SupportSQLiteDatabase):Map<String,List<List<String>>> {
+            val entities=schema(20).getJSONArray("entities")
+            return (0 until entities.length()).associate {i->
+                val table=entities.getJSONObject(i).getString("tableName")
+                val result=db.query("SELECT * FROM `$table` ORDER BY rowid").use {c->buildList {
+                    while(c.moveToNext())add((0 until c.columnCount).map {j->
+                        c.getType(j).toString()+":"+when {
+                            c.isNull(j)->"<null>"
+                            c.getType(j)==android.database.Cursor.FIELD_TYPE_BLOB->android.util.Base64.encodeToString(c.getBlob(j),android.util.Base64.NO_WRAP)
+                            else->c.getString(j)
+                        }
+                    })
+                }}
+                table to result
+            }
+        }
+        try {
+            lateinit var scope:AttachmentIdentity.Scope
+            val before=fixture(name,pass,20).use {old->
+                val db=old.writableDatabase;SchemaGuards.install(db)
+                db.beginTransaction()
+                try {
+                    db.execSQL("INSERT INTO appointment(id,type,at_utc,at_zone,note,remind_minutes_before) VALUES (1,'ENDO',1000,'UTC','SYNTHETIC Room20 sentinel',0)")
+                    scope=requireNotNull(AttachmentIdentity.initialize(db,true))
+                    db.setTransactionSuccessful()
+                }finally {db.endTransaction()}
+                val frozen=rows(db)
+                // A failed/aborted activation migration must not leave relaxed historical guards.
+                db.beginTransaction()
+                try {migration20To21.migrate(db)}finally {db.endTransaction()}
+                var denied=false
+                try {db.execSQL("UPDATE attachment_store SET feature_enabled=1")}catch(_:Exception){denied=true}
+                assertTrue("Rollback keeps Room20 OFF-only guard",denied)
+                assertEquals(20,db.version);assertEquals(frozen,rows(db));frozen
+            }
+            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass))
+                .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
+            val db=room.openHelper.writableDatabase
+            assertEquals(21,db.version);assertEquals(before,rows(db));assertEquals(scope,AttachmentIdentity.current(db))
+            db.query("PRAGMA foreign_key_check").use {assertFalse(it.moveToFirst())}
+            assertEncryptedDatabase(name)
+            room.close();room=null
+            var rejected=false
+            try {fixture(name,pass,20).use {it.writableDatabase}}catch(_:Exception){rejected=true}
+            assertTrue("Historical Room20 reader must not downgrade an activated-schema database",rejected)
+            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass))
+                .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
+            assertEquals(before,rows(room.openHelper.writableDatabase))
+        }finally {room?.close();context.deleteDatabase(name);pass.fill(0)}
+    }
+
 }

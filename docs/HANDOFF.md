@@ -4044,3 +4044,12 @@ Production MedicalAttachmentRecordPage now offers explicit user confirmation bef
 ## PR133 bounded production entry conversion — 2026-10-27
 
 The production-activation branch now sets AttachmentFlowController.PUBLIC_ENTRY_ENABLED=true after adding Room21 scoped activation, real visit/individual LAB + full medical-transfer routes, non-destructive exact-link retraction UI/transaction and four-locale privacy notice. This is SOURCE ENABLEMENT IN DRAFT PR, NOT a merged user installation or PUBLIC RELEASE. Preserved authenticating runtime/capability/dataset/epoch gates, existing backup protection, no INTERNET, and test/demo release isolation. PRIVACY.md and docs/privacy-evidence.md now distinguish ordinary PNBAK1 from full PNMEDBK2; unlink retains object/space. Required precise final HEAD compilation, native MainActivity SAF/backup recovery/E2E and security CI must pass before protected merge. F04 POTENTIAL, external audit NOT_REVIEWED_EXTERNALLY, physical/TalkBack/hard-power-loss NOT_RUN; no signed APK or public Release authorized.
+
+
+## PR133 最终产品验收接手 — 2026-10-27
+
+实时远端df0aacf0，独立工作树/workspace/HRT-Log-med02-activation，初始clean，无本地修改丢失。公共入口ON保留。该源JVM/Science/四API安全专项/Featherline512MiB PASS；library低内存FAIL在旧合同要求QUARANTINED关联仍列出；三API原生FAIL在旧PUBLIC=false断言，并非retained15..21修复再次失败。原件40505845804/40505846101，原job日志在本次产品验收evidence。修正旧假设同时加强对持久QUARANTINED保留/不可读取/无关LAB不受影响的检查，未改变生产列表、完整导出或归属守卫。另更新现有合成RuntimeGateway合同的真实激活flag=1。
+
+补齐真正缺失的MainActivity正式入口原生合同（非合成UI宿主）：显式就诊及LAB(panel id不同)、真实DocumentsUI/确认/COMMIT/重开/认证像素/单条解除，以及真实运行时PNMEDBK2导出、认证恢复、新Activity/旧scope拒绝和恢复后关联。仅文件provider和种子医疗事实为合成；归档适配器使用真实生产代码，但未将其直接调用冒充归档SAF按钮端到端。以现有三API工作流执行一次，保留独立XML。另补从发布Room20 schema实际创建的升级/回滚/旧reader拒绝合同，复用现有JVM及SQLCipher原生迁移套件。当前编译/定向回归进行中，新增原生均PENDING，不能Ready或合并。真实设备/TalkBack/硬断电NOT_RUN；无签名交付发布授权。
+
+定向编译/回归完成：App/core AndroidTest编译PASS；AttachmentActivationTest、MedicalAttachmentUiGuardTest PASS；实际发布Room20→21迁移合同1 PASS（0 fail/error/skip）；Python Release隔离5 PASS。必要证据与真实MainActivity合同范围见docs/medical-attachments/2026-10-27/product-activation/acceptance.md。下一步推送这一候选读取自动CI；新入口/迁移原生未运行前不标PASS。源码冻结后最终状态以#133精确HEAD Actions及PR正文链接的不可变最终receipt为准，不将历史PENDING段落视为实时远端结论。

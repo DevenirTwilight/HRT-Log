@@ -1555,3 +1555,8 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 ## 154. MED-02 正式产品集成授权（2026-10-27）
 
 负责人批准在单一正式启用PR中实施Room非破坏启用、真实就诊/单项化验/医疗中心/完整医疗备份导航和最小非破坏管理。内部针对性准入与已确认严重漏洞修复取代项目政策中一律先购买外审的要求；保留NOT_REVIEWED_EXTERNALLY事实，不将AI内审称独立认证，不推定法律豁免。永久密文/key销毁、公开Release/tag仍未批准。正式开启前必须通过精确HEAD CI、迁移/恢复/负向与真实MainActivity SAF验收，按106保护合并；不以只翻UI开关交付。
+
+
+### 154.A 最终产品验收与合并（2026-10-27）
+
+负责人要求继续既有#133，保留PUBLIC_ENTRY_ENABLED=true及已批准Room21/正式导航/单条解除/四语隐私代码，先实时定位CI具体失败，再做必要的真实MainActivity→SAF→确认→COMMIT→重开→认证查看与LAB整数身份隔离、完整PNMEDBK2/retained/恢复回滚验收。只修真实阻断及过时断言，保留负向/UNKNOWN/资源归属守卫，不重写密码学、Schema、配额、P4或UI系统。最终精确SHA必需CI、安全/受影响原生及低内存验收通过、无冲突或未解决审查后，按106普通受保护Ready/合并并查主线；不以还可多测试无限拖延。可以准备未签名Release候选，不创建公开tag/Release、不签名或交付APK、不永久删除密文/key。F04仍POTENTIAL，NOT_REVIEWED_EXTERNALLY如实保留；真机/人工TalkBack/硬断电无证据仍NOT_RUN。手机实际使用必须安装更新后的APK。

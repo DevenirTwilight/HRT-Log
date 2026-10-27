@@ -45,7 +45,11 @@ class MedicalAttachmentOperationAndroidTest {
                 val current=service.open(cap,target,r.document);service.trash(cap,r.document,2)
                 reject {current.readAt(0,bytes,0,bytes.size)};current.close()
                 service.restore(cap,r.document,3)
-                assertEquals("QUARANTINED",service.documents(cap,target).single().linkState)
+                assertTrue("Restoring content never re-associates it with the current record",service.documents(cap,target).isEmpty())
+                f.raw.query("SELECT state FROM attachment_link WHERE document_uuid=?",arrayOf(r.document.toString())).use {
+                    assertTrue(it.moveToFirst());assertEquals("QUARANTINED",it.getString(0));assertFalse(it.moveToNext())
+                }
+                assertEquals(1,service.documents(cap,labTarget).size) // Unrelated active relationship remains visible.
                 reject {runBlocking {service.open(cap,target,r.document)}} // Restore is not automatic reassociation.
                 assertEquals(MedicalAttachmentOperations.Export.COMPLETE,service.exportEligibility(cap))
                 val out=ByteArrayOutputStream();val password="SYNTHETIC facade archive".toCharArray()

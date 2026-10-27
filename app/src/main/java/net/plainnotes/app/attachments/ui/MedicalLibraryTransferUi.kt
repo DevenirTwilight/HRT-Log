@@ -23,7 +23,7 @@ import net.plainnotes.app.security.Session
 import net.plainnotes.app.security.launchPicker
 import net.plainnotes.app.attachments.ui.MedicalLibraryTransferController.*
 
-/** Full-library transfer candidate, not a replacement for PNBAK1. No release route references it. */
+/** Full-library transfer page, separate from ordinary PNBAK1 record backup. */
 @Composable internal fun MedicalLibraryTransferPage(model:NotesViewModel,onReopen:()->Unit,onBack:()->Unit) {
     if(!AttachmentFlowController.PUBLIC_ENTRY_ENABLED)return
     val context=LocalContext.current
