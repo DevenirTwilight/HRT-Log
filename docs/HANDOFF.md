@@ -1,3 +1,13 @@
+## Build36 正式原证书私人交付完成 — 2026-10-27
+
+负责人明确授权私人签名和交付。从最新已合并正式主线f5d37144acf25e4f0128b15a7fe9969ca34f70b6（含#133/#134/#135，#135任务归属MED-02-EXPOSE）独立干净工作树重新构建fullRelease，外部Gradle finalizeDsl显式0.2.0/code36，未复用旧unsigned缓存，175tasks实际执行、10m40s成功；APK自身DEX SOURCE_SHA准确、git/dirtyfalse。主线Android40564386422、Science40564386608、安全40564386376成功，复用既有三API真实产品验收，不另跑P4/PK研究。
+
+已使用原正式证书989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1签名，文件HRT-Log-build36-full-official.apk，14007301bytes，最终APK SHA256为16aaf2aad6cced5dff3d64440cc4d3657d585e06137e6bc266ceeaffe2de4a62。Google Drive本人专属、sharedfalse、单一owner，已完整回读与本地签名包逐字节相同，下载链接只给负责人、不进公开Git。临时签名材料已移除，私有原备份不改。无公开Release/tag/公开APK。
+
+实际包名net.plainnotes.app、版本36>既有35、非debug、四ABI含ARM64、所有8个ELF LOAD及ZIP16KiB对齐、无INTERNET/PoC Provider/合成入口。PUBLIC入口ON，医疗中心→就诊/单项LAB/完整医疗备份接线包含#135；Room20→21迁移不变，不要求卸载/清库。普通PNBAK1不含原件、应另做完整医疗备份。实际覆盖安装条件PASS，负责人真机安装/人工TalkBack仍NOT_RUN，不能保证未实测OEM行为。
+
+账本仅追加本次真实交付，历史不改；为保留既有delivery_ledger源码版本不得低于已交付版本守卫，后续主线默认versionCode由35同步为36，仅这一必要交付版本常量，无功能变更。APK源仍是上面的干净f5d37144+明确版本构建参数，不冒认本账本提交。校验收据docs/delivery/build36-private-verification.json不含下载令牌/私钥/密码。正常PR保护流程提交此记录；不再开发MED03/UI/性能功能。用户应先保管加密备份/密码、直接覆盖不卸载不清数据，先核既有记录/化验/库存，再用无敏感测试文件试附件；不要对唯一重要资料做恢复实验。
+
 ## PR133已合并；主线返回键测试同步修复 — 2026-10-27
 
 #133真实最终7bdddc88的push/PR六门全部PASS，三API真实MainActivity全链PASS；正常保护合并ff54396bc96db4264c26bfb0cb930a2244dbd176，PUBLIC_ENTRY_ENABLED=true，文件树和已验源码一致。主线Science40524888999及安全40524889000四API均SUCCESS；主线Android40524889046/API35 job122261639387实际FAIL：全链已完成就诊/LAB真实SAF/COMMIT/认证读，line285连续Espresso.pressBack在关闭附件Dialog的焦点交接期选中无焦点Activity，RootViewWithoutFocusException。原XML/工件SHA已保存证据分支f8c06ac9，不能将旧失败重标通过。
