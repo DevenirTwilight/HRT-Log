@@ -19,6 +19,9 @@ import java.util.UUID
 internal interface MedicalAttachmentGateway {
     val scopeEnded:Boolean get()=false
     fun onHidden(listener:()->Unit):AutoCloseable=AutoCloseable {}
+    fun pending():Pair<UUID,UUID>?=null
+    fun retain(operation:UUID,document:UUID) {}
+    fun resolved(operation:UUID,document:UUID) {}
     val target:MedicalAttachmentOperations.Target
     suspend fun documents():List<MedicalAttachmentOperations.Document>
     /** The system picker for one transient document; choosing creates no operation. */
@@ -51,6 +54,11 @@ internal interface MedicalAttachmentGateway {
  * AttachmentFlowController/AttachmentViewer. No second store or decryption path exists. */
 internal class RuntimeAttachmentGateway(private val context:Context,private val runtime:RuntimeLibrarySession,
     override val target:MedicalAttachmentOperations.Target):MedicalAttachmentGateway {
+    private val recovery=AttachmentReconciliationStore(context,
+        requireNotNull((runtime.state.value as? RuntimeLibrarySession.State.Ready)?.scope),target)
+    override fun pending()=recovery.pending()
+    override fun retain(operation:UUID,document:UUID)=recovery.retain(operation,document)
+    override fun resolved(operation:UUID,document:UUID)=recovery.resolved(operation,document)
     override val scopeEnded get()=runtime.ended
     override fun onHidden(listener:()->Unit)=runtime.observePresentationHidden(listener)
     private suspend fun browse()=runtime.attachments(target,BROWSE_TITLE)
@@ -70,6 +78,7 @@ internal class RuntimeAttachmentGateway(private val context:Context,private val 
         }catch(e:Throwable) {flow.close();throw e}
     }
     override suspend fun newImport(title:String):MedicalAttachmentGateway.Import {
+        check(pending()==null) {"Reconcile existing attachment operation first"}
         val flow=runtime.attachments(target,title)
         return object:MedicalAttachmentGateway.Import {
             override val operation get()=flow.request.operation

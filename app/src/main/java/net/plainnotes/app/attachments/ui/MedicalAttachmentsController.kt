@@ -53,14 +53,14 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
         /** The screen's data scope ended (data switch/restore): this page can never read again. */
         val ended:Boolean=false)
 
-    private val mutable=MutableStateFlow(State())
+    private var unresolved:Pair<UUID,UUID>?=gateway.pending()
+    private val mutable=MutableStateFlow(State(import=if(unresolved==null)Import.Idle else Import.Unknown))
     val state=mutable.asStateFlow()
     @Volatile private var closed=false
     private var attempt:MedicalAttachmentGateway.Import?=null
     private var chosen:ActivityResult?=null
     private var picking=false
     /** Identities of an attempt whose outcome is unknown; kept only for the read-only check. */
-    private var unresolved:Pair<UUID,UUID>?=null
     private var preview:MedicalAttachmentGateway.Preview?=null
     private var job:Job?=null
     private var presentationEpoch=0L
@@ -86,7 +86,7 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
 
     /** Returns the system picker intent. Choosing a file creates no operation and reads nothing. */
     suspend fun startImport():Intent? {
-        if(picking || closed || state.value.revoked || state.value.import==Import.Saving || state.value.import==Import.Checking)return null
+        if(picking || closed || state.value.revoked || unresolved!=null || state.value.import in setOf(Import.Unknown,Import.Saving,Import.Checking))return null
         chosen=null;picking=true
         mutable.update {it.copy(import=Import.Idle)}
         return try {gateway.pickerIntent()}catch(e:CancellationException) {throw e}catch(_:Exception) {picking=false;null}
@@ -121,7 +121,13 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
             if(current==null) {mutable.update {it.copy(import=Import.NotSaved)};return@launch}
             attempt=current
             if(closed || state.value.revoked) {discardAttempt();return@launch}
-            try {withContext(io) {current.selected(result)}}catch(e:CancellationException) {throw e}catch(_:Exception) {}
+            unresolved=current.operation to current.document
+            try {
+                withContext(io) {
+                    gateway.retain(current.operation,current.document)
+                    current.selected(result)
+                }
+            }catch(e:CancellationException) {throw e}catch(_:Exception) {}
             settle(current)
         }
     }
@@ -129,13 +135,13 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
         val outcome=current.state.value
         when(outcome) {
             is AttachmentFlowController.State.Saved-> {
-                unresolved=null
+                resolve(current.operation,current.document)
                 // The COMMIT is real; a later list failure must not turn it into "not saved".
                 val files=loadFiles()
                 mutable.update {it.copy(import=Import.Saved(listStale=files==null),files=if(it.revoked)Files.Loading else files ?: it.files)}
             }
-            AttachmentFlowController.State.Failed->{unresolved=null;mutable.update {it.copy(import=Import.NotSaved)}}
-            AttachmentFlowController.State.Cancelled->{unresolved=null;mutable.update {it.copy(import=Import.Cancelled)}}
+            AttachmentFlowController.State.Failed->{resolve(current.operation,current.document);mutable.update {it.copy(import=Import.NotSaved)}}
+            AttachmentFlowController.State.Cancelled->{resolve(current.operation,current.document);mutable.update {it.copy(import=Import.Cancelled)}}
             else-> {
                 // Pending, ReconcileRequired, Closed (revoked mid-save) or anything unexpected.
                 unresolved=current.operation to current.document
@@ -144,19 +150,24 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
         }
         if(attempt===current) {attempt=null;current.close()}
     }
+    private fun resolve(operation:UUID,document:UUID) {
+        // Failure to durably clear keeps new writes blocked, even after a COMMIT receipt.
+        if(runCatching {gateway.resolved(operation,document)}.isSuccess)unresolved=null
+    }
     /** Read-only status of the unresolved attempt with the same identities. */
     fun checkStatus() {
         val (operation,document)=unresolved ?: return
-        if(closed || state.value.revoked)return
+        if(closed || state.value.revoked || job?.isActive==true || state.value.import==Import.Checking)return
         mutable.update {it.copy(import=Import.Checking)}
         scope.launch {
             val outcome=try {withContext(io) {gateway.reconcile(operation,document)}}catch(e:CancellationException) {throw e}catch(_:Exception) {null}
             when(outcome) {
                 is AttachmentFlowController.State.Saved-> {
-                    unresolved=null;val files=loadFiles()
+                    check(outcome.receipt.operation==operation && outcome.receipt.document==document)
+                    resolve(operation,document);val files=loadFiles()
                     mutable.update {it.copy(import=Import.Saved(listStale=files==null),files=if(it.revoked)Files.Loading else files ?: it.files)}
                 }
-                AttachmentFlowController.State.Failed->{unresolved=null;mutable.update {it.copy(import=Import.NotSaved)}}
+                AttachmentFlowController.State.Failed->{resolve(operation,document);mutable.update {it.copy(import=Import.NotSaved)}}
                 else->mutable.update {it.copy(import=Import.Unknown)}
             }
         }

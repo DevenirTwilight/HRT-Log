@@ -30,6 +30,10 @@ class MedicalAttachmentsControllerTest {
 
     private class Fake(override val target:MedicalAttachmentOperations.Target):MedicalAttachmentGateway {
         var docs=mutableListOf<MedicalAttachmentOperations.Document>()
+        var pendingIdentity:Pair<UUID,UUID>?=null
+        override fun pending()=pendingIdentity
+        override fun retain(operation:UUID,document:UUID) {check(pendingIdentity==null || pendingIdentity==(operation to document));pendingIdentity=operation to document}
+        override fun resolved(operation:UUID,document:UUID) {check(pendingIdentity==(operation to document));pendingIdentity=null}
         var listFails=false
         var outcome:AttachmentFlowController.State=AttachmentFlowController.State.Saved(MedicalAttachmentOperations.Receipt(UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),1))
         var reconcileOutcome:AttachmentFlowController.State=AttachmentFlowController.State.ReconcileRequired
@@ -229,6 +233,30 @@ class MedicalAttachmentsControllerTest {
         val c=controller(fake);c.refresh();c.open((c.state.value.files as Files.Ready).items.single())
         assertTrue(c.state.value.viewer is Viewer.Message)
         assertTrue(fake.previews.single().closed);assertTrue(fake.previews.single().pages.all{it.isRecycled});c.close()
+    }
+
+    @Test fun unknownRefusesAnotherPickerAndReconstructedControllerOnlyQueriesOriginalIdentity()=runBlocking {
+        val fake=Fake(target).apply {outcome=AttachmentFlowController.State.ReconcileRequired}
+        val first=controller(fake)
+        first.startImport();first.picked(picked,"t");first.confirmImport("t")
+        val identity=fake.pendingIdentity!!
+        assertEquals(Import.Unknown,first.state.value.import)
+        assertNull(first.startImport());first.confirmImport("again")
+        assertEquals(1,fake.imports.size)
+        first.close()
+        val restored=controller(fake)
+        assertEquals(Import.Unknown,restored.state.value.import)
+        assertNull(restored.startImport())
+        restored.checkStatus()
+        assertEquals(listOf(identity),fake.reconciles)
+        assertEquals(1,fake.imports.single().selections)
+        assertNull(restored.startImport())
+        fake.reconcileOutcome=AttachmentFlowController.State.Saved(MedicalAttachmentOperations.Receipt(identity.first,identity.second,UUID.randomUUID(),1))
+        restored.checkStatus()
+        assertNull(fake.pendingIdentity)
+        assertTrue(restored.state.value.import is Import.Saved)
+        assertNotNull(restored.startImport())
+        restored.close()
     }
 
 }

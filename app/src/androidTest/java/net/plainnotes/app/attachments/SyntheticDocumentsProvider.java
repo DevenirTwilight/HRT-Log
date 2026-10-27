@@ -21,6 +21,11 @@ import java.util.Locale;
 /** Standalone test-APK process: framework/Java only, no target-APK Kotlin dependency.
  * MANAGE_DOCUMENTS protected; generates synthetic bytes without filesystem/patient access. */
 public final class SyntheticDocumentsProvider extends DocumentsProvider {
+    private final java.util.concurrent.atomic.AtomicInteger opens = new java.util.concurrent.atomic.AtomicInteger();
+    @Override public android.os.Bundle call(String method, String arg, android.os.Bundle extras) {
+        if (!"openCount".equals(method)) throw new IllegalArgumentException("Synthetic observation only");
+        android.os.Bundle b = new android.os.Bundle(); b.putInt("count", opens.get()); return b;
+    }
     private static final String[] ROOTS={DocumentsContract.Root.COLUMN_ROOT_ID,DocumentsContract.Root.COLUMN_DOCUMENT_ID,
         DocumentsContract.Root.COLUMN_TITLE,DocumentsContract.Root.COLUMN_MIME_TYPES,DocumentsContract.Root.COLUMN_FLAGS,DocumentsContract.Root.COLUMN_AVAILABLE_BYTES};
     private static final String[] DOCS={DocumentsContract.Document.COLUMN_DOCUMENT_ID,DocumentsContract.Document.COLUMN_DISPLAY_NAME,
@@ -64,6 +69,7 @@ public final class SyntheticDocumentsProvider extends DocumentsProvider {
         }
     }
     @Override public ParcelFileDescriptor openDocument(String id,String mode,CancellationSignal signal) throws FileNotFoundException {
+        opens.incrementAndGet();
         if(!"r".equals(mode))throw new FileNotFoundException("Synthetic read-only source");if(signal!=null)signal.throwIfCanceled();
         final byte[] bytes=sample(id);final ParcelFileDescriptor[] pipe;
         try {pipe=ParcelFileDescriptor.createReliablePipe();}catch(IOException e){Arrays.fill(bytes,(byte)0);throw new FileNotFoundException("Synthetic pipe unavailable");}
