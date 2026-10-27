@@ -1,0 +1,590 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="1" failures="1" errors="0" skipped="0" time="40.718" timestamp="2026-10-27T13:50:07" hostname="localhost">
+  <testsuite name="net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest" tests="1" failures="1" errors="0" skipped="0" time="40.075" timestamp="2026-10-27T13:50:07" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 15" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="mainActivityVisitAndIndividualLabSafCommitReopenPreviewUnlinkAndTransfer" classname="net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest" time="40.075">
+      <failure>java.lang.AssertionError: Missing androidx.compose.ui.test.SemanticsMatcher&#64;55be5ec; production tree: Printing with useUnmergedTree = 'true'
+1) Node #342 at (l=0.0, t=0.0, r=320.0, b=640.0)px
+|-Node #349 at (l=0.0, t=0.0, r=320.0, b=640.0)px
+| IsContainer = 'true'
+|  |-Node #728 at (l=0.0, t=0.0, r=320.0, b=640.0)px, Tag: 'labs-home'
+|  | CollectionInfo = 'androidx.compose.ui.semantics.CollectionInfo&#64;555009f'
+|  | IsTraversalGroup = 'true'
+|  | VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=100.0, reverseScrolling=false)'
+|  | Actions = [GetScrollViewportLength, IndexForKey, ScrollBy, ScrollByOffset, ScrollToIndex]
+|  |  |-Node #730 at (l=16.0, t=96.0, r=304.0, b=144.0)px, Tag: 'labs-home-add'
+|  |  | Focused = 'false'
+|  |  | Role = 'Button'
+|  |  | Actions = [OnClick, RequestFocus]
+|  |  | MergeDescendants = 'true'
+|  |  |  |-Node #734 at (l=113.0, t=110.0, r=239.0, b=130.0)px
+|  |  |    Text = '[Record a blood test]'
+|  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |-Node #736 at (l=16.0, t=158.0, r=208.0, b=198.0)px, Tag: 'labs-home-search-toggle'
+|  |  | Focused = 'false'
+|  |  | Role = 'Button'
+|  |  | Actions = [OnClick, RequestFocus]
+|  |  | MergeDescendants = 'true'
+|  |  |  |-Node #738 at (l=28.0, t=168.0, r=196.0, b=188.0)px
+|  |  |    Text = '[Search tests or laboratory]'
+|  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |-Node #739 at (l=16.0, t=202.0, r=304.0, b=250.0)px
+|  |  | HorizontalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=510.0, reverseScrolling=false)'
+|  |  | IsTraversalGroup = 'true'
+|  |  | Actions = [ScrollBy, ScrollByOffset]
+|  |  |  |-Node #740 at (l=16.0, t=210.0, r=67.0, b=242.0)px, Tag: 'lab-category-all'
+|  |  |  | Focused = 'false'
+|  |  |  | Role = 'Checkbox'
+|  |  |  | Selected = 'true'
+|  |  |  | Actions = [OnClick, RequestFocus]
+|  |  |  | MergeDescendants = 'true'
+|  |  |  |  |-Node #743 at (l=32.0, t=216.0, r=51.0, b=236.0)px
+|  |  |  |    Text = '[All]'
+|  |  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |  |-Node #744 at (l=75.0, t=210.0, r=175.0, b=242.0)px, Tag: 'lab-category:HORMONES'
+|  |  |  | Focused = 'false'
+|  |  |  | Role = 'Checkbox'
+|  |  |  | Selected = 'false'
+|  |  |  | Actions = [OnClick, RequestFocus]
+|  |  |  | MergeDescendants = 'true'
+|  |  |  |  |-Node #747 at (l=91.0, t=216.0, r=159.0, b=236.0)px
+|  |  |  |    Text = '[Hormones]'
+|  |  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |  |-Node #748 at (l=183.0, t=210.0, r=293.0, b=242.0)px, Tag: 'lab-category:CBC'
+|  |  |  | Focused = 'false'
+|  |  |  | Role = 'Checkbox'
+|  |  |  | Selected = 'false'
+|  |  |  | Actions = [OnClick, RequestFocus]
+|  |  |  | MergeDescendants = 'true'
+|  |  |  |  |-Node #751 at (l=199.0, t=216.0, r=277.0, b=236.0)px
+|  |  |  |    Text = '[Blood count]'
+|  |  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |  |-Node #752 at (l=301.0, t=210.0, r=367.0, b=242.0)px, Tag: 'lab-category:LIVER'
+|  |  |  | Focused = 'false'
+|  |  |  | Role = 'Checkbox'
+|  |  |  | Selected = 'false'
+|  |  |  | Actions = [OnClick, RequestFocus]
+|  |  |  | MergeDescendants = 'true'
+|  |  |  |  |-Node #755 at (l=317.0, t=216.0, r=351.0, b=236.0)px
+|  |  |  |    Text = '[Liver]'
+|  |  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |  |-Node #756 at (l=375.0, t=210.0, r=453.0, b=242.0)px, Tag: 'lab-category:KIDNEY'
+|  |  |  | Focused = 'false'
+|  |  |  | Role = 'Checkbox'
+|  |  |  | Selected = 'false'
+|  |  |  | Actions = [OnClick, RequestFocus]
+|  |  |  | MergeDescendants = 'true'
+|  |  |  |  |-Node #759 at (l=391.0, t=216.0, r=437.0, b=236.0)px
+|  |  |  |    Text = '[Kidney]'
+|  |  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |  |-Node #760 at (l=461.0, t=210.0, r=534.0, b=242.0)px, Tag: 'lab-category:LIPIDS'
+|  |  |  | Focused = 'false'
+|  |  |  | Role = 'Checkbox'
+|  |  |  | Selected = 'false'
+|  |  |  | Actions = [OnClick, RequestFocus]
+|  |  |  | MergeDescendants = 'true'
+|  |  |  |  |-Node #763 at (l=477.0, t=216.0, r=518.0, b=236.0)px
+|  |  |  |    Text = '[Lipids]'
+|  |  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |  |-Node #764 at (l=542.0, t=210.0, r=736.0, b=242.0)px, Tag: 'lab-category:METABOLISM'
+|  |  |  | Focused = 'false'
+|  |  |  | Role = 'Checkbox'
+|  |  |  | Selected = 'false'
+|  |  |  | Actions = [OnClick, RequestFocus]
+|  |  |  | MergeDescendants = 'true'
+|  |  |  |  |-Node #767 at (l=558.0, t=216.0, r=720.0, b=236.0)px
+|  |  |  |    Text = '[Glucose and metabolism]'
+|  |  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |  |-Node #768 at (l=744.0, t=210.0, r=814.0, b=242.0)px, Tag: 'lab-category:OTHER'
+|  |  |    Focused = 'false'
+|  |  |    Role = 'Checkbox'
+|  |  |    Selected = 'false'
+|  |  |    Actions = [OnClick, RequestFocus]
+|  |  |    MergeDescendants = 'true'
+|  |  |     |-Node #771 at (l=760.0, t=216.0, r=798.0, b=236.0)px
+|  |  |       Text = '[Other]'
+|  |  |       Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |-Node #773 at (l=16.0, t=260.0, r=304.0, b=308.0)px
+|  |  | HorizontalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=20.0, reverseScrolling=false)'
+|  |  | IsTraversalGroup = 'true'
+|  |  | Actions = [ScrollBy, ScrollByOffset]
+|  |  |  |-Node #774 at (l=16.0, t=268.0, r=67.0, b=300.0)px, Tag: 'lab-filter-all'
+|  |  |  | Focused = 'false'
+|  |  |  | Role = 'Checkbox'
+|  |  |  | Selected = 'true'
+|  |  |  | Actions = [OnClick, RequestFocus]
+|  |  |  | MergeDescendants = 'true'
+|  |  |  |  |-Node #777 at (l=32.0, t=274.0, r=51.0, b=294.0)px
+|  |  |  |    Text = '[All]'
+|  |  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |  |-Node #778 at (l=75.0, t=268.0, r=196.0, b=300.0)px, Tag: 'lab-filter:E2'
+|  |  |  | Focused = 'false'
+|  |  |  | Role = 'Checkbox'
+|  |  |  | Selected = 'false'
+|  |  |  | Actions = [OnClick, RequestFocus]
+|  |  |  | MergeDescendants = 'true'
+|  |  |  |  |-Node #781 at (l=91.0, t=274.0, r=180.0, b=294.0)px
+|  |  |  |    Text = '[Estradiol (E2)]'
+|  |  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |  |-Node #782 at (l=204.0, t=268.0, r=324.0, b=300.0)px, Tag: 'lab-filter:T'
+|  |  |    Focused = 'false'
+|  |  |    Role = 'Checkbox'
+|  |  |    Selected = 'false'
+|  |  |    Actions = [OnClick, RequestFocus]
+|  |  |    MergeDescendants = 'true'
+|  |  |     |-Node #785 at (l=220.0, t=274.0, r=308.0, b=294.0)px
+|  |  |       Text = '[Testosterone]'
+|  |  |       Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |-Node #787 at (l=16.0, t=318.0, r=304.0, b=631.0)px, Tag: 'lab-panel:1'
+|  |    IsContainer = 'true'
+|  |     |-Node #790 at (l=32.0, t=334.0, r=128.0, b=350.0)px
+|  |     | Text = '[Blood test panel]'
+|  |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |     |-Node #791 at (l=32.0, t=362.0, r=288.0, b=410.0)px, Tag: 'lab-panel-open'
+|  |     | Focused = 'false'
+|  |     | Role = 'Button'
+|  |     | Actions = [OnClick, RequestFocus]
+|  |     | MergeDescendants = 'true'
+|  |     |  |-Node #792 at (l=32.0, t=376.0, r=264.0, b=396.0)px, Tag: 'lab-group-title'
+|  |     |    Text = '[Fri, Jan 15 8:00 AM · 2 tests]'
+|  |     |    [Heading]
+|  |     |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |     |-Node #794 at (l=32.0, t=422.0, r=288.0, b=555.0)px
+|  |     | IsContainer = 'true'
+|  |     |  |-Node #797 at (l=32.0, t=422.0, r=288.0, b=488.0)px, Tag: 'lab-group-row:1'
+|  |     |  | ContentDescription = '[Estradiol (E2), 120, pg/mL]'
+|  |     |  | Focused = 'false'
+|  |     |  | Role = 'Button'
+|  |     |  | Actions = [OnClick, RequestFocus]
+|  |     |  | MergeDescendants = 'true'
+|  |     |  | ClearAndSetSemantics = 'true'
+|  |     |  |  |-Node #799 at (l=48.0, t=432.0, r=136.0, b=452.0)px
+|  |     |  |  | Text = '[Estradiol (E2)]'
+|  |     |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |     |  |  |-Node #801 at (l=48.0, t=454.0, r=131.0, b=478.0)px
+|  |     |  |    Text = '[120 pg/mL]'
+|  |     |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |     |  |-Node #805 at (l=32.0, t=489.0, r=288.0, b=555.0)px, Tag: 'lab-group-row:2'
+|  |     |    ContentDescription = '[Testosterone, 9, ng/dL]'
+|  |     |    Focused = 'false'
+|  |     |    Role = 'Button'
+|  |     |    Actions = [OnClick, RequestFocus]
+|  |     |    MergeDescendants = 'true'
+|  |     |    ClearAndSetSemantics = 'true'
+|  |     |     |-Node #807 at (l=48.0, t=499.0, r=133.0, b=519.0)px
+|  |     |     | Text = '[Testosterone]'
+|  |     |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |     |     |-Node #809 at (l=48.0, t=521.0, r=107.0, b=545.0)px
+|  |     |       Text = '[9 ng/dL]'
+|  |     |       Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |     |-Node #811 at (l=32.0, t=567.0, r=288.0, b=615.0)px, Tag: 'lab-home-expand:1'
+|  |       Focused = 'false'
+|  |       Role = 'Button'
+|  |       Actions = [OnClick, RequestFocus]
+|  |       MergeDescendants = 'true'
+|  |        |-Node #813 at (l=66.0, t=581.0, r=255.0, b=601.0)px
+|  |          Text = '[View all 2 results and actions]'
+|  |          Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #440 at (l=0.0, t=0.0, r=320.0, b=88.0)px
+|  | IsTraversalGroup = 'true'
+|  |  |-Node #441 at (l=0.0, t=24.0, r=320.0, b=88.0)px
+|  |     |-Node #443 at (l=8.0, t=36.0, r=48.0, b=76.0)px
+|  |     | Focused = 'false'
+|  |     | Role = 'Button'
+|  |     | Actions = [OnClick, RequestFocus]
+|  |     | MergeDescendants = 'true'
+|  |     |  |-Node #444 at (l=16.0, t=44.0, r=40.0, b=68.0)px
+|  |     |    ContentDescription = '[Menu]'
+|  |     |    Role = 'Image'
+|  |     |-Node #445 at (l=56.0, t=42.0, r=162.0, b=70.0)px
+|  |        |-Node #446 at (l=56.0, t=42.0, r=162.0, b=70.0)px, Tag: 'top-title'
+|  |          Text = '[Lab results]'
+|  |          Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #720 at (l=141.0, t=520.0, r=304.0, b=576.0)px, Tag: 'lab-open-batch'
+|    Focused = 'false'
+|    Role = 'Button'
+|    Actions = [OnClick, RequestFocus]
+|    MergeDescendants = 'true'
+|     |-Node #724 at (l=181.0, t=538.0, r=284.0, b=558.0)px
+|        |-Node #725 at (l=181.0, t=538.0, r=284.0, b=558.0)px
+|          ClearAndSetSemantics = 'true'
+|           |-Node #727 at (l=193.0, t=538.0, r=284.0, b=558.0)px
+|             Text = '[Add lab result]'
+|             Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #352 at (l=-320.0, t=0.0, r=0.0, b=640.0)px
+PaneTitle = 'Navigation menu'
+|-Node #353 at (l=-320.0, t=0.0, r=0.0, b=640.0)px
+IsContainer = 'true'
+|-Node #354 at (l=-320.0, t=24.0, r=0.0, b=592.0)px
+|-Node #355 at (l=-320.0, t=24.0, r=0.0, b=592.0)px, Tag: 'drawer-content'
+IsTraversalGroup = 'true'
+VerticalScrollAxisRange = 'ScrollAxisRange(value=188.0, maxValue=317.0, reverseScrolling=false)'
+Actions = [ScrollBy, ScrollByOffset]
+|-Node #357 at (l=-292.0, t=-140.0, r=-252.0, b=-100.0)px
+| IsContainer = 'true'
+|-Node #360 at (l=-240.0, t=-134.0, r=-154.0, b=-106.0)px
+| Text = '[HRT Log]'
+| Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #361 at (l=-296.0, t=-76.0, r=-24.0, b=-20.0)px
+| Focused = 'false'
+| Role = 'Tab'
+| Selected = 'false'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #366 at (l=-244.0, t=-60.0, r=-176.0, b=-36.0)px
+|    Text = '[Calendar]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #367 at (l=-296.0, t=-20.0, r=-24.0, b=36.0)px
+| Focused = 'false'
+| Role = 'Tab'
+| Selected = 'false'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #372 at (l=-244.0, t=-4.0, r=-102.0, b=20.0)px
+|    Text = '[Treatment timeline]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #373 at (l=-280.0, t=48.0, r=-223.0, b=68.0)px, Tag: 'drawer-group:journal'
+| Text = '[Daily log]'
+| [Heading]
+| Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #374 at (l=-296.0, t=72.0, r=-24.0, b=128.0)px
+| Focused = 'false'
+| Role = 'Tab'
+| Selected = 'false'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #379 at (l=-244.0, t=88.0, r=-177.0, b=112.0)px
+|    Text = '[Dose log]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #380 at (l=-296.0, t=128.0, r=-24.0, b=184.0)px
+| Focused = 'false'
+| Role = 'Tab'
+| Selected = 'false'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #385 at (l=-244.0, t=144.0, r=-165.0, b=168.0)px
+|    Text = '[Well-being]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #386 at (l=-280.0, t=196.0, r=-206.0, b=216.0)px, Tag: 'drawer-group:medication'
+| Text = '[Medication]'
+| [Heading]
+| Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #387 at (l=-296.0, t=220.0, r=-24.0, b=276.0)px
+| Focused = 'false'
+| Role = 'Tab'
+| Selected = 'false'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #392 at (l=-244.0, t=236.0, r=-113.0, b=260.0)px
+|    Text = '[Medication plans]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #393 at (l=-296.0, t=276.0, r=-24.0, b=332.0)px
+| Focused = 'false'
+| Role = 'Tab'
+| Selected = 'false'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #398 at (l=-244.0, t=292.0, r=-201.0, b=316.0)px
+|    Text = '[Stock]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #399 at (l=-296.0, t=332.0, r=-24.0, b=388.0)px
+| Focused = 'false'
+| Role = 'Tab'
+| Selected = 'false'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #404 at (l=-244.0, t=348.0, r=-120.0, b=372.0)px
+|    Text = '[Estimated levels]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #405 at (l=-280.0, t=400.0, r=-197.0, b=420.0)px, Tag: 'drawer-group:records'
+| Text = '[Care records]'
+| [Heading]
+| Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #406 at (l=-296.0, t=424.0, r=-24.0, b=480.0)px
+| Focused = 'false'
+| Role = 'Tab'
+| Selected = 'false'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #411 at (l=-244.0, t=440.0, r=-124.0, b=464.0)px
+|    Text = '[Medical records]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #412 at (l=-296.0, t=480.0, r=-24.0, b=536.0)px
+| Focused = 'false'
+| Role = 'Tab'
+| Selected = 'false'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #417 at (l=-244.0, t=496.0, r=-201.0, b=520.0)px
+|    Text = '[Visits]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #418 at (l=-296.0, t=536.0, r=-24.0, b=592.0)px
+| Focused = 'false'
+| Role = 'Tab'
+| Selected = 'true'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #423 at (l=-244.0, t=552.0, r=-160.0, b=576.0)px
+|    Text = '[Lab results]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #424 at (l=-292.0, t=600.0, r=-28.0, b=601.0)px, Tag: 'drawer-divider'
+|-Node #425 at (l=-296.0, t=609.0, r=-24.0, b=665.0)px
+| Focused = 'false'
+| Role = 'Tab'
+| Selected = 'false'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #430 at (l=-244.0, t=625.0, r=-181.0, b=649.0)px
+|    Text = '[Settings]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #431 at (l=-296.0, t=665.0, r=-24.0, b=721.0)px
+Focused = 'false'
+Role = 'Tab'
+Selected = 'false'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+|-Node #436 at (l=-244.0, t=681.0, r=-199.0, b=705.0)px
+Text = '[About]'
+Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+2) Node #814 at (l=0.0, t=0.0, r=320.0, b=568.0)px
+|-Node #815 at (l=0.0, t=0.0, r=320.0, b=568.0)px
+[IsDialog]
+|-Node #816 at (l=0.0, t=0.0, r=320.0, b=568.0)px, Tag: 'lab-batch'
+IsContainer = 'true'
+|-Node #819 at (l=8.0, t=8.0, r=48.0, b=48.0)px
+| Focused = 'false'
+| Role = 'Button'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #820 at (l=16.0, t=16.0, r=40.0, b=40.0)px
+|    ContentDescription = '[Cancel]'
+|    Role = 'Image'
+|-Node #821 at (l=52.0, t=14.0, r=304.0, b=42.0)px
+| Text = '[Record a blood test]'
+| [Heading]
+| Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #822 at (l=0.0, t=52.0, r=320.0, b=487.0)px, Tag: 'lab-batch-scroll'
+| IsTraversalGroup = 'true'
+| VerticalScrollAxisRange = 'ScrollAxisRange(value=0.0, maxValue=677.0, reverseScrolling=false)'
+| Actions = [ScrollBy, ScrollByOffset]
+|  |-Node #939 at (l=16.0, t=60.0, r=304.0, b=108.0)px
+|  | Focused = 'false'
+|  | Role = 'Button'
+|  | Actions = [OnClick, RequestFocus]
+|  | MergeDescendants = 'true'
+|  |  |-Node #943 at (l=135.0, t=74.0, r=209.0, b=94.0)px
+|  |    Text = '[Tue, Oct 27]'
+|  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #944 at (l=16.0, t=116.0, r=304.0, b=164.0)px
+|  | Focused = 'false'
+|  | Role = 'Button'
+|  | Actions = [OnClick, RequestFocus]
+|  | MergeDescendants = 'true'
+|  |  |-Node #948 at (l=145.0, t=130.0, r=199.0, b=150.0)px
+|  |    Text = '[1:49 PM]'
+|  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #824 at (l=16.0, t=176.0, r=304.0, b=240.0)px, Tag: 'lab-batch-lab'
+|  | ContentDataType = 'AndroidContentDataType(androidAutofillType=1)'
+|  | EditableText = ''
+|  | Focused = 'false'
+|  | ImeAction = 'Default'
+|  | InputText = ''
+|  | IsEditable = 'true'
+|  | TextSelectionRange = 'TextRange(0, 0)'
+|  | Actions = [GetTextLayoutResult, InsertTextAtCursor, OnAutofillText, OnClick, OnLongClick, PasteText, PerformImeAction, RequestFocus, SetSelection, SetText]
+|  | MergeDescendants = 'true'
+|  |  |-Node #828 at (l=16.0, t=184.0, r=304.0, b=240.0)px
+|  |  |-Node #833 at (l=32.0, t=200.0, r=193.0, b=224.0)px
+|  |  | Text = '[Laboratory (optional)]'
+|  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |-Node #830 at (l=32.0, t=200.0, r=288.0, b=224.0)px
+|  |-Node #834 at (l=16.0, t=252.0, r=304.0, b=284.0)px
+|  | Text = '[Keep one result in its original unit. A rounded alternative unit is not a second measurement.]'
+|  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #835 at (l=16.0, t=296.0, r=304.0, b=344.0)px
+|  | Text = '[Assay method, instrument, report date and original wording can be kept in Notes. An unknown method stays unknown.]'
+|  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #836 at (l=16.0, t=356.0, r=105.0, b=376.0)px
+|  | Text = '[Common sets]'
+|  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #839 at (l=16.0, t=396.0, r=137.0, b=428.0)px, Tag: 'lab-preset:HORMONES'
+|  | Focused = 'false'
+|  | Role = 'Button'
+|  | Actions = [OnClick, RequestFocus]
+|  | MergeDescendants = 'true'
+|  |  |-Node #842 at (l=32.0, t=402.0, r=121.0, b=422.0)px
+|  |    Text = '[Six hormones]'
+|  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #843 at (l=145.0, t=396.0, r=211.0, b=428.0)px, Tag: 'lab-preset:LIVER'
+|  | Focused = 'false'
+|  | Role = 'Button'
+|  | Actions = [OnClick, RequestFocus]
+|  | MergeDescendants = 'true'
+|  |  |-Node #846 at (l=161.0, t=402.0, r=195.0, b=422.0)px
+|  |    Text = '[Liver]'
+|  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #847 at (l=16.0, t=444.0, r=201.0, b=476.0)px, Tag: 'lab-preset:KIDNEY'
+|  | Focused = 'false'
+|  | Role = 'Button'
+|  | Actions = [OnClick, RequestFocus]
+|  | MergeDescendants = 'true'
+|  |  |-Node #850 at (l=32.0, t=450.0, r=185.0, b=470.0)px
+|  |    Text = '[Kidney and electrolytes]'
+|  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #851 at (l=16.0, t=492.0, r=181.0, b=524.0)px, Tag: 'lab-preset:LIVER_EXTENDED'
+|  | Focused = 'false'
+|  | Role = 'Button'
+|  | Actions = [OnClick, RequestFocus]
+|  | MergeDescendants = 'true'
+|  |  |-Node #854 at (l=32.0, t=498.0, r=165.0, b=518.0)px
+|  |    Text = '[Extended liver panel]'
+|  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #855 at (l=16.0, t=540.0, r=234.0, b=572.0)px, Tag: 'lab-preset:KIDNEY_EXTENDED'
+|  | Focused = 'false'
+|  | Role = 'Button'
+|  | Actions = [OnClick, RequestFocus]
+|  | MergeDescendants = 'true'
+|  |  |-Node #858 at (l=32.0, t=546.0, r=218.0, b=566.0)px
+|  |    Text = '[Renal panel and electrolytes]'
+|  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #859 at (l=16.0, t=588.0, r=89.0, b=620.0)px, Tag: 'lab-preset:LIPIDS'
+|  | Focused = 'false'
+|  | Role = 'Button'
+|  | Actions = [OnClick, RequestFocus]
+|  | MergeDescendants = 'true'
+|  |  |-Node #862 at (l=32.0, t=594.0, r=73.0, b=614.0)px
+|  |    Text = '[Lipids]'
+|  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #863 at (l=97.0, t=588.0, r=207.0, b=620.0)px, Tag: 'lab-preset:CBC'
+|  | Focused = 'false'
+|  | Role = 'Button'
+|  | Actions = [OnClick, RequestFocus]
+|  | MergeDescendants = 'true'
+|  |  |-Node #866 at (l=113.0, t=594.0, r=191.0, b=614.0)px
+|  |    Text = '[Blood count]'
+|  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #867 at (l=16.0, t=636.0, r=225.0, b=668.0)px, Tag: 'lab-preset:METABOLISM'
+|  | Focused = 'false'
+|  | Role = 'Button'
+|  | Actions = [OnClick, RequestFocus]
+|  | MergeDescendants = 'true'
+|  |  |-Node #870 at (l=32.0, t=642.0, r=209.0, b=662.0)px
+|  |    Text = '[Fasting glucose and HbA1c]'
+|  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #871 at (l=16.0, t=688.0, r=304.0, b=960.0)px, Tag: 'lab-batch-row:0'
+|  | IsContainer = 'true'
+|  |  |-Node #876 at (l=28.0, t=700.0, r=292.0, b=748.0)px, Tag: 'lab-batch-analyte:0'
+|  |  | Focused = 'false'
+|  |  | Role = 'Button'
+|  |  | Actions = [OnClick, RequestFocus]
+|  |  | MergeDescendants = 'true'
+|  |  |  |-Node #878 at (l=116.0, t=714.0, r=205.0, b=734.0)px
+|  |  |    Text = '[Estradiol (E2)]'
+|  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |-Node #880 at (l=28.0, t=756.0, r=154.0, b=820.0)px, Tag: 'lab-batch-value:0'
+|  |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=1)'
+|  |  | EditableText = ''
+|  |  | Focused = 'false'
+|  |  | ImeAction = 'Default'
+|  |  | InputText = ''
+|  |  | IsEditable = 'true'
+|  |  | TextSelectionRange = 'TextRange(0, 0)'
+|  |  | Actions = [GetTextLayoutResult, InsertTextAtCursor, OnAutofillText, OnClick, OnLongClick, PasteText, PerformImeAction, RequestFocus, SetSelection, SetText]
+|  |  | MergeDescendants = 'true'
+|  |  |  |-Node #884 at (l=28.0, t=764.0, r=154.0, b=820.0)px
+|  |  |  |-Node #889 at (l=44.0, t=780.0, r=87.0, b=804.0)px
+|  |  |  | Text = '[Value]'
+|  |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |  |-Node #886 at (l=44.0, t=780.0, r=138.0, b=804.0)px
+|  |  |-Node #891 at (l=166.0, t=756.0, r=292.0, b=820.0)px
+|  |  | ContentDataType = 'AndroidContentDataType(androidAutofillType=1)'
+|  |  | EditableText = 'pg/mL'
+|  |  | Focused = 'false'
+|  |  | ImeAction = 'Default'
+|  |  | InputText = 'pg/mL'
+|  |  | IsEditable = 'false'
+|  |  | Role = 'DropdownList'
+|  |  | TextSelectionRange = 'TextRange(0, 0)'
+|  |  | Actions = [GetTextLayoutResult, OnAutofillText, OnClick, OnLongClick, PerformImeAction, RequestFocus, SetSelection]
+|  |  | MergeDescendants = 'true'
+|  |  |  |-Node #895 at (l=166.0, t=764.0, r=292.0, b=820.0)px
+|  |  |  |-Node #902 at (l=182.0, t=756.0, r=238.0, b=772.0)px
+|  |  |  | Text = '[Dose unit]'
+|  |  |  | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |  |-Node #899 at (l=182.0, t=780.0, r=240.0, b=804.0)px
+|  |  |-Node #903 at (l=28.0, t=828.0, r=292.0, b=876.0)px, Tag: 'lab-batch-range-toggle:0'
+|  |  | Focused = 'false'
+|  |  | Role = 'Button'
+|  |  | Actions = [OnClick, RequestFocus]
+|  |  | MergeDescendants = 'true'
+|  |  |  |-Node #904 at (l=28.0, t=832.0, r=268.0, b=872.0)px
+|  |  |    Text = '[Reference range from your report (optional)]'
+|  |  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |  |-Node #906 at (l=28.0, t=884.0, r=292.0, b=948.0)px
+|  |    ContentDataType = 'AndroidContentDataType(androidAutofillType=1)'
+|  |    EditableText = ''
+|  |    Focused = 'false'
+|  |    ImeAction = 'Default'
+|  |    InputText = ''
+|  |    IsEditable = 'true'
+|  |    TextSelectionRange = 'TextRange(0, 0)'
+|  |    Actions = [GetTextLayoutResult, InsertTextAtCursor, OnAutofillText, OnClick, OnLongClick, PasteText, PerformImeAction, RequestFocus, SetSelection, SetText]
+|  |    MergeDescendants = 'true'
+|  |     |-Node #910 at (l=28.0, t=892.0, r=292.0, b=948.0)px
+|  |     |-Node #915 at (l=44.0, t=908.0, r=88.0, b=932.0)px
+|  |     | Text = '[Notes]'
+|  |     | Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |     |-Node #912 at (l=44.0, t=908.0, r=276.0, b=932.0)px
+|  |-Node #916 at (l=16.0, t=972.0, r=304.0, b=1020.0)px, Tag: 'lab-batch-add-row'
+|  | Focused = 'false'
+|  | Role = 'Button'
+|  | Actions = [OnClick, RequestFocus]
+|  | MergeDescendants = 'true'
+|  |  |-Node #920 at (l=143.0, t=986.0, r=209.0, b=1006.0)px
+|  |    Text = '[Add a test]'
+|  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #921 at (l=16.0, t=1032.0, r=304.0, b=1080.0)px, Tag: 'lab-batch-estimate'
+|  | Focused = 'false'
+|  | Role = 'Checkbox'
+|  | Selected = 'false'
+|  | Actions = [OnClick, RequestFocus]
+|  | MergeDescendants = 'true'
+|  |  |-Node #924 at (l=48.0, t=1032.0, r=304.0, b=1080.0)px
+|  |    Text = '[Include an uncalibrated estimate at sampling]'
+|  |    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|  |-Node #925 at (l=16.0, t=1092.0, r=304.0, b=1156.0)px
+|    Text = '[A new sample captures context automatically. Editing a value or note preserves it; selecting an estimate creates a new version. Only actual intakes before sampling are used.]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #931 at (l=16.0, t=504.0, r=156.0, b=552.0)px, Tag: 'lab-batch-cancel'
+| Focused = 'false'
+| Role = 'Button'
+| Actions = [OnClick, RequestFocus]
+| MergeDescendants = 'true'
+|  |-Node #933 at (l=63.0, t=518.0, r=109.0, b=538.0)px
+|    Text = '[Cancel]'
+|    Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+|-Node #934 at (l=164.0, t=504.0, r=304.0, b=552.0)px, Tag: 'lab-batch-save'
+Role = 'Button'
+[Disabled]
+Actions = [OnClick]
+MergeDescendants = 'true'
+|-Node #936 at (l=218.0, t=518.0, r=251.0, b=538.0)px
+Text = '[Save]'
+Actions = [ClearTextSubstitution, GetTextLayoutResult, SetTextSubstitution, ShowTextSubstitution]
+at net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest.press(MedicalAttachmentProductAndroidTest.kt:65)
+at net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest.button(MedicalAttachmentProductAndroidTest.kt:72)
+at net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest.mainActivityVisitAndIndividualLabSafCommitReopenPreviewUnlinkAndTransfer(MedicalAttachmentProductAndroidTest.kt:264)
+... 65 trimmed
+Caused by: androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:755)
+at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:362)
+at net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest.press(MedicalAttachmentProductAndroidTest.kt:63)
+... 68 more
+</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

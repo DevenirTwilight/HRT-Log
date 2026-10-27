@@ -4067,3 +4067,5 @@ The production-activation branch now sets AttachmentFlowController.PUBLIC_ENTRY_
 3e library低内存整条工作流SUCCESS；Featherline低内存真实LMK（PID3849，错误密码拒绝后、下一次认证前，kernel anon245648KiB不是峰值）。kernel/logcat/memory/native原件入库，没有声称修复或排除所有根因，没有动Importer/KDF或预算。下一次是随真实MED02源码修正的正常最终CI，不进行同源反复筛绿；若仍有实际阻断精准处理/如实保留。公共入口ON，Ready/合并仍等准确最终六门/受影响原生与安全验收。最终状态以#133精确HEAD及正文的永久receipt为准。
 
 PR133 LAB导航最小收敛：源审计发现LabsScreen内部详情的附件按钮只设置medicalDialogs.lab，外层MedicalLabDetail又默认打开详情，导致重复中间页。增加仅内存的labAttachmentTarget（明确LabValue ID，非panel ID），仅该按钮预置为附件目的地，宿主dispose清除匹配意图；普通就诊/医疗中心的查看化验详情入口保持原行为。App/core不增Schema、无持久化新状态。App AndroidTest编译和MedicalAttachmentUiGuardTest PASS（32秒）；最终同源MainActivity单次附件按钮→LAB=2/panel=1的实际路径仍以CI为准，不能仅凭编译称PASS。
+
+PR133 a0真实MainActivity API35已通过就诊SAF/COMMIT/新Activity/认证预览、真实关闭与指定关联解除，进入LAB。新失败原完整语义树证明：result2行bounds(32,489)-(288,555)中心(160,522)被lab-open-batch悬浮按钮(141,520)-(304,576)覆盖，测试触摸错开新增表单并无保存。只改原生用例，点击真实语义行左20%未遮挡区域，仍走MainActivity/详情/附件/SAF，所有LAB目标身份/实际COMMIT/重开/恢复断言保留；没有调用VM或直接URI替代，未修改无关Labs UI。11秒AndroidTest编译PASS。原XML含完整树/原logcat/工件SHA已入evidence/a0fd447d。a0四API安全专项PASS、Featherline512MiB PASS（不抵消3e LMK历史），最终仍待这一测试输入修正后的精确SHA全部门槛。

@@ -166,3 +166,17 @@ visit/medical-center lab-detail entry still defaults to detail. No panel ID subs
 new persistent field, auto-import or database/record change. Compilation/UI boundary
 regressions PASS; the same real MainActivity case requires ONE attachment click for
 result2/panel1 and will verify the actual relation through authenticated reading.
+
+## Native row hit-region correction (test input only)
+
+At a0, the real API35 product case completed visit import/reopen/authenticated
+preview/real close/exact unlink. Its later result-row center touch opened the Labs
+floating add-batch action. The original full semantics tree proves row2 bounds
+(32,489)-(288,555), center(160,522), overlapped by lab-open-batch bounds
+(141,520)-(304,576). Touch the unobscured left20% of that actual semantic row,
+still using actual input events and the production details/attachment routes.
+Do not replace it with a ViewModel call, direct URI or a relaxed identity assertion.
+Both original and restored LAB row entry use the same real hit-region helper.
+No unrelated Labs UI is redesigned. Compilation PASS, final native outcome pending.
+Four API security and Featherline512MiB passed a0; the 3e LMK remains a preserved
+failure and no memory-stability fix is claimed.

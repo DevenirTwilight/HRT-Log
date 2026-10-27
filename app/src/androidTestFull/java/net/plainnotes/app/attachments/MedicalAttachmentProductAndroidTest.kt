@@ -76,6 +76,15 @@ class MedicalAttachmentProductAndroidTest {
         button(R.string.attach_section)
     }
     private fun back() {androidx.test.espresso.Espresso.pressBack()}
+    private fun labDetail(id:Long) {
+        val row=ui.onNodeWithTag("lab-group-row:$id")
+        row.performScrollTo()
+        // The real Labs FAB overlaps the right side of a low visible row on 320dp.
+        // Tap its unobscured label side, relative to the actual semantic row bounds.
+        // This is still a real touch on the existing result, not a ViewModel/URI shortcut.
+        row.performTouchInput {click(androidx.compose.ui.geometry.Offset(width*0.2f,center.y))}
+        button(R.string.attach_section)
+    }
     private fun waitSystem(label:String,predicate:()->Boolean) {
         val end=SystemClock.uptimeMillis()+30000
         while(SystemClock.uptimeMillis()<end){if(predicate())return;Thread.sleep(100)}
@@ -261,7 +270,7 @@ class MedicalAttachmentProductAndroidTest {
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
         runBlocking {model.libraryRuntime.attachments(visit,"SYNTHETIC unlinked").use {assertTrue(it.documents().isEmpty())}}
         back();open(Destination.LABS)
-        tag("lab-group-row:${lab.id}");button(R.string.attach_section)
+        labDetail(lab.id)
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
         add("SYNTHETIC production lab")
         val labSaved=read(labTarget)
@@ -288,7 +297,7 @@ class MedicalAttachmentProductAndroidTest {
             try {old.checkRequest();fail("Old Activity scope was rebound after root COMMIT")}catch(_:LibraryRequestRevoked) {}
         }finally {gateway.close()}
         scenario!!.close();scenario=null;launch()
-        open(Destination.LABS);tag("lab-group-row:${lab.id}");button(R.string.attach_section)
+        open(Destination.LABS);labDetail(lab.id)
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment:${labSaved.document}",useUnmergedTree=true).fetchSemanticsNodes().isNotEmpty()}
         assertEquals(labSaved.document,read(labTarget).document)
         val restoredLabel=context.getString(R.string.attach_item_description,labSaved.title,text(R.string.attach_kind_image),text(R.string.attach_status_saved))
