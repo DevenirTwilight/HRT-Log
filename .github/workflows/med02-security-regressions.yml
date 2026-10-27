@@ -38,7 +38,7 @@ jobs:
           heap-size: 192M
           disable-animations: true
           script: |
-            python3 scripts/configure_ansm_native_runtime.py --api ${{ matrix.api }}
+            python3 scripts/configure_ansm_native_runtime.py --api ${{ matrix.api }} --security-api27
             python3 scripts/run_med02_security_native.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()

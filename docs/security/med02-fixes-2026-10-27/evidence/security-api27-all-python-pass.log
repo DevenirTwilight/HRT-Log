@@ -1,0 +1,9 @@
+...........................................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 235 tests in 7.658s
+
+OK
+Synthetic API26 emulator ART heap properties verified192m; test Runtime.maxMemory and measured budgets still required
+Synthetic API29 emulator ART heap properties verified192m; test Runtime.maxMemory and measured budgets still required
+Synthetic API35 emulator ART heap properties verified192m; test Runtime.maxMemory and measured budgets still required
+Synthetic API26 emulator ART heap properties verified192m; test Runtime.maxMemory and measured budgets still required

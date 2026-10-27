@@ -83,3 +83,10 @@ F03每项仍验证根事务及时释放、全部业务事实相等及LEGACY auth
 - 唯一Draft #132维持阻断，不合并、不签名/发布/启用。新HEAD仍需完整必需/四API/低内存结果；最终CI回执和未验证范围写PR及交付包，避免为记录结果无限改变SHA。OFF / NOT_REVIEWED_EXTERNALLY。
 
 擦除补正后针对性回归 PASS：24项JVM（0 fail/error/skip），app/core AndroidTest编译PASS，原XML和日志见wipe-targeted-*；70项静态约束PASS。下一步推本次新HEAD，运行完整精确SHA CI、四API安全原生和分支HEAD低内存两项。6d低内存FAIL仍未修复根因；保持Draft直到全部条件满足，否则禁止合并。
+
+## MED-02 #132 API27专用配置接线修正 — 2026-10-27
+
+- 6c6eee90生产代码在四API专用原生40476432331全部PASS，本地24项及仪器编译PASS。完整PR Android主构建/单元/lint/隔离步骤通过后，235前身的233 Python守卫发现通用性能矩阵应默认拒绝27（原test_ansm_native_performance，AttributeError暴露错误接线）；原日志保留6c-pr-android-full-failed.log.gz。
+- 修正仅脚本/workflow/新回归：通用configure继续只允许26/29/35；27必须由专用MED-02安全工作流显式--security-api27。原性能矩阵守卫不改；设备身份/模拟器/root/192MiB检查不改，新测试验证opt-in不能绕过。全235 Python测试PASS（security-api27-all-python-pass.log）；生产AppLock/UNKNOWN/擦除/IO代码不再改变。下一精确SHA完整CI待执行。
+- 6c实际branch lowmem40476452481两个作业PASS（含后续完整重启）；PR预览40476438280 Featherline PASS/library FAIL：base13、集合编解码4、业务集成2、generation四阶段和attachment operation四阶段重启均PASS；集合PREPARED准备60秒内未到seam，脚本finally force-stop，不是已证明OOM，根因NOT_PROVEN，集合恢复/后续阶段NOT_RUN。原ZIP/全日志保留；不增时限/预算/减数据，不为绿反复重试。旧6d/db605实际OOM/LMK原件仍保留。
+- 仍唯一Draft #132、禁止合并失败候选；推接线修正后的精确SHA运行完整必需+四API+低内存，结果通过全部条件后才正常保护merge，否则维持阻断。最终PR回执/证据包记录精确结果；OFF / NOT_REVIEWED_EXTERNALLY。

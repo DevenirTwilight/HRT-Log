@@ -1,3 +1,10 @@
+## MED-02 #132 API27专用配置接线修正 — 2026-10-27
+
+- 6c6eee90生产代码在四API专用原生40476432331全部PASS，本地24项及仪器编译PASS。完整PR Android主构建/单元/lint/隔离步骤通过后，235前身的233 Python守卫发现通用性能矩阵应默认拒绝27（原test_ansm_native_performance，AttributeError暴露错误接线）；原日志保留6c-pr-android-full-failed.log.gz。
+- 修正仅脚本/workflow/新回归：通用configure继续只允许26/29/35；27必须由专用MED-02安全工作流显式--security-api27。原性能矩阵守卫不改；设备身份/模拟器/root/192MiB检查不改，新测试验证opt-in不能绕过。全235 Python测试PASS（security-api27-all-python-pass.log）；生产AppLock/UNKNOWN/擦除/IO代码不再改变。下一精确SHA完整CI待执行。
+- 6c实际branch lowmem40476452481两个作业PASS（含后续完整重启）；PR预览40476438280 Featherline PASS/library FAIL：base13、集合编解码4、业务集成2、generation四阶段和attachment operation四阶段重启均PASS；集合PREPARED准备60秒内未到seam，脚本finally force-stop，不是已证明OOM，根因NOT_PROVEN，集合恢复/后续阶段NOT_RUN。原ZIP/全日志保留；不增时限/预算/减数据，不为绿反复重试。旧6d/db605实际OOM/LMK原件仍保留。
+- 仍唯一Draft #132、禁止合并失败候选；推接线修正后的精确SHA运行完整必需+四API+低内存，结果通过全部条件后才正常保护merge，否则维持阻断。最终PR回执/证据包记录精确结果；OFF / NOT_REVIEWED_EXTERNALLY。
+
 ## MED-02 #132 全套CI发现擦除遗漏，有限补正 — 2026-10-27
 
 - 6d8273b1四API专用原生push40472207972全部PASS，原件在最终交付证据；本地21项PASS。但完整Android 40472208031 FAIL：2486项、1 fail、561 skip，唯一失败是原有LocalDataWipeCoverageTest，指出F02新存储attachment-reconciliation-v1未接入删除全部数据。原始HTML/作业日志保留在evidence/6d-*；不是放宽守卫。

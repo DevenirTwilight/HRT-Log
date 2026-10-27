@@ -8,8 +8,8 @@ from configure_ansm_native_runtime import configure
 
 
 class Executor:
-    def __init__(self, uid="0", after="emulator-5554", root_error=False, wait_error=False):
-        self.uid, self.after = uid, after
+    def __init__(self, uid="0", after="emulator-5554", root_error=False, wait_error=False, api="35"):
+        self.uid, self.after, self.api = uid, after, api
         self.root_error, self.wait_error = root_error, wait_error
         self.calls, self.serial_reads = [], 0
         self.properties = {"dalvik.vm.heapsize": "64m", "dalvik.vm.heapgrowthlimit": "64m", "sys.boot_completed": "1"}
@@ -33,7 +33,7 @@ class Executor:
         if args == ("shell", "id", "-u"):
             return self.uid
         if args[:2] == ("shell", "getprop"):
-            return {"ro.kernel.qemu": "1", "ro.build.version.sdk": "35"}.get(args[2], self.properties.get(args[2], ""))
+            return {"ro.kernel.qemu": "1", "ro.build.version.sdk": self.api}.get(args[2], self.properties.get(args[2], ""))
         if args[:2] == ("shell", "setprop"):
             self.properties[args[2]] = args[3]
             return ""
@@ -84,6 +84,24 @@ class RuntimeReconnectTest(unittest.TestCase):
             self.run_configure(fake)
         self.assertEqual(30, fake.wait_timeout)
         self.assert_unmodified(fake)
+
+
+class SecurityApi27OptInTest(unittest.TestCase):
+    def test_api27_is_rejected_without_opt_in_before_adb(self):
+        fake=Executor(api="27")
+        with self.assertRaises(ValueError):configure(execute=fake,expected_api="27")
+        self.assertEqual([],fake.calls)
+
+    def test_opt_in_still_requires_matching_device_root_and_heap(self):
+        with contextlib.redirect_stdout(io.StringIO()):
+            good=Executor(api="27")
+            configure(execute=good,pause=lambda _:None,expected_api="27",security_api27=True)
+            self.assertEqual("192m",good.properties["dalvik.vm.heapsize"])
+            self.assertEqual("192m",good.properties["dalvik.vm.heapgrowthlimit"])
+            for bad in (Executor(api="26"),Executor(api="27",uid="2000"),Executor(api="27",after="emulator-5556")):
+                with self.assertRaises(RuntimeError):
+                    configure(execute=bad,pause=lambda _:None,expected_api="27",security_api27=True)
+                self.assertFalse(any(args[:2]==("shell","setprop") for args in bad.calls))
 
 
 if __name__ == "__main__":
