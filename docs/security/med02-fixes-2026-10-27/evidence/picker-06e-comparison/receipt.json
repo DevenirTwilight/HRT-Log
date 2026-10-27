@@ -1,0 +1,21 @@
+{
+  "head": "06e4fa9781e21641e430a2447f09038771f232e7",
+  "failed_pr_run": 40480396404,
+  "passed_branch_run": 40480442930,
+  "failed_job": 122108946111,
+  "passed_job": 122109105793,
+  "artifacts": {
+    "fail": [
+      12723113283,
+      "9b81b18094c50d4ff0b80ec8fd06fbd6688fe85e0cadf11b6488d75d0ced7b90"
+    ],
+    "pass": [
+      12723367063,
+      "83ec1ad42c0e0bc4aa6934e1b545b7e51f81031d052975333af29de5bcc3c5df"
+    ]
+  },
+  "proven": "Readiness predicate omitted navigable empty Recent. Failure occurred before synthetic root selection. Both guest images API26/default/x86 with512MiB RAM/192MiB heap.",
+  "not_proven": "Provider initial cache/download-provider failure underlying cause; host resource competition. System OOM/background kills occurred, but app3801/picker3885 not shown killed. Not a confirmed app foreground LMK.",
+  "fix": "Test-only narrow localized Recent+visible navigation+empty dir_list, same30s wait. Existing root/directory/file identity/SAF/import/password/COMMIT/reopen assertions unchanged.",
+  "history": "Branch PASS does not replace PR FAIL. Historical foreground LMK allocation root cause remains NOT_PROVEN."
+}

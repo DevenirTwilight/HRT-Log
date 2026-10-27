@@ -90,3 +90,12 @@ F03每项仍验证根事务及时释放、全部业务事实相等及LEGACY auth
 - 修正仅脚本/workflow/新回归：通用configure继续只允许26/29/35；27必须由专用MED-02安全工作流显式--security-api27。原性能矩阵守卫不改；设备身份/模拟器/root/192MiB检查不改，新测试验证opt-in不能绕过。全235 Python测试PASS（security-api27-all-python-pass.log）；生产AppLock/UNKNOWN/擦除/IO代码不再改变。下一精确SHA完整CI待执行。
 - 6c实际branch lowmem40476452481两个作业PASS（含后续完整重启）；PR预览40476438280 Featherline PASS/library FAIL：base13、集合编解码4、业务集成2、generation四阶段和attachment operation四阶段重启均PASS；集合PREPARED准备60秒内未到seam，脚本finally force-stop，不是已证明OOM，根因NOT_PROVEN，集合恢复/后续阶段NOT_RUN。原ZIP/全日志保留；不增时限/预算/减数据，不为绿反复重试。旧6d/db605实际OOM/LMK原件仍保留。
 - 仍唯一Draft #132、禁止合并失败候选；推接线修正后的精确SHA运行完整必需+四API+低内存，结果通过全部条件后才正常保护merge，否则维持阻断。最终PR回执/证据包记录精确结果；OFF / NOT_REVIEWED_EXTERNALLY。
+
+
+## 最终验收：DocumentsUI 就绪谓词修正（2026-10-27）
+
+06e4fa97的Android/domain、Science和API26/27/29/35安全专项均PASS；PR低内存40480396404为Library PASS、Featherline FAIL，branch40480442930两项PASS不能替代。原件及哈希见evidence/picker-06e-comparison。失败树显示真实DocumentsUI前台、Recent标题、可点击toolbar导航及空dir_list，但原等待只接受roots/非空目录/message，故在导航前超时。就绪谓词遗漏已证明；provider首次更新超时/下载provider获取失败的底层原因仍NOT_PROVEN。系统有OOM/后台进程被杀，未证明app3801或picker3885被杀；不能称无内存压力，也不能当作前台LMK。两作业镜像/API/RAM/heap/启动参数一致，宿主地域不同但竞争未证明。
+
+最小修改仅AutomaticImportAndroidTest：用系统包root_recent资源本地化标题、可见toolbar导航、空dir_list且drawer未开确认可导航Recent。任意空目录仍拒绝，原30秒和真实roots/目录/文件身份及密码/COMMIT/重开/重复断言不变。无生产/密码学/格式/配额改动。新准确HEAD需正式CI和低内存验收，封版时PENDING；无同源重跑。F01–F03已有06e原生修复证据，最终源仍需核对；F04保持POTENTIAL。最终结果记录PR132回执，不用旧源绿色证明新源，不因后续绿删除历史LMK。真机/人工TalkBack/硬件断电/独立外审NOT_RUN。所有OFF与RELEASE_NOT_AUTHORIZED不变。
+
+本次测试补丁本地 `:app:compileFullDebugAndroidTestKotlin` PASS（2m42s），只证明编译；真实SAF/低内存及最终必需CI仍待新HEAD，不冒充原生通过。

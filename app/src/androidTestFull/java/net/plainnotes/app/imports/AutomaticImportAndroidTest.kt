@@ -99,6 +99,29 @@ class AutomaticImportAndroidTest {
         return root.findAccessibilityNodeInfosByViewId("${root.packageName}:id/$id").firstOrNull(::shown)
     }
     private fun rootsOpen()=systemId("drawer_roots")!=null
+    private fun toolbarNavigation():AccessibilityNodeInfo? {
+        fun find(node:AccessibilityNodeInfo?):AccessibilityNodeInfo? {
+            if(node==null)return null
+            if(node.className=="android.widget.ImageButton" && node.isClickable && shown(node))return node
+            for(i in 0 until node.childCount)find(node.getChild(i))?.let{return it}
+            return null
+        }
+        return find(systemId("toolbar"))
+    }
+    /** Empty Recent can be navigated while provider roots are still loading.
+     * Keep this narrow: a generic empty dir_list cannot authorize selecting its root again. */
+    private fun emptyRecentReady():Boolean {
+        val root=pickerRoot() ?: return false
+        if(rootsOpen() || systemId("dir_list")?.childCount!=0 || toolbarNavigation()==null)return false
+        val label=try {
+            val resources=context.packageManager.getResourcesForApplication(root.packageName.toString())
+            val id=resources.getIdentifier("root_recent","string",root.packageName.toString())
+            if(id==0)return false
+            resources.getString(id)
+        }catch(_:android.content.pm.PackageManager.NameNotFoundException) {return false}
+        return systemId("toolbar")?.findAccessibilityNodeInfosByText(label)
+            ?.any {it.text?.toString()==label && shown(it)}==true
+    }
     private fun loadedImportDirectory()=!rootsOpen() &&
         (systemNode("SYNTHETIC IMPORT")!=null || systemNode("SYNTHETIC exports")!=null) &&
         (systemId("dir_list")?.childCount ?: 0)>0 &&
@@ -130,19 +153,14 @@ class AutomaticImportAndroidTest {
         // pending (API26 DocumentStack.push rejects the duplicate callback).
         // A requested file below the viewport also does not mean the root is wrong.
         waitSystem("initial directory loaded or roots available") {
-            rootsOpen() || (systemId("dir_list")?.childCount ?: 0)>0 || systemId("message")!=null
+            rootsOpen() || (systemId("dir_list")?.childCount ?: 0)>0 || systemId("message")!=null ||
+                emptyRecentReady().also {if(it)android.util.Log.i("SyntheticImport","DocumentsUI ready: empty Recent with toolbar navigation")}
         }
         if(!loadedImportDirectory()) {
             if(!rootsOpen()) {
                 var navigation:AccessibilityNodeInfo?=null
                 waitSystem("main toolbar navigation") {
-                    fun find(n:AccessibilityNodeInfo?):AccessibilityNodeInfo? {
-                        if(n==null)return null
-                        if(n.className=="android.widget.ImageButton" && n.isClickable && shown(n))return n
-                        for(i in 0 until n.childCount)find(n.getChild(i))?.let{return it}
-                        return null
-                    }
-                    navigation=find(systemId("toolbar"));navigation!=null
+                    navigation=toolbarNavigation();navigation!=null
                 }
                 assertTrue(requireNotNull(navigation).performAction(AccessibilityNodeInfo.ACTION_CLICK))
             }

@@ -4005,3 +4005,12 @@ Stage C final ownership check: presentation hide now also cancels a chosen-but-u
 最终初始化失败清理后的本地串行复测 PASS：21项JVM（0 fail/error/skip），app/core AndroidTest编译 PASS，日志 final-local-serial-pass.log / final-local-targeted XML保留。此前资源压力中止部分仍NOT_RUN。下一步固定最终SHA完整CI，不以本地代替原生/低内存验证。
 
 擦除补正后针对性回归 PASS：24项JVM（0 fail/error/skip），app/core AndroidTest编译PASS，原XML和日志见wipe-targeted-*；70项静态约束PASS。下一步推本次新HEAD，运行完整精确SHA CI、四API安全原生和分支HEAD低内存两项。6d低内存FAIL仍未修复根因；保持Draft直到全部条件满足，否则禁止合并。
+
+
+## PR132 最终验收继续 — 2026-10-27
+
+唯一PR132/分支security/med02-f01-f04-20261027，基线06e4fa97，无其他未合并共享修改。06e正式Android/Science/四API安全专项PASS；PR40480396404仅Featherline低内存FAIL，分支40480442930两项PASS不可替代。原fail/pass ZIP、job日志与SHA在docs/security/med02-fixes-2026-10-27/evidence/picker-06e-comparison。已证明测试就绪谓词不接受合法可导航空Recent，尚未选择合成root；系统provider首更新延迟底层原因NOT_PROVEN，系统内存压力存在但本次没有前台app/选择器被杀证据。
+
+仅测试最小补丁增加严格本地化Recent+可见导航+空dir_list且drawer未开条件；仍30秒，所有真实SAF/目录/文件身份/密码/COMMIT/重开/幂等断言保留。本地AndroidTest编译进行中，尚无新源原生PASS。下一步编译成功后一次推送最终HEAD，读取自动必要CI及低内存结果，不另开PR、不循环重跑。全门槛成功无审查/冲突后按106正常Ready/保护合并并查主线；失败保留Draft和精确阻断。F01–03修复保留，F04 POTENTIAL、历史LMK根因未知、真机/TalkBack/硬断电/独立外审未跑；feature0/publicfalse/NOT_REVIEWED_EXTERNALLY/RELEASE_NOT_AUTHORIZED。
+
+本次测试补丁本地 `:app:compileFullDebugAndroidTestKotlin` PASS（2m42s），只证明编译；真实SAF/低内存及最终必需CI仍待新HEAD，不冒充原生通过。
