@@ -32,7 +32,12 @@ import net.plainnotes.app.attachments.ui.MedicalLibraryTransferController.*
     val generation=remember(controller) {Session.generation}
     var awaiting by remember(controller) {mutableStateOf(false)}
     val picker=key(controller) {rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {result->
-        val valid=awaiting && Session.consumePicker(generation);awaiting=false
+        // The Activity may already have consumed the lock-on-leave exemption.
+        // Accept only this live pending owner; runtime/capability checks still guard all IO.
+        val valid=awaiting && generation==Session.generation &&
+            Session.target!=net.plainnotes.app.security.UnlockTarget.PRIVATE &&
+            runCatching {model.libraryRuntime.checkRequest()}.isSuccess
+        Session.consumePicker(generation);awaiting=false
         if(valid)controller.picked(result)
     }}
     DisposableEffect(controller) {onDispose {if(awaiting)Session.consumePicker(generation);controller.close()}}

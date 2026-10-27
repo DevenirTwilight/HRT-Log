@@ -4053,3 +4053,9 @@ The production-activation branch now sets AttachmentFlowController.PUBLIC_ENTRY_
 补齐真正缺失的MainActivity正式入口原生合同（非合成UI宿主）：显式就诊及LAB(panel id不同)、真实DocumentsUI/确认/COMMIT/重开/认证像素/单条解除，以及真实运行时PNMEDBK2导出、认证恢复、新Activity/旧scope拒绝和恢复后关联。仅文件provider和种子医疗事实为合成；归档适配器使用真实生产代码，但未将其直接调用冒充归档SAF按钮端到端。以现有三API工作流执行一次，保留独立XML。另补从发布Room20 schema实际创建的升级/回滚/旧reader拒绝合同，复用现有JVM及SQLCipher原生迁移套件。当前编译/定向回归进行中，新增原生均PENDING，不能Ready或合并。真实设备/TalkBack/硬断电NOT_RUN；无签名交付发布授权。
 
 定向编译/回归完成：App/core AndroidTest编译PASS；AttachmentActivationTest、MedicalAttachmentUiGuardTest PASS；实际发布Room20→21迁移合同1 PASS（0 fail/error/skip）；Python Release隔离5 PASS。必要证据与真实MainActivity合同范围见docs/medical-attachments/2026-10-27/product-activation/acceptance.md。下一步推送这一候选读取自动CI；新入口/迁移原生未运行前不标PASS。源码冻结后最终状态以#133精确HEAD Actions及PR正文链接的不可变最终receipt为准，不将历史PENDING段落视为实时远端结论。
+
+## PR133 主机与真实产品验收精确修复 — 2026-10-27
+
+旧df主机最终21 core+1 app FAIL原HTML已入库：最新版Room断言仍20、注入迁移链未延伸21、0/1合法范围旧负向、两条批准隐私文案使UI08整文件摘要不匹配。逐一修正当前版本/链尾/非法值2；保留所有历史输入、注入reached与回滚断言。隐私只按批准的每元素SHA精确归一，两条外全部原PDF/资源摘要不变。由此真正复现六条历史升级Missing attachment store guard：生产20→21事务先复用AttachmentSchema.install标准守卫安装，再扩展激活，未新Schema或改事实。105项数据+8项四语确认+1项PDF冻结PASS，本地后续controller/activation及AndroidTest编译PASS。首次新单测缺少scroll父项的夹具误用也保留失败，不称产品缺陷。
+
+31fd原生：library512MiB实际14项PASS但旧脚本只接受13，严格计数同步14；Featherline512MiB PASS。三API真实MainActivity测试保留失败：26/29已走通就诊SAF/COMMIT/新Activity/认证PNG，到解除关联两动作同行处timeout，现拆行及补实际语义树；发现可见UNKNOWN时只允许现有只读核对，不重放。35在SAF取消回调丢失，Page误将MainActivity已在onStart消费的lock豁免当结果授权；两Page改核对awaiting owner+generation+runtime，而不是要求豁免尚未消费。底层权限/实际commit守卫不变。下一步推这一实际修复，验收新SHA必要CI与真实路径；尚不可Ready。local Release在并行任务时Gradle daemon消失，NOT_COMPLETED、根因未知，原日志保留；以最终CI无签名Release为准。公共入口始终ON，不签名/交付/发版/销毁。

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.attachments.ui.MedicalAttachmentsUiTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-27T13:15:25.475Z" hostname="42f8489b32d3" time="11.15">
+  <properties/>
+  <testcase name="exactUnlinkRequiresConfirmationAndNeverUsesThePreviewAsConfirmation[en/320dp/2x]" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsUiTest" time="7.559"/>
+  <testcase name="exactUnlinkRequiresConfirmationAndNeverUsesThePreviewAsConfirmation[en/411dp/1x]" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsUiTest" time="0.495"/>
+  <testcase name="exactUnlinkRequiresConfirmationAndNeverUsesThePreviewAsConfirmation[zh-rCN/320dp/2x]" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsUiTest" time="0.542"/>
+  <testcase name="exactUnlinkRequiresConfirmationAndNeverUsesThePreviewAsConfirmation[zh-rCN/411dp/1x]" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsUiTest" time="0.352"/>
+  <testcase name="exactUnlinkRequiresConfirmationAndNeverUsesThePreviewAsConfirmation[zh-rTW/320dp/2x]" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsUiTest" time="0.544"/>
+  <testcase name="exactUnlinkRequiresConfirmationAndNeverUsesThePreviewAsConfirmation[zh-rTW/411dp/1x]" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsUiTest" time="0.35"/>
+  <testcase name="exactUnlinkRequiresConfirmationAndNeverUsesThePreviewAsConfirmation[fr/320dp/2x]" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsUiTest" time="0.565"/>
+  <testcase name="exactUnlinkRequiresConfirmationAndNeverUsesThePreviewAsConfirmation[fr/411dp/1x]" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsUiTest" time="0.354"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -71,3 +71,55 @@ FullRelease must compile unsigned and pass existing release/source-isolation che
 No signing, APK delivery, version/tag/Release change is authorized. The owner's phone
 requires an updated APK to use the new entry. Manual TalkBack, hardware power loss
 and physical-phone acceptance remain NOT_RUN, with V1 viewer limits retained.
+
+## Additional exact failures discovered when host job completed
+
+The old host run 40505845804 finished with 21 core failures and one app failure.
+Original HTML/ZIP identity is retained. Current-Room assertions still expected20;
+manual fault-injection chains ended at20 so Room could not reach21 and the injected
+faults never executed. The correction extends each explicit chain to21 and updates
+only current-room expectations, retaining historical versions, injected-fault reached
+assertions and full rollback/data checks. Room21's valid 0/1 flag no longer rejects1;
+negative guard tests reject2, while OFF defaults and wrong-scope activation remain checked.
+
+After correcting those stale assumptions, six historical upgrade cases exposed a
+real production migration defect: migration20To21 required guards that published
+historical DDL had not yet installed. The migration now calls the EXISTING canonical
+AttachmentSchema.install (including journal guards), inside the same transaction,
+before specializing activation. This is the same mechanism used on every onOpen;
+no new schema, facts, permissions, cache, trigger protocol or source trust is added.
+The exact published20 fixture freezes an actual pre-existing reference runtime
+identity, comparing all rows and trigger inventory through rollback and reopen.
+
+The PDF/string freeze failed only at the two explicitly authorized privacy elements.
+The test still checks all original PDF/source/locale hashes; it verifies each new
+privacy element against a fixed approved SHA256 and normalizes ONLY those elements
+and the already-approved Tink attribution to their historical values. No broad hash
+replacement, ignored element, deleted assertion or production wording rollback.
+
+105 targeted data tests, eight four-locale unlink-confirmation tests and one PDF/string
+freeze test PASS locally; callbacks/controller/activation regression and native test
+compilation also PASS. Local unsigned Release attempt lost its Gradle daemon during
+R8 while another local task was active: NOT_COMPLETED, cause not proven, not called
+product LMK or a successful build. Final CI Release is the authoritative acceptance.
+
+## 31fd715e actual native evidence and remaining checks
+
+Library512MiB ran all14 actual base contracts successfully, then the shell's stale
+exact-count guard expected13. Update that strict expectation to14 to include the
+new existing exact-link test. No cases, limits or assertions are removed.
+Featherline512MiB PASS. The former QUARANTINED assertion failure is resolved.
+
+Real MainActivity on API26/29 imported, reopened and authenticated the visit PNG,
+then timed out in the unlink step (two actions had originally shared one line).
+The new test reports the exact missing action and full semantics roots, keeping
+all assertions. A visible UNKNOWN result, if encountered, is explicitly reconciled
+using the existing READ-ONLY UI action; never repeat selection/encryption.
+API35 stopped waiting for actual picker cancellation. Production callbacks were
+incorrectly using Session.consumePicker as result authorization: MainActivity also
+consumes this lock-exemption token in onStart, and callback ordering varies by API.
+Both record and archive pages now validate their live pending owner, unchanged
+session and current runtime, clear the exemption idempotently and preserve all
+backend request/capability/generation/confirmation gates. No process-restored URI
+or grant exists. Final real-native evidence must confirm the fix; compilation alone
+cannot do so. Original failures stay FAIL and are retained under evidence/31fd715e.

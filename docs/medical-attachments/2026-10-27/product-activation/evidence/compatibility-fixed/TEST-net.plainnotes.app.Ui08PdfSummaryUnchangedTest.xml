@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.Ui08PdfSummaryUnchangedTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-27T13:15:37.831Z" hostname="42f8489b32d3" time="0.048">
+  <properties/>
+  <testcase name="summaryCodeAndStringsAreTheBase" classname="net.plainnotes.app.Ui08PdfSummaryUnchangedTest" time="0.047"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -181,4 +181,17 @@ class MedicalAttachmentsUiTest(private val locale:String,private val width:Int,p
         assertTrue(reopened);c.close()
     }
 
+    @Test fun exactUnlinkRequiresConfirmationAndNeverUsesThePreviewAsConfirmation() {
+        setup()
+        var selected:Item?=null
+        ui.setContent {NotesTheme {MedicalAttachmentsSection(UiState(files=Files.Ready(listOf(image,pdf))),"Synthetic visit",{},{},{},{},{},{},{},
+            onUnlink={selected=it})}}
+        ui.onNodeWithTag("attachment-unlink:${image.document}").performClick()
+        ui.onNodeWithTag("attachments-unlink-confirm").assertExists()
+        assertNull("Opening the confirmation must not write",selected)
+        ui.onNodeWithTag("attachments-unlink-confirm").performClick()
+        assertEquals(image,selected)
+        ui.onNodeWithTag("attachment-unlink:${pdf.document}").assertExists()
+    }
+
 }

@@ -98,7 +98,7 @@ abstract class AttachmentFoundationContract : AttachmentObjectStreamsContract() 
         } finally {raw.endTransaction();session.revoke()}
     }
     @Test fun room11KeepsThreeAttachmentDomainsDefaultDisabled()=runBlocking {
-        assertEquals(20,raw.version)
+        assertEquals(21,raw.version)
         for(table in listOf("library_authority","library_candidate"))raw.query("SELECT COUNT(*) FROM $table").use {assertTrue(it.moveToFirst());assertEquals(0L,it.getLong(0))}
         assertNotEquals(scope.dataset,scope.logicalVault);assertNotEquals(scope.dataset,scope.epoch)
         assertEquals(1,db.attachments().current().size)
@@ -106,7 +106,7 @@ abstract class AttachmentFoundationContract : AttachmentObjectStreamsContract() 
         raw.query("SELECT generation_uuid FROM attachment_generation WHERE store_uuid=?",arrayOf(scope.dataset)).use {
             assertTrue(it.moveToFirst());assertNotEquals(scope.dataset,it.getString(0));assertNotEquals(scope.logicalVault,it.getString(0))
         }
-        reject{raw.execSQL("UPDATE attachment_store SET feature_enabled=1")}
+        reject{raw.execSQL("UPDATE attachment_store SET feature_enabled=2")} // Room21 permits 0/1, never arbitrary flags.
         reject{raw.execSQL("UPDATE attachment_generation SET state='VALIDATED',manifest_digest=zeroblob(32)")}
         db.withTransaction { assertNull(AttachmentIdentity.initialize(raw,false)) }
     }
@@ -252,7 +252,7 @@ abstract class AttachmentFoundationContract : AttachmentObjectStreamsContract() 
         try{db.withTransaction{RawData.clear(raw);error("synthetic interruption after clear")}}catch(_:IllegalStateException){}
         assertEquals(scope,AttachmentIdentity.current(raw));assertEquals(before,bind());assertNotNull(db.dao().appointmentById(1))
         reject{raw.execSQL("DELETE FROM attachment_record_identity")}
-        reject{raw.execSQL("UPDATE attachment_store SET feature_enabled=1")}
+        reject{raw.execSQL("UPDATE attachment_store SET feature_enabled=2")} // Room21 permits 0/1, never arbitrary flags.
         raw.query("SELECT name FROM sqlite_master WHERE type='trigger' AND name IN('immutable_supply_update','immutable_supply_delete')").use{assertEquals(2,it.count)}
     }
 

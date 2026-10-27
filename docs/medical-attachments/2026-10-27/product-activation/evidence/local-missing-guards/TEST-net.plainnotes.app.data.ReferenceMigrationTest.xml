@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.ReferenceMigrationTest" tests="18" skipped="0" failures="3" errors="0" timestamp="2026-10-27T13:08:45.794Z" hostname="42f8489b32d3" time="13.657">
+  <properties/>
+  <testcase name="canonicalUuidPredicateMatchesThePlatformOracleAcrossVersionsAndMalformedForms" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.047"/>
+  <testcase name="utf8LengthMatchesPlatformForEveryCodeUnitPairsAndBoundaries" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.055"/>
+  <testcase name="failedElevenToTwelveFenceRollsBackWithAllReferenceFactsAndEpochIntact" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.92"/>
+  <testcase name="monaSeventeenToEighteenIsAdditiveAndFailedUpgradeRollsBack" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="1.054">
+    <failure message="java.lang.IllegalStateException: Missing attachment store guard" type="java.lang.IllegalStateException">java.lang.IllegalStateException: Missing attachment store guard
+	at net.plainnotes.app.data.AttachmentActivationSchema.install(AttachmentActivationSchema.kt:17)
+	at net.plainnotes.app.data.AttachmentActivationSchema.migrate(AttachmentActivationSchema.kt:10)
+	at net.plainnotes.app.data.MigrationsKt$migration20To21$1.migrate(Migrations.kt:120)
+	at androidx.room.migration.Migration.migrate(Migration.android.kt:79)
+	at androidx.room.BaseRoomConnectionManager.onMigrate(RoomConnectionManager.kt:212)
+	at androidx.room.RoomConnectionManager$SupportOpenHelperCallback.onUpgrade(RoomConnectionManager.android.kt:163)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.onUpgrade(FrameworkSQLiteOpenHelper.android.kt:245)
+	at android.database.sqlite.SQLiteOpenHelper.$$robo$$android_database_sqlite_SQLiteOpenHelper$getDatabaseLocked(SQLiteOpenHelper.java:398)
+	at android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java)
+	at android.database.sqlite.SQLiteOpenHelper.$$robo$$android_database_sqlite_SQLiteOpenHelper$getWritableDatabase(SQLiteOpenHelper.java:298)
+	at android.database.sqlite.SQLiteOpenHelper.getWritableDatabase(SQLiteOpenHelper.java)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.getWritableOrReadableDatabase(FrameworkSQLiteOpenHelper.android.kt:224)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.innerGetDatabase(FrameworkSQLiteOpenHelper.android.kt:180)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.getSupportDatabase(FrameworkSQLiteOpenHelper.android.kt:141)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper.getWritableDatabase(FrameworkSQLiteOpenHelper.android.kt:96)
+	at net.plainnotes.app.data.ReferenceMigrationContract.monaSeventeenToEighteenIsAdditiveAndFailedUpgradeRollsBack(ReferenceMigrationContract.kt:514)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:524)
+	at org.robolectric.internal.SandboxTestRunner.executeInSandbox(SandboxTestRunner.java:494)
+	at org.robolectric.internal.SandboxTestRunner.access$900(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$7.evaluate(SandboxTestRunner.java:442)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.robolectric.internal.SandboxTestRunner.access$600(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$6.evaluate(SandboxTestRunner.java:333)
+	at org.robolectric.internal.SandboxTestRunner$3.evaluate(SandboxTestRunner.java:233)
+	at org.robolectric.internal.SandboxTestRunner$5.lambda$evaluate$0(SandboxTestRunner.java:317)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:101)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <testcase name="unsupportedMeasurementsInOldRoomElevenAreRejectedWithoutClearingAnything" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.571"/>
+  <testcase name="featherlineEighteenToNineteenIsAdditiveAndFailedUpgradeRollsBack" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="1.054">
+    <failure message="java.lang.IllegalStateException: Missing attachment store guard" type="java.lang.IllegalStateException">java.lang.IllegalStateException: Missing attachment store guard
+	at net.plainnotes.app.data.AttachmentActivationSchema.install(AttachmentActivationSchema.kt:17)
+	at net.plainnotes.app.data.AttachmentActivationSchema.migrate(AttachmentActivationSchema.kt:10)
+	at net.plainnotes.app.data.MigrationsKt$migration20To21$1.migrate(Migrations.kt:120)
+	at androidx.room.migration.Migration.migrate(Migration.android.kt:79)
+	at androidx.room.BaseRoomConnectionManager.onMigrate(RoomConnectionManager.kt:212)
+	at androidx.room.RoomConnectionManager$SupportOpenHelperCallback.onUpgrade(RoomConnectionManager.android.kt:163)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.onUpgrade(FrameworkSQLiteOpenHelper.android.kt:245)
+	at android.database.sqlite.SQLiteOpenHelper.$$robo$$android_database_sqlite_SQLiteOpenHelper$getDatabaseLocked(SQLiteOpenHelper.java:398)
+	at android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java)
+	at android.database.sqlite.SQLiteOpenHelper.$$robo$$android_database_sqlite_SQLiteOpenHelper$getWritableDatabase(SQLiteOpenHelper.java:298)
+	at android.database.sqlite.SQLiteOpenHelper.getWritableDatabase(SQLiteOpenHelper.java)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.getWritableOrReadableDatabase(FrameworkSQLiteOpenHelper.android.kt:224)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.innerGetDatabase(FrameworkSQLiteOpenHelper.android.kt:180)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.getSupportDatabase(FrameworkSQLiteOpenHelper.android.kt:141)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper.getWritableDatabase(FrameworkSQLiteOpenHelper.android.kt:96)
+	at net.plainnotes.app.data.ReferenceMigrationContract.featherlineEighteenToNineteenIsAdditiveAndFailedUpgradeRollsBack(ReferenceMigrationContract.kt:546)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:524)
+	at org.robolectric.internal.SandboxTestRunner.executeInSandbox(SandboxTestRunner.java:494)
+	at org.robolectric.internal.SandboxTestRunner.access$900(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$7.evaluate(SandboxTestRunner.java:442)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.robolectric.internal.SandboxTestRunner.access$600(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$6.evaluate(SandboxTestRunner.java:333)
+	at org.robolectric.internal.SandboxTestRunner$3.evaluate(SandboxTestRunner.java:233)
+	at org.robolectric.internal.SandboxTestRunner$5.lambda$evaluate$0(SandboxTestRunner.java:317)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:101)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <testcase name="publishedRoomTwelveMayLackEncodingButClaimedThirteenMustRejectIt" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.039"/>
+  <testcase name="storedColumnFenceMatchesTheOriginalPerColumnOracleForNullTypesAndLateRows" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.156"/>
+  <testcase name="oldRoomElevenReaderCannotOpenTheNewMeasurementFormat" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="1.675"/>
+  <testcase name="syntheticFixtureByteCounterMatchesWholePlatformDocumentWithoutMutatingRows" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.056"/>
+  <testcase name="backupPlaintextOwnerClearsSuccessFailureAndRejectedTransfers" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.018"/>
+  <testcase name="everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="4.559">
+    <failure message="java.lang.IllegalStateException: Missing attachment store guard" type="java.lang.IllegalStateException">java.lang.IllegalStateException: Missing attachment store guard
+	at net.plainnotes.app.data.AttachmentActivationSchema.install(AttachmentActivationSchema.kt:17)
+	at net.plainnotes.app.data.AttachmentActivationSchema.migrate(AttachmentActivationSchema.kt:10)
+	at net.plainnotes.app.data.MigrationsKt$migration20To21$1.migrate(Migrations.kt:120)
+	at androidx.room.migration.Migration.migrate(Migration.android.kt:79)
+	at androidx.room.BaseRoomConnectionManager.onMigrate(RoomConnectionManager.kt:212)
+	at androidx.room.RoomConnectionManager$SupportOpenHelperCallback.onUpgrade(RoomConnectionManager.android.kt:163)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.onUpgrade(FrameworkSQLiteOpenHelper.android.kt:245)
+	at android.database.sqlite.SQLiteOpenHelper.$$robo$$android_database_sqlite_SQLiteOpenHelper$getDatabaseLocked(SQLiteOpenHelper.java:398)
+	at android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java)
+	at android.database.sqlite.SQLiteOpenHelper.$$robo$$android_database_sqlite_SQLiteOpenHelper$getWritableDatabase(SQLiteOpenHelper.java:298)
+	at android.database.sqlite.SQLiteOpenHelper.getWritableDatabase(SQLiteOpenHelper.java)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.getWritableOrReadableDatabase(FrameworkSQLiteOpenHelper.android.kt:224)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.innerGetDatabase(FrameworkSQLiteOpenHelper.android.kt:180)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.getSupportDatabase(FrameworkSQLiteOpenHelper.android.kt:141)
+	at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper.getWritableDatabase(FrameworkSQLiteOpenHelper.android.kt:96)
+	at net.plainnotes.app.data.ReferenceMigrationContract.everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve(ReferenceMigrationContract.kt:304)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:524)
+	at org.robolectric.internal.SandboxTestRunner.executeInSandbox(SandboxTestRunner.java:494)
+	at org.robolectric.internal.SandboxTestRunner.access$900(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$7.evaluate(SandboxTestRunner.java:442)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.robolectric.internal.SandboxTestRunner.access$600(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$6.evaluate(SandboxTestRunner.java:333)
+	at org.robolectric.internal.SandboxTestRunner$3.evaluate(SandboxTestRunner.java:233)
+	at org.robolectric.internal.SandboxTestRunner$5.lambda$evaluate$0(SandboxTestRunner.java:317)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:101)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <testcase name="failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.829"/>
+  <testcase name="streamedMeasuredBackupMatchesWholeDocumentBytesAndRemainsReadOnly" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.341"/>
+  <testcase name="cancellationAfterPlaintextCaptureRollsBackAndClearsBeforeTransactionReturns" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.311"/>
+  <testcase name="failedMainTwelveToThirteenFenceKeepsPanelLinksLegacyBitsAndEpoch" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.9"/>
+  <testcase name="boundedBackupPlaintextChunksAreExactAndWipedOnSuccessAndFailure" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="0.025"/>
+  <testcase name="roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects" classname="net.plainnotes.app.data.ReferenceMigrationTest" time="1.035"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

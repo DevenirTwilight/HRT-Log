@@ -60,7 +60,10 @@ class MedicalAttachmentProductAndroidTest {
         ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(text(destination.title))).performClick()
     }
     private fun press(matcher:SemanticsMatcher) {
-        ui.waitUntil(30000) {ui.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty()}
+        try {ui.waitUntil(30000) {ui.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty()}}
+        catch(e:androidx.compose.ui.test.ComposeTimeoutException) {
+            throw AssertionError("Missing $matcher; production tree: "+ui.onAllNodes(isRoot(),useUnmergedTree=true).printToString(),e)
+        }
         val node=ui.onNode(matcher)
         if(ui.onAllNodes(matcher and hasAnyAncestor(hasScrollAction())).fetchSemanticsNodes().isNotEmpty())node.performScrollTo()
         node.assertIsEnabled().performClick()
@@ -233,7 +236,15 @@ class MedicalAttachmentProductAndroidTest {
         press(hasContentDescription(label))
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
         tag("attachment-viewer-close")
-        tag("attachment-unlink:${saved.document}");tag("attachments-unlink-confirm")
+        // A retained uncertain result is resolved only by the visible, read-only action.
+        // Never repeat SAF input or encryption to make a management action available.
+        if(ui.onAllNodesWithTag("attachments-check").fetchSemanticsNodes().isNotEmpty()) {
+            tag("attachments-check")
+            ui.waitUntil(30000) {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
+            assertEquals(saved.document,read(visit).document)
+        }
+        tag("attachment-unlink:${saved.document}")
+        tag("attachments-unlink-confirm")
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
         runBlocking {model.libraryRuntime.attachments(visit,"SYNTHETIC unlinked").use {assertTrue(it.documents().isEmpty())}}
         back();open(Destination.LABS)

@@ -7,6 +7,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 internal object AttachmentActivationSchema {
     fun migrate(db:SupportSQLiteDatabase) {
         check(db.inTransaction())
+        // Published historical schemas may not yet have onOpen guards. Reinstall the same
+        // canonical protections used by SchemaGuards, inside this migration transaction,
+        // before specializing the two activation guards. No data or grant is synthesized.
+        AttachmentSchema.install(db)
         install(db, migrating=true)
     }
     fun install(db:SupportSQLiteDatabase,migrating:Boolean=false) {

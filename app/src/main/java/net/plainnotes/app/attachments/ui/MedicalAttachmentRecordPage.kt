@@ -34,7 +34,13 @@ import net.plainnotes.app.security.launchPicker
     var awaiting by remember(controller) {mutableStateOf(false)}
     val title=stringResource(if(target.kind==MedicalAttachmentOperations.Kind.LAB)R.string.attach_default_lab else R.string.attach_default_visit)
     val picker=key(controller) {rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {result->
-        val accepted=awaiting && Session.consumePicker(generation)
+        // MainActivity consumes the one-shot lock exemption in onStart. ActivityResult
+        // delivery can precede OR follow it across Android versions. That exemption is
+        // not the result's authority: the pending owner, session and scoped runtime are.
+        val accepted=awaiting && generation==Session.generation &&
+            Session.target!=net.plainnotes.app.security.UnlockTarget.PRIVATE &&
+            runCatching {model.libraryRuntime.checkRequest()}.isSuccess
+        Session.consumePicker(generation)
         awaiting=false
         if(accepted)controller.picked(result,title)
     }}
