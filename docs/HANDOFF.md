@@ -1,3 +1,11 @@
+## PR133 最终验收实时证据（2026-10-27）
+
+本证据分支只存文档/原件，不是生产源码、不用于构建或合并。生产冻结源7bdddc8850b83c083ea9d2abe4e90c3bb59da75c，#133当前仍Draft，公共入口ON。API29同源push原生整作业SUCCESS，真实MainActivity全链用例1PASS（15.638秒，0 fail/error/skip），已独立读取原XML；附件库512MiB整作业SUCCESS、四API安全专项SUCCESS。其余最终必需CI仍PENDING，不得提前合并。
+
+同一低内存工作流里独立Featherline任务FAIL，kernel证明PID3921在初次错误密码KDF期间LMK（anon217276KiB为终止观测非峰值）；读取器/KDF/ViewModel/测试脚本相对f0c4ea9a均无改动。该非必需分支检查不是MED02路径通过证据，不改标PASS、不修改预算/跳测/重跑筛绿，不以共享工作流整体红/绿代替各作业的真实结果。MED02准入只在其本身安全/迁移/全链及六项受保护门槛满足后判断；不宣称整个App所有低内存路径合格。
+
+精确原件和各状态见docs/medical-attachments/2026-10-27/product-activation/evidence/7bdddc88/receipt.json。物理设备、手工TalkBack、硬断电NOT_RUN；外审NOT_REVIEWED_EXTERNALLY。无签名/交付/发版/永久删除授权。此后只收尾本PR，不启动新阶段。
+
 ## MED-02 #132 API27专用配置接线修正 — 2026-10-27
 
 - 6c6eee90生产代码在四API专用原生40476432331全部PASS，本地24项及仪器编译PASS。完整PR Android主构建/单元/lint/隔离步骤通过后，235前身的233 Python守卫发现通用性能矩阵应默认拒绝27（原test_ansm_native_performance，AttributeError暴露错误接线）；原日志保留6c-pr-android-full-failed.log.gz。

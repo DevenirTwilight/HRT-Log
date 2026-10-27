@@ -1,0 +1,60 @@
+{
+  "sourceSha": "7bdddc8850b83c083ea9d2abe4e90c3bb59da75c",
+  "mergeSha": null,
+  "defaultBranch": "claude/new-session-1959qb",
+  "pr": 133,
+  "publicEntry": "ON",
+  "status": "FINAL_ACCEPTANCE_IN_PROGRESS",
+  "api29": {
+    "run": 40519142188,
+    "event": "push",
+    "job": 122241887324,
+    "conclusion": "SUCCESS",
+    "artifact": 12742337288,
+    "sha256": "54ead25aeeacc0d28118c0f1fc421946171e36f4e3f297e67740d34406ca653d",
+    "zipCrc": "PASS",
+    "realProductCase": "PASS; 1 test, 0 failures/errors/skips, 15.638s"
+  },
+  "prAndroidRun": 40519149329,
+  "securityRun": 40519149422,
+  "scienceRun": 40519149359,
+  "medicalLibraryLowMemory": {
+    "run": 40519149572,
+    "job": 122241475263,
+    "conclusion": "SUCCESS"
+  },
+  "separateFeatherlineLowMemory": {
+    "run": 40519149572,
+    "job": 122241475849,
+    "conclusion": "FAIL",
+    "artifact": 12740766947,
+    "sha256": "be65f77705181831b714c082d82a5f6dbff7abb9660f45e6c975823fd5fa904c",
+    "zipCrc": "PASS",
+    "kernel": "foreground PID3921 LMK during initial wrong-password KDF, anon217276KiB at kill; not peak/RSS",
+    "notClaimedFixed": true,
+    "unchangedFromAcceptedBase": [
+      "Featherline.kt",
+      "FeatherlineContainer.kt",
+      "ArchiveKdfWorkspace.kt",
+      "NotesViewModel.kt",
+      "run_featherline_low_memory_acceptance.sh"
+    ],
+    "requiredBranchCheck": false
+  },
+  "requiredChecks": [
+    "jvm",
+    "android",
+    "device-tests",
+    "attachment-poc-compatibility (26)",
+    "attachment-poc-compatibility (29)",
+    "science-change-gate"
+  ],
+  "notRun": [
+    "physical phone",
+    "manual TalkBack",
+    "hardware power loss",
+    "physical-phone full backup SAF widgets"
+  ],
+  "externalReview": "NOT_REVIEWED_EXTERNALLY",
+  "signatureDeliveryRelease": "NOT_AUTHORIZED"
+}
