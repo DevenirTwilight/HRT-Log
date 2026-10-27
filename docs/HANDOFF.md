@@ -14,6 +14,8 @@
 - 只有组件和合同（不接生产导航）：`attachments/ui/library/`（文件库、文件详情、文件优先导入、记录优先结果卡）。`MedicalAttachmentUiGuardTest` 新增守卫，生产文件不得引用。
 - 测试：`ui10/Ui10RedesignTest`（160）、`ui10/Ui10LibraryTest`（144）；改写了 MedicalCenterMatrix、AppShellBackNavigation、MedicalHome、MedicalAttachmentsUi、MedicalAttachmentUiGuard、LabUi03Home 中随新设计变化的断言（保留原来的负向断言）；真实 MainActivity 的 `MedicalAttachmentProductAndroidTest` 按新路径改写，**只能在 CI 的 API26/29/35 上验证**。
 - 未做：新建化验/就诊后直接添加文件（需要保存接口返回记录身份，已列入合同）；物理设备、人工 TalkBack（NOT_RUN）；独立外审（NOT_REVIEWED_EXTERNALLY）。
+- 缓解（负责人 2026-10-27：一次化验有多项数据）：结果页「同一次化验」、文件区块“只关联这一项”、添加文件按一次化验分组、化验砖统计“n 次化验 · m 项”；整次化验目标已授权 MED-03，规格 `MED03_PANEL_TARGET_REQUIREMENTS.md`（REQUIREMENTS §158）。待负责人决定：没有批次的旧分组如何整次关联。
+- 编号：药品资料中心任务书原称 UI-10，负责人确认改称 **UI-11**（§158.A），等本 PR 和 #138 合并后开工。
 - 下一步：本地全量 JVM + lint → 推送、开 PR、按 §106 自动合并；CI 失败按作业日志定位，不绕过检查。
 
 ---
