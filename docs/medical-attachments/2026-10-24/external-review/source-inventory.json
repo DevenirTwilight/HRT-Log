@@ -136,7 +136,7 @@
     "scripts/run_library_low_memory_acceptance.sh": "e96d29e4a8944b42fba5d8a6f2c9ad732db8613ea2d8949774121765829d6bee",
     "app/src/main/java/net/plainnotes/app/security/AppLock.kt": "4ab0357e0b31ba2a2782fc52929b62aa3c25f646c0ca0ec167078c1abef69ae7",
     "core/data/src/main/java/net/plainnotes/app/data/RevocableArchiveOutput.kt": "5cc76b56e7e105639bc5f93f8112afa5deca1bbcdc9c8c82aa18d6d6b35af26c",
-    "app/src/androidTestFull/java/net/plainnotes/app/security/AppLockAtomicRestartAndroidTest.kt": "1cd944c4e096becfb2318b2687491ebc88bb78d223f01eefc0e10b9e6da3ebfe",
+    "app/src/androidTestFull/java/net/plainnotes/app/security/AppLockAtomicRestartAndroidTest.kt": "cddb2be1e207d8291ce13eaaaddf0da8c77f765024f4b2f8a253831b7c3d6aa9",
     "app/src/androidTest/java/net/plainnotes/app/attachments/AttachmentReconciliationRestartAndroidTest.kt": "5fe6951159f80461896ae31089dba34e061d8f69fe5b7dfc73f23d5e4b74223b",
     "core/data/src/androidTest/java/net/plainnotes/app/data/MedicalCollectionRevocationAndroidTest.kt": "077e5a92f530baf3c42322afab6c1138e6b092ef8fe76160a8365289dbecc1d2",
     "core/data/src/androidTest/java/net/plainnotes/app/data/SyntheticSecurityDocumentsProvider.java": "29c6b859f0a818a334cee60a6bd1be00610d0846f0f7d26055340b94b206fe39",
@@ -150,5 +150,5 @@
   "baseline_sha": "9eb6d0f51db21e3629019c2757a5f35724d793a7",
   "executable_sha": "22524070a30bee82a8c3ba8e53fd44915ee0d6d9",
   "security_fix_baseline_sha": "03f724f41e91a1a866d98de31de673594d1105af",
-  "validation_status": "SECURITY_FIX_VALIDATION_PENDING"
+  "validation_status": "TARGETED_NATIVE_6eb350ba_PASS_FINAL_HEAD_CI_NOT_RUN_AT_FREEZE"
 }

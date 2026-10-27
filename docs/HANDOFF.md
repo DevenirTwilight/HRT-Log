@@ -1,3 +1,9 @@
+## MED-02 #132 针对性原生通过，准备最终精确SHA — 2026-10-27
+
+- 6eb350ba push40464182728两API均SUCCESS；PR40464190169也SUCCESS。原始两ZIP和完整receipt已保存。API26/27 F01真实PID死亡/恢复，F02实际COMMIT后fresh PID只读核对（opens不增），F03原provider release前worker退出/根事务可写/业务事实不变/无成功返回均PASS。撤权API26=1ms/API27=2ms，输出close不在main。F04主线程close阻塞未复现，读worker退出问题已有限修正；整体其他设备/provider仍POTENTIAL。
+- F01 0f7c88a2、F02 e358b0a8、F03 cdfe354f+22524070；最后补TEST-OWNED缺key不重建负向断言，随最终CI执行。原始失败/guard失败均保留，断言没放宽，算法/格式/schema/配额/开关不变。
+- 当前只做封版文档和额外负向断言，不再改生产。下一步固定此后的最终HEAD，等待完整必需CI、API26/29/35、专用security26/27及lowmem两作业全部合格，再ready并按§106正常merge（禁止admin）。如有实际失败只最小修正并留证。最终精确SHA/run/merge结果写PR描述与交付回执，避免为记录绿不断改变受测SHA；合并后复验默认分支CI。本次记录封版时PR仍唯一#132、Draft；之后状态以PR及最终交付回执为准。物理设备/硬件断电/人工TalkBack/独立外审NOT_RUN，真实附件及签名发布OFF。
+
 ## MED-02 #132 真实管道证据后的有限IO修复 — 2026-10-27
 
 - 55c62f3e原生push40462163586/PR40462167902均FAIL。API26/27 F01和F02实际PID死亡/恢复/真实COMMIT+只读核对均PASS；原始两ZIP和log已保留。F03 revoke主线程仅1/2ms、close不在main，但worker未退出；F04 close同样1/2ms返回，读worker仍等待provider。故F04“主线程同步close阻塞”未复现，保留POTENTIAL；确证关闭PFD不能打断既有pipe IO。不能松动worker退出断言来绿。55c低内存library/Featherline均SUCCESS，不能代替新IO源码。

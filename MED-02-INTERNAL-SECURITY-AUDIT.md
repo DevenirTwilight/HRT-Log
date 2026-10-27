@@ -9,6 +9,8 @@
 
 #131 已于2026-10-26T20:18:50Z正常合并：受审HEAD为9fafe3c27d563c32f5638029ff084db3e1b59d7f，合并提交为03f724f41e91a1a866d98de31de673594d1105af。GitHub现有记录中该HEAD所列CI作业均SUCCESS，详见[保留快照](docs/security/med02-fixes-2026-10-27/evidence/pr131-merged.json)。原报告沿用冻结收尾文档的BLOCKED_ENGINEERING，**不再代表当前工程合并状态**。历史失败/LMK根因未证实不能因后续绿色结果改写为已修复。
 
+2026-10-27有限修复：F01/F02/F03已实现；6eb350ba的真实API26/27针对性作业40464182728通过（含实际PID死亡、COMMIT后只读核对、阻塞管道worker/根事务检查）。F04主线程close阻塞在这些样本中NOT_REPRODUCED，其他平台/IO仍POTENTIAL；正式最终HEAD CI与合并状态以修复记录和最终交付回执为准。
+
 本轮获授权的有限修复状态另见[修复记录](docs/security/med02-fixes-2026-10-27/README.md)。下面保留原审计发现和当轮执行边界；F01–F03原始CONFIRMED不因代码修复删除，修复验证与F04的真实Android判定单独记录。原始报告和探针完整封存在[原evidence ZIP](docs/security/med02-fixes-2026-10-27/evidence/original-audit-evidence.zip)。仍NOT_REVIEWED_EXTERNALLY，不构成独立第三方认证，附件仍OFF。
 
 ## 结论与适用边界

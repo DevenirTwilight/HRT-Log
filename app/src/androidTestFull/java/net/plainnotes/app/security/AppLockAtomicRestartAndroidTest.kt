@@ -53,6 +53,15 @@ class AppLockAtomicRestartAndroidTest {
             assertArrayEquals(corrupt,base.readBytes())
             base.writeBytes(original)
             assertTrue("Authentication failure must not replace the existing Keystore key",lock().matches("2468"))
+            // Simulate invalidation of this TEST-OWNED alias, never a user key.
+            val keys=java.security.KeyStore.getInstance("AndroidKeyStore").apply {load(null)}
+            keys.deleteEntry("notes.security.f01")
+            assertFalse(lock().matches("2468"));assertTrue(lock().enabled)
+            assertFalse("Authentication must not generate a replacement key",keys.containsAlias("notes.security.f01"))
+            assertArrayEquals(original,base.readBytes())
+            try {lock().setPin("1357");fail("Missing-key recovery silently replaced credentials")}
+            catch(_:IllegalStateException) {}
+            assertFalse(keys.containsAlias("notes.security.f01"));assertArrayEquals(original,base.readBytes())
         }finally {
             lock().disable();File(app.filesDir,"security-f01-original.bin").delete();File(app.filesDir,"security-f01-death.txt").delete()
         }
