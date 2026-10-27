@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>商品资料关联 · 重做</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.sh{font-size:14px;font-weight:700;color:#006A63;margin:24px 8px 10px}
+.tag{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.t1{font-size:16px;font-weight:600;color:#161D1C;line-height:1.35}
+.t2{font-size:13px;color:#3F4947;line-height:1.45}
+.mono{font-variant-numeric:tabular-nums;font-family:'Roboto Mono',ui-monospace,monospace;font-size:12px}
+.spring{transition:transform .35s cubic-bezier(.34,1.56,.64,1),background-color .2s}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width:390px;min-height:1560px;box-sizing:border-box;background:#F4FBF9;color:#161D1C;font-family:'Noto Sans SC',sans-serif;padding-bottom:32px;">
+
+  <!-- 顶栏 -->
+  <div style="height:64px;display:flex;align-items:center;gap:4px;padding:0 8px 0 4px;">
+    <button aria-label="返回" style="width:48px;height:48px;border:0;border-radius:24px;background:transparent;color:#161D1C;display:flex;align-items:center;justify-content:center;">
+      <svg class="ic" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg>
+    </button>
+    <div>
+      <div style="font-size:20px;font-weight:500;line-height:1.2;">商品资料关联</div>
+      <div style="font-size:12px;color:#3F4947;">药物 A · 雌二醇 2 mg</div>
+    </div>
+  </div>
+
+  <div style="padding:0 16px;">
+    <!-- 边界说明 -->
+    <div style="display:flex;gap:12px;background:#EEF5F3;border-radius:24px;padding:14px 16px;">
+      <svg class="ic" viewBox="0 0 24 24" style="color:#006A63;flex:none;"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v5M12 7.8v.2"/></svg>
+      <div class="t2" style="color:#161D1C;font-size:14px;line-height:1.55;">关联只记录这条药物对应哪种商品。<b style="font-weight:700;">不会改变剂量、方案或库存。</b></div>
+    </div>
+
+    <!-- 当前关联 -->
+    <div class="sh">当前关联</div>
+    <div style="background:#FFFFFF;border-radius:28px;padding:18px 18px 12px;">
+      <div style="display:flex;gap:6px;"><span class="tag" style="background:#9EF2E8;color:#00201D;">BDPM 官方</span><span class="tag" style="background:#E3EAE8;color:#3F4947;">已指定包装</span></div>
+      <div class="t1" style="font-size:17px;margin-top:10px;">ESTRADIOL [厂商] 2 mg, comprimé pelliculé</div>
+      <div class="t2" style="margin-top:4px;">雌二醇 2 mg · 薄膜衣片 · 口服</div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin-top:10px;color:#3F4947;">
+        <span class="t2">CIS</span><span class="mono">6000 0001</span>
+        <span class="t2">包装</span><span class="t2" style="color:#161D1C;">28 片铝塑板 · <span class="mono">CIP13 3400 9300 0000 1</span></span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:14px;">
+        <button class="spring" style="height:40px;padding:0 18px;border:0;border-radius:999px;background:#CCE8E3;color:#00201D;font-size:14px;font-weight:600;">查看资料</button>
+        <button style="height:40px;padding:0 14px;border:0;border-radius:999px;background:transparent;color:#006A63;font-size:14px;font-weight:600;">解除关联</button>
+      </div>
+    </div>
+
+    <!-- 分段切换 -->
+    <div class="sh">更换资料</div>
+    <div role="tablist" style="display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#E3EAE8;border-radius:999px;padding:4px;">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="2">
+        <button role="tab" aria-selected="{{t.sel}}" onClick="{{t.pick}}" class="spring" style="height:44px;border:0;border-radius:999px;background:{{t.bg}};color:{{t.fg}};font-size:14px;font-weight:{{t.w}};">{{t.name}}</button>
+      </sc-for>
+    </div>
+
+    <!-- 目录 -->
+    <sc-if value="{{isCat}}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;gap:8px;margin-top:14px;">
+        <div style="flex:1;height:52px;border-radius:999px;background:#FFFFFF;border:1px solid #BEC9C6;display:flex;align-items:center;gap:10px;padding:0 16px;box-sizing:border-box;">
+          <svg class="ic" viewBox="0 0 24 24" style="color:#3F4947;flex:none;"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg>
+          <span style="font-size:15px;color:#161D1C;">estradiol</span>
+        </div>
+        <button class="spring" style="height:52px;padding:0 18px;border:0;border-radius:999px;background:#006A63;color:#FFFFFF;font-size:14px;font-weight:700;">离线搜索</button>
+      </div>
+      <div class="t2" style="margin:10px 8px 10px;">找到 3 个产品 · 法国 HRT 相关药品目录 · 2026-09</div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <sc-for list="{{cat}}" as="p" hint-placeholder-count="3">
+          <div style="background:#FFFFFF;border-radius:{{p.radius}};">
+            <button onClick="{{p.toggle}}" aria-expanded="{{p.exp}}" style="width:100%;border:0;background:transparent;text-align:left;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;color:#161D1C;">
+              <div style="flex:1;min-width:0;">
+                <div class="t1">{{p.name}}</div>
+                <div class="t2" style="margin-top:3px;">{{p.comp}}</div>
+                <div style="display:flex;gap:6px;align-items:center;margin-top:8px;"><span class="tag" style="background:#9EF2E8;color:#00201D;">BDPM 官方</span><span class="mono" style="color:#3F4947;">CIS {{p.cis}}</span></div>
+              </div>
+              <svg class="ic spring" viewBox="0 0 24 24" style="color:#6F7977;flex:none;margin-top:2px;transform:{{p.rot}};"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <sc-if value="{{p.open}}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 12px 14px;display:flex;flex-direction:column;gap:6px;">
+                <div class="t2" style="padding:0 4px;font-weight:700;color:#006A63;">选择包装</div>
+                <sc-for list="{{p.packs}}" as="k" hint-placeholder-count="2">
+                  <button onClick="{{k.pick}}" style="border:{{k.border}};background:{{k.bg}};border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;text-align:left;color:#161D1C;">
+                    <span style="width:20px;height:20px;border-radius:10px;border:2px solid {{k.ring}};box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex:none;"><span style="width:10px;height:10px;border-radius:5px;background:{{k.dot}};"></span></span>
+                    <span style="flex:1;"><span class="t2" style="display:block;color:#161D1C;font-size:14px;">{{k.desc}}</span><span class="mono" style="color:#3F4947;">CIP13 {{k.cip}}</span></span>
+                  </button>
+                </sc-for>
+                <button style="border:0;background:transparent;color:#006A63;font-size:14px;font-weight:600;text-align:left;padding:8px 4px;">仅选择产品，不指定包装</button>
+                <button class="spring" style="height:48px;border:0;border-radius:999px;background:#006A63;color:#FFFFFF;font-size:15px;font-weight:700;margin-top:2px;">关联此资料</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <div class="t2" style="margin:10px 8px 0;font-size:12px;">仅收录法国 HRT 相关药品，数据来自 ANSM 公开的 BDPM，离线使用。</div>
+    </sc-if>
+
+    <!-- 我录入的资料 -->
+    <sc-if value="{{isUser}}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+        <div style="flex:1 1 100%;height:52px;border-radius:999px;background:#FFFFFF;border:1px solid #BEC9C6;display:flex;align-items:center;gap:10px;padding:0 16px;box-sizing:border-box;">
+          <svg class="ic" viewBox="0 0 24 24" style="color:#3F4947;flex:none;"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg>
+          <span style="font-size:15px;color:#6F7977;">商品名或成分名</span>
+        </div>
+        <sc-for list="{{chips}}" as="c" hint-placeholder-count="3">
+          <span style="height:32px;padding:0 12px;border-radius:999px;border:1px solid #BEC9C6;background:#FFFFFF;display:inline-flex;align-items:center;font-size:13px;color:#3F4947;">{{c}}</span>
+        </sc-for>
+      </div>
+      <div class="t2" style="margin:12px 8px 10px;">2 条已保存资料</div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <sc-for list="{{mine}}" as="u" hint-placeholder-count="2">
+          <div style="background:#FFFFFF;border-radius:{{u.radius}};padding:14px 16px;">
+            <div class="t1">{{u.name}}</div>
+            <div class="t2" style="margin-top:3px;">{{u.comp}}</div>
+            <div style="display:flex;gap:6px;align-items:center;margin-top:8px;flex-wrap:wrap;"><span class="tag" style="background:#FFDBCE;color:#5C2410;">我录入 · 未核实</span><span class="t2" style="font-size:12px;">录入于 {{u.date}}</span></div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <button style="margin-top:20px;width:100%;height:52px;border:1px solid #6F7977;border-radius:999px;background:transparent;color:#006A63;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;">
+      <svg class="ic" viewBox="0 0 24 24" style="width:20px;height:20px;"><path d="M12 5v14M5 12h14"/></svg>
+      自行录入商品资料
+    </button>
+    <div class="t2" style="margin:8px 8px 0;font-size:12px;text-align:left;">找不到时可以手动录入，资料会标为“未核实”。</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1560}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { tab: 0, open: 0, pack: 0 }; }
+  renderVals() {
+    var self = this, s = this.state;
+    function rad(i, n) { return n === 1 ? '24px' : (i === 0 ? '24px 24px 6px 6px' : (i === n - 1 ? '6px 6px 24px 24px' : '6px')); }
+    var tabs = ['法国 HRT 药品目录', '我录入的资料'].map(function (n, k) {
+      var sel = s.tab === k;
+      return { name: n, sel: sel ? 'true' : 'false', bg: sel ? '#FFFFFF' : 'transparent', fg: sel ? '#00201D' : '#3F4947', w: sel ? 700 : 500, pick: function () { self.setState({ tab: k }); } };
+    });
+    var catData = [
+      { name: 'ESTRADIOL [厂商] 2 mg, comprimé pelliculé', comp: '雌二醇 2 mg · 薄膜衣片 · 口服', cis: '6000 0001', packs: [{ desc: '28 片铝塑板', cip: '3400 9300 0000 1' }, { desc: '3 × 28 片铝塑板', cip: '3400 9300 0000 2' }] },
+      { name: 'ESTRADIOL [厂商] 1 mg, comprimé', comp: '雌二醇 1 mg · 片剂 · 口服', cis: '6000 0002', packs: [{ desc: '28 片铝塑板', cip: '3400 9300 0000 3' }] },
+      { name: 'ESTRADIOL [厂商] 0,06 %, gel', comp: '雌二醇 0.06% · 凝胶 · 经皮', cis: '6000 0003', packs: [{ desc: '80 g 按压瓶', cip: '3400 9300 0000 4' }] }
+    ];
+    var cat = catData.map(function (p, i) {
+      var open = s.open === i;
+      return { name: p.name, comp: p.comp, cis: p.cis, open: open, exp: open ? 'true' : 'false', rot: open ? 'rotate(180deg)' : 'rotate(0deg)', radius: rad(i, catData.length),
+        toggle: function () { self.setState({ open: open ? -1 : i, pack: 0 }); },
+        packs: p.packs.map(function (k, j) {
+          var sel = s.pack === j;
+          return { desc: k.desc, cip: k.cip, border: sel ? '2px solid #006A63' : '1px solid #DAE5E2', bg: sel ? '#E6F4F1' : '#FFFFFF', ring: sel ? '#006A63' : '#6F7977', dot: sel ? '#006A63' : 'transparent', pick: function () { self.setState({ pack: j }); } };
+        }) };
+    });
+    var mineData = [
+      { name: '[商品名] 醋酸环丙孕酮 12.5 mg', comp: '醋酸环丙孕酮 · 片剂 · 口服', date: '2026/9/2' },
+      { name: '[商品名] 雌二醇贴片', comp: '雌二醇 · 透皮贴 · 经皮', date: '2026/8/18' }
+    ];
+    var mine = mineData.map(function (u, i) { return { name: u.name, comp: u.comp, date: u.date, radius: rad(i, mineData.length) }; });
+    return { tabs: tabs, isCat: s.tab === 0, isUser: s.tab === 1, cat: cat, mine: mine, chips: ['剂型', '规格', '途径'] };
+  }
+}
+</script>
+</body>
+</html>
