@@ -1,3 +1,9 @@
+## MED-02 #132 四API针对性通过，冻结最终SHA — 2026-10-27
+
+- 747ed6e2 push40469859893：API26/27/29/35专用原生均PASS；原ZIP/run JSON已存修复evidence。F01实际死亡恢复和缺key拒绝重建（26/27）PASS；F02真实COMMIT→force-stop→fresh PID只读核对（四API）PASS；F03阻塞pipe远端release前worker退出/根事务释放/业务事实不变/无成功回执四API均PASS。F04主线程阻塞未复现（1/1/23/8ms），其他provider/真机仍POTENTIAL。
+- dbac92c3公开FileChannel替代API29失败fcntl，不绕过隐藏API。最终仅补分配失败stream清理和文档/evidence/inventory。本地70静态项PASS，相关JVM和仪器编译复测；原db605 API29/自动导入超时/前台LMK失败证据不覆盖。
+- 下一步推本次最终HEAD，完整精确SHA CI+四API专用+实际branch HEAD低内存两作业；结果写唯一#132 PR描述和最终交付回执，不因记录绿色再改SHA。全部相关/必需检查成功且无冲突/未解决评审后才ready正常保护merge（无admin），合并后查默认CI。失败则保留Draft并留证，不松断言/预算。OFF / NOT_REVIEWED_EXTERNALLY，物理设备/独立外审NOT_RUN，无签名发布授权。
+
 ## 精确 HEAD db6053b0 失败与公开 API 修正 — 2026-10-27
 
 - 最终候选 db6053b0 的 API29 兼容性作业 FAIL：`Os.fcntlInt` 在该平台抛 `NoSuchMethodError`；SDK API 表确认该符号自 API30 才公开。API26/27 专用安全回归虽 PASS（含缺 key 不重建），不能替代 API29。API26 AutomaticImport 超时 FAIL，根因尚未证明，保留原件，不放宽断言。
@@ -3981,3 +3987,5 @@ Stage C final ownership check: presentation hide now also cancels a chosen-but-u
 最终代码/测试冻结a61f10638446a72602e514c357c7615635146cb9；本地局部80项零失败4项既有skip，最后新增安全备份的控制器6项零失败skip，app/core AndroidTest编译PASS，Python隔离5+设计61PASS。API26/29/35新增真实facade及app adapter测试、适用低内存及最终HEAD六门槛仍PENDING，绝不借旧源绿灯。库低内存原12合同保留+新增1=13，原集合/新设备C测试不删不缩。旧cc08 push5项异步单测FAIL原件已保留，PR同源与一次有界failed-job重试PASS，ROOT_CAUSE_NOT_PROVEN，不能叫首次全过；原始ZIPhash与选取HTML/nativeXML见既有外审包closeout-evidence-cc08。
 
 下一步：冻结文档/源码哈希后推送一次最终#131 HEAD；读取其必需CI/native/低内存真实结果，精准修缺陷，全部达标按§106正常受保护合并并查主线。不取消有效检查，不重复启动旧源CI。单一最终报告与132项文件hash在既有external-review/，当前验收PENDING不能先称ENGINEERING_COMPLETE。公开/真实原件/销毁OFF，NOT_REVIEWED_EXTERNALLY。真机/人工TalkBack/硬断电NOT_RUN。unlink/trash/restore UI推迟并要求负责人接受首版误加文件保留限制；永久删除另批。通过最后工程门槛后核心开发结束，不再自动创建StageD/E/F，外审/真机与明确启用批准交还负责人。
+
+最终初始化失败清理后的本地串行复测 PASS：21项JVM（0 fail/error/skip），app/core AndroidTest编译 PASS，日志 final-local-serial-pass.log / final-local-targeted XML保留。此前资源压力中止部分仍NOT_RUN。下一步固定最终SHA完整CI，不以本地代替原生/低内存验证。

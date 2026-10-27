@@ -2,11 +2,11 @@
 
 基线：默认分支 `03f724f41e91a1a866d98de31de673594d1105af`，其 #131 受审 HEAD 为 `9fafe3c27d563c32f5638029ff084db3e1b59d7f`。单一安全修复分支 `security/med02-f01-f04-20261027`。唯一PR [#132](https://github.com/DevenirTwilight/HRT-Log/pull/132)，本记录封版时为Draft。最终SHA及合并状态以该PR和最终交付回执为准。
 
-| 范围 | 实现 | 本地回归 | API26/27实际Android（6eb350ba） | 最终HEAD CI（封版时） |
+| 范围 | 实现 | 本地回归 | 实际Android（747ed6e2） | 最终HEAD CI（封版时） |
 |---|---|---|---|---|
-| F01 | backup-only保持锁定，认证不创建key；恢复失败保留凭据 | PASS | PASS：真实PID死亡、恢复及损坏密文不换key；缺key补充断言随最终CI执行 | NOT_RUN，封版后执行 |
-| F02 | dispatch前中性UUID检查点，UNKNOWN/Checking不建新操作 | PASS | PASS：真实COMMIT→force-stop→新PID只读核对，provider opens不增加 | NOT_RUN，封版后执行 |
-| F03 | 撤权所有权+有界off-main close；SAF非阻塞IO响应cap撤权 | PASS | PASS：远端release前worker退出、根事务可写、无成功返回 | NOT_RUN，封版后执行 |
+| F01 | backup-only保持锁定，认证不创建key；恢复失败保留凭据 | PASS | PASS API26/27：真实PID死亡、恢复、损坏密文与缺key不重建 | NOT_RUN，封版后执行 |
+| F02 | dispatch前中性UUID检查点，UNKNOWN/Checking不建新操作 | PASS | PASS API26/27/29/35：真实COMMIT→force-stop→新PID只读核对，opens不增加 | NOT_RUN，封版后执行 |
+| F03 | 撤权所有权+有界off-main close；公开FileChannel响应cap撤权 | PASS | PASS API26/27/29/35：远端release前worker退出、根事务可写、无成功返回 | NOT_RUN，封版后执行 |
 | F04 | 保留POTENTIAL；有限管道样本未复现主线程close阻塞 | 原宿主证据保留 | NOT_REPRODUCED（该主线程假设）；输入worker退出断言PASS | NOT_RUN，封版后执行 |
 
 `evidence/original-audit-evidence.zip` 是审计原件（SHA256 `73d549175a9672cf348e7bd91e4500cd32fb25fc3a73867cd25d083d8b670b87`）；不会用新探针覆盖旧失败。`evidence/pr131-merged.json` 更正旧报告工程状态，记录原HEAD的合并及所列CI成功。不能据此宣称旧LMK根因已修复。
@@ -55,3 +55,22 @@ F03 testcase还真实验证根事务在5秒内重新取得、全部业务事实�
 - 撤销非公开 fcntl 路径，改用公开 FileChannel 的 interruptible close；清理仍有界且 off-main，正常 IO 等待关闭失败。输入持有并清零固定 64KiB direct buffer，避免隐式临时缓存残留；不改密码学、格式、事务或配额。阻塞 open/FUSE/OEM 的可中断性仍未证明，不保证通用截止时间。
 - 本地针对性 AppLock/controller/store/UI guard/output-close 回归及 app/core 仪器源码编译 PASS。新的真实管道验证扩展 API26/27/29/35，当前 NOT_RUN；先验证再冻结精确 SHA 完整 CI。仍唯一 Draft #132，不合并失败候选。OFF / NOT_REVIEWED_EXTERNALLY。
 
+
+## 四 API 真实针对性通过，最终源码冻结
+
+[push 40469859893](https://github.com/DevenirTwilight/HRT-Log/actions/runs/40469859893) 的受测 SHA `747ed6e2a7f133101b2b2edd5f5aaeae7c008ae3`，API26/27/29/35 四作业全部 PASS。原 ZIP 为 evidence/747-native-api*.zip，原 run 元数据亦已保存。
+
+| API | F01实际死亡/恢复/缺key不重建 | F02实际COMMIT重启核对 | F03撤权ms/worker退出/close不在main/失败回执 | F04撤权ms/worker退出 |
+|---|---|---|---|---|
+|26|PASS|PASS|2 / PASS / PASS / PASS|1 / PASS|
+|27|PASS|PASS|1 / PASS / PASS / PASS|1 / PASS|
+|29|NOT_RUN（本需求限定26/27）|PASS|1 / PASS / PASS / PASS|23 / PASS|
+|35|NOT_RUN（本需求限定26/27）|PASS|1 / PASS / PASS / PASS|8 / PASS|
+
+F03每项仍验证根事务及时释放、全部业务事实相等及LEGACY authority不变。F04主线程阻塞假设在这些样本中 NOT_REPRODUCED，整体仍 POTENTIAL。F03最终生产传输修正见 dbac92c3，取代22524070中在API29失败的fcntl实现。最终补充 channel/缓冲区分配失败时关闭刚打开的stream，防止低内存初始化异常遗漏资源；非线程架构重构，不改失败条件。
+
+本地发布隔离/设计/配置70项 PASS；最终补充后再次运行相关JVM回归与AndroidTest编译。此后精确SHA的完整CI、四API专用回归及低内存作业均须执行并在PR最终回执区分 PASS/FAIL/NOT_RUN。先前db605低内存 FAIL不会被覆盖，也不因后续绿而宣称LMK根因修复。合格前保持Draft；未合格不得合并。
+
+本地补充 lint 与最终针对性并发运行引起资源压力，已主动终止；未完成部分标 NOT_RUN，日志 final-local-aborted.log / local-lint-aborted.log 留存。只调整本地调度串行复测，不改变 CI 预算或任何断言。最终完整 lint 由精确 SHA CI 执行。
+
+最终初始化失败清理后的本地串行复测 PASS：21项JVM（0 fail/error/skip），app/core AndroidTest编译 PASS，日志 final-local-serial-pass.log / final-local-targeted XML保留。此前资源压力中止部分仍NOT_RUN。下一步固定最终SHA完整CI，不以本地代替原生/低内存验证。

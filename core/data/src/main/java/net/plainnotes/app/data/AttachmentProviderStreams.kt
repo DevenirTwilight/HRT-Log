@@ -25,12 +25,12 @@ object AttachmentProviderStreams {
     fun input(context:Context,uri:Uri,cap:AttachmentSession.Capability):InputStream {
         val physical=open(context,uri,"r",cap)
         val stream=ParcelFileDescriptor.AutoCloseInputStream(physical)
-        val channel=stream.channel
+        val channel=try {stream.channel}catch(t:Throwable) {stream.close();throw t}
         val reads=Any()
         // Own and wipe a bounded native buffer instead of leaving plaintext in FileChannel's
         // implicit thread-local temporary direct-buffer cache (or allocating a 16MiB read buffer).
-        val buffer=ByteBuffer.allocateDirect(65536)
-        val zeros=ByteArray(buffer.capacity())
+        val buffer=try {ByteBuffer.allocateDirect(65536)}catch(t:Throwable) {stream.close();throw t}
+        val zeros=try {ByteArray(buffer.capacity())}catch(t:Throwable) {stream.close();throw t}
         fun wipe() {(buffer as Buffer).clear();buffer.put(zeros);(buffer as Buffer).clear()}
         val cleanup=try {RevocableProviderClose(AutoCloseable {
             try {channel.close()}finally {try {stream.close()}finally {synchronized(reads) {wipe()}}}
@@ -66,7 +66,7 @@ object AttachmentProviderStreams {
     fun output(context:Context,uri:Uri,cap:AttachmentSession.Capability):OutputStream {
         val physical=open(context,uri,"w",cap)
         val stream=ParcelFileDescriptor.AutoCloseOutputStream(physical)
-        val channel=stream.channel
+        val channel=try {stream.channel}catch(t:Throwable) {stream.close();throw t}
         val target=object:OutputStream() {
             override fun write(value:Int)=write(byteArrayOf(value.toByte()))
             override fun write(b:ByteArray,o:Int,n:Int) {
