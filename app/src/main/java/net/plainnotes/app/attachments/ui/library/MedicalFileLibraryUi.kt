@@ -129,7 +129,7 @@ private fun FileKind.label() = when (this) { FileKind.PDF -> R.string.attach_kin
             }
         }
         item("footer") {
-            FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
                 TextButton(onUnsorted, Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.lib_unlinked_files, state.unsorted())) }
                 TextButton(onBin, Modifier.heightIn(min = 48.dp).testTag("library-bin"), enabled = caps.recycle) { Text(stringResource(R.string.lib_bin)) }
             }

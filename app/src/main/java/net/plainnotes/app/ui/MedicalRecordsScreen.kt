@@ -137,7 +137,7 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
                         Surface(Modifier.size(40.dp),shape=CircleShape,color=MaterialTheme.colorScheme.secondaryContainer) {
                             Box(contentAlignment=Alignment.Center){Icon(icon,null,Modifier.size(20.dp),tint=MaterialTheme.colorScheme.onSecondaryContainer)}
                         }
-                        Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(2.dp)) {
+                        Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
                             Text(stringResource(text.first),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
                             Text(stringResource(text.second),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
                         }
@@ -151,7 +151,7 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
         Surface(backup,Modifier.fillMaxWidth().testTag("medical-complete-backup"),shape=Corners.card,color=MaterialTheme.colorScheme.surfaceContainerLow) {
             Row(Modifier.padding(16.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {
                 Icon(Icons.Outlined.VerifiedUser,null,tint=MaterialTheme.colorScheme.primary)
-                Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(2.dp)) {
+                Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
                     Text(stringResource(R.string.med_transfer_title),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
                     Text(stringResource(R.string.mh_backup_body),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
                 }
@@ -223,7 +223,7 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
                         else LazyColumn(Modifier.fillMaxSize().testTag("file-target-visits"),verticalArrangement=Arrangement.spacedBy(GroupedGap),contentPadding=PaddingValues(bottom=24.dp)) {
                             itemsIndexed(visits,key={_,a->"v:${a.id}"}){i,a->
                                 GroupedItem(i,visits.size,onClick={onVisit(a)},modifier=Modifier.testTag("file-target:visit:${a.id}")) {
-                                    Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(2.dp)) {
+                                    Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
                                         Text(choiceLabel(a.type.ifBlank{"OTHER"}),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
                                         Text(listOfNotNull(visitWhen(a),a.practitioner?.takeIf{it.isNotBlank()}).joinToString(" · "),style=MaterialTheme.typography.bodyMedium)
                                     }
@@ -246,7 +246,7 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
                                         Column(verticalArrangement=Arrangement.spacedBy(GroupedGap)) {
                                             d.labs.forEachIndexed{i,v->
                                                 GroupedItem(i,d.labs.size,onClick={onLab(v)},modifier=Modifier.testTag("file-target:lab:${v.id}")) {
-                                                    Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(2.dp)) {
+                                                    Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
                                                         Text(analyteLabel(v.analyte_code)+" · "+displayNumber(v.value)+" "+v.unit,style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
                                                         if(d.labs.size==1)Text(when_+(place?.let{" · $it"} ?: ""),style=MaterialTheme.typography.bodyMedium)
                                                     }
