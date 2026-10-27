@@ -126,5 +126,16 @@
     "zipCrc": "PASS",
     "failure": "Espresso RootViewWithoutFocusException at back helper78/call285 after actual visit/LAB confirmed commits; original failure retained",
     "followup": "test-only real BACK input + observable window transition; production unchanged"
+  },
+  "followup134": {
+    "source": "beb319e0917b0c4b0fca8beb0a2998e9fdcb2e33",
+    "state": "DRAFT",
+    "changes": "AndroidTest BACK dispatch and observable dismissal/focus only;HANDOFF;production unchanged",
+    "compile": "PASS;6m30s;94 tasks",
+    "prAndroidRun": 40527400341,
+    "pushAndroidRun": 40527349642,
+    "prScienceRun": 40527399915,
+    "science": "SUCCESS",
+    "nativeAndRequiredCi": "PENDING"
   }
 }

@@ -1,3 +1,7 @@
+## PR134 精确补丁已编译，继续最终复核 — 2026-10-27
+
+#133已合并ff54396b、公共入口ON、正式实现不再改变；主线API35的Espresso无焦点异常原件保留。仅测试/HANDOFF补丁#134，固定源码beb319e0917b0c4b0fca8beb0a2998e9fdcb2e33，真实BACK与观察Dialog退出/Activity恢复焦点，不用sleep/重试或ViewModel导航捷径。Instrumentation Kotlin编译实际PASS（6m30s，94tasks）；Science40527399915 SUCCESS，精确PR Android40527400341与push40527349642原生/完整检查进行中。仍Draft，不用旧绿替代。旧主线Android40524889046的失败不抹除，独立Featherline512MiB FAIL仍记录。只核对这些有限CI，成功后正常保护合并此窄补丁并查新主线；不再开发新模块或新安全研究。未签名Release7bdddc88已PASS且本地验证无签名/无INTERNET/无测试载荷，未交付。最终receipt见本证据分支，不将其当应用源。
+
 ## PR133 已受保护合并，最终主线复核进行中 — 2026-10-27
 
 #133最终源码7bdddc8850b83c083ea9d2abe4e90c3bb59da75c的六门（push/PR均）全部PASS，无冲突/未解决审查；正常gh pr ready及gh pr merge --squash --auto --match-head-commit执行，未用admin。2026-10-27T14:49:38Z已合并ff54396bc96db4264c26bfb0cb930a2244dbd176到实际默认分支claude/new-session-1959qb；源码树均95f132496434e9ce81f3c010db117cfb68e0d80a完全一致，PUBLIC_ENTRY_ENABLED=true。
