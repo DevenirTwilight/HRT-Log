@@ -75,7 +75,13 @@ class MedicalAttachmentProductAndroidTest {
         press(hasText("SYNTHETIC product clinician",substring=true))
         button(R.string.attach_section)
     }
-    private fun back() {androidx.test.espresso.Espresso.pressBack()}
+    private fun back() {
+        // Use actual system BACK dispatch. Espresso's default root can still be
+        // the unfocused Activity while the lab attachment Dialog is dismissing.
+        // No direct navigation/state mutation and no retry of the operation.
+        instrumentation.sendKeyDownUpSync(android.view.KeyEvent.KEYCODE_BACK)
+        instrumentation.waitForIdleSync()
+    }
     private fun labDetail(id:Long) {
         // Library scope readiness precedes NotesViewModel's asynchronous committed
         // medical snapshot. In particular a new post-restore Activity has not yet
@@ -282,7 +288,15 @@ class MedicalAttachmentProductAndroidTest {
         assertEquals("SYNTHETIC production lab",labSaved.title)
         // This test uses the real runtime transfer adapter, not a test-only archive or database.
         // Archive SAF/confirmation widgets have separate existing controller tests; do not claim those here.
-        back();back();open(Destination.SETTINGS)
+        back()
+        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments").fetchSemanticsNodes().isEmpty()}
+        back()
+        ui.waitUntil(30000) {
+            var focused=false
+            scenario!!.onActivity {focused=it.hasWindowFocus()}
+            focused
+        }
+        open(Destination.SETTINGS)
         button(R.string.settings_data_backup)
         button(R.string.med_transfer_title)
         ui.onNodeWithText(text(R.string.med_transfer_export)).assertExists()
