@@ -26,6 +26,7 @@ internal object AttachmentCandidateMetadata {
     fun write(db:SupportSQLiteDatabase,p:AttachmentRestorePreflight.Plan,featureEnabled:Int=0) {
         require(featureEnabled in 0..1) {"Invalid candidate activation value"}
         check(db.inTransaction())
+        if(featureEnabled==1)check(db.version>=21) {"Enabled candidate requires Room21"}
         val ddl=listOf(
             "CREATE TEMP TABLE rc_scope(dataset TEXT PRIMARY KEY,epoch TEXT NOT NULL,generation TEXT NOT NULL,vault TEXT NOT NULL,feature_enabled INTEGER NOT NULL CHECK(feature_enabled IN(0,1)))",
             "CREATE TEMP TABLE rc_identity(uuid TEXT PRIMARY KEY,kind TEXT NOT NULL,source_id INTEGER NOT NULL,target_id INTEGER,state TEXT NOT NULL,trash_id INTEGER,evidence TEXT NOT NULL,UNIQUE(kind,target_id))",
