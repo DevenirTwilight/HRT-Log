@@ -1,0 +1,80 @@
+[
+  {
+    "name": "kotlin-compiler-embeddable.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-compiler-embeddable/2.2.20/kotlin-compiler-embeddable-2.2.20.jar",
+    "bytes": 56907103,
+    "sha256": "1c6c3f810bfe6a41abcbc34b3a2ef639f1e3f4aeed3a953a4b0974eea4f41889"
+  },
+  {
+    "name": "kotlin-stdlib.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.2.20/kotlin-stdlib-2.2.20.jar",
+    "bytes": 1761444,
+    "sha256": "8836ccffd3585fadda9901244b20d42901d2f3cd581058d8434e2ffabcf3a3e7"
+  },
+  {
+    "name": "kotlin-script-runtime.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-script-runtime/2.2.20/kotlin-script-runtime-2.2.20.jar",
+    "bytes": 44769,
+    "sha256": "5c8bd5dd7ae1ea2eeb2778fdbeaa19a562184975f6cab8a0bb6779e4190731ae"
+  },
+  {
+    "name": "kotlin-reflect.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-reflect/1.6.10/kotlin-reflect-1.6.10.jar",
+    "bytes": 3038560,
+    "sha256": "3277ac102ae17aad10a55abec75ff5696c8d109790396434b496e75087854203"
+  },
+  {
+    "name": "kotlinx-coroutines-core-jvm.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.10.2/kotlinx-coroutines-core-jvm-1.10.2.jar",
+    "bytes": 1479317,
+    "sha256": "5ca175b38df331fd64155b35cd8cae1251fa9ee369709b36d42e0a288ccce3fd"
+  },
+  {
+    "name": "annotations.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0.jar",
+    "bytes": 17536,
+    "sha256": "ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478"
+  },
+  {
+    "name": "android-all.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/robolectric/android-all/8.0.0_r4-robolectric-r1/android-all-8.0.0_r4-robolectric-r1.jar",
+    "bytes": 100871989,
+    "sha256": "3707dc100381e3bbcc57b85255fd313ae20875fc65cf3130c47e86f044ad77f0"
+  },
+  {
+    "name": "bcprov-jdk18on.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/bouncycastle/bcprov-jdk18on/1.86/bcprov-jdk18on-1.86.jar",
+    "bytes": 7224011,
+    "sha256": "2af190b300cbb0b35e248ccf5f4a06b6072030aeb3da7a98ec73abe5b4cb371f"
+  },
+  {
+    "name": "tink.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/crypto/tink/tink/1.23.0/tink-1.23.0.jar",
+    "bytes": 2775464,
+    "sha256": "5bcdc8798ce106f5145acb4a0e993c5e5861337b1e75ca88ceb6ab9da10fa512"
+  },
+  {
+    "name": "gson.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.13.2/gson-2.13.2.jar",
+    "bytes": 289901,
+    "sha256": "dd0ce1b55a3ed2080cb70f9c655850cda86c206862310009dcb5e5c95265a5e0"
+  },
+  {
+    "name": "protobuf-java.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/4.33.6/protobuf-java-4.33.6.jar",
+    "bytes": 1886534,
+    "sha256": "c24b2464ecfe9ac1d44e3a8fe281fca09e6ad2ca73dbd689dd7d6d719df987b5"
+  },
+  {
+    "name": "error_prone_annotations.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.41.0/error_prone_annotations-2.41.0.jar",
+    "bytes": 20389,
+    "sha256": "a56e782b5b50811ac204073a355a21d915a2107fce13ec711331ad036f660fcc"
+  },
+  {
+    "name": "jsr305.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar",
+    "bytes": 19936,
+    "sha256": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7"
+  }
+]

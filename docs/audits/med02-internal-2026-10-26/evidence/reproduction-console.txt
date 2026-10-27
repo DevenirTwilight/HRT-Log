@@ -1,0 +1,50 @@
+VERIFIED kotlin-compiler-embeddable.jar
+VERIFIED kotlin-stdlib.jar
+VERIFIED kotlin-script-runtime.jar
+VERIFIED kotlin-reflect.jar
+VERIFIED kotlinx-coroutines-core-jvm.jar
+VERIFIED annotations.jar
+VERIFIED android-all.jar
+VERIFIED bcprov-jdk18on.jar
+VERIFIED tink.jar
+VERIFIED gson.jar
+VERIFIED protobuf-java.jar
+VERIFIED error_prone_annotations.jar
+VERIFIED jsr305.jar
+Injected death immediately after Android 8 AtomicFile backup rename
+Interrupted-update fixture: base=false backup=true AppLock.enabled=false
+Android 8 AtomicFile.readFully recovered original credential: true
+After synthetic COMMIT and lost response: state=Unknown, imports=1, commit facts=1
+startImport while UNKNOWN returned picker: true; state=Idle
+New operation/document UUID accepted: imports=2, distinct commit facts=2; state=Saved(listStale=false); first unresolved identity no longer checkable
+While synthetic provider close blocks: revoke returned=false, further publication denied=true
+After provider released: revoke returned=true
+core/data/src/main/java/net/plainnotes/app/data/AttachmentObjectStreams.kt:48:52: warning: 'fun <P : Any!> getPrimitive(targetClassObject: Class<P!>!): P!' is deprecated. Deprecated in Java.
+            .withRandomId().makePrimary()).build().getPrimitive(StreamingAead::class.java)
+                                                   ^^^^^^^^^^^^
+actual Tink adapter: synthetic 140000-byte roundtrip + cross-segment random access PASS; raw write DEK cleared
+wrong DEK: refused before Reader publication; channel closed; raw DEK cleared
+wrong object AAD: refused before Reader publication; channel closed; raw DEK cleared
+last segment modified + recommitted cipher SHA: refused before Reader publication; channel closed; raw DEK cleared
+truncated + recommitted cipher length/SHA: refused before Reader publication; channel closed; raw DEK cleared
+trailing byte + recommitted cipher length/SHA: refused before Reader publication; channel closed; raw DEK cleared
+wrong plaintext commitment: refused before Reader publication; channel closed; raw DEK cleared
+revoked read: denied and requested destination zeroed
+negative authentication cases=6; result=NOT_REPRODUCED for unauthenticated Reader release within this corpus
+core/data/src/main/java/net/plainnotes/app/data/MedicalArchiveCrypto.kt:31:23: warning: non-public primary constructor is exposed via the generated 'copy()' method of the 'data' class.
+
+The generated 'copy()' will change its visibility in future releases.
+
+To suppress the warning do one of the following:
+- Annotate the data class with the '@ConsistentCopyVisibility' annotation.
+- Use the '-Xconsistent-data-class-copy-visibility' compiler flag.
+- Annotate the data class with the '@ExposedCopyVisibility' annotation 
+  (Discouraged, but can be used to keep binary compatibility).
+
+To learn more, see the documentation of the '@ConsistentCopyVisibility' and '@ExposedCopyVisibility' annotations.
+
+This will become an error in language version 2.5. See https://youtrack.jetbrains.com/issue/KT-11914.
+    data class Header internal constructor(val archive:UUID,val plaintextBytes:Long,val ciphertextBytes:Long,private val encoded:ByteArray,
+                      ^^^^^^^^
+actual PNMEDBK2 writer blocked inside target.write; after capability revoke: target.closed=false, worker.finished=false
+after external unblock: target.closed=true, worker.finished=true; no successful receipt

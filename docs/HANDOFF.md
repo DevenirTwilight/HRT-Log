@@ -1,3 +1,10 @@
+## MED-02 有限安全修复接手 — 2026-10-27
+
+- 单一分支security/med02-f01-f04-20261027，基线默认03f724f4；#131实际head9fafe3c2已于2026-10-26T20:18:50Z合并，其所列作业均SUCCESS，原始快照已保存。旧审计BLOCKED_ENGINEERING仅是当时文档状态，不能继续称#131未合并；历史LMK原件及根因未证明仍保留。
+- 原审计/evidence ZIP保留于docs/security/med02-fixes-2026-10-27/evidence/original-audit-evidence.zip。F01检查backup-only且认证只取既有key；F02中性检查点在dispatch前commit、按scope/typed target隔离、UNKNOWN不重放；F03只将该writer输出注册到bounded异步close，成功路径等待关闭。尚未宣称native PASS。
+- 针对性Robolectric/worker回归及AndroidTest编译正在本地跑；初始缺JDK编译器、直接网络连接和新JDK CA错误原件保留scratch，已安装独立SDK/JDK并使用会话proxy与系统Java CA，无TLS关闭。没有本地KVM；真实API26/27 pipe/provider/PID死亡通过新增专用GitHub作业验证。
+- F04目前POTENTIAL；必须读实际native原始结果，不用宿主任意InputStream.close假定真实provider利用成功。正式入口/feature/外审/格式/配额/schema/PK/签名发布不变。下一步：针对性结果、最小修复真实失败、只开一个PR，然后最终SHA必需CI及适用低内存，再正常保护合并。
+
 ## #131 final acceptance takeover — 2026-10-26
 
 Remote exact4e73d700/default9192b91a; continuing existing feature/med02-stage-c-lifecycle-20261026 in /workspace/HRT-Log-med02-final-131, clean remote baseline, no new PR/stage. Original five failed native/lowmem jobs and artifacts preserved external-review/final-acceptance-evidence/4e73-original (CRC/hash checked). Host/JVM/Science and preview low-memory PASS; threeAPI facade export failed, library failed SWITCHED60s seam after13+4+2/first3seams PASS, Featherline real foregroundLMK afterCOMMIT confirmed, not logcat-clear cause.

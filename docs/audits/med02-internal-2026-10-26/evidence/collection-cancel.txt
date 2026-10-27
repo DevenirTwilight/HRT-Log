@@ -1,0 +1,2 @@
+actual PNMEDBK2 writer blocked inside target.write; after capability revoke: target.closed=false, worker.finished=false
+after external unblock: target.closed=true, worker.finished=true; no successful receipt

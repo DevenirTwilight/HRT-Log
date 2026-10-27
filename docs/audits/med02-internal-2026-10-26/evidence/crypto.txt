@@ -1,0 +1,9 @@
+actual Tink adapter: synthetic 140000-byte roundtrip + cross-segment random access PASS; raw write DEK cleared
+wrong DEK: refused before Reader publication; channel closed; raw DEK cleared
+wrong object AAD: refused before Reader publication; channel closed; raw DEK cleared
+last segment modified + recommitted cipher SHA: refused before Reader publication; channel closed; raw DEK cleared
+truncated + recommitted cipher length/SHA: refused before Reader publication; channel closed; raw DEK cleared
+trailing byte + recommitted cipher length/SHA: refused before Reader publication; channel closed; raw DEK cleared
+wrong plaintext commitment: refused before Reader publication; channel closed; raw DEK cleared
+revoked read: denied and requested destination zeroed
+negative authentication cases=6; result=NOT_REPRODUCED for unauthenticated Reader release within this corpus

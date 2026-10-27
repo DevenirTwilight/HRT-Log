@@ -1544,3 +1544,9 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 ### 152.A 最终失败修复与有限结项（2026-10-26）
 
 负责人要求继续唯一#131，先定位三API共同OWNER_OR_SET_NOT_PROVEN真实分支，保留全量归属证明与所有负向断言，分别核实library/Featherline低内存原始阶段、命令、LMK证据；不以清日志一行猜测根因。只修实际工程阻断，最终准确HEAD六门及受影响原生/低内存通过、无阻断后按106普通保护合并并核主线。单一FINAL-ENGINEERING-CLOSEOUT报告区分ENGINEERING_COMPLETE/READY_FOR_EXTERNAL_REVIEW/BLOCKED_ENGINEERING/NOT_REVIEWED_EXTERNALLY/RELEASE_NOT_AUTHORIZED。不启动D/E/F，不改格式/schema/配额/参数/密钥协议；必要真实缺陷最小修复须留证。feature0/publicfalse/真实原件/永久删除/网络/签名/APK/Release仍OFF；真机/人工TalkBack/硬件断电未做保持NOT_RUN。
+
+## 153. MED-02 有限安全修复（2026-10-27）
+
+负责人授权依据冻结9fafe3c2内部审计及原始evidence ZIP，在一个独立安全修复PR中修复F01/F02/F03，真实Android验证F04。AtomicFile备份凭据恢复失败保持锁定，不删原凭据或因认证失败重建key；补API26/27实际死亡/恢复。UNKNOWN/Checking不建新附件操作，持久化中性作用域/操作核对身份，重启只读核对，不存URI或自动重放。PNMEDBK2输出纳入撤权所有权，避免主线程同步外部close；真实恶意DocumentsProvider/pipe验证worker退出、根事务释放和无失败成功回执。F04无真实证据保留POTENTIAL，不重构通用线程架构。
+
+保留原参数、key协议、schema、完整备份格式、配额及全部完整性断言；针对性回归先于最终精确SHA必需CI，失败原件留存，区分PASS/FAIL/NOT_RUN。按§106保护合并，不绕过规则。更正审计工程状态：#131已以03f724f4合并，9fafe3c2的所列CI成功不等于历史LMK根因已修复或独立外审。feature0/publicfalse/NOT_REVIEWED_EXTERNALLY/真实原件/永久删除/正式签名/APK交付/发布继续OFF。AI内部审计不作独立第三方认证。证据与状态见docs/security/med02-fixes-2026-10-27/README.md。
