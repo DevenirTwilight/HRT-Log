@@ -14,7 +14,7 @@ internal object MedicalCollectionWriter {
     data class Receipt(val collection:UUID,val bytes:Long,val libraries:Int,val objects:Int) {val activatable=false}
     fun write(sources:List<Source>,active:UUID,parent:AttachmentSession.Capability,password:CharArray,target:OutputStream):Receipt {
         var child:AttachmentSession.Capability?=null
-        val owned=RevocableArchiveOutput(target)
+        val owned=if(target is RevocableArchiveOutput)target else RevocableArchiveOutput(target)
         val sink=object:FilterOutputStream(owned) {
             var count=0L;private var closed=false
             override fun write(b:Int)=write(byteArrayOf(b.toByte()),0,1)

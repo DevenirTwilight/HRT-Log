@@ -44,7 +44,7 @@ class MedicalCollectionRevocationAndroidTest {
                 "INSERT INTO appointment(id,type,at_utc,at_zone,note,remind_minutes_before) VALUES(?,?,?,?,?,?)",
                 arrayOf(n+10,"SYNTHETIC",1000,"UTC","SYNTHETIC "+"x".repeat(4096),0))}}
             val original=f.facts()
-            val physical=requireNotNull(app.contentResolver.openOutputStream(uri,"w"))
+            val physical=AttachmentProviderStreams.output(app,uri,f.session.issue())
             val closeOnMain=AtomicBoolean(false);val entered=CountDownLatch(1)
             val target=object:OutputStream() {
                 override fun write(value:Int)=physical.write(value)
@@ -79,7 +79,7 @@ class MedicalCollectionRevocationAndroidTest {
     }
     @Test fun f04RealStalledReadCloseObservation() {
         val session=AttachmentSession(UUID.randomUUID(),UUID.randomUUID())
-        val input=AttachmentInputStream.open(session.issue(),requireNotNull(app.contentResolver.openInputStream(uri)),16)
+        val input=AttachmentInputStream.open(session.issue(),AttachmentProviderStreams.input(app,uri,session.issue()),16)
         val result=AtomicReference<Throwable?>()
         val worker=Thread({try {input.read();error("Stalled input unexpectedly read data")}catch(t:Throwable){result.set(t)}},"security-input-worker")
         try {

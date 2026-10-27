@@ -24,3 +24,11 @@ F01修复提交0f7c88a2，F02 e358b0a8，F03 cdfe354f。本地18项针对性回�
 真实API26/27 push作业40461145091和PR作业40461203361均FAIL，不改写绿。API26 F01实际死亡及fresh PID恢复PASS（原始f01-verify.log在2470-original-api26.zip）；F02尚未建立真实COMMIT；F03/F04的DocumentsProvider未初始化，故相关漏洞动态判定NOT_RUN，不是漏洞被排除。API27因既有脚本拒绝27而NOT_RUN。已保留原始artifact12715230402 ZIP与失败日志。
 
 最小测试接线修正：按Android8 DocumentsProvider.attachInfo要求在测试APK声明exported/grantUriPermissions/MANAGE_DOCUMENTS；不改生产组件权限。F02使用既有可访问合成只读ContentProvider并统计opens，未伪造系统SAF grant；原真实DocumentsUI回归保留。加入27白名单和匹配Robolectric离线jar；192MiB ART预算、数据规模和失败断言保持。新-source原生结果待运行，F04仍POTENTIAL。
+
+## 第二轮真实管道证据（55c62f3e）
+
+API26/27的F01及F02进程死亡/恢复、实际COMMIT和只读核对均PASS，见55c-original-api26.zip及55c-original-api27.zip。F03仍FAIL：撤权1/2ms返回、关闭不在主线程、没有成功回执，但worker在provider释放前未退出。F04主线程close阻塞假设未复现（均1/2ms及时返回），同时证实读worker也不能依靠关闭PFD退出；整体保留POTENTIAL。完整原始失败和两份ZIP已保留。
+
+基于这些实际证据，新增有限SAF descriptor适配：单次open、O_NONBLOCK、50ms poll、既有cap检查；worker持有dup防关闭时FD编号复用；30s无进度拒绝，可靠pipe EOF仍检查provider错误。只调整传输，不重写加密/事务/格式，不放宽原worker退出/根事务断言。regular/FUSE或open本身不响应时仍不承诺通用终止。输入和输出都走相同实际边界，避免只测一个与生产不同的实验流。
+
+另保留UI隔离守卫原始失败：中性检查点存储放在ui包触犯原守卫；已移到application attachments层，守卫不改。后续相关JVM回归和AndroidTest编译PASS；既有4个Robolectric dialog跳过没有删改。新IO源码的原生/最终CI尚未PASS，不以55c低内存绿色替代。

@@ -1,3 +1,9 @@
+## MED-02 #132 真实管道证据后的有限IO修复 — 2026-10-27
+
+- 55c62f3e原生push40462163586/PR40462167902均FAIL。API26/27 F01和F02实际PID死亡/恢复/真实COMMIT+只读核对均PASS；原始两ZIP和log已保留。F03 revoke主线程仅1/2ms、close不在main，但worker未退出；F04 close同样1/2ms返回，读worker仍等待provider。故F04“主线程同步close阻塞”未复现，保留POTENTIAL；确证关闭PFD不能打断既有pipe IO。不能松动worker退出断言来绿。55c低内存library/Featherline均SUCCESS，不能代替新IO源码。
+- 新修复只在SAF descriptor边界加O_NONBLOCK+50ms poll+既有cap撤权检查；每次worker IO持有dup防FD编号复用，进度停滞30s拒绝。原件输入仍单次open/16MiB有界读取；可靠pipe EOF保留checkError。PNMEDBK2格式/加密/schema/quota/断言均不改。输出仍用原bounded off-main close；不重构通用AttachmentSession线程模型，阻塞open/regular/FUSE忽略NONBLOCK仍是残余风险。
+- 相关本地回归发现UI包禁止存储的原守卫失败（旧XML保留），已把中性检查点存储移到application attachments层；未改守卫。修正后相关suite通过（既有4个dialog skip保留），新IO针对性与app/core AndroidTest编译PASS。下一步推新源码，只验证同一原始真实pipe/PID断言，再固定最终SHA跑完整必需CI。PR仍Draft，不合并/启用/签名发布。
+
 ## MED-02 #132 原生首轮失败与针对性通过 — 2026-10-27
 
 - 唯一PR https://github.com/DevenirTwilight/HRT-Log/pull/132，Draft；pre-final2470ca2d，F01提交0f7c88a2、F02 e358b0a8、F03 cdfe354f。不能合并。

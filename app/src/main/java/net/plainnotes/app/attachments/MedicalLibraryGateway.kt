@@ -55,7 +55,7 @@ internal class RuntimeMedicalLibraryGateway(private val context:Context,private 
             require(uri.scheme=="content")
             committedReceipt=null
             val lease=acquire()
-            try {requireNotNull(context.contentResolver.openOutputStream(uri,"w")).use {lease.backend.export(lease.cap,password,it)}}finally {release(lease)}
+            try {AttachmentProviderStreams.output(context,uri,lease.cap).use {lease.backend.export(lease.cap,password,it)}}finally {release(lease)}
         }
     }finally {password.fill('\u0000')}
     override suspend fun prepare(uri:Uri,password:CharArray):MedicalLibraryGateway.Prepared=try {

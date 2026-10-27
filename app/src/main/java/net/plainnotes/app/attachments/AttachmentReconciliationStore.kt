@@ -1,4 +1,4 @@
-package net.plainnotes.app.attachments.ui
+package net.plainnotes.app.attachments
 
 import android.content.Context
 import net.plainnotes.app.data.LibraryRequestScope

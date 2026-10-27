@@ -72,7 +72,7 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
         val scratch=ByteArray(maximum)
         cap.ownBytes(scratch).use {
             var used=0
-            AttachmentInputStream.open(cap,requireNotNull(access.applicationContext.contentResolver.openInputStream(uri)),maximum.toLong()).use {input->
+            AttachmentInputStream.open(cap,AttachmentProviderStreams.input(access.applicationContext,uri,cap),maximum.toLong()).use {input->
                 while(used<scratch.size) {
                     permission();val n=input.read(scratch,used,scratch.size-used);if(n<0)break;used+=n
                 }
