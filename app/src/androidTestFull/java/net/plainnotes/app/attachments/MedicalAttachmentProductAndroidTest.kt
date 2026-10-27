@@ -77,6 +77,11 @@ class MedicalAttachmentProductAndroidTest {
     }
     private fun back() {androidx.test.espresso.Espresso.pressBack()}
     private fun labDetail(id:Long) {
+        // Library scope readiness precedes NotesViewModel's asynchronous committed
+        // medical snapshot. In particular a new post-restore Activity has not yet
+        // composed its result rows at that first boundary. Observe both, never sleep.
+        ui.waitUntil(30000) {!model.state.value.loading && model.extra.value.labs.any {it.id==id}}
+        ui.waitUntil(30000) {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty()}
         val row=ui.onNodeWithTag("lab-group-row:$id")
         row.performScrollTo()
         // The real Labs FAB overlaps the right side of a low visible row on 320dp.

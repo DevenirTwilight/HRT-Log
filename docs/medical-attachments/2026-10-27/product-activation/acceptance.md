@@ -180,3 +180,15 @@ Both original and restored LAB row entry use the same real hit-region helper.
 No unrelated Labs UI is redesigned. Compilation PASS, final native outcome pending.
 Four API security and Featherline512MiB passed a0; the 3e LMK remains a preserved
 failure and no memory-stability fix is claimed.
+
+## Post-restore snapshot readiness (test only)
+
+155 API29 completed visit and LAB real SAF/COMMIT/authenticated reads, exact unlink,
+formal PNMEDBK2 export/authentication/actual root COMMIT, old runtime rejection and
+a new MainActivity scope. Its immediate performScrollTo on restored row2 ran before
+the asynchronous committed medical snapshot was composed. Observe both non-loading
+snapshot containing that exact LAB and its actual semantic node (bounded30s), then
+perform the same real touch. Do not remove the subsequent original document UUID,
+authenticated preview or retained-unlink assertions. No production changes or sleeps.
+Native test compilation PASS; full exact-source result remains pending. Original
+failure and unmodified artifact SHA/XML retained under evidence/155043ff.

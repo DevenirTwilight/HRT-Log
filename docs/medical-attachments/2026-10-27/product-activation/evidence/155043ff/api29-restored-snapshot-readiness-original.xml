@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="1" failures="1" errors="0" skipped="0" time="21.757" timestamp="2026-10-27T14:04:29" hostname="localhost">
+  <testsuite name="net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest" tests="1" failures="1" errors="0" skipped="0" time="21.084" timestamp="2026-10-27T14:04:29" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 10" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="mainActivityVisitAndIndividualLabSafCommitReopenPreviewUnlinkAndTransfer" classname="net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest" time="21.084">
+      <failure>java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'lab-group-row:2')
+
+at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:81)
+at net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest.labDetail(MedicalAttachmentProductAndroidTest.kt:81)
+at net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest.mainActivityVisitAndIndividualLabSafCommitReopenPreviewUnlinkAndTransfer(MedicalAttachmentProductAndroidTest.kt:300)
+</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
