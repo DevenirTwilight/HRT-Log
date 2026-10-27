@@ -5,13 +5,13 @@ import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
 
-/** MED-02 attachment UI isolation (REQUIREMENTS §149): no release entry, no storage internals, honest wording. */
+/** MED-02 production entry isolation: only reviewed record hosts, no raw storage, honest wording. */
 class MedicalAttachmentUiGuardTest {
     private val main=File("src/main/java/net/plainnotes/app")
     private val ui=File(main,"attachments/ui")
 
     @Test fun onlyReviewedProductionHostsReferenceScopedUi() {
-        assertFalse(AttachmentFlowController.PUBLIC_ENTRY_ENABLED)
+        assertTrue(AttachmentFlowController.PUBLIC_ENTRY_ENABLED)
         val names=listOf("MedicalAttachmentsSection","MedicalAttachmentViewer","MedicalAttachmentsController","RuntimeAttachmentGateway","MedicalAttachmentGateway","medicalAttachmentsForRecord","MedicalAttachmentRecordPage","MedicalAttachmentRecordContent","MedicalLibraryTransferPage","MedicalLibraryTransferContent","MedicalLibraryTransferController")
         val reaching=main.walkTopDown().filter {it.isFile && it.extension=="kt" && !it.path.startsWith(ui.path)}
             .filter {f->val text=f.readText();names.any {it in text}}.map {it.path}.toList()

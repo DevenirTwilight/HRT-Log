@@ -28,9 +28,15 @@ CSV, PDF report and visit pack exports are plain files. You choose where to save
 
 - Encrypted with the password you choose: Argon2id (32 MiB memory, 3 passes, parallelism 1) derives a 256-bit key; AES-256-GCM encrypts the backup (format `PNBAK1`, structured record serialization 11).
 - Contains your structured records, including recycle-bin items until you purge them.
-- Does not contain private notes, Notes disguise text, settings or medical file attachments. The app does not store attachments: that feature is not available to users.
+- Does not contain private notes, Notes disguise text, settings or medical file attachments. A .pnbak backup alone is not sufficient to move medical file originals to another phone.
 - A forgotten backup password cannot be recovered.
-- A future complete medical backup (with attachments) would be a separate, newly reviewed format.
+
+## Medical files and complete medical backups
+
+- Medical attachments that you explicitly add to an existing visit or individual lab result are stored in the app's private storage as encrypted file objects, with the relationship and metadata recorded in the protected database.
+- The separate complete medical encrypted backup (.pnmedbk2, format PNMEDBK2) includes supported medical files and related records from the authorized collection. It is distinct from the ordinary .pnbak backup and requires the password you choose. Backup destinations are chosen in Android's system file picker and may belong to another app or cloud provider.
+- Internal previews require app authorization. PDF previews show only the first page on Android 9 and newer; on Android 8, a PDF may be saved and backed up but cannot be previewed in the app.
+- Removing a file's link to one record does not delete its encrypted contents, other links, or recover disk space. The current interface does not promise immediate permanent erasure of individual medical attachments. Backups already saved elsewhere are not revoked by removing a link.
 
 ## Imports
 
@@ -50,7 +56,7 @@ Disguise mode changes the launcher icon and name and hides the app behind a calc
 
 ## If the app changes
 
-If medical file storage, sync, sharing or advice features are ever added, this notice will be updated and reviewed before they are released, together with the regulatory assessment in [`docs/med-eu-privacy-readiness-v2.md`](docs/med-eu-privacy-readiness-v2.md). That document is an engineering condition matrix. It does not claim that GDPR, MDR, GPSR, CRA, EAA or EHDS are inapplicable.
+Medical file storage is included in this app. Future sync, sharing or advice features require an updated and reviewed notice before release, together with the regulatory assessment in [`docs/med-eu-privacy-readiness-v2.md`](docs/med-eu-privacy-readiness-v2.md). That document is an engineering condition matrix. It does not claim that GDPR, MDR, GPSR, CRA, EAA or EHDS are inapplicable.
 
 ## Contact
 

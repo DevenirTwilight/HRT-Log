@@ -4039,3 +4039,8 @@ On HEAD 63ad86b2, API26/29 native CI failed original lifecycle/collection tests:
 ## PR133 single-link management UI — 2026-10-27
 
 Production MedicalAttachmentRecordPage now offers explicit user confirmation before retracting a single current-record link. The existing scoped RuntimeAttachmentGateway/AttachmentFlowController/MedicalAttachmentOperations perform the transaction; list view hides retracted links; the controller represents possible post-commit uncertainty without replaying unlink. Ciphertext, document metadata, other relationships, backup content and storage budget remain intact. Added targeted native facade regression in previous commit. Pending fresh-source compile/CI, 4-language notices and final integration E2E; public entry still OFF at this checkpoint.
+
+
+## PR133 bounded production entry conversion — 2026-10-27
+
+The production-activation branch now sets AttachmentFlowController.PUBLIC_ENTRY_ENABLED=true after adding Room21 scoped activation, real visit/individual LAB + full medical-transfer routes, non-destructive exact-link retraction UI/transaction and four-locale privacy notice. This is SOURCE ENABLEMENT IN DRAFT PR, NOT a merged user installation or PUBLIC RELEASE. Preserved authenticating runtime/capability/dataset/epoch gates, existing backup protection, no INTERNET, and test/demo release isolation. PRIVACY.md and docs/privacy-evidence.md now distinguish ordinary PNBAK1 from full PNMEDBK2; unlink retains object/space. Required precise final HEAD compilation, native MainActivity SAF/backup recovery/E2E and security CI must pass before protected merge. F04 POTENTIAL, external audit NOT_REVIEWED_EXTERNALLY, physical/TalkBack/hard-power-loss NOT_RUN; no signed APK or public Release authorized.
