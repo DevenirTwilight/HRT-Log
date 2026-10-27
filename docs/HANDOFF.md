@@ -1,3 +1,23 @@
+## UI-10 医疗档案、医疗文件与化验详情重新设计（进行中）— 2026-10-27
+
+负责人任务书“UI-10：医疗档案、医疗文件库与化验详情全面重新设计”，REQUIREMENTS §157。分支 `feature/ui10-medical-redesign-20261027`，工作树 /home/user/wt-ui10，基于 main `019c805d`。设计、差异矩阵、验收分层：`docs/medical-attachments/2026-10-27/ui10/README.md`；与 MED-03 的接口合同和所有权：同目录 `INTERFACE_CONTRACT.md`；视觉证据（样图 | Before | After）：`docs/ui-audit/2026-10-27-ui10/`。
+
+- 已审阅原图 05/06/07/08 和 med02b6 原型 01/03/05/06/07/10/11；Before 在开工前用 main 的生产组件真实渲染并入库。
+- 生产代码（后端已具备的能力）：
+  - `ui/LabDetailPage.kt`（全屏结果页，取代 `LabDetailDialogWithAttachments`）；
+  - `attachments/ui/MedicalAttachmentsUi.kt`（相关文件区块、文件页）；
+  - `attachments/ui/MedicalAttachmentRecordPage.kt`（`rememberRecordFiles` 把授权/选择器收口为一条路径，就诊页、化验页、整页共用）；
+  - `ui/MedicalRecordsScreen.kt`（医疗记录 / 医疗文件两个区域、添加医疗文件先选明确记录）；
+  - `ui/VisitsScreen.kt`（就诊页内联相关文件）；
+  - `ui/ShellHosts.kt`、`AppShell.kt`（化验行直接打开结果页，保留所选区域）；
+  - 资源 `values*/ui10_redesign.xml`，并删除被取代的旧占位字符串。
+- 只有组件和合同（不接生产导航）：`attachments/ui/library/`（文件库、文件详情、文件优先导入、记录优先结果卡）。`MedicalAttachmentUiGuardTest` 新增守卫，生产文件不得引用。
+- 测试：`ui10/Ui10RedesignTest`（160）、`ui10/Ui10LibraryTest`（144）；改写了 MedicalCenterMatrix、AppShellBackNavigation、MedicalHome、MedicalAttachmentsUi、MedicalAttachmentUiGuard、LabUi03Home 中随新设计变化的断言（保留原来的负向断言）；真实 MainActivity 的 `MedicalAttachmentProductAndroidTest` 按新路径改写，**只能在 CI 的 API26/29/35 上验证**。
+- 未做：新建化验/就诊后直接添加文件（需要保存接口返回记录身份，已列入合同）；物理设备、人工 TalkBack（NOT_RUN）；独立外审（NOT_REVIEWED_EXTERNALLY）。
+- 下一步：本地全量 JVM + lint → 推送、开 PR、按 §106 自动合并；CI 失败按作业日志定位，不绕过检查。
+
+---
+
 ## 任务编号二次更正：撤销 UI-10 归类，改为 MED-02-EXPOSE（2026-10-27）
 
 负责人指出：**前后端接通并非新 UI 设计，不得占用 UI 系列任务编号**。核对 PR #135 的 diff 后确认，它只有现有附件/医疗备份的实际导航接线、现成入口卡片、过时占位清理、简单文案及测试，没有交付独立新 UI 方案。因此原先对其“UI-10 编号保留正确”的判断**撤销**；PR #135 正式按产品集成归入 **MED-02-EXPOSE**。**UI-10 当前空缺**，仅留给真正的新 UI/UX 设计任务。原定“UI-11 医疗附件管理闭环”仍更正为 MED-03 候选（未批准）。规则见 REQUIREMENTS §156，最新 BACKLOG 顶部。
