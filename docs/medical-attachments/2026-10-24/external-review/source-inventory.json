@@ -143,12 +143,12 @@
     "scripts/run_med02_security_restart.py": "e09cc9e76b075c59a1e83f8a35335c96eb1072d1d78f4611c4d51532393077f6",
     "scripts/run_med02_security_native.py": "7acb6605ae2abe9f842bc6c1b82a1083d784c1b70aeb9a26a30f5e727421d804",
     "app/src/main/java/net/plainnotes/app/attachments/AttachmentReconciliationStore.kt": "17844550ac512db86d138d977600c5fad4ab8fd78ef885fe857d85011e227551",
-    "core/data/src/main/java/net/plainnotes/app/data/AttachmentProviderStreams.kt": "632ddf601b597dcfec6606649ef8fb55623d67b423ea622ffe3e0e8e31a7b436"
+    "core/data/src/main/java/net/plainnotes/app/data/AttachmentProviderStreams.kt": "d515f98d89c240eefd5860c53867676f6776ab35f0341e41b3fcba8868cf581b"
   },
   "production_base_sha": "2a47be6a41cfdf79771dbc5e9d17a5d4ec7b1895",
   "acknowledgement_fix_base_sha": "70584c6f00ba167e77f2406e87d301b329db1acc",
   "baseline_sha": "9eb6d0f51db21e3629019c2757a5f35724d793a7",
-  "executable_sha": "dbac92c3",
+  "executable_sha": "dc58f4afa8462633e29ffdbd8ed7cb830b261f52",
   "security_fix_baseline_sha": "03f724f41e91a1a866d98de31de673594d1105af",
-  "validation_status": "PUBLIC_CHANNEL_TARGETED_NATIVE_NOT_RUN_FINAL_CI_PENDING"
+  "validation_status": "TARGETED_NATIVE_747ed6e2_FOUR_API_PASS_FINAL_EXACT_HEAD_CI_PENDING"
 }
