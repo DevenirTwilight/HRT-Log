@@ -37,4 +37,11 @@
     <string name="viewer_pdf_unsupported">PDF preview needs Android 9 or later. The file is still saved.</string>
     <string name="viewer_no_preview">This type of file can’t be previewed here. The file is still saved.</string>
     <string name="viewer_failed">This file couldn’t be displayed.</string>
+    <string name="attach_unlink_action">Remove link</string>
+    <string name="attach_unlink_title">Remove this link?</string>
+    <string name="attach_unlink_explain">Remove “%1$s” from this record? The stored file, any other links and its occupied space remain.</string>
+    <string name="attach_unlink_working">Removing this link…</string>
+    <string name="attach_unlink_done">The link was removed. The stored file remains.</string>
+    <string name="attach_unlink_list_stale">The link was removed, but the list could not be updated.</string>
+    <string name="attach_unlink_unknown">The outcome is unclear. Reopen this record to check; do not repeat the action yet.</string>
 </resources>
