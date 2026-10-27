@@ -1560,3 +1560,8 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 ### 154.A 最终产品验收与合并（2026-10-27）
 
 负责人要求继续既有#133，保留PUBLIC_ENTRY_ENABLED=true及已批准Room21/正式导航/单条解除/四语隐私代码，先实时定位CI具体失败，再做必要的真实MainActivity→SAF→确认→COMMIT→重开→认证查看与LAB整数身份隔离、完整PNMEDBK2/retained/恢复回滚验收。只修真实阻断及过时断言，保留负向/UNKNOWN/资源归属守卫，不重写密码学、Schema、配额、P4或UI系统。最终精确SHA必需CI、安全/受影响原生及低内存验收通过、无冲突或未解决审查后，按106普通受保护Ready/合并并查主线；不以还可多测试无限拖延。可以准备未签名Release候选，不创建公开tag/Release、不签名或交付APK、不永久删除密文/key。F04仍POTENTIAL，NOT_REVIEWED_EXTERNALLY如实保留；真机/人工TalkBack/硬断电无证据仍NOT_RUN。手机实际使用必须安装更新后的APK。
+
+
+## 155. UI-10 已实现模块正式接线（2026-10-27）
+
+负责人授权从 #134 最新主线修正过时占位和导航：医疗中心提供按具体就诊、单项 LAB 管理附件以及完整 PNMEDBK2 备份入口；复用唯一生产 runtime / controller / gateway 和当前记录身份，返回原页面。原生备份 PNBAK1 与完整备份保持独立。统一全库文件浏览、医生独立档案、独立分类摘要/任意文件导出继续未实现；药品中心 RCP/Notice/安全/短缺/监管五项继续 OFF，BDPM 仅身份及包装搜索，不宣称正文可用。四语说明与真实能力一致；不改 Room21、密码学、配额、PK、库存或签名交付发布。仅针对导航/资源及受影响真实 MainActivity 路径验证，复用既有安全证据，最终精确 HEAD CI 满足 §106 后正常保护合并。

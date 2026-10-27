@@ -1,0 +1,8 @@
+{
+  "source": "1439b49af57e34f5ef2eefdabc17fe7e846e87e4",
+  "run": 40557152041,
+  "job": 122376148218,
+  "artifact": 12757863703,
+  "artifact_sha256": "5e4723a10eb5f0aefdae518adb099e13a35d584017a5b1011a16feee79d6455e",
+  "failure": "Original test expected Menu while hub-owned visit route correctly exposes medical-center-back. Geometry assertion retained for that actual Back control. API26 push job122375990485 independently has the same line276 failure."
+}

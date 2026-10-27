@@ -225,7 +225,7 @@ class InAppNavigationLockAndroidTest {
         instrumentation.addMonitor(monitor)
         try {
             launch(); unlock(); open(Destination.MEDICAL)
-            listOf("files", "originals", "practitioners", "visit-links", "lab-links", "organize").forEach { suffix ->
+            listOf("files", "practitioners", "organize").forEach { suffix ->
                 val tag = "medical-future-$suffix"
                 ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag(tag))
                 ui.onNodeWithTag(tag).performClick()
@@ -254,8 +254,8 @@ class InAppNavigationLockAndroidTest {
                 ui.onNodeWithTag("drug-center-window").assertExists()
                 assertUnlocked("Back from $tag")
             }
-            ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-browse"))
-            ui.onNodeWithTag("drug-center-browse").performClick()
+            ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-catalogue"))
+            ui.onNodeWithTag("drug-center-catalogue").performClick()
             ui.onNodeWithTag("reference-screen").assertExists()
             back("reference-window")
             ui.onNodeWithTag("reference-window").assertDoesNotExist()

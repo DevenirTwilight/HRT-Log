@@ -124,7 +124,7 @@ class AppShellBackNavigationTest {
 
     @Test fun medicalCenterOpensRealVisitsAndReturnsWithoutCreatingRecords() {
         show(); open(Destination.MEDICAL)
-        for(tag in listOf("medical-center-visits","medical-center-prepare","medical-center-pack")) {
+        for(tag in listOf("medical-center-visits","medical-center-prepare","medical-center-pack","medical-visit-attachments")) {
             ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag(tag))
             ui.onNodeWithTag(tag).performClick();ui.waitForIdle()
             ui.onNodeWithText(context.getString(R.string.visits_empty)).assertExists()
@@ -136,12 +136,26 @@ class AppShellBackNavigationTest {
         back();assertCalendar()
     }
 
+    @Test fun medicalCenterOpensExistingCompleteBackupAndReturns() {
+        show();open(Destination.MEDICAL)
+        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-complete-backup"))
+        ui.onNodeWithTag("medical-complete-backup").performClick()
+        ui.onNodeWithText(context.getString(R.string.med_transfer_scope)).assertExists()
+        // The focused Dialog has its own window; dispatch Back there, not directly to
+        // the underlying Activity dispatcher used for the top-level-page tests.
+        ui.runOnUiThread {org.robolectric.shadows.ShadowDialog.getShownDialogs().last {it.isShowing}.onBackPressed()}
+        ui.waitForIdle()
+        ui.onNodeWithTag("medical-list").assertExists()
+        assertTrue(runBlocking {db.dao().appointments().isEmpty()})
+        assertTrue(runBlocking {db.dao().labs().isEmpty()})
+    }
+
     @Test fun medicalFutureModulesKeepExistingDataAndBackOrigin() {
         runBlocking {repo.appointment(AppointmentEntity(at_utc=Instant.now().plusSeconds(86400).toEpochMilli(),at_zone="UTC",type="CHECKUP",practitioner="Synthetic future-module audit",remind_minutes_before=0))}
         val before=runBlocking{db.dao().appointments()}
         model.sync();show();open(Destination.MEDICAL)
         val intents=org.robolectric.Shadows.shadowOf(context)
-        for(tag in listOf("medical-future-files","medical-future-originals","medical-future-practitioners","medical-future-visit-links","medical-future-lab-links","medical-future-organize")) {
+        for(tag in listOf("medical-future-files","medical-future-practitioners","medical-future-organize")) {
             ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag(tag))
             ui.onNodeWithTag(tag).performClick()
             ui.onNodeWithTag("center-unavailable-dialog").assertExists()

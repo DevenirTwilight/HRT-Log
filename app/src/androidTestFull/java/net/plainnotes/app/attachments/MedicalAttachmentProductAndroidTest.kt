@@ -55,6 +55,12 @@ class MedicalAttachmentProductAndroidTest {
         ui.waitUntil(30000) {model.librarySession.value is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready}
     }
     private fun open(destination:Destination) {
+        // Return through the real hub-owned detail/list navigation before using the drawer.
+        repeat(2) {
+            if(ui.onAllNodesWithTag("medical-center-back").fetchSemanticsNodes().isNotEmpty()) {
+                ui.onNodeWithTag("medical-center-back").performClick();ui.waitForIdle()
+            }
+        }
         ui.onNodeWithContentDescription(text(R.string.menu)).performClick()
         ui.onNodeWithTag("drawer-content").performScrollToNode(hasText(text(destination.title)))
         ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(text(destination.title))).performClick()
@@ -71,7 +77,9 @@ class MedicalAttachmentProductAndroidTest {
     private fun tag(value:String)=press(hasTestTag(value))
     private fun button(id:Int)=press(hasText(text(id)))
     private fun visit() {
-        open(Destination.VISITS)
+        open(Destination.MEDICAL)
+        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-visit-attachments"))
+        tag("medical-visit-attachments")
         press(hasText("SYNTHETIC product clinician",substring=true))
         button(R.string.attach_section)
     }
@@ -265,8 +273,8 @@ class MedicalAttachmentProductAndroidTest {
         press(hasContentDescription(label))
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
         val closeBounds=ui.onNodeWithTag("attachment-viewer-close").fetchSemanticsNode().boundsInRoot
-        val menuBounds=ui.onNodeWithContentDescription(text(R.string.menu)).fetchSemanticsNode().boundsInRoot
-        assertTrue("Preview close must be below the real shell app bar, not covered by its menu",closeBounds.top>=menuBounds.bottom)
+        val navigationBounds=ui.onNodeWithTag("medical-center-back").assertExists().fetchSemanticsNode().boundsInRoot
+        assertTrue("Preview close must be below the real shell app bar, not covered by its Back button",closeBounds.top>=navigationBounds.bottom)
         tag("attachment-viewer-close")
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment-viewer").fetchSemanticsNodes().isEmpty()}
         // A retained uncertain result is resolved only by the visible, read-only action.
@@ -280,7 +288,9 @@ class MedicalAttachmentProductAndroidTest {
         tag("attachments-unlink-confirm")
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
         runBlocking {model.libraryRuntime.attachments(visit,"SYNTHETIC unlinked").use {assertTrue(it.documents().isEmpty())}}
-        back();open(Destination.LABS)
+        back();open(Destination.MEDICAL)
+        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-labs"))
+        tag("medical-labs")
         labDetail(lab.id)
         ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
         add("SYNTHETIC production lab")
@@ -296,6 +306,14 @@ class MedicalAttachmentProductAndroidTest {
             scenario!!.onActivity {focused=it.hasWindowFocus()}
             focused
         }
+        open(Destination.MEDICAL)
+        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-complete-backup"))
+        tag("medical-complete-backup")
+        ui.onNodeWithText(text(R.string.med_transfer_scope)).assertExists()
+        back()
+        ui.waitUntil(30000) {ui.onAllNodesWithText(text(R.string.med_transfer_scope)).fetchSemanticsNodes().isEmpty()}
+        ui.waitUntil(30000) {var focused=false;scenario!!.onActivity {focused=it.hasWindowFocus()};focused}
+        ui.onNodeWithTag("medical-list").assertExists()
         open(Destination.SETTINGS)
         button(R.string.settings_data_backup)
         button(R.string.med_transfer_title)

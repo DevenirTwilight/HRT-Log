@@ -30,23 +30,23 @@ class MedicalCenterMatrixTest(private val locale:String,private val width:Int,pr
         val height=if(width==320)640 else 891
         RuntimeEnvironment.setQualifiers("$locale-w${if(landscape)height else width}dp-h${if(landscape)width else height}dp-${if(landscape)"land" else "port"}-xxhdpi");RuntimeEnvironment.setFontScale(font)
         var contrast by mutableStateOf(Contrast.STANDARD)
-        var visits=0;var labs=0;var timeline=0
+        var visits=0;var labs=0;var timeline=0;var backups=0
         ui.setContent {NotesTheme(if(dark)ThemeMode.DARK else ThemeMode.LIGHT,contrast=contrast) {
             androidx.compose.material3.Scaffold { padding ->
-                MedicalRecordsScreen(emptyList(),{}, {},{labs++},{timeline++},{},padding,onVisits={visits++})
+                MedicalRecordsScreen(emptyList(),{}, {},{labs++},{timeline++},{},padding,onVisits={visits++},onMedicalBackup={backups++})
             }
         }}
         for(mode in Contrast.entries) {
             ui.runOnIdle{contrast=mode}
             val list=ui.onNodeWithTag("medical-list")
-            for(tag in listOf("medical-center-visits","medical-center-prepare","medical-center-pack")) {
+            for(tag in listOf("medical-center-visits","medical-center-prepare","medical-center-pack","medical-visit-attachments")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
             }
-            for(tag in listOf("medical-labs","medical-history")) {
+            for(tag in listOf("medical-labs","medical-history","medical-complete-backup")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
             }
             list.performScrollToNode(hasTestTag("medical-bin"));ui.onNodeWithTag("medical-bin").assertIsDisplayed()
-            for(tag in listOf("medical-future-files","medical-future-originals","medical-future-practitioners","medical-future-visit-links","medical-future-lab-links","medical-future-organize")) {
+            for(tag in listOf("medical-future-files","medical-future-practitioners","medical-future-organize")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
                 ui.onNodeWithTag("center-unavailable-dialog").assertExists()
                 ui.onNodeWithTag("center-unavailable-close").assertIsDisplayed().performClick()
@@ -62,7 +62,7 @@ class MedicalCenterMatrixTest(private val locale:String,private val width:Int,pr
                 File(folder,"${locale}_${width}dp_${font}x_${if(dark)"dark" else "light"}_${mode.name}.png").outputStream().use{image.compress(Bitmap.CompressFormat.PNG,100,it)}
             }
         }
-        assertEquals(9,visits);assertEquals(3,labs);assertEquals(3,timeline)
+        assertEquals(12,visits);assertEquals(3,labs);assertEquals(3,timeline);assertEquals(3,backups)
         ui.onAllNodesWithTag("attachment-add").assertCountEquals(0)
     }
 }

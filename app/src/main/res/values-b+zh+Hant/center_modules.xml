@@ -5,14 +5,14 @@
     <string name="center_fr_catalogue_reason">官方資料分發仍待來源與再利用許可審核。</string>
     <string name="center_shortages">藥品短缺資訊</string>
     <string name="center_recalls">召回及監管公告</string>
-    <string name="center_med_files">醫療文件庫</string>
+    <string name="center_med_files">統一醫療檔案瀏覽</string>
     <string name="center_med_originals">PDF、圖片、處方及病歷原件</string>
     <string name="center_med_practitioners">醫生與醫療機構獨立檔案</string>
     <string name="center_med_visit_links">文件與就診記錄關聯</string>
     <string name="center_med_lab_links">文件與化驗記錄關聯</string>
-    <string name="center_med_organize">醫療資料整理、摘要與匯出</string>
-    <string name="center_med_files_reason">原件匯入與儲存仍待安全驗收；此處不會選取或儲存文件。</string>
+    <string name="center_med_organize">檔案分類、摘要與單檔匯出</string>
+    <string name="center_med_files_reason">就診和單項化驗內已可管理附件，獨立的全庫檔案瀏覽器尚未實作。</string>
     <string name="center_med_practitioners_reason">獨立檔案尚未實作；既有醫生與機構資訊仍可在就診記錄中查看和編輯。</string>
-    <string name="center_med_links_reason">文件關聯尚未實作，不根據日期自動推斷關聯。</string>
-    <string name="center_med_organize_reason">文件整理尚未實作；既有就診資料包 PDF 仍可從就診詳情匯出。</string>
+    <string name="center_med_links_reason">選擇具體就診或單項化驗，再開啟「附件」新增或查看加密檔案。支援 JPEG/PNG 預覽；Android 9 以上支援 PDF 第一頁預覽。Android 8 可儲存與備份 PDF，不提供內建預覽。</string>
+    <string name="center_med_organize_reason">獨立檔案整理、摘要和任意檔案匯出尚未實作。就診內可匯出資料包 PDF；上方可進入完整加密醫療備份。</string>
 </resources>

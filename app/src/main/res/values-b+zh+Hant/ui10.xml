@@ -1,0 +1,6 @@
+<resources>
+    <string name="ui10_attachments">醫療附件</string>
+    <string name="ui10_visit_attachments">就診附件</string>
+    <string name="ui10_lab_attachments">單項化驗附件</string>
+    <string name="ui10_attachment_scope">選擇具體就診或單項化驗，再開啟「附件」新增或查看加密檔案。支援 JPEG/PNG 預覽；Android 9 以上支援 PDF 第一頁預覽。Android 8 可儲存與備份 PDF，不提供內建預覽。</string>
+</resources>

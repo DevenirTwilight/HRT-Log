@@ -1,0 +1,6 @@
+<resources>
+    <string name="ui10_attachments">Pièces jointes médicales</string>
+    <string name="ui10_visit_attachments">Pièces jointes des consultations</string>
+    <string name="ui10_lab_attachments">Pièces jointes des résultats biologiques</string>
+    <string name="ui10_attachment_scope">Choisissez une consultation ou un résultat individuel, puis ouvrez les pièces jointes pour ajouter ou consulter les fichiers chiffrés. Aperçu JPEG/PNG et première page PDF sous Android 9 ou ultérieur. Sous Android 8, les PDF peuvent être enregistrés et sauvegardés sans aperçu intégré.</string>
+</resources>

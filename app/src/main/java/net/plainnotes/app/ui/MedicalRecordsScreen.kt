@@ -34,14 +34,14 @@ import java.time.*
 
 /**
  * A view over existing records, never a second clinical store or an inferred visit/lab association (§87: closeness in
- * time is never shown as a link). Original-file actions remain OFF; visible future modules only explain their status. [onConfirm] is wired to the same existing write the
+ * time is never shown as a link). Attachments are managed through explicit visit / individual LAB targets; future modules only explain their status. [onConfirm] is wired to the same existing write the
  * visit detail's "Confirm the visit took place" uses in the medical archive (saveMedicalVisit → completed_utc, with its
  * stale-record check); it is undone with "Retract" in that detail.
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable fun MedicalRecordsScreen(appointments:List<AppointmentEntity>,onVisit:(AppointmentEntity)->Unit,onAdd:()->Unit,
     onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,contentPadding:PaddingValues,onConfirm:(AppointmentEntity)->Unit={onVisit(it)},
-    questionCounts:Map<Long,Int> = emptyMap(),now:Instant=Instant.now(),onVisits:(()->Unit)?=null) {
+    questionCounts:Map<Long,Int> = emptyMap(),now:Instant=Instant.now(),onVisits:(()->Unit)?=null,onMedicalBackup:(()->Unit)?=null) {
     val past=MedicalRecordIndex.past(appointments,now)
     val confirmed=past.filter{it.completed_utc!=null}
     val unconfirmed=past.filter{it.completed_utc==null}
@@ -75,15 +75,20 @@ import java.time.*
         }
         item("related") { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
             MedicalHeading(stringResource(R.string.medical_related))
-            RelatedCard(Icons.Outlined.Science,stringResource(R.string.labs),"medical-labs",onLabs)
             RelatedCard(Icons.Outlined.Timeline,stringResource(R.string.medical_timeline),"medical-history",onHistory)
+        } }
+        item("attachments-heading") {MedicalHeading(stringResource(R.string.ui10_attachments))}
+        item("attachments-scope") {Text(stringResource(R.string.ui10_attachment_scope))}
+        onVisits?.let { visits -> item("visit-attachments") {
+            RelatedCard(Icons.Outlined.Description,stringResource(R.string.ui10_visit_attachments),"medical-visit-attachments",visits)
+        } }
+        item("lab-attachments") {RelatedCard(Icons.Outlined.Science,stringResource(R.string.ui10_lab_attachments),"medical-labs",onLabs)}
+        onMedicalBackup?.let { backup -> item("medical-backup") {
+            RelatedCard(Icons.Outlined.Description,stringResource(R.string.med_transfer_title),"medical-complete-backup",backup)
         } }
         item("future-heading") {MedicalHeading(stringResource(R.string.center_future_modules))}
         item("future-files") {UnavailableModuleCard(R.string.center_med_files,R.string.center_med_files_reason,"medical-future-files")}
-        item("future-originals") {UnavailableModuleCard(R.string.center_med_originals,R.string.center_med_files_reason,"medical-future-originals")}
         item("future-practitioners") {UnavailableModuleCard(R.string.center_med_practitioners,R.string.center_med_practitioners_reason,"medical-future-practitioners")}
-        item("future-visit-links") {UnavailableModuleCard(R.string.center_med_visit_links,R.string.center_med_links_reason,"medical-future-visit-links")}
-        item("future-lab-links") {UnavailableModuleCard(R.string.center_med_lab_links,R.string.center_med_links_reason,"medical-future-lab-links")}
         item("future-organize") {UnavailableModuleCard(R.string.center_med_organize,R.string.center_med_organize_reason,"medical-future-organize")}
         item("bin") { TextButton(onClick=onTrash,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("medical-bin")){Text(stringResource(R.string.medical_bin))} }
     }
