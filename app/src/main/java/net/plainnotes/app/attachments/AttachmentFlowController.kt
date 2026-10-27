@@ -102,6 +102,7 @@ internal class AttachmentFlowController(
     }
     suspend fun activate()=session.issue().let {cap->try {permission();check(!closed.get());backend.activate(cap)}finally {cap.close()}}
     suspend fun documents()=session.issue().let {cap->try {permission();backend.documents(cap,request.target)}finally {cap.close()}}
+    suspend fun unlink(document:UUID)=session.issue().let {cap->try {permission();check(!closed.get());backend.unlink(cap,request.target,document)}finally {cap.close()}}
     suspend fun open(document:UUID):MedicalAttachmentOperations.Read {
         permission();check(!closed.get());val cap=session.issue()
         try {

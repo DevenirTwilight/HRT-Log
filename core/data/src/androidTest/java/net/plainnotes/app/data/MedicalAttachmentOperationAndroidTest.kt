@@ -58,6 +58,30 @@ class MedicalAttachmentOperationAndroidTest {
             }finally {cap.close()}
         }
     }
+    @Test fun explicitUnlinkRetainsCiphertextAndOtherAttachments()=runBlocking {
+        LibraryRestoreAndroidTest.RootFixture(app).use {f->
+            val repo=NotesRepository(f.access).forGeneration(scope(f)).pinnedTo(Space.PRIMARY)
+            val service=repo.medicalAttachments()
+            val target=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,2)
+            val cap=f.session.issue()
+            try {
+                val first=MedicalAttachmentOperations.Import(UUID.randomUUID(),UUID.randomUUID(),target,"SYNTHETIC unlink first")
+                val second=MedicalAttachmentOperations.Import(UUID.randomUUID(),UUID.randomUUID(),target,"SYNTHETIC unlink second")
+                service.import(cap,first,uri("unknown"))
+                service.import(cap,second,uri("unknown"))
+                assertEquals(2,service.documents(cap,target).size)
+                assertTrue(service.unlink(cap,target,first.document))
+                assertFalse(service.unlink(cap,target,first.document))
+                assertEquals(listOf(second.document),service.documents(cap,target).map {it.document})
+                reject {runBlocking {service.open(cap,target,first.document)}}
+                val opened=service.open(cap,target,second.document);opened.close()
+                f.raw.query("SELECT state FROM attachment_document WHERE document_uuid=?",arrayOf(first.document.toString()))
+                    .use {assertTrue(it.moveToFirst());assertEquals("ACTIVE",it.getString(0))}
+                f.raw.query("SELECT state FROM attachment_link WHERE document_uuid=?",arrayOf(first.document.toString()))
+                    .use {assertTrue(it.moveToFirst());assertEquals("RETRACTED",it.getString(0))}
+            }finally {cap.close()}
+        }
+    }
     @Test fun hostileInputCapacityUnknownAndLostAuthorityRefuseWithoutFalseCommit()=runBlocking {
         LibraryRestoreAndroidTest.RootFixture(app).use {f->
             val target=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,2)

@@ -25,6 +25,8 @@ internal interface MedicalAttachmentGateway {
     fun resolved(operation:UUID,document:UUID) {}
     val target:MedicalAttachmentOperations.Target
     suspend fun documents():List<MedicalAttachmentOperations.Document>
+    /** Removes one explicit association without deleting the underlying medical document. */
+    suspend fun unlink(document:UUID):Boolean = error("Unlink unavailable for this gateway")
     /** The system picker for one transient document; choosing creates no operation. */
     suspend fun pickerIntent():Intent
     /** Opens an authenticated preview; the returned object owns the reader and must be closed. */
@@ -66,6 +68,7 @@ internal class RuntimeAttachmentGateway(private val context:Context,private val 
         try {if(AttachmentFlowController.PUBLIC_ENTRY_ENABLED)flow.activate()}catch(t:Throwable) {flow.close();throw t}
     }
     override suspend fun documents()=browse().use {it.documents()}
+    override suspend fun unlink(document:UUID)=browse().use {it.unlink(document)}
     override suspend fun pickerIntent()=browse().use {it.pickerIntent()}
     override suspend fun preview(document:UUID):MedicalAttachmentGateway.Preview {
         val flow=browse()

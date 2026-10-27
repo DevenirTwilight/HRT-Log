@@ -131,11 +131,32 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
                 JOIN attachment_link l ON l.store_uuid=r.store_uuid AND l.record_epoch=r.record_epoch AND l.record_uuid=r.record_uuid
                 JOIN attachment_document d ON d.store_uuid=l.store_uuid AND d.document_uuid=l.document_uuid
                 JOIN attachment_version v ON v.store_uuid=d.store_uuid AND v.document_uuid=d.document_uuid AND v.version_uuid=d.active_version_uuid
-                WHERE r.store_uuid=? AND r.record_epoch=? AND r.target_kind=? AND r.legacy_id=? AND r.state='ACTIVE' ORDER BY d.document_uuid""",arrayOf(s.dataset,s.epoch,target.kind.name,target.id)).use {c->
+                WHERE r.store_uuid=? AND r.record_epoch=? AND r.target_kind=? AND r.legacy_id=? AND r.state='ACTIVE' AND l.state='ACTIVE' AND d.state='ACTIVE' ORDER BY d.document_uuid""",arrayOf(s.dataset,s.epoch,target.kind.name,target.id)).use {c->
                 buildList {while(c.moveToNext()) {permission();add(Document(UUID.fromString(c.getString(0)),c.getLong(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5)))}}
             }
         }
     }
+
+    /** Retract one exact association; retain all ciphertext, keys, quota and other links. */
+    suspend fun unlink(cap:AttachmentSession.Capability,target:Target,document:UUID):Boolean=work(cap) {db,s->
+        AttachmentTransaction.commit(db,s,cap) {
+            permission()
+            val raw=db.openHelper.writableDatabase
+            val link=raw.query("""SELECT l.link_uuid FROM attachment_record_identity r
+                JOIN attachment_link l ON l.store_uuid=r.store_uuid AND l.record_epoch=r.record_epoch AND l.record_uuid=r.record_uuid
+                JOIN attachment_document d ON d.store_uuid=l.store_uuid AND d.document_uuid=l.document_uuid
+                WHERE r.store_uuid=? AND r.record_epoch=? AND r.target_kind=? AND r.legacy_id=? AND r.state='ACTIVE'
+                  AND l.document_uuid=? AND l.state='ACTIVE' AND d.state='ACTIVE'""",
+                arrayOf(s.dataset,s.epoch,target.kind.name,target.id,document.toString())).use {c->
+                if(!c.moveToFirst())null else c.getString(0).also {check(!c.moveToNext()) {"Ambiguous attachment relationship"}}
+            } ?: return@commit false
+            val update=raw.compileStatement("UPDATE attachment_link SET state='RETRACTED',revision=revision+1 WHERE store_uuid=? AND record_epoch=? AND link_uuid=? AND state='ACTIVE'")
+            update.bindString(1,s.dataset);update.bindString(2,s.epoch);update.bindString(3,link)
+            check(update.executeUpdateDelete()==1) {"Attachment relationship changed during unlink"}
+            true
+        }
+    }
+
     suspend fun open(cap:AttachmentSession.Capability,target:Target,document:UUID):Read=work(cap) {db,s->
         val owner=cap.fork()
         try {
