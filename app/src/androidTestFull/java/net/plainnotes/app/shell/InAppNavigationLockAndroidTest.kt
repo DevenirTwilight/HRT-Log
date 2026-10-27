@@ -225,16 +225,18 @@ class InAppNavigationLockAndroidTest {
         instrumentation.addMonitor(monitor)
         try {
             launch(); unlock(); open(Destination.MEDICAL)
-            listOf("files", "practitioners", "organize").forEach { suffix ->
-                val tag = "medical-future-$suffix"
-                ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag(tag))
-                ui.onNodeWithTag(tag).performClick()
-                ui.onNodeWithTag("center-unavailable-dialog").assertExists()
-                back("center-unavailable-dialog")
-                ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
-                ui.onNodeWithTag("medical-list").assertExists()
-                assertUnlocked("Back from $tag")
-            }
+            // UI-10: the three "not open" cards became one explanatory card in the Files area (no dialog). The real dialog window
+            // of that area is the "Add medical file" record chooser: Back dismisses only it, nothing launches, the session stays unlocked.
+            ui.onNodeWithTag("medical-tab:files").performClick()
+            ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-files-soon"))
+            ui.onNodeWithTag("medical-files-soon").assertExists()
+            ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-add-file"))
+            ui.onNodeWithTag("medical-add-file").performClick()
+            ui.onNodeWithTag("file-target-dialog").assertExists()
+            back("file-target-dialog")
+            ui.onNodeWithTag("file-target-dialog").assertDoesNotExist()
+            ui.onNodeWithTag("medical-list").assertExists()
+            assertUnlocked("Back from the add-file record chooser")
             open(Destination.MEDICATIONS)
             ui.onNodeWithTag("drug-center-open").performClick()
             ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-catalogue"))
