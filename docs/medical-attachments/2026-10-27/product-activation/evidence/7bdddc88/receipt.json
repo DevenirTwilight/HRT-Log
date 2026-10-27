@@ -115,8 +115,16 @@
     "security": 40524889000,
     "science": 40524888999
   },
-  "mainlineCi": "PENDING",
+  "mainlineCi": "FAIL_API35_TEST_BACK_FOCUS;OTHER_JOBS_RUNNING",
   "prAndroidResult": "SUCCESS",
   "mainlineScience": "SUCCESS",
-  "mainlineSecurity": "SUCCESS_ALL_API26_27_29_35"
+  "mainlineSecurity": "SUCCESS_ALL_API26_27_29_35",
+  "mainlineApi35Failure": {
+    "job": 122261639387,
+    "artifact": 12744551531,
+    "sha256": "22ced7670a96835b747b19c6117da5ef79d77edfcb4b34793de99efa44402acf",
+    "zipCrc": "PASS",
+    "failure": "Espresso RootViewWithoutFocusException at back helper78/call285 after actual visit/LAB confirmed commits; original failure retained",
+    "followup": "test-only real BACK input + observable window transition; production unchanged"
+  }
 }

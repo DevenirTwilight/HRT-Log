@@ -4,7 +4,7 @@
 
 API26/29/35真实MainActivity→就诊/单项LAB→DocumentsUI→确认→COMMIT→重进→认证预览→指定单条解除→PNMEDBK2实际网关恢复→新Activity认证读取均PASS；备份选择器控件全程未实测，不冒充。Room20→21现有guard迁移/多库/旧scope及负向已验。MED02512MiB完整作业及fresh C、12处强停重启PASS，四API安全PASS。独立非保护Featherline512MiB真实LMK仍FAIL，未定位分配根因，未改标通过/重跑挑绿；不宣称整个App所有低内存路径合格。此风险已在合并前PR公开保留。
 
-主线自动CI：Science40524888999及安全40524889000的26/27/29/35四作业已SUCCESS；Android40524889046仍PENDING，继续只复核这些，不再触发新原生轮次或开发阶段。证据、原件、逐项范围及状态见本分支docs/medical-attachments/2026-10-27/product-activation/evidence/7bdddc88/receipt.json。本分支仅文档不是应用源，不合入产品、不用于构建；生产和合并SHA在上。签名/交付APK/tag/Release/永久删除均未执行。NOT_REVIEWED_EXTERNALLY、F04 POTENTIAL；真机/人工TalkBack/硬断电NOT_RUN。用户手机必须更新APK。下一步等待已运行主线CI、记录准确结果，结束本阶段，不开D/E/F或其它PR。
+主线自动CI：Science40524888999及安全40524889000的26/27/29/35四作业已SUCCESS；Android40524889046的API35实际FAIL：新全链测试连续Espresso.pressBack选择无焦点Activity，line78/285；其余作业运行中。原件保存merged-api35-back-focus-failure.xml。只建窄测试修复分支fix/med02-native-back-dispatch-20261027，用真实BACK与可观察关闭同步，不改生产代码/安全断言，不将旧失败重标通过，继续只复核这些，不再触发新原生轮次或开发阶段。证据、原件、逐项范围及状态见本分支docs/medical-attachments/2026-10-27/product-activation/evidence/7bdddc88/receipt.json。本分支仅文档不是应用源，不合入产品、不用于构建；生产和合并SHA在上。签名/交付APK/tag/Release/永久删除均未执行。NOT_REVIEWED_EXTERNALLY、F04 POTENTIAL；真机/人工TalkBack/硬断电NOT_RUN。用户手机必须更新APK。下一步等待已运行主线CI、记录准确结果，结束本阶段，不开D/E/F或其它PR。
 
 ## PR133 最终验收实时证据（2026-10-27）
 
