@@ -116,6 +116,8 @@ import java.time.Instant
     var editing by mutableStateOf(false)
     var edit by mutableStateOf<AppointmentEntity?>(null)
     var lab by mutableStateOf<Long?>(null)
+    // Transient destination intent, always an individual LabValue ID, never a panel ID.
+    var labAttachmentTarget by mutableStateOf<Long?>(null)
 }
 
 @Composable internal fun MedicalVisitEditor(m: MedicalDialogs, model: NotesViewModel, save: net.plainnotes.app.medical.MedicalVisitSaveState) {
@@ -125,7 +127,8 @@ import java.time.Instant
 @Composable internal fun MedicalLabDetail(m: MedicalDialogs, l: LabDialogs, extra: NotesViewModel.ExtraState, model:NotesViewModel) {
     m.lab?.let {id->
         extra.labs.firstOrNull {it.id==id}?.let {v->
-            var attachments by remember(id) {mutableStateOf(false)}
+            var attachments by remember(id) {mutableStateOf(m.labAttachmentTarget==id)}
+            DisposableEffect(id) {onDispose {if(m.labAttachmentTarget==id)m.labAttachmentTarget=null}}
             if(attachments && net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) {
                 androidx.compose.ui.window.Dialog(onDismissRequest={attachments=false},properties=androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth=false)) {
                     Surface(Modifier.fillMaxSize()) {

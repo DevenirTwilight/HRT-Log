@@ -254,7 +254,7 @@ class UiPrefs(context: Context) {
                     content = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                         { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,selector,m2Only=true) })
                 Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labDialogs.labEdit = it; labDialogs.labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)},
-                    extra.labPanels,{labDialogs.panel=it.id},{labDialogs.saveAs=it},onAttachments=if(net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) ({medicalDialogs.lab=it.id}) else null)
+                    extra.labPanels,{labDialogs.panel=it.id},{labDialogs.saveAs=it},onAttachments=if(net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) ({medicalDialogs.labAttachmentTarget=it.id;medicalDialogs.lab=it.id}) else null)
                 Destination.SETTINGS -> {
                     val lockOn = remember(settingsPage) { net.plainnotes.app.security.AppLock(context).enabled }
                     val backup by model.backupHistory.state.collectAsState()

@@ -156,3 +156,13 @@ kernel/logcat/measurements/native originals. The earlier clear-log warning is no
 the cause. This is a real historical/concurrent low-memory risk; no memory limit,
 fixture, test assertion or importer/KDF code is changed to force a pass. Final
 source's actual low-memory result remains to be recorded honestly, not assumed.
+
+## Direct individual LAB destination
+
+LabsScreen already displayed an individual result detail, but its attachment callback
+opened MedicalLabDetail's default detail again. Pass a transient, explicit LabValue ID
+as attachment destination intent and clear it on matching host disposal. The ordinary
+visit/medical-center lab-detail entry still defaults to detail. No panel ID substitution,
+new persistent field, auto-import or database/record change. Compilation/UI boundary
+regressions PASS; the same real MainActivity case requires ONE attachment click for
+result2/panel1 and will verify the actual relation through authenticated reading.
