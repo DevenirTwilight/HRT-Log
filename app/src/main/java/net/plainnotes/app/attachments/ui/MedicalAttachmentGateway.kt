@@ -55,10 +55,35 @@ internal interface MedicalAttachmentGateway {
 
 /** Production wiring: every call goes through the screen's RuntimeLibrarySession scope and the existing
  * AttachmentFlowController/AttachmentViewer. No second store or decryption path exists. */
+internal interface MedicalFileGateway:MedicalAttachmentGateway {
+    suspend fun relationships(document:UUID):List<MedicalAttachmentOperations.Relationship>
+    suspend fun resolveTarget(target:MedicalAttachmentOperations.Target):MedicalAttachmentOperations.Target
+    suspend fun associate(operation:UUID,target:MedicalAttachmentOperations.Target,document:UUID,revision:Long,unlink:MedicalAttachmentOperations.Relationship?=null):MedicalAttachmentOperations.RelationReceipt
+    suspend fun relationStatus(operation:UUID,document:UUID):MedicalAttachmentOperations.RelationReceipt?
+    suspend fun trash(document:UUID,revision:Long)
+    suspend fun restore(document:UUID,revision:Long)
+    fun relationPending():Pair<UUID,UUID>?
+    fun relationRetain(operation:UUID,document:UUID)
+    fun relationResolved(operation:UUID,document:UUID)
+    fun lifecyclePending():Pair<UUID,UUID>?
+    fun lifecycleRetain(operation:UUID,document:UUID)
+    fun lifecycleResolved(operation:UUID,document:UUID)
+}
+
 internal class RuntimeAttachmentGateway(private val context:Context,private val runtime:RuntimeLibrarySession,
-    override val target:MedicalAttachmentOperations.Target?):MedicalAttachmentGateway {
+    override val target:MedicalAttachmentOperations.Target?):MedicalFileGateway {
     private val recovery=AttachmentReconciliationStore(context,
         requireNotNull((runtime.state.value as? RuntimeLibrarySession.State.Ready)?.scope),target)
+    private val relationRecovery=AttachmentReconciliationStore(context,
+        requireNotNull((runtime.state.value as? RuntimeLibrarySession.State.Ready)?.scope),null,"RELATION")
+    private val lifecycleRecovery=AttachmentReconciliationStore(context,
+        requireNotNull((runtime.state.value as? RuntimeLibrarySession.State.Ready)?.scope),null,"LIFECYCLE")
+    override fun relationPending()=relationRecovery.pending()
+    override fun relationRetain(operation:UUID,document:UUID)=relationRecovery.retain(operation,document)
+    override fun relationResolved(operation:UUID,document:UUID)=relationRecovery.resolved(operation,document)
+    override fun lifecyclePending()=lifecycleRecovery.pending()
+    override fun lifecycleRetain(operation:UUID,document:UUID)=lifecycleRecovery.retain(operation,document)
+    override fun lifecycleResolved(operation:UUID,document:UUID)=lifecycleRecovery.resolved(operation,document)
     override fun pending()=recovery.pending()
     override fun retain(operation:UUID,document:UUID)=recovery.retain(operation,document)
     override fun resolved(operation:UUID,document:UUID)=recovery.resolved(operation,document)
@@ -69,6 +94,13 @@ internal class RuntimeAttachmentGateway(private val context:Context,private val 
     }
     override suspend fun documents()=browse().use {it.documents()}
     override suspend fun unlink(document:UUID)=browse().use {it.unlink(document)}
+    override suspend fun relationships(document:UUID)=browse().use {it.relationships(document)}
+    override suspend fun resolveTarget(target:MedicalAttachmentOperations.Target)=browse().use {it.resolveTarget(target)}
+    override suspend fun associate(operation:UUID,target:MedicalAttachmentOperations.Target,document:UUID,revision:Long,unlink:MedicalAttachmentOperations.Relationship?)=
+        browse().use {it.associate(operation,target,document,revision,unlink)}
+    override suspend fun relationStatus(operation:UUID,document:UUID)=browse().use {it.relationStatus(operation,document)}
+    override suspend fun trash(document:UUID,revision:Long)=browse().use {it.trash(document,revision)}
+    override suspend fun restore(document:UUID,revision:Long)=browse().use {it.restore(document,revision)}
     override suspend fun pickerIntent()=browse().use {it.pickerIntent()}
     override suspend fun preview(document:UUID):MedicalAttachmentGateway.Preview {
         val flow=browse()

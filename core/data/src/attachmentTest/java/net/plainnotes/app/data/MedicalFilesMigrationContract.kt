@@ -37,11 +37,21 @@ abstract class MedicalFilesMigrationContract {
             val s=requireNotNull(AttachmentIdentity.initialize(db,true))
             db.execSQL("INSERT INTO lab_analyte(code,canonical_unit) VALUES('E2','pg/mL')")
             db.execSQL("INSERT INTO lab_value(id,analyte_code,value,unit,sampled_utc,sampled_zone) VALUES(17,'E2',120,'pg/mL',1000,'UTC')")
-            AttachmentIdentity.bind(db,s,"LAB",17)
+            val record=AttachmentIdentity.bind(db,s,"LAB",17)
+            // Byte-preservation fixture, not an authenticated-original claim. Every old FK and guard remains on.
+            val doc=UUID.randomUUID().toString();val version=UUID.randomUUID().toString();val key=UUID.randomUUID().toString()
+            val obj=UUID.randomUUID().toString();val operation=UUID.randomUUID().toString();val generation=UUID.randomUUID().toString()
+            db.execSQL("INSERT INTO attachment_generation(store_uuid,generation_uuid,state,created_utc) VALUES(?,?,'STAGING',1)",arrayOf(s.dataset,generation))
+            db.execSQL("INSERT INTO attachment_document(store_uuid,document_uuid,revision,title,category,state) VALUES(?,?,1,'SYNTHETIC preserved bytes','REPORT','ACTIVE')",arrayOf(s.dataset,doc))
+            db.execSQL("INSERT INTO attachment_version(store_uuid,document_uuid,version_uuid,ordinal,object_uuid,protocol_revision,dek_handle_uuid,plaintext_sha256,ciphertext_sha256,plaintext_bytes,ciphertext_bytes,mime,status) VALUES(?,?,?,1,?,1,?,?,?,12,128,'application/pdf','STAGED')",arrayOf(s.dataset,doc,version,obj,key,ByteArray(32){it.toByte()},ByteArray(32){(it+1).toByte()}))
+            db.execSQL("INSERT INTO attachment_key_envelope(store_uuid,document_uuid,version_uuid,envelope_uuid,dek_handle_uuid,wrap_epoch,wrapping_key_alias,wrapped_dek,created_utc,state) VALUES(?,?,?,?,?,1,'SYNTHETIC migration-only alias',?,1,'AVAILABLE')",arrayOf(s.dataset,doc,version,UUID.randomUUID().toString(),key,byteArrayOf(0,1,-1,2)))
+            db.execSQL("INSERT INTO attachment_link(store_uuid,link_uuid,record_epoch,record_uuid,document_uuid,revision,state) VALUES(?,?,?,?,?,1,'QUARANTINED')",arrayOf(s.dataset,UUID.randomUUID().toString(),s.epoch,record,doc))
+            db.execSQL("INSERT INTO attachment_operation(store_uuid,operation_uuid,idempotency_uuid,kind,phase,expected_generation,document_uuid,resource_generation_uuid,object_uuid,version_uuid,dek_handle_uuid,reserved_bytes,reserved_objects,updated_utc) VALUES(?,?,?,'IMPORT','PREPARED',1,?,?,?,?,?,128,1,1)",arrayOf(s.dataset,operation,operation,doc,generation,obj,version,key))
+            db.execSQL("INSERT INTO attachment_journal(store_uuid,operation_uuid,record_epoch,physical_generation,document_uuid,record_uuid,request_sha256,attempt_uuid,object_uuid,version_uuid,dek_handle_uuid,stage_alias_uuid,active_alias_uuid,stage_ready,active_ready,stage_uses,active_uses,proof) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,0,0,0,0,'RESERVED')",arrayOf(s.dataset,operation,s.epoch,generation,doc,record,ByteArray(32){(it+2).toByte()},UUID.randomUUID().toString(),obj,version,key,UUID.randomUUID().toString(),UUID.randomUUID().toString()))
             db.setTransactionSuccessful();return s
         }finally {db.endTransaction()}
     }
-    private fun rows(db:SupportSQLiteDatabase)=listOf("lab_value","attachment_store","attachment_record_identity","attachment_journal","attachment_link").associateWith {table->
+    private fun rows(db:SupportSQLiteDatabase)=listOf("lab_value","attachment_store","attachment_record_identity","attachment_journal","attachment_link","attachment_document","attachment_version","attachment_key_envelope","attachment_operation","attachment_generation").associateWith {table->
         db.query("SELECT * FROM `$table` ORDER BY rowid").use {c->buildList {
             while(c.moveToNext())add((0 until c.columnCount).map {column->
                 when(c.getType(column)) {

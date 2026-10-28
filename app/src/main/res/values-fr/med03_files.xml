@@ -2,4 +2,27 @@
 <resources>
     <string name="med03_whole_draw">Prélèvement complet (%1$d résultats)</string>
     <string name="med03_only_result">Ce résultat uniquement</string>
+    <string name="med03_default_file">Document médical</string>
+    <string name="med03_library_body">Enregistrez un fichier seul, puis associez explicitement le même original à des consultations ou prélèvements.</string>
+    <string name="med03_link_confirm">Associer « %1$s » à « %2$s » ? L’original chiffré ne sera pas copié.</string>
+    <string name="med03_relation_done">Opération validée.</string>
+    <string name="med03_relation_unknown">Résultat inconnu. Vérifiez l’opération existante sans la répéter.</string>
+    <string name="med03_state_checked">État actuel vérifié. Cela ne prouve pas la validation de l’action interrompue.</string>
+    <string name="med03_relation_failed">Association non enregistrée. L’original reste conservé.</string>
+    <string name="med03_new_prompt">Fichier enregistré. Créez une fiche pour l’associer ; annuler le laisse sans association.</string>
+    <string name="med03_save_record_first">La fiche est enregistrée d’abord. Confirmez ensuite le fichier et sa cible. Les résultats sont distincts.</string>
+    <string name="med03_file_chosen">Un fichier est sélectionné en mémoire. Il n’a été ni lu ni enregistré.</string>
+    <string name="med03_selected_file">Document sélectionné · type non encore vérifié</string>
+    <string name="med03_link_target_title">Choisir une fiche précise</string>
+    <string name="med03_no_target">Aucune fiche compatible. Créez une consultation ou un prélèvement, puis associez le fichier.</string>
+    <string name="med03_bin_confirm">Mettre à la corbeille ? Les liens seront isolés. Original, historique et espace restent conservés. Restaurer ne réactive jamais les anciens liens.</string>
+    <string name="med03_restore_confirm">Restaurer cet original authentifié ? Les anciens liens restent isolés et nécessitent une nouvelle association explicite.</string>
+    <string name="med03_unknown_links">Liens indisponibles ou anciennes cibles non gérées. Aucun lien n’a été modifié.</string>
+    <string name="med03_types">Type de fichier enregistré</string>
+    <string name="med03_all_types">Tous les types</string>
+    <string name="med03_type_unknown">Le type n’est vérifié à partir des octets qu’après confirmation.</string>
+    <string name="med03_open_library">Ouvrir les documents médicaux</string>
+    <string name="med03_operation_stale">L’opération a été validée, mais la liste n’a pas pu être actualisée.</string>
+    <string name="med03_select_target">Choisissez précisément le dossier à associer.</string>
+    <string name="med03_search_hint">Rechercher un titre de fichier</string>
 </resources>

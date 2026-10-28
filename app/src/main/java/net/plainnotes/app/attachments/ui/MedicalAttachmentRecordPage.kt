@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,7 +25,7 @@ import net.plainnotes.app.security.launchPicker
 
 /** One record's attachments as the production UI uses them: the scoped controller and the system-picker launcher.
  * Shared by the visit page, the lab result page and the full-page host so there is exactly one authorization path. */
-internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd:()->Unit)
+internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd:()->Unit,val model:NotesViewModel?=null,val target:MedicalAttachmentOperations.Target?=null)
 
 /** Production real-record files. Runtime authorization and scoped activation remain mandatory.
  * OFF is checked before the ViewModel/runtime is touched (null when OFF). No URI or capability is saved. */
@@ -34,9 +35,17 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
     val owner=LocalLifecycleOwner.current
     val scope=rememberCoroutineScope()
     val controller=remember(model,target,owner) {model.medicalAttachmentsForRecord(context,owner,target,scope)}
+    val title=stringResource(when(target?.kind) {null->R.string.med03_default_file;MedicalAttachmentOperations.Kind.APPOINTMENT->R.string.attach_default_visit;else->R.string.attach_default_lab})
+    val onAdd=rememberAttachmentPicker(model,controller,title)
+    LaunchedEffect(controller) {controller.refresh()}
+    return remember(controller,onAdd) {RecordFiles(controller,onAdd,model,target)}
+}
+
+/** Shared real SAF lifecycle for record, file-first and not-yet-saved-record selections. */
+@Composable internal fun rememberAttachmentPicker(model:NotesViewModel,controller:MedicalAttachmentsController,title:String):()->Unit {
+    val scope=rememberCoroutineScope()
     val generation=remember(controller) {Session.generation}
     var awaiting by remember(controller) {mutableStateOf(false)}
-    val title=stringResource(if(target?.kind!=MedicalAttachmentOperations.Kind.APPOINTMENT)R.string.attach_default_lab else R.string.attach_default_visit)
     val picker=key(controller) {rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {result->
         // MainActivity consumes the one-shot lock exemption in onStart. ActivityResult
         // delivery can precede OR follow it across Android versions. That exemption is
@@ -52,15 +61,14 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
         if(awaiting)Session.consumePicker(generation)
         controller.close()
     }}
-    LaunchedEffect(controller) {controller.refresh()}
-    return remember(controller,picker) {RecordFiles(controller) {scope.launch {
+    return remember(controller,picker,title) {{scope.launch {
         controller.startImport()?.let {intent->
             awaiting=true
             try {picker.launchPicker(intent)}catch(_:Exception) {
                 awaiting=false;controller.picked(ActivityResult(Activity.RESULT_CANCELED,null),title)
             }
         }
-    }}}
+    };Unit}}
 }
 
 /** Full-page host kept for the guarded flows that still open the files on their own page. */
@@ -73,10 +81,19 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
 @Composable internal fun RecordFilesSection(files:RecordFiles,targetLabel:String,modifier:Modifier=Modifier,scopeNote:String?=null) {
     val state by files.controller.state.collectAsState()
     val controller=files.controller
-    MedicalAttachmentsSection(state,targetLabel,onAdd=files.onAdd,onConfirm=controller::confirmImport,
+    var choose by remember {mutableStateOf(false)}
+    Column(modifier.testTag("record-files:${files.target?.kind}:${files.target?.id}")) {MedicalAttachmentsSection(state,targetLabel,onAdd=files.onAdd,onConfirm=controller::confirmImport,
         onCancelImport=controller::cancelImport,onCheckStatus=controller::checkStatus,
-        onDismissMessage=controller::dismissImportMessage,onRetry=controller::refresh,onOpen=controller::open,modifier=modifier,
-        onUnlink=controller::unlink,onDismissUnlinkMessage=controller::dismissUnlinkMessage,scopeNote=scopeNote)
+        onDismissMessage=controller::dismissImportMessage,onRetry=controller::refresh,onOpen=controller::open,modifier=Modifier,
+        onUnlink=controller::unlink,onDismissUnlinkMessage=controller::dismissUnlinkMessage,scopeNote=scopeNote,
+        onChooseExisting=if(files.model!=null && files.target!=null)({choose=true})else null)}
+    if(choose)files.model?.let {model->
+        val notes by model.state.collectAsState();val extra by model.extra.collectAsState()
+        net.plainnotes.app.attachments.ui.library.FileWindow(stringResource(R.string.attach_choose_existing),{choose=false}) {
+            net.plainnotes.app.attachments.ui.library.MedicalFileLibraryHost(model,notes.appointments,extra.labs,extra.labPanels,
+                onRecord={},onNewVisit={},onNewDraw={},onPrepare={},onBackup={},chooseFor=files.target,onChosen={choose=false;controller.refresh()})
+        }
+    }
 }
 
 /** The page-sized file page over a record page. System BACK closes it first; nothing stale stays when it is closed or revoked. */

@@ -552,6 +552,12 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         catch(e:CancellationException) {committed?.let(onDone);throw e}
         catch(_:Exception) {if(committed!=null)onDone(requireNotNull(committed)) else mutable.value=mutable.value.copy(error=R.string.operation_error)}
     }
+    fun confirmDisplayedDraw(labs:List<LabValueEntity>,onDone:(LabPanelEntity?)->Unit)=viewModelScope.launch {
+        var committed:LabPanelEntity?=null
+        try {mutate {repo.confirmLabPanel(labs.map {it.id}).also {committed=it}};refresh().join();onDone(committed)}
+        catch(e:CancellationException) {committed?.let {onDone(it)};throw e}
+        catch(_:Exception) {if(committed==null)mutable.value=mutable.value.copy(error=R.string.operation_error);onDone(committed)}
+    }
     fun rebuildLabContext(v:LabValueEntity,includeEstimate:Boolean=false)=change{repo.rebuildLabContext(v.id,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}
     fun deleteLab(v:LabValueEntity)=change{repo.deleteLab(v.id)}
     fun delete(id:Long)=change{repo.removeMedication(id)}

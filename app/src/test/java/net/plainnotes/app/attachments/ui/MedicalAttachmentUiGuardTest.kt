@@ -15,13 +15,14 @@ class MedicalAttachmentUiGuardTest {
         val names=listOf("MedicalAttachmentsSection","MedicalAttachmentViewer","MedicalAttachmentsController","RuntimeAttachmentGateway","MedicalAttachmentGateway","medicalAttachmentsForRecord","MedicalAttachmentRecordPage","MedicalAttachmentRecordContent","MedicalLibraryTransferPage","MedicalLibraryTransferContent","MedicalLibraryTransferController","rememberRecordFiles","RecordFilesSection","RecordFilesViewer")
         val reaching=main.walkTopDown().filter {it.isFile && it.extension=="kt" && !it.path.startsWith(ui.path)}
             .filter {f->val text=f.readText();names.any {it in text}}.map {it.path}.toList()
-        val approved=listOf(File(main,"ui/DataSection.kt").path,File(main,"ui/ShellHosts.kt").path,File(main,"ui/VisitsScreen.kt").path)
+        val approved=listOf(File(main,"ui/DataSection.kt").path,File(main,"ui/ShellHosts.kt").path,File(main,"ui/VisitsScreen.kt").path,File(main,"ui/NewRecordFiles.kt").path)
         assertEquals("Only explicit record hosts may reference the scoped page",approved.sorted(),reaching.sorted())
         approved.forEach {path->
             val source=File(path).readText()
             // The OFF gate is checked either here or by rememberRecordFiles, which checks it before touching any runtime.
             assertTrue(source.contains("AttachmentFlowController.PUBLIC_ENTRY_ENABLED") || source.contains("rememberRecordFiles("))
-            if(!path.endsWith("DataSection.kt"))assertTrue(source.contains("MedicalAttachmentOperations.Target("))
+            if(path.endsWith("NewRecordFiles.kt"))assertTrue(source.contains("target:Ops.Target") && source.contains("rememberRecordFiles(model,target)"))
+            else if(!path.endsWith("DataSection.kt"))assertTrue(source.contains("MedicalAttachmentOperations.Target("))
             else assertTrue(source.contains("onReopen=onLibraryReopen"))
             assertFalse(source.contains("RuntimeAttachmentGateway("))
             assertFalse(source.contains("MedicalAttachmentsController("))
@@ -38,13 +39,16 @@ class MedicalAttachmentUiGuardTest {
     }
 
     /** UI-10: the file library, file page, file-first add flow and record outcome wait for the MED-03 backend; no production file may reach them. */
-    @Test fun fileLibraryComposablesAreNotReachableFromProductionNavigation() {
+    @Test fun fileLibraryProductionReachabilityUsesTheOneScopedGatewayAndNoStorageInViews() {
         val library=File(ui,"library")
         val names=listOf("MedicalFileLibraryScreen","MedicalFileDetailPage","AddDocumentDetails","RecordFileOutcomeCard","LibraryCapabilities")
         val reaching=main.walkTopDown().filter {it.isFile && it.extension=="kt" && !it.path.startsWith(library.path)}
             .filter {f->val text=f.readText();names.any {it in text}}.map {it.path}.toList()
-        assertEquals("No production file may use the file library composables yet",emptyList<String>(),reaching)
-        val forbidden=listOf("androidx.room","SupportSQLite","java.io.File","KeyStore","Cipher","Tink","AttachmentPersistentStore","openFileDescriptor","takePersistableUriPermission","SharedPreferences","Bundle","RuntimeLibrarySession")
+        assertEquals("The record outcome is the only view reused outside the library",listOf("NewRecordFiles.kt"),reaching.map {File(it).name})
+        assertTrue(File(main,"ui/AppShell.kt").readText().contains("MedicalFileLibraryHost"))
+        assertTrue(File(ui,"MedicalAttachmentIntegration.kt").readText().contains("RuntimeAttachmentGateway(context,libraryRuntime,null)"))
+        assertTrue(File(library,"MedicalFileLibraryHost.kt").readText().contains("model.medicalFileLibrary(context,owner,scope)"))
+        val forbidden=listOf("androidx.room","SupportSQLite","java.io.File","KeyStore","Cipher","Tink","AttachmentPersistentStore","openFileDescriptor","takePersistableUriPermission","SharedPreferences","Bundle")
         library.listFiles()!!.filter {it.extension=="kt"}.forEach {f->val text=f.readText();forbidden.forEach {assertFalse("${f.name} uses $it",it in text)}}
     }
 

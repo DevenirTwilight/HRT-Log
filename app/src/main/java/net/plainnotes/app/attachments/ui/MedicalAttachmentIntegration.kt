@@ -21,3 +21,13 @@ internal fun NotesViewModel.medicalAttachmentsForRecord(context:Context,owner:Li
     })
     return controller
 }
+
+internal fun NotesViewModel.medicalFileLibrary(context:Context,owner:LifecycleOwner,scope:CoroutineScope):net.plainnotes.app.attachments.ui.library.MedicalFileLibraryController {
+    check(AttachmentFlowController.PUBLIC_ENTRY_ENABLED)
+    check(owner.lifecycle.currentState!=Lifecycle.State.DESTROYED)
+    val controller=net.plainnotes.app.attachments.ui.library.MedicalFileLibraryController(RuntimeAttachmentGateway(context,libraryRuntime,null),scope)
+    owner.lifecycle.addObserver(object:DefaultLifecycleObserver {
+        override fun onDestroy(owner:LifecycleOwner) {controller.close();owner.lifecycle.removeObserver(this)}
+    })
+    return controller
+}

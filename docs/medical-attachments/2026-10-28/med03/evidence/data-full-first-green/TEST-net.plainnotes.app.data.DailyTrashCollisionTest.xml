@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.DailyTrashCollisionTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:51:56.413Z" hostname="948d99df3df9" time="3.139">
+  <properties/>
+  <testcase name="failedReinsertRollsBackSwapIncludingNewTrashEntry" classname="net.plainnotes.app.data.DailyTrashCollisionTest" time="0.738"/>
+  <testcase name="sameMillisecondNoteSwapPreservesBothTexts" classname="net.plainnotes.app.data.DailyTrashCollisionTest" time="0.678"/>
+  <testcase name="collisionChangesOnlyNewDailySnapshotIdentityAndKeepsOtherKindsUnique" classname="net.plainnotes.app.data.DailyTrashCollisionTest" time="0.624"/>
+  <testcase name="sameMillisecondScoreSwapPreservesBothValuesThroughBackup" classname="net.plainnotes.app.data.DailyTrashCollisionTest" time="1.092"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

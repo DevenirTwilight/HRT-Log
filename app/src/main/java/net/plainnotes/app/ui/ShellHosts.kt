@@ -13,6 +13,7 @@ import net.plainnotes.app.NotesViewModel
 import net.plainnotes.app.R
 import net.plainnotes.app.data.AppointmentEntity
 import net.plainnotes.app.data.ContainerEntity
+import net.plainnotes.app.data.LabPanelEntity
 import net.plainnotes.app.data.LabValueEntity
 import net.plainnotes.app.data.MedicationEntity
 import net.plainnotes.app.data.MedicationSnapshot
@@ -73,6 +74,8 @@ import java.time.Instant
 
 /** Lab add/edit, opened from the labs page and from a lab detail in the medical records. */
 @Stable class LabDialogs {
+    var onCreated:((LabPanelEntity)->Unit)? by mutableStateOf(null)
+    var createdPanel by mutableStateOf<LabPanelEntity?>(null)
     var labEdit by mutableStateOf<LabValueEntity?>(null)
     var labNew by mutableStateOf(false)
     var batchSaving by mutableStateOf(false)
@@ -83,19 +86,28 @@ import java.time.Instant
 }
 
 @Composable internal fun LabEditDialog(l: LabDialogs, model: NotesViewModel, labs: List<LabValueEntity> = emptyList(), retained:LabUiState?=null) {
-    // LAB-01: "add" opens the batch form; editing one result keeps the single dialog, with the split hint when it is shown in a draw card.
-    if (l.labNew && l.labEdit == null) LabBatchDialog({ if (!l.batchSaving) { l.labNew = false; l.batchFailed = false;retained?.discardDraft() } }, submit@{ values, estimate ->
+    val draftFiles=if(l.labNew)net.plainnotes.app.attachments.ui.rememberRecordFiles(model,null) else null
+    l.createdPanel?.let {panel->
+        NewRecordFiles(model,net.plainnotes.app.data.MedicalAttachmentOperations.Target(net.plainnotes.app.data.MedicalAttachmentOperations.Kind.LAB_PANEL,panel.id,java.util.UUID.fromString(panel.uuid)),draftFiles) {
+            l.createdPanel=null;l.labNew=false;retained?.discardDraft()
+        }
+    }
+    if (l.labNew && l.labEdit == null && l.createdPanel==null) LabBatchDialog({ if (!l.batchSaving) { l.labNew = false; l.batchFailed = false;l.onCreated=null;retained?.discardDraft() } }, submit@{ values, estimate ->
         if(l.batchSaving)return@submit
         val token=retained?.token
         l.batchSaving = true; l.batchFailed = false
-        model.saveLabs(values, estimate) { ok ->
-            // A result from a discarded/locked session cannot clear a newer draft (ABA).
+        model.saveLabDraw(values, estimate) { panel ->
+            // A discarded/locked session must not bind a later result to a replacement draft.
             if(retained==null || retained.token===token) {
                 l.batchSaving = false
-                if(ok){l.labNew=false;retained?.discardDraft()}else l.batchFailed=true
+                if(panel!=null){
+                    val done=l.onCreated;l.onCreated=null;done?.invoke(panel)
+                    if(draftFiles?.controller?.state?.value?.import is net.plainnotes.app.attachments.ui.MedicalAttachmentsController.Import.Confirming)l.createdPanel=panel
+                    else {l.labNew=false;retained?.discardDraft()}
+                }else l.batchFailed=true
             }
         }
-    }, saving = l.batchSaving, failed = l.batchFailed, draft=retained?.draft)
+    }, saving = l.batchSaving, failed = l.batchFailed, draft=retained?.draft,files=draftFiles?.let {f->{NewRecordFileChoice(f,l.batchSaving)}})
     else if (l.labEdit != null) LabDialog(l.labEdit, { l.labNew = false; l.labEdit = null }, { model.saveLab(it); l.labNew = false; l.labEdit = null },onSaveWithEstimate={v,estimate->model.saveLab(v,estimate);l.labNew=false;l.labEdit=null},
         inGroup = l.labEdit!!.let { e -> e.panel_id != null || labGroups(labs.filter { it.panel_id == null }).any { g -> g.size > 1 && g.any { it.id == e.id } } })
     else if (l.labNew && l.labEdit == null) { l.labNew = false }
@@ -114,11 +126,16 @@ import java.time.Instant
             files=files?.let {f->{net.plainnotes.app.attachments.ui.RecordFilesSection(f,label,scopeNote=scope)}},
             overlay=files?.let {f->{net.plainnotes.app.attachments.ui.RecordFilesViewer(f,label)}})
     } ?: run { l.panel = null } }
-    l.saveAs?.let { g -> LabSaveAsPanelDialog(g, { l.saveAs = null }) { l.saveAs = null; model.groupAsLabPanel(g) {id->l.panel=id} } }
+    var confirming by remember {mutableStateOf(false)}
+    l.saveAs?.let { g -> LabSaveAsPanelDialog(g, { if(!confirming)l.saveAs = null }) {
+        if(!confirming){confirming=true;model.confirmDisplayedDraw(g){p->confirming=false;if(p!=null){l.saveAs=null;l.panel=p.id}}}
+    } }
 }
 
 /** Medical visit editor and lab detail, used by the medical records and the visit detail. */
 @Stable class MedicalDialogs {
+    var onCreated:((AppointmentEntity)->Unit)? by mutableStateOf(null)
+    var attachAfterSave by mutableStateOf(false)
     var editing by mutableStateOf(false)
     var edit by mutableStateOf<AppointmentEntity?>(null)
     /** The open lab result page: always an individual LabValue ID, never a panel ID. */
@@ -126,7 +143,19 @@ import java.time.Instant
 }
 
 @Composable internal fun MedicalVisitEditor(m: MedicalDialogs, model: NotesViewModel, save: net.plainnotes.app.medical.MedicalVisitSaveState) {
-    if(m.editing)MedicalVisitDialog(m.edit,save,{if(!save.saving){m.editing=false;m.edit=null;model.clearMedicalVisitSave()}}){model.saveMedicalVisit(it,m.edit)}
+    if(!m.editing)return
+    val draft=if(m.edit==null)net.plainnotes.app.attachments.ui.rememberRecordFiles(model,null) else null
+    val saved=save.saved
+    if(saved!=null && m.attachAfterSave) {
+        NewRecordFiles(model,net.plainnotes.app.data.MedicalAttachmentOperations.Target(net.plainnotes.app.data.MedicalAttachmentOperations.Kind.APPOINTMENT,saved.id),draft) {
+            m.attachAfterSave=false;m.editing=false;m.edit=null;model.clearMedicalVisitSave()
+        }
+    } else MedicalVisitDialogWithFiles(m.edit,save,{if(!save.saving){m.editing=false;m.edit=null;m.onCreated=null;m.attachAfterSave=false;model.clearMedicalVisitSave()}},onSave={
+        m.attachAfterSave=draft?.controller?.state?.value?.import is net.plainnotes.app.attachments.ui.MedicalAttachmentsController.Import.Confirming
+        model.saveMedicalVisit(it,m.edit)
+    },files=draft?.let {f->{NewRecordFileChoice(f,save.saving)}})
+    LaunchedEffect(saved) {if(saved!=null && m.attachAfterSave){val done=m.onCreated;m.onCreated=null;done?.invoke(saved)}}
+
 }
 
 /** The lab result page, with its related files when the guarded attachment capability is on. One window; no nested dialogs. */

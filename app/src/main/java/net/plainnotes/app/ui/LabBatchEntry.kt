@@ -147,7 +147,7 @@ internal fun labFlag(v: LabValueEntity): LabFlag? {
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable fun LabBatchDialog(onDismiss: () -> Unit, onSave: (List<LabValueEntity>, Boolean) -> Unit, saving: Boolean = false, failed: Boolean = false,
-                               showEstimate: Boolean = true, draft:LabBatchDraft?=null) {
+                               showEstimate: Boolean = true, draft:LabBatchDraft?=null,files:(@Composable ()->Unit)?=null) {
     val form=draft ?: remember {LabBatchDraft()}
     val rows=form.rows
     val duplicates = LabBatchRules.duplicates(rows)
@@ -160,6 +160,7 @@ internal fun labFlag(v: LabValueEntity): LabFlag? {
                 }
                 Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp).testTag("lab-batch-scroll"),
                     verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    files?.invoke()
                     DateTimeRow(form.time, { form.time = it })
                     OutlinedTextField(form.laboratory, { form.laboratory = it }, Modifier.fillMaxWidth().testTag("lab-batch-lab"), label = { Text(stringResource(R.string.lab_laboratory)) }, singleLine = true)
                     Text(stringResource(R.string.lab_catalog_original_result_hint),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)

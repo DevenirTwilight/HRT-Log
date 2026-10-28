@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.BdpmCatalogueTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:51:51.040Z" hostname="948d99df3df9" time="3.689">
+  <properties/>
+  <testcase name="officialAssociationIsImmutableSeparateFromUserSourcesAndBacksUpSafely" classname="net.plainnotes.app.data.BdpmCatalogueTest" time="3.015"/>
+  <testcase name="genuineBundledProvamesIngredientsIdentifiersAndReopenWithoutUserData" classname="net.plainnotes.app.data.BdpmCatalogueTest" time="0.201"/>
+  <testcase name="officialProductionDetailsPreserveSourceDisagreementDatesAndIdentity" classname="net.plainnotes.app.data.BdpmCatalogueTest" time="0.107"/>
+  <testcase name="officialCacheRepairAndBrowserLinksCannotAffectPrivateRecords" classname="net.plainnotes.app.data.BdpmCatalogueTest" time="0.149"/>
+  <testcase name="malformedOfficialProvenanceAndForgedCatalogueSelectionFailClosed" classname="net.plainnotes.app.data.BdpmCatalogueTest" time="0.117"/>
+  <testcase name="corruptedPublicCopyIsRepairedWithoutTouchingEncryptedData" classname="net.plainnotes.app.data.BdpmCatalogueTest" time="0.094"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

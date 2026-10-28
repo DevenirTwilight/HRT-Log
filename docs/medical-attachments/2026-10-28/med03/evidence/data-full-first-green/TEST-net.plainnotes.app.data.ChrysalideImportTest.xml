@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.ChrysalideImportTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:51:54.733Z" hostname="948d99df3df9" time="1.652">
+  <properties/>
+  <testcase name="businessSchema16IncludesReceiptsAndOldReadersRefuseIt" classname="net.plainnotes.app.data.ChrysalideImportTest" time="1.185"/>
+  <testcase name="userEditsAreConflictAndTransactionFailureRollsBackReceiptAndRecord" classname="net.plainnotes.app.data.ChrysalideImportTest" time="0.23"/>
+  <testcase name="doseUnknownHistoryIsExplicitIdempotentAndTombstoneProtected" classname="net.plainnotes.app.data.ChrysalideImportTest" time="0.225"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

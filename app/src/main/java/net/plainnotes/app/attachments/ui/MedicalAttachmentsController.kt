@@ -54,7 +54,7 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
         /** The screen's data scope ended (data switch/restore): this page can never read again. */
         val ended:Boolean=false,
         val unlinkStatus:UnlinkStatus=UnlinkStatus.IDLE,
-        val unlinking:UUID?=null)
+        val unlinking:UUID?=null,val receipt:MedicalAttachmentOperations.Receipt?=null)
 
     private var unresolved:Pair<UUID,UUID>?=gateway.pending()
     private val mutable=MutableStateFlow(State(import=if(unresolved==null)Import.Idle else Import.Unknown))
@@ -93,7 +93,7 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
             state.value.unlinkStatus in setOf(UnlinkStatus.WORKING,UnlinkStatus.UNKNOWN) ||
             state.value.import in setOf(Import.Unknown,Import.Saving,Import.Checking))return null
         chosen=null;picking=true
-        mutable.update {it.copy(import=Import.Idle)}
+        mutable.update {it.copy(import=Import.Idle,receipt=null)}
         return try {gateway.pickerIntent()}catch(e:CancellationException) {throw e}catch(_:Exception) {picking=false;null}
     }
     /** The picker returned. Cancel/back means no file and no pending operation. */
@@ -109,6 +109,18 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
         if(state.value.import !is Import.Confirming)return
         chosen=null
         mutable.update {it.copy(import=Import.Cancelled)}
+    }
+    /** Transfer a still-unread picker result to the exact record created by this form.
+     * Memory only, consumed once; no operation exists, so this never replays UNKNOWN input. */
+    @Synchronized fun takeUncommittedSelection():ActivityResult? {
+        if(closed || state.value.revoked || unresolved!=null || state.value.import !is Import.Confirming)return null
+        val result=chosen ?: return null
+        chosen=null;picking=false
+        mutable.update {it.copy(import=Import.Idle)}
+        return result
+    }
+    suspend fun acceptUncommittedSelection(result:ActivityResult,title:String) {
+        if(startImport()!=null)picked(result,title) // permission check only; the existing result came from real SAF.
     }
     private fun discardAttempt() {
         chosen=null;picking=false
@@ -143,7 +155,7 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
                 resolve(current.operation,current.document)
                 // The COMMIT is real; a later list failure must not turn it into "not saved".
                 val files=loadFiles()
-                mutable.update {it.copy(import=Import.Saved(listStale=files==null),files=if(it.revoked)Files.Loading else files ?: it.files)}
+                mutable.update {it.copy(import=Import.Saved(listStale=files==null),receipt=outcome.receipt,files=if(it.revoked)Files.Loading else files ?: it.files)}
             }
             AttachmentFlowController.State.Failed->{resolve(current.operation,current.document);mutable.update {it.copy(import=Import.NotSaved)}}
             AttachmentFlowController.State.Cancelled->{resolve(current.operation,current.document);mutable.update {it.copy(import=Import.Cancelled)}}
@@ -205,7 +217,7 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
                 is AttachmentFlowController.State.Saved-> {
                     check(outcome.receipt.operation==operation && outcome.receipt.document==document)
                     resolve(operation,document);val files=loadFiles()
-                    mutable.update {it.copy(import=Import.Saved(listStale=files==null),files=if(it.revoked)Files.Loading else files ?: it.files)}
+                    mutable.update {it.copy(import=Import.Saved(listStale=files==null),receipt=outcome.receipt,files=if(it.revoked)Files.Loading else files ?: it.files)}
                 }
                 AttachmentFlowController.State.Failed->{resolve(operation,document);mutable.update {it.copy(import=Import.NotSaved)}}
                 else->mutable.update {it.copy(import=Import.Unknown)}

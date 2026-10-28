@@ -50,25 +50,36 @@ private fun FileKind.label() = when (this) { FileKind.PDF -> R.string.attach_kin
 @OptIn(ExperimentalLayoutApi::class)
 @Composable internal fun MedicalFileLibraryScreen(state: LibraryState, caps: LibraryCapabilities, onAdd: () -> Unit, onPrepare: () -> Unit, onOpen: (DocumentSummary) -> Unit,
     onUnsorted: () -> Unit, onCategory: (FileCategory) -> Unit, onShowAll: () -> Unit, onBackup: () -> Unit, onBin: () -> Unit, query: String = "", onQuery: (String) -> Unit = {},
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier, typeCounts:Map<FileKind,Int> = emptyMap(),typeFilter:FileKind?=null,onType:(FileKind?)->Unit={},busy:Boolean=false) {
     val c = MaterialTheme.colorScheme
     val narrow = LocalDensity.current.fontScale > 1.3f || androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp < 360
     LazyColumn(modifier.fillMaxSize().testTag("library"), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         item("search") {
             TextField(query, onQuery, Modifier.fillMaxWidth().testTag("library-search"), enabled = caps.search, singleLine = true, shape = Corners.full,
-                leadingIcon = { Icon(Icons.Outlined.Search, null) }, placeholder = { Text(stringResource(R.string.lib_search_hint)) },
+                leadingIcon = { Icon(Icons.Outlined.Search, null) }, placeholder = { Text(stringResource(if(caps.categories)R.string.lib_search_hint else R.string.med03_search_hint)) },
                 supportingText = if (!caps.search) ({ Text(stringResource(R.string.lib_not_yet), Modifier.testTag("library-search-reason")) }) else null,
                 colors = TextFieldDefaults.colors(focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent, unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
                     disabledIndicatorColor = androidx.compose.ui.graphics.Color.Transparent))
         }
         item("actions") {
             FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Button(onAdd, Modifier.heightIn(min = 56.dp).testTag("library-add"), enabled = caps.standaloneImport) {
+                Button(onAdd, Modifier.heightIn(min = 56.dp).testTag("library-add"), enabled = caps.standaloneImport && !busy) {
                     Icon(Icons.Outlined.Add, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.lib_add))
                 }
                 FilledTonalButton(onPrepare, Modifier.heightIn(min = 56.dp).testTag("library-prepare")) { Text(stringResource(R.string.lib_prepare)) }
             }
             if (!caps.standaloneImport) Text(stringResource(R.string.lib_not_yet), Modifier.padding(top = 4.dp).testTag("library-add-reason"), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+        }
+        if(typeCounts.isNotEmpty()) item("types") {
+            Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.med03_types),style=MaterialTheme.typography.titleSmall)
+                FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                    FilterChip(typeFilter==null,{onType(null)},{Text(stringResource(R.string.med03_all_types))},Modifier.heightIn(min=48.dp).testTag("library-type:ALL"))
+                    FileKind.entries.filter {(typeCounts[it] ?: 0)>0}.forEach {kind->
+                        FilterChip(typeFilter==kind,{onType(kind)},{Text(stringResource(kind.label())+" · "+typeCounts.getValue(kind))},Modifier.heightIn(min=48.dp).testTag("library-type:${kind.name}"))
+                    }
+                }
+            }
         }
         if (state.unsorted() > 0) item("unsorted") {
             val tone = NotesTheme.semantic.attention
@@ -164,7 +175,7 @@ private fun LibraryState.unsorted() = unlinked
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable internal fun MedicalFileDetailPage(detail: DocumentDetail, caps: LibraryCapabilities, preview: @Composable () -> Unit, onBack: () -> Unit, onViewFull: () -> Unit,
-    onAddLink: () -> Unit, onUnlink: (DocumentLink) -> Unit, onOpenRecord: (RecordTarget) -> Unit, onRestore: () -> Unit, modifier: Modifier = Modifier) {
+    onAddLink: () -> Unit, onUnlink: (DocumentLink) -> Unit, onOpenRecord: (RecordTarget) -> Unit, onRestore: () -> Unit, modifier: Modifier = Modifier,operationsEnabled:Boolean=true) {
     val c = MaterialTheme.colorScheme
     val s = detail.summary
     Scaffold(modifier.testTag("file-detail"), topBar = {
@@ -182,17 +193,17 @@ private fun LibraryState.unsorted() = unlinked
             if (detail.inBin) Surface(Modifier.fillMaxWidth().testTag("file-detail-bin"), shape = Corners.card, color = c.errorContainer, contentColor = c.onErrorContainer) {
                 Row(Modifier.padding(start = 16.dp, top = 4.dp, bottom = 4.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.lib_in_bin), Modifier.weight(1f))
-                    TextButton(onRestore, Modifier.heightIn(min = 48.dp).testTag("file-detail-restore"), enabled = caps.recycle) { Text(stringResource(R.string.lib_restore)) }
+                    TextButton(onRestore, Modifier.heightIn(min = 48.dp).testTag("file-detail-restore"), enabled = caps.recycle && operationsEnabled) { Text(stringResource(R.string.lib_restore)) }
                 }
             } else FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                if (caps.bidirectionalLinks) Button(onAddLink, Modifier.heightIn(min = 56.dp).testTag("file-detail-add-link")) { Text(stringResource(R.string.lib_detail_add_link)) }
+                if (caps.bidirectionalLinks) Button(onAddLink, Modifier.heightIn(min = 56.dp).testTag("file-detail-add-link"),enabled=operationsEnabled) { Text(stringResource(R.string.lib_detail_add_link)) }
                 OutlinedButton(onViewFull, Modifier.heightIn(min = 56.dp).testTag("file-detail-view")) { Text(stringResource(R.string.lib_view_full)) }
             }
             Surface(Modifier.fillMaxWidth().testTag("file-detail-links"), shape = Corners.card, color = c.surfaceContainerLow) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(stringResource(R.string.lib_detail_linked), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, modifier = Modifier.semantics { heading() })
-                    if (detail.links.isEmpty()) Text(stringResource(R.string.lib_detail_no_links), Modifier.testTag("file-detail-no-links"), color = c.onSurfaceVariant)
-                    detail.links.forEach { LinkRow(it, caps.bidirectionalLinks, { onOpenRecord(it.target) }, { onUnlink(it) }) }
+                    if (detail.linksKnown && detail.links.isEmpty()) Text(stringResource(R.string.lib_detail_no_links), Modifier.testTag("file-detail-no-links"), color = c.onSurfaceVariant)
+                    detail.links.forEach { LinkRow(it, caps.bidirectionalLinks && operationsEnabled, { onOpenRecord(it.target) }, { onUnlink(it) }) }
                 }
             }
             val facts = listOfNotNull(s.category?.let { R.string.lib_info_category to stringResource(it.label()) }, s.addedLabel?.let { R.string.lib_info_added to it },
@@ -252,7 +263,7 @@ private fun LibraryState.unsorted() = unlinked
         Text(stringResource(R.string.lib_import_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, modifier = Modifier.semantics { heading() })
         Surface(shape = Corners.list, color = c.surfaceContainerLow) {
             Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                FileTile(if (draft.fileName.endsWith(".pdf", true)) FileKind.PDF else FileKind.IMAGE, true)
+                FileTile(draft.verifiedKind ?: FileKind.OTHER, true)
                 Column { Text(stringResource(R.string.lib_import_file), style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant); Text(draft.fileName, maxLines = 2, overflow = TextOverflow.Ellipsis) }
             }
         }

@@ -142,7 +142,7 @@ jobs:
             python3 scripts/run_med02_product_native.py
             python3 scripts/run_library_lifecycle_native.py
             adb logcat -G 16M
-            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=net.plainnotes.app.data.LibraryLifecycleAndroidTest,net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest,net.plainnotes.app.data.LibraryCollectionAndroidTest --no-parallel --max-workers=2
+            ./gradlew :core:data:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=net.plainnotes.app.data.LibraryLifecycleAndroidTest,net.plainnotes.app.data.MedicalAttachmentOperationAndroidTest,net.plainnotes.app.data.LibraryCollectionAndroidTest,net.plainnotes.app.data.MedicalFilesOperationAndroidTest,net.plainnotes.app.data.MedicalFilesSqlCipherMigrationTest --no-parallel --max-workers=2
             python3 scripts/collect_med02_format_readiness.py
             python3 scripts/run_attachment_foundation_restart.py
             python3 scripts/run_attachment_persistent_restart.py

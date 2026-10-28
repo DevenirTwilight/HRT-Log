@@ -120,7 +120,7 @@ internal object MedicalArchiveManifest {
             ordered(records) {it.uuid};ordered(docs) {it.uuid};ordered(links) {it.uuid};ordered(envelopes) {it.first}
             require(versions.zipWithNext().all {(a,b)->order.compare(a.document,b.document)<0 || a.document==b.document && a.ordinal<b.ordinal})
             val m=AttachmentBackupManifest(dataset,epoch,vault,records,docs,versions,links)
-            require(version==2L || records.none {it.kind==AttachmentBackupManifest.Kind.LAB_PANEL}) {"Panel semantics require manifest version 2"}
+            require(version==2L || (records.none {it.kind==AttachmentBackupManifest.Kind.LAB_PANEL} && docs.all {d->links.any {it.document==d.uuid}})) {"Panel or independent-file semantics require manifest version 2"}
             m.validateComplete(AttachmentBackupManifest.Limits(maximumCiphertextBytes=MedicalArchiveCrypto.MAX_CIPHER))
             require(envelopes.size==versions.size && envelopes.map {it.first}.toSet()==versions.map {it.context.version}.toSet())
             return Decoded(m,Collections.unmodifiableMap(envelopes.toMap()))

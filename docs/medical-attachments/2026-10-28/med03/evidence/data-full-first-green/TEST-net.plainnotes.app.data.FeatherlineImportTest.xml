@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.FeatherlineImportTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:52:04.040Z" hostname="948d99df3df9" time="3.077">
+  <properties/>
+  <testcase name="currentTagAndDoseCannotReplaceNewHistoricalSourceFacts" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.18"/>
+  <testcase name="nativeBusinessFifteenRoundTripsAndOldReaderRejectsBeforeMutation" classname="net.plainnotes.app.data.FeatherlineImportTest" time="1.235"/>
+  <testcase name="commitReceiptCannotBeReplayed" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.189"/>
+  <testcase name="purgedDoseSourceIsNotRecreatedAndReceiptCannotBePhysicallyRemoved" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.21"/>
+  <testcase name="editedSourcePanelAndChangedMembershipDoNotAcceptNewResult" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.204"/>
+  <testcase name="clinicalDeleteRestoreAndPurgeRetainTypedSourceTombstones" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.307"/>
+  <testcase name="sameUuidIsIdempotentButChangedSourceAndLocalEditAreConflicts" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.223"/>
+  <testcase name="newlySupportedResultJoinsOnlyItsUnmodifiedExplicitSourcePanel" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.204"/>
+  <testcase name="realCommitPreservesClinicalFactsWithoutPkStockOrPlan" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.131"/>
+  <testcase name="failedInsertAndCancellationRollBackAllClinicalFactsAndReceipts" classname="net.plainnotes.app.data.FeatherlineImportTest" time="0.149"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

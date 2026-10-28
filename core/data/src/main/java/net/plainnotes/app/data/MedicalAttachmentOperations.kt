@@ -23,7 +23,8 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
     }
     data class Import(val operation:UUID,val document:UUID,val target:Target?,val title:String,val revision:Long=0)
     data class Receipt(val operation:UUID,val document:UUID,val version:UUID,val revision:Long)
-    data class Document(val document:UUID,val revision:Long,val title:String,val mime:String,val state:String,val linkState:String)
+    data class Document(val document:UUID,val revision:Long,val title:String,val mime:String,val state:String,val linkState:String,
+        val linkCount:Int=0,val bytes:Long?=null,val importedUtc:Long?=null)
     enum class Export { COMPLETE, REFUSED, UNKNOWN }
     enum class Phase { NOT_FOUND, PENDING, ABORTED, COMMITTED }
     data class Status(val phase:Phase,val receipt:Receipt?)
@@ -54,6 +55,13 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
     private fun verifyTarget(db:NotesDatabase,t:Target?) {
         if(t==null) {check(db.openHelper.writableDatabase.version>=MedicalFilesSchema.VERSION);return}
         val raw=db.openHelper.writableDatabase
+        if(t.kind!=Kind.LAB_PANEL && t.expectedUuid!=null) {
+            val s=requireNotNull(AttachmentIdentity.current(raw))
+            raw.query("SELECT 1 FROM attachment_record_identity WHERE store_uuid=? AND record_epoch=? AND target_kind=? AND legacy_id=? AND record_uuid=? AND state='ACTIVE'",
+                arrayOf(s.dataset,s.epoch,t.kind.name,t.id,t.expectedUuid.toString())).use {
+                check(it.moveToFirst()) {"Selected typed record identity changed"}
+            }
+        }
         if(t.kind==Kind.LAB_PANEL) {
             raw.query("SELECT uuid FROM lab_panel WHERE id=?",arrayOf(t.id)).use {
                 check(it.moveToFirst() && it.getString(0)==t.expectedUuid.toString()) {"Blood draw no longer exists with the selected identity"}
@@ -221,15 +229,23 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
         }catch(e:Throwable) {owner.close();throw e}
     }
     /** All current-library documents, including unassociated originals. No retained library is silently imported here. */
-    suspend fun libraryDocuments(cap:AttachmentSession.Capability):List<Document> =work(cap) {db,s->
+    suspend fun libraryDocuments(cap:AttachmentSession.Capability,includeTrash:Boolean=false):List<Document> =work(cap) {db,s->
         AttachmentTransaction.commit(db,s,cap) {
             permission()
-            db.openHelper.writableDatabase.query("""SELECT d.document_uuid,d.revision,d.title,v.mime,d.state FROM attachment_document d
+            db.openHelper.writableDatabase.query("""SELECT d.document_uuid,d.revision,d.title,v.mime,d.state,
+                (SELECT COUNT(*) FROM attachment_link l JOIN attachment_record_identity r ON r.store_uuid=l.store_uuid AND r.record_epoch=l.record_epoch AND r.record_uuid=l.record_uuid
+                 WHERE l.store_uuid=d.store_uuid AND l.document_uuid=d.document_uuid AND l.record_epoch=? AND l.state='ACTIVE' AND r.state='ACTIVE'),v.plaintext_bytes,
+                (SELECT MIN(o.updated_utc) FROM attachment_operation o WHERE o.store_uuid=d.store_uuid AND o.document_uuid=d.document_uuid AND o.kind='IMPORT' AND o.phase IN('COMMITTED','CLEANED')) AS imported
+                FROM attachment_document d
                 JOIN attachment_version v ON v.store_uuid=d.store_uuid AND v.document_uuid=d.document_uuid AND v.version_uuid=d.active_version_uuid
-                WHERE d.store_uuid=? AND d.state='ACTIVE' AND v.status='VERIFIED' ORDER BY d.document_uuid""",arrayOf(s.dataset)).use {c->
-                buildList {while(c.moveToNext())add(Document(UUID.fromString(c.getString(0)),c.getLong(1),c.getString(2),c.getString(3),c.getString(4),"ACTIVE"))}
+                WHERE d.store_uuid=? AND (d.state='ACTIVE' OR (?=1 AND d.state='TRASHED')) AND v.status='VERIFIED' ORDER BY imported DESC,d.rowid DESC""",arrayOf(s.epoch,s.dataset,if(includeTrash)1 else 0)).use {c->
+                buildList {while(c.moveToNext()){permission();add(Document(UUID.fromString(c.getString(0)),c.getLong(1),c.getString(2),c.getString(3),c.getString(4),"ACTIVE",c.getInt(5),c.getLong(6),if(c.isNull(7))null else c.getLong(7)))}}
             }
         }
+    }
+    /** Freeze a real typed identity when the user selects a relationship target; never infer one. */
+    suspend fun resolveTarget(cap:AttachmentSession.Capability,target:Target):Target=work(cap) {db,s->
+        AttachmentTransaction.commit(db,s,cap) {permission();target.copy(expectedUuid=UUID.fromString(requireNotNull(bindTarget(db,s,target))))}
     }
     data class Relationship(val link:UUID,val revision:Long,val target:Target)
     suspend fun relationships(cap:AttachmentSession.Capability,document:UUID):List<Relationship> =work(cap) {db,s->
@@ -248,8 +264,15 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
     }
     data class RelationReceipt(val operation:UUID,val phase:Phase,val link:UUID?,val revision:Long?)
     private fun AttachmentRelations.Fact.receipt()=RelationReceipt(operation,when(phase) {"COMMITTED"->Phase.COMMITTED;"ABORTED"->Phase.ABORTED;else->Phase.PENDING},link,revision)
-    suspend fun relationStatus(cap:AttachmentSession.Capability,operation:UUID):RelationReceipt?=work(cap) {db,s->
-        AttachmentTransaction.commit(db,s,cap) {permission();AttachmentRelations.status(db.openHelper.writableDatabase,s,operation)?.receipt()}
+    suspend fun relationStatus(cap:AttachmentSession.Capability,operation:UUID,document:UUID?=null):RelationReceipt?=work(cap) {db,s->
+        AttachmentTransaction.commit(db,s,cap) {
+            permission()
+            val fact=AttachmentRelations.status(db.openHelper.writableDatabase,s,operation)
+            if(fact!=null && document!=null)db.openHelper.writableDatabase.query("SELECT document_uuid FROM attachment_relation_operation WHERE store_uuid=? AND record_epoch=? AND operation_uuid=?",arrayOf(s.dataset,s.epoch,operation.toString())).use {
+                check(it.moveToFirst() && it.getString(0)==document.toString()) {"Conflicting relation reconciliation identity"}
+            }
+            fact?.receipt()
+        }
     }
     suspend fun cancelRelation(cap:AttachmentSession.Capability,operation:UUID):RelationReceipt?=work(cap) {db,s->
         AttachmentTransaction.commit(db,s,cap) {permission();AttachmentRelations.abort(db.openHelper.writableDatabase,s,operation)?.receipt()}

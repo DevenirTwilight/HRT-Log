@@ -2,4 +2,27 @@
 <resources>
     <string name="med03_whole_draw">整次抽血（%1$d 项结果）</string>
     <string name="med03_only_result">仅此项目</string>
+    <string name="med03_default_file">医疗文件</string>
+    <string name="med03_library_body">可先独立保存文件，再明确关联同一原件到就诊或整次抽血。</string>
+    <string name="med03_link_confirm">将“%1$s”关联到“%2$s”？不会复制加密原件。</string>
+    <string name="med03_relation_done">操作已提交。</string>
+    <string name="med03_relation_unknown">结果未知。请核对原操作，不要重复提交。</string>
+    <string name="med03_state_checked">已核对当前状态；这不代表能确认中断操作已成功提交。</string>
+    <string name="med03_relation_failed">关联未保存，原件仍然保留。</string>
+    <string name="med03_new_prompt">文件已保存。新建记录后再关联；取消会保留未关联文件。</string>
+    <string name="med03_save_record_first">先保存记录，再确认所选文件和关联对象。记录与文件分别报告保存结果。</string>
+    <string name="med03_file_chosen">已在内存中暂存文件选择，尚未读取或保存。</string>
+    <string name="med03_selected_file">已选择文件 · 类型尚未验证</string>
+    <string name="med03_link_target_title">选择明确的记录</string>
+    <string name="med03_no_target">没有可用记录。请先新建就诊或抽血记录，再关联此文件。</string>
+    <string name="med03_bin_confirm">移入回收站？关联将被隔离，原件、历史和占用容量仍保留。恢复不会自动恢复旧关联。</string>
+    <string name="med03_restore_confirm">恢复经过认证的原件？旧关联仍被隔离，需要重新明确关联。</string>
+    <string name="med03_unknown_links">关联详情不可用或包含不支持管理的旧目标，未修改任何关联。</string>
+    <string name="med03_types">已保存的文件类型</string>
+    <string name="med03_all_types">全部类型</string>
+    <string name="med03_type_unknown">仅在确认后根据实际字节检查文件类型。</string>
+    <string name="med03_open_library">打开医疗文件库</string>
+    <string name="med03_operation_stale">操作已提交，但列表未能刷新。</string>
+    <string name="med03_select_target">请选择要关联的明确记录。</string>
+    <string name="med03_search_hint">搜索文件标题</string>
 </resources>

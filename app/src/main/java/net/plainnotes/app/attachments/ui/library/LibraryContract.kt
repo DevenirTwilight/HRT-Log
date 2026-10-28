@@ -32,11 +32,11 @@ internal data class DocumentLink(val target: RecordTarget)
 
 internal data class DocumentDetail(val summary: DocumentSummary, val links: List<DocumentLink>, val sizeLabel: String? = null,
     /** True while the file is in the bin: it can be restored, nothing else. */
-    val inBin: Boolean = false)
+    val inBin: Boolean = false,val linksKnown:Boolean=true)
 
 internal data class LibraryState(val documents: List<DocumentSummary>, val categoryCounts: Map<FileCategory, Int>, val unlinked: Int, val total: Int)
 
-/** What the backend can do today. All false is the state of the production app. A disabled control says why; it never pretends. */
+/** What the backend can do today. Defaults are closed; only a verified production gateway advertises capabilities. A disabled control says why; it never pretends. */
 internal data class LibraryCapabilities(val standaloneImport: Boolean = false, val search: Boolean = false, val categories: Boolean = false,
     val bidirectionalLinks: Boolean = false, val panelLinks: Boolean = false, val chooseExisting: Boolean = false, val recycle: Boolean = false)
 
@@ -44,7 +44,7 @@ internal enum class LinkChoice { EXISTING_VISIT, EXISTING_RECORD, NEW_RECORD, LA
 
 /** The two-step add flow from the file side: the chosen file, an editable title, an optional category and one explicit link choice. */
 internal data class ImportDraft(val fileName: String, val title: String, val category: FileCategory? = null, val choice: LinkChoice = LinkChoice.LATER,
-    val chosen: RecordTarget? = null)
+    val chosen: RecordTarget? = null, val verifiedKind:FileKind?=null)
 
 /** What happened to the file when a record was saved first. The two outcomes are reported separately and an unknown one is never retried. */
 internal enum class RecordFileOutcome { NONE, ADDED, NOT_SAVED, UNKNOWN }

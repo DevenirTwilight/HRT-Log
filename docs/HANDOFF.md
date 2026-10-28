@@ -1,3 +1,15 @@
+## MED-03 正式产品接线检查点 — 2026-10-28（PR #145 继续 Draft，原生待验收）
+
+同一 feature/med03-medical-files-20261028 分支继续，默认仍6ada7402，未覆盖他人提交。cd458159已经推送第一批编译/迁移修复；本检查点追加实际产品代码，不另开总PR。主线/Build37尚不含本候选。
+
+- 第一批完整core:data回归664/664 PASS、0skip；此前24项原始失败及第一次修复后3项失败均保留，见med03/evidence。随后补强published21夹具，新增版本/封装/journal/关系原始字节快照；初始不合法ACTIVE链接被原触发器拒绝（原XML保留），改为真实合法的隔离历史链接，未移除触发器；新增夹具2/2 PASS。manifest v1原向量保持，v2独立文件/类型化panel及伪装v1拒绝定向1/1 PASS。
+- 已接生产MedicalFileLibraryHost→同一RuntimeAttachmentGateway/Flow/Operations；文件页支持独立导入、搜索真实标题/实际类型、未关联、详情、显式多关联及单关联撤回、现有CAS回收/认证恢复。临床类别尚无用户设置来源，categories保持false，不猜分类。关系/LIFECYCLE仅持久保存中性op/doc，UNKNOWN只核对；恢复不复活隔离链接。
+- 新建历史就诊/抽血表单可先选文件，内存暂存ActivityResult、不读取；真实记录COMMIT后取得实际ID/panel UUID，再转移一次选择、显示明确附件确认。记录成功和文件状态分别显示。已有记录提供“选择已有文件”，只新增关系、不复制密文。显示组合并的原>=2 API保留；新增显式确认API允许单项建立真实panel。
+- 本地最终产品定向46/46 PASS（18 AppShell返回/导航、4 release授权边界、5关系/UNKNOWN控制器、3中性检查点、16四语320/411dp/1x/2x明暗实际生产Compose布局），0skip。Android app/core测试源码都编译PASS；**本地无adb设备、无/dev/kvm，实际原生NOT_RUN，须看新HEAD的GitHub原始结果，不能以编译冒充。** 真实Compose截图16张在med03/screenshots，合成metadata gateway，不是APK或真机证据。
+- 原生候选已扩展同一产品runner：两个独立干净安装MainActivity真实SAF场景（保留原MED02链，并新增独立PDF→显式panel→5成员共享→新建就诊/抽血附档），以及独立SQLCipher迁移/完整集合恢复测试；bulk排除同一测试避免重复/whole-UID污染。尚未执行成功。旧source468/CD检查仍FAIL，不得借本地结果写整体PASS。
+
+继续事项：提交/推送本产品候选、读取其精确HEAD的全部checks和原生原件；发现真实失败最小修复；补足真实UI/创建/恢复/锁定验收后才Ready、保护合并、关闭144、核对主线及unsigned fullRelease。不能称MED03_PRODUCT_INTEGRATION_COMPLETE。PHYSICAL/TALKBACK/HARDWARE_POWER_NOT_RUN；本轮没有签名授权，不取私钥、不交付APK/Release。
+
 ## MED-03 接手修复检查点 — 2026-10-28（继续实施，未完成产品）
 
 实时远端#145仍46838e4e，默认6ada7402；旧本地工作区/日志未保留，已在同名原分支恢复独立工作树HRT-Log-med03-panel，没有强推或另开总PR。原GitHub host40691410692/artifact12817702193的24项失败报告及sha留在med03/evidence。Compose错误最小修复为合法Composable for读取本地化标签，再纯join；app:compileFullDebugKotlin实际PASS。
