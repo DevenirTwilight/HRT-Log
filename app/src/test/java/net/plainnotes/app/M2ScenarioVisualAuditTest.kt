@@ -45,9 +45,8 @@ class M2ScenarioVisualAuditTest(private val locale: String, private val scale: F
 
     @Test fun scenarioPageHasNoClippedText() {
         ui.runOnUiThread { ui.activity.auditDark = dark }
-        ui.waitUntil(30_000) { ui.onAllNodesWithTag("unified-chart").fetchSemanticsNodes().isNotEmpty() }
-        ui.onNodeWithTag("m2-research-basis-toggle").performScrollTo().performClick()
-        ui.onNodeWithTag("m2-research-basis").assertExists()
+        ui.waitUntil(30_000) { ui.onAllNodesWithTag("e2-chart").fetchSemanticsNodes().isNotEmpty() }
+        // UI-12: the research basis moved under "Model and literature"; its text is audited by Ui12ConcentrationTest.pageAndModelAndLiteratureWindowHaveNoClippedText.
         ui.waitForIdle()
         val d = ui.activity.resources.displayMetrics.density
         val problems = mutableListOf<String>()

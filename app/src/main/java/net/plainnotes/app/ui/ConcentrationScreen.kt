@@ -117,13 +117,10 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 val nowH = total.nowH
                 val noon = stringResource(R.string.ui12_noon_tick)
                 val spoken = stringResource(if (settings.pmol) R.string.ui12_unit_pmol_spoken else R.string.ui12_unit_pg_spoken)
-                val marks = remember(doseTimes, nowH) { doseTimes.map { it.toEpochMilli() / 3_600_000.0 }.filter { it <= nowH }.toDoubleArray() }
-                val data = remember(total, result, factor, marks, rangeDays, noon, spoken, unit) {
-                    ChartData(total.timeH, DoubleArray(total.values.size) { total.values[it] * factor }, null, null, nowH,
-                        result?.labs.orEmpty().map { it.first to it.second * factor }, unit = unit, breaks = total.breaks,
-                        readAt = { hour, cancel -> cancel(); total.readAt(hour, cancel)?.times(factor) },
-                        marks = marks, axisDays = true, noonLabel = noon, lineWidthDp = if (rangeDays == 3) 2.6f else 2f, unitSpoken = spoken)
+                val data = remember(total, result, factor, doseTimes, rangeDays, noon, spoken, unit) {
+                    E2Total.chartData(total, result?.labs.orEmpty(), factor, doseTimes, rangeDays, unit, noon, spoken)
                 }
+                val hasDoseMarks = data.marks.isNotEmpty()
                 key(rangeDays) {
                     ConcChart(data, nowH - rangeDays * 24.0, nowH + if (rangeDays == 3) 12.0 else 24.0, Modifier.fillMaxWidth().height(260.dp).testTag("e2-chart")) { if(it>=10)it.roundToInt().toString() else chartNumber.format(it) }
                 }
@@ -131,14 +128,14 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                     Legend(stringResource(R.string.legend_recorded), MaterialTheme.colorScheme.primary, dashed = false)
                     Legend(stringResource(R.string.uc_original_tail), MaterialTheme.colorScheme.primary, dashed = true)
                     if (!result?.labs.isNullOrEmpty()) Legend(stringResource(R.string.legend_labs), MaterialTheme.colorScheme.tertiary, dot = true)
-                    if (marks.isNotEmpty()) Legend(stringResource(R.string.legend_doses), MaterialTheme.colorScheme.secondary, tick = true)
+                    if (hasDoseMarks) Legend(stringResource(R.string.legend_doses), MaterialTheme.colorScheme.secondary, tick = true)
                 }
                 Text(stringResource(R.string.pk_unit),style=MaterialTheme.typography.bodyMedium)
                 AdaptiveChoice(listOf("pg/mL","pmol/L"),if(settings.pmol)1 else 0,{onSettings(ConcSettings(it==1,settings.calibrate,settings.mode))})
             }
             statusCards()
         } else if (pending || loading) Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-        else if (!previewReady && result != null && result.usedDoses==0 && result.simulatedMedications.isNotEmpty() && result.others.isEmpty() && !compatibilityHasSl)
+        else if (!previewReady && result != null && result.usedDoses==0 && result.others.isEmpty() && !compatibilityHasSl && state.medications.any { it.molecule in listOf("E2", "CPA", "SPI", "P4") })
             EmptyState(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.pk_no_doses_title), stringResource(R.string.pk_no_doses_body))
 
         if (result != null && result.others.isNotEmpty()) OtherCurvesCard(result)
@@ -148,7 +145,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 Text(stringResource(R.string.calib_enable), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
                 StatusPill(stringResource(R.string.ui12_calib_unavailable), MaterialTheme.colorScheme.surfaceContainerHighest, MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(Modifier.width(8.dp))
-                Switch(checked = false, onCheckedChange = null, enabled = false, modifier = Modifier.testTag("calibration-switch"))
+                Switch(checked = false, onCheckedChange = {}, enabled = false, modifier = Modifier.testTag("calibration-switch"))
             }
             Text(stringResource(R.string.ui12_calib_unavailable_sl),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("calibration-unavailable-sl"))
             OutlinedButton(onClick=onOpenLabs,modifier=Modifier.heightIn(min=48.dp)) { Text(stringResource(R.string.calib_manage_labs)) }

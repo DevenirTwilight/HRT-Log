@@ -101,4 +101,18 @@ object E2Total {
         }
         return Curve(times, values, nowH, total(nowH) {}, doubleArrayOf(), listOf(Route.SUBLINGUAL) + routesOf(other), m2.doseCount + other.usedDoses, false, ::total)
     }
+
+    /** Every E2 lab is a dot on the total curve (all routes, UI-12), in the displayed unit; nothing is filtered or rescaled beyond the unit factor. */
+    fun labPoints(labs: List<Pair<Double, Double>>, factor: Double): List<Pair<Double, Double>> = labs.map { it.first to it.second * factor }
+
+    /** Hours of the doses actually taken, only those up to "now". */
+    fun doseMarks(doseTimes: List<java.time.Instant>, nowH: Double): DoubleArray =
+        doseTimes.map { it.toEpochMilli() / 3_600_000.0 }.filter { it <= nowH }.sorted().toDoubleArray()
+
+    /** The chart's data for the page: the total in the displayed unit, labs, dose ticks, day axis and the line width of the chosen range. */
+    fun chartData(total: Curve, labs: List<Pair<Double, Double>>, factor: Double, doseTimes: List<java.time.Instant>, rangeDays: Int,
+                  unit: String, noonLabel: String, unitSpoken: String?): ChartData =
+        ChartData(total.timeH, DoubleArray(total.values.size) { total.values[it] * factor }, null, null, total.nowH, labPoints(labs, factor), unit = unit,
+            breaks = total.breaks, readAt = { hour, cancel -> cancel(); total.readAt(hour, cancel)?.times(factor) },
+            marks = doseMarks(doseTimes, total.nowH), axisDays = true, noonLabel = noonLabel, lineWidthDp = if (rangeDays == 3) 2.6f else 2f, unitSpoken = unitSpoken)
 }
