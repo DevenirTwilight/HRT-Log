@@ -27,7 +27,7 @@ android {
     namespace = "net.plainnotes.app"
     compileSdk = 37
     buildToolsVersion = "37.0.0"
-    defaultConfig { minSdk = 26; applicationId = "net.plainnotes.app"; targetSdk = 37; versionCode = 35; versionName = "0.2.0"; testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    defaultConfig { minSdk = 26; applicationId = "net.plainnotes.app"; targetSdk = 37; versionCode = 37; versionName = "0.2.0"; testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "SOURCE_SHA", "\"$sourceSha\""); buildConfigField("String", "SOURCE_COMMIT_TIME_UTC", "\"$sourceCommitTimeUtc\""); buildConfigField("boolean", "SOURCE_DIRTY", sourceDirty.toString()); buildConfigField("String", "SOURCE_ORIGIN", "\"$sourceOrigin\"") }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     testOptions {
