@@ -59,3 +59,9 @@ python3 -m unittest discover -s scripts -p 'test_bdpm*.py'
 - [UI-11 基线 before/after](../../ui-audit/2026-10-28-ui11/)与本目录截图对照：保留 hero、分组/药丸/返回，不把全部字段摊在首页，不恢复药物/库存捷径。新增资料为白卡内默认折叠入口及摘要行；外部浏览器确认是唯一新增必要警示弹窗。人工 TalkBack、真机、独立外审 NOT_RUN/NOT_REVIEWED_EXTERNALLY；不冒充更高层认证。
 
 本轮不签名、交付 APK 或创建 Release。APK 实测大小及最终 PR/CI/SHA 收据在 PR 正文，不能拿局部编译冒充原生验收。
+
+## #142 初次最终原生及实际体积收据
+
+`f27d0364` 的新增 MainActivity 正式入口合同在 API26/29/35 均实际 PASS。同批原有中心导航合同仍要求四个已实现模块没有点击动作，因此三个作业 FAIL；保留 XML/API35完整日志。最小修正只把四项改为验证实际产品选择窗口、返回和解锁会话，召回仍 OFF、文件 Intent 仍必须0；新候选的整体结果须等待其自己的最终 CI，不能以此前子项 PASS 代替。
+
+[实际 unsigned APK 对比](evidence/unsigned-apk-size-receipt.json)：同环境 clean #140 `32e3a422` 14,062,172 bytes → 生产实现 `f27d0364` 14,286,553 bytes，增加224,381 bytes（约219KiB）。两者均通过 DEX 源码身份核对；当前包的正式身份、无 INTERNET、附件与 ANSM 试验代码隔离实际 PASS。没有签名/交付。后继仅测试/证据修订不能冒充这份 APK 的来源；最终全部 CI/合并收据见 [PR #142](https://github.com/DevenirTwilight/HRT-Log/pull/142)。

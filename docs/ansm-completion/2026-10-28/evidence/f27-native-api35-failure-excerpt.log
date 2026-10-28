@@ -1,0 +1,149 @@
+2026-10-28T09:15:40.5116064Z 
+2026-10-28T09:15:40.5120447Z at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:264)
+2026-10-28T09:15:40.5121061Z at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+2026-10-28T09:15:40.5121693Z at androidx.compose.ui.test.AssertionsKt.assertHasNoClickAction(Assertions.kt:243)
+2026-10-28T09:15:40.5122750Z at net.plainnotes.app.shell.InAppNavigationLockAndroidTest.centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles(InAppNavigationLockAndroidTest.kt:281)
+2026-10-28T09:15:40.5907275Z 
+2026-10-28T09:15:40.5917334Z > Task :app:connectedFullDebugAndroidTest FAILED
+2026-10-28T09:15:40.5918349Z gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__ReactiveCircus_android-emulator-runner-1793178535223.json
+2026-10-28T09:15:40.5918998Z 
+2026-10-28T09:15:40.5919544Z FAILURE: Build failed with an exception.
+2026-10-28T09:15:40.5919789Z 
+2026-10-28T09:15:40.5919919Z * What went wrong:
+2026-10-28T09:15:40.5920310Z Execution failed for task ':app:connectedFullDebugAndroidTest'.
+2026-10-28T09:15:40.5921186Z > There were failing tests. See the report at: file:///home/runner/work/HRT-Log/HRT-Log/app/build/reports/androidTests/connected/debug/flavors/full/index.html
+2026-10-28T09:15:40.5921724Z 
+2026-10-28T09:15:40.5921813Z * Try:
+2026-10-28T09:15:40.5922127Z > Run with --stacktrace option to get the stack trace.
+2026-10-28T09:15:40.5922587Z > Run with --info or --debug option to get more log output.
+2026-10-28T09:15:40.5923114Z > Run with --scan to get full insights from a Build Scan (powered by Develocity).
+2026-10-28T09:15:40.5923574Z > Get more help at https://help.gradle.org.
+2026-10-28T09:15:40.5923780Z 
+2026-10-28T09:15:40.5923920Z BUILD FAILED in 6m 45s
+2026-10-28T09:15:40.5924236Z 152 actionable tasks: 1 executed, 151 up-to-date
+2026-10-28T09:15:40.6681780Z ##[error]The process '/usr/bin/sh' failed with exit code 1
+2026-10-28T09:15:40.6686935Z ##[group]Terminate Emulator
+2026-10-28T09:15:40.6687509Z [command]/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 emu kill
+2026-10-28T09:15:40.6713592Z OK: killing emulator, bye bye
+2026-10-28T09:15:40.6713985Z OK
+2026-10-28T09:15:40.6716750Z ##[endgroup]
+2026-10-28T09:15:40.6718647Z INFO         | Wait for emulator (pid 2665) 20 seconds to shutdown gracefully before kill;you can set environment variable ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL(in seconds) to change the default value (20 seconds)
+2026-10-28T09:15:40.6719677Z 
+2026-10-28T09:15:40.6892015Z USER_INFO    | Snapshots have been disabled by the user, save request is ignored.
+2026-10-28T09:15:40.6893228Z INFO         | Saving snapshot 'default_boot' took 0 ms
+2026-10-28T09:15:41.0097675Z ERROR        | stop: Not implemented
+2026-10-28T09:15:41.0098071Z WARNING      | Emulator client has not yet been configured.. Call configure me first!
+2026-10-28T09:15:41.0203445Z INFO         | removeAll
+2026-10-28T09:15:41.0846930Z WARNING      | Netsim Wifi dns:///localhost:39537 is gone due to Stream removed (CANCELLED)
+2026-10-28T09:15:41.6947985Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-28T09:15:41.6948245Z with:
+2026-10-28T09:15:41.6948386Z   name: device-test-results
+2026-10-28T09:15:41.6950656Z   path: core/data/build/reports/androidTests/
+core/data/build/reports/med02-lifecycle-isolated/
+core/data/build/reports/med02-operation-restart/
+core/data/build/reports/ansm-write-process-death/
+core/data/build/reports/gate2/
+core/data/build/reports/gate3/
+core/data/build/reports/b3/
+core/data/build/reports/med02-persistent-restart/
+core/data/build/reports/med02-restore-restart/
+core/data/build/reports/med02-generation-restart/
+core/data/build/reports/med02-collection-restart/
+core/data/build/reports/med02-format-readiness/
+app/build/reports/androidTests/
+app/build/reports/import-a-native/
+app/build/reports/med02-operation-isolated/
+app/build/reports/med02-product-native/
+app/build/outputs/androidTest-results/
+app/build/reports/bdpm/
+app/build/reports/unified-device-performance.json
+app/build/reports/pr19-display-performance.json
+app/build/reports/package-history-evidence.json
+app/build/reports/attachment-poc-evidence.json
+
+2026-10-28T09:15:41.6952494Z   if-no-files-found: warn
+2026-10-28T09:15:41.6952653Z   compression-level: 6
+2026-10-28T09:15:41.6952799Z   overwrite: false
+2026-10-28T09:15:41.6952945Z   include-hidden-files: false
+2026-10-28T09:15:41.6953110Z env:
+2026-10-28T09:15:41.6953308Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-28T09:15:41.6953603Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-28T09:15:41.6953844Z   ANDROID_HOME: /usr/local/lib/android/sdk
+2026-10-28T09:15:41.6954040Z   ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+2026-10-28T09:15:41.6954242Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-28T09:15:41.6954434Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-28T09:15:41.6954616Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-28T09:15:41.6954806Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-28T09:15:41.6955074Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-28T09:15:41.6955360Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-28T09:15:41.6955559Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-28T09:15:41.6955746Z   ANDROID_AVD_HOME: /home/runner/.android/avd
+2026-10-28T09:15:41.6955927Z ##[endgroup]
+2026-10-28T09:15:41.8086339Z (node:6347) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-28T09:15:41.8086990Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-28T09:15:41.9296896Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-28T09:15:41.9306866Z The least common ancestor is /home/runner/work/HRT-Log/HRT-Log. This will be the root directory of the artifact
+2026-10-28T09:15:41.9307684Z With the provided path, there will be 622 files uploaded
+2026-10-28T09:15:41.9308529Z Artifact name is valid!
+2026-10-28T09:15:41.9308949Z Root directory input is valid!
+2026-10-28T09:15:42.2787276Z Beginning upload of artifact content to blob storage
+2026-10-28T09:15:42.5417248Z (node:6347) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-28T09:15:43.1300205Z Uploaded bytes 1286627
+2026-10-28T09:15:43.1912184Z Finished uploading artifact content to blob storage!
+2026-10-28T09:15:43.1912884Z SHA256 digest of uploaded artifact zip is ac5d647ee4fec188a39bf37d7a12f6157836931b512d5e0b9d56dde8a4b4fb41
+2026-10-28T09:15:43.1913923Z Finalizing artifact upload
+2026-10-28T09:15:43.7367550Z Artifact device-test-results.zip successfully finalized. Artifact ID 12803768471
+2026-10-28T09:15:43.7368336Z Artifact device-test-results has been successfully uploaded! Final size is 1286627 bytes. Artifact ID is 12803768471
+2026-10-28T09:15:43.7371232Z Artifact download URL: https://github.com/DevenirTwilight/HRT-Log/actions/runs/40660379229/artifacts/12803768471
+2026-10-28T09:15:43.7550914Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-28T09:15:43.7551162Z with:
+2026-10-28T09:15:43.7551296Z   name: demo-evidence
+2026-10-28T09:15:43.7551457Z   path: app/build/reports/demo/
+2026-10-28T09:15:43.7551630Z   if-no-files-found: warn
+2026-10-28T09:15:43.7551804Z   compression-level: 6
+2026-10-28T09:15:43.7551953Z   overwrite: false
+2026-10-28T09:15:43.7552101Z   include-hidden-files: false
+2026-10-28T09:15:43.7552278Z env:
+2026-10-28T09:15:43.7552490Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-28T09:15:43.7552796Z   JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.12-1/x64
+2026-10-28T09:15:43.7553057Z   ANDROID_HOME: /usr/local/lib/android/sdk
+2026-10-28T09:15:43.7553255Z   ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+2026-10-28T09:15:43.7553461Z   GRADLE_ACTION_ID: gradle/actions/setup-gradle
+2026-10-28T09:15:43.7553659Z   GRADLE_USER_HOME: /home/runner/.gradle
+2026-10-28T09:15:43.7553870Z   GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
+2026-10-28T09:15:43.7554063Z   GRADLE_BUILD_ACTION_CACHE_RESTORED: true
+2026-10-28T09:15:43.7554339Z   DEVELOCITY_INJECTION_INIT_SCRIPT_NAME: gradle-actions.inject-develocity.init.gradle
+2026-10-28T09:15:43.7554629Z   DEVELOCITY_INJECTION_CUSTOM_VALUE: gradle-actions
+2026-10-28T09:15:43.7554838Z   GITHUB_DEPENDENCY_GRAPH_ENABLED: false
+2026-10-28T09:15:43.7555031Z   ANDROID_AVD_HOME: /home/runner/.android/avd
+2026-10-28T09:15:43.7555212Z ##[endgroup]
+2026-10-28T09:15:43.8594884Z (node:6360) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-28T09:15:43.8595682Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-28T09:15:43.8606323Z ##[warning]No files were found with the provided path: app/build/reports/demo/. No artifacts will be uploaded.
+2026-10-28T09:15:43.8833870Z Post job cleanup.
+2026-10-28T09:15:44.0383613Z In post-action step
+2026-10-28T09:15:44.0390662Z Cache is read-only: will not save state for use in subsequent builds.
+2026-10-28T09:15:44.0394666Z Generating Job Summary
+2026-10-28T09:15:44.0408417Z Completed post-action step
+2026-10-28T09:15:44.0632081Z Post job cleanup.
+2026-10-28T09:15:44.1543842Z (node:6384) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-28T09:15:44.1544379Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-28T09:15:44.1787344Z Post job cleanup.
+2026-10-28T09:15:44.2371942Z [command]/usr/bin/git version
+2026-10-28T09:15:44.2436756Z git version 2.55.0
+2026-10-28T09:15:44.2462485Z Temporarily overriding HOME='/home/runner/work/_temp/c2039bcd-6e40-4554-89ec-0192b1860996' before making global git config changes
+2026-10-28T09:15:44.2463310Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-28T09:15:44.2465996Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/HRT-Log/HRT-Log
+2026-10-28T09:15:44.2500413Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-28T09:15:44.2530598Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-28T09:15:44.2758910Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-28T09:15:44.2817990Z http.https://github.com/.extraheader
+2026-10-28T09:15:44.2827559Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-28T09:15:44.2878726Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-28T09:15:44.3134157Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-28T09:15:44.3167459Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-28T09:15:44.3543201Z Cleaning up orphan processes
+2026-10-28T09:15:44.3917025Z Terminate orphan process: pid (2768) (adb)
+2026-10-28T09:15:44.4004057Z Terminate orphan process: pid (2985) (java)
+2026-10-28T09:15:44.4064305Z Terminate orphan process: pid (3080) (java)
+2026-10-28T09:15:44.4167339Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02, android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407, gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -277,8 +277,18 @@ class InAppNavigationLockAndroidTest {
             listOf("rcp", "notice", "safety", "supply", "recalls").forEach { suffix ->
                 val tag = "drug-center-$suffix"
                 ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
-                // UI-11: the module rows are not tappable; nothing opens and the centre stays put.
-                ui.onNodeWithTag(tag).assertHasNoClickAction()
+                if (suffix == "recalls") {
+                    // No complete recall dataset: the unimplemented row must remain inert.
+                    ui.onNodeWithTag(tag).assertHasNoClickAction()
+                } else {
+                    // ANSM-04/06: implemented rows open the real product chooser, never a file picker.
+                    ui.onNodeWithTag(tag).assertHasClickAction().performClick()
+                    ui.onNodeWithTag("reference-window").assertExists()
+                    ui.onNodeWithTag("reference-screen").assertExists()
+                    assertUnlocked("Open product facts from $tag")
+                    back("reference-window")
+                    ui.onNodeWithTag("reference-window").assertDoesNotExist()
+                }
                 ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
                 ui.onNodeWithTag("drug-center-window").assertExists()
                 assertUnlocked("Rows $tag")
