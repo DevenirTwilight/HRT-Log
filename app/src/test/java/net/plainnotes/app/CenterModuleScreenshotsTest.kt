@@ -42,13 +42,10 @@ class CenterModuleScreenshotsTest(private val locale:String,private val dark:Boo
                 capture("medical-future",false)
                 continue
             }
-            val list=ui.onNodeWithTag(if(medical)"medical-list" else "drug-center-list")
-            val tag=if(medical)"medical-future-files" else "drug-center-recalls"
-            list.performScrollToNode(hasTestTag(tag))
-            // UI-11: the drug centre's not-yet-open modules are plain rows: no tap, no dialog.
-            ui.onNodeWithTag(tag).assertIsDisplayed().assertHasNoClickAction()
-            capture("$kind-future",!medical)
-            ui.onNodeWithTag(tag).performClick()
+            ui.onAllNodesWithTag("drug-center-recalls").assertCountEquals(0)
+            ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-rcp"))
+            ui.onNodeWithTag("drug-center-rcp").assertHasClickAction()
+            capture("$kind-official",true)
             ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
         }
         Assert.assertEquals(0,actions)
