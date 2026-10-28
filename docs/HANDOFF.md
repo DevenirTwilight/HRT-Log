@@ -1,4 +1,4 @@
-## UI-11 药品资料中心与商品资料关联重设计（进行中）— 2026-10-28
+## UI-11 药品资料中心与商品资料关联重设计（已合并）— 2026-10-28
 
 UI-10（医疗档案重设计）已合并（PR #139，5d383a2d）。UI-11 = 药品资料中心与商品资料关联页面重设计（任务书原称 UI-10，负责人确认改称 UI-11，REQUIREMENTS §158.A、§159）。分支 `feature/ui11-drug-center-20261027`，工作树 /home/user/wt-ui11，基于 5d383a2d。任务书原文 `docs/design/ui10-drug-center-2026-10-27/TASK_BOOK_ORIGINAL.md`；样图同目录（PR #138）。
 
@@ -13,7 +13,7 @@ UI-10（医疗档案重设计）已合并（PR #139，5d383a2d）。UI-11 = 药�
   - 新测试 `ui11/Ui11CenterTest`、`ui11/Ui11LinkTest`；已迁移断言：`DrugCenterNavigationTest`、`DrugCenterMatrixTest`、`CenterModuleScreenshotsTest`、`CenterStateRestorationTest`（去掉 onStock）、androidTestFull `InAppNavigationLockAndroidTest`（五个模块不再可点）。
   - 结果（2026-10-28）：`Ui11CenterTest` 144/144、`Ui11LinkTest` 72 例（56 通过、16 因 411dp 嵌套对话框跳过）；既有相关测试（DrugCenter*、CenterStateRestoration、MedicationReference*、RecordedReference、BdpmReferenceFlow、CenterModuleScreenshots）280 例全过。
   - 截图和前后对比已入库 `docs/ui-audit/2026-10-28-ui11/`（before 用 main `5d383a2d` 的旧组件在 /home/user/wt-ui11-before 渲染）；报告 `docs/audits/product-quality-2026-10/77-ui11-drug-center.md`；`docs/STATUS.md` 已更新。
-  - PR #140 已开，自动合并已开启（§106，默认分支是 `claude/new-session-1959qb`）。CI 失败按作业日志定位，不绕过检查；合并后确认默认分支 CI。UI-10 合并提交 `5d383a2d` 的默认分支 CI 也尚未确认。
+  - **已合并（2026-10-28）**：PR #140 合并为 `32e3a422`（默认分支 `claude/new-session-1959qb`），默认分支 CI 全绿（android、device-tests、jvm、attachment-poc-compatibility 26/29、security-native 四项、science-change-gate）。PR 上推送触发的 `android` 曾因无关的 `MedicalHomeConfirmFlowTest.confirmThenUndoInDetail`（10 秒 waitUntil）超时失败一次，同一提交的 PR 运行通过、本地通过，重跑一次后通过。UI-10 合并提交 `5d383a2d` 的默认分支 CI 也已确认全绿。后续：真机/人工 TalkBack 验收（NOT_RUN）；是否把 `docs/ui-audit/2026-10-28-ui11/` 之外的截图脚本（`/home/user/wt-ui11-before` 里的前后对比用例）入库，未做。
 
 ---
 
