@@ -1,0 +1,72 @@
+{
+"clinical_accuracy_established": false,
+"g_max": 3.725,
+"g_min": 0.276,
+"groups": [
+{
+"assay": "LC-MS/MS",
+"dose_mg": 1,
+"g_needed": 0.276,
+"group": "A_fitting (the legacy model was fitted to it; the M2 anchor is Price)",
+"id": "doll_sl_peak",
+"ln_g": -1.287,
+"model_increment_pgml": 434.84,
+"observed_pgml_as_used": 144,
+"study": "Doll2022",
+"time_h": 1
+},
+{
+"assay": "unknown",
+"dose_mg": 4,
+"g_needed": 0.998,
+"group": "B_external",
+"id": "pines_60min",
+"ln_g": -0.002,
+"model_increment_pgml": 1739.34,
+"observed_pgml_as_used": 1759,
+"study": "Pines1998",
+"time_h": 1
+},
+{
+"assay": "Immulite 2000 chemiluminescence",
+"dose_mg": 0.5,
+"g_needed": 3.727,
+"group": "B_external",
+"id": "yaish_90min",
+"ln_g": 1.315,
+"model_increment_pgml": 139.32,
+"observed_pgml_as_used": 543.18,
+"study": "Yaish2023",
+"time_h": 1.5
+},
+{
+"assay": "unknown",
+"dose_mg": 0.5,
+"g_needed": 2.76,
+"group": "B_external",
+"id": "burnier_1h_fold",
+"ln_g": 1.015,
+"model_increment_pgml": 217.42,
+"observed_pgml_as_used": 624.0,
+"study": "Burnier1981",
+"time_h": 1
+}
+],
+"implied_prior_sd_note": "The p1a prior sd (0.455) is 0.39 to 0.66 of the between-study ln-spread above (all four groups / the three external ones); it is a diagnostic ratio, not a fitted prior.",
+"ln_g_sd_all": 1.175,
+"ln_g_sd_external_only": 0.69,
+"m2": {
+"amplitude_pgml_per_mg": 434.8357,
+"background_pgml": 24.0,
+"candidate": "p2x-39"
+},
+"not_a_validation": true,
+"note": "Aggregate summaries only. Different assays, populations, baselines and doses; dose proportionality assumed. A spread of g across studies is a statement about between-study heterogeneity, not about any person.",
+"schema": "sl-cal-01-external-diagnostic-v1",
+"single_dose_tail_hours_until_fraction_of_peak_increment": {
+"0.001": 22.48,
+"0.01": 13.68,
+"0.03": 9.48,
+"0.1": 4.99
+}
+}

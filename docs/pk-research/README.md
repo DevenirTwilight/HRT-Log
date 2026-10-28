@@ -11,3 +11,5 @@
 以上为历史M4a调研记录；文献引擎与参数已经实现，不再是待编写任务。
 
 2026-10-09最新入口：[舌下P0科学审查](sublingual-v2.md)、[校准审计](sublingual-calibration-audit.md)、[P1规划（未实施）](sublingual-p1-design.md)、[自动对照](results/sublingual-p0-report.md)、[复现工具](../../tools/pk-audit/README.md)。独立来源数据在pk-engine/src/test/resources/sublingual-literature-validation.json；训练、外部、定性分组严格分开。科学外部验证未确立，不以旧拟合测试作为临床准确性证明。
+
+2026-10-28 SL-CAL-01（只研究，不改产品）：[化验校准 E2 合计的研究报告](sl-cal/sl-cal-01-report.md)；任务书原文 [TASK_BOOK_ORIGINAL.md](sl-cal/TASK_BOOK_ORIGINAL.md)；合成验证、可辨识性与外部条件性诊断在 `sl-cal/results/`，脚本在 `tools/pk-research/sl_cal/`。结论仍为外部临床准确性未确立。
