@@ -1,3 +1,11 @@
+## MED-03 接手修复检查点 — 2026-10-28（继续实施，未完成产品）
+
+实时远端#145仍46838e4e，默认6ada7402；旧本地工作区/日志未保留，已在同名原分支恢复独立工作树HRT-Log-med03-panel，没有强推或另开总PR。原GitHub host40691410692/artifact12817702193的24项失败报告及sha留在med03/evidence。Compose错误最小修复为合法Composable for读取本地化标签，再纯join；app:compileFullDebugKotlin实际PASS。
+
+24项归因并修复：旧当前Room断言21→22（不改旧fixture/回滚版本），故障注入链补21→22使原injected必须执行；published21夹具indices可缺省（真实21.JSON确有无索引表），BLOB行快照改为类型保持/原始字节比较；候选误把至少2项显示组合并改成任意非空，恢复原>=2业务断言；迁移现在保留实际旧DDL，只替换必要目标CHECK/journal nullable，旧实体字节指纹断言不删除。新增relation表以完整10表名称集合核对，不只是改计数。第一次修复后暴露3个夹具/结构断言问题，原XML也保存；第二轮108项定向迁移/身份/既有历史及app编译全部PASS，XML/log在evidence/migration-repair-green。
+
+仍须继续：正式文件库Host/关联收据与UNKNOWN对账、记录创建时选附件、一次5结果单PDF/ID碰撞/删除恢复/版本化归档真实闭环、UI/原生API26/29/35和精确HEAD必需CI。此检查点不是MED03_PRODUCT_INTEGRATION_COMPLETE，不Ready/不关闭Issue144；未签名、未交付新APK。旧版本APP必须拒绝22回退，不清库；保护临床/库存/ANSM/密码学边界不变。
+
 ## MED-03 实施检查点 — 2026-10-28（未完成，不可交付）
 
 #143 已受保护合并：源码 `3c50d7eb7c7fb1cf32fa70213827c10473e946bb`，主线合并 `6ada7402b28bf7ca2cc70acff158efbe1900bb98`；push 40683340703 / PR 40683348274 六项必需检查 PASS。只读官方资料、删除不可靠召回卡、补录历史就诊不再待实现。保留原32项旧召回断言失败证据。

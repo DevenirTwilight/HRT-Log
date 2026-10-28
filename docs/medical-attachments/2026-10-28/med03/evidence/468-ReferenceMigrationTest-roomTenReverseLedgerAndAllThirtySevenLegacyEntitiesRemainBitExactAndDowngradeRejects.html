@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<div class="breadcrumbs">
+<a class="breadcrumb" href="../index.html">all</a> &gt; 
+<a class="breadcrumb" href="index.html">net.plainnotes.app.data.ReferenceMigrationTest</a> &gt; 
+<span class="breadcrumb">roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects</span>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a class="failureGroup" href="#">Gradle Test Run :core:data:testDebugUnitTest</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Gradle Test Run :core:data:testDebugUnitTest</h2>
+<h1>roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects</h1>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a class="" href="#">summary</a>
+</li>
+</ul>
+<div class="tab">
+<h2>summary</h2>
+<div>
+<div class="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox">
+<div class="counter">1</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox">
+<div class="counter">0</div>
+<p>skipped</p>
+</div>
+</td>
+<td>
+<div class="infoBox duration">
+<div class="counter">0.268s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox failures successRate">
+<div class="percent">0%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="result-details">
+<h3>Failure details</h3>
+<span class="code">
+<pre id="root-0-test-failure-roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects">org.junit.ComparisonFailure: expected:&lt;...tity&quot;,&quot;CREATE TABLE [`attachment_record_identity` (`store_uuid` TEXT NOT NULL, `record_epoch` TEXT NOT NULL, `record_uuid` TEXT NOT NULL, `target_kind` TEXT NOT NULL, `legacy_id` INTEGER NOT NULL, `state` TEXT NOT NULL, `trash_id` INTEGER, `evidence_digest` BLOB NOT NULL, PRIMARY KEY(`store_uuid`, `record_epoch`, `record_uuid`), FOREIGN KEY(`store_uuid`, `record_epoch`) REFERENCES `attachment_store`(`store_uuid`, `record_epoch`) ON UPDATE NO ACTION ON DELETE RESTRICT )&quot;]],&quot;attachment_document&quot;:[],&quot;ddl_attachment_document&quot;:[[&quot;index&quot;,&quot;index_attachment_document_store_uuid_document_uuid_active_version_uuid&quot;,&quot;CREATE INDEX `index_attachment_document_store_uuid_document_uuid_active_version_uuid` ON `attachment_document` (`store_uuid`, `document_uuid`, `active_version_uuid`)&quot;],[&quot;index&quot;,&quot;sqlite_autoindex_attachment_document_1&quot;,null],[&quot;table&quot;,&quot;attachment_document&quot;,&quot;CREATE TABLE `attachment_document` (`store_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `revision` INTEGER NOT NULL, `title` TEXT NOT NULL, `category` TEXT NOT NULL, `state` TEXT NOT NULL, `active_version_uuid` TEXT, `deleted_utc` INTEGER, PRIMARY KEY(`store_uuid`, `document_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`, `active_version_uuid`) REFERENCES `attachment_version`(`store_uuid`, `document_uuid`, `version_uuid`) ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`store_uuid`) REFERENCES `attachment_store`(`store_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )&quot;]],&quot;attachment_version&quot;:[],&quot;ddl_attachment_version&quot;:[[&quot;index&quot;,&quot;index_attachment_version_store_uuid_document_uuid_ordinal&quot;,&quot;CREATE UNIQUE INDEX `index_attachment_version_store_uuid_document_uuid_ordinal` ON `attachment_version` (`store_uuid`, `document_uuid`, `ordinal`)&quot;],[&quot;index&quot;,&quot;index_attachment_version_store_uuid_object_uuid&quot;,&quot;CREATE UNIQUE INDEX `index_attachment_version_store_uuid_object_uuid` ON `attachment_version` (`store_uuid`, `object_uuid`)&quot;],[&quot;index&quot;,&quot;index_attachment_version_store_uuid_status&quot;,&quot;CREATE INDEX `index_attachment_version_store_uuid_status` ON `attachment_version` (`store_uuid`, `status`)&quot;],[&quot;index&quot;,&quot;sqlite_autoindex_attachment_version_1&quot;,null],[&quot;table&quot;,&quot;attachment_version&quot;,&quot;CREATE TABLE `attachment_version` (`store_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `version_uuid` TEXT NOT NULL, `ordinal` INTEGER NOT NULL, `object_uuid` TEXT NOT NULL, `protocol_revision` INTEGER NOT NULL, `dek_handle_uuid` TEXT NOT NULL, `plaintext_sha256` BLOB NOT NULL, `ciphertext_sha256` BLOB NOT NULL, `plaintext_bytes` INTEGER NOT NULL, `ciphertext_bytes` INTEGER NOT NULL, `mime` TEXT NOT NULL, `status` TEXT NOT NULL, PRIMARY KEY(`store_uuid`, `document_uuid`, `version_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`) REFERENCES `attachment_document`(`store_uuid`, `document_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )&quot;]],&quot;attachment_link&quot;:[],&quot;ddl_attachment_link&quot;:[[&quot;index&quot;,&quot;index_attachment_link_store_uuid_document_uuid_state&quot;,&quot;CREATE INDEX `index_attachment_link_store_uuid_document_uuid_state` ON `attachment_link` (`store_uuid`, `document_uuid`, `state`)&quot;],[&quot;index&quot;,&quot;index_attachment_link_store_uuid_record_epoch_record_uuid_document_uuid&quot;,&quot;CREATE UNIQUE INDEX index_attachment_link_store_uuid_record_epoch_record_uuid_document_uuid ON attachment_link(store_uuid,record_epoch,record_uuid,document_uuid) WHERE state='ACTIVE'&quot;],[&quot;index&quot;,&quot;sqlite_autoindex_attachment_link_1&quot;,null],[&quot;table&quot;,&quot;attachment_link&quot;,&quot;CREATE TABLE `attachment_link` (`store_uuid` TEXT NOT NULL, `link_uuid` TEXT NOT NULL, `record_epoch` TEXT NOT NULL, `record_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `revision` INTEGER NOT NULL, `state` TEXT NOT NULL, PRIMARY KEY(`store_uuid`, `link_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`) REFERENCES `attachment_document`(`store_uuid`, `document_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`store_uuid`, `record_epoch`, `record_uuid`) REFERENCES `attachment_record_identity`(`store_uuid`, `record_epoch`, `record_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT ])&quot;]],&quot;attachment_ope...&gt; but was:&lt;...tity&quot;,&quot;CREATE TABLE [attachment_record_identity (\n store_uuid TEXT NOT NULL, record_epoch TEXT NOT NULL,\n record_uuid TEXT NOT NULL CHECK(length(record_uuid)=36),\n target_kind TEXT NOT NULL CHECK(target_kind IN('APPOINTMENT','LAB','LAB_PANEL','DOSE_RECORD')),\n legacy_id INTEGER NOT NULL CHECK(legacy_id&gt;0),\n state TEXT NOT NULL CHECK(state IN('ACTIVE','TRASHED','PURGED')),\n trash_id INTEGER, evidence_digest BLOB NOT NULL CHECK(length(evidence_digest)=32),\n PRIMARY KEY(store_uuid,record_epoch,record_uuid),\n FOREIGN KEY(store_uuid,record_epoch) REFERENCES attachment_store(store_uuid,record_epoch) ON DELETE RESTRICT,\n CHECK((state='TRASHED' AND trash_id IS NOT NULL) OR (state!='TRASHED' AND trash_id IS NULL))\n)&quot;]],&quot;attachment_document&quot;:[],&quot;ddl_attachment_document&quot;:[[&quot;index&quot;,&quot;index_attachment_document_store_uuid_document_uuid_active_version_uuid&quot;,&quot;CREATE INDEX `index_attachment_document_store_uuid_document_uuid_active_version_uuid` ON `attachment_document` (`store_uuid`, `document_uuid`, `active_version_uuid`)&quot;],[&quot;index&quot;,&quot;sqlite_autoindex_attachment_document_1&quot;,null],[&quot;table&quot;,&quot;attachment_document&quot;,&quot;CREATE TABLE `attachment_document` (`store_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `revision` INTEGER NOT NULL, `title` TEXT NOT NULL, `category` TEXT NOT NULL, `state` TEXT NOT NULL, `active_version_uuid` TEXT, `deleted_utc` INTEGER, PRIMARY KEY(`store_uuid`, `document_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`, `active_version_uuid`) REFERENCES `attachment_version`(`store_uuid`, `document_uuid`, `version_uuid`) ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`store_uuid`) REFERENCES `attachment_store`(`store_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )&quot;]],&quot;attachment_version&quot;:[],&quot;ddl_attachment_version&quot;:[[&quot;index&quot;,&quot;index_attachment_version_store_uuid_document_uuid_ordinal&quot;,&quot;CREATE UNIQUE INDEX `index_attachment_version_store_uuid_document_uuid_ordinal` ON `attachment_version` (`store_uuid`, `document_uuid`, `ordinal`)&quot;],[&quot;index&quot;,&quot;index_attachment_version_store_uuid_object_uuid&quot;,&quot;CREATE UNIQUE INDEX `index_attachment_version_store_uuid_object_uuid` ON `attachment_version` (`store_uuid`, `object_uuid`)&quot;],[&quot;index&quot;,&quot;index_attachment_version_store_uuid_status&quot;,&quot;CREATE INDEX `index_attachment_version_store_uuid_status` ON `attachment_version` (`store_uuid`, `status`)&quot;],[&quot;index&quot;,&quot;sqlite_autoindex_attachment_version_1&quot;,null],[&quot;table&quot;,&quot;attachment_version&quot;,&quot;CREATE TABLE `attachment_version` (`store_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `version_uuid` TEXT NOT NULL, `ordinal` INTEGER NOT NULL, `object_uuid` TEXT NOT NULL, `protocol_revision` INTEGER NOT NULL, `dek_handle_uuid` TEXT NOT NULL, `plaintext_sha256` BLOB NOT NULL, `ciphertext_sha256` BLOB NOT NULL, `plaintext_bytes` INTEGER NOT NULL, `ciphertext_bytes` INTEGER NOT NULL, `mime` TEXT NOT NULL, `status` TEXT NOT NULL, PRIMARY KEY(`store_uuid`, `document_uuid`, `version_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`) REFERENCES `attachment_document`(`store_uuid`, `document_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )&quot;]],&quot;attachment_link&quot;:[],&quot;ddl_attachment_link&quot;:[[&quot;index&quot;,&quot;index_attachment_link_store_uuid_document_uuid_state&quot;,&quot;CREATE INDEX `index_attachment_link_store_uuid_document_uuid_state` ON `attachment_link` (`store_uuid`, `document_uuid`, `state`)&quot;],[&quot;index&quot;,&quot;index_attachment_link_store_uuid_record_epoch_record_uuid_document_uuid&quot;,&quot;CREATE UNIQUE INDEX index_attachment_link_store_uuid_record_epoch_record_uuid_document_uuid ON attachment_link(store_uuid,record_epoch,record_uuid,document_uuid) WHERE state='ACTIVE'&quot;],[&quot;index&quot;,&quot;sqlite_autoindex_attachment_link_1&quot;,null],[&quot;table&quot;,&quot;attachment_link&quot;,&quot;CREATE TABLE attachment_link (\n store_uuid TEXT NOT NULL, link_uuid TEXT NOT NULL CHECK(length(link_uuid)=36),\n record_epoch TEXT NOT NULL, record_uuid TEXT NOT NULL, document_uuid TEXT NOT NULL,\n revision INTEGER NOT NULL CHECK(revision&gt;=1), state TEXT NOT NULL CHECK(state IN('ACTIVE','RETRACTED','QUARANTINED')),\n PRIMARY KEY(store_uuid,link_uuid),\n FOREIGN KEY(store_uuid,record_epoch,record_uuid) REFERENCES attachment_record_identity(store_uuid,record_epoch,record_uuid) ON DELETE RESTRICT,\n FOREIGN KEY(store_uuid,document_uuid) REFERENCES attachment_document(store_uuid,document_uuid) ON DELETE RESTRICT\n])&quot;]],&quot;attachment_ope...&gt;
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at net.plainnotes.app.data.ReferenceMigrationContract.roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects(ReferenceMigrationContract.kt:328)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:524)
+	at org.robolectric.internal.SandboxTestRunner.executeInSandbox(SandboxTestRunner.java:494)
+	at org.robolectric.internal.SandboxTestRunner.access$900(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$7.evaluate(SandboxTestRunner.java:442)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.robolectric.internal.SandboxTestRunner.access$600(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$6.evaluate(SandboxTestRunner.java:333)
+	at org.robolectric.internal.SandboxTestRunner$3.evaluate(SandboxTestRunner.java:233)
+	at org.robolectric.internal.SandboxTestRunner$5.lambda$evaluate$0(SandboxTestRunner.java:317)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:101)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</pre>
+<button class="clipboard-copy-btn" aria-label="Copy to clipboard" data-copy-element-id="root-0-test-failure-roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects">Copy</button>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 9.3.1</a> at Oct 28, 2026, 12:57:43 PM</p>
+</div>
+</div>
+</body>
+</html>

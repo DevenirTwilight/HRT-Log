@@ -92,9 +92,14 @@ abstract class AttachmentMigrationContract {
             fun open()=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass))
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
             room=open();val db=room!!;val raw=db.openHelper.writableDatabase
-            assertEquals(21,raw.version);assertEquals(before,fingerprint(raw));raw.query("SELECT inventory_encoding FROM supply_container").use{c->while(c.moveToNext())assertEquals(InventoryEncoding.LEGACY,c.getString(0))}
+            assertEquals(22,raw.version);assertEquals(before,fingerprint(raw));raw.query("SELECT inventory_encoding FROM supply_container").use{c->while(c.moveToNext())assertEquals(InventoryEncoding.LEGACY,c.getString(0))}
             raw.query("PRAGMA foreign_key_check").use{assertEquals(0,it.count)}
-            raw.query("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'attachment_%'").use{assertEquals(9,it.count)}
+            val attachmentTables=AttachmentSchema.tables.map {it.substringAfter("CREATE TABLE ").substringBefore(' ')}.toSet()+
+                setOf("attachment_journal","attachment_relation_operation")
+            assertEquals(10,attachmentTables.size)
+            raw.query("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'attachment_%'").use {c->
+                assertEquals(attachmentTables,buildSet {while(c.moveToNext())add(c.getString(0))})
+            }
             val scope=db.withTransaction { requireNotNull(AttachmentIdentity.initialize(raw,true)) }
             val id=db.withTransaction { AttachmentIdentity.bind(raw,scope,"APPOINTMENT",1) }
             val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
@@ -120,7 +125,7 @@ abstract class AttachmentMigrationContract {
             fixture(name,pass,1).use{it.writableDatabase.execSQL("INSERT INTO day_note(date,text) VALUES ('2026-01-01','synthetic oldest chain')")}
             room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass))
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
-            val raw=room!!.openHelper.writableDatabase;assertEquals(21,raw.version)
+            val raw=room!!.openHelper.writableDatabase;assertEquals(22,raw.version)
             raw.query("SELECT text FROM day_note").use{assertTrue(it.moveToFirst());assertEquals("synthetic oldest chain",it.getString(0))}
             raw.query("PRAGMA foreign_key_check").use{assertEquals(0,it.count)}
         } finally {room?.close();context.deleteDatabase(name);pass.fill(0)}
@@ -133,7 +138,7 @@ abstract class AttachmentMigrationContract {
             val fault=object:androidx.room.migration.Migration(9,10) {
                 override fun migrate(db:SupportSQLiteDatabase) {AttachmentSchema.migrate(db);injected=true;error("synthetic migration interruption")}
             }
-            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration10To11,migration11To12,migration12To13,migration13To14,migration14To15,migration15To16,migration16To17,migration17To18,migration18To19,migration19To20,migration20To21).build()
+            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration10To11,migration11To12,migration12To13,migration13To14,migration14To15,migration15To16,migration16To17,migration17To18,migration18To19,migration19To20,migration20To21,migration21To22).build()
             try{room!!.openHelper.writableDatabase;fail("Interrupted migration reported success")}catch(_:IllegalStateException){}
             assertTrue("Injected migration must actually execute",injected)
             room!!.close();room=null
@@ -142,8 +147,8 @@ abstract class AttachmentMigrationContract {
                 db.query("SELECT text FROM day_note").use{c->assertTrue(c.moveToFirst());assertEquals("synthetic rollback sentinel",c.getString(0))}
                 db.query("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'attachment_%'").use{c->assertEquals(0,c.count)}
             }
-            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(migration9To10,migration10To11,migration11To12,migration12To13,migration13To14,migration14To15,migration15To16,migration16To17,migration17To18,migration18To19,migration19To20,migration20To21).addCallback(SchemaGuards).build()
-            assertEquals(21,room!!.openHelper.writableDatabase.version)
+            room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(migration9To10,migration10To11,migration11To12,migration12To13,migration13To14,migration14To15,migration15To16,migration16To17,migration17To18,migration18To19,migration19To20,migration20To21,migration21To22).addCallback(SchemaGuards).build()
+            assertEquals(22,room!!.openHelper.writableDatabase.version)
         } finally {room?.close();context.deleteDatabase(name);pass.fill(0)}
     }
 
@@ -159,12 +164,12 @@ abstract class AttachmentMigrationContract {
             }
             var injected=false
             val fault=object:androidx.room.migration.Migration(13,14) {override fun migrate(db:SupportSQLiteDatabase) {migration13To14.migrate(db);injected=true;error("synthetic journal migration interruption")}}
-            val broken=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration14To15,migration15To16,migration16To17,migration17To18,migration18To19,migration19To20,migration20To21).build()
+            val broken=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration14To15,migration15To16,migration16To17,migration17To18,migration18To19,migration19To20,migration20To21,migration21To22).build()
             try {try {broken.openHelper.writableDatabase;fail("Interrupted journal migration accepted")}catch(_:IllegalStateException){}} finally {broken.close()}
             assertTrue("Injected journal migration must actually execute",injected)
             fixture(name,pass,13).use {h->assertEquals(13,h.writableDatabase.version);h.writableDatabase.query("SELECT name FROM sqlite_master WHERE name='attachment_journal'").use {assertEquals(0,it.count)}}
             val room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
-            try {val db=room.openHelper.writableDatabase;assertEquals(21,db.version)
+            try {val db=room.openHelper.writableDatabase;assertEquals(22,db.version)
                 db.query("SELECT status,plaintext_sha256,ciphertext_sha256 FROM attachment_version WHERE version_uuid=?",arrayOf(version)).use {assertTrue(it.moveToFirst());assertEquals("STAGED",it.getString(0));assertArrayEquals(ByteArray(32),it.getBlob(1));assertArrayEquals(ByteArray(32),it.getBlob(2))}
                 db.query("SELECT COUNT(*) FROM attachment_journal").use {assertTrue(it.moveToFirst());assertEquals(0,it.getInt(0))}
                 try {db.execSQL("UPDATE attachment_version SET status='VERIFIED'");fail("Legacy UNKNOWN promoted")}catch(_:android.database.SQLException){}
@@ -187,7 +192,7 @@ abstract class AttachmentMigrationContract {
             val fault=object:androidx.room.migration.Migration(14,15) {override fun migrate(db:SupportSQLiteDatabase) {
                 migration14To15.migrate(db);injected=true;error("synthetic authority migration interruption")
             }}
-            val broken=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration15To16,migration16To17,migration17To18,migration18To19,migration19To20,migration20To21).build()
+            val broken=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration15To16,migration16To17,migration17To18,migration18To19,migration19To20,migration20To21,migration21To22).build()
             try {try {broken.openHelper.writableDatabase;fail("Interrupted authority migration accepted")}catch(_:IllegalStateException){}}finally {broken.close()}
             assertTrue("Authority migration fault must actually execute",injected)
             fixture(name,pass,14).use {h->val db=h.writableDatabase
@@ -197,7 +202,7 @@ abstract class AttachmentMigrationContract {
                 db.query("SELECT store_uuid,logical_vault_uuid,record_epoch,feature_enabled FROM attachment_store").use {assertTrue(it.moveToFirst());assertEquals(dataset,it.getString(0));assertEquals(vault,it.getString(1));assertEquals(epoch,it.getString(2));assertEquals(0,it.getInt(3));assertFalse(it.moveToNext())}
             }
             val room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
-            try {val db=room.openHelper.writableDatabase;assertEquals(21,db.version)
+            try {val db=room.openHelper.writableDatabase;assertEquals(22,db.version)
                 assertEquals(AttachmentIdentity.Scope(dataset,vault,epoch),AttachmentIdentity.current(db))
                 for(t in listOf("library_authority","library_candidate"))db.query("SELECT COUNT(*) FROM $t").use {assertTrue(it.moveToFirst());assertEquals(0L,it.getLong(0))}
                 db.query("SELECT text FROM day_note").use {assertTrue(it.moveToFirst());assertEquals("synthetic authority rollback sentinel",it.getString(0))}
@@ -213,14 +218,14 @@ abstract class AttachmentMigrationContract {
             fixture(name,pass,15).use {h->h.writableDatabase.execSQL("INSERT INTO day_note(date,text) VALUES ('2026-01-01','synthetic lifecycle migration')")}
             var reached=false
             val fault=object:androidx.room.migration.Migration(15,16) {override fun migrate(db:SupportSQLiteDatabase) {migration15To16.migrate(db);reached=true;error("synthetic lifecycle fault")}}
-            val bad=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration16To17,migration17To18,migration18To19,migration19To20,migration20To21).build()
+            val bad=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration16To17,migration17To18,migration18To19,migration19To20,migration20To21,migration21To22).build()
             try {try {bad.openHelper.writableDatabase;fail("Failed lifecycle migration accepted")}catch(_:IllegalStateException){}}finally {bad.close()}
             assertTrue(reached)
             fixture(name,pass,15).use {h->val r=h.writableDatabase;assertEquals(15,r.version)
                 r.query("SELECT name FROM sqlite_master WHERE name IN('library_resource_owner','library_resource_inventory')").use {assertEquals(0,it.count)}
                 r.query("SELECT text FROM day_note").use {assertTrue(it.moveToFirst());assertEquals("synthetic lifecycle migration",it.getString(0))}}
             val room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
-            try {val r=room.openHelper.writableDatabase;assertEquals(21,r.version)
+            try {val r=room.openHelper.writableDatabase;assertEquals(22,r.version)
                 for(t in listOf("library_resource_owner","library_resource_inventory"))r.query("SELECT COUNT(*) FROM $t").use {assertTrue(it.moveToFirst());assertEquals(0,it.getInt(0))}
                 r.query("SELECT text FROM day_note").use {assertTrue(it.moveToFirst());assertEquals("synthetic lifecycle migration",it.getString(0))}
                 r.query("PRAGMA foreign_key_check").use {assertEquals(0,it.count)}
@@ -235,14 +240,14 @@ abstract class AttachmentMigrationContract {
             fixture(name,pass,16).use {h->h.writableDatabase.execSQL("INSERT INTO day_note(date,text) VALUES ('2026-01-01','synthetic collection sentinel')")}
             var reached=false
             val fault=object:androidx.room.migration.Migration(16,17) {override fun migrate(db:SupportSQLiteDatabase) {migration16To17.migrate(db);reached=true;error("synthetic collection interruption")}}
-            val broken=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration17To18,migration18To19,migration19To20,migration20To21).build()
+            val broken=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(fault,migration17To18,migration18To19,migration19To20,migration20To21,migration21To22).build()
             try {try {broken.openHelper.writableDatabase;fail("Interrupted migration succeeded")}catch(_:IllegalStateException){}}finally {broken.close()}
             assertTrue(reached)
             fixture(name,pass,16).use {h->val r=h.writableDatabase;assertEquals(16,r.version)
                 r.query("SELECT 1 FROM sqlite_master WHERE name IN('library_collection','library_collection_member','library_write_reservation')").use {assertEquals(0,it.count)}
                 r.query("SELECT text FROM day_note").use {assertTrue(it.moveToFirst());assertEquals("synthetic collection sentinel",it.getString(0))}}
             val room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass)).addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
-            try {val r=room.openHelper.writableDatabase;assertEquals(21,r.version)
+            try {val r=room.openHelper.writableDatabase;assertEquals(22,r.version)
                 for(t in listOf("library_collection","library_collection_member","library_write_reservation"))r.query("SELECT COUNT(*) FROM $t").use {assertTrue(it.moveToFirst());assertEquals(0,it.getInt(0))}
                 r.query("SELECT text FROM day_note").use {assertTrue(it.moveToFirst());assertEquals("synthetic collection sentinel",it.getString(0))}
                 r.query("PRAGMA foreign_key_check").use {assertEquals(0,it.count)}
@@ -321,7 +326,7 @@ abstract class AttachmentMigrationContract {
             room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory(pass))
                 .addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
             val db=room.openHelper.writableDatabase
-            assertEquals(21,db.version);assertEquals(before,rows(db));assertEquals(scope,AttachmentIdentity.current(db))
+            assertEquals(22,db.version);assertEquals(before,rows(db));assertEquals(scope,AttachmentIdentity.current(db))
             db.query("PRAGMA foreign_key_check").use {assertFalse(it.moveToFirst())}
             assertEncryptedDatabase(name)
             room.close();room=null

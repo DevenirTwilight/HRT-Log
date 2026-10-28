@@ -253,7 +253,9 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
                                             Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(6.dp)) {
                                                 Text(listOfNotNull(when_,place).joinToString(" · "),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
                                                 Text(stringResource(R.string.med03_whole_draw,d.labs.size),style=MaterialTheme.typography.bodyMedium)
-                                                Text(d.labs.joinToString(" · ") {analyteLabel(it.analyte_code)},style=MaterialTheme.typography.bodySmall)
+                                                val analyteLabels = mutableListOf<String>()
+                                                for (lab in d.labs) analyteLabels += analyteLabel(lab.analyte_code)
+                                                Text(analyteLabels.joinToString(" · "),style=MaterialTheme.typography.bodySmall)
                                                 if(panel==null)Text(stringResource(R.string.lab_panel_save_as),color=MaterialTheme.colorScheme.primary)
                                             }
                                         }

@@ -25,6 +25,13 @@ internal object MedicalFilesSchema {
     fun migrate(db:SupportSQLiteDatabase,checkpoint:()->Unit={}) {
         check(db.inTransaction())
         val names=listOf("attachment_link","attachment_journal","attachment_record_identity")
+        // Preserve the actual published table definitions, including legacy FK clauses and quoting.
+        // Only the new target CHECK (when present) and independent journal nullability change.
+        val definitions=names.associateWith {table->
+            db.query("SELECT sql FROM sqlite_master WHERE type='table' AND name=?",arrayOf(table)).use {
+                check(it.moveToFirst()) {"Missing published attachment table"};it.getString(0)
+            }
+        }
         val triggers=db.query("SELECT name,sql FROM sqlite_master WHERE type='trigger' ORDER BY name").use {c->buildList {
             while(c.moveToNext())if(names.any {c.getString(1).contains(it)})add(c.getString(0) to c.getString(1))}}
         val indices=db.query("SELECT sql FROM sqlite_master WHERE type='index' AND tbl_name IN('attachment_link','attachment_journal','attachment_record_identity') AND sql IS NOT NULL ORDER BY name").use {c->buildList {while(c.moveToNext())add(c.getString(0))}}
@@ -32,10 +39,13 @@ internal object MedicalFilesSchema {
         triggers.forEach {(name,_)->db.execSQL("DROP TRIGGER `$name`")}
         names.forEach {db.execSQL("DROP TABLE `$it`")}
         checkpoint() // Same transaction rolls back copies, DDL and original data on failure.
-        db.execSQL(AttachmentSchema.tables.single {it.startsWith("CREATE TABLE attachment_record_identity (")}
+        db.execSQL(definitions.getValue("attachment_record_identity")
             .replace("'APPOINTMENT','LAB','DOSE_RECORD'","'APPOINTMENT','LAB','LAB_PANEL','DOSE_RECORD'"))
-        db.execSQL(AttachmentSchema.tables.single {it.startsWith("CREATE TABLE attachment_link (")})
-        db.execSQL(AttachmentJournalSchema.create.replace("record_uuid TEXT NOT NULL","record_uuid TEXT"))
+        db.execSQL(definitions.getValue("attachment_link"))
+        val journal=definitions.getValue("attachment_journal")
+        val independentJournal=journal.replace(Regex("([`\"]?record_uuid[`\"]?\\s+TEXT)\\s+NOT NULL",RegexOption.IGNORE_CASE),"$1")
+        check(independentJournal!=journal) {"Published journal nullability not proven"}
+        db.execSQL(independentJournal)
         names.reversed().forEach {table->db.execSQL("INSERT INTO `$table` SELECT * FROM med03_copy_$table");db.execSQL("DROP TABLE med03_copy_$table")}
         indices.forEach(db::execSQL)
         triggers.forEach {(_,sql)->db.execSQL(sql)}

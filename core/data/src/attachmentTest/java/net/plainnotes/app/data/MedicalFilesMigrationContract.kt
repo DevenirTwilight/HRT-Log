@@ -23,8 +23,8 @@ abstract class MedicalFilesMigrationContract {
                 for(i in 0 until entities.length()) {
                     val e=entities.getJSONObject(i);val table=e.getString("tableName")
                     db.execSQL(e.getString("createSql").replace("\${TABLE_NAME}",table))
-                    val indices=e.getJSONArray("indices")
-                    for(j in 0 until indices.length())db.execSQL(indices.getJSONObject(j).getString("createSql").replace("\${TABLE_NAME}",table))
+                    val indices=e.optJSONArray("indices")
+                    for(j in 0 until (indices?.length() ?: 0))db.execSQL(requireNotNull(indices).getJSONObject(j).getString("createSql").replace("\${TABLE_NAME}",table))
                 }
                 val setup=schema.getJSONArray("setupQueries");for(i in 0 until setup.length())db.execSQL(setup.getString(i))
             }
@@ -41,7 +41,19 @@ abstract class MedicalFilesMigrationContract {
             db.setTransactionSuccessful();return s
         }finally {db.endTransaction()}
     }
-    private fun rows(db:SupportSQLiteDatabase)=listOf("lab_value","attachment_store","attachment_record_identity","attachment_journal","attachment_link").associateWith {Trash.rows(db,it,"1 ORDER BY rowid",emptyArray()).toString()}
+    private fun rows(db:SupportSQLiteDatabase)=listOf("lab_value","attachment_store","attachment_record_identity","attachment_journal","attachment_link").associateWith {table->
+        db.query("SELECT * FROM `$table` ORDER BY rowid").use {c->buildList {
+            while(c.moveToNext())add((0 until c.columnCount).map {column->
+                when(c.getType(column)) {
+                    android.database.Cursor.FIELD_TYPE_NULL->null
+                    android.database.Cursor.FIELD_TYPE_BLOB->c.getBlob(column).toList()
+                    android.database.Cursor.FIELD_TYPE_INTEGER->c.getLong(column)
+                    android.database.Cursor.FIELD_TYPE_FLOAT->c.getDouble(column)
+                    else->c.getString(column)
+                }
+            })
+        }}
+    }
     @Test fun published21RetainsRowsIdentitiesAndValidatesRoom22AfterReopen() {
         val name="synthetic-med03-upgrade-${UUID.randomUUID()}.db"
         try {
