@@ -1,3 +1,7 @@
+## SL-CAL-01 用化验校准 E2 合计（研究完成，PR 待合并）— 2026-10-28
+
+分支 `research/sl-cal-01-20261028`，工作树 /home/user/wt-slcal。REQUIREMENTS §163，报告 `docs/pk-research/sl-cal/sl-cal-01-report.md`，审计 79。只研究，不改任何生产文件。结论：可做、只能到整体比例校正；推荐 SL-CAL-02 起点是“方案 C 共同系数 + 峰值附近 delta 降权 + 信息增益 <0.5 拒绝 + 先验 sd≈0.9”；两系数在谷值-only/峰值-only 下共线；名义 90% 区间覆盖率仅 0.53–0.80，不适合展示；背景基线/形状错误是主要误差。守卫：LIVE_LOCK 55 文件一致，历史 164/164 与 5/5 回放逐字节一致，阶段范围守卫通过。曾误改字节锁定的 `docs/pk-research/README.md`，守卫当场报错，已还原，入口改放 `docs/pk-research/sl-cal/README.md`。可选的负责人本地验证 NOT_RUN。下一步：PR 自动合并（§106）并复核默认分支 CI；SL-CAL-02 需负责人批准后另开。
+
 ## #143 最终验收：旧召回占位断言修正 — 2026-10-28
 
 接手精确1ed73d07，push40678509368/android122783344100及PR40678516954/android122783525605实际FAIL：App3129项32失败593原跳过，32项均为Ui11CenterTest两方法×16矩阵。生产已按§161删除不可靠召回模块，旧测试仍performScrollToNode(drug-center-recalls)，因此line66找不到节点；不是去回退生产入口或删测试。最小修复：已删除plans/stock负向遍历使用仍存在的supply末行锚点；原future测试改成四只读模块真实点击→精确documents/documents/safety/supply回调、48dp、无不可用弹窗、召回节点不存在、两个私人关联回调均0。原语言/对比/返回/关联状态等断言不变；没有重做药品中心或ANSM功能。针对性Ui11CenterTest完整144项实际PASS（0 fail/error/skip），7m14s；原失败摘录与通过XML已入库。修复准确SHA的完整必需CI仍待执行，不用旧绿替代。同步已受保护合并#137（e9d8f943），保留Build36/37真实交付账本与versionCode37；只解决两份进度/授权文档的并行插入冲突，完整保留双方原文。并行§161收口：真机反馈保持161，既有Build37授权移至161.A，不改交付事实；本轮不签名。

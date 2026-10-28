@@ -204,7 +204,7 @@ def main():
                sigma_fit=c.SIGMA_LAB, prior_sd_p1a=c.PRIOR_SD_P1A, users_baseline=args.users, users_sweep=args.sweep_users, loo_users='all baseline users with n_labs>=2')
     doc = dict(schema=SCHEMA, synthetic_only=True, clinical_accuracy_established=False, real_health_data_used=False, config=cfg,
                rows=sorted(rows, key=lambda r: (r['sweep'], r['regimen'], r['truth'], r['scheme'], r['n_labs'], r['policy'], r['method'])))
-    text = json.dumps(doc, indent=0, sort_keys=True, allow_nan=False) + '\n'
+    text = json.dumps(doc, separators=(',', ':'), sort_keys=True, allow_nan=False) + '\n'
     Path(args.out).write_text(text)
     print(len(rows), 'rows', hashlib.sha256(text.encode()).hexdigest())
 

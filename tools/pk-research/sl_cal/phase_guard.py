@@ -7,7 +7,7 @@ ALLOWED_PREFIXES = (
     'docs/pk-research/sl-cal/', 'tools/pk-research/sl_cal/', 'docs/audits/product-quality-2026-10/',
 )
 ALLOWED_FILES = {
-    'tools/pk-research/test_sl_cal_01.py', 'docs/REQUIREMENTS.md', 'docs/HANDOFF.md', 'docs/STATUS.md', 'docs/pk-research/README.md',
+    'tools/pk-research/test_sl_cal_01.py', 'docs/REQUIREMENTS.md', 'docs/HANDOFF.md', 'docs/STATUS.md',
 }
 FORBIDDEN_PREFIXES = (
     'app/', 'core/', 'pk-engine/', 'importer/', 'scripts/', '.github/', 'gradle/',
