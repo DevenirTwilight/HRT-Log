@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui12_label_total">E2 total</string>
+    <string name="ui12_label_calibrated">Calibré avec analyses</string>
+    <string name="ui12_label_single">E2 %1$s</string>
+    <string name="ui12_route_sl">sublingual</string>
+    <string name="ui12_route_oral">oral</string>
+    <string name="ui12_route_gel">gel</string>
+    <string name="ui12_route_patch">patch</string>
+    <string name="ui12_route_injection">injection</string>
+    <string name="ui12_list_last">%1$s et %2$s</string>
+    <string name="ui12_sum_phrase">%1$s additionnés</string>
+    <string name="ui12_basis">%1$s · d\'après %2$d prises enregistrées</string>
+    <string name="ui12_reminder">Estimation : elle ne remplace pas une analyse et ne doit pas servir à ajuster une dose.</string>
+    <string name="ui12_curve_title">Courbe E2</string>
+    <string name="legend_doses">Prises</string>
+    <string name="ui12_noon_tick">12 h</string>
+    <string name="ui12_readout_spoken">%1$s, %2$s %3$s</string>
+    <string name="ui12_unit_pg_spoken">picogrammes par millilitre</string>
+    <string name="ui12_unit_pmol_spoken">picomoles par litre</string>
+    <string name="ui12_calib_unavailable">Indisponible</string>
+    <string name="ui12_calib_unavailable_sl">Calibration indisponible tant que des prises sublinguales sont enregistrées.</string>
+    <string name="ui12_models_title">Modèle et littérature</string>
+    <string name="ui12_models_subtitle">Sources, portée et limites</string>
+    <string name="ui12_baseline_once">Quand les voies sont additionnées, la base de fond n\'est comptée qu\'une fois.</string>
+    <string name="ui12_unknown_records">Certaines prises ont une voie, une dose ou une heure inconnue et ne sont pas incluses dans ce total. Complétez-les pour les inclure.</string>
+</resources>

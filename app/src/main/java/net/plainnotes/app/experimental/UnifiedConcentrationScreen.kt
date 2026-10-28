@@ -28,7 +28,7 @@ import java.time.Instant
 
 /** The original screen owns every card, chart and setting. M2 is the only product SL reference; other routes retain explicitly scoped compatibility. */
 @Composable fun UnifiedConcentrationScreen(records: List<RecordEntity>, ruleSnapshots: Map<Long,String>, labs: List<LabValueEntity>,
-    pad: PaddingValues, content: @Composable (PaddingValues, ConcentrationPreview?, @Composable () -> Unit) -> Unit,
+    pad: PaddingValues, content: @Composable (PaddingValues, ConcentrationPreview?, @Composable () -> Unit, @Composable () -> Unit) -> Unit,
     now: () -> Instant = Instant::now,
     /** D-1: the snapshot is recomputed this often while the page is shown, so "now" never silently goes stale. */
     refreshMillis: Long = 60_000,
@@ -74,12 +74,17 @@ import java.time.Instant
     val sameHistory = lastReadyHistory == (records to ruleSnapshots)
     val shown = displayed ?: lastReady?.takeIf { sameHistory && load != ResearchPreviewLoad.Failed }
     var basisOpen by rememberSaveable { mutableStateOf(false) }
-    val notice: @Composable () -> Unit = {
+    // UI-12: what needs attention stays on the page (failure and retry, partial scope, no qualified history); the as-of time,
+    // research basis and compatibility scope are explanations and live under "Model and literature".
+    val status: @Composable () -> Unit = {
         if(load==ResearchPreviewLoad.Failed) {
             Text(stringResource(R.string.uc_preview_failed),modifier=Modifier.testTag("research-preview-error"))
             OutlinedButton(onClick={retry++},modifier=Modifier.testTag("m2-retry")) { Text(stringResource(R.string.m2_retry_reference)) }
         }
-
+        if(scope.unknownRecords>0) Text(stringResource(R.string.ui12_unknown_records),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("e2-unknown-records"))
+        if(shown!=null && shown.timeH.isEmpty() && !scope.compatibilityOnly) Text(stringResource(R.string.m2_no_qualified_history),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("m2-no-qualified-history"))
+    }
+    val basis: @Composable () -> Unit = {
         if (shown != null && shown.timeH.isNotEmpty()) {
             // Whole pg/mL and one-decimal hours: more digits would suggest a precision the evidence does not have.
             fun whole(v: Double) = java.text.NumberFormat.getIntegerInstance().format(kotlin.math.round(v))
@@ -103,9 +108,7 @@ import java.time.Instant
                     style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("research-peaks"))
             }
         }
-        if(scope.partial && !scope.compatibilityOnly) Text(stringResource(R.string.m2_partial_scope),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("m2-partial-scope"))
         if(scope.compatibilityOnly) Text(stringResource(R.string.m2_compatibility_scope),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("e2-compatibility-scope"))
-        if(shown!=null && shown.timeH.isEmpty() && !scope.compatibilityOnly) Text(stringResource(R.string.m2_no_qualified_history),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("m2-no-qualified-history"))
     }
     // Keep the original renderer at the same composition position during model transitions.
     // An opaque, semantics-isolated overlay prevents old values/empty-state text being presented as the new model.
@@ -114,12 +117,12 @@ import java.time.Instant
     val rendererPreview=if(load==ResearchPreviewLoad.Failed) ConcentrationPreview.pending(model) else if(shown!=null && (scope.compatibilityOnly || records.isEmpty()) && shown.timeH.isEmpty()) null else shown ?: lastReady ?: ConcentrationPreview.pending(model)
     Box(Modifier.fillMaxSize()) {
         Box(if(busy) Modifier.clearAndSetSemantics {} else Modifier) {
-            content(pad,rendererPreview,notice)
+            content(pad,rendererPreview,status,basis)
         }
         if(busy) Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)
             .pointerInput(Unit) { detectTapGestures(onTap={}) }.padding(pad).padding(16.dp),
             verticalArrangement=Arrangement.spacedBy(12.dp)) {
-            notice()
+            status()
             if (load == ResearchPreviewLoad.Failed) Text(stringResource(R.string.uc_preview_failed),modifier=Modifier.testTag("research-preview-error"))
             else {
                 CircularProgressIndicator(Modifier.testTag("research-preview-loading"))

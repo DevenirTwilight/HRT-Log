@@ -14,6 +14,11 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
@@ -47,6 +52,15 @@ class ChartData(
     val breaks:DoubleArray = doubleArrayOf(),
     /** Optional query-local model evaluation. Invoked on Default, outside Canvas, with cancellation. */
     val readAt:((Double,()->Unit)->Double?)? = null,
+    /** UI-12: hours of actual doses, drawn as short vertical ticks along the bottom edge (callers pass only past doses). */
+    val marks: DoubleArray = doubleArrayOf(),
+    /** UI-12: day-based axis (date in bold at local midnight, noon label at 12:00) when the visible span is 1.5 to 10 days. */
+    val axisDays: Boolean = false,
+    val noonLabel: String = "12:00",
+    /** UI-12: width of the recorded line in dp; the forecast stays 2 dp (or thinner when this is thinner). Null keeps 2.5 dp. */
+    val lineWidthDp: Float? = null,
+    /** UI-12: how the unit is spoken by a screen reader (e.g. "picograms per millilitre"); null reads the unit text. */
+    val unitSpoken: String? = null,
 )
 
 private fun niceStep(span: Double, target: Int): Double {
@@ -63,7 +77,7 @@ private fun niceStep(span: Double, target: Int): Double {
 @Composable fun ConcChart(data: ChartData, initialStart: Double, initialEnd: Double, modifier: Modifier = Modifier, valueLabel: (Double) -> String) {
     val c = MaterialTheme.colorScheme
     val line = c.primary; val band = c.primary; val grid = c.outlineVariant; val textColor = c.onSurfaceVariant
-    val labColor = c.tertiary; val nowColor = c.error; val rangeColor = c.secondary
+    val labColor = c.tertiary; val nowColor = c.outline; val rangeColor = c.secondary; val markColor = c.secondary
     val measurer = rememberTextMeasurer()
     val minX = data.x.firstOrNull() ?: initialStart; val maxX = data.x.lastOrNull() ?: initialEnd
     var start by remember(initialStart,initialEnd,minX,maxX) { mutableDoubleStateOf(max(minX, initialStart)) }
@@ -79,13 +93,15 @@ private fun niceStep(span: Double, target: Int): Double {
     }
     fun valueAtTap(tx:Double):Double? = if(data.readAt==null)net.plainnotes.app.pk.Pk.interpolate(data.x,data.y,tx) else tapValue?.takeIf{it.first==tx}?.second
     val density = LocalDensity.current
+    var canvasSize by remember { mutableStateOf(androidx.compose.ui.unit.IntSize.Zero) }
+    var cardSize by remember { mutableStateOf(androidx.compose.ui.unit.IntSize.Zero) }
     val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
     val h24 = android.text.format.DateFormat.is24HourFormat(androidx.compose.ui.platform.LocalContext.current)
     val hourFmt = remember(locale, h24) { DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, if (h24) "Hm" else "hm"), locale) }
     val dayFmt = remember(locale) { DateTimeFormatter.ofPattern(android.text.format.DateFormat.getBestDateTimePattern(locale, "Md"), locale) }
     val leftPad = with(density) { 44.dp.toPx() }; val bottomPad = with(density) { 22.dp.toPx() }; val topPad = with(density) { 8.dp.toPx() }
     Box(modifier) {
-        Canvas(Modifier.fillMaxSize()
+        Canvas(Modifier.fillMaxSize().onSizeChanged { canvasSize = it }
             .pointerInput(data) {
                 detectTransformGestures { centroid, pan, zoom, _ ->
                     val w = size.width - leftPad; if (w <= 0) return@detectTransformGestures
@@ -96,7 +112,10 @@ private fun niceStep(span: Double, target: Int): Double {
                     s = s.coerceIn(minX, max(minX, maxX - newSpan)); start = s; end = s + newSpan; tapX = null
                 }
             }
-            .pointerInput(data) { detectTapGestures { o -> val w = size.width - leftPad; tapX = if (o.x < leftPad) null else start + (end - start) * ((o.x - leftPad) / w) } }) {
+            .pointerInput(data) { detectTapGestures { o -> val w = size.width - leftPad
+                // UI-12: tapping next to the current point again closes the readout; elsewhere moves it.
+                val previous = tapX?.let { leftPad + ((it - start) / (end - start) * w).toFloat() }
+                tapX = if (o.x < leftPad || (previous != null && kotlin.math.abs(o.x - previous) < 12.dp.toPx())) null else start + (end - start) * ((o.x - leftPad) / w) } }) {
             val w = size.width - leftPad; val h = size.height - bottomPad - topPad
             if (w <= 0 || h <= 0 || data.x.isEmpty()) return@Canvas
             if(end<=start)return@Canvas
@@ -116,7 +135,7 @@ private fun niceStep(span: Double, target: Int): Double {
                 v += step
             }
             data.range?.let { (lo, hi) -> drawRect(rangeColor.copy(alpha = 0.10f), Offset(leftPad, py(hi)), androidx.compose.ui.geometry.Size(w, py(lo) - py(hi))) }
-            drawTimeAxis(measurer, labelStyle, start, end, ::px, size.height - bottomPad, grid, hourFmt, dayFmt)
+            drawTimeAxis(measurer, labelStyle, start, end, ::px, size.height - bottomPad, grid, hourFmt, dayFmt, data.axisDays, data.noonLabel)
             clipRectSafe(leftPad, topPad, size.width, topPad+h) {
                 fun bandPath(b: Pair<DoubleArray, DoubleArray>, indices:IntRange): Path = Path().apply {
                     var first = true
@@ -135,9 +154,11 @@ private fun niceStep(span: Double, target: Int): Double {
                     if(data.splitX!=null && x>=data.splitX){if(!dStarted){dashed.moveTo(p.x,p.y);dStarted=true}else dashed.lineTo(p.x,p.y)}
                 }
                 }
-                drawPath(solid, line, style = Stroke(width = 2.5.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
-                drawPath(dashed, line.copy(alpha = 0.75f), style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(14f, 10f))))
+                val lineW = data.lineWidthDp ?: 2.5f
+                drawPath(solid, line, style = Stroke(width = lineW.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
+                drawPath(dashed, line.copy(alpha = 0.75f), style = Stroke(width = minOf(2f, lineW).dp.toPx(), cap = StrokeCap.Round, pathEffect = PathEffect.dashPathEffect(floatArrayOf(14f, 10f))))
                 data.splitX?.takeIf { it in start..end }?.let { drawLine(nowColor.copy(alpha = 0.7f), Offset(px(it), topPad), Offset(px(it), topPad + h), 1.5f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 6f))) }
+                data.marks.forEach { x -> if (x in start..end) drawLine(markColor, Offset(px(x), topPad + h), Offset(px(x), topPad + h - 10.dp.toPx()), 1.5.dp.toPx(), cap = StrokeCap.Butt) }
                 data.points.forEach { (x, y) -> if (x in start..end) { drawCircle(Color.White, 6.dp.toPx(), Offset(px(x), py(y))); drawCircle(labColor, 4.5.dp.toPx(), Offset(px(x), py(y))) } }
                 tapX?.let { tx ->
                     valueAtTap(tx)?.let { ty ->
@@ -148,9 +169,24 @@ private fun niceStep(span: Double, target: Int): Double {
             }
         }
         tapX?.let { tx -> valueAtTap(tx)?.let { ty ->
-            Surface(color = c.inverseSurface, contentColor = c.inverseOnSurface, shape = MaterialTheme.shapes.small, modifier = Modifier.padding(start = 52.dp, top = 4.dp)) {
-                val time = Instant.ofEpochMilli((tx * 3_600_000).toLong())
-                Text("${formatDateTime(time)}  ·  ${valueLabel(ty)} ${data.unit}", Modifier.padding(horizontal = 8.dp, vertical = 4.dp), style = MaterialTheme.typography.labelMedium)
+            // UI-12: a floating readout beside the point; on the right half it opens to the left, otherwise to the right.
+            val yMaxOut = ChartViewport.top(data, start, end); val stepOut = niceStep(yMaxOut, 4); val top = ceil(yMaxOut / stepOut) * stepOut
+            val plotW = canvasSize.width - leftPad; val plotH = canvasSize.height - bottomPad - topPad
+            val pointX = leftPad + ((tx - start) / (end - start) * plotW).toFloat(); val pointY = topPad + (plotH - (ty / top * plotH)).toFloat()
+            val gap = with(density) { 10.dp.toPx() }
+            val x = if (pointX > canvasSize.width / 2f) pointX - cardSize.width - gap else pointX + gap
+            val y = (pointY - cardSize.height - gap / 2).coerceIn(with(density) { 2.dp.toPx() }, maxOf(0f, (canvasSize.height - cardSize.height).toFloat()))
+            val time = Instant.ofEpochMilli((tx * 3_600_000).toLong())
+            val whenText = formatDateTime(time)
+            val number = valueLabel(ty)
+            val spoken = androidx.compose.ui.res.stringResource(net.plainnotes.app.R.string.ui12_readout_spoken, whenText, number, data.unitSpoken ?: data.unit)
+            Surface(color = c.inverseSurface, contentColor = c.inverseOnSurface, shape = MaterialTheme.shapes.small,
+                modifier = Modifier.offset { androidx.compose.ui.unit.IntOffset(x.toInt(), y.toInt()) }.onSizeChanged { cardSize = it }
+                    .testTag("chart-readout").clearAndSetSemantics { contentDescription = spoken; liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite }) {
+                Column(Modifier.padding(horizontal = 10.dp, vertical = 6.dp)) {
+                    Text(whenText, style = MaterialTheme.typography.labelMedium)
+                    Text("$number ${data.unit}", style = MaterialTheme.typography.titleSmall)
+                }
             }
         } }
     }
@@ -160,9 +196,10 @@ private inline fun DrawScope.clipRectSafe(l: Float, t: Float, r: Float, b: Float
     drawContext.canvas.let { canvas -> canvas.save(); canvas.clipRect(l, t, r, b); block(); canvas.restore() }
 
 private fun DrawScope.drawTimeAxis(measurer: TextMeasurer, style: TextStyle, start: Double, end: Double, px: (Double) -> Float, y: Float, grid: Color,
-                                   hourFmt: DateTimeFormatter, dayFmt: DateTimeFormatter) {
+                                   hourFmt: DateTimeFormatter, dayFmt: DateTimeFormatter, days: Boolean = false, noonLabel: String = "12:00") {
     val span = end - start
     val stepH = when { span <= 36 -> 6.0; span <= 96 -> 12.0; span <= 24 * 10 -> 24.0; span <= 24 * 35 -> 24.0 * 7; span <= 24 * 120 -> 24.0 * 14; else -> 24.0 * 30 }
+    val dayLabels = days && stepH in 12.0..24.0
     val zone = ZoneId.systemDefault()
     val fmt = if (stepH < 24) hourFmt else dayFmt
     val offsetH = zone.rules.getOffset(Instant.ofEpochMilli((start * 3_600_000).toLong())).totalSeconds / 3600.0
@@ -170,8 +207,10 @@ private fun DrawScope.drawTimeAxis(measurer: TextMeasurer, style: TextStyle, sta
     while (t <= end) {
         val x = px(t)
         drawLine(grid.copy(alpha = 0.5f), Offset(x, 0f), Offset(x, y), 1f)
-        val label = Instant.ofEpochMilli((t * 3_600_000).toLong()).atZone(zone).format(fmt)
-        val m = measurer.measure(label, style)
+        val at = Instant.ofEpochMilli((t * 3_600_000).toLong()).atZone(zone)
+        // UI-12: with day labels the date is bold at local midnight and the half-day tick says "12時"/"12 h" instead of a clock time.
+        val label = if (dayLabels) (if (at.hour == 12) noonLabel else at.format(dayFmt)) else at.format(fmt)
+        val m = measurer.measure(label, if (dayLabels && at.hour != 12) style.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold) else style)
         drawText(m, topLeft = Offset(x - m.size.width / 2f, y + 4f))
         t += stepH
     }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui12_label_total">E2 total</string>
+    <string name="ui12_label_calibrated">Calibrated with labs</string>
+    <string name="ui12_label_single">%1$s E2</string>
+    <string name="ui12_route_sl">sublingual</string>
+    <string name="ui12_route_oral">oral</string>
+    <string name="ui12_route_gel">gel</string>
+    <string name="ui12_route_patch">patch</string>
+    <string name="ui12_route_injection">injection</string>
+    <string name="ui12_list_last">%1$s and %2$s</string>
+    <string name="ui12_sum_phrase">%1$s combined</string>
+    <string name="ui12_basis">%1$s · based on %2$d recorded doses</string>
+    <string name="ui12_reminder">An estimate. It cannot replace a lab test, and it must not be used to adjust a dose.</string>
+    <string name="ui12_curve_title">E2 curve</string>
+    <string name="legend_doses">Doses taken</string>
+    <string name="ui12_noon_tick">12:00</string>
+    <string name="ui12_readout_spoken">%1$s, %2$s %3$s</string>
+    <string name="ui12_unit_pg_spoken">picograms per millilitre</string>
+    <string name="ui12_unit_pmol_spoken">picomoles per litre</string>
+    <string name="ui12_calib_unavailable">Not available</string>
+    <string name="ui12_calib_unavailable_sl">Calibration is not available while sublingual doses are recorded.</string>
+    <string name="ui12_models_title">Model and literature</string>
+    <string name="ui12_models_subtitle">Sources, scope and limits</string>
+    <string name="ui12_baseline_once">When routes are added together, the background baseline is counted once.</string>
+    <string name="ui12_unknown_records">Some records have an unknown route, dose or time and are not part of this total. Repair them to include them.</string>
+</resources>

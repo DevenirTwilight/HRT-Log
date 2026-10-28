@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ui12_label_total">E2 合計</string>
+    <string name="ui12_label_calibrated">已按檢驗校準</string>
+    <string name="ui12_label_single">%1$s E2</string>
+    <string name="ui12_route_sl">舌下</string>
+    <string name="ui12_route_oral">口服</string>
+    <string name="ui12_route_gel">凝膠</string>
+    <string name="ui12_route_patch">貼片</string>
+    <string name="ui12_route_injection">注射</string>
+    <string name="ui12_list_last">%1$s與%2$s</string>
+    <string name="ui12_sum_phrase">%1$s相加</string>
+    <string name="ui12_basis">%1$s · 基於 %2$d 次服藥記錄</string>
+    <string name="ui12_reminder">估算值，不能代替檢驗，也不能作為調整劑量的依據。</string>
+    <string name="ui12_curve_title">E2 曲線</string>
+    <string name="legend_doses">服藥時刻</string>
+    <string name="ui12_noon_tick">12時</string>
+    <string name="ui12_readout_spoken">%1$s，%2$s %3$s</string>
+    <string name="ui12_unit_pg_spoken">皮克每毫升</string>
+    <string name="ui12_unit_pmol_spoken">皮莫耳每公升</string>
+    <string name="ui12_calib_unavailable">暫不能用</string>
+    <string name="ui12_calib_unavailable_sl">有舌下記錄時，暫不能校準。</string>
+    <string name="ui12_models_title">模型與文獻</string>
+    <string name="ui12_models_subtitle">來源、適用範圍與限制</string>
+    <string name="ui12_baseline_once">各途徑相加時，背景基線只計一次。</string>
+    <string name="ui12_unknown_records">有些記錄的途徑、劑量或時間不明，未計入合計。補全後才會計入。</string>
+</resources>

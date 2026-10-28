@@ -159,7 +159,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun editById(id:Long){state.value.medications.firstOrNull{it.id==id}?.let{edit(it)}}
 
     // Concentration (PK) page
-    data class ConcState(val loading:Boolean=false,val result:ConcentrationResult?=null,val weight:Double?=null,val labs:List<LabValueEntity> = emptyList(),val doseTimes:List<Instant> = emptyList())
+    data class ConcState(val loading:Boolean=false,val result:ConcentrationResult?=null,val weight:Double?=null,val labs:List<LabValueEntity> = emptyList(),val doseTimes:List<Instant> = emptyList(),
+        /** UI-12: the compatibility result for non-sublingual estradiol only (the other half of the E2 total); null without sublingual doses. */
+        val nonSublingual:ConcentrationResult? = null)
     val conc=MutableStateFlow(ConcState())
     private var concSettings=Pair(true,CalibrationMode.RETROSPECTIVE)
     fun concentrationSettings(calibrate:Boolean,mode:CalibrationMode){if(concSettings!=calibrate to mode){concSettings=calibrate to mode;loadConcentration()}}
@@ -178,8 +180,14 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         val (meds,profiles,records,labs,weight,planned,snapshots)=inputs
         val settings=concSettings
         val result=withContext(Dispatchers.Default){ConcentrationCalculator.compute(meds,profiles,records,planned,labs,weight,now,settings.first,settings.second,snapshots,net.plainnotes.app.conc.HistoryRead(true,ConcentrationCalculator.hours(now)),checkCancelled={ensureActive()})}
+        // UI-12: the total's non-sublingual half is a separate, uncalibrated run on non-sublingual estradiol only (no double counting; the models are untouched).
+        val nonSublingual=if(result.models[net.plainnotes.app.pk.Curve.E2]?.any{it.key=="E2_SL"}==true) withContext(Dispatchers.Default){
+            val x=net.plainnotes.app.ui.E2Total.nonSublingualInputs(meds,profiles,records,planned,snapshots)
+            if(x.records.isEmpty() && x.planned.isEmpty()) null
+            else ConcentrationCalculator.compute(x.medications,x.profiles,x.records,x.planned,emptyList(),weight,now,false,CalibrationMode.RETROSPECTIVE,snapshots,net.plainnotes.app.conc.HistoryRead(true,ConcentrationCalculator.hours(now)),checkCancelled={ensureActive()})
+        } else null
         val doseTimes=records.filter{MedicationSnapshot.decode(it.config_snapshot,it.medication_id)?.molecule=="E2" && it.deleted_at_utc==null && it.status in listOf("ON_TIME","LATE") && it.taken_utc!=null}.map{Instant.ofEpochMilli(it.taken_utc!!)}.sorted()
-        ensureActive();runtime.verify();runtime.checkRequest();conc.value=ConcState(false,result,weight,labs,doseTimes)
+        ensureActive();runtime.verify();runtime.checkRequest();conc.value=ConcState(false,result,weight,labs,doseTimes,nonSublingual)
     }catch(e:CancellationException){throw e}catch(e:Exception){conc.value=conc.value.copy(loading=false);readFailure(e)} }.also{concJob=it} }
     // History, stock and well-being
     data class ExtraState(val records:List<RecordEntity> = emptyList(),val containers:List<ContainerEntity> = emptyList(),val items:List<CheckinItemEntity> = emptyList(),
