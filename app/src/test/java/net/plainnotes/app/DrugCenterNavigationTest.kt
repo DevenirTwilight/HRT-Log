@@ -73,16 +73,25 @@ class DrugCenterNavigationTest {
             ui.onNodeWithTag("reference-close").performClick()
             for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply","drug-center-recalls")) {
                 ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
-                ui.onNodeWithTag(tag).performClick()
-                ui.onNodeWithTag("center-unavailable-close").performClick()
+                // UI-11: the not-yet-open modules are plain rows now; they carry no tap and open nothing.
+                ui.onNodeWithTag(tag).assert(hasClickAction().not())
+                ui.onAllNodesWithTag("center-unavailable-dialog").assertCountEquals(0)
             }
             ui.onNodeWithTag("drug-center-close").performClick()
             ui.onNodeWithTag("drug-center-window").assertDoesNotExist()
             ui.onNodeWithTag("drug-center-open").assertExists()
+            // UI-11: the centre no longer has Medications / Stock shortcut buttons; both stay reachable from the drawer.
             ui.onNodeWithTag("drug-center-open").performClick()
-            ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-stock"))
-            ui.onNodeWithTag("drug-center-stock").performClick()
+            for(tag in listOf("drug-center-plans","drug-center-stock")) {
+                ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-recalls"))
+                ui.onAllNodesWithTag(tag).assertCountEquals(0)
+            }
+            ui.onNodeWithTag("drug-center-close").performClick()
             ui.onNodeWithTag("drug-center-window").assertDoesNotExist()
+            ui.onNodeWithTag("top-title").assertTextEquals(context.getString(R.string.medications))
+            ui.onNodeWithContentDescription(context.getString(R.string.menu)).performClick()
+            ui.onNodeWithTag("drawer-content").performScrollToNode(hasText(context.getString(R.string.stock)))
+            ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(context.getString(R.string.stock))).performClick()
             ui.onNodeWithTag("top-title").assertTextEquals(context.getString(R.string.stock))
             assertEquals(before,runBlocking{db.dao().medications()})
             assertEquals(beforeContainers,runBlocking{repo.containers()})

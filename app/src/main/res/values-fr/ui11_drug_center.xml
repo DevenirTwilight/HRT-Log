@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_back">Retour</string>
+    <string name="drug_center_scope">Consultation seule. Aucun conseil de médication ; vos doses et votre stock ne changent jamais.</string>
+    <string name="drug_center_find_title">Trouver une fiche produit</string>
+    <string name="drug_link_official">Liée à la fiche officielle BDPM</string>
+    <string name="drug_link_user">Liée à une fiche que j’ai saisie</string>
+    <string name="drug_link_none">Aucune fiche produit liée</string>
+    <string name="drug_link_caption">Lier une fiche indique seulement de quel produit il s’agit. Cela ne change jamais la dose.</string>
+    <string name="drug_sources_title">Sources</string>
+    <string name="drug_src_bdpm_title">Catalogue officiel BDPM</string>
+    <string name="drug_src_bdpm_info">Hors ligne · données du %1$s</string>
+    <string name="drug_src_bdpm_info_plain">Intégré, consultable hors ligne.</string>
+    <string name="drug_src_official_tag">Officiel</string>
+    <string name="drug_src_user_title">Fiches que j’ai saisies</string>
+    <string name="drug_src_user_info">%1$d enregistrée(s) · non vérifiées</string>
+    <string name="drug_src_user_info_many">%1$d+ enregistrées · non vérifiées</string>
+    <string name="drug_src_user_info_plain">Enregistrées sur l’appareil · non vérifiées.</string>
+    <string name="drug_src_unverified_tag">Non vérifié</string>
+    <string name="drug_center_learn_title">À propos de ces fiches</string>
+    <string name="drug_state_expanded">Développé</string>
+    <string name="drug_state_collapsed">Réduit</string>
+    <string name="drug_not_open_tag">Pas encore ouvert</string>
+    <string name="drug_not_open_desc">%1$s, pas encore ouvert</string>
+    <string name="drug_center_future_caption">Ces modules sont indiqués à titre d’information et ne peuvent pas être ouverts.</string>
+    <string name="ref2_page_title">Lien vers la fiche produit</string>
+    <string name="ref2_boundary_lead">Le lien ne modifie jamais votre dose, votre schéma ni votre stock.</string>
+    <string name="ref2_tag_official">BDPM officiel</string>
+    <string name="ref2_tag_user">Saisie perso · non vérifiée</string>
+    <string name="ref2_tag_package">Présentation choisie</string>
+    <string name="ref2_view_source">Voir la fiche</string>
+    <string name="ref2_label_cis">CIS</string>
+    <string name="ref2_label_package">Présentation (CIP13)</string>
+    <string name="ref2_tab_catalogue">Catalogue THS français</string>
+    <string name="ref2_tab_saved">Fiches que j’ai saisies</string>
+    <string name="bdpm_status_line">%1$s résultats · BDPM hors ligne · données %2$s</string>
+    <string name="bdpm_package_selected">Présentation sélectionnée</string>
+    <string name="ref2_manual_button">＋ Saisir moi-même une fiche produit</string>
+    <string name="ref2_manual_caption">Introuvable ? Saisissez-la à la main ; elle sera marquée « non vérifiée ».</string>
+    <string name="ref2_entered_on">Saisie le %1$s</string>
+    <string name="drug_center_states_title">Signification des états</string>
+    <string name="ref2_pill_form">Forme</string>
+    <string name="ref2_pill_strength">Dosage</string>
+    <string name="ref2_pill_route">Voie</string>
+    <string name="ref2_hide_source">Masquer la fiche</string>
+    <string name="ref2_current_link">Lien actuel</string>
+</resources>

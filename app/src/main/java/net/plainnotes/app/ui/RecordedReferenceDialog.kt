@@ -2,8 +2,6 @@ package net.plainnotes.app.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -30,7 +28,7 @@ import net.plainnotes.app.data.*
         finally {loading=false}
     }
     Dialog(onDismissRequest=onDismiss,properties=DialogProperties(usePlatformDefaultWidth=false)) {
-        Scaffold(topBar={TopAppBar(title={Text(stringResource(R.string.ref2_history_title))},navigationIcon={IconButton(onClick=onDismiss,modifier=Modifier.testTag("record-reference-close")){Icon(Icons.AutoMirrored.Outlined.ArrowBack,stringResource(R.string.cancel))}})}) {padding->
+        Scaffold(topBar={TopAppBar(title={Text(stringResource(R.string.ref2_history_title))},navigationIcon={NavBackButton(onDismiss,"record-reference-close")})}) {padding->
             LazyColumn(Modifier.fillMaxSize().padding(padding).testTag("record-reference-list"),contentPadding=PaddingValues(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
                 item {Text(stringResource(R.string.ref2_history_saved_only))}
                 if(loading)item {LinearProgressIndicator(Modifier.fillMaxWidth().testTag("record-reference-loading"))}

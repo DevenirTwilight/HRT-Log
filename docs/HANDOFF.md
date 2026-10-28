@@ -4,7 +4,14 @@ UI-10（医疗档案重设计）已合并（PR #139，5d383a2d）。UI-11 = 药�
 
 - B0 矩阵已核对：四个目标 UI 文件不在矩阵内，`MedicationsScreen`/`AppShell`/`Components`/`AdaptiveControls` 是 HISTORY_ONLY；不碰 PK_DISPLAY_REVIEW、LIVE_LOCK_*。
 - 补记：UI-10 修改了 PK_DISPLAY_REVIEW 文件 `LabsScreen.kt`（范围、批准来源、回归见 §158.B）。
-- 进度：见下方各节完成后更新。顺序：A 返回按钮 → 删除两个按钮 → B 药品资料中心 → C 商品资料关联 → 测试、截图、报告 77。
+- 进度（2026-10-28，生产代码已写完，编译通过，尚未跑测试）：
+  - A：`NavBackButton`（`nav_back` 四语言，48dp）用于药品资料中心、商品资料关联页、`RecordedReferenceDialog`，tag 不变。
+  - 删除“药物”“库存”两个按钮（`onPlans`/`onStock` 参数一并删除；抽屉里仍可到药物和库存）。
+  - B：`DrugReferenceCenterScreen.kt` 重写（主卡、我的药物 GroupedList + 关联状态标签、资料来源两行、了解这些资料可展开、尚未开放的模块为不可点击行；`UnavailableModuleCard.kt` 已删除）。关联状态**只读现有关联**：`MedicationReference.product.bdpm != null` = BDPM 官方；有 product 无 bdpm = 我录入的；无 product = 未关联（`drugLinkStatus()`）。加载走 `MedicationReferenceController.links()` / `savedSourceCount()`（只读），`changes` 计数在关联/解除后触发中心刷新（`NotesViewModel.referenceChanges`）。
+  - C：`MedicationReferenceDialog.kt`（顶栏标题+药物名副标题、边界卡、当前关联卡、分段 Tab、药丸筛选、GroupedList 结果、底部手动录入）和 `BdpmCataloguePanel.kt`（一次展开一个、包装为单选卡、主按钮“关联此资料”）。点包装卡仍直接打开原“确认前预览”（保持原流程与 `BdpmReferenceFlowContract` 不改）；主按钮在已选包装后可重开同一预览。当前关联的只读详情默认展开，由“查看资料/收起资料”切换（为保持 `reference-details` 原断言）。
+  - 筛选“药丸”是胶囊形输入框（保留原 tag 与过滤逻辑，不改过滤）。
+  - 新测试 `ui11/Ui11CenterTest`、`ui11/Ui11LinkTest`；已迁移断言：`DrugCenterNavigationTest`、`DrugCenterMatrixTest`、`CenterModuleScreenshotsTest`、`CenterStateRestorationTest`（去掉 onStock）、androidTestFull `InAppNavigationLockAndroidTest`（五个模块不再可点）。
+  - 下一步：跑 ui11 测试与 7 个相关旧测试、全量 JVM、lint，再截图、写报告 77、开 PR。
 
 ---
 

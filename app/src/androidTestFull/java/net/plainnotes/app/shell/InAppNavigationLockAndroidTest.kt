@@ -249,12 +249,11 @@ class InAppNavigationLockAndroidTest {
             listOf("rcp", "notice", "safety", "supply", "recalls").forEach { suffix ->
                 val tag = "drug-center-$suffix"
                 ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
-                ui.onNodeWithTag(tag).performClick()
-                ui.onNodeWithTag("center-unavailable-dialog").assertExists()
-                back("center-unavailable-dialog")
+                // UI-11: the module rows are not tappable; nothing opens and the centre stays put.
+                ui.onNodeWithTag(tag).assertHasNoClickAction()
                 ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
                 ui.onNodeWithTag("drug-center-window").assertExists()
-                assertUnlocked("Back from $tag")
+                assertUnlocked("Rows $tag")
             }
             ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-catalogue"))
             ui.onNodeWithTag("drug-center-catalogue").performClick()

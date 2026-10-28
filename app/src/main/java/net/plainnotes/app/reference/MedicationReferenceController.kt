@@ -15,6 +15,9 @@ class MedicationReferenceController(private val repo:NotesRepository,private val
     private val mutable=MutableStateFlow(MedicationReferenceUiState())
     val state=mutable.asStateFlow()
     private var load:Job?=null
+    private val changeCounter=MutableStateFlow(0)
+    /** Bumps after each saved link/unlink so read-only views (the drug centre) can refresh their statuses. */
+    val changes=changeCounter.asStateFlow()
     private var generation=0L
     private data class Attempt(val target:Long,val current:MedicationReferenceState,val product:UserReferenceProduct?,val uuid:String)
     private var attempt:Attempt?=null
@@ -64,11 +67,16 @@ class MedicationReferenceController(private val repo:NotesRepository,private val
                 val fresh=repo.medicationReferenceState(pending.target)
                 if(fresh.previewEpoch!=current.previewEpoch)throw ReferenceFailure(ReferenceError.STALE_SCOPE)
                 mutable.value=mutable.value.copy(current=fresh,busy=false,saved=true)
+                changeCounter.value++
                 attempt=null
             }catch(e:CancellationException){throw e}
             catch(e:Exception){mutable.value=mutable.value.copy(busy=false,failed=true,stale=e is ReferenceFailure && e.code in setOf(ReferenceError.STALE_SCOPE,ReferenceError.STALE_REVISION))}
         }
     }
+    /** Read-only: the current association of each listed medication; touches neither the dialog state nor any write path. */
+    suspend fun links(medications:List<Long>):Map<Long,MedicationReference?> = medications.associateWith {repo.medicationReferenceState(it).reference}
+    /** Read-only: how many user-entered snapshots are saved, and whether the list was cut at its page limit. */
+    suspend fun savedSourceCount():Pair<Int,Boolean> = repo.savedReferenceProducts().let {it.entries.size to it.limited}
     fun close():Boolean {
         if(mutable.value.busy)return false
         load?.cancel();generation++;attempt=null;mutable.value=MedicationReferenceUiState()

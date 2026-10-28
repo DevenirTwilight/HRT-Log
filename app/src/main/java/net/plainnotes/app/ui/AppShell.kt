@@ -139,6 +139,11 @@ class UiPrefs(context: Context) {
     var appointment by remember { mutableStateOf(false) }
     val medicationDialogs = remember { MedicationDialogs() }
     var referenceOpen by remember {mutableStateOf(false)}
+    val referenceVersion by model.referenceChanges.collectAsState()
+    val appContext=LocalContext.current.applicationContext
+    val referenceLoaders=remember(model,appContext){DrugCenterLoaders(
+        links={ids->model.medicationReferences.links(ids).mapValues {drugLinkStatus(it.value)}},
+        sources={loadDrugSourceInfo(appContext){model.medicationReferences.savedSourceCount()}})}
     fun openReference(medication:net.plainnotes.app.data.MedicationEntity?){if(model.medicationReferences.open(medication?.id)!=null)referenceOpen=true}
     val labUi = rememberLabUiState()
     val labDialogs = labUi.dialogs
@@ -252,7 +257,7 @@ class UiPrefs(context: Context) {
                     // UI-06 C: the same backfill dialog and confirm-missed as the intake history; "more" opens the history filtered to them.
                     onBackfill = { historyDialogs.referenceEpoch = extra.referenceEpoch; historyDialogs.editRecord = it }, onConfirmMissed = { model.confirmMissed(it.id) }, onUndoRecord = { model.deleteRecord(it.id) },
                     onUnconfirmedMore = { rows -> destination = Destination.HISTORY; importedRecordIds = rows.map { it.id }.toSet() })
-                Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { medicationDialogs.archive = it }, pad,onReference={openReference(it)},onBrowseReference={openReference(null)},onStock={destination=Destination.STOCK})
+                Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { medicationDialogs.archive = it }, pad,onReference={openReference(it)},onBrowseReference={openReference(null)},referenceLoaders=referenceLoaders,referenceVersion=referenceVersion)
                 Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, extra.labs, pad,
                     content = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                         { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,selector,m2Only=true) })
@@ -309,7 +314,7 @@ class UiPrefs(context: Context) {
     val meds = state.medications.associateBy { it.id }
     importedLink?.let { link -> ImportedPlanDialog(link, meds[link.record.medication_id], model::closeImportedLink) { key -> model.linkImported(link.record.id, key) } }
     editor?.let { MedicationEditor(it, { model.closeEditor() }, containers = extra.containers,onReference={openReference(it.medication)}) { d -> model.save(d) } }
-    if(referenceOpen)MedicationReferenceDialog(model.medicationReferences){referenceOpen=false}
+    if(referenceOpen)MedicationReferenceDialog(model.medicationReferences,{referenceOpen=false}) {id->state.medications.firstOrNull {it.id==id}?.name ?: editor?.medication?.takeIf {it.id==id}?.name}
     completeEntry?.let { e ->
         val saved=state.ruleSnapshots[e.slot.ruleId]?.let{MedicationSnapshot.decode(it,e.slot.medicationId)?.medication(e.slot.medicationId)}
         val current=meds[e.slot.medicationId]
