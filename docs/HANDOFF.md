@@ -4164,3 +4164,12 @@ ANSM 新读写边界定向回归已通过：BdpmCatalogueTest6（含真实关联
 ANSM #142 f27d0364 原生原件：push40660379229的API26/29/35新增 MainActivity 官方详情测试均实际PASS；三者唯一旧导航合同失败在centerDialogsBackNavigation仍要求4个已正式实现模块无OnClick。原XML、API35完整job日志及artifact ID/hash在同目录evidence；没有数据、AppLock或外链认证失败证据。仅该旧合同改为四项真实产品选择窗口/返回/会话保持，recalls仍强制无点击，文件Intent监测和0次文件启动原断言保留；14秒AndroidTest编译PASS。新精确SHA最终原生/全部CI仍待实际执行，不把f27通过的子项冒充最终整体PASS。
 
 同源f27 unsigned fullRelease实际PASS，DEX来源精确核对f27+clean；包名/NoINTERNET/附件及ANSM调试隔离PASS。与同环境实际构建且DEX核对#140基线32e3a422相比：14,062,172→14,286,553 bytes，+224,381 bytes(约219KiB)，evidence/unsigned-apk-size-receipt.json记录两APK SHA/每资产压缩尺寸。不签名/交付、不改versionCode；此体积对比对应生产代码冻结f27，后继仅原生合同与证据更新。最终PR及受保护合并/主线CI收据以#142正文和永久评论为准，历史PENDING是该次提交检查点而非未来状态。
+
+
+## Build37 原证书私人文件交付 — 2026-10-28
+
+负责人明确要求签名APK。最新默认主线f00598e48af0bf1124e48149005930a69b2ba2d6（#142）Android40667142336、Science40667142275、安全40667142298均实际SUCCESS，PR最终42949cc7三API真实入口及完整必要检查PASS，合并树一致。包含MED-02正式入口、UI-11和本批官方只读BDPM资料。
+
+已知实际最高交付Build36（#137未合并记录）保留，故本次full0.2.0/code37。干净独立主线工作树，加源码外version37.init.gradle显式版本参数（哈希见收据），175 tasks实际执行，7m28s成功。只用原正式证书989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1，v2/v3实际PASS，APK HRT-Log-build37-full-official.apk，14,331,038 bytes，SHA256 eb943209ef7893e7c6e52d623fc40495c14a77cedc5d9a0cbe78b68d12423cee。签后逐项验包名/code37/clean源f00598e4、min26、非debug/NoINTERNET、四ABI及8个ELF/ZIP16KiB、正式附件/ANSM隔离、签前签后业务payload字节一致。
+
+本次为负责人共享工作区私人文件提供，不谎称已上传Drive或用户已安装；APK不入Git/公共CI，下载能力/用户接收回执和真机安装未独立确认。可直接覆盖原证书正式版，勿卸载/清数据；医疗资料建议先保存完整备份。临时恢复的私钥与密码已逐文件删除，原私有备份不动，没有公开Release/tag。核验收据docs/delivery/build37-private-verification.json。现有#137记录合并保留Build36及主线双方文档，再追加37与源码版本floor37，无其他产品/DB/密码学改动。首次验包脚本误用旧aapt字段sdkVersion，实际输出是minSdkVersion；更正为精确min26断言后验证PASS，没有降低SDK要求。此记录提交不是APK源码，APK源仍f00598e4+版本参数。
