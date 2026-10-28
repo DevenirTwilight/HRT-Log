@@ -23,3 +23,7 @@
 
 - `UI-*` **只分配给真实的新 UI/UX 设计及其实现**；单纯调用已有接口、前后端接线、增设已有组件的导航入口、过时“尚未开放”清理或文案修正，不得冒用新 UI 编号。
 - 已合并 PR #135 的历史 `UI-10` 归类已撤销，正式称 `MED-02-EXPOSE`；**UI-10 目前空缺**。医疗附件新增文件管理/回收/恢复业务候选称 `MED-03`，尚未实施授权。参见 `docs/REQUIREMENTS.md` §156。
+
+## 永久 UI 继承规则（2026-10-28）
+
+任何产品界面开发前必须阅读 [UI_STYLE_AUTHORITY](docs/design/UI_STYLE_AUTHORITY.md)。继承 Material 3 Expressive + Quiet Healthcare Design、现有 NotesTheme/Corners/语义色/分组组件。优先级：负责人最新确认决定 → 有对照与实际验收证据的更优正式应用 UI → Claude 样图及历史审查 → 外部参考。不能机械回退到旧样图，也不能无证据自称新设计更优；保留 before/after、任务流程与无障碍证据，四语、小屏、大字号、明暗及减少动态不得退化。

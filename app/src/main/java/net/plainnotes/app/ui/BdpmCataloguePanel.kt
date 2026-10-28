@@ -82,7 +82,7 @@ internal class BdpmCatalogueUiState(val catalogue:BdpmCatalogue,private val scop
             val inputs=meta.getJSONObject("inputs")
             Text(stringResource(R.string.bdpm_dates,inputs.getJSONObject("CIS_bdpm.txt").getString("source_updated_on"),
                 inputs.getJSONObject("CIS_CIP_bdpm.txt").getString("source_updated_on"),inputs.getJSONObject("CIS_COMPO_bdpm.txt").getString("source_updated_on"),meta.getString("downloaded_on")),style=MaterialTheme.typography.bodySmall,color=c.onSurfaceVariant)
-            Text("https://bdpmt.ansm.sante.fr/telechargement",style=MaterialTheme.typography.bodySmall,color=c.onSurfaceVariant)
+            Text(meta.getString("download_page"),style=MaterialTheme.typography.bodySmall,color=c.onSurfaceVariant)
             if(page!!.limited)Text(stringResource(R.string.bdpm_limited))
             val entries=page!!.entries
             Column(verticalArrangement=Arrangement.spacedBy(GroupedGap)) {
@@ -105,6 +105,7 @@ internal class BdpmCatalogueUiState(val catalogue:BdpmCatalogue,private val scop
                             }
                             if(open)Column(Modifier.padding(start=16.dp,end=16.dp,bottom=16.dp).testTag("bdpm-expanded:${product.cis}"),verticalArrangement=Arrangement.spacedBy(8.dp)) {
                                 Text(product.composition.joinToString("\n"){it.display()},style=MaterialTheme.typography.bodySmall,color=c.onSurfaceVariant)
+                                BdpmOfficialPanel(product.cis,product.name)
                                 Text(stringResource(R.string.bdpm_packages),style=MaterialTheme.typography.labelLarge)
                                 Text(stringResource(R.string.bdpm_package_boundary),style=MaterialTheme.typography.bodySmall,color=c.onSurfaceVariant)
                                 product.packages.forEach {pack->

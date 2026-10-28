@@ -195,8 +195,10 @@ class Ui11CenterTest(private val locale: String, private val width: Int, private
     @Test fun notYetOpenModulesAreRowsNotButtons() {
         setup()
         ui.setContent { NotesTheme(mode) { DrugReferenceCenterScreen(meds, {}, {}, PaddingValues(), links) } }
-        val future = mapOf("drug-center-rcp" to R.string.drug_center_rcp, "drug-center-notice" to R.string.drug_center_notice, "drug-center-safety" to R.string.drug_center_safety,
-            "drug-center-supply" to R.string.center_shortages, "drug-center-recalls" to R.string.center_recalls)
+        for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply")) {
+            scrollTo(tag);ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction()
+        }
+        val future = mapOf("drug-center-recalls" to R.string.center_recalls)
         for ((tag, title) in future) {
             scrollTo(tag)
             ui.onNodeWithTag(tag).assertIsDisplayed().assert(hasClickAction().not())

@@ -4137,3 +4137,20 @@ PR133 155 API29真实流程已通过就诊全链、LAB=2/panel=1 SAF/COMMIT/认�
 MED-02-EXPOSE（旧名 UI-10）本地证据更新：生产与AndroidTest编译PASS。首次测试未传离线Robolectric目录导致MavenArtifactFetcher连接失败；原日志保存ui10-evidence。正确离线参数后130项中129 PASS，唯一FAIL是新增返回测试直接给底层Activity发Back，未发给当前Dialog；仅将该测试改为对话框窗口Back，所有实际返回/不写入断言保留，AppShell全套随后PASS（27秒）。其余已执行：医疗/药品矩阵各48组、中心四语主题8、药品真实NotesApp导航1、MedicalHome4、Ui05MedicalHome3全部PASS。药品中心合并两个完全相同onBrowse按钮为单一catalogue入口，四语明确BDPM身份/包装与用户来源边界，五项真正未实现卡仍OFF。原生MainActivity及最终必需CI等待PR，不将上述本地测试冒充原生。
 
 MED-02-EXPOSE（旧名 UI-10）首轮1439原生保留真实FAIL：API35 PR40557152041/job122376148218及API26 push122375990485在产品合同276行仍查Menu；从新hub入口进入后，真实顶栏是medical-center-back。此前已完成真实就诊SAF/COMMIT/新Activity/认证预览；不是丢数据或保存失败。只将原几何安全断言的对象改为实际返回按钮，仍要求viewer close在真实顶栏下方、仍必须真实触摸关闭；其余业务断言不变。原XML及artifact ID/SHA在ui10-evidence。1439安全PR40557152049/API35在安装emulator报ZipFile unknown archive，未启动设备/未执行测试；原job122376147317和完整日志已保留于PR评论及/workspace/ui10-ci-evidence，仅同源该失败job做一次有界重试，其他安全API全PASS。新测试输入修正后的精确源码仍须CI，不借1439通过项冒充最终全过；不修改生产安全路径或放宽断言。
+
+
+## ANSM-04/06 正式资料接手 — 2026-10-28
+
+独立 /workspace/HRT-Log-ansm-details，feature/ansm04-06-official-details，实时基线 #140 合并32e3a422；#98/#135/#140均已合并。#141仅UI-11交接文档，#58/#59仍研究分支，本轮不直接复制。先提交全项目 UI_STYLE_AUTHORITY 及 AGENTS/CLAUDE/REQUIREMENTS160引用，尚未修改产品界面。之后复用现有 BdpmCatalogue、UI-11、生成/溯源工具，优先核实正式官网下载与许可；旧2026-10-22 manifest的TEST替代主机不被静默升级为生产最新。原用户关联及CIS/CIP/成分查询不重做，临床/库存/PK及用户库不改，官方正文未取得不能称离线全文。下一步核实官方源、字段/许可和已有管线，再实际接入只读详情、官方文档核对入口与四语界面；最终必须有实际App操作测试和精确源码CI。没有签名/交付/公开Release授权。
+
+ANSM-04/06 已有真实生产实现（未最终验收）：正式生产下载13个文件（11数据集+许可/格式PDF），每文件hash/编码/自己的页面日期，raw gzip和metadata在tools/bdpm/official-sources；临床正文只用下载文件，不捏造RCP正文。实际420个HRT产品页面核对通过，382独立RCP/Notice、11 EMA合并文档；37仿制组成员在当前身份文件缺失，保留CIS+未知，不猜名称。附加只读official.sqlite约1.36MB，CPD667/HAS465/分组归属238/重要信息771/供应5/MITM107；动态信息生成时间未知，检索日不作发布时间。旧身份/成分原始字节相同，420产品/702成分保持；包装550→544变更逐行在package-update-audit.json，旧用户冻结关联不重写。
+
+UI沿UI-11分组和折叠交互，在产品展开和官方已关联详情有按CIS查的官方资料；CPD/HAS/分组/MITM/加强监测/重要信息/供应/来源日期可离线看。RCP/Notice为逐产品验证后的浏览器入口，明确非离线全文，点击先确认；EMA合并文档原网址保留；未提供文档显示未知。中心四个已实现模块进入既有搜索；全量召回仍未证明，保留OFF和已实际HTTP200核对的ANSM安全公告查询入口。无INTERNET或用户DB新schema。
+
+首次新生产URL触发旧ReferencePayload唯一TEST地址约束，两原关联回归真实FAIL已留evidence XML/log。仅增加精确生产下载地址白名单，旧TEST仍可读，其余域名/参数继续拒绝，payload格式未变。旧程序校验器可能拒绝含新生产地址的备份/关联，不承诺回退旧程序可读；新程序旧快照/新关联/备份恢复将复用原事务回归验证。不动加密协议或历史医疗事实。Python原目录7+新资料7项PASS，生产Kotlin编译PASS；新URL修正后的core/app回归与AndroidTest编译进行中，原生及CI未跑不能称正式验收完成。新增MainActivity解锁→药品中心→真实目录→CPD/文档确认取消合同，保留旧完整关联/备份与锁/伪装测试；四语尺寸/字体/主题新组件测试及UI-11截图对照待执行。
+
+ANSM 新读写边界定向回归已通过：BdpmCatalogueTest6（含真实关联→普通加密备份→恢复/历史不变）、原DrugCenter/ReferenceFlow/UI11Center相关任务PASS；新公共组件32组布局/原文/外链确认取消/准确Intent PASS。Python全bdpm54项PASS；新pipeline损坏源回滚拒绝、URL重定向白名单也通过。UI11Link72项中64通过、8项仅因旧测试硬编码下载日2026-10-22而失败；原XML/log留evidence。将日期断言绑定随包manifest实际downloaded_on，仍精确检查结果数2/来源日期，保留所有CIS/包装/单展开/原确认流程断言；针对8配置复验进行中。同步已合并#141（只改HANDOFF两处UI-11最终CI状态），保留双方内容，生产基线仍#140相同代码。未开启全量召回、未打包RCP全文、不签名交付。
+
+ANSM #142 f27d0364 原生原件：push40660379229的API26/29/35新增 MainActivity 官方详情测试均实际PASS；三者唯一旧导航合同失败在centerDialogsBackNavigation仍要求4个已正式实现模块无OnClick。原XML、API35完整job日志及artifact ID/hash在同目录evidence；没有数据、AppLock或外链认证失败证据。仅该旧合同改为四项真实产品选择窗口/返回/会话保持，recalls仍强制无点击，文件Intent监测和0次文件启动原断言保留；14秒AndroidTest编译PASS。新精确SHA最终原生/全部CI仍待实际执行，不把f27通过的子项冒充最终整体PASS。
+
+同源f27 unsigned fullRelease实际PASS，DEX来源精确核对f27+clean；包名/NoINTERNET/附件及ANSM调试隔离PASS。与同环境实际构建且DEX核对#140基线32e3a422相比：14,062,172→14,286,553 bytes，+224,381 bytes(约219KiB)，evidence/unsigned-apk-size-receipt.json记录两APK SHA/每资产压缩尺寸。不签名/交付、不改versionCode；此体积对比对应生产代码冻结f27，后继仅原生合同与证据更新。最终PR及受保护合并/主线CI收据以#142正文和永久评论为准，历史PENDING是该次提交检查点而非未来状态。

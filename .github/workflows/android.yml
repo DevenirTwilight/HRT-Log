@@ -18,6 +18,7 @@ jobs:
       - run: ./gradlew -PjvmOnly :core:domain:test :pk-engine:test :importer:test :attachment-poc:test --rerun-tasks --no-parallel --max-workers=2
       - name: Lightweight scientific contracts and four-language checks
         run: |
+          python3 -m unittest discover -s scripts -p 'test_bdpm*.py'
           python3 -m unittest discover -s scripts -p 'test_attachment_design_validation.py'
           python3 -m unittest discover -s scripts -p 'test_attachment_release_isolation.py'
           python3 -m unittest discover -s scripts -p 'test_configure_ansm_native_runtime.py'

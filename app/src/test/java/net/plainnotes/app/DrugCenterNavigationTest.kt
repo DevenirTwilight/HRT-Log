@@ -71,7 +71,14 @@ class DrugCenterNavigationTest {
             ui.onNodeWithTag("reference-screen").performScrollToNode(hasTestTag("bdpm-panel"))
             ui.onNodeWithTag("bdpm-panel").assertExists()
             ui.onNodeWithTag("reference-close").performClick()
-            for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply","drug-center-recalls")) {
+            for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply")) {
+                ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
+                ui.onNodeWithTag(tag).assertHasClickAction().performClick()
+                ui.onNodeWithTag("reference-window").assertExists()
+                ui.onNodeWithTag("reference-close").performClick()
+                ui.onNodeWithTag("drug-center-window").assertExists()
+            }
+            for(tag in listOf("drug-center-recalls")) {
                 ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
                 // UI-11: the not-yet-open modules are plain rows now; they carry no tap and open nothing.
                 ui.onNodeWithTag(tag).assert(hasClickAction().not())

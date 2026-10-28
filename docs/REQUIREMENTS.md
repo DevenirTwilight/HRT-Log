@@ -1620,3 +1620,10 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 **范围。** 只改展示和导航，不改业务：BDPM 目录数据、搜索算法和结果排序；关联、解除关联、自行录入的逻辑和确认对话框的触发条件；Room schema 和备份。关联操作仍不得改变剂量、方案或库存，现有证明这一点的测试全部保留。不新增药品资料中心的功能，不打开“尚未开放”的模块，不提供用药建议，不把用户录入的资料显示成已核实；不用红色作强调色；不打包字体，不新增依赖、权限、网络或埋点；不升级 Compose/Material 3（BOM 2025.10.00），不用实验性 Expressive API；不改 versionCode 和签名，不交付 APK。
 **保护文件。** 涉及的 `DrugReferenceCenterScreen.kt`、`MedicationReferenceDialog.kt`、`BdpmCataloguePanel.kt`、`RecordedReferenceDialog.kt` 不在 B0 矩阵内；`MedicationsScreen.kt`、`AppShell.kt`、`Components.kt`、`AdaptiveControls.kt` 是 HISTORY_ONLY，可改。一旦需要改 PK_DISPLAY_REVIEW 或 LIVE_LOCK_* 文件就停止；浓度、PK、`Exports.kt`、`ConcChart.kt` 一律不改。
 **测试与交付。** 先写失败测试；`MedicationReferenceControllerTest`、`MedicationReferenceUiTest`、`MedicationReferenceMatrixTest`、`DrugCenterMatrixTest`、`RecordedReferenceUiTest`、`CenterStateRestorationTest`、`BdpmReferenceFlowContract`、`PeriodStabilityTest`、`ButtonLayoutRegressionTest`、`TranslationsTest` 和对比度断言不得放宽；只能迁移因“取消→返回”和删除两个按钮而必然变化的断言，并在报告中逐条写明原含义如何保留。截图覆盖四语 × 320/411dp × 字号 1/2 × 明暗，前后对比并与样图并排，存入 `docs/ui-audit/2026-10-28-ui11/`。报告 `docs/audits/product-quality-2026-10/77-ui11-drug-center.md`：改动清单、返回与删除按钮说明、关联状态能否区分官方/用户录入的结论、迁移断言清单、前后截图与样图对照、NOT_RUN 项。PR 按 §106 自动合并，合并后复验默认分支 CI；更新 HANDOFF、STATUS。
+
+
+## 160. ANSM-04/06 正式官方资料与永久 UI 设计继承（2026-10-28）
+
+负责人授权把可合法取得、明确产品身份且可可靠解析的官方 BDPM/ANSM/HAS 资料接入普通用户可达的只读药品详情，不再以旧 OWNER_BLOCKED 报告自动阻止已满足来源条件的独立模块。生产下载优先；TEST 替代来源不能冒充生产最新。每数据集保留 URL、自己的更新时间、下载日期、编码、行数、SHA-256 与实际许可，不推断缺行等于正常/无风险，不把离线状态称实时。CPD 多条件、仿制分组、SMR/ASMR、MITM、重要信息、供应状态按原字段保留；不作个人安全评分、用药建议、自动换药或库存事实。官方文档链接须逐产品核对；外部浏览器由用户明确触发，无 INTERNET 权限；官网入口不等于离线全文。全文及全量召回无法证明时准确标 PARTIAL/BLOCKED，不拖延其余可交付模块。只读资料与私人数据库分离，优先不改 Room21；不改 PK、医疗备份、资源配额、用户来源及历史关联。
+
+先提交 [永久 UI 规范](design/UI_STYLE_AUTHORITY.md)，再开发产品界面；全项目继承规则为：负责人最新决定 → 有对照与实际验收证据的更优正式应用 UI → Claude 原始样图/历史审查 → 其他外部参考。Claude 样图是重要基线而非永久上限，不准机械退化，也不准无证据自称更优。继承 UI-11/NotesTheme/Corners/语义色/GroupedItem，四语、小屏、大字号、明暗与自动语义验证；真正功能用真实入口与提交/读取证据证明，不把脚本/下载/占位视为交付。允许分合理功能 PR，按 §106 精确源码 CI、无冲突及无未解决审查正常合并；不签名交付或公开 Release。

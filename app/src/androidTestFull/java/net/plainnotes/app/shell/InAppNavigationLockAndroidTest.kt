@@ -67,6 +67,34 @@ class InAppNavigationLockAndroidTest {
     }
     private fun title() = ui.onNodeWithTag("top-title")
 
+    /** Actual unlocked MainActivity → UI-11 center → product → source facts and explicit browser consent. */
+    @Test fun officialProductFactsAreOfflineAndBrowserAccessNeedsConfirmation() {
+        launch();unlock();open(Destination.MEDICATIONS)
+        ui.onNodeWithTag("drug-center-open").performClick()
+        ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-rcp"))
+        ui.onNodeWithTag("drug-center-rcp").assertHasClickAction().performClick()
+        val list=ui.onNodeWithTag("reference-screen")
+        list.performScrollToNode(hasTestTag("bdpm-search"));ui.onNodeWithTag("bdpm-search").performTextInput("PROVAMES")
+        list.performScrollToNode(hasTestTag("bdpm-search-go"));ui.onNodeWithTag("bdpm-search-go").performClick()
+        ui.waitUntil(30_000) {ui.onAllNodesWithTag("bdpm-result:65421374").fetchSemanticsNodes().isNotEmpty()}
+        list.performScrollToNode(hasTestTag("bdpm-result:65421374"));ui.onNodeWithTag("bdpm-result:65421374").performClick()
+        list.performScrollToNode(hasTestTag("bdpm-official-toggle"));ui.onNodeWithTag("bdpm-official-toggle").performClick()
+        ui.waitUntil(30_000) {ui.onAllNodesWithTag("bdpm-official-prescribing").fetchSemanticsNodes().isNotEmpty()}
+        list.performScrollToNode(hasTestTag("bdpm-official-prescribing"));ui.onNodeWithTag("bdpm-official-prescribing").performClick()
+        list.performScrollToNode(hasText("liste II"));ui.onNodeWithText("liste II").assertIsDisplayed()
+        list.performScrollToNode(hasTestTag("bdpm-official-documents"));ui.onNodeWithTag("bdpm-official-documents").performClick()
+        list.performScrollToNode(hasText(context.getString(R.string.drug_center_rcp)))
+        ui.onNode(hasText(context.getString(R.string.drug_center_rcp)) and hasAnyAncestor(hasTestTag("bdpm-official:65421374"))).performClick()
+        ui.onNodeWithText(context.getString(R.string.official_external_title)).assertExists()
+        ui.onNodeWithText("https://base-donnees-publique.medicaments.gouv.fr/medicament/65421374/extrait#tabpanel-rcp-panel").assertExists()
+        ui.onNodeWithText(context.getString(R.string.cancel)).performClick()
+        ui.onNodeWithTag("bdpm-official-open-confirm").assertDoesNotExist()
+        assertUnlocked("view public sources and cancel browser")
+        // No medication or lab is created by browsing, and no pending import is offered.
+        ui.onAllNodesWithTag("reference-confirm").assertCountEquals(0)
+        ui.onNodeWithTag("reference-close").performClick();ui.onNodeWithTag("drug-center-window").assertExists()
+    }
+
     /** The owner's exact path: unlock → calendar → stock → settings → history → calendar, without leaving the app. */
     @Test fun internalNavigationNeverAsksForThePinAgain() {
         launch(); unlock()
@@ -249,8 +277,18 @@ class InAppNavigationLockAndroidTest {
             listOf("rcp", "notice", "safety", "supply", "recalls").forEach { suffix ->
                 val tag = "drug-center-$suffix"
                 ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
-                // UI-11: the module rows are not tappable; nothing opens and the centre stays put.
-                ui.onNodeWithTag(tag).assertHasNoClickAction()
+                if (suffix == "recalls") {
+                    // No complete recall dataset: the unimplemented row must remain inert.
+                    ui.onNodeWithTag(tag).assertHasNoClickAction()
+                } else {
+                    // ANSM-04/06: implemented rows open the real product chooser, never a file picker.
+                    ui.onNodeWithTag(tag).assertHasClickAction().performClick()
+                    ui.onNodeWithTag("reference-window").assertExists()
+                    ui.onNodeWithTag("reference-screen").assertExists()
+                    assertUnlocked("Open product facts from $tag")
+                    back("reference-window")
+                    ui.onNodeWithTag("reference-window").assertDoesNotExist()
+                }
                 ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
                 ui.onNodeWithTag("drug-center-window").assertExists()
                 assertUnlocked("Rows $tag")

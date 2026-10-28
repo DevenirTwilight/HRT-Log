@@ -143,17 +143,28 @@ suspend fun loadDrugSourceInfo(context: Context, saved: suspend () -> Pair<Int, 
                 ExpandableRow(stringResource(title), stringResource(body), tag in open, { toggle(tag) }, tag)
             }
         }
-        item("future-title") { SectionHeader(R.string.center_future_modules) }
-        val future = listOf(Triple(R.string.drug_center_rcp, R.string.drug_center_documents_off, "drug-center-rcp"),
-            Triple(R.string.drug_center_notice, R.string.drug_center_documents_off, "drug-center-notice"),
-            Triple(R.string.drug_center_safety, R.string.drug_center_safety_off, "drug-center-safety"),
-            Triple(R.string.center_shortages, R.string.drug_center_supply_off, "drug-center-supply"),
-            Triple(R.string.center_recalls, R.string.drug_center_supply_off, "drug-center-recalls"))
-        items(future.size, key = { "future:${future[it].third}" }) { i ->
-            val (title, reason, tag) = future[i]
-            GroupedItem(i, future.size, color = c.surfaceContainerLow) { FutureRow(title, reason, tag, futureIcon(tag)) }
+        item("official-title") { SectionHeader(R.string.official_title) }
+        item("official-help") { Caption(R.string.official_choose_product) }
+        val available=listOf(R.string.drug_center_rcp to "drug-center-rcp",R.string.drug_center_notice to "drug-center-notice",
+            R.string.drug_center_safety to "drug-center-safety",R.string.center_shortages to "drug-center-supply")
+        items(available.size,key={"official:${available[it].second}"}) {i->
+            val (title,tag)=available[i]
+            GroupedItem(i,available.size,onClick=onBrowse,modifier=Modifier.testTag(tag)) {
+                Row(Modifier.padding(16.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+                    IconTile(futureIcon(tag),c.secondaryContainer,c.onSecondaryContainer)
+                    Text(stringResource(title),style=MaterialTheme.typography.titleSmall,modifier=Modifier.weight(1f))
+                    Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,null,tint=c.onSurfaceVariant)
+                }
+            }
         }
-        item("future-caption") { Caption(R.string.drug_center_future_caption) }
+        item("future-title") { SectionHeader(R.string.center_future_modules) }
+        item("recalls") {GroupedItem(0,1,color=c.surfaceContainerLow) {
+            Column {
+                FutureRow(R.string.center_recalls,R.string.official_recall_limit,"drug-center-recalls",futureIcon("drug-center-recalls"))
+                BdpmOfficialExternalLink("https://ansm.sante.fr/informations-de-securite",R.string.official_recall_query)
+            }
+        }}
+
     }
 }
 

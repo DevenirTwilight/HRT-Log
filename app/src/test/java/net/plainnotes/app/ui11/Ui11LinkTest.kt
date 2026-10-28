@@ -124,7 +124,8 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         val id = runBlocking { medication() }; runBlocking { controller.open(id)!!.join() }
         show()
         search("PROVAMES")
-        ui.onNodeWithTag("bdpm-status").assert(hasText(s(R.string.bdpm_status_line, "2", "2026-10-22")))
+        val snapshotDate=org.json.JSONObject(ui.activity.assets.open("bdpm/manifest.json").bufferedReader().use {it.readText()}).getString("downloaded_on")
+        ui.onNodeWithTag("bdpm-status").assert(hasText(s(R.string.bdpm_status_line, "2", snapshotDate)))
         for (cis in listOf("65281285", "65421374")) { scrollTo("bdpm-result:$cis"); ui.onNodeWithTag("bdpm-result:$cis").assert(hasText(s(R.string.ref2_tag_official))).assert(hasText("CIS $cis")) }
         ui.onAllNodesWithTag("bdpm-expanded:65281285").assertCountEquals(0); ui.onAllNodesWithTag("bdpm-expanded:65421374").assertCountEquals(0)
         click("bdpm-result:65281285"); scrollTo("bdpm-expanded:65281285"); ui.onNodeWithTag("bdpm-expanded:65281285").assertExists()
