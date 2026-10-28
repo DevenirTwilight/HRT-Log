@@ -1,3 +1,13 @@
+## 2026-10-28 负责人真机问题修正（PR #143 / MED-03 Issue #144）
+
+负责人反馈：RCP/Notice/安全/短缺误入“商品资料关联”；无可靠完整来源的召回占位应删；历史就诊应直接补录；一份化验报告必须关联整次抽血 LabPanel。权威要求已追加 REQUIREMENTS §161；此前 §158 的整次报告授权继续有效。
+
+PR #143 分支 fix/official-browse-past-visits-20261028 已提交：药品四项跳转独立只读官方产品浏览器、移除完整召回空卡及其误导外链；医疗档案和就诊列表有“补录历史就诊”操作，复用 MedicalVisitDialog / saveHistoricalVisit。UI/原生回归断言已调整；**精确 HEAD CI、合并仍待验证，不得标记 PASS 或声称 APK 已更新**。
+
+**MED-03 Issue #144 仍未实现**：当前 AttachmentSchema/触发器仍只支持 APPOINTMENT/LAB/DOSE_RECORD，MedicalRecordsScreen.AddFileTargetDialog 仍按抽血组展示后让用户选单项，不能把这误称整次报告关联。必须实现 LabPanel 类型化目标、非破坏迁移、身份/备份/恢复/删除负向测试与正式 UI；不允许传 panel.id 给 LAB 或凭日期推断，参见已有 MED03_PANEL_TARGET_REQUIREMENTS.md。
+
+---
+
 ## UI-11 药品资料中心与商品资料关联重设计（已合并）— 2026-10-28
 
 UI-10（医疗档案重设计）已合并（PR #139，5d383a2d）。UI-11 = 药品资料中心与商品资料关联页面重设计（任务书原称 UI-10，负责人确认改称 UI-11，REQUIREMENTS §158.A、§159）。分支 `feature/ui11-drug-center-20261027`，工作树 /home/user/wt-ui11，基于 5d383a2d。任务书原文 `docs/design/ui10-drug-center-2026-10-27/TASK_BOOK_ORIGINAL.md`；样图同目录（PR #138）。
