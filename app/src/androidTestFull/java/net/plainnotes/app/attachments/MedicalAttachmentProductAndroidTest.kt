@@ -317,6 +317,9 @@ class MedicalAttachmentProductAndroidTest {
         }
         open(Destination.MEDICAL)
         tag("medical-tab:files")
+        // MED-03: the library is one lazy list; at 320 dp the backup entry is below the first screen, so a person scrolls to it.
+        ui.waitUntil(30000) {ui.onAllNodesWithTag("library").fetchSemanticsNodes().isNotEmpty()}
+        ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-backup"))
         tag("library-backup")
         ui.onNodeWithText(text(R.string.med_transfer_scope)).assertExists()
         back()
