@@ -328,7 +328,12 @@ class Ui08PdfSummaryUnchangedTest {
             for (name in listOf("privacy_notice_backup_body", "privacy_notice_changes_body")) {
                 val element = requireNotNull(Regex("<string name=\"$name\">.*?</string>").find(text))
                 val evidence = approved.getJSONObject(name)
-                assertEquals("$dir exact approved $name", evidence.getString("approvedSha256"), sha(element.value.toByteArray()))
+                // MED-03 (REQUIREMENTS §161.B) extends exactly one statement, the backup notice, to describe independent
+                // files, whole-draw links and the recycle bin. Its exact text is pinned by its own hash record; any other
+                // edit of a privacy statement still fails here.
+                val med03 = org.json.JSONObject(File("src/test/resources/med03-approved-privacy-files.json").readText()).getJSONObject(dir)
+                val accepted = listOfNotNull(evidence.getString("approvedSha256"), med03.optJSONObject(name)?.getString("approvedSha256"))
+                assertTrue("$dir exact approved $name", sha(element.value.toByteArray()) in accepted)
                 text = text.replaceRange(element.range, evidence.getString("original"))
             }
             val a = text.indexOf("<!-- UI-08 (REQUIREMENTS §140)"); val b = text.lastIndexOf("</resources>")

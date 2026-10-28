@@ -25,4 +25,5 @@
     <string name="med03_operation_stale">操作已提交，但列表未能刷新。</string>
     <string name="med03_select_target">请选择要关联的明确记录。</string>
     <string name="med03_search_hint">搜索文件标题</string>
+    <string name="med03_or_one_result">或只关联其中一项结果</string>
 </resources>

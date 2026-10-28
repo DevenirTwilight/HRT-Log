@@ -250,14 +250,24 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
                                     val when_=formatDate(local.toLocalDate())+" · "+formatTime(local.toLocalTime())
                                     Column(Modifier.testTag("file-target-draw:${d.panel?.id ?: "g${first.id}"}"),verticalArrangement=Arrangement.spacedBy(8.dp)) {
                                         val panel=d.panel
-                                        GroupedItem(0,1,onClick={if(panel!=null)onPanel?.invoke(panel) else onSaveDraw?.invoke(d.labs)},modifier=Modifier.testTag("file-target:${if(panel!=null)"panel:${panel.id}" else "save-draw:${first.id}"}")) {
-                                            Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(6.dp)) {
+                                        val whole=d.labs.size>1 || panel!=null
+                                        // A real draw (or a display group that can be saved as one) is the first choice; a file may still link to one result only.
+                                        if(whole)GroupedItem(0,1,onClick={if(panel!=null)onPanel?.invoke(panel) else onSaveDraw?.invoke(d.labs)},modifier=Modifier.testTag("file-target:${if(panel!=null)"panel:${panel.id}" else "save-draw:${first.id}"}")) {
+                                            Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
                                                 Text(listOfNotNull(when_,place).joinToString(" · "),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
                                                 Text(stringResource(R.string.med03_whole_draw,d.labs.size),style=MaterialTheme.typography.bodyMedium)
-                                                val analyteLabels = mutableListOf<String>()
-                                                for (lab in d.labs) analyteLabels += analyteLabel(lab.analyte_code)
-                                                Text(analyteLabels.joinToString(" · "),style=MaterialTheme.typography.bodySmall)
                                                 if(panel==null)Text(stringResource(R.string.lab_panel_save_as),color=MaterialTheme.colorScheme.primary)
+                                            }
+                                        }
+                                        if(whole)Text(stringResource(R.string.med03_or_one_result),style=MaterialTheme.typography.labelLarge,color=MaterialTheme.colorScheme.onSurfaceVariant,modifier=Modifier.padding(start=4.dp,top=4.dp))
+                                        Column(verticalArrangement=Arrangement.spacedBy(GroupedGap)) {
+                                            d.labs.forEachIndexed{i,v->
+                                                GroupedItem(i,d.labs.size,onClick={onLab(v)},modifier=Modifier.testTag("file-target:lab:${v.id}")) {
+                                                    Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
+                                                        Text(analyteLabel(v.analyte_code)+" · "+displayNumber(v.value)+" "+v.unit,style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
+                                                        if(!whole)Text(when_+(place?.let{" · $it"} ?: ""),style=MaterialTheme.typography.bodyMedium)
+                                                    }
+                                                }
                                             }
                                         }
                                     }

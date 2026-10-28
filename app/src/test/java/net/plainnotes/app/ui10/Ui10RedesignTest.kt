@@ -231,9 +231,10 @@ class Ui10RedesignTest(private val locale: String, private val width: Int, priva
 
     // --- medical records hub ----------------------------------------------------------------------------------------------
 
-    private fun hub(withFiles: Boolean = true, onVisit: (AppointmentEntity) -> Unit = {}, onLab: ((LabValueEntity) -> Unit)? = null, labs: List<LabValueEntity> = listOf(lab, bare), panels: List<LabPanelEntity> = emptyList()) {
+    private fun hub(withFiles: Boolean = true, onVisit: (AppointmentEntity) -> Unit = {}, onLab: ((LabValueEntity) -> Unit)? = null, labs: List<LabValueEntity> = listOf(lab, bare), panels: List<LabPanelEntity> = emptyList(),
+                    onPanel: ((LabPanelEntity) -> Unit)? = null) {
         ui.setContent { NotesTheme(mode) { Scaffold { pad -> MedicalRecordsScreen(visits, onVisit, {}, {}, {}, {}, pad, questionCounts = mapOf(1L to 3), now = now,
-            onVisits = if (withFiles) ({}) else null, onMedicalBackup = if (withFiles) ({}) else null, labs = labs, onLab = onLab, labPanels = panels) } } }
+            onVisits = if (withFiles) ({}) else null, onMedicalBackup = if (withFiles) ({}) else null, labs = labs, onLab = onLab, labPanels = panels, onPanel = onPanel) } } }
     }
 
     @Test fun hubRecordsAreaLeadsWithTheNextVisitAndTilesNotACardPile() {
@@ -276,13 +277,17 @@ class Ui10RedesignTest(private val locale: String, private val width: Int, priva
     @Test fun addFileOffersLabResultsPerBloodTestNotAsAFlatListOfResults() {
         assumeTrue("Dialog windows are exercised at 320 dp only", width == 320)
         setup()
-        var picked: LabValueEntity? = null
+        var picked: LabValueEntity? = null; var pickedPanel: LabPanelEntity? = null
         // One five-result draw (a real panel) and one separate single result.
-        hub(onLab = { picked = it }, labs = fiveResults + bare, panels = listOf(panel))
+        hub(onLab = { picked = it }, labs = fiveResults + bare, panels = listOf(panel), onPanel = { pickedPanel = it })
         ui.onNodeWithTag("medical-tab:files").performClick()
         ui.onNodeWithTag("medical-add-file").performClick()
         ui.onNodeWithTag("file-target-kind:1").performClick()
         ui.onNodeWithTag("file-target-lab-help").assertExists()
+        // MED-03 (REQUIREMENTS §161): the real draw is the first choice for one report; single results stay explicit options.
+        ui.onNodeWithTag("file-target:panel:7").assertHasClickAction().assert(hasText(s(R.string.med03_whole_draw, 5)))
+        ui.onNode(hasTestTag("file-target:panel:7") and hasAnyAncestor(hasTestTag("file-target-draw:7")), useUnmergedTree = true).assertExists()
+        ui.onNode(hasText(s(R.string.med03_or_one_result)) and hasAnyAncestor(hasTestTag("file-target-draw:7")), useUnmergedTree = true).assertExists()
         // The five results are one group, not five unrelated rows; the single result is its own group.
         ui.onNodeWithTag("file-target-draw:7").assertExists()
         ui.onAllNodes(hasTestTag("file-target-draw:7")).assertCountEquals(1)
@@ -293,7 +298,20 @@ class Ui10RedesignTest(private val locale: String, private val width: Int, priva
         // A file is still linked to one explicit result.
         ui.onNodeWithTag("file-target-labs").performScrollToNode(hasTestTag("file-target:lab:12"))
         ui.onNodeWithTag("file-target:lab:12").performClick()
-        assertEquals(fiveResults[1], picked)
+        assertEquals(fiveResults[1], picked); assertNull("one result never opens the whole draw", pickedPanel)
+    }
+
+    @Test fun addFileWholeDrawChoiceOpensTheRealPanelNotAResult() {
+        assumeTrue("Dialog windows are exercised at 320 dp only", width == 320)
+        setup()
+        var picked: LabValueEntity? = null; var pickedPanel: LabPanelEntity? = null
+        hub(onLab = { picked = it }, labs = fiveResults + bare, panels = listOf(panel), onPanel = { pickedPanel = it })
+        ui.onNodeWithTag("medical-tab:files").performClick()
+        ui.onNodeWithTag("medical-add-file").performClick()
+        ui.onNodeWithTag("file-target-kind:1").performClick()
+        ui.onNodeWithTag("file-target:panel:7").performClick()
+        assertEquals(panel, pickedPanel); assertNull(picked)
+        ui.onNodeWithTag("file-target-dialog").assertDoesNotExist()
     }
 
     @Test fun hubLabTileCountsBloodTestsAndNamesTheirResults() {

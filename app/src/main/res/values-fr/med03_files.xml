@@ -25,4 +25,5 @@
     <string name="med03_operation_stale">L’opération a été validée, mais la liste n’a pas pu être actualisée.</string>
     <string name="med03_select_target">Choisissez précisément le dossier à associer.</string>
     <string name="med03_search_hint">Rechercher un titre de fichier</string>
+    <string name="med03_or_one_result">Ou lier un seul résultat</string>
 </resources>

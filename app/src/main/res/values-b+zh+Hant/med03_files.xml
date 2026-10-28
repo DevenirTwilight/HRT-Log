@@ -25,4 +25,5 @@
     <string name="med03_operation_stale">操作已提交，但清單未能重新整理。</string>
     <string name="med03_select_target">請選擇要關聯的明確紀錄。</string>
     <string name="med03_search_hint">搜尋檔案標題</string>
+    <string name="med03_or_one_result">或只關聯其中一項結果</string>
 </resources>
