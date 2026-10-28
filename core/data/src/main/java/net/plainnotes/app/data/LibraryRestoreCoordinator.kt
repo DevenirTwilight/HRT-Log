@@ -66,8 +66,8 @@ internal class LibraryRestoreCoordinator(private val access:DatabaseAccess,
             val slots=LibraryRestoreObjects.fresh(manifest);val aliasPlan=LibraryRestoreObjects.encode(slots);owner.ownBytes(aliasPlan)
             val targets=manifest.records.map {AttachmentBackupManifest.Target(it.uuid,it.kind,if(it.state=="PURGED")null else it.sourceId)}
             val rows=manifest.records.filter {it.state!="PURGED"}.map {AttachmentRestorePreflight.TargetRow(it.uuid,it.kind,it.sourceId,it.state)}
-            // Explicitly refuse unsupported provenance instead of inventing a record for an orphan.
-            require(manifest.documents.all {d->manifest.links.any {it.document==d.uuid}})
+            // MED-03: independent files are valid saved content. The archive boundary (MedicalArchiveManifest) already refuses a v1 manifest
+            // with an unlinked document and any LAB_PANEL / independent file outside v2; nothing is invented for them here.
             val plan=rootTransaction {
                 val raw=root.openHelper.writableDatabase
                 raw.execSQL("PRAGMA defer_foreign_keys=ON")
