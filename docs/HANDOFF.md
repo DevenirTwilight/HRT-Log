@@ -4137,3 +4137,8 @@ PR133 155 API29真实流程已通过就诊全链、LAB=2/panel=1 SAF/COMMIT/认�
 MED-02-EXPOSE（旧名 UI-10）本地证据更新：生产与AndroidTest编译PASS。首次测试未传离线Robolectric目录导致MavenArtifactFetcher连接失败；原日志保存ui10-evidence。正确离线参数后130项中129 PASS，唯一FAIL是新增返回测试直接给底层Activity发Back，未发给当前Dialog；仅将该测试改为对话框窗口Back，所有实际返回/不写入断言保留，AppShell全套随后PASS（27秒）。其余已执行：医疗/药品矩阵各48组、中心四语主题8、药品真实NotesApp导航1、MedicalHome4、Ui05MedicalHome3全部PASS。药品中心合并两个完全相同onBrowse按钮为单一catalogue入口，四语明确BDPM身份/包装与用户来源边界，五项真正未实现卡仍OFF。原生MainActivity及最终必需CI等待PR，不将上述本地测试冒充原生。
 
 MED-02-EXPOSE（旧名 UI-10）首轮1439原生保留真实FAIL：API35 PR40557152041/job122376148218及API26 push122375990485在产品合同276行仍查Menu；从新hub入口进入后，真实顶栏是medical-center-back。此前已完成真实就诊SAF/COMMIT/新Activity/认证预览；不是丢数据或保存失败。只将原几何安全断言的对象改为实际返回按钮，仍要求viewer close在真实顶栏下方、仍必须真实触摸关闭；其余业务断言不变。原XML及artifact ID/SHA在ui10-evidence。1439安全PR40557152049/API35在安装emulator报ZipFile unknown archive，未启动设备/未执行测试；原job122376147317和完整日志已保留于PR评论及/workspace/ui10-ci-evidence，仅同源该失败job做一次有界重试，其他安全API全PASS。新测试输入修正后的精确源码仍须CI，不借1439通过项冒充最终全过；不修改生产安全路径或放宽断言。
+
+
+## ANSM-04/06 正式资料接手 — 2026-10-28
+
+独立 /workspace/HRT-Log-ansm-details，feature/ansm04-06-official-details，实时基线 #140 合并32e3a422；#98/#135/#140均已合并。#141仅UI-11交接文档，#58/#59仍研究分支，本轮不直接复制。先提交全项目 UI_STYLE_AUTHORITY 及 AGENTS/CLAUDE/REQUIREMENTS160引用，尚未修改产品界面。之后复用现有 BdpmCatalogue、UI-11、生成/溯源工具，优先核实正式官网下载与许可；旧2026-10-22 manifest的TEST替代主机不被静默升级为生产最新。原用户关联及CIS/CIP/成分查询不重做，临床/库存/PK及用户库不改，官方正文未取得不能称离线全文。下一步核实官方源、字段/许可和已有管线，再实际接入只读详情、官方文档核对入口与四语界面；最终必须有实际App操作测试和精确源码CI。没有签名/交付/公开Release授权。
