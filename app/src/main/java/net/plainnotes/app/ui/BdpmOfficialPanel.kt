@@ -25,14 +25,14 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 /** UI-11 inline disclosure rows over hash-verified public data. No user writes or in-app network requests. */
-@Composable internal fun BdpmOfficialPanel(cis:String,expectedName:String?=null) {
+@Composable internal fun BdpmOfficialPanel(cis:String,expectedName:String?=null,initialSection:String?=null) {
     val context=LocalContext.current
     val catalogue=remember(context) {BdpmCatalogue(context)}
     var activeCis by remember(cis) {mutableStateOf(cis)}
-    var visible by rememberSaveable(cis) {mutableStateOf(false)}
+    var visible by rememberSaveable(cis,initialSection) {mutableStateOf(initialSection!=null)}
     var entry by remember(activeCis) {mutableStateOf<BdpmOfficialDetails?>(null)}
     var failed by remember(activeCis) {mutableStateOf(false)}
-    var expanded by rememberSaveable(activeCis) {mutableStateOf("")}
+    var expanded by rememberSaveable(activeCis,initialSection) {mutableStateOf(initialSection.orEmpty())}
     var link by remember(activeCis) {mutableStateOf<String?>(null)}
     var browserFailed by remember(activeCis) {mutableStateOf(false)}
     LaunchedEffect(activeCis,expectedName,visible) {
