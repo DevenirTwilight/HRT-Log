@@ -63,7 +63,7 @@ class Ui12ConcentrationTest(private val locale: String, private val width: Int, 
         val dir = System.getenv("UI12_SHOTS")?.takeIf { it.isNotBlank() } ?: return
         ui.waitForIdle()
         val view = ui.activity.window.decorView
-        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888); view.draw(Canvas(bitmap))
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888); ui.runOnUiThread { view.draw(Canvas(bitmap)) }
         File("build/ui12-shots/$dir").apply { mkdirs() }.resolve("${name}_${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}.png")
             .outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
