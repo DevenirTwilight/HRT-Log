@@ -68,7 +68,7 @@ internal class BdpmCatalogueUiState(val catalogue:BdpmCatalogue,private val scop
 @Composable internal fun BdpmCataloguePanel(state:BdpmCatalogueUiState,onSelect:(UserReferenceProduct)->Unit) = with(state) {
     val c=MaterialTheme.colorScheme
     Column(verticalArrangement=Arrangement.spacedBy(12.dp),modifier=Modifier.fillMaxWidth().testTag("bdpm-panel")) {
-        PillField(query,{if(phase!="SEARCHING")query=it.take(256)},stringResource(R.string.bdpm_search_label),"bdpm-search",Icons.Outlined.Search)
+        PillField(query,{if(phase!="SEARCHING")query=it.take(256)},stringResource(R.string.bdpm_search_label),"bdpm-search",Icons.Outlined.Search,Modifier.fillMaxWidth())
         Button(onClick={search()},enabled=query.isNotBlank() && phase!="SEARCHING" && !busy,shape=Corners.pill,modifier=Modifier.heightIn(min=48.dp).testTag("bdpm-search-go")) {Text(stringResource(R.string.ref2_find))}
         if(phase=="SEARCHING")LinearProgressIndicator(Modifier.fillMaxWidth())
         val meta=if(phase=="RESULTS")JSONObject(requireNotNull(page).metadata) else null

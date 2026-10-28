@@ -74,7 +74,7 @@ import java.time.LocalDate
                     listOf("reference-official-tab","reference-saved-tab"),!state.busy)}
                 if(official) item(key="bdpm-catalogue") {BdpmCataloguePanel(catalogueState){preview=it}}
                 if(!official) {
-                item {PillField(query,{query=it.take(256)},stringResource(R.string.ref2_search),"reference-search",Icons.Outlined.Search)}
+                item {PillField(query,{query=it.take(256)},stringResource(R.string.ref2_search),"reference-search",Icons.Outlined.Search,Modifier.fillMaxWidth())}
                 item {FlowRow(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp),verticalArrangement=Arrangement.spacedBy(8.dp),maxItemsInEachRow=3) {
                     PillField(form,{form=it.take(256)},stringResource(R.string.ref2_pill_form),"reference-form-filter",modifier=Modifier.weight(1f).widthIn(min=104.dp))
                     PillField(strengthFilter,{strengthFilter=it.take(256)},stringResource(R.string.ref2_pill_strength),"reference-strength-filter",modifier=Modifier.weight(1f).widthIn(min=104.dp))
@@ -178,7 +178,7 @@ import java.time.LocalDate
 }
 
 @Composable internal fun PillField(value:String,onValue:(String)->Unit,label:String,tag:String,icon:ImageVector?=null,modifier:Modifier=Modifier) {
-    OutlinedTextField(value,onValue,modifier.fillMaxWidth().heightIn(min=56.dp).testTag(tag),label={Text(label,maxLines=1,overflow=TextOverflow.Ellipsis)},singleLine=true,shape=Corners.pill,
+    OutlinedTextField(value,onValue,modifier.heightIn(min=56.dp).testTag(tag),label={Text(label,maxLines=1,overflow=TextOverflow.Ellipsis)},singleLine=true,shape=Corners.pill,
         leadingIcon=icon?.let {{Icon(it,null)}})
 }
 
