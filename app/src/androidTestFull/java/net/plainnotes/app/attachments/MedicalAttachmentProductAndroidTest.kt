@@ -23,6 +23,7 @@ import net.plainnotes.app.security.AppLock
 import net.plainnotes.app.security.Session
 import net.plainnotes.app.ui.Destination
 import net.plainnotes.app.ui.UiPrefs
+import androidx.compose.ui.semantics.getOrNull
 import org.junit.*
 import org.junit.Assert.*
 import java.security.MessageDigest
@@ -52,10 +53,10 @@ class MedicalAttachmentProductAndroidTest {
     private fun launch() {
         scenario=ActivityScenario.launch<MainActivity>(Intent(context,MainActivity::class.java))
         scenario!!.onActivity {model=ViewModelProvider(it)[NotesViewModel::class.java]}
-        ui.waitUntil(30000) {model.librarySession.value is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready}
+        await {model.librarySession.value is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready}
     }
     private fun open(destination:Destination) {
-        ui.waitUntil(30000) {var focused=false;scenario!!.onActivity {focused=it.hasWindowFocus()};focused}
+        await {var focused=false;scenario!!.onActivity {focused=it.hasWindowFocus()};focused}
         // Return through the real hub-owned detail/list navigation before using the drawer.
         repeat(2) {
             if(ui.onAllNodesWithTag("medical-center-back").fetchSemanticsNodes().isNotEmpty()) {
@@ -67,6 +68,13 @@ class MedicalAttachmentProductAndroidTest {
         ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(text(destination.title))).performClick()
     }
     private var currentFiles:String?=null
+    /** Waits like waitUntil(30 s) but, on a timeout, fails with the real unmerged semantics tree so the cause is readable from the log. */
+    private fun await(condition:()->Boolean) {
+        try {ui.waitUntil(30000,condition)}
+        catch(e:androidx.compose.ui.test.ComposeTimeoutException) {
+            throw AssertionError("Condition not met; production tree: "+ui.onAllNodes(isRoot(),useUnmergedTree=true).printToString(maxDepth=24),e)
+        }
+    }
     /** Lazy lists compose only the visible rows; a person scrolls to what is below the first screen, and so does this. */
     private fun reveal(matcher:SemanticsMatcher) {
         if(ui.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty())return
@@ -78,7 +86,7 @@ class MedicalAttachmentProductAndroidTest {
     }
     private fun press(original:SemanticsMatcher) {
         val matcher=if(currentFiles!=null && ui.onAllNodes(original).fetchSemanticsNodes().size>1)original and hasAnyAncestor(hasTestTag(currentFiles!!)) else original
-        try {ui.waitUntil(30000) {reveal(matcher);ui.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty()}}
+        try {await {reveal(matcher);ui.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty()}}
         catch(e:androidx.compose.ui.test.ComposeTimeoutException) {
             throw AssertionError("Missing $matcher; production tree: "+ui.onAllNodes(isRoot(),useUnmergedTree=true).printToString(maxDepth=24),e)
         }
@@ -94,7 +102,7 @@ class MedicalAttachmentProductAndroidTest {
         tag("medical-tab:files")
         tag("library-prepare")
         press(hasText("SYNTHETIC product clinician",substring=true))
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments").fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag("attachments").fetchSemanticsNodes().isNotEmpty()}
     }
     private fun back() {
         // Use actual system BACK dispatch. Espresso's default root can still be
@@ -108,8 +116,14 @@ class MedicalAttachmentProductAndroidTest {
         // Library scope readiness precedes NotesViewModel's asynchronous committed
         // medical snapshot. In particular a new post-restore Activity has not yet
         // composed its result rows at that first boundary. Observe both, never sleep.
-        ui.waitUntil(30000) {!model.state.value.loading && model.extra.value.labs.any {it.id==id}}
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty()}
+        await {!model.state.value.loading && model.extra.value.labs.any {it.id==id}}
+        // A blood draw card lists its first three results; a person taps "show all" to reach the others.
+        val collapsedDraw=SemanticsMatcher("collapsed blood draw") {node->
+            node.config.getOrNull(androidx.compose.ui.semantics.SemanticsProperties.TestTag)?.startsWith("lab-home-expand:")==true}
+            .and(hasText(text(R.string.lab_home_collapse)).not())
+        await {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty() || ui.onAllNodes(collapsedDraw).fetchSemanticsNodes().isNotEmpty()}
+        if(ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isEmpty())ui.onAllNodes(collapsedDraw).onFirst().performScrollTo().performClick()
+        await {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty()}
         val row=ui.onNodeWithTag("lab-group-row:$id")
         row.performScrollTo()
         // The real Labs FAB overlaps the right side of a low visible row on 320dp.
@@ -117,7 +131,7 @@ class MedicalAttachmentProductAndroidTest {
         // This is still a real touch on the existing result, not a ViewModel/URI shortcut.
         row.performTouchInput {click(androidx.compose.ui.geometry.Offset(width*0.2f,center.y))}
         // UI-10: one full-screen result page whose related files are part of it; no button in between.
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("lab-detail").fetchSemanticsNodes().isNotEmpty() && ui.onAllNodesWithTag("attachments").fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag("lab-detail").fetchSemanticsNodes().isNotEmpty() && ui.onAllNodesWithTag("attachments").fetchSemanticsNodes().isNotEmpty()}
     }
     private fun waitSystem(label:String,predicate:()->Boolean) {
         val end=SystemClock.uptimeMillis()+30000
@@ -224,14 +238,14 @@ class MedicalAttachmentProductAndroidTest {
         waitSystem(name) {systemNode(name)!=null && !rootsOpen()}
         settlePicker();touch(requireNotNull(systemNode(name)))
         waitSystem("production Activity resumed") {scenario?.state==Lifecycle.State.RESUMED && pickerRoot()==null}
-        ui.waitUntil(30000) {ui.onAllNodesWithTag(confirmation).fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag(confirmation).fetchSemanticsNodes().isNotEmpty()}
     }
     private fun add(title:String) {
         tag("attachments-add");pickPng()
         ui.onNodeWithTag("attachments-name").performTextClearance()
         ui.onNodeWithTag("attachments-name").performTextInput(title)
         tag("attachments-confirm-attach")
-        ui.waitUntil(30000) {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
     }
     private fun read(target:MedicalAttachmentOperations.Target):MedicalAttachmentOperations.Document=runBlocking {
         model.libraryRuntime.attachments(target,"SYNTHETIC independent read").use {flow->
@@ -258,13 +272,13 @@ class MedicalAttachmentProductAndroidTest {
                 LabValueEntity(analyte_code="T",value=9.0,unit="ng/dL",sampled_utc=1800000000000,sampled_zone="UTC")))
         }
         ui.runOnIdle {model.sync()}
-        ui.waitUntil(30000) {model.state.value.appointments.size==1 && model.extra.value.labs.size==2}
+        await {model.state.value.appointments.size==1 && model.extra.value.labs.size==2}
         val visit=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,model.state.value.appointments.single().id)
         val lab=model.extra.value.labs.single {it.analyte_code=="T"}
         assertNotEquals("Exercise a result ID that differs from its panel ID",lab.panel_id,lab.id)
         val labTarget=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.LAB,lab.id)
         visit()
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
         ui.onNode(hasTestTag("attachments-empty") and (currentFiles?.let {hasAnyAncestor(hasTestTag(it))} ?: hasTestTag("attachments-empty"))).assertExists()
         tag("attachments-add")
         waitSystem("settled real picker before cancellation") {
@@ -278,48 +292,48 @@ class MedicalAttachmentProductAndroidTest {
             waitSystem("roots drawer closed before cancellation") {pickerRoot()!=null && !rootsOpen()}
         }
         assertTrue(instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK))
-        ui.waitUntil(30000) {ui.onAllNodesWithText(text(R.string.attach_cancelled)).fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithText(text(R.string.attach_cancelled)).fetchSemanticsNodes().isNotEmpty()}
         runBlocking {model.libraryRuntime.attachments(visit,"SYNTHETIC cancelled").use {assertTrue(it.documents().isEmpty())}}
         add("SYNTHETIC production visit")
         val saved=read(visit)
         scenario!!.close();scenario=null;launch();visit()
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment:${saved.document}",useUnmergedTree=true).fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag("attachment:${saved.document}",useUnmergedTree=true).fetchSemanticsNodes().isNotEmpty()}
         assertEquals(saved.document,read(visit).document)
         val label=context.getString(R.string.attach_item_description,saved.title,text(R.string.attach_kind_image),text(R.string.attach_status_saved))
         press(hasContentDescription(label))
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
         val closeBounds=ui.onNodeWithTag("attachment-viewer-close").fetchSemanticsNode().boundsInRoot
         val navigationBounds=ui.onNodeWithTag("medical-center-back").assertExists().fetchSemanticsNode().boundsInRoot
         assertTrue("Preview close must be below the real shell app bar, not covered by its Back button",closeBounds.top>=navigationBounds.bottom)
         tag("attachment-viewer-close")
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment-viewer").fetchSemanticsNodes().isEmpty()}
+        await {ui.onAllNodesWithTag("attachment-viewer").fetchSemanticsNodes().isEmpty()}
         // A retained uncertain result is resolved only by the visible, read-only action.
         // Never repeat SAF input or encryption to make a management action available.
         if(ui.onAllNodesWithTag("attachments-check").fetchSemanticsNodes().isNotEmpty()) {
             tag("attachments-check")
-            ui.waitUntil(30000) {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
+            await {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
             assertEquals(saved.document,read(visit).document)
         }
         // The link action is in the row's overflow menu.
         tag("attachment-more:${saved.document}")
         tag("attachment-unlink:${saved.document}")
         tag("attachments-unlink-confirm")
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
         runBlocking {model.libraryRuntime.attachments(visit,"SYNTHETIC unlinked").use {assertTrue(it.documents().isEmpty())}}
         back();open(Destination.MEDICAL)
         tag("medical-tab:records")
         ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-labs"))
         tag("medical-labs")
         labDetail(lab.id)
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag("attachments-empty").fetchSemanticsNodes().isNotEmpty()}
         add("SYNTHETIC production lab")
         val labSaved=read(labTarget)
         assertEquals("SYNTHETIC production lab",labSaved.title)
         // This test uses the real runtime transfer adapter, not a test-only archive or database.
         // Archive SAF/confirmation widgets have separate existing controller tests; do not claim those here.
         back()
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachments").fetchSemanticsNodes().isEmpty()}
-        ui.waitUntil(30000) {
+        await {ui.onAllNodesWithTag("attachments").fetchSemanticsNodes().isEmpty()}
+        await {
             var focused=false
             scenario!!.onActivity {focused=it.hasWindowFocus()}
             focused
@@ -327,13 +341,13 @@ class MedicalAttachmentProductAndroidTest {
         open(Destination.MEDICAL)
         tag("medical-tab:files")
         // MED-03: the library is one lazy list; at 320 dp the backup entry is below the first screen, so a person scrolls to it.
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("library").fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag("library").fetchSemanticsNodes().isNotEmpty()}
         ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-backup"))
         tag("library-backup")
         ui.onNodeWithText(text(R.string.med_transfer_scope)).assertExists()
         back()
-        ui.waitUntil(30000) {ui.onAllNodesWithText(text(R.string.med_transfer_scope)).fetchSemanticsNodes().isEmpty()}
-        ui.waitUntil(30000) {var focused=false;scenario!!.onActivity {focused=it.hasWindowFocus()};focused}
+        await {ui.onAllNodesWithText(text(R.string.med_transfer_scope)).fetchSemanticsNodes().isEmpty()}
+        await {var focused=false;scenario!!.onActivity {focused=it.hasWindowFocus()};focused}
         ui.onNodeWithTag("library").assertExists()
         open(Destination.SETTINGS)
         button(R.string.settings_data_backup)
@@ -356,11 +370,11 @@ class MedicalAttachmentProductAndroidTest {
         }finally {gateway.close()}
         scenario!!.close();scenario=null;launch()
         open(Destination.LABS);labDetail(lab.id)
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment:${labSaved.document}",useUnmergedTree=true).fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag("attachment:${labSaved.document}",useUnmergedTree=true).fetchSemanticsNodes().isNotEmpty()}
         assertEquals(labSaved.document,read(labTarget).document)
         val restoredLabel=context.getString(R.string.attach_item_description,labSaved.title,text(R.string.attach_kind_image),text(R.string.attach_status_saved))
         press(hasContentDescription(restoredLabel))
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
         tag("attachment-viewer-close")
         runBlocking {model.libraryRuntime.attachments(visit,"SYNTHETIC preserved unlink").use {assertTrue(it.documents().isEmpty())}}
         context.contentResolver.call(archive,"reset",null,null)
@@ -374,34 +388,34 @@ class MedicalAttachmentProductAndroidTest {
                 LabValueEntity(analyte_code=code,value=12.0,unit=unit,sampled_utc=1800000000000,sampled_zone="UTC")})
         }
         ui.runOnIdle {model.sync()}
-        ui.waitUntil(30000) {model.extra.value.labs.size==5 && model.extra.value.labPanels.any {it.id==panel.id}}
+        await {model.extra.value.labs.size==5 && model.extra.value.labPanels.any {it.id==panel.id}}
         open(Destination.MEDICAL);tag("medical-tab:files");tag("library-add")
         pickSample("pdf","add-document-confirm")
         ui.onNodeWithTag("add-document-title").performTextClearance()
         ui.onNodeWithTag("add-document-title").performTextInput("SYNTHETIC whole blood draw")
         tag("add-document-confirm")
-        ui.waitUntil(30000) {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
         val document=runBlocking {model.libraryRuntime.attachments(null,"SYNTHETIC independent library check").use {it.documents().single()}}
         tag("library-doc:${document.document}");tag("file-detail-add-link")
         tag("library-target:panel:${panel.id}");tag("library-link-confirm")
-        ui.waitUntil(30000) {ui.onAllNodesWithText(text(R.string.med03_relation_done)).fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithText(text(R.string.med03_relation_done)).fetchSemanticsNodes().isNotEmpty()}
         runBlocking {model.libraryRuntime.attachments(null,"SYNTHETIC no duplicate object").use {flow->
             assertEquals(1,flow.documents().size);assertEquals(1,flow.relationships(document.document).size)
             assertEquals(MedicalAttachmentOperations.Kind.LAB_PANEL,flow.relationships(document.document).single().target.kind)
         }}
         scenario!!.close();scenario=null;launch()
         val members=model.extra.value.labs.filter {it.panel_id==panel.id}
-        ui.waitUntil(30000) {model.extra.value.labs.count {it.panel_id==panel.id}==5}
+        await {model.extra.value.labs.count {it.panel_id==panel.id}==5}
         for(member in model.extra.value.labs.filter {it.panel_id==panel.id}) {
             open(Destination.LABS);labDetail(member.id)
-            ui.waitUntil(30000) {ui.onAllNodesWithTag("attachment:${document.document}",useUnmergedTree=true).fetchSemanticsNodes().isNotEmpty()}
-            ui.onNodeWithText(context.getString(R.string.med03_whole_draw,5)).assertExists()
+            await {ui.onAllNodesWithTag("attachment:${document.document}",useUnmergedTree=true).fetchSemanticsNodes().isNotEmpty()}
+            assertTrue("the result page names the whole draw its file belongs to",ui.onAllNodesWithText(context.getString(R.string.med03_whole_draw,5),substring=true).fetchSemanticsNodes().isNotEmpty())
             val panelTarget=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.LAB_PANEL,panel.id,java.util.UUID.fromString(panel.uuid),member.id)
             runBlocking {model.libraryRuntime.attachments(panelTarget,"SYNTHETIC shared draw original").use {flow->
                 assertEquals(document.document,flow.documents().single().document)
                 flow.open(document.document).use {reader->val b=ByteArray(5);assertEquals(5,reader.readAt(0,b,0,5));assertEquals("%PDF-",String(b,Charsets.US_ASCII))}
             }}
-            back();ui.waitUntil(30000) {ui.onAllNodesWithTag("lab-detail").fetchSemanticsNodes().isEmpty()}
+            back();await {ui.onAllNodesWithTag("lab-detail").fetchSemanticsNodes().isEmpty()}
         }
         // Select while the visit is still a form: cancellation does not discard its fields.
         currentFiles=null
@@ -409,9 +423,9 @@ class MedicalAttachmentProductAndroidTest {
         tag("new-record-choose-file");pickSample("png","new-record-file-chosen")
         runBlocking {model.libraryRuntime.attachments(null,"SYNTHETIC no pre-save import").use {assertEquals(1,it.documents().size)}}
         tag("medical-save")
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("record-committed-before-file").fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag("record-committed-before-file").fetchSemanticsNodes().isNotEmpty()}
         tag("attachments-confirm-attach")
-        ui.waitUntil(30000) {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
         val visit=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,runBlocking {model.libraryRuntime.currentRepository().appointments().single().id})
         read(visit)
         tag("new-record-files-done")
@@ -419,9 +433,9 @@ class MedicalAttachmentProductAndroidTest {
         ui.onNodeWithTag("lab-batch-value:0").performTextInput("130")
         tag("new-record-choose-file");pickSample("pdf","new-record-file-chosen")
         tag("lab-batch-save")
-        ui.waitUntil(30000) {ui.onAllNodesWithTag("record-committed-before-file").fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithTag("record-committed-before-file").fetchSemanticsNodes().isNotEmpty()}
         tag("attachments-confirm-attach")
-        ui.waitUntil(30000) {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
+        await {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
         val savedDraw=runBlocking {model.libraryRuntime.currentRepository().labPanels().single {it.id!=panel.id}}
         runBlocking {model.libraryRuntime.attachments(MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.LAB_PANEL,savedDraw.id,java.util.UUID.fromString(savedDraw.uuid)),"SYNTHETIC form report").use {flow->
             assertEquals(1,flow.documents().size)
