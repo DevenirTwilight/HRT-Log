@@ -13,7 +13,7 @@ UI-10（医疗档案重设计）已合并（PR #139，5d383a2d）。UI-11 = 药�
   - 新测试 `ui11/Ui11CenterTest`、`ui11/Ui11LinkTest`；已迁移断言：`DrugCenterNavigationTest`、`DrugCenterMatrixTest`、`CenterModuleScreenshotsTest`、`CenterStateRestorationTest`（去掉 onStock）、androidTestFull `InAppNavigationLockAndroidTest`（五个模块不再可点）。
   - 结果（2026-10-28）：`Ui11CenterTest` 144/144、`Ui11LinkTest` 72 例（56 通过、16 因 411dp 嵌套对话框跳过）；既有相关测试（DrugCenter*、CenterStateRestoration、MedicationReference*、RecordedReference、BdpmReferenceFlow、CenterModuleScreenshots）280 例全过。
   - 截图和前后对比已入库 `docs/ui-audit/2026-10-28-ui11/`（before 用 main `5d383a2d` 的旧组件在 /home/user/wt-ui11-before 渲染）；报告 `docs/audits/product-quality-2026-10/77-ui11-drug-center.md`；`docs/STATUS.md` 已更新。
-  - 下一步：推送、开 PR（§106 自动合并）、CI 全绿后确认默认分支 CI；再检查 UI-10 合并提交 `5d383a2d` 的默认分支 CI。
+  - PR #140 已开，自动合并已开启（§106，默认分支是 `claude/new-session-1959qb`）。CI 失败按作业日志定位，不绕过检查；合并后确认默认分支 CI。UI-10 合并提交 `5d383a2d` 的默认分支 CI 也尚未确认。
 
 ---
 
