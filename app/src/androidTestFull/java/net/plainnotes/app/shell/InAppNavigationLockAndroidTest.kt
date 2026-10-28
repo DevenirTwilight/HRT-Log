@@ -256,6 +256,8 @@ class InAppNavigationLockAndroidTest {
             // The accepted product now opens the library. Its backup confirmation is a real dialog;
             // merely visiting it or cancelling must not launch SAF or grant a file operation.
             ui.onNodeWithTag("medical-tab:files").performClick()
+            // The library host loads its state asynchronously; scroll only once the real list exists (no timeout shortened, no assertion removed).
+            ui.waitUntil(15_000) { ui.onAllNodesWithTag("library").fetchSemanticsNodes().isNotEmpty() }
             ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-backup"))
             ui.onNodeWithTag("library-backup").performClick()
             ui.onNodeWithText(context.getString(R.string.med_transfer_scope)).assertExists()
