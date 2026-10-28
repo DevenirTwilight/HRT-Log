@@ -1,0 +1,72 @@
+Source: 1ed73d07adeb9b36fd86588ecad3ea073e0969d8
+Run: 40678516954; job: 122783525605
+Result: FAIL (retained original)
+Raw log: https://github.com/DevenirTwilight/HRT-Log/actions/runs/40678516954/job/122783525605
+
+2026-10-28T11:36:58.8482124Z Ui11CenterTest > [en/320dp/2x/dark=false] > notYetOpenModulesAreRowsNotButtons[en/320dp/2x/dark=false] FAILED
+2026-10-28T11:36:58.8482553Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:36:59.7560036Z Ui11CenterTest > [en/320dp/2x/dark=false] > planAndStockButtonsAreGone[en/320dp/2x/dark=false] FAILED
+2026-10-28T11:36:59.7585944Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:02.0481164Z Ui11CenterTest > [en/320dp/2x/dark=true] > notYetOpenModulesAreRowsNotButtons[en/320dp/2x/dark=true] FAILED
+2026-10-28T11:37:02.0481778Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:02.9480627Z Ui11CenterTest > [en/320dp/2x/dark=true] > planAndStockButtonsAreGone[en/320dp/2x/dark=true] FAILED
+2026-10-28T11:37:02.9481197Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:04.3536062Z Ui11CenterTest > [en/411dp/1x/dark=false] > notYetOpenModulesAreRowsNotButtons[en/411dp/1x/dark=false] FAILED
+2026-10-28T11:37:04.3536842Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:04.7536263Z Ui11CenterTest > [en/411dp/1x/dark=false] > planAndStockButtonsAreGone[en/411dp/1x/dark=false] FAILED
+2026-10-28T11:37:04.7565678Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:06.0481144Z Ui11CenterTest > [en/411dp/1x/dark=true] > notYetOpenModulesAreRowsNotButtons[en/411dp/1x/dark=true] FAILED
+2026-10-28T11:37:06.0481996Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:06.5546027Z Ui11CenterTest > [en/411dp/1x/dark=true] > planAndStockButtonsAreGone[en/411dp/1x/dark=true] FAILED
+2026-10-28T11:37:06.5575594Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:08.9536079Z Ui11CenterTest > [zh-rCN/320dp/2x/dark=false] > notYetOpenModulesAreRowsNotButtons[zh-rCN/320dp/2x/dark=false] FAILED
+2026-10-28T11:37:08.9565517Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:09.7506215Z Ui11CenterTest > [zh-rCN/320dp/2x/dark=false] > planAndStockButtonsAreGone[zh-rCN/320dp/2x/dark=false] FAILED
+2026-10-28T11:37:09.7535681Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:12.1506432Z Ui11CenterTest > [zh-rCN/320dp/2x/dark=true] > notYetOpenModulesAreRowsNotButtons[zh-rCN/320dp/2x/dark=true] FAILED
+2026-10-28T11:37:12.1535293Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:13.0487124Z Ui11CenterTest > [zh-rCN/320dp/2x/dark=true] > planAndStockButtonsAreGone[zh-rCN/320dp/2x/dark=true] FAILED
+2026-10-28T11:37:13.0487557Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:14.3480742Z Ui11CenterTest > [zh-rCN/411dp/1x/dark=false] > notYetOpenModulesAreRowsNotButtons[zh-rCN/411dp/1x/dark=false] FAILED
+2026-10-28T11:37:14.3481180Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:14.7536005Z Ui11CenterTest > [zh-rCN/411dp/1x/dark=false] > planAndStockButtonsAreGone[zh-rCN/411dp/1x/dark=false] FAILED
+2026-10-28T11:37:14.7595583Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:16.1523285Z Ui11CenterTest > [zh-rCN/411dp/1x/dark=true] > notYetOpenModulesAreRowsNotButtons[zh-rCN/411dp/1x/dark=true] FAILED
+2026-10-28T11:37:16.1547034Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:16.6526208Z Ui11CenterTest > [zh-rCN/411dp/1x/dark=true] > planAndStockButtonsAreGone[zh-rCN/411dp/1x/dark=true] FAILED
+2026-10-28T11:37:16.6545517Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:19.0506176Z Ui11CenterTest > [zh-rTW/320dp/2x/dark=false] > notYetOpenModulesAreRowsNotButtons[zh-rTW/320dp/2x/dark=false] FAILED
+2026-10-28T11:37:19.0535585Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:19.8480471Z Ui11CenterTest > [zh-rTW/320dp/2x/dark=false] > planAndStockButtonsAreGone[zh-rTW/320dp/2x/dark=false] FAILED
+2026-10-28T11:37:19.8481147Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:22.2516036Z Ui11CenterTest > [zh-rTW/320dp/2x/dark=true] > notYetOpenModulesAreRowsNotButtons[zh-rTW/320dp/2x/dark=true] FAILED
+2026-10-28T11:37:22.2545458Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:23.1506095Z Ui11CenterTest > [zh-rTW/320dp/2x/dark=true] > planAndStockButtonsAreGone[zh-rTW/320dp/2x/dark=true] FAILED
+2026-10-28T11:37:23.1506816Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:24.4536098Z Ui11CenterTest > [zh-rTW/411dp/1x/dark=false] > notYetOpenModulesAreRowsNotButtons[zh-rTW/411dp/1x/dark=false] FAILED
+2026-10-28T11:37:24.4565575Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:24.9516239Z Ui11CenterTest > [zh-rTW/411dp/1x/dark=false] > planAndStockButtonsAreGone[zh-rTW/411dp/1x/dark=false] FAILED
+2026-10-28T11:37:24.9516984Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:26.2556268Z Ui11CenterTest > [zh-rTW/411dp/1x/dark=true] > notYetOpenModulesAreRowsNotButtons[zh-rTW/411dp/1x/dark=true] FAILED
+2026-10-28T11:37:26.2566946Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:26.7481696Z Ui11CenterTest > [zh-rTW/411dp/1x/dark=true] > planAndStockButtonsAreGone[zh-rTW/411dp/1x/dark=true] FAILED
+2026-10-28T11:37:26.7482319Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:29.2526054Z Ui11CenterTest > [fr/320dp/2x/dark=false] > notYetOpenModulesAreRowsNotButtons[fr/320dp/2x/dark=false] FAILED
+2026-10-28T11:37:29.2553182Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:30.0536269Z Ui11CenterTest > [fr/320dp/2x/dark=false] > planAndStockButtonsAreGone[fr/320dp/2x/dark=false] FAILED
+2026-10-28T11:37:30.0537379Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:32.5545970Z Ui11CenterTest > [fr/320dp/2x/dark=true] > notYetOpenModulesAreRowsNotButtons[fr/320dp/2x/dark=true] FAILED
+2026-10-28T11:37:32.5546842Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:33.3516644Z Ui11CenterTest > [fr/320dp/2x/dark=true] > planAndStockButtonsAreGone[fr/320dp/2x/dark=true] FAILED
+2026-10-28T11:37:33.3545621Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:34.6506721Z Ui11CenterTest > [fr/411dp/1x/dark=false] > notYetOpenModulesAreRowsNotButtons[fr/411dp/1x/dark=false] FAILED
+2026-10-28T11:37:34.6535771Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:35.0506309Z Ui11CenterTest > [fr/411dp/1x/dark=false] > planAndStockButtonsAreGone[fr/411dp/1x/dark=false] FAILED
+2026-10-28T11:37:35.0527193Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:36.4536264Z Ui11CenterTest > [fr/411dp/1x/dark=true] > notYetOpenModulesAreRowsNotButtons[fr/411dp/1x/dark=true] FAILED
+2026-10-28T11:37:36.4537231Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:37:36.9556153Z Ui11CenterTest > [fr/411dp/1x/dark=true] > planAndStockButtonsAreGone[fr/411dp/1x/dark=true] FAILED
+2026-10-28T11:37:36.9585659Z     java.lang.AssertionError at Ui11CenterTest.kt:66
+2026-10-28T11:38:04.2547863Z 3129 tests completed, 32 failed, 593 skipped
+2026-10-28T11:38:05.1482505Z > Task :app:testFullDebugUnitTest FAILED
+2026-10-28T11:38:05.1488927Z BUILD FAILED in 18m 3s

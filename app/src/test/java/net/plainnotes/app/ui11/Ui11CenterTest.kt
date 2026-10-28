@@ -84,7 +84,7 @@ class Ui11CenterTest(private val locale: String, private val width: Int, private
         ui.setContent { NotesTheme(mode) { DrugReferenceCenterDialog(meds, {}, {}, null, 0) {} } }
         for (tag in listOf("drug-center-plans", "drug-center-stock")) {
             ui.onAllNodesWithTag(tag).assertCountEquals(0)
-            for (anchor in listOf("drug-center-catalogue", "drug-center-source-user", "drug-center-recalls")) { scrollTo(anchor); ui.onAllNodesWithTag(tag).assertCountEquals(0) }
+            for (anchor in listOf("drug-center-catalogue", "drug-center-source-user", "drug-center-supply")) { scrollTo(anchor); ui.onAllNodesWithTag(tag).assertCountEquals(0) }
         }
     }
 
@@ -192,23 +192,19 @@ class Ui11CenterTest(private val locale: String, private val width: Int, private
         scrollTo("drug-center-identity"); ui.onAllNodesWithTag("drug-center-identity-body").assertCountEquals(0)
     }
 
-    @Test fun notYetOpenModulesAreRowsNotButtons() {
+    @Test fun officialModulesUseReadOnlyRoutesAndUnsupportedRecallsAreAbsent() {
         setup()
-        ui.setContent { NotesTheme(mode) { DrugReferenceCenterScreen(meds, {}, {}, PaddingValues(), links) } }
+        var associationEntries=0
+        val opened=mutableListOf<String>()
+        ui.setContent { NotesTheme(mode) { DrugReferenceCenterScreen(meds, {associationEntries++}, {associationEntries++}, PaddingValues(), links,
+            onOfficial={opened+=it}) } }
         for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply")) {
-            scrollTo(tag);ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction()
-        }
-        val future = mapOf("drug-center-recalls" to R.string.center_recalls)
-        for ((tag, title) in future) {
-            scrollTo(tag)
-            ui.onNodeWithTag(tag).assertIsDisplayed().assert(hasClickAction().not())
-                .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf(s(R.string.drug_not_open_desc, s(title)))))
-            ui.onNodeWithTag(tag).performClick()
+            scrollTo(tag);ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().assertHeightIsAtLeast(48.dp).performClick()
+            ui.onAllNodesWithTag("drug-center-recalls").assertCountEquals(0)
             ui.onAllNodesWithTag("center-unavailable-dialog").assertCountEquals(0)
-            assertTrue("$tag shows the tag", ui.onAllNodesWithText(s(R.string.drug_not_open_tag), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty())
         }
-        // The row's own semantics are one spoken name; the visible tag is a descendant in the unmerged tree.
-        // (a lazy list composes only the visible rows, so each row is checked as it is scrolled to)
-        scrollTo("drug-center-recalls"); shot("center_future")
+        assertEquals(listOf("documents","documents","safety","supply"),opened)
+        assertEquals("Official queries must not enter either private association path",0,associationEntries)
+        shot("center_official_queries")
     }
 }
