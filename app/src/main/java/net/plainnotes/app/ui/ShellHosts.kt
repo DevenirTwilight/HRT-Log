@@ -104,11 +104,17 @@ import java.time.Instant
 /** LAB-02: a lab panel's detail and the "save as one blood test" confirmation (docs/design/lab-panel-adr.md §10). */
 @Composable internal fun LabPanelHost(l: LabDialogs, model: NotesViewModel, extra: NotesViewModel.ExtraState) {
     l.panel?.let { id -> extra.labPanels.firstOrNull { it.id == id }?.let { p ->
+        val files=net.plainnotes.app.attachments.ui.rememberRecordFiles(model,
+            net.plainnotes.app.data.MedicalAttachmentOperations.Target(net.plainnotes.app.data.MedicalAttachmentOperations.Kind.LAB_PANEL,p.id,java.util.UUID.fromString(p.uuid)))
+        val label=stringResource(R.string.lab_panel_title)
+        val scope=stringResource(R.string.med03_whole_draw,extra.labs.count {it.panel_id==p.id})
         LabPanelDialog(p, extra.labs.filter { it.panel_id == id }.sortedBy { v -> ANALYTES.indexOfFirst { it.code == v.analyte_code }.let { if (it < 0) ANALYTES.size else it } },
             { l.panel = null }, { time, lab, note -> model.saveLabPanel(p, time, lab, note) }, { l.labEdit = it }, { model.removeFromLabPanel(it) },
-            { values, estimate -> model.addToLabPanel(id, values, estimate) }, { l.panel = null; model.deleteLabPanel(id) })
+            { values, estimate -> model.addToLabPanel(id, values, estimate) }, { l.panel = null; model.deleteLabPanel(id) },
+            files=files?.let {f->{net.plainnotes.app.attachments.ui.RecordFilesSection(f,label,scopeNote=scope)}},
+            overlay=files?.let {f->{net.plainnotes.app.attachments.ui.RecordFilesViewer(f,label)}})
     } ?: run { l.panel = null } }
-    l.saveAs?.let { g -> LabSaveAsPanelDialog(g, { l.saveAs = null }) { l.saveAs = null; model.groupAsLabPanel(g) } }
+    l.saveAs?.let { g -> LabSaveAsPanelDialog(g, { l.saveAs = null }) { l.saveAs = null; model.groupAsLabPanel(g) {id->l.panel=id} } }
 }
 
 /** Medical visit editor and lab detail, used by the medical records and the visit detail. */
@@ -132,11 +138,20 @@ import java.time.Instant
                 net.plainnotes.app.data.MedicalAttachmentOperations.Target(net.plainnotes.app.data.MedicalAttachmentOperations.Kind.LAB,v.id))
             // The draw this result belongs to, from the same grouping the labs list uses (a real panel, or a display group).
             val draw=labDraws(extra.labs,extra.labPanels).firstOrNull {d->d.labs.any {it.id==id}}
-            val multi=draw!=null && draw.labs.size>1
-            val scope=if(multi)stringResource(R.string.lab_page_files_scope,label) else null
+            val panel=draw?.panel
+            val panelFiles=panel?.let {p->net.plainnotes.app.attachments.ui.rememberRecordFiles(model,
+                net.plainnotes.app.data.MedicalAttachmentOperations.Target(net.plainnotes.app.data.MedicalAttachmentOperations.Kind.LAB_PANEL,p.id,java.util.UUID.fromString(p.uuid),v.id))}
+            val scope=stringResource(R.string.med03_only_result)
+            val drawScope=stringResource(R.string.med03_whole_draw,draw?.labs?.size ?: 0)
             LabDetailFullscreen(v,extra.labContexts.filter {it.lab_id==id},{m.lab=null},{m.lab=null;l.labEdit=v},
-                files=files?.let {f->{net.plainnotes.app.attachments.ui.RecordFilesSection(f,label,scopeNote=scope)}},
-                overlay=files?.let {f->{net.plainnotes.app.attachments.ui.RecordFilesViewer(f,label)}},
+                files={
+                    panelFiles?.let {f->net.plainnotes.app.attachments.ui.RecordFilesSection(f,stringResource(R.string.lab_panel_title),scopeNote=drawScope)}
+                    files?.let {f->net.plainnotes.app.attachments.ui.RecordFilesSection(f,label,scopeNote=scope)}
+                },
+                overlay={
+                    panelFiles?.let {f->net.plainnotes.app.attachments.ui.RecordFilesViewer(f,stringResource(R.string.lab_panel_title))}
+                    files?.let {f->net.plainnotes.app.attachments.ui.RecordFilesViewer(f,label)}
+                },
                 draw=draw,onOpenResult={m.lab=it.id},onOpenDraw=draw?.panel?.let {p->{m.lab=null;l.panel=p.id}})
         }
     }

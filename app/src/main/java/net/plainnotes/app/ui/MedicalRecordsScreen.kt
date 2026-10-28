@@ -54,7 +54,7 @@ import java.time.*
     onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,contentPadding:PaddingValues,onConfirm:(AppointmentEntity)->Unit={onVisit(it)},
     questionCounts:Map<Long,Int> = emptyMap(),now:Instant=Instant.now(),onVisits:(()->Unit)?=null,onMedicalBackup:(()->Unit)?=null,
     labs:List<LabValueEntity> = emptyList(),onLab:((LabValueEntity)->Unit)?=null,initialTab:Int=0,onTabChange:(Int)->Unit={},
-    labPanels:List<LabPanelEntity> = emptyList()) {
+    labPanels:List<LabPanelEntity> = emptyList(),onPanel:((LabPanelEntity)->Unit)?=null,onSaveDraw:((List<LabValueEntity>)->Unit)?=null,onFileLibrary:(()->Unit)?=null) {
     val past=MedicalRecordIndex.past(appointments,now)
     val confirmed=past.filter{it.completed_utc!=null}
     val unconfirmed=past.filter{it.completed_utc==null}
@@ -74,10 +74,10 @@ import java.time.*
         LazyColumn(Modifier.fillMaxSize().testTag("medical-list"),contentPadding=PaddingValues(start=16.dp,end=16.dp,
             top=if(filesAvailable)16.dp else contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
             if(!filesAvailable || tab==0)recordsArea(next,unconfirmed,past.isEmpty(),confirmed,byYear,questionCounts,now,onVisit,onConfirm,onVisits,onLabs,onHistory,onTrash,drawCount,labs.size,onAdd)
-            else filesArea(onVisits,onLabs,onMedicalBackup,onAddFile={choosing=true})
+            else filesArea(onVisits,onLabs,onMedicalBackup,onAddFile={onFileLibrary?.invoke() ?: run {choosing=true}})
         }
     }
-    if(choosing)AddFileTargetDialog(appointments,labs,labPanels,onVisit={choosing=false;onVisit(it)},onLab=onLab?.let{open->{v:LabValueEntity->choosing=false;open(v)}},onDismiss={choosing=false})
+    if(choosing)AddFileTargetDialog(appointments,labs,labPanels,onVisit={choosing=false;onVisit(it)},onLab=onLab?.let{open->{v:LabValueEntity->choosing=false;open(v)}},onDismiss={choosing=false},onPanel=onPanel?.let {open->{p:LabPanelEntity->choosing=false;open(p)}},onSaveDraw=onSaveDraw?.let {save->{group:List<LabValueEntity>->choosing=false;save(group)}})
 }
 
 private fun LazyListScope.recordsArea(next:AppointmentEntity?,unconfirmed:List<AppointmentEntity>,noVisits:Boolean,confirmed:List<AppointmentEntity>,byYear:Map<Int,List<AppointmentEntity>>,
@@ -209,7 +209,7 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
  * files and the single add action are. A lab result opens the individual result, never a panel.
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable private fun AddFileTargetDialog(appointments:List<AppointmentEntity>,labs:List<LabValueEntity>,panels:List<LabPanelEntity>,onVisit:(AppointmentEntity)->Unit,onLab:((LabValueEntity)->Unit)?,onDismiss:()->Unit) {
+@Composable private fun AddFileTargetDialog(appointments:List<AppointmentEntity>,labs:List<LabValueEntity>,panels:List<LabPanelEntity>,onVisit:(AppointmentEntity)->Unit,onLab:((LabValueEntity)->Unit)?,onDismiss:()->Unit,onPanel:((LabPanelEntity)->Unit)?=null,onSaveDraw:((List<LabValueEntity>)->Unit)?=null) {
     var kind by remember{mutableIntStateOf(0)}
     val visits=remember(appointments){appointments.sortedWith(compareByDescending<AppointmentEntity>{it.at_utc}.thenByDescending{it.id})}
     // Lab results are offered per blood test, newest first, the same grouping as the labs page; a file still links to one result.
@@ -248,17 +248,13 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
                                     val place=(d.panel?.laboratory ?: first.laboratory)?.trim()?.takeIf{it.isNotEmpty()}
                                     val when_=formatDate(local.toLocalDate())+" · "+formatTime(local.toLocalTime())
                                     Column(Modifier.testTag("file-target-draw:${d.panel?.id ?: "g${first.id}"}"),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                                        // One header per blood test with several results; a single result keeps its own date line.
-                                        if(d.labs.size>1)Text(listOfNotNull(when_,place,stringResource(R.string.lab_group_count,d.labs.size)).joinToString(" · "),
-                                            style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold,modifier=Modifier.semantics{heading()})
-                                        Column(verticalArrangement=Arrangement.spacedBy(GroupedGap)) {
-                                            d.labs.forEachIndexed{i,v->
-                                                GroupedItem(i,d.labs.size,onClick={onLab(v)},modifier=Modifier.testTag("file-target:lab:${v.id}")) {
-                                                    Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
-                                                        Text(analyteLabel(v.analyte_code)+" · "+displayNumber(v.value)+" "+v.unit,style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
-                                                        if(d.labs.size==1)Text(when_+(place?.let{" · $it"} ?: ""),style=MaterialTheme.typography.bodyMedium)
-                                                    }
-                                                }
+                                        val panel=d.panel
+                                        GroupedItem(0,1,onClick={if(panel!=null)onPanel?.invoke(panel) else onSaveDraw?.invoke(d.labs)},modifier=Modifier.testTag("file-target:${if(panel!=null)"panel:${panel.id}" else "save-draw:${first.id}"}")) {
+                                            Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(6.dp)) {
+                                                Text(listOfNotNull(when_,place).joinToString(" · "),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
+                                                Text(stringResource(R.string.med03_whole_draw,d.labs.size),style=MaterialTheme.typography.bodyMedium)
+                                                Text(d.labs.joinToString(" · ") {analyteLabel(it.analyte_code)},style=MaterialTheme.typography.bodySmall)
+                                                if(panel==null)Text(stringResource(R.string.lab_panel_save_as),color=MaterialTheme.colorScheme.primary)
                                             }
                                         }
                                     }

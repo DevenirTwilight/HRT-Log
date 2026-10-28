@@ -39,7 +39,7 @@ internal class LibraryRestoreObjects(private val context:LibraryGenerationContex
         AttachmentOwnedFiles(context).locked().use {directory->
             for(v in p.manifest.versions.sortedWith(compareBy<AttachmentBackupManifest.Version> {it.document.toString()}.thenBy {it.ordinal})) {
                 cap.check();checkpoint();val s=slots.single {it.version==v.context.version}
-                val related=p.manifest.links.firstOrNull {it.document==v.document} ?: error("Unlinked retained document needs explicit provenance support")
+                val related=p.manifest.links.firstOrNull {it.document==v.document}
                 val op=s.operation.toString();val version=v.context.version.toString()
                 fun binding(role:AttachmentDeviceKeys.Role)=AttachmentDeviceKeys.Binding(v.context,p.namespace.dataset,p.namespace.generation,s.operation,1,role)
                 val staging=AttachmentDeviceKeys.Alias(s.staging,AttachmentDeviceKeys.Role.STAGING)
@@ -48,7 +48,7 @@ internal class LibraryRestoreObjects(private val context:LibraryGenerationContex
                 tx {
                     insert("attachment_operation","store_uuid" to scope.dataset,"operation_uuid" to op,"idempotency_uuid" to op,"kind" to "FULL_RESTORE","phase" to "PREPARED","expected_generation" to 1L,"expected_document_revision" to p.manifest.documents.single {it.uuid==v.document}.revision,
                         "document_uuid" to v.document.toString(),"resource_generation_uuid" to p.namespace.generation.toString(),"object_uuid" to v.context.objectId.toString(),"version_uuid" to version,"dek_handle_uuid" to v.context.dekHandle.toString(),"reserved_bytes" to v.manifest.ciphertextBytes,"reserved_objects" to 1,"updated_utc" to System.currentTimeMillis())
-                    insert("attachment_journal","store_uuid" to scope.dataset,"operation_uuid" to op,"record_epoch" to scope.epoch,"physical_generation" to p.namespace.generation.toString(),"document_uuid" to v.document.toString(),"record_uuid" to related.record.toString(),"request_sha256" to commitment,
+                    insert("attachment_journal","store_uuid" to scope.dataset,"operation_uuid" to op,"record_epoch" to scope.epoch,"physical_generation" to p.namespace.generation.toString(),"document_uuid" to v.document.toString(),"record_uuid" to related?.record?.toString(),"request_sha256" to commitment,
                         "attempt_uuid" to v.context.attempt.toString(),"object_uuid" to v.context.objectId.toString(),"version_uuid" to version,"dek_handle_uuid" to v.context.dekHandle.toString(),"stage_alias_uuid" to s.staging.toString(),"active_alias_uuid" to s.active.toString(),"stage_ready" to 0,"active_ready" to 0,"stage_uses" to 0,"active_uses" to 0,"proof" to "RESERVED")
                 }
                 // All identities were also reserved in the ROOT journal before any provisioning.

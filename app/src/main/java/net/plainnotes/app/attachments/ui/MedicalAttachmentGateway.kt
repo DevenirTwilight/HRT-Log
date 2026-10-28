@@ -23,7 +23,7 @@ internal interface MedicalAttachmentGateway {
     fun pending():Pair<UUID,UUID>?=null
     fun retain(operation:UUID,document:UUID) {}
     fun resolved(operation:UUID,document:UUID) {}
-    val target:MedicalAttachmentOperations.Target
+    val target:MedicalAttachmentOperations.Target?
     suspend fun documents():List<MedicalAttachmentOperations.Document>
     /** Removes one explicit association without deleting the underlying medical document. */
     suspend fun unlink(document:UUID):Boolean = error("Unlink unavailable for this gateway")
@@ -56,7 +56,7 @@ internal interface MedicalAttachmentGateway {
 /** Production wiring: every call goes through the screen's RuntimeLibrarySession scope and the existing
  * AttachmentFlowController/AttachmentViewer. No second store or decryption path exists. */
 internal class RuntimeAttachmentGateway(private val context:Context,private val runtime:RuntimeLibrarySession,
-    override val target:MedicalAttachmentOperations.Target):MedicalAttachmentGateway {
+    override val target:MedicalAttachmentOperations.Target?):MedicalAttachmentGateway {
     private val recovery=AttachmentReconciliationStore(context,
         requireNotNull((runtime.state.value as? RuntimeLibrarySession.State.Ready)?.scope),target)
     override fun pending()=recovery.pending()

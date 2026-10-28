@@ -7,7 +7,7 @@ internal data class AttachmentBackupManifest(
     val dataset:UUID,val epoch:UUID,val logicalVault:UUID,
     val records:List<Record>,val documents:List<Document>,val versions:List<Version>,val links:List<Link>
 ) {
-    enum class Kind { APPOINTMENT, LAB, DOSE_RECORD }
+    enum class Kind { APPOINTMENT, LAB, LAB_PANEL, DOSE_RECORD }
     data class Record(val uuid:UUID,val kind:Kind,val sourceId:Long,val state:String,val trashId:Long?,val evidenceSha256:String)
     data class Document(val uuid:UUID,val revision:Long,val title:String,val category:String,val state:String,
         val activeVersion:UUID,val deletedUtc:Long?)

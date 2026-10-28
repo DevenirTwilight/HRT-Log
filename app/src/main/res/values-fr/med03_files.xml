@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="med03_whole_draw">Prélèvement complet (%1$d résultats)</string>
+    <string name="med03_only_result">Ce résultat uniquement</string>
+</resources>

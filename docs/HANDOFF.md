@@ -1,3 +1,15 @@
+## MED-03 实施检查点 — 2026-10-28（未完成，不可交付）
+
+#143 已受保护合并：源码 `3c50d7eb7c7fb1cf32fa70213827c10473e946bb`，主线合并 `6ada7402b28bf7ca2cc70acff158efbe1900bb98`；push 40683340703 / PR 40683348274 六项必需检查 PASS。只读官方资料、删除不可靠召回卡、补录历史就诊不再待实现。保留原32项旧召回断言失败证据。
+
+从该正式主线新建 `feature/med03-medical-files-20261028`（工作区 HRT-Log-med03-panel）。用户最新任务授权完整8项MED-03产品修复，包含独立文件导入、双向关联、真实整次抽血、创建时选报告；不是仅完成 #143 或存储即结项。当前生产在主线仍使用 Room21，本分支候选 Room22；不签名、不交付APK、不改PK/库存/数据集/权限。
+
+已写生产候选（尚未完成验收）：Room21→22同一事务内复制/重建原身份、链接和journal表；保留旧LAB身份，新增实际LabPanel.uuid约束，journal允许真正未关联导入，不虚造临床对象；局部关联操作收据以UUID/载荷/实际链接COMMIT对账，保留旧历史链接且不自动重新激活；批次删除隔离，恢复仍隔离；完整备份增加内部manifest v2表达新类型/独立文件，外层PNMEDBK/KDF/Tink/PNBAK1不变，旧manifest v1读取保留。正式批次/单项UI已初步接入父报告与“仅此项目”区分，医疗档案目标选择改为整批；尚未完成文件库实际Host、新建时选附件、端到端和所有兼容回归。
+
+实际证据：原Room21“panel17与无关lab17”真实RED（missing typed target）；最小Room22 typed identity测试 GREEN 1项（XML保留）。早期core:data编译PASS不等于后来全部候选PASS。新增published21迁移/故障回滚测试第一次编译失败（Trash.rows缺args、Room非Closeable），已最小修正，原日志本机scratch/med03-model-tests.log；本次完整定向测试+app编译正在执行 scratch/med03-panel-integration.log，结果待核查。真实SQLCipher/API26/29/35、实际SAF/COMMIT/重启、全库恢复、四语截图、真机/TalkBack均未可声称PASS。
+
+下一步继续同一分支：先检查当前构建/迁移测试，修复确切问题；完成未接线的文件库和保存时报告流程；增加真实5结果单文件/ID碰撞/移除成员撤权/旧LAB兼容/备份恢复及MainActivity验收。保持当前正式入口与既有加密合同，不删除旧证据、不绕过所有权或CI。Issue #144仍OPEN。不要再创建重复MED-03分支或PR，不把本检查点当作完成。
+
 ## #143 最终验收：旧召回占位断言修正 — 2026-10-28
 
 接手精确1ed73d07，push40678509368/android122783344100及PR40678516954/android122783525605实际FAIL：App3129项32失败593原跳过，32项均为Ui11CenterTest两方法×16矩阵。生产已按§161删除不可靠召回模块，旧测试仍performScrollToNode(drug-center-recalls)，因此line66找不到节点；不是去回退生产入口或删测试。最小修复：已删除plans/stock负向遍历使用仍存在的supply末行锚点；原future测试改成四只读模块真实点击→精确documents/documents/safety/supply回调、48dp、无不可用弹窗、召回节点不存在、两个私人关联回调均0。原语言/对比/返回/关联状态等断言不变；没有重做药品中心或ANSM功能。针对性Ui11CenterTest完整144项实际PASS（0 fail/error/skip），7m14s；原失败摘录与通过XML已入库。修复准确SHA的完整必需CI仍待执行，不用旧绿替代。同步已受保护合并#137（e9d8f943），保留Build36/37真实交付账本与versionCode37；只解决两份进度/授权文档的并行插入冲突，完整保留双方原文。并行§161收口：真机反馈保持161，既有Build37授权移至161.A，不改交付事实；本轮不签名。

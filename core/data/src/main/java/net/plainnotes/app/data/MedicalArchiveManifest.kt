@@ -12,6 +12,9 @@ import java.util.UUID
  * Decoder consumes exact ordered tokens, independently of encoder (no re-encode acceptance test).
  */
 internal object MedicalArchiveManifest {
+    // Version 1 remains byte-for-byte unchanged for historical single-result archives.
+    // Older independent readers reject version 2 before exposing clinical data.
+    private fun wireVersion(m:AttachmentBackupManifest)=if(m.records.any {it.kind==AttachmentBackupManifest.Kind.LAB_PANEL} || m.documents.any {d->m.links.none {it.document==d.uuid}})2 else 1
     data class Decoded(val manifest:AttachmentBackupManifest,val envelopes:Map<UUID,String>)
     private val order=MedicalArchiveCrypto.uuidOrder
     fun encode(m:AttachmentBackupManifest,envelopes:Map<UUID,String>,checkActive:()->Unit={}):ByteArray {
@@ -30,7 +33,7 @@ internal object MedicalArchiveManifest {
         fun num(n:Long?)=raw(n?.toString()?:"null")
         fun <T> array(values:List<T>,write:(T)->Unit) {raw("[");values.forEachIndexed {i,v->checkActive();if(i>0)raw(",");write(v)};raw("]")}
         try {
-        raw("{\"version\":1,\"dataset\":");id(m.dataset);raw(",\"epoch\":");id(m.epoch);raw(",\"logicalVault\":");id(m.logicalVault)
+        raw("{\"version\":${wireVersion(m)},\"dataset\":");id(m.dataset);raw(",\"epoch\":");id(m.epoch);raw(",\"logicalVault\":");id(m.logicalVault)
         raw(",\"records\":");array(m.records.sortedWith(compareBy(order) {it.uuid})) {r->
             raw("{\"uuid\":");id(r.uuid);raw(",\"kind\":");str(r.kind.name);raw(",\"sourceId\":");num(r.sourceId);raw(",\"state\":");str(r.state)
             raw(",\"trashId\":");num(r.trashId);raw(",\"evidenceSha256\":");str(r.evidenceSha256);raw("}")}
@@ -94,7 +97,7 @@ internal object MedicalArchiveManifest {
             take(']');return Collections.unmodifiableList(result)
         }
         fun decode():Decoded {
-            active();take('{');key("version",true);require(number()==1L);key("dataset");val dataset=id();key("epoch");val epoch=id();key("logicalVault");val vault=id()
+            active();take('{');key("version",true);val version=number();require(version in 1L..2L);key("dataset");val dataset=id();key("epoch");val epoch=id();key("logicalVault");val vault=id()
             key("records");val records=rows {take('{');key("uuid",true);val uuid=id();key("kind");val kind=AttachmentBackupManifest.Kind.valueOf(text(16))
                 key("sourceId");val source=number();key("state");val state=text(16);key("trashId");val trash=nullable();key("evidenceSha256");val hash=hex(64);take('}')
                 AttachmentBackupManifest.Record(uuid,kind,source,state,trash,hash)}
@@ -117,6 +120,7 @@ internal object MedicalArchiveManifest {
             ordered(records) {it.uuid};ordered(docs) {it.uuid};ordered(links) {it.uuid};ordered(envelopes) {it.first}
             require(versions.zipWithNext().all {(a,b)->order.compare(a.document,b.document)<0 || a.document==b.document && a.ordinal<b.ordinal})
             val m=AttachmentBackupManifest(dataset,epoch,vault,records,docs,versions,links)
+            require(version==2L || records.none {it.kind==AttachmentBackupManifest.Kind.LAB_PANEL}) {"Panel semantics require manifest version 2"}
             m.validateComplete(AttachmentBackupManifest.Limits(maximumCiphertextBytes=MedicalArchiveCrypto.MAX_CIPHER))
             require(envelopes.size==versions.size && envelopes.map {it.first}.toSet()==versions.map {it.context.version}.toSet())
             return Decoded(m,Collections.unmodifiableMap(envelopes.toMap()))

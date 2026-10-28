@@ -1219,8 +1219,10 @@ const val BACKFILL_MAX_DAYS=731L
         require(values.isNotEmpty() && values.all{it.id==0L && it.panel_id==null})
         val first=values.first();val lab=first.laboratory?.trim()?.ifEmpty{null}
         require(values.all{it.sampled_utc==first.sampled_utc && it.sampled_zone==first.sampled_zone && it.laboratory?.trim()?.ifEmpty{null}==lab})
-        val panel=dao.insertLabPanel(LabPanelEntity(uuid=java.util.UUID.randomUUID().toString(),sampled_utc=first.sampled_utc,sampled_zone=first.sampled_zone,laboratory=lab,created_utc=now.toEpochMilli()))
+        val draft=LabPanelEntity(uuid=java.util.UUID.randomUUID().toString(),sampled_utc=first.sampled_utc,sampled_zone=first.sampled_zone,laboratory=lab,created_utc=now.toEpochMilli())
+        val panel=dao.insertLabPanel(draft)
         values.forEach{writeLab(dao,it.copy(laboratory=lab,panel_id=panel),now,recapture,estimate)}
+        draft.copy(id=panel)
     }
     suspend fun labPanels()=withContext(Dispatchers.IO){db().dao().labPanels()}
     /** LAB-02: time, zone, laboratory and note of the whole draw; members follow in the same transaction (new SAMPLE_CHANGED contexts, old ones kept). */
@@ -1244,7 +1246,7 @@ const val BACKFILL_MAX_DAYS=731L
      * share exactly the same sample time and zone and the same trimmed laboratory. Their sample does not change, so no new context.
      */
     suspend fun groupAsLabPanel(labIds:List<Long>,now:Instant=Instant.now())=transaction { dao ->
-        val labs=dao.labs().filter{it.id in labIds};require(labIds.distinct().size>=2 && labs.size==labIds.distinct().size && labs.all{it.panel_id==null})
+        val labs=dao.labs().filter{it.id in labIds};require(labIds.distinct().isNotEmpty() && labs.size==labIds.distinct().size && labs.all{it.panel_id==null})
         val first=labs.first();val lab=first.laboratory?.trim()?.ifEmpty{null}
         require(labs.all{it.sampled_utc==first.sampled_utc && it.sampled_zone==first.sampled_zone && it.laboratory?.trim()?.ifEmpty{null}==lab})
         val panel=dao.insertLabPanel(LabPanelEntity(uuid=java.util.UUID.randomUUID().toString(),sampled_utc=first.sampled_utc,sampled_zone=first.sampled_zone,laboratory=lab,created_utc=now.toEpochMilli()))

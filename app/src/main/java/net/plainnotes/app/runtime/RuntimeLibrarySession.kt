@@ -74,7 +74,7 @@ class RuntimeLibrarySession(private val source:NotesRepository,private val saved
         catch(t:Throwable){resource.close();throw t}
         return AutoCloseable{synchronized(protectedResources){protectedResources-=resource};resource.close()}
     }
-    internal suspend fun attachments(target:net.plainnotes.app.data.MedicalAttachmentOperations.Target,
+    internal suspend fun attachments(target:net.plainnotes.app.data.MedicalAttachmentOperations.Target?,
         title:String,operation:java.util.UUID=java.util.UUID.randomUUID(),document:java.util.UUID=java.util.UUID.randomUUID()):net.plainnotes.app.attachments.AttachmentFlowController {
         val repo=repository();val scope=requireNotNull(frozen)
         val session=net.plainnotes.app.domain.AttachmentSession(java.util.UUID.fromString(scope.dataset),java.util.UUID.fromString(scope.epoch))

@@ -11,11 +11,11 @@ import java.util.UUID
  * Scope and typed target are frozen in the key; another dataset cannot adopt the operation.
  * Synchronous commit precedes dispatch. A corrupt checkpoint refuses new operations.
  */
-internal class AttachmentReconciliationStore(context:Context,scope:LibraryRequestScope,target:MedicalAttachmentOperations.Target) {
+internal class AttachmentReconciliationStore(context:Context,scope:LibraryRequestScope,target:MedicalAttachmentOperations.Target?) {
     private val ownerEpoch=synchronized(monitor) {wipeEpoch}
     private val prefs=context.getSharedPreferences("attachment-reconciliation-v1",Context.MODE_PRIVATE)
     private val key=MessageDigest.getInstance("SHA-256").digest(
-        (scope.encoded()+listOf(target.kind.name,target.id.toString())).joinToString("\u0000").toByteArray()
+        (scope.encoded()+(target?.let {listOf(it.kind.name,it.id.toString())+(if(it.kind==MedicalAttachmentOperations.Kind.LAB_PANEL)listOf(requireNotNull(it.expectedUuid).toString()) else emptyList())} ?: listOf("FILE_LIBRARY"))).joinToString("\u0000").toByteArray()
     ).joinToString("") {"%02x".format(it.toInt() and 255)}
     fun pending():Pair<UUID,UUID>?=synchronized(monitor) {
         if(!prefs.contains(key))return@synchronized null

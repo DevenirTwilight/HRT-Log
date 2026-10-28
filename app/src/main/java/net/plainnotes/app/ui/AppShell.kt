@@ -295,7 +295,7 @@ class UiPrefs(context: Context) {
                     {model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true},{openMedicalChild(Destination.LABS)},{openMedicalChild(Destination.TIMELINE)},{destination=Destination.SETTINGS},pad,
                     onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount(),onVisits={openMedicalChild(Destination.VISITS)},
                     onMedicalBackup=if(net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) ({medicalBackupOpen=true}) else null,
-                    labs=extra.labs,onLab={medicalDialogs.lab=it.id},initialTab=medicalTab,onTabChange={medicalTab=it},labPanels=extra.labPanels)
+                    labs=extra.labs,onLab={medicalDialogs.lab=it.id},initialTab=medicalTab,onTabChange={medicalTab=it},labPanels=extra.labPanels,onPanel={labDialogs.panel=it.id},onSaveDraw={labDialogs.saveAs=it})
                 Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it;if(it==null && medicalOrigin){medicalOrigin=false;destination=Destination.MEDICAL} }, { appointment = true }, pad,
                     medical=medicalOrigin,onMedicalEdit={model.clearMedicalVisitSave();medicalDialogs.edit=it;medicalDialogs.editing=true},onLab={medicalDialogs.lab=it.id},
                     onAddHistorical={model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true})

@@ -28,7 +28,7 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
 
 /** Production real-record files. Runtime authorization and scoped activation remain mandatory.
  * OFF is checked before the ViewModel/runtime is touched (null when OFF). No URI or capability is saved. */
-@Composable internal fun rememberRecordFiles(model:NotesViewModel,target:MedicalAttachmentOperations.Target):RecordFiles? {
+@Composable internal fun rememberRecordFiles(model:NotesViewModel,target:MedicalAttachmentOperations.Target?):RecordFiles? {
     if(!AttachmentFlowController.PUBLIC_ENTRY_ENABLED)return null
     val context=LocalContext.current
     val owner=LocalLifecycleOwner.current
@@ -36,7 +36,7 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
     val controller=remember(model,target,owner) {model.medicalAttachmentsForRecord(context,owner,target,scope)}
     val generation=remember(controller) {Session.generation}
     var awaiting by remember(controller) {mutableStateOf(false)}
-    val title=stringResource(if(target.kind==MedicalAttachmentOperations.Kind.LAB)R.string.attach_default_lab else R.string.attach_default_visit)
+    val title=stringResource(if(target?.kind!=MedicalAttachmentOperations.Kind.APPOINTMENT)R.string.attach_default_lab else R.string.attach_default_visit)
     val picker=key(controller) {rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {result->
         // MainActivity consumes the one-shot lock exemption in onStart. ActivityResult
         // delivery can precede OR follow it across Android versions. That exemption is

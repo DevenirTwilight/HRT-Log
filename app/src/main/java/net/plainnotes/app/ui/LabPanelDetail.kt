@@ -29,7 +29,7 @@ import java.time.LocalDateTime
  */
 @Composable fun LabPanelDialog(panel: LabPanelEntity, members: List<LabValueEntity>, onDismiss: () -> Unit,
                                onSave: (LocalDateTime, String, String) -> Unit, onOpen: (LabValueEntity) -> Unit, onRemove: (LabValueEntity) -> Unit,
-                               onAdd: (List<LabValueEntity>, Boolean) -> Unit, onDelete: () -> Unit) {
+                               onAdd: (List<LabValueEntity>, Boolean) -> Unit, onDelete: () -> Unit, files: (@Composable () -> Unit)?=null, overlay: (@Composable () -> Unit)?=null) {
     var time by remember(panel) { mutableStateOf(Instant.ofEpochMilli(panel.sampled_utc).toLocalHere()) }
     var lab by remember(panel) { mutableStateOf(panel.laboratory.orEmpty()) }
     var note by remember(panel) { mutableStateOf(panel.note.orEmpty()) }
@@ -49,6 +49,7 @@ import java.time.LocalDateTime
                 }
                 Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp).testTag("lab-panel-scroll"),
                     verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    files?.invoke()
                     DateTimeRow(time, { time = it })
                     OutlinedTextField(lab, { lab = it }, Modifier.fillMaxWidth().testTag("lab-panel-lab"), label = { Text(stringResource(R.string.lab_laboratory)) }, singleLine = true)
                     OutlinedTextField(note, { note = it }, Modifier.fillMaxWidth().testTag("lab-panel-note-field"), label = { Text(stringResource(R.string.lab_panel_note)) })
@@ -88,6 +89,7 @@ import java.time.LocalDateTime
                     }
                 }
             }
+            overlay?.invoke()
         }
     }
     if (deleting) AlertDialog(onDismissRequest = { deleting = false }, modifier = Modifier.testTag("lab-panel-delete-dialog"),
