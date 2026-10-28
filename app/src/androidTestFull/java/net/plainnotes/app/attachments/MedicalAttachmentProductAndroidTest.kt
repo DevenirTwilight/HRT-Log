@@ -75,6 +75,26 @@ class MedicalAttachmentProductAndroidTest {
             throw AssertionError("Condition not met; production tree: "+ui.onAllNodes(isRoot(),useUnmergedTree=true).printToString(maxDepth=24),e)
         }
     }
+    /**
+     * performScrollTo() aligns a row with the viewport edge, which on a 320x640 screen is behind the status/navigation bars and
+     * the floating add button. A person scrolls until the row is comfortably inside; so does this, with real swipes on the list.
+     */
+    private fun scrollIntoComfort(list:String,node:SemanticsNodeInteraction) {
+        node.performScrollTo()
+        repeat(4) {
+            val root=ui.onAllNodes(isRoot()).onFirst().fetchSemanticsNode().boundsInRoot
+            val bounds=node.fetchSemanticsNode().boundsInRoot
+            val margin=root.height*0.2f
+            val shift=when {bounds.bottom>root.bottom-margin->-(bounds.bottom-(root.bottom-margin)+16f)
+                bounds.top<root.top+margin->(root.top+margin-bounds.top)+16f else->0f}
+            if(shift==0f)return
+            ui.onNodeWithTag(list).performTouchInput {
+                val x=centerX;val from=centerY
+                swipe(androidx.compose.ui.geometry.Offset(x,from),androidx.compose.ui.geometry.Offset(x,from+shift),durationMillis=400)
+            }
+            ui.waitForIdle()
+        }
+    }
     /** Lazy lists compose only the visible rows; a person scrolls to what is below the first screen, and so does this. */
     private fun reveal(matcher:SemanticsMatcher) {
         if(ui.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty())return
@@ -123,11 +143,13 @@ class MedicalAttachmentProductAndroidTest {
             .and(hasText(text(R.string.lab_home_collapse)).not())
         await {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty() || ui.onAllNodes(collapsedDraw).fetchSemanticsNodes().isNotEmpty()}
         // The floating add button overlaps the centre of this wide control on 320 dp; tap its free left part.
-        if(ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isEmpty())
-            ui.onAllNodes(collapsedDraw).onFirst().performScrollTo().performTouchInput {click(androidx.compose.ui.geometry.Offset(width*0.12f,center.y))}
+        if(ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isEmpty()) {
+            scrollIntoComfort("labs-home",ui.onAllNodes(collapsedDraw).onFirst())
+            ui.onAllNodes(collapsedDraw).onFirst().performTouchInput {click(androidx.compose.ui.geometry.Offset(width*0.12f,center.y))}
+        }
         await {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty()}
         val row=ui.onNodeWithTag("lab-group-row:$id")
-        row.performScrollTo()
+        scrollIntoComfort("labs-home",row)
         // The real Labs FAB overlaps the right side of a low visible row on 320dp.
         // Tap its unobscured label side, relative to the actual semantic row bounds.
         // This is still a real touch on the existing result, not a ViewModel/URI shortcut.
