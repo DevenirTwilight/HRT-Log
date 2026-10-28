@@ -1,3 +1,22 @@
+## UI-11 药品资料中心与商品资料关联重设计（进行中）— 2026-10-28
+
+UI-10（医疗档案重设计）已合并（PR #139，5d383a2d）。UI-11 = 药品资料中心与商品资料关联页面重设计（任务书原称 UI-10，负责人确认改称 UI-11，REQUIREMENTS §158.A、§159）。分支 `feature/ui11-drug-center-20261027`，工作树 /home/user/wt-ui11，基于 5d383a2d。任务书原文 `docs/design/ui10-drug-center-2026-10-27/TASK_BOOK_ORIGINAL.md`；样图同目录（PR #138）。
+
+- B0 矩阵已核对：四个目标 UI 文件不在矩阵内，`MedicationsScreen`/`AppShell`/`Components`/`AdaptiveControls` 是 HISTORY_ONLY；不碰 PK_DISPLAY_REVIEW、LIVE_LOCK_*。
+- 补记：UI-10 修改了 PK_DISPLAY_REVIEW 文件 `LabsScreen.kt`（范围、批准来源、回归见 §158.B）。
+- 进度（2026-10-28，生产代码已写完，编译通过，尚未跑测试）：
+  - A：`NavBackButton`（`nav_back` 四语言，48dp）用于药品资料中心、商品资料关联页、`RecordedReferenceDialog`，tag 不变。
+  - 删除“药物”“库存”两个按钮（`onPlans`/`onStock` 参数一并删除；抽屉里仍可到药物和库存）。
+  - B：`DrugReferenceCenterScreen.kt` 重写（主卡、我的药物 GroupedList + 关联状态标签、资料来源两行、了解这些资料可展开、尚未开放的模块为不可点击行；`UnavailableModuleCard.kt` 已删除）。关联状态**只读现有关联**：`MedicationReference.product.bdpm != null` = BDPM 官方；有 product 无 bdpm = 我录入的；无 product = 未关联（`drugLinkStatus()`）。加载走 `MedicationReferenceController.links()` / `savedSourceCount()`（只读），`changes` 计数在关联/解除后触发中心刷新（`NotesViewModel.referenceChanges`）。
+  - C：`MedicationReferenceDialog.kt`（顶栏标题+药物名副标题、边界卡、当前关联卡、分段 Tab、药丸筛选、GroupedList 结果、底部手动录入）和 `BdpmCataloguePanel.kt`（一次展开一个、包装为单选卡、主按钮“关联此资料”）。点包装卡仍直接打开原“确认前预览”（保持原流程与 `BdpmReferenceFlowContract` 不改）；主按钮在已选包装后可重开同一预览。当前关联的只读详情默认展开，由“查看资料/收起资料”切换（为保持 `reference-details` 原断言）。
+  - 筛选“药丸”是胶囊形输入框（保留原 tag 与过滤逻辑，不改过滤）。
+  - 新测试 `ui11/Ui11CenterTest`、`ui11/Ui11LinkTest`；已迁移断言：`DrugCenterNavigationTest`、`DrugCenterMatrixTest`、`CenterModuleScreenshotsTest`、`CenterStateRestorationTest`（去掉 onStock）、androidTestFull `InAppNavigationLockAndroidTest`（五个模块不再可点）。
+  - 结果（2026-10-28）：`Ui11CenterTest` 144/144、`Ui11LinkTest` 72 例（56 通过、16 因 411dp 嵌套对话框跳过）；既有相关测试（DrugCenter*、CenterStateRestoration、MedicationReference*、RecordedReference、BdpmReferenceFlow、CenterModuleScreenshots）280 例全过。
+  - 截图和前后对比已入库 `docs/ui-audit/2026-10-28-ui11/`（before 用 main `5d383a2d` 的旧组件在 /home/user/wt-ui11-before 渲染）；报告 `docs/audits/product-quality-2026-10/77-ui11-drug-center.md`；`docs/STATUS.md` 已更新。
+  - PR #140 已开，自动合并已开启（§106，默认分支是 `claude/new-session-1959qb`）。CI 失败按作业日志定位，不绕过检查；合并后确认默认分支 CI。UI-10 合并提交 `5d383a2d` 的默认分支 CI 也尚未确认。
+
+---
+
 ## UI-10 医疗档案、医疗文件与化验详情重新设计（进行中）— 2026-10-27
 
 负责人任务书“UI-10：医疗档案、医疗文件库与化验详情全面重新设计”，REQUIREMENTS §157。分支 `feature/ui10-medical-redesign-20261027`，工作树 /home/user/wt-ui10，基于 main `019c805d`。设计、差异矩阵、验收分层：`docs/medical-attachments/2026-10-27/ui10/README.md`；与 MED-03 的接口合同和所有权：同目录 `INTERFACE_CONTRACT.md`；视觉证据（样图 | Before | After）：`docs/ui-audit/2026-10-27-ui10/`。

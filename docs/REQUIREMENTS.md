@@ -1603,3 +1603,20 @@ PNMEDBK1继续单一NOT_APPROVED候选；正式writer/reader/KDF/portable wrappi
 ### 158.A UI 编号：UI-10 与 UI-11（2026-10-27）
 
 同日有两份任务书都称 UI-10：「医疗档案、医疗文件库与化验详情重设计」和「药品资料中心与商品资料关联页面重设计」（样图在 PR #138）。负责人确认：**UI-10 = 医疗档案、医疗文件库与化验详情重设计**（§157）；**药品资料中心与商品资料关联页面重设计改称 UI-11**，任务书其余内容不变（把“取消”改为“返回”、删除“药物”和“库存”按钮、只改展示和导航）。UI-11 在 UI-10 的 PR 合并且 #138 合并之后开工；开工时归档任务书原文并写入 REQUIREMENTS 的下一个 § 编号。
+
+### 158.B 受保护文件追加记录：UI-10 修改了 `ui/LabsScreen.kt`（2026-10-28）
+
+B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查的负责人批准来源的追加式记录 + PK 显示回归）。UI-10（PR #139）修改了它，当时没有同步记录，此处补记：
+- **批准来源**：负责人 UI-10 任务书第五节，点名“当前源码 `LabsScreen.kt`、`LabDetailDialogWithAttachments`”，要求不再修补旧弹窗、重做化验详情并“必须实际修改 Compose 生产代码”。
+- **范围**：仅限化验详情的承载——行点击改为调用 `onOpenDetail`（或本地的全屏 `LabDetailFullscreen`）、删除旧 `LabDetailDialogWithAttachments`、`LabDetailDialog` 改为薄包装。趋势图、`ConcChart` 数据、参考范围换算、`labDraws` 分组、列表筛选没有改动。
+- **PK 显示回归**：`LabUi03HomeTest`、`Lab01/02/04*Test`、`LabContextUiTest`、`PeriodStabilityTest` 在 PR #139 的 CI 中通过；`LabContextSection.kt`（同属 PK_DISPLAY_REVIEW）未改动，只被新结果页原样嵌入。
+
+## 159. UI-11 — 药品资料中心与商品资料关联页面重设计（2026-10-28）
+
+负责人任务书（原文 `docs/design/ui10-drug-center-2026-10-27/TASK_BOOK_ORIGINAL.md`，原称 UI-10，负责人确认改称 UI-11，见 §158.A）。样图已入库（PR #138）；样图与任务书文字冲突时以任务书为准。
+
+**决定。** 两个页面（药品资料中心、商品资料关联）改为 UI-06/UI-07 的视觉体系：大圆角主卡、分组列表、胶囊按钮、纯线条图标、语义色。同时：(1) 左上角“取消”改为 ← 返回（48dp 图标按钮，无障碍名称新增四语字符串 `nav_back`，不复用 `cancel`；保留 `drug-center-close`、`reference-close`、`record-reference-close` 标签；行为不变）；(2) 药品资料中心删除“药物”（`drug-center-plans`）和“库存”（`drug-center-stock`）两个按钮及 `onPlans`/`onStock` 参数和调用方传参，用户返回后从抽屉进入，不设替代入口。
+
+**范围。** 只改展示和导航，不改业务：BDPM 目录数据、搜索算法和结果排序；关联、解除关联、自行录入的逻辑和确认对话框的触发条件；Room schema 和备份。关联操作仍不得改变剂量、方案或库存，现有证明这一点的测试全部保留。不新增药品资料中心的功能，不打开“尚未开放”的模块，不提供用药建议，不把用户录入的资料显示成已核实；不用红色作强调色；不打包字体，不新增依赖、权限、网络或埋点；不升级 Compose/Material 3（BOM 2025.10.00），不用实验性 Expressive API；不改 versionCode 和签名，不交付 APK。
+**保护文件。** 涉及的 `DrugReferenceCenterScreen.kt`、`MedicationReferenceDialog.kt`、`BdpmCataloguePanel.kt`、`RecordedReferenceDialog.kt` 不在 B0 矩阵内；`MedicationsScreen.kt`、`AppShell.kt`、`Components.kt`、`AdaptiveControls.kt` 是 HISTORY_ONLY，可改。一旦需要改 PK_DISPLAY_REVIEW 或 LIVE_LOCK_* 文件就停止；浓度、PK、`Exports.kt`、`ConcChart.kt` 一律不改。
+**测试与交付。** 先写失败测试；`MedicationReferenceControllerTest`、`MedicationReferenceUiTest`、`MedicationReferenceMatrixTest`、`DrugCenterMatrixTest`、`RecordedReferenceUiTest`、`CenterStateRestorationTest`、`BdpmReferenceFlowContract`、`PeriodStabilityTest`、`ButtonLayoutRegressionTest`、`TranslationsTest` 和对比度断言不得放宽；只能迁移因“取消→返回”和删除两个按钮而必然变化的断言，并在报告中逐条写明原含义如何保留。截图覆盖四语 × 320/411dp × 字号 1/2 × 明暗，前后对比并与样图并排，存入 `docs/ui-audit/2026-10-28-ui11/`。报告 `docs/audits/product-quality-2026-10/77-ui11-drug-center.md`：改动清单、返回与删除按钮说明、关联状态能否区分官方/用户录入的结论、迁移断言清单、前后截图与样图对照、NOT_RUN 项。PR 按 §106 自动合并，合并后复验默认分支 CI；更新 HANDOFF、STATUS。

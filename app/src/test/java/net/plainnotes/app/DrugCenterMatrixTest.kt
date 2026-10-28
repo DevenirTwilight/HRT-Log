@@ -43,13 +43,13 @@ class DrugCenterMatrixTest(private val locale:String,private val width:Int,priva
             ui.onNodeWithTag("drug-center-catalogue").assertIsDisplayed().assertHasClickAction().performClick()
             list.performScrollToNode(hasTestTag("drug-center-medication:7"))
             ui.onNodeWithTag("drug-center-medication:7").assertIsDisplayed().performClick()
+            // UI-11: the two description rows are expandable (their toggle is the tap target), the five modules are plain rows.
             for(tag in listOf("drug-center-identity","drug-center-packaging")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assert(hasClickAction().not())
+                ui.onNodeWithTag("$tag-toggle").assertIsDisplayed().assertHasClickAction()
             }
             for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply","drug-center-recalls")) {
-                list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
-                ui.onNodeWithTag("center-unavailable-dialog").assertExists()
-                ui.onNodeWithTag("center-unavailable-close").assertIsDisplayed().performClick()
+                list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assert(hasClickAction().not())
                 ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
             }
             list.performScrollToIndex(0)

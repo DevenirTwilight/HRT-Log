@@ -20,7 +20,7 @@ import net.plainnotes.app.NotesState
 import net.plainnotes.app.R
 import net.plainnotes.app.data.MedicationEntity
 
-@Composable fun MedicationsScreen(state: NotesState, onAdd: () -> Unit, onEdit: (MedicationEntity) -> Unit, onArchive: (MedicationEntity) -> Unit, contentPadding: PaddingValues,onReference:((MedicationEntity)->Unit)?=null,onBrowseReference:(()->Unit)?=null,onStock:(()->Unit)?=null) {
+@Composable fun MedicationsScreen(state: NotesState, onAdd: () -> Unit, onEdit: (MedicationEntity) -> Unit, onArchive: (MedicationEntity) -> Unit, contentPadding: PaddingValues,onReference:((MedicationEntity)->Unit)?=null,onBrowseReference:(()->Unit)?=null,referenceLoaders:DrugCenterLoaders?=null,referenceVersion:Int=0) {
     var centerOpen by rememberSaveable { mutableStateOf(false) }
     val list = state.medications.sortedWith(compareByDescending<MedicationEntity> { it.active }.thenBy { it.sort_order }.thenBy { it.id })
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
@@ -38,7 +38,7 @@ import net.plainnotes.app.data.MedicationEntity
         items(list, key = { it.id }) { m -> MedicationCard(m, state, { onEdit(m) }, { onArchive(m) },onReference?.let {callback->{callback(m)}}) }
     }
     if(centerOpen && onReference!=null && onBrowseReference!=null) {
-        DrugReferenceCenterDialog(state.medications,onBrowseReference,onReference,onStock=onStock?.let {open->{centerOpen=false;open()}}){centerOpen=false}
+        DrugReferenceCenterDialog(state.medications,onBrowseReference,onReference,referenceLoaders,referenceVersion){centerOpen=false}
     }
 }
 

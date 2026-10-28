@@ -36,6 +36,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     val librarySession=runtime.state
     private var referenceController:net.plainnotes.app.reference.MedicationReferenceController?=null
     val medicationReferences get()=requireNotNull(referenceController)
+    private val referenceChangeCounter=MutableStateFlow(0)
+    /** Mirrors the reference controller's saved-change counter; usable before the runtime has created the controller. */
+    val referenceChanges=referenceChangeCounter.asStateFlow()
     private var runtimeVisible=true
     private var runtimePause:Job?=null
     fun runtimeStopped(graceMillis:Long?) {
@@ -84,7 +87,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     init {
         viewModelScope.launch {
             try {
-                runtime.initialize {referenceController=net.plainnotes.app.reference.MedicationReferenceController(it,viewModelScope)}
+                runtime.initialize {referenceController=net.plainnotes.app.reference.MedicationReferenceController(it,viewModelScope).also {controller->viewModelScope.launch {controller.changes.collect {referenceChangeCounter.value=it}}}}
                 refresh()
                 bootstrapRepository.generationChanges().collect {runtime.verify();if(runtimeVisible && readFailureShown)refresh()}
             } catch(e:CancellationException){throw e}catch(e:Exception){readFailure(e)}

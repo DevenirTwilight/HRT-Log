@@ -23,7 +23,7 @@ class CenterStateRestorationTest {
         var businessActions=0
         restoration.setContent {NotesTheme(ThemeMode.LIGHT) {
             MedicationsScreen(NotesState(loading=false),{businessActions++},{businessActions++},{businessActions++},PaddingValues(),
-                onReference={businessActions++},onBrowseReference={businessActions++},onStock={businessActions++})
+                onReference={businessActions++},onBrowseReference={businessActions++})
         }}
         ui.onNodeWithTag("drug-center-open").performClick()
         ui.onNodeWithTag("drug-center-window").assertExists()
