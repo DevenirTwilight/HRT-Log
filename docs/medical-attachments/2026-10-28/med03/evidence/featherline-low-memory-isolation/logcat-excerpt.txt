@@ -1,0 +1,3 @@
+62:10-28 15:21:32.055  3852  3871 I TestRunner: started: featherlineImportRunsAsIsolatedLowMemoryFlow(net.plainnotes.app.imports.AutomaticImportAndroidTest)
+1689:10-28 15:22:02.156  2796  3924 I ActivityManager: Process net.plainnotes.app (pid 3852) has died: fore TOP 
+1694:10-28 15:22:02.199  2796  3924 W ActivityManager: Crash of app net.plainnotes.app running instrumentation ComponentInfo{net.plainnotes.app.test/androidx.test.runner.AndroidJUnitRunner}

@@ -1,0 +1,8 @@
+[  219.299039] .plainnotes.app invoked oom-killer: gfp_mask=0x2084d0, order=0, oom_score_adj=0
+[  219.300559] CPU: 1 PID: 3852 Comm: .plainnotes.app Not tainted 3.18.91+ #1
+[  219.301751] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.11.1-0-g0551a4be2c-prebuilt.qemu-project.org 04/01/2014
+[  219.303795]  00000000 00000286 caea5dd4 c07a9c83 ce27c620 00000000 caea5e1c c07a913f
+[  219.305348]  c0a083cb ce27ca64 002084d0 00000000 00000000 c024d18f c0b07780 caea5e08
+[  219.508753] [ 3852] 10065  3852   278512    11898      96        0             0 .plainnotes.app
+[  219.510533] Out of memory: Kill process 3295 (d.process.media) score 927 or sacrifice child
+[  219.512155] Killed process 3295 (d.process.media) total-vm:993268kB, anon-rss:13116kB, file-rss:0kB
