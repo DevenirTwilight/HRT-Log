@@ -70,7 +70,8 @@ private fun FileKind.label() = when (this) { FileKind.PDF -> R.string.attach_kin
             }
             if (!caps.standaloneImport) Text(stringResource(R.string.lib_not_yet), Modifier.padding(top = 4.dp).testTag("library-add-reason"), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
         }
-        if(typeCounts.isNotEmpty()) item("types") {
+        // A filter with a single choice only pushes the files down; offer it once there are two kinds (or while one is active).
+        if(typeCounts.count {it.value>0}>=2 || typeFilter!=null) item("types") {
             Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.med03_types),style=MaterialTheme.typography.titleSmall)
                 FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) {

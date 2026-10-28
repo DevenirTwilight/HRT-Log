@@ -8,9 +8,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -115,7 +118,7 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
             if(fileState.import !in setOf(MedicalAttachmentsController.Import.Idle,MedicalAttachmentsController.Import.Cancelled) && fileState.import !is MedicalAttachmentsController.Import.Confirming) {
                 MedicalAttachmentsSection(fileState.copy(files=MedicalAttachmentsController.Files.Ready(emptyList())),stringResource(R.string.mh_files_title),
                     onAdd={},onConfirm={},onCancelImport=controller.files::cancelImport,onCheckStatus=controller.files::checkStatus,onDismissMessage=controller.files::dismissImportMessage,
-                    onRetry=controller::refresh,onOpen={})
+                    onRetry=controller::refresh,onOpen={},statusOnly=true)
             }
             if(selected!=null) {
                 val links=state.links.map {r->DocumentLink(recordTarget(r.target,appointments,labs,panels))}
@@ -142,7 +145,7 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
         }
     }
     MedicalAttachmentViewer(fileState.viewer,controller.files::closeViewer,targetLabel=stringResource(R.string.mh_files_title))
-    draft?.let {d->FileWindow(stringResource(R.string.lib_import_title),{controller.files.cancelImport()}) {
+    draft?.let {d->FileWindow("",{controller.files.cancelImport()}) {
         Column {Text(stringResource(R.string.med03_type_unknown),Modifier.padding(16.dp))
         AddDocumentDetails(d,caps,onChange={if(it.choice!=draft?.choice || it.chosen!=draft?.chosen)chosenTarget=null;draft=it},onChoose={picker=true},onConfirm={
             if(canWrite && (d.choice !in setOf(LinkChoice.EXISTING_VISIT,LinkChoice.EXISTING_RECORD) || chosenTarget!=null)) {afterImportTarget=chosenTarget;createAfterImport=d.choice==LinkChoice.NEW_RECORD;controller.files.confirmImport(d.title)}
@@ -173,7 +176,10 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
     Dialog(onBack,properties=DialogProperties(usePlatformDefaultWidth=false)) {
         Surface(Modifier.fillMaxSize(),color=MaterialTheme.colorScheme.surface) {
             Column(Modifier.fillMaxSize().systemBarsPadding()) {
-                Row(Modifier.fillMaxWidth().padding(8.dp)) {TextButton(onBack){Text(stringResource(R.string.nav_back))};Text(title,style=MaterialTheme.typography.titleLarge,modifier=Modifier.padding(8.dp))}
+                Row(Modifier.fillMaxWidth().padding(start=4.dp,end=16.dp,top=4.dp,bottom=4.dp),verticalAlignment=Alignment.CenterVertically) {
+                    NavBackButton(onBack,"file-window-back")
+                    if(title.isNotEmpty())Text(title,style=MaterialTheme.typography.titleLarge,modifier=Modifier.padding(start=4.dp).weight(1f).semantics{heading()})
+                }
                 Box(Modifier.weight(1f).fillMaxWidth()) {content()}
             }
         }

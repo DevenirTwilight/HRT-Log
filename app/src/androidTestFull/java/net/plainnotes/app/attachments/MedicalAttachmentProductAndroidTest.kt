@@ -67,9 +67,18 @@ class MedicalAttachmentProductAndroidTest {
         ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(text(destination.title))).performClick()
     }
     private var currentFiles:String?=null
+    /** Lazy lists compose only the visible rows; a person scrolls to what is below the first screen, and so does this. */
+    private fun reveal(matcher:SemanticsMatcher) {
+        if(ui.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty())return
+        for(list in listOf("library","medical-list","library-targets")) {
+            if(ui.onAllNodes(hasTestTag(list)).fetchSemanticsNodes().isEmpty())continue
+            try {ui.onNodeWithTag(list).performScrollToNode(matcher)} catch(_:Throwable) {}
+            if(ui.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty())return
+        }
+    }
     private fun press(original:SemanticsMatcher) {
         val matcher=if(currentFiles!=null && ui.onAllNodes(original).fetchSemanticsNodes().size>1)original and hasAnyAncestor(hasTestTag(currentFiles!!)) else original
-        try {ui.waitUntil(30000) {ui.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty()}}
+        try {ui.waitUntil(30000) {reveal(matcher);ui.onAllNodes(matcher).fetchSemanticsNodes().isNotEmpty()}}
         catch(e:androidx.compose.ui.test.ComposeTimeoutException) {
             throw AssertionError("Missing $matcher; production tree: "+ui.onAllNodes(isRoot(),useUnmergedTree=true).printToString(maxDepth=24),e)
         }
