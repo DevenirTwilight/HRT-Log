@@ -100,7 +100,8 @@ suspend fun loadDrugSourceInfo(context: Context, saved: suspend () -> Pair<Int, 
 /** A view over the existing medication/reference APIs. No clinical advice or inventory writes. */
 @Composable fun DrugReferenceCenterScreen(medications: List<MedicationEntity>, onBrowse: () -> Unit,
     onReference: (MedicationEntity) -> Unit, contentPadding: PaddingValues,
-    links: Map<Long, DrugLinkStatus> = emptyMap(), sources: DrugSourceInfo = DrugSourceInfo()) {
+    links: Map<Long, DrugLinkStatus> = emptyMap(), sources: DrugSourceInfo = DrugSourceInfo(),
+    onOfficial: (String) -> Unit = {}) {
     val c = MaterialTheme.colorScheme
     var expanded by rememberSaveable { mutableStateOf("") }
     val open = expanded.split(',').filter { it.isNotEmpty() }.toSet()
@@ -149,7 +150,13 @@ suspend fun loadDrugSourceInfo(context: Context, saved: suspend () -> Pair<Int, 
             R.string.drug_center_safety to "drug-center-safety",R.string.center_shortages to "drug-center-supply")
         items(available.size,key={"official:${available[it].second}"}) {i->
             val (title,tag)=available[i]
-            GroupedItem(i,available.size,onClick=onBrowse,modifier=Modifier.testTag(tag)) {
+            // Official facts are read-only. Never route through the user's product-association editor.
+            val section=when(tag) {
+                "drug-center-rcp","drug-center-notice" -> "documents"
+                "drug-center-safety" -> "safety"
+                else -> "supply"
+            }
+            GroupedItem(i,available.size,onClick={onOfficial(section)},modifier=Modifier.testTag(tag)) {
                 Row(Modifier.padding(16.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
                     IconTile(futureIcon(tag),c.secondaryContainer,c.onSecondaryContainer)
                     Text(stringResource(title),style=MaterialTheme.typography.titleSmall,modifier=Modifier.weight(1f))
@@ -157,14 +164,6 @@ suspend fun loadDrugSourceInfo(context: Context, saved: suspend () -> Pair<Int, 
                 }
             }
         }
-        item("future-title") { SectionHeader(R.string.center_future_modules) }
-        item("recalls") {GroupedItem(0,1,color=c.surfaceContainerLow) {
-            Column {
-                FutureRow(R.string.center_recalls,R.string.official_recall_limit,"drug-center-recalls",futureIcon("drug-center-recalls"))
-                BdpmOfficialExternalLink("https://ansm.sante.fr/informations-de-securite",R.string.official_recall_query)
-            }
-        }}
-
     }
 }
 
@@ -286,19 +285,28 @@ private fun futureIcon(tag: String) = when (tag) {
         links = try { loaders.links(ids) } catch (e: CancellationException) { throw e } catch (_: Exception) { emptyMap() }
         sources = try { loaders.sources() } catch (e: CancellationException) { throw e } catch (_: Exception) { DrugSourceInfo() }
     }
+    var officialSection by rememberSaveable { mutableStateOf<String?>(null) }
     androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss,
         properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)) {
         Scaffold(modifier = Modifier.testTag("drug-center-window"), topBar = {
             Surface {
                 Row(Modifier.fillMaxWidth().statusBarsPadding().padding(start = 4.dp, end = 16.dp, top = 4.dp, bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    NavBackButton(onDismiss, "drug-center-close")
+                    NavBackButton({ if (officialSection != null) officialSection = null else onDismiss() }, "drug-center-close")
                     Spacer(Modifier.width(4.dp))
-                    Text(stringResource(R.string.drug_center_title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).semantics { heading() })
+                    val title = when (officialSection) {
+                        "documents" -> R.string.official_documents
+                        "safety" -> R.string.drug_center_safety
+                        "supply" -> R.string.center_shortages
+                        else -> R.string.drug_center_title
+                    }
+                    Text(stringResource(title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).semantics { heading() })
                 }
             }
         }) { padding ->
             Box(Modifier.fillMaxSize().padding(padding)) {
-                DrugReferenceCenterScreen(medications, onBrowse, onReference, PaddingValues(), links, sources)
+                officialSection?.let { section -> DrugOfficialBrowserScreen(section) }
+                    ?: DrugReferenceCenterScreen(medications, onBrowse, onReference, PaddingValues(), links, sources,
+                        onOfficial = { officialSection = it })
             }
         }
     }
