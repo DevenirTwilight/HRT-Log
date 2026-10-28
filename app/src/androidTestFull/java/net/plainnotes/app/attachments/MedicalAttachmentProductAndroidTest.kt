@@ -122,14 +122,16 @@ class MedicalAttachmentProductAndroidTest {
             node.config.getOrNull(androidx.compose.ui.semantics.SemanticsProperties.TestTag)?.startsWith("lab-home-expand:")==true}
             .and(hasText(text(R.string.lab_home_collapse)).not())
         await {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty() || ui.onAllNodes(collapsedDraw).fetchSemanticsNodes().isNotEmpty()}
-        if(ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isEmpty())ui.onAllNodes(collapsedDraw).onFirst().performScrollTo().performClick()
+        // The floating add button overlaps the centre of this wide control on 320 dp; tap its free left part.
+        if(ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isEmpty())
+            ui.onAllNodes(collapsedDraw).onFirst().performScrollTo().performTouchInput {click(androidx.compose.ui.geometry.Offset(width*0.12f,center.y))}
         await {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty()}
         val row=ui.onNodeWithTag("lab-group-row:$id")
         row.performScrollTo()
         // The real Labs FAB overlaps the right side of a low visible row on 320dp.
         // Tap its unobscured label side, relative to the actual semantic row bounds.
         // This is still a real touch on the existing result, not a ViewModel/URI shortcut.
-        row.performTouchInput {click(androidx.compose.ui.geometry.Offset(width*0.2f,center.y))}
+        row.performTouchInput {click(androidx.compose.ui.geometry.Offset(width*0.2f,height*0.3f))}
         // UI-10: one full-screen result page whose related files are part of it; no button in between.
         await {ui.onAllNodesWithTag("lab-detail").fetchSemanticsNodes().isNotEmpty() && ui.onAllNodesWithTag("attachments").fetchSemanticsNodes().isNotEmpty()}
     }
