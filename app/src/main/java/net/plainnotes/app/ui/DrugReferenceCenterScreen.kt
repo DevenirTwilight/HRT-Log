@@ -62,9 +62,10 @@ fun drugTagColors(status: DrugLinkStatus, semantic: SemanticColors, scheme: Colo
 
 private fun DrugLinkStatus.tone() = when (this) { DrugLinkStatus.OFFICIAL -> "official"; DrugLinkStatus.USER_ENTERED -> "user"; DrugLinkStatus.NONE -> "neutral" }
 
+/** Not a merging node: inside a tappable row its words join the row's spoken text, so TalkBack reads the status too. */
 @Composable internal fun DrugTag(text: String, status: DrugLinkStatus, modifier: Modifier = Modifier, icon: ImageVector? = null) {
     val (container, content) = drugTagColors(status, NotesTheme.semantic, MaterialTheme.colorScheme)
-    Surface(color = container, contentColor = content, shape = Corners.pill, modifier = modifier.semantics(mergeDescendants = true) { drugTagTone = status.tone() }) {
+    Surface(color = container, contentColor = content, shape = Corners.pill, modifier = modifier.semantics { drugTagTone = status.tone() }) {
         Row(Modifier.padding(horizontal = 12.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             icon?.let { Icon(it, null, Modifier.size(14.dp)); Spacer(Modifier.width(4.dp)) }
             Text(text, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium)
@@ -75,7 +76,7 @@ private fun DrugLinkStatus.tone() = when (this) { DrugLinkStatus.OFFICIAL -> "of
 /** The "not open yet" tag: outlined, neutral. */
 @Composable private fun NotOpenTag(modifier: Modifier = Modifier) {
     Surface(color = Color.Transparent, contentColor = MaterialTheme.colorScheme.onSurfaceVariant, shape = Corners.pill,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline), modifier = modifier.semantics(mergeDescendants = true) { drugTagTone = "outlined" }) {
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline), modifier = modifier.semantics { drugTagTone = "outlined" }) {
         Text(stringResource(R.string.drug_not_open_tag), Modifier.padding(horizontal = 12.dp, vertical = 4.dp), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium)
     }
 }

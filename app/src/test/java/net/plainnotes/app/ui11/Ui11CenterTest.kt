@@ -104,16 +104,20 @@ class Ui11CenterTest(private val locale: String, private val width: Int, private
         val tapped = mutableListOf<Long>()
         ui.setContent { NotesTheme(mode) { DrugReferenceCenterScreen(meds, {}, { tapped += it.id }, PaddingValues(), links) } }
         scrollTo("drug-center-medication:1")
-        fun tone(id: Long) = ui.onNodeWithTag("drug-center-link-tag:$id")
-        tone(1).assert(hasText(s(R.string.drug_link_official))).assert(SemanticsMatcher.expectValue(DrugTagToneKey, "official"))
+        // The tag is part of the tappable row: its words join the row's spoken text; its tone is read from the tag itself.
+        fun row(id: Long) = ui.onNodeWithTag("drug-center-medication:$id")
+        fun tone(id: Long, value: String) = ui.onNodeWithTag("drug-center-link-tag:$id", useUnmergedTree = true).assert(SemanticsMatcher.expectValue(DrugTagToneKey, value))
+        scrollTo("drug-center-medication:1")
+        row(1).assert(hasText(s(R.string.drug_link_official))); tone(1, "official")
         scrollTo("drug-center-medication:2")
-        tone(2).assert(hasText(s(R.string.drug_link_user))).assert(SemanticsMatcher.expectValue(DrugTagToneKey, "user"))
+        row(2).assert(hasText(s(R.string.drug_link_user))); tone(2, "user")
         scrollTo("drug-center-medication:3")
-        tone(3).assert(hasText(s(R.string.drug_link_none))).assert(SemanticsMatcher.expectValue(DrugTagToneKey, "neutral"))
-        ui.onAllNodesWithTag("drug-center-archived-tag:3").assertCountEquals(0)
+        row(3).assert(hasText(s(R.string.drug_link_none))); tone(3, "neutral")
+        ui.onAllNodesWithTag("drug-center-archived-tag:3", useUnmergedTree = true).assertCountEquals(0)
+        row(3).assert(hasText(s(R.string.archived)).not())
         scrollTo("drug-center-medication:4")
-        tone(4).assert(hasText(s(R.string.drug_link_official)))
-        ui.onNodeWithTag("drug-center-archived-tag:4").assert(hasText(s(R.string.archived)))
+        row(4).assert(hasText(s(R.string.drug_link_official))).assert(hasText(s(R.string.archived)))
+        ui.onNodeWithTag("drug-center-archived-tag:4", useUnmergedTree = true).assert(SemanticsMatcher.expectValue(DrugTagToneKey, "neutral"))
         // The three statuses are told apart by their words, not by colour alone.
         assertEquals(3, listOf(R.string.drug_link_official, R.string.drug_link_user, R.string.drug_link_none).map { s(it) }.toSet().size)
         // The whole row is the tap target and reaches the existing reference flow with the medication itself.
@@ -199,9 +203,10 @@ class Ui11CenterTest(private val locale: String, private val width: Int, private
                 .assert(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf(s(R.string.drug_not_open_desc, s(title)))))
             ui.onNodeWithTag(tag).performClick()
             ui.onAllNodesWithTag("center-unavailable-dialog").assertCountEquals(0)
+            assertTrue("$tag shows the tag", ui.onAllNodesWithText(s(R.string.drug_not_open_tag), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty())
         }
         // The row's own semantics are one spoken name; the visible tag is a descendant in the unmerged tree.
-        ui.onAllNodesWithText(s(R.string.drug_not_open_tag), useUnmergedTree = true).assertCountEquals(5)
+        // (a lazy list composes only the visible rows, so each row is checked as it is scrolled to)
         scrollTo("drug-center-recalls"); shot("center_future")
     }
 }

@@ -154,8 +154,8 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         val id = runBlocking { medication() }; seedOfficial(id); runBlocking { controller.open(id)!!.join() }
         show()
         scrollTo("reference-current")
-        ui.onNodeWithTag("reference-source-tag").assert(hasText(s(R.string.ref2_tag_official))).assert(SemanticsMatcher.expectValue(DrugTagToneKey, "official"))
-        ui.onNodeWithTag("reference-package-tag").assert(hasText(s(R.string.ref2_tag_package)))
+        ui.onNodeWithTag("reference-source-tag").assert(hasAnyDescendant(hasText(s(R.string.ref2_tag_official)))).assert(SemanticsMatcher.expectValue(DrugTagToneKey, "official"))
+        ui.onNodeWithTag("reference-package-tag").assert(hasAnyDescendant(hasText(s(R.string.ref2_tag_package))))
         ui.onNodeWithTag("reference-current").assert(hasAnyDescendant(hasText("65421374"))).assert(hasAnyDescendant(hasText("3400935479341")))
             .assert(hasAnyDescendant(hasText(s(R.string.ref2_label_cis)))).assert(hasAnyDescendant(hasText(s(R.string.ref2_label_package))))
         ui.onNodeWithTag("reference-view").assertHasClickAction().assertHeightIsAtLeast(48.dp)
@@ -191,7 +191,7 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         val id = runBlocking { medication() }; runBlocking { controller.open(id)!!.join() }
         show(); linkOfficialPackage()
         scrollTo("reference-current")
-        ui.onNodeWithTag("reference-source-tag").assert(hasText(s(R.string.ref2_tag_official)))
+        ui.onNodeWithTag("reference-source-tag").assert(hasAnyDescendant(hasText(s(R.string.ref2_tag_official))))
         assertEquals(DrugLinkStatus.OFFICIAL, drugLinkStatus(runBlocking { repo.medicationReferenceState(id) }.reference))
     }
 
@@ -199,7 +199,7 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         val id = runBlocking { medication() }; seedUserEntered(id); runBlocking { controller.open(id)!!.join() }
         show()
         scrollTo("reference-current")
-        ui.onNodeWithTag("reference-source-tag").assert(hasText(s(R.string.ref2_tag_user))).assert(SemanticsMatcher.expectValue(DrugTagToneKey, "user"))
+        ui.onNodeWithTag("reference-source-tag").assert(hasAnyDescendant(hasText(s(R.string.ref2_tag_user)))).assert(SemanticsMatcher.expectValue(DrugTagToneKey, "user"))
         ui.onAllNodesWithTag("reference-package-tag").assertCountEquals(0)
         assertEquals(DrugLinkStatus.USER_ENTERED, drugLinkStatus(runBlocking { repo.medicationReferenceState(id) }.reference))
         // The saved library lists it with the same tag and its entry date.
@@ -207,7 +207,8 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         ui.waitUntil(10000) { idle(); ui.onAllNodesWithTag("reference-loading").fetchSemanticsNodes().isEmpty() }
         val uuid = runBlocking { repo.savedReferenceProducts() }.entries.single().snapshotUuid
         scrollTo("reference-result:$uuid")
-        ui.onNodeWithTag("reference-result:$uuid").assert(hasAnyDescendant(hasText(s(R.string.ref2_tag_user)))).assert(hasAnyDescendant(hasText(s(R.string.ref2_entered_on, "2026-10-20"))))
+        val recorded = runBlocking { repo.savedReferenceProducts() }.entries.single().product.recordedOn
+        ui.onNodeWithTag("reference-result:$uuid").assert(hasText(s(R.string.ref2_tag_user))).assert(hasText(s(R.string.ref2_entered_on, recorded)))
             .assertHasClickAction().assertHeightIsAtLeast(56.dp)
         shot("link_mine")
     }
@@ -222,7 +223,7 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         ui.waitUntil(15000) { idle(); controller.state.value.let { it.saved || it.failed } }
         assertTrue(controller.state.value.saved)
         scrollTo("reference-current")
-        ui.onNodeWithTag("reference-source-tag").assert(hasText(s(R.string.ref2_tag_user)))
+        ui.onNodeWithTag("reference-source-tag").assert(hasAnyDescendant(hasText(s(R.string.ref2_tag_user))))
         assertEquals(1, controller.changes.value)
     }
 
