@@ -4,7 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
@@ -76,9 +80,9 @@ import java.time.LocalDate
                 if(!official) {
                 item {PillField(query,{query=it.take(256)},stringResource(R.string.ref2_search),"reference-search",Icons.Outlined.Search,Modifier.fillMaxWidth())}
                 item {FlowRow(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp),verticalArrangement=Arrangement.spacedBy(8.dp),maxItemsInEachRow=3) {
-                    PillField(form,{form=it.take(256)},stringResource(R.string.ref2_pill_form),"reference-form-filter",modifier=Modifier.weight(1f).widthIn(min=104.dp))
-                    PillField(strengthFilter,{strengthFilter=it.take(256)},stringResource(R.string.ref2_pill_strength),"reference-strength-filter",modifier=Modifier.weight(1f).widthIn(min=104.dp))
-                    PillField(route,{route=it.take(256)},stringResource(R.string.ref2_pill_route),"reference-route-filter",modifier=Modifier.weight(1f).widthIn(min=104.dp))
+                    PillFilter(form,{form=it.take(256)},stringResource(R.string.ref2_pill_form),"reference-form-filter",Modifier.weight(1f).widthIn(min=104.dp))
+                    PillFilter(strengthFilter,{strengthFilter=it.take(256)},stringResource(R.string.ref2_pill_strength),"reference-strength-filter",Modifier.weight(1f).widthIn(min=104.dp))
+                    PillFilter(route,{route=it.take(256)},stringResource(R.string.ref2_pill_route),"reference-route-filter",Modifier.weight(1f).widthIn(min=104.dp))
                 }}
                 item {Button(enabled=!state.busy && !state.loading,shape=Corners.pill,onClick={keyboard?.hide();controller.search(query,form,route,strengthFilter)},modifier=Modifier.heightIn(min=48.dp).testTag("reference-search-go")){Text(stringResource(R.string.ref2_find))}}
                 if(!state.loading && state.products.isEmpty())item {Text(stringResource(R.string.ref2_empty),modifier=Modifier.testTag("reference-empty"))}
@@ -180,6 +184,18 @@ import java.time.LocalDate
 @Composable internal fun PillField(value:String,onValue:(String)->Unit,label:String,tag:String,icon:ImageVector?=null,modifier:Modifier=Modifier) {
     OutlinedTextField(value,onValue,modifier.heightIn(min=56.dp).testTag(tag),label={Text(label,maxLines=1,overflow=TextOverflow.Ellipsis)},singleLine=true,shape=Corners.pill,
         leadingIcon=icon?.let {{Icon(it,null)}})
+}
+
+/** A compact filter pill: a small pill-shaped input (the label shows until something is typed); same filtering as before. */
+@Composable private fun PillFilter(value:String,onValue:(String)->Unit,label:String,tag:String,modifier:Modifier=Modifier) {
+    val c=MaterialTheme.colorScheme
+    Surface(shape=Corners.pill,color=Color.Transparent,border=BorderStroke(1.dp,c.outline),modifier=modifier.heightIn(min=48.dp)) {
+        Box(Modifier.padding(horizontal=16.dp,vertical=12.dp),contentAlignment=Alignment.CenterStart) {
+            if(value.isEmpty())Text(label,style=MaterialTheme.typography.bodyMedium,color=c.onSurfaceVariant,maxLines=1,overflow=TextOverflow.Ellipsis)
+            BasicTextField(value,onValue,singleLine=true,textStyle=MaterialTheme.typography.bodyMedium.copy(color=c.onSurface),cursorBrush=SolidColor(c.primary),
+                modifier=Modifier.fillMaxWidth().testTag(tag).semantics{contentDescription=label})
+        }
+    }
 }
 
 @Composable private fun SavedResultRow(product:UserReferenceProduct) {
