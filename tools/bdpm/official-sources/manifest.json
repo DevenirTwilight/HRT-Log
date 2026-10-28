@@ -1,0 +1,224 @@
+{
+  "date_semantics": "Per-file official page dates; dynamic generation time unknown, retrieval is not publication.",
+  "documents": {
+    "Contenu_et_format_des_fichiers_telechargeables_dans_la_BDM_v5.pdf": {
+      "bytes": 295557,
+      "http_date": "Wed, 28 Oct 2026 08:17:54 GMT",
+      "label": "Cliquez ici pour télécharger le fichier descriptif (pdf, 289 Ko)",
+      "last_modified": null,
+      "retrieved_at": "2026-10-28T08:17:55.204188+00:00",
+      "sha256": "db10d5a62bc640c227405bcb11cef5db9ad2a2d9a6b4b547198ee19978b6bc8b",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/Contenu_et_format_des_fichiers_telechargeables_dans_la_BDM_v5.pdf"
+    },
+    "licence_bdpm.pdf": {
+      "bytes": 540249,
+      "http_date": "Wed, 28 Oct 2026 08:17:54 GMT",
+      "label": "de la licence ouverte (pdf, 528 Ko).",
+      "last_modified": "Wed, 03 Jun 2026 12:55:12 GMT",
+      "retrieved_at": "2026-10-28T08:17:55.281560+00:00",
+      "sha256": "44ff23ae2b5cce0d729d1b53b20d17aae625189b131c2dd9cb98d1fe0d0a2a90",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/docs/telechargement/licence_bdpm.pdf"
+    }
+  },
+  "download_page": "https://base-donnees-publique.medicaments.gouv.fr/telechargement",
+  "download_page_evidence": {
+    "bytes": 48732,
+    "sha256": "5629a3025045706c073a74fff12a6971691dd31b08f95ea2545474c67a7d59e7",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/telechargement"
+  },
+  "downloaded_on": "2026-10-28",
+  "inputs": {
+    "CIS_CIP_Dispo_Spec.txt": {
+      "blank_lines": 0,
+      "bytes": 154098,
+      "encoding": "cp1252",
+      "field_counts": {
+        "8": 706
+      },
+      "http_date": "Wed, 28 Oct 2026 08:17:56 GMT",
+      "last_modified": null,
+      "page_label": "Fichier des ruptures de stocks (Date de mise à jour : 27/10/2026, 151 Ko)",
+      "raw_rows": 706,
+      "retrieved_at": "2026-10-28T08:17:56.181038+00:00",
+      "rows": 706,
+      "sha256": "1d9d0f3e222e8357ee8c01834dcdc658d7b8f0f1aedca06a824ee873fec4c743",
+      "source_updated_on": "2026-10-27",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_CIP_Dispo_Spec.txt"
+    },
+    "CIS_CIP_bdpm.txt": {
+      "blank_lines": 0,
+      "bytes": 4145494,
+      "encoding": "utf-8",
+      "field_counts": {
+        "13": 20882
+      },
+      "http_date": "Wed, 28 Oct 2026 08:17:55 GMT",
+      "last_modified": null,
+      "page_label": "Fichier des présentations (Date de mise à jour : 28/10/2026, 4048 Ko)",
+      "raw_rows": 20882,
+      "retrieved_at": "2026-10-28T08:17:56.066764+00:00",
+      "rows": 20882,
+      "sha256": "2fffefa0da2a7cd37d797e5c1cb2fb3f53e1f98d28aaa4ecd2c0bc53a8d46cb6",
+      "source_updated_on": "2026-10-28",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_CIP_bdpm.txt"
+    },
+    "CIS_COMPO_bdpm.txt": {
+      "blank_lines": 0,
+      "bytes": 2735840,
+      "encoding": "cp1252",
+      "field_counts": {
+        "8": 32439
+      },
+      "http_date": "Wed, 28 Oct 2026 08:17:55 GMT",
+      "last_modified": null,
+      "page_label": "Fichier des compositions (Date de mise à jour : 29/09/2026, 2672 Ko)",
+      "raw_rows": 32439,
+      "retrieved_at": "2026-10-28T08:17:55.663916+00:00",
+      "rows": 32439,
+      "sha256": "90a6e8ee286b6245c3938dd417ac75d1135a61b15ba50cfad70ee6b3bd181b7a",
+      "source_updated_on": "2026-09-29",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_COMPO_bdpm.txt"
+    },
+    "CIS_CPD_bdpm.txt": {
+      "blank_lines": 9,
+      "bytes": 1336246,
+      "encoding": "cp1252",
+      "field_counts": {
+        "1": 9,
+        "2": 28532
+      },
+      "http_date": "Wed, 28 Oct 2026 08:17:56 GMT",
+      "last_modified": null,
+      "page_label": "Fichier des conditions de prescription et de délivrance (Date de mise à jour : 29/09/2026, 1305 Ko)",
+      "raw_rows": 28541,
+      "retrieved_at": "2026-10-28T08:17:56.168810+00:00",
+      "rows": 28532,
+      "sha256": "e92ca48f83f54f6e2bca7248d3e8c24d7399402fd6b5b9058c41ad730529c237",
+      "source_updated_on": "2026-09-29",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_CPD_bdpm.txt"
+    },
+    "CIS_GENER_bdpm.txt": {
+      "blank_lines": 0,
+      "bytes": 1219514,
+      "encoding": "cp1252",
+      "field_counts": {
+        "5": 10737
+      },
+      "http_date": "Wed, 28 Oct 2026 08:17:56 GMT",
+      "last_modified": null,
+      "page_label": "Fichier des groupes génèriques (Date de mise à jour : 29/09/2026, 1191 Ko)",
+      "raw_rows": 10737,
+      "retrieved_at": "2026-10-28T08:17:56.323217+00:00",
+      "rows": 10737,
+      "sha256": "04ea92fb3d2e7682ed0720daea48ecf65f3459b4b0b61fe9160bb7cce82f152c",
+      "source_updated_on": "2026-09-29",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_GENER_bdpm.txt"
+    },
+    "CIS_HAS_ASMR_bdpm.txt": {
+      "blank_lines": 0,
+      "bytes": 4605173,
+      "encoding": "cp1252",
+      "field_counts": {
+        "6": 10117
+      },
+      "http_date": "Wed, 28 Oct 2026 08:17:55 GMT",
+      "last_modified": null,
+      "page_label": "Fichier des avis ASMR de la HAS (Date de mise à jour : 29/09/2026, 4497 Ko)",
+      "raw_rows": 10117,
+      "retrieved_at": "2026-10-28T08:17:55.928541+00:00",
+      "rows": 10117,
+      "sha256": "f849554030c7dafdaf9ccf604dcdb8393590302f7a28f869a71a3fd798ae0a69",
+      "source_updated_on": "2026-09-29",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_HAS_ASMR_bdpm.txt"
+    },
+    "CIS_HAS_SMR_bdpm.txt": {
+      "blank_lines": 0,
+      "bytes": 4630126,
+      "encoding": "cp1252",
+      "field_counts": {
+        "6": 15547
+      },
+      "http_date": "Wed, 28 Oct 2026 08:17:55 GMT",
+      "last_modified": null,
+      "page_label": "Fichier des avis SMR de la HAS (Date de mise à jour : 29/09/2026, 4522 Ko)",
+      "raw_rows": 15547,
+      "retrieved_at": "2026-10-28T08:17:55.976537+00:00",
+      "rows": 15547,
+      "sha256": "c2215af6b20705bb8b8eb6f447ebb2a45000c40e5cd8d3f575149832c639ffdd",
+      "source_updated_on": "2026-09-29",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_HAS_SMR_bdpm.txt"
+    },
+    "CIS_InfoImportantes.txt": {
+      "blank_lines": 0,
+      "bytes": 4510790,
+      "encoding": "utf-8",
+      "field_counts": {
+        "4": 10905
+      },
+      "http_date": "Wed, 28 Oct 2026 08:17:56 GMT",
+      "last_modified": null,
+      "page_label": "Fichier des Informations importantes (génération en direct)",
+      "raw_rows": 10905,
+      "retrieved_at": "2026-10-28T08:17:57.221843+00:00",
+      "rows": 10905,
+      "sha256": "a27b30e12c837fd709906513fb0fe8e8c16bd008d3d0fab2fd0dea8de46a39ff",
+      "source_updated_on": null,
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/CIS_InfoImportantes.txt"
+    },
+    "CIS_MITM.txt": {
+      "blank_lines": 0,
+      "bytes": 1618769,
+      "encoding": "cp1252",
+      "field_counts": {
+        "7": 7855
+      },
+      "http_date": "Wed, 28 Oct 2026 08:17:56 GMT",
+      "last_modified": null,
+      "page_label": "Fichier des médicaments d'intérêt thérapeutique majeur (Date de mise à jour : 13/10/2026, 1581 Ko)",
+      "raw_rows": 7855,
+      "retrieved_at": "2026-10-28T08:17:56.300261+00:00",
+      "rows": 7855,
+      "sha256": "300f24c39e84466c617eedce9edfd491870259fd5abd2092b3f8296a3b6245fa",
+      "source_updated_on": "2026-10-13",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_MITM.txt"
+    },
+    "CIS_bdpm.txt": {
+      "blank_lines": 0,
+      "bytes": 3175357,
+      "encoding": "cp1252",
+      "field_counts": {
+        "12": 15883
+      },
+      "http_date": "Wed, 28 Oct 2026 08:17:55 GMT",
+      "last_modified": null,
+      "page_label": "Fichier des spécialités (Date de mise à jour : 29/09/2026, 3101 Ko)",
+      "raw_rows": 15883,
+      "retrieved_at": "2026-10-28T08:17:55.749550+00:00",
+      "rows": 15883,
+      "sha256": "332b95926f76f1a2ab3d70cdf64205397fc13e74b7cc9afad9b625fbb6961640",
+      "source_updated_on": "2026-09-29",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_bdpm.txt"
+    },
+    "HAS_LiensPageCT_bdpm.txt": {
+      "blank_lines": 0,
+      "bytes": 517390,
+      "encoding": "utf-8",
+      "field_counts": {
+        "2": 10480
+      },
+      "http_date": "Wed, 28 Oct 2026 08:17:55 GMT",
+      "last_modified": null,
+      "page_label": "Fichier des liens vers les avis de la commission de la transparence de la HAS (Date de mise à jour : 29/09/2026, 505 Ko)",
+      "raw_rows": 10480,
+      "retrieved_at": "2026-10-28T08:17:56.047963+00:00",
+      "rows": 10480,
+      "sha256": "2f01ff1e13f8431434d545d1c567368276223b7a5d9c5612fc423f4353c54a2b",
+      "source_updated_on": "2026-09-29",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/HAS_LiensPageCT_bdpm.txt"
+    }
+  },
+  "license": "Licence Ouverte 1.0 supplied by download contract; footer also links 2.0, not substituted for the supplied contract",
+  "license_url": "https://base-donnees-publique.medicaments.gouv.fr/docs/telechargement/licence_bdpm.pdf",
+  "source": "Base de Données Publique des Médicaments (ANSM / HAS / UNCAM)",
+  "source_environment": "Official production website; dated offline snapshot, not realtime"
+}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Reproducible BDPM HRT-related identity catalogue (or --profile full); stdlib only. No clinical text or arithmetic.
-Run --download to explicitly refresh the ANSM alternative published snapshot, then review dates.
+Run scripts/bdpm_official_details.py --download --pages --build for a reviewed production refresh.
 Without --download builds offline from hash-pinned gzip source bytes in tools/bdpm/sources.
 """
 import argparse, datetime, gzip, hashlib, json, re, sqlite3, unicodedata, urllib.request
@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 SOURCES=ROOT/'tools/bdpm/sources'
 ASSETS=ROOT/'core/data/src/main/assets/bdpm'
-BASE='https://bdpmt.ansm.sante.fr'
+BASE='https://base-donnees-publique.medicaments.gouv.fr'
 FILES={'CIS_bdpm.txt':('cp1252',12),'CIS_CIP_bdpm.txt':('utf-8',13),'CIS_COMPO_bdpm.txt':('cp1252',8)}
 def sha(data):return hashlib.sha256(data).hexdigest()
 def fold(s):return ''.join(c for c in unicodedata.normalize('NFD',s.lower().replace('œ','oe').replace('æ','ae')) if not unicodedata.combining(c))
@@ -19,26 +19,9 @@ def rows(name,data):
  return parsed
 
 def download():
- SOURCES.mkdir(parents=True,exist_ok=True)
- page=urllib.request.urlopen(BASE+'/telechargement',timeout=45).read()
- inputs={}
- for name,(enc,_) in FILES.items():
-  url=BASE+'/download/file/'+name
-  with urllib.request.urlopen(url,timeout=45) as response:data=response.read()
-  parsed=rows(name,data)
-  block=page.decode('utf-8').split('href="/download/file/'+name+'"',1)[1].split('</a>',1)[0]
-  date=re.search(r'Date de mise à jour\s*:\s*(\d{2}/\d{2}/\d{4})',block)[1]
-  updated=datetime.datetime.strptime(date,'%d/%m/%Y').date().isoformat()
-  (SOURCES/(name+'.gz')).write_bytes(gzip.compress(data,mtime=0))
-  inputs[name]=dict(url=url,encoding=enc,sha256=sha(data),bytes=len(data),rows=len(parsed),source_updated_on=updated)
- meta=dict(downloaded_on=datetime.datetime.now(datetime.timezone.utc).date().isoformat(),
-  source='Base de Données Publique des Médicaments (ANSM / HAS / UNCAM)',download_page=BASE+'/telechargement',
-  source_environment='ANSM alternative host; download page displays TEST banner; not certified latest production export',
-  production_download_attempt='503 from base-donnees-publique.medicaments.gouv.fr on 2026-10-22',
-  date_semantics='Dates displayed beside individual files; HTTP Last-Modified/export timestamp not supplied',
-  license='Licence Ouverte 1.0 (download contract); data.gouv.fr identifies fr-lo; footer 2.0 link is not substituted for the supplied contract',
-  license_url=BASE+'/docs/telechargement/licence_bdpm.pdf',inputs=inputs)
- (SOURCES/'manifest.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n')
+ # Production source only. The complete official-details updater also verifies document pages.
+ from bdpm_official_details import download as production_download
+ production_download()
 
 def build(profile="hrt"):
  assert profile in ("hrt","full")

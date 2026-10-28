@@ -1,0 +1,14 @@
+{
+  "kind": "Production component in controlled synthetic Robolectric host, not MainActivity screenshot",
+  "baseline": "32e3a4223bd0b9921e8f860751a21f841a8e1dd3 / docs/ui-audit/2026-10-28-ui11/after",
+  "screenshots": {
+    "en_411dp_1.0x_light.png": "8ab9159fed0249973c54e8a7cdcacabf7716aeb267b4575c1d1196e1c1b4a599",
+    "zh-rTW_411dp_1.0x_light.png": "9661b207980d4aa4c8a4c9ab142f2cdd7ffe9f0e44ec38eed4b4266aaefef39c",
+    "fr-rFR_320dp_2.0x_dark.png": "fd027958325f7b4f2fa50692facf73501cf16cab9e22ebfdd482c957e2fd4294",
+    "zh-rCN_320dp_2.0x_dark.png": "6422553d47ba37df04c5a5f29ae0ae59a723a2125051a311b1a3a08907dd525f"
+  },
+  "source_files_sha256": {
+    "app/src/main/java/net/plainnotes/app/ui/BdpmOfficialPanel.kt": "a04ed95d34c7d0eae855aec1b9849fdfc59e06e2e925a944d964a982bb76ac95",
+    "app/src/main/java/net/plainnotes/app/ui/DrugReferenceCenterScreen.kt": "d9fb5e959e9205be2b4cff1c74860fb97fdd244114cf41704afde41336e36825"
+  }
+}

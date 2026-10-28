@@ -43,7 +43,7 @@ class CenterModuleScreenshotsTest(private val locale:String,private val dark:Boo
                 continue
             }
             val list=ui.onNodeWithTag(if(medical)"medical-list" else "drug-center-list")
-            val tag=if(medical)"medical-future-files" else "drug-center-rcp"
+            val tag=if(medical)"medical-future-files" else "drug-center-recalls"
             list.performScrollToNode(hasTestTag(tag))
             // UI-11: the drug centre's not-yet-open modules are plain rows: no tap, no dialog.
             ui.onNodeWithTag(tag).assertIsDisplayed().assertHasNoClickAction()

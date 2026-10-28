@@ -223,6 +223,7 @@ import java.time.LocalDate
             Text(stringResource(R.string.bdpm_scope));Text(stringResource(R.string.bdpm_snapshot_dates,b.sourceDates,product.recordedOn))
             b.packageDescription?.let{Text(it)};b.cip7?.let{Text("CIP7 $it")}
             Text(b.downloadUrl)
+            if(b.downloadUrl.contains("bdpmt.ansm.sante.fr"))Text(stringResource(R.string.official_test_source))
         }
         listOf(R.string.ref2_ingredients to product.ingredients.joinToString("\n"),R.string.ref2_strength to product.strength,
             R.string.ref2_form to product.form,(if(product.bdpm==null)R.string.ref2_routes else R.string.bdpm_routes) to product.routes.joinToString("\n"),
@@ -231,7 +232,8 @@ import java.time.LocalDate
             Text(stringResource(label),style=MaterialTheme.typography.labelLarge)
             Text(value?.takeIf {it.isNotBlank()} ?: stringResource(R.string.ref2_unknown))
         }
-        Text(stringResource(if(product.bdpm==null)R.string.ref2_status_unknown else R.string.bdpm_status_omitted));Text(stringResource(R.string.ref2_documents_unknown))
+        Text(stringResource(if(product.bdpm==null)R.string.ref2_status_unknown else R.string.bdpm_status_omitted));if(product.bdpm==null)Text(stringResource(R.string.ref2_documents_unknown))
+        else product.cis?.let {BdpmOfficialPanel(it,product.name)}
         product.sourceUrl?.let { url->
             Text(url)
             TextButton(onClick={external=true}){Text(stringResource(R.string.ref2_open_source))}

@@ -4142,3 +4142,9 @@ MED-02-EXPOSE（旧名 UI-10）首轮1439原生保留真实FAIL：API35 PR405571
 ## ANSM-04/06 正式资料接手 — 2026-10-28
 
 独立 /workspace/HRT-Log-ansm-details，feature/ansm04-06-official-details，实时基线 #140 合并32e3a422；#98/#135/#140均已合并。#141仅UI-11交接文档，#58/#59仍研究分支，本轮不直接复制。先提交全项目 UI_STYLE_AUTHORITY 及 AGENTS/CLAUDE/REQUIREMENTS160引用，尚未修改产品界面。之后复用现有 BdpmCatalogue、UI-11、生成/溯源工具，优先核实正式官网下载与许可；旧2026-10-22 manifest的TEST替代主机不被静默升级为生产最新。原用户关联及CIS/CIP/成分查询不重做，临床/库存/PK及用户库不改，官方正文未取得不能称离线全文。下一步核实官方源、字段/许可和已有管线，再实际接入只读详情、官方文档核对入口与四语界面；最终必须有实际App操作测试和精确源码CI。没有签名/交付/公开Release授权。
+
+ANSM-04/06 已有真实生产实现（未最终验收）：正式生产下载13个文件（11数据集+许可/格式PDF），每文件hash/编码/自己的页面日期，raw gzip和metadata在tools/bdpm/official-sources；临床正文只用下载文件，不捏造RCP正文。实际420个HRT产品页面核对通过，382独立RCP/Notice、11 EMA合并文档；37仿制组成员在当前身份文件缺失，保留CIS+未知，不猜名称。附加只读official.sqlite约1.36MB，CPD667/HAS465/分组归属238/重要信息771/供应5/MITM107；动态信息生成时间未知，检索日不作发布时间。旧身份/成分原始字节相同，420产品/702成分保持；包装550→544变更逐行在package-update-audit.json，旧用户冻结关联不重写。
+
+UI沿UI-11分组和折叠交互，在产品展开和官方已关联详情有按CIS查的官方资料；CPD/HAS/分组/MITM/加强监测/重要信息/供应/来源日期可离线看。RCP/Notice为逐产品验证后的浏览器入口，明确非离线全文，点击先确认；EMA合并文档原网址保留；未提供文档显示未知。中心四个已实现模块进入既有搜索；全量召回仍未证明，保留OFF和已实际HTTP200核对的ANSM安全公告查询入口。无INTERNET或用户DB新schema。
+
+首次新生产URL触发旧ReferencePayload唯一TEST地址约束，两原关联回归真实FAIL已留evidence XML/log。仅增加精确生产下载地址白名单，旧TEST仍可读，其余域名/参数继续拒绝，payload格式未变。旧程序校验器可能拒绝含新生产地址的备份/关联，不承诺回退旧程序可读；新程序旧快照/新关联/备份恢复将复用原事务回归验证。不动加密协议或历史医疗事实。Python原目录7+新资料7项PASS，生产Kotlin编译PASS；新URL修正后的core/app回归与AndroidTest编译进行中，原生及CI未跑不能称正式验收完成。新增MainActivity解锁→药品中心→真实目录→CPD/文档确认取消合同，保留旧完整关联/备份与锁/伪装测试；四语尺寸/字体/主题新组件测试及UI-11截图对照待执行。

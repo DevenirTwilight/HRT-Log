@@ -3,7 +3,7 @@
     <string name="bdpm_title">法国 HRT 相关药品目录</string>
     <string name="bdpm_available">法国 BDPM 身份目录已内置，可离线搜索。RCP/说明书及监控服务独立，尚未开放。</string>
     <string name="bdpm_source">来源：BDPM（ANSM / HAS / UNCAM），复制的官方结构化记录。不代表官方背书或临床核验。</string>
-    <string name="bdpm_scope">按成分筛选的 HRT 相关子集，不包含法国全部药品；收录不代表治疗建议。来源：BDPM，Licence Ouverte 1.0。来自 ANSM 替代站点（测试环境）的注明日期离线副本，未能核实最新生产导出。不表示实时供应、处方建议或 ANSM 背书。SA 和 FT/ST 行分别展示，绝不相加。</string>
+    <string name="bdpm_scope">按明确成分筛选的 HRT 相关子集，不含法国全部药品，也不代表治疗建议。BDPM 公开离线快照，按开放许可标明来源；不代表实时供应或 ANSM/HAS 背书。SA 与 FT/ST 分别保留，绝不相加。</string>
     <string name="bdpm_search_label">商品名、有效成分、CIS 或 CIP13</string>
     <string name="bdpm_initial">输入关键词，搜索内置目录。</string>
     <string name="bdpm_searching">正在离线搜索…</string>
