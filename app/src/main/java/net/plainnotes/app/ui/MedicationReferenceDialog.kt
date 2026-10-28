@@ -76,9 +76,9 @@ import java.time.LocalDate
                 if(!official) {
                 item {PillField(query,{query=it.take(256)},stringResource(R.string.ref2_search),"reference-search",Icons.Outlined.Search)}
                 item {FlowRow(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp),verticalArrangement=Arrangement.spacedBy(8.dp),maxItemsInEachRow=3) {
-                    PillField(form,{form=it.take(256)},stringResource(R.string.ref2_pill_form),"reference-form-filter",modifier=Modifier.weight(1f).widthIn(min=148.dp))
-                    PillField(strengthFilter,{strengthFilter=it.take(256)},stringResource(R.string.ref2_pill_strength),"reference-strength-filter",modifier=Modifier.weight(1f).widthIn(min=148.dp))
-                    PillField(route,{route=it.take(256)},stringResource(R.string.ref2_pill_route),"reference-route-filter",modifier=Modifier.weight(1f).widthIn(min=148.dp))
+                    PillField(form,{form=it.take(256)},stringResource(R.string.ref2_pill_form),"reference-form-filter",modifier=Modifier.weight(1f).widthIn(min=104.dp))
+                    PillField(strengthFilter,{strengthFilter=it.take(256)},stringResource(R.string.ref2_pill_strength),"reference-strength-filter",modifier=Modifier.weight(1f).widthIn(min=104.dp))
+                    PillField(route,{route=it.take(256)},stringResource(R.string.ref2_pill_route),"reference-route-filter",modifier=Modifier.weight(1f).widthIn(min=104.dp))
                 }}
                 item {Button(enabled=!state.busy && !state.loading,shape=Corners.pill,onClick={keyboard?.hide();controller.search(query,form,route,strengthFilter)},modifier=Modifier.heightIn(min=48.dp).testTag("reference-search-go")){Text(stringResource(R.string.ref2_find))}}
                 if(!state.loading && state.products.isEmpty())item {Text(stringResource(R.string.ref2_empty),modifier=Modifier.testTag("reference-empty"))}

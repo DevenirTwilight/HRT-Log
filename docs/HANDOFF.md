@@ -11,7 +11,9 @@ UI-10（医疗档案重设计）已合并（PR #139，5d383a2d）。UI-11 = 药�
   - C：`MedicationReferenceDialog.kt`（顶栏标题+药物名副标题、边界卡、当前关联卡、分段 Tab、药丸筛选、GroupedList 结果、底部手动录入）和 `BdpmCataloguePanel.kt`（一次展开一个、包装为单选卡、主按钮“关联此资料”）。点包装卡仍直接打开原“确认前预览”（保持原流程与 `BdpmReferenceFlowContract` 不改）；主按钮在已选包装后可重开同一预览。当前关联的只读详情默认展开，由“查看资料/收起资料”切换（为保持 `reference-details` 原断言）。
   - 筛选“药丸”是胶囊形输入框（保留原 tag 与过滤逻辑，不改过滤）。
   - 新测试 `ui11/Ui11CenterTest`、`ui11/Ui11LinkTest`；已迁移断言：`DrugCenterNavigationTest`、`DrugCenterMatrixTest`、`CenterModuleScreenshotsTest`、`CenterStateRestorationTest`（去掉 onStock）、androidTestFull `InAppNavigationLockAndroidTest`（五个模块不再可点）。
-  - 下一步：跑 ui11 测试与 7 个相关旧测试、全量 JVM、lint，再截图、写报告 77、开 PR。
+  - 结果（2026-10-28）：`Ui11CenterTest` 144/144、`Ui11LinkTest` 72 例（56 通过、16 因 411dp 嵌套对话框跳过）；既有相关测试（DrugCenter*、CenterStateRestoration、MedicationReference*、RecordedReference、BdpmReferenceFlow、CenterModuleScreenshots）280 例全过。
+  - 截图和前后对比已入库 `docs/ui-audit/2026-10-28-ui11/`（before 用 main `5d383a2d` 的旧组件在 /home/user/wt-ui11-before 渲染）；报告 `docs/audits/product-quality-2026-10/77-ui11-drug-center.md`；`docs/STATUS.md` 已更新。
+  - 下一步：推送、开 PR（§106 自动合并）、CI 全绿后确认默认分支 CI；再检查 UI-10 合并提交 `5d383a2d` 的默认分支 CI。
 
 ---
 
