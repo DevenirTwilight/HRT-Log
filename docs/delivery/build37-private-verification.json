@@ -107,8 +107,22 @@
   "public_release": "NOT_AUTHORIZED",
   "signed_at": "2026-10-28T10:40:05.810409+00:00",
   "temporary_credentials_removed": true,
-  "delivery_channel": "Owner shared workspace; signed file and checksum made available without public hosting",
+  "delivery_channel": "Existing owner-only private GitHub repository; independent orphan delivery branch; private link given only to owner",
   "owner_download_confirmed": false,
   "installed_on_user_device": "NOT_RUN",
-  "scope": "Private owner APK only; no public Release, tag or public artifact upload"
+  "scope": "Private owner APK only; no public Release, tag or public artifact upload",
+  "initial_delivery_attempt": "Owner reported shared-workspace link loading indefinitely; not confirmed received",
+  "delivery_transport_attempts": [
+    {
+      "channel": "shared-workspace-private-file",
+      "status": "OWNER_REPORTED_LOADING_FAILED"
+    },
+    {
+      "channel": "private-github-delivery-branch",
+      "status": "UPLOADED_AND_INDEPENDENT_FRESH_FETCH_BYTE_VERIFIED"
+    }
+  ],
+  "remote_readback_bytes_match": true,
+  "private_repository_verified": true,
+  "original_signing_backup_main_branch_modified": false
 }

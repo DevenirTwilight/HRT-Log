@@ -4173,3 +4173,10 @@ ANSM #142 f27d0364 原生原件：push40660379229的API26/29/35新增 MainActivi
 已知实际最高交付Build36（#137未合并记录）保留，故本次full0.2.0/code37。干净独立主线工作树，加源码外version37.init.gradle显式版本参数（哈希见收据），175 tasks实际执行，7m28s成功。只用原正式证书989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1，v2/v3实际PASS，APK HRT-Log-build37-full-official.apk，14,331,038 bytes，SHA256 eb943209ef7893e7c6e52d623fc40495c14a77cedc5d9a0cbe78b68d12423cee。签后逐项验包名/code37/clean源f00598e4、min26、非debug/NoINTERNET、四ABI及8个ELF/ZIP16KiB、正式附件/ANSM隔离、签前签后业务payload字节一致。
 
 本次为负责人共享工作区私人文件提供，不谎称已上传Drive或用户已安装；APK不入Git/公共CI，下载能力/用户接收回执和真机安装未独立确认。可直接覆盖原证书正式版，勿卸载/清数据；医疗资料建议先保存完整备份。临时恢复的私钥与密码已逐文件删除，原私有备份不动，没有公开Release/tag。核验收据docs/delivery/build37-private-verification.json。现有#137记录合并保留Build36及主线双方文档，再追加37与源码版本floor37，无其他产品/DB/密码学改动。首次验包脚本误用旧aapt字段sdkVersion，实际输出是minSdkVersion；更正为精确min26断言后验证PASS，没有降低SDK要求。此记录提交不是APK源码，APK源仍f00598e4+版本参数。
+
+
+## Build37 私人交付通道更正 — 2026-10-28
+
+负责人实际反馈工作区APK链接一直加载，原文件路径没有证明已收到，不能继续声称聊天附件交付成功。按“换个方式交付”要求，仍使用同一Build37/同一SHA eb943209ef7893e7c6e52d623fc40495c14a77cedc5d9a0cbe78b68d12423cee，不重建/重签/升38。网盘未连接，新建GitHub私有库返回403，草稿附件跨host上传返回401且空草稿已删除；最终改用已授权现有私有库的独立orphan交付分支，只含APK、校验文件及说明，原签名备份main和所有密钥文件完全不变，没有公开Release/tag。确认库仍private后成功push，再在新空仓库中仅fetch该独立分支，完整回读14,331,038bytes，与原签名APK逐字节相同；已给负责人真实GitHub文件页/下载入口，链接不入公共Git。
+
+Build37签名/源码/版本/账本身份不变；账本原channel记录初次提供方式，当前通道与失败事实以build37-private-verification.json补充，不改写既有身份记录，不把同一包换渠道再交付算新版本。用户实际下载/手机安装/TalkBack仍待确认，不能仅因远端回读PASS说真机PASS。后续下载需负责人登录原GitHub账号访问私有文件页，不再发工作区本地路径冒充已上传附件。
