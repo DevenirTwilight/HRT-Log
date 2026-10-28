@@ -314,7 +314,7 @@ class UiPrefs(context: Context) {
     val meds = state.medications.associateBy { it.id }
     importedLink?.let { link -> ImportedPlanDialog(link, meds[link.record.medication_id], model::closeImportedLink) { key -> model.linkImported(link.record.id, key) } }
     editor?.let { MedicationEditor(it, { model.closeEditor() }, containers = extra.containers,onReference={openReference(it.medication)}) { d -> model.save(d) } }
-    if(referenceOpen)MedicationReferenceDialog(model.medicationReferences,{referenceOpen=false}) {id->state.medications.firstOrNull {it.id==id}?.name ?: editor?.medication?.takeIf {it.id==id}?.name}
+    if(referenceOpen)MedicationReferenceDialog(model.medicationReferences,{id->state.medications.firstOrNull {it.id==id}?.name ?: editor?.medication?.takeIf {it.id==id}?.name}){referenceOpen=false}
     completeEntry?.let { e ->
         val saved=state.ruleSnapshots[e.slot.ruleId]?.let{MedicationSnapshot.decode(it,e.slot.medicationId)?.medication(e.slot.medicationId)}
         val current=meds[e.slot.medicationId]

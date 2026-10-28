@@ -66,7 +66,7 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         ui.waitUntil(30000) { idle(); ui.onAllNodesWithTag("bdpm-result:65421374").fetchSemanticsNodes().isNotEmpty() }
     }
     private fun show(name: String? = "SYNTHETIC linked medication") {
-        ui.setContent { NotesTheme(mode) { MedicationReferenceDialog(controller, {}, { name }) } }
+        ui.setContent { NotesTheme(mode) { MedicationReferenceDialog(controller, { name }) {} } }
     }
     private fun linkOfficialPackage() {
         search("PROVAMES"); click("bdpm-result:65421374"); click("bdpm-package:3400935479341")
@@ -79,7 +79,7 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
     @Test fun topBarHasTheBackArrowTheMedicationNameAndTheBoundaryCard() {
         val id = runBlocking { medication() }; runBlocking { controller.open(id)!!.join() }
         var closed = 0
-        ui.setContent { NotesTheme(mode) { MedicationReferenceDialog(controller, { closed++ }, { "SYNTHETIC linked medication" }) } }
+        ui.setContent { NotesTheme(mode) { MedicationReferenceDialog(controller, { "SYNTHETIC linked medication" }) { closed++ } } }
         val back = Ui11CenterTest.BACK.getValue(locale)
         ui.onNodeWithTag("reference-close").assert(hasContentDescription(back)).assertHasClickAction().assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
         ui.onAllNodesWithText(s(R.string.cancel)).assertCountEquals(0)
