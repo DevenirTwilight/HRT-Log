@@ -158,8 +158,8 @@ class Ui12ConcentrationTest(private val locale: String, private val width: Int, 
         ui.onNodeWithText(s(R.string.pk_need_weight_title)).assertExists()
         ui.onNodeWithText(s(R.string.pk_set_weight)).assertHasClickAction()
         // With an estimate present the weight request comes after the estimate card.
-        val estimateTop = ui.onNodeWithTag("e2-estimate-card").fetchSemanticsNode().boundsInRoot.top
-        val weightTop = ui.onNodeWithText(s(R.string.pk_need_weight_title)).fetchSemanticsNode().boundsInRoot.top
+        val estimateTop = ui.onNodeWithTag("e2-estimate-card").fetchSemanticsNode().positionInRoot.y
+        val weightTop = ui.onNodeWithText(s(R.string.pk_need_weight_title)).fetchSemanticsNode().positionInRoot.y
         assertTrue("estimate first: estimate=$estimateTop weight=$weightTop ($locale/$width/$font/$dark)", estimateTop < weightTop)
         shot("needs_weight")
     }
