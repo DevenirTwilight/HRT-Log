@@ -1632,7 +1632,15 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 
 先提交 [永久 UI 规范](design/UI_STYLE_AUTHORITY.md)，再开发产品界面；全项目继承规则为：负责人最新决定 → 有对照与实际验收证据的更优正式应用 UI → Claude 原始样图/历史审查 → 其他外部参考。Claude 样图是重要基线而非永久上限，不准机械退化，也不准无证据自称更优。继承 UI-11/NotesTheme/Corners/语义色/GroupedItem，四语、小屏、大字号、明暗与自动语义验证；真正功能用真实入口与提交/读取证据证明，不把脚本/下载/占位视为交付。允许分合理功能 PR，按 §106 精确源码 CI、无冲突及无未解决审查正常合并；不签名交付或公开 Release。
 
+## 161. 负责人真机反馈：药品资料导航、历史就诊、整次抽血附件（2026-10-28）
 
-## 161. Build37 原证书私人签名交付（2026-10-28）
+**药品中心是真实官方资料浏览，不是资料关联流程。** 点击 RCP / Notice / 安全信息 / 短缺信息不得进入“商品资料关联”。四项应走只读、可检索的独立官方产品选择→对应官方资料，不调用 MedicationReferenceController，不修改私人产品关联/库存/用药。外链必须要求显式确认。未有独立完整数据源的“召回及监管公告”整个占位模块须删除，不以官网链接冒充完整召回系统。修复 PR #143。
+
+**历史就诊直接补录。** 医疗档案及就诊列表都应有明确“记录过去的就诊”入口，复用 MedicalVisitDialog → saveHistoricalVisit 的真实日期/时区/已完成状态/冲突检查，绝不误入未来预约，不因预约日期已过自动确认。
+
+**整次抽血报告关联整个 LabPanel，禁止以单个 LabValue 冒充。** 再次确认 §158 的 MED-03 P0 授权。真实 LabPanel 才能稳定关联；显示用的同日分组必须由用户明确确认建立 LabPanel。一份 PDF 覆盖多项指标且密文只存一次；批次附件与单项附件要清楚区分。Room21 AttachmentSchema CHECK/触发器和 AttachmentIdentity.bind 现有种类尚不支持 LAB_PANEL，必须非破坏迁移并完成备份/恢复/删除/负向验收，绝不能把 panel.id 塞进 Kind.LAB。跟踪 Issue #144 与已有 docs/medical-attachments/2026-10-27/ui10/MED03_PANEL_TARGET_REQUIREMENTS.md。本条是未完成业务要求，不授权签名或公开发布。
+
+
+### 161.A Build37 原证书私人签名交付（2026-10-28；并行编号收口，授权原文保留）
 
 负责人在ANSM #142合并后明确要求“apk签名给我”，授权从已验收最新主线f00598e4制作正式证书full APK并向本人私人交付，不包含公开Release/tag/公开托管。原Build36确已交付但记录#137尚未合并，故本次必须code37，沿用net.plainnotes.app及原989ba045…9379b1证书，不生成新密钥。允许从既有私有备份恢复原签名材料至源码外受限临时目录，签后删除本地临时凭据，不改原备份。复用精确主线Android/Science/四API安全及三API实际产品验收，核对实际APK的源码、版本、签名、NoINTERNET、Release隔离、四ABI和ELF/ZIP16KiB。构建只由源码外可追溯参数将版本35→37；未来源码交付下限同步37，账本仅追加真实交付，不修改历史。真机/人工TalkBack未运行如实NOT_RUN；不要求卸载或清医疗数据，不处理其他功能/科研PR。

@@ -39,7 +39,8 @@ import java.time.*
 
 /** Appointments with their questions and visit packs. Selecting one shows its detail; Back returns to the list. */
 @Composable fun VisitsScreen(state: NotesState, extra: NotesViewModel.ExtraState, model: NotesViewModel, selected: Long?, onSelect: (Long?) -> Unit,
-                             onAdd: () -> Unit, contentPadding: PaddingValues, medical:Boolean=false, onMedicalEdit:(AppointmentEntity)->Unit={}, onLab:(LabValueEntity)->Unit={}) {
+                             onAdd: () -> Unit, contentPadding: PaddingValues, medical:Boolean=false, onMedicalEdit:(AppointmentEntity)->Unit={}, onLab:(LabValueEntity)->Unit={},
+                             onAddHistorical:()->Unit=onAdd) {
     val appointment = selected?.let { id -> state.appointments.firstOrNull { it.id == id } }
     LaunchedEffect(selected,appointment,medical){if(medical && selected!=null && appointment==null)onSelect(null)}
     if (appointment != null) {
@@ -52,6 +53,12 @@ import java.time.*
     val past = state.appointments.filter { it.at_utc < now }.sortedByDescending { it.at_utc }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        item("historical-visit") {
+            Button(onClick=onAddHistorical,modifier=Modifier.fillMaxWidth().heightIn(min=56.dp).testTag("visits-record-past")) {
+                Icon(Icons.Outlined.Add,null);Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.medical_add_visit))
+            }
+        }
         if (state.appointments.isEmpty()) item { EmptyState(Icons.AutoMirrored.Outlined.EventNote, stringResource(R.string.visits), stringResource(R.string.visits_empty)) { Button(onClick = onAdd) { Text(stringResource(R.string.appointment)) } } }
         if (upcoming.isNotEmpty()) item { Text(stringResource(R.string.visits_upcoming), style = MaterialTheme.typography.titleSmall) }
         items(upcoming, key = { "u${it.id}" }) { VisitCard(it, extra) { onSelect(it.id) } }

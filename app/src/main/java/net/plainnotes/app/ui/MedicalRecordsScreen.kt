@@ -73,7 +73,7 @@ import java.time.*
         }
         LazyColumn(Modifier.fillMaxSize().testTag("medical-list"),contentPadding=PaddingValues(start=16.dp,end=16.dp,
             top=if(filesAvailable)16.dp else contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-            if(!filesAvailable || tab==0)recordsArea(next,unconfirmed,past.isEmpty(),confirmed,byYear,questionCounts,now,onVisit,onConfirm,onVisits,onLabs,onHistory,onTrash,drawCount,labs.size)
+            if(!filesAvailable || tab==0)recordsArea(next,unconfirmed,past.isEmpty(),confirmed,byYear,questionCounts,now,onVisit,onConfirm,onVisits,onLabs,onHistory,onTrash,drawCount,labs.size,onAdd)
             else filesArea(onVisits,onLabs,onMedicalBackup,onAddFile={choosing=true})
         }
     }
@@ -81,8 +81,16 @@ import java.time.*
 }
 
 private fun LazyListScope.recordsArea(next:AppointmentEntity?,unconfirmed:List<AppointmentEntity>,noVisits:Boolean,confirmed:List<AppointmentEntity>,byYear:Map<Int,List<AppointmentEntity>>,
-    questionCounts:Map<Long,Int>,now:Instant,onVisit:(AppointmentEntity)->Unit,onConfirm:(AppointmentEntity)->Unit,onVisits:(()->Unit)?,onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,drawCount:Int,resultCount:Int) {
-    // UI-05 F: "Record a past visit" is AppShell's top bar "+" (MedicalAddAction), not a list button.
+    questionCounts:Map<Long,Int>,now:Instant,onVisit:(AppointmentEntity)->Unit,onConfirm:(AppointmentEntity)->Unit,onVisits:(()->Unit)?,onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,drawCount:Int,resultCount:Int,onAddHistorical:()->Unit) {
+    // Record a visit that already occurred; the existing MedicalVisitDialog saves a confirmed historic fact.
+    // Do not open the future-appointment scheduler for this action.
+    item("record-past-visit") {
+        Button(onClick=onAddHistorical,modifier=Modifier.fillMaxWidth().heightIn(min=56.dp).testTag("medical-record-past-visit")) {
+            Icon(Icons.Outlined.Add,null);Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.medical_add_visit))
+        }
+    }
+    // Historical entry is also kept in the existing toolbar for compatibility.
     next?.let{a->item("next"){NextVisitCard(a,questionCounts[a.id] ?: 0,now,onVisit)}}
     if(unconfirmed.isNotEmpty())item("unconfirmed"){MedicalHeading(stringResource(R.string.medical_were_you_there))}
     items(unconfirmed,key={"visit:${it.id}"}) { MedicalVisitCard(it,questionCounts[it.id] ?: 0,onVisit,onConfirm) }

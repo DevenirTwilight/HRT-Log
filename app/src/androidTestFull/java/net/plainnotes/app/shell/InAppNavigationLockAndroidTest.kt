@@ -67,32 +67,32 @@ class InAppNavigationLockAndroidTest {
     }
     private fun title() = ui.onNodeWithTag("top-title")
 
-    /** Actual unlocked MainActivity → UI-11 center → product → source facts and explicit browser consent. */
+    /** Real MainActivity -> direct READ-ONLY official browser; no medication association UI. */
     @Test fun officialProductFactsAreOfflineAndBrowserAccessNeedsConfirmation() {
         launch();unlock();open(Destination.MEDICATIONS)
         ui.onNodeWithTag("drug-center-open").performClick()
         ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-rcp"))
         ui.onNodeWithTag("drug-center-rcp").assertHasClickAction().performClick()
-        val list=ui.onNodeWithTag("reference-screen")
-        list.performScrollToNode(hasTestTag("bdpm-search"));ui.onNodeWithTag("bdpm-search").performTextInput("PROVAMES")
-        list.performScrollToNode(hasTestTag("bdpm-search-go"));ui.onNodeWithTag("bdpm-search-go").performClick()
-        ui.waitUntil(30_000) {ui.onAllNodesWithTag("bdpm-result:65421374").fetchSemanticsNodes().isNotEmpty()}
-        list.performScrollToNode(hasTestTag("bdpm-result:65421374"));ui.onNodeWithTag("bdpm-result:65421374").performClick()
-        list.performScrollToNode(hasTestTag("bdpm-official-toggle"));ui.onNodeWithTag("bdpm-official-toggle").performClick()
-        ui.waitUntil(30_000) {ui.onAllNodesWithTag("bdpm-official-prescribing").fetchSemanticsNodes().isNotEmpty()}
-        list.performScrollToNode(hasTestTag("bdpm-official-prescribing"));ui.onNodeWithTag("bdpm-official-prescribing").performClick()
-        list.performScrollToNode(hasText("liste II"));ui.onNodeWithText("liste II").assertIsDisplayed()
-        list.performScrollToNode(hasTestTag("bdpm-official-documents"));ui.onNodeWithTag("bdpm-official-documents").performClick()
-        list.performScrollToNode(hasText(context.getString(R.string.drug_center_rcp)))
-        ui.onNode(hasText(context.getString(R.string.drug_center_rcp)) and hasAnyAncestor(hasTestTag("bdpm-official:65421374"))).performClick()
+        ui.onNodeWithTag("official-browser").assertExists()
+        ui.onNodeWithTag("reference-window").assertDoesNotExist()
+        ui.onNodeWithTag("official-product-search").performTextInput("PROVAMES")
+        ui.onNodeWithTag("official-product-search-go").performClick()
+        ui.waitUntil(30_000) {ui.onAllNodesWithTag("official-product:65421374").fetchSemanticsNodes().isNotEmpty()}
+        ui.onNodeWithTag("official-product-results").performScrollToNode(hasTestTag("official-product:65421374"))
+        ui.onNodeWithTag("official-product:65421374").performClick()
+        ui.waitUntil(30_000) {ui.onAllNodesWithTag("bdpm-official-documents").fetchSemanticsNodes().isNotEmpty()}
+        ui.onNodeWithTag("bdpm-official-documents").assertExists()
+        // RCP opens the verified official URL only after explicit user consent.
+        ui.onNode(hasText(context.getString(R.string.drug_center_rcp)) and hasAnyAncestor(hasTestTag("bdpm-official:65421374")))
+            .performScrollTo().performClick()
         ui.onNodeWithText(context.getString(R.string.official_external_title)).assertExists()
         ui.onNodeWithText("https://base-donnees-publique.medicaments.gouv.fr/medicament/65421374/extrait#tabpanel-rcp-panel").assertExists()
         ui.onNodeWithText(context.getString(R.string.cancel)).performClick()
         ui.onNodeWithTag("bdpm-official-open-confirm").assertDoesNotExist()
-        assertUnlocked("view public sources and cancel browser")
-        // No medication or lab is created by browsing, and no pending import is offered.
         ui.onAllNodesWithTag("reference-confirm").assertCountEquals(0)
-        ui.onNodeWithTag("reference-close").performClick();ui.onNodeWithTag("drug-center-window").assertExists()
+        assertUnlocked("official facts without product association")
+        ui.onNodeWithTag("drug-center-close").performClick()
+        ui.onNodeWithTag("drug-center-list").assertExists()
     }
 
     /** The owner's exact path: unlock → calendar → stock → settings → history → calendar, without leaving the app. */
@@ -274,25 +274,17 @@ class InAppNavigationLockAndroidTest {
             ui.onNodeWithTag("reference-window").assertDoesNotExist()
             ui.onNodeWithTag("drug-center-window").assertExists()
             assertUnlocked("Back from offline catalogue")
-            listOf("rcp", "notice", "safety", "supply", "recalls").forEach { suffix ->
+            listOf("rcp", "notice", "safety", "supply").forEach { suffix ->
                 val tag = "drug-center-$suffix"
                 ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
-                if (suffix == "recalls") {
-                    // No complete recall dataset: the unimplemented row must remain inert.
-                    ui.onNodeWithTag(tag).assertHasNoClickAction()
-                } else {
-                    // ANSM-04/06: implemented rows open the real product chooser, never a file picker.
-                    ui.onNodeWithTag(tag).assertHasClickAction().performClick()
-                    ui.onNodeWithTag("reference-window").assertExists()
-                    ui.onNodeWithTag("reference-screen").assertExists()
-                    assertUnlocked("Open product facts from $tag")
-                    back("reference-window")
-                    ui.onNodeWithTag("reference-window").assertDoesNotExist()
-                }
-                ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
-                ui.onNodeWithTag("drug-center-window").assertExists()
-                assertUnlocked("Rows $tag")
+                ui.onNodeWithTag(tag).assertHasClickAction().performClick()
+                ui.onNodeWithTag("official-browser").assertExists()
+                ui.onNodeWithTag("reference-window").assertDoesNotExist()
+                assertUnlocked("Read-only official browser $tag")
+                ui.onNodeWithTag("drug-center-close").performClick()
+                ui.onNodeWithTag("drug-center-list").assertExists()
             }
+            ui.onAllNodesWithTag("drug-center-recalls").assertCountEquals(0)
             ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-catalogue"))
             ui.onNodeWithTag("drug-center-catalogue").performClick()
             ui.onNodeWithTag("reference-screen").assertExists()

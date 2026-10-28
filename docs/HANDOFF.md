@@ -1,3 +1,19 @@
+## #143 最终验收：旧召回占位断言修正 — 2026-10-28
+
+接手精确1ed73d07，push40678509368/android122783344100及PR40678516954/android122783525605实际FAIL：App3129项32失败593原跳过，32项均为Ui11CenterTest两方法×16矩阵。生产已按§161删除不可靠召回模块，旧测试仍performScrollToNode(drug-center-recalls)，因此line66找不到节点；不是去回退生产入口或删测试。最小修复：已删除plans/stock负向遍历使用仍存在的supply末行锚点；原future测试改成四只读模块真实点击→精确documents/documents/safety/supply回调、48dp、无不可用弹窗、召回节点不存在、两个私人关联回调均0。原语言/对比/返回/关联状态等断言不变；没有重做药品中心或ANSM功能。针对性Ui11CenterTest完整144项实际PASS（0 fail/error/skip），7m14s；原失败摘录与通过XML已入库。修复准确SHA的完整必需CI仍待执行，不用旧绿替代。同步已受保护合并#137（e9d8f943），保留Build36/37真实交付账本与versionCode37；只解决两份进度/授权文档的并行插入冲突，完整保留双方原文。并行§161收口：真机反馈保持161，既有Build37授权移至161.A，不改交付事实；本轮不签名。
+
+MED-03 P0/Issue144用户新任务已明确授权Room新版本、独立LAB_PANEL、完整备份内部版本兼容及正式UI/新建记录文件流程；当前仅只读完成边界扫描，未提前改生产。#143保护合并后从新主线建独立分支再实施。用户最新规则覆盖旧R3：恢复批次后保留隔离链接，不自动恢复，重关联须显式且认证真实文件。未签名/交付/发版。创建额外worktree遇到32GiB工作盘满，已只删除本会话完成任务的可重建build缓存和可重新下载的工具安装包/旧CI ZIP；源码、证据、正式签名APK/私有备份均保留，改为复用干净工作树。
+
+## 2026-10-28 负责人真机问题修正（PR #143 / MED-03 Issue #144）
+
+负责人反馈：RCP/Notice/安全/短缺误入“商品资料关联”；无可靠完整来源的召回占位应删；历史就诊应直接补录；一份化验报告必须关联整次抽血 LabPanel。权威要求已追加 REQUIREMENTS §161；此前 §158 的整次报告授权继续有效。
+
+PR #143 分支 fix/official-browse-past-visits-20261028 已提交：药品四项跳转独立只读官方产品浏览器、移除完整召回空卡及其误导外链；医疗档案和就诊列表有“补录历史就诊”操作，复用 MedicalVisitDialog / saveHistoricalVisit。UI/原生回归断言已调整；**精确 HEAD CI、合并仍待验证，不得标记 PASS 或声称 APK 已更新**。
+
+**MED-03 Issue #144 仍未实现**：当前 AttachmentSchema/触发器仍只支持 APPOINTMENT/LAB/DOSE_RECORD，MedicalRecordsScreen.AddFileTargetDialog 仍按抽血组展示后让用户选单项，不能把这误称整次报告关联。必须实现 LabPanel 类型化目标、非破坏迁移、身份/备份/恢复/删除负向测试与正式 UI；不允许传 panel.id 给 LAB 或凭日期推断，参见已有 MED03_PANEL_TARGET_REQUIREMENTS.md。
+
+---
+
 ## Build36 正式原证书私人交付完成 — 2026-10-27
 
 负责人明确授权私人签名和交付。从最新已合并正式主线f5d37144acf25e4f0128b15a7fe9969ca34f70b6（含#133/#134/#135，#135任务归属MED-02-EXPOSE）独立干净工作树重新构建fullRelease，外部Gradle finalizeDsl显式0.2.0/code36，未复用旧unsigned缓存，175tasks实际执行、10m40s成功；APK自身DEX SOURCE_SHA准确、git/dirtyfalse。主线Android40564386422、Science40564386608、安全40564386376成功，复用既有三API真实产品验收，不另跑P4/PK研究。
