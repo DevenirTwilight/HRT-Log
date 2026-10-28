@@ -33,16 +33,22 @@ class CenterModuleScreenshotsTest(private val locale:String,private val dark:Boo
         }}
         for(kind in listOf("medical","drug")) {
             ui.runOnIdle{medical=kind=="medical"}
+            if(medical) {
+                // UI-10: the three separate "not open" cards became one explanatory card in the Files area. It is read-only text:
+                // no dialog, no importer; the drug center's dialogs below are unchanged.
+                ui.onNodeWithTag("medical-tab:files").performClick()
+                ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-files-soon"))
+                ui.onNodeWithTag("medical-files-soon").assertIsDisplayed().assertHasNoClickAction()
+                capture("medical-future",false)
+                continue
+            }
             val list=ui.onNodeWithTag(if(medical)"medical-list" else "drug-center-list")
-            val tag=if(medical)"medical-future-files" else "drug-center-rcp"
+            val tag=if(medical)"medical-future-files" else "drug-center-recalls"
             list.performScrollToNode(hasTestTag(tag))
-            ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction()
+            // UI-11: the drug centre's not-yet-open modules are plain rows: no tap, no dialog.
+            ui.onNodeWithTag(tag).assertIsDisplayed().assertHasNoClickAction()
             capture("$kind-future",!medical)
             ui.onNodeWithTag(tag).performClick()
-            ui.onNodeWithTag("center-unavailable-dialog").assertExists()
-            ui.onNodeWithTag("center-unavailable-close").assertIsDisplayed()
-            capture("$kind-dialog",true)
-            ui.onNodeWithTag("center-unavailable-close").performClick()
             ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
         }
         Assert.assertEquals(0,actions)

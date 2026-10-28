@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_back">Back</string>
+    <string name="drug_center_scope">Read-only reference. No medication advice; your doses and stock never change.</string>
+    <string name="drug_center_find_title">Find a product source</string>
+    <string name="drug_link_official">Linked to BDPM official source</string>
+    <string name="drug_link_user">Linked to a source I entered</string>
+    <string name="drug_link_none">No product source linked</string>
+    <string name="drug_link_caption">Linking a source only records which product a medication is. It never changes the dose.</string>
+    <string name="drug_sources_title">Sources</string>
+    <string name="drug_src_bdpm_title">BDPM official catalogue</string>
+    <string name="drug_src_bdpm_info">Offline · data dated %1$s</string>
+    <string name="drug_src_bdpm_info_plain">Built in and searchable offline.</string>
+    <string name="drug_src_official_tag">Official</string>
+    <string name="drug_src_user_title">Sources I entered</string>
+    <string name="drug_src_user_info">%1$d saved · not verified</string>
+    <string name="drug_src_user_info_many">%1$d+ saved · not verified</string>
+    <string name="drug_src_user_info_plain">Saved on this device · not verified.</string>
+    <string name="drug_src_unverified_tag">Unverified</string>
+    <string name="drug_center_learn_title">About these sources</string>
+    <string name="drug_state_expanded">Expanded</string>
+    <string name="drug_state_collapsed">Collapsed</string>
+    <string name="drug_not_open_tag">Not open yet</string>
+    <string name="drug_not_open_desc">%1$s, not open yet</string>
+    <string name="drug_center_future_caption">These modules are shown for orientation only and cannot be opened.</string>
+    <string name="ref2_page_title">Product source link</string>
+    <string name="ref2_boundary_lead">Linking never changes your dose, schedule or stock.</string>
+    <string name="ref2_tag_official">BDPM official</string>
+    <string name="ref2_tag_user">Mine · unverified</string>
+    <string name="ref2_tag_package">Package chosen</string>
+    <string name="ref2_view_source">View source</string>
+    <string name="ref2_label_cis">CIS</string>
+    <string name="ref2_label_package">Package (CIP13)</string>
+    <string name="ref2_tab_catalogue">French HRT catalogue</string>
+    <string name="ref2_tab_saved">Sources I entered</string>
+    <string name="bdpm_status_line">%1$s results · BDPM offline · data %2$s</string>
+    <string name="bdpm_package_selected">Selected package</string>
+    <string name="ref2_manual_button">＋ Enter a product source myself</string>
+    <string name="ref2_manual_caption">Can’t find it? Enter it by hand; it is saved as “unverified”.</string>
+    <string name="ref2_entered_on">Entered %1$s</string>
+    <string name="drug_center_states_title">Status meanings</string>
+    <string name="ref2_pill_form">Form</string>
+    <string name="ref2_pill_strength">Strength</string>
+    <string name="ref2_pill_route">Route</string>
+    <string name="ref2_hide_source">Hide source</string>
+    <string name="ref2_current_link">Current link</string>
+</resources>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- MED-02 attachment UI (REQUIREMENTS §149). Not reachable from release navigation. -->
 <resources>
-    <string name="attach_section">附件</string>
+    <string name="attach_section">相關檔案</string>
     <string name="attach_add">新增檔案</string>
-    <string name="attach_empty">這筆紀錄還沒有附件。</string>
+    <string name="attach_empty">新增報告的 PDF 或照片，讓它和這筆紀錄放在一起。</string>
     <string name="attach_kind_pdf">PDF</string>
     <string name="attach_kind_image">圖片</string>
     <string name="attach_kind_other">其他檔案</string>

@@ -139,12 +139,19 @@ class UiPrefs(context: Context) {
     var appointment by remember { mutableStateOf(false) }
     val medicationDialogs = remember { MedicationDialogs() }
     var referenceOpen by remember {mutableStateOf(false)}
+    val referenceVersion by model.referenceChanges.collectAsState()
+    val appContext=LocalContext.current.applicationContext
+    val referenceLoaders=remember(model,appContext){DrugCenterLoaders(
+        links={ids->model.medicationReferences.links(ids).mapValues {drugLinkStatus(it.value)}},
+        sources={loadDrugSourceInfo(appContext){model.medicationReferences.savedSourceCount()}})}
     fun openReference(medication:net.plainnotes.app.data.MedicationEntity?){if(model.medicationReferences.open(medication?.id)!=null)referenceOpen=true}
     val labUi = rememberLabUiState()
     val labDialogs = labUi.dialogs
     var pickStart by remember { mutableStateOf(false) }
     val today = LocalDate.now()
     var medicalBackupOpen by remember { mutableStateOf(false) }
+    // UI-10: which medical archive area (records or files) is open; kept while a record page is open and closed again.
+    var medicalTab by rememberSaveable { mutableIntStateOf(0) }
     var medicalOrigin by rememberSaveable { mutableStateOf(false) }
     // Only a hub-launched page returns to the hub. Drawer and calendar routes remain independent.
     var medicalChild by rememberSaveable { mutableStateOf<Destination?>(null) }
@@ -250,12 +257,12 @@ class UiPrefs(context: Context) {
                     // UI-06 C: the same backfill dialog and confirm-missed as the intake history; "more" opens the history filtered to them.
                     onBackfill = { historyDialogs.referenceEpoch = extra.referenceEpoch; historyDialogs.editRecord = it }, onConfirmMissed = { model.confirmMissed(it.id) }, onUndoRecord = { model.deleteRecord(it.id) },
                     onUnconfirmedMore = { rows -> destination = Destination.HISTORY; importedRecordIds = rows.map { it.id }.toSet() })
-                Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { medicationDialogs.archive = it }, pad,onReference={openReference(it)},onBrowseReference={openReference(null)},onStock={destination=Destination.STOCK})
+                Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { medicationDialogs.archive = it }, pad,onReference={openReference(it)},onBrowseReference={openReference(null)},referenceLoaders=referenceLoaders,referenceVersion=referenceVersion)
                 Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, extra.labs, pad,
                     content = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                         { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,selector,m2Only=true) })
                 Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labDialogs.labEdit = it; labDialogs.labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)},
-                    extra.labPanels,{labDialogs.panel=it.id},{labDialogs.saveAs=it},onAttachments=if(net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) ({medicalDialogs.labAttachmentTarget=it.id;medicalDialogs.lab=it.id}) else null)
+                    extra.labPanels,{labDialogs.panel=it.id},{labDialogs.saveAs=it},onOpenDetail={medicalDialogs.lab=it.id})
                 Destination.SETTINGS -> {
                     val lockOn = remember(settingsPage) { net.plainnotes.app.security.AppLock(context).enabled }
                     val backup by model.backupHistory.state.collectAsState()
@@ -287,7 +294,8 @@ class UiPrefs(context: Context) {
                 Destination.MEDICAL -> MedicalRecordsScreen(state.appointments,{visitId=it.id;medicalOrigin=true;destination=Destination.VISITS},
                     {model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true},{openMedicalChild(Destination.LABS)},{openMedicalChild(Destination.TIMELINE)},{destination=Destination.SETTINGS},pad,
                     onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount(),onVisits={openMedicalChild(Destination.VISITS)},
-                    onMedicalBackup=if(net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) ({medicalBackupOpen=true}) else null)
+                    onMedicalBackup=if(net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) ({medicalBackupOpen=true}) else null,
+                    labs=extra.labs,onLab={medicalDialogs.lab=it.id},initialTab=medicalTab,onTabChange={medicalTab=it},labPanels=extra.labPanels)
                 Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it;if(it==null && medicalOrigin){medicalOrigin=false;destination=Destination.MEDICAL} }, { appointment = true }, pad,
                     medical=medicalOrigin,onMedicalEdit={model.clearMedicalVisitSave();medicalDialogs.edit=it;medicalDialogs.editing=true},onLab={medicalDialogs.lab=it.id})
                 Destination.HISTORY -> { val historySnapshot=extra;HistoryScreen(state, historySnapshot.records, { historyDialogs.referenceEpoch=historySnapshot.referenceEpoch;historyDialogs.editRecord = it }, { historyDialogs.deleteRecord = it }, pad, onAdd = { manual = true }, onBatch = { historyDialogs.batch = true }, onConfirmMissed={model.confirmMissed(it.id)},selectedRecordIds=importedRecordIds,labels=historyLabels,onExtra={r,on->model.setExtra(r.id,on)},onClearSelection={importedRecordIds=null},onUndoSkip={model.undoSkipped(it)}) }
@@ -306,7 +314,7 @@ class UiPrefs(context: Context) {
     val meds = state.medications.associateBy { it.id }
     importedLink?.let { link -> ImportedPlanDialog(link, meds[link.record.medication_id], model::closeImportedLink) { key -> model.linkImported(link.record.id, key) } }
     editor?.let { MedicationEditor(it, { model.closeEditor() }, containers = extra.containers,onReference={openReference(it.medication)}) { d -> model.save(d) } }
-    if(referenceOpen)MedicationReferenceDialog(model.medicationReferences){referenceOpen=false}
+    if(referenceOpen)MedicationReferenceDialog(model.medicationReferences,{id->state.medications.firstOrNull {it.id==id}?.name ?: editor?.medication?.takeIf {it.id==id}?.name}){referenceOpen=false}
     completeEntry?.let { e ->
         val saved=state.ruleSnapshots[e.slot.ruleId]?.let{MedicationSnapshot.decode(it,e.slot.medicationId)?.medication(e.slot.medicationId)}
         val current=meds[e.slot.medicationId]

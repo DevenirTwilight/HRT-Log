@@ -8,6 +8,55 @@
 
 账本仅追加本次真实交付，历史不改；为保留既有delivery_ledger源码版本不得低于已交付版本守卫，后续主线默认versionCode由35同步为36，仅这一必要交付版本常量，无功能变更。APK源仍是上面的干净f5d37144+明确版本构建参数，不冒认本账本提交。校验收据docs/delivery/build36-private-verification.json不含下载令牌/私钥/密码。正常PR保护流程提交此记录；不再开发MED03/UI/性能功能。用户应先保管加密备份/密码、直接覆盖不卸载不清数据，先核既有记录/化验/库存，再用无敏感测试文件试附件；不要对唯一重要资料做恢复实验。
 
+## UI-11 药品资料中心与商品资料关联重设计（已合并）— 2026-10-28
+
+UI-10（医疗档案重设计）已合并（PR #139，5d383a2d）。UI-11 = 药品资料中心与商品资料关联页面重设计（任务书原称 UI-10，负责人确认改称 UI-11，REQUIREMENTS §158.A、§159）。分支 `feature/ui11-drug-center-20261027`，工作树 /home/user/wt-ui11，基于 5d383a2d。任务书原文 `docs/design/ui10-drug-center-2026-10-27/TASK_BOOK_ORIGINAL.md`；样图同目录（PR #138）。
+
+- B0 矩阵已核对：四个目标 UI 文件不在矩阵内，`MedicationsScreen`/`AppShell`/`Components`/`AdaptiveControls` 是 HISTORY_ONLY；不碰 PK_DISPLAY_REVIEW、LIVE_LOCK_*。
+- 补记：UI-10 修改了 PK_DISPLAY_REVIEW 文件 `LabsScreen.kt`（范围、批准来源、回归见 §158.B）。
+- 进度（2026-10-28，生产代码已写完，编译通过，尚未跑测试）：
+  - A：`NavBackButton`（`nav_back` 四语言，48dp）用于药品资料中心、商品资料关联页、`RecordedReferenceDialog`，tag 不变。
+  - 删除“药物”“库存”两个按钮（`onPlans`/`onStock` 参数一并删除；抽屉里仍可到药物和库存）。
+  - B：`DrugReferenceCenterScreen.kt` 重写（主卡、我的药物 GroupedList + 关联状态标签、资料来源两行、了解这些资料可展开、尚未开放的模块为不可点击行；`UnavailableModuleCard.kt` 已删除）。关联状态**只读现有关联**：`MedicationReference.product.bdpm != null` = BDPM 官方；有 product 无 bdpm = 我录入的；无 product = 未关联（`drugLinkStatus()`）。加载走 `MedicationReferenceController.links()` / `savedSourceCount()`（只读），`changes` 计数在关联/解除后触发中心刷新（`NotesViewModel.referenceChanges`）。
+  - C：`MedicationReferenceDialog.kt`（顶栏标题+药物名副标题、边界卡、当前关联卡、分段 Tab、药丸筛选、GroupedList 结果、底部手动录入）和 `BdpmCataloguePanel.kt`（一次展开一个、包装为单选卡、主按钮“关联此资料”）。点包装卡仍直接打开原“确认前预览”（保持原流程与 `BdpmReferenceFlowContract` 不改）；主按钮在已选包装后可重开同一预览。当前关联的只读详情默认展开，由“查看资料/收起资料”切换（为保持 `reference-details` 原断言）。
+  - 筛选“药丸”是胶囊形输入框（保留原 tag 与过滤逻辑，不改过滤）。
+  - 新测试 `ui11/Ui11CenterTest`、`ui11/Ui11LinkTest`；已迁移断言：`DrugCenterNavigationTest`、`DrugCenterMatrixTest`、`CenterModuleScreenshotsTest`、`CenterStateRestorationTest`（去掉 onStock）、androidTestFull `InAppNavigationLockAndroidTest`（五个模块不再可点）。
+  - 结果（2026-10-28）：`Ui11CenterTest` 144/144、`Ui11LinkTest` 72 例（56 通过、16 因 411dp 嵌套对话框跳过）；既有相关测试（DrugCenter*、CenterStateRestoration、MedicationReference*、RecordedReference、BdpmReferenceFlow、CenterModuleScreenshots）280 例全过。
+  - 截图和前后对比已入库 `docs/ui-audit/2026-10-28-ui11/`（before 用 main `5d383a2d` 的旧组件在 /home/user/wt-ui11-before 渲染）；报告 `docs/audits/product-quality-2026-10/77-ui11-drug-center.md`；`docs/STATUS.md` 已更新。
+  - **已合并（2026-10-28）**：PR #140 合并为 `32e3a422`（默认分支 `claude/new-session-1959qb`），默认分支 CI 全绿（android、device-tests、jvm、attachment-poc-compatibility 26/29、security-native 四项、science-change-gate）。PR 上推送触发的 `android` 曾因无关的 `MedicalHomeConfirmFlowTest.confirmThenUndoInDetail`（10 秒 waitUntil）超时失败一次，同一提交的 PR 运行通过、本地通过，重跑一次后通过。UI-10 合并提交 `5d383a2d` 的默认分支 CI 也已确认全绿。后续：真机/人工 TalkBack 验收（NOT_RUN）；是否把 `docs/ui-audit/2026-10-28-ui11/` 之外的截图脚本（`/home/user/wt-ui11-before` 里的前后对比用例）入库，未做。
+
+---
+
+## UI-10 医疗档案、医疗文件与化验详情重新设计（进行中）— 2026-10-27
+
+负责人任务书“UI-10：医疗档案、医疗文件库与化验详情全面重新设计”，REQUIREMENTS §157。分支 `feature/ui10-medical-redesign-20261027`，工作树 /home/user/wt-ui10，基于 main `019c805d`。设计、差异矩阵、验收分层：`docs/medical-attachments/2026-10-27/ui10/README.md`；与 MED-03 的接口合同和所有权：同目录 `INTERFACE_CONTRACT.md`；视觉证据（样图 | Before | After）：`docs/ui-audit/2026-10-27-ui10/`。
+
+- 已审阅原图 05/06/07/08 和 med02b6 原型 01/03/05/06/07/10/11；Before 在开工前用 main 的生产组件真实渲染并入库。
+- 生产代码（后端已具备的能力）：
+  - `ui/LabDetailPage.kt`（全屏结果页，取代 `LabDetailDialogWithAttachments`）；
+  - `attachments/ui/MedicalAttachmentsUi.kt`（相关文件区块、文件页）；
+  - `attachments/ui/MedicalAttachmentRecordPage.kt`（`rememberRecordFiles` 把授权/选择器收口为一条路径，就诊页、化验页、整页共用）；
+  - `ui/MedicalRecordsScreen.kt`（医疗记录 / 医疗文件两个区域、添加医疗文件先选明确记录）；
+  - `ui/VisitsScreen.kt`（就诊页内联相关文件）；
+  - `ui/ShellHosts.kt`、`AppShell.kt`（化验行直接打开结果页，保留所选区域）；
+  - 资源 `values*/ui10_redesign.xml`，并删除被取代的旧占位字符串。
+- 只有组件和合同（不接生产导航）：`attachments/ui/library/`（文件库、文件详情、文件优先导入、记录优先结果卡）。`MedicalAttachmentUiGuardTest` 新增守卫，生产文件不得引用。
+- 测试：`ui10/Ui10RedesignTest`（160）、`ui10/Ui10LibraryTest`（144）；改写了 MedicalCenterMatrix、AppShellBackNavigation、MedicalHome、MedicalAttachmentsUi、MedicalAttachmentUiGuard、LabUi03Home 中随新设计变化的断言（保留原来的负向断言）；真实 MainActivity 的 `MedicalAttachmentProductAndroidTest` 按新路径改写，**只能在 CI 的 API26/29/35 上验证**。
+- 未做：新建化验/就诊后直接添加文件（需要保存接口返回记录身份，已列入合同）；物理设备、人工 TalkBack（NOT_RUN）；独立外审（NOT_REVIEWED_EXTERNALLY）。
+- 缓解（负责人 2026-10-27：一次化验有多项数据）：结果页「同一次化验」、文件区块“只关联这一项”、添加文件按一次化验分组、化验砖统计“n 次化验 · m 项”；整次化验目标已授权 MED-03，规格 `MED03_PANEL_TARGET_REQUIREMENTS.md`（REQUIREMENTS §158）。待负责人决定：没有批次的旧分组如何整次关联。
+- 编号：药品资料中心任务书原称 UI-10，负责人确认改称 **UI-11**（§158.A），等本 PR 和 #138 合并后开工。
+- 下一步：本地全量 JVM + lint → 推送、开 PR、按 §106 自动合并；CI 失败按作业日志定位，不绕过检查。
+
+---
+
+## 任务编号二次更正：撤销 UI-10 归类，改为 MED-02-EXPOSE（2026-10-27）
+
+负责人指出：**前后端接通并非新 UI 设计，不得占用 UI 系列任务编号**。核对 PR #135 的 diff 后确认，它只有现有附件/医疗备份的实际导航接线、现成入口卡片、过时占位清理、简单文案及测试，没有交付独立新 UI 方案。因此原先对其“UI-10 编号保留正确”的判断**撤销**；PR #135 正式按产品集成归入 **MED-02-EXPOSE**。**UI-10 当前空缺**，仅留给真正的新 UI/UX 设计任务。原定“UI-11 医疗附件管理闭环”仍更正为 MED-03 候选（未批准）。规则见 REQUIREMENTS §156，最新 BACKLOG 顶部。
+
+保留 PR #135 原有 Git 合并 SHA、CI、历史测试和 legacy 资源文件名以维持审计追溯；旧记录写“UI-10”只是当时误标，不代表本次修改重新设计了界面。不要把历史错误分类继续传播到新的功能开发提示词或交接。MED-02 入口 ON、不更改附件安全/备份/数据处理、不授权签名或公开发布。本轮仅文档与元数据纠正。
+
+---
+
 ## PR133已合并；主线返回键测试同步修复 — 2026-10-27
 
 #133真实最终7bdddc88的push/PR六门全部PASS，三API真实MainActivity全链PASS；正常保护合并ff54396bc96db4264c26bfb0cb930a2244dbd176，PUBLIC_ENTRY_ENABLED=true，文件树和已验源码一致。主线Science40524888999及安全40524889000四API均SUCCESS；主线Android40524889046/API35 job122261639387实际FAIL：全链已完成就诊/LAB真实SAF/COMMIT/认证读，line285连续Espresso.pressBack在关闭附件Dialog的焦点交接期选中无焦点Activity，RootViewWithoutFocusException。原XML/工件SHA已保存证据分支f8c06ac9，不能将旧失败重标通过。
@@ -4089,12 +4138,29 @@ PR133 a0真实MainActivity API35已通过就诊SAF/COMMIT/新Activity/认证预�
 PR133 155 API29真实流程已通过就诊全链、LAB=2/panel=1 SAF/COMMIT/认证读取、PNMEDBK2真实导出/认证prepare/实际root COMMIT、旧scope拒绝及新MainActivity作用域初始化。最后测试在新Activity仅runtime Ready后立即performScrollTo查恢复后的row2，尚未等待异步NotesViewModel医疗快照，出现即时缺节点（无等待），原XML/工件SHA已入evidence/155043ff。只补有界可观察等待：state非loading且extra中存在该LAB、真实语义节点已组成；随后保持全部原触摸/恢复附件UUID/认证像素/保留解除关系断言，不引入sleep/重放/跳过，不改生产代码。新AndroidTest编译PASS（9秒）。继续最终精确源码CI，公共入口ON，不能把部分完成写为整个用例PASS。
 
 
-## UI-10 医疗中心真实入口与占位收敛 — 2026-10-27
+## MED-02-EXPOSE 医疗中心真实入口与占位收敛（原误称 UI-10） — 2026-10-27
 
 独立 feature/ui10-enable-implemented-modules（/workspace/HRT-Log-ui10），精确基线 0daeb63cc47f7baac6c603735dd6307c085bbe08，无并行 UI-10 PR。注意本地 origin 默认分支 tracking ref 曾停在旧 #125；已显式 fetch 默认分支并以 GitHub branch API 确认 #134 后基线，没有以旧 ref 开发交付。医疗中心新增就诊附件、单项 LAB 附件、完整医疗备份实际导航；共享原 DataSection 的生产 transfer Dialog，未复制引擎。仅统一文件浏览、医生独立档案、分类摘要/任意文件导出保留准确未开放说明。四语范围明确 JPEG/PNG、Android9+ PDF首页/Android8保存备份。BDPM现有身份/包装入口不变，五项监管/正文未开放不变；ComingSoonScreen 无实际未就绪 Destination。旧 ref2_official_off 资源无生产引用，不代表当前身份目录状态；不为无引用历史字符串破坏原文资源冻结。
 
 旧占位测试仅保留真正未实现三项；新增 hub 入口及返回/无写入检查，四语/320dp/2倍字/主题矩阵继续；现有真实 MainActivity 产品合同从医疗中心进入就诊与 LAB，保留原 SAF/COMMIT/读取/目标 ID/恢复断言。定向编译与回归正在运行，原生及最终 CI PENDING，不能先标 PASS。PUBLIC_ENTRY_ENABLED=true 保持，不改数据层、协议、资源限额或权限，不签名/交付/Release。
 
-UI-10 本地证据更新：生产与AndroidTest编译PASS。首次测试未传离线Robolectric目录导致MavenArtifactFetcher连接失败；原日志保存ui10-evidence。正确离线参数后130项中129 PASS，唯一FAIL是新增返回测试直接给底层Activity发Back，未发给当前Dialog；仅将该测试改为对话框窗口Back，所有实际返回/不写入断言保留，AppShell全套随后PASS（27秒）。其余已执行：医疗/药品矩阵各48组、中心四语主题8、药品真实NotesApp导航1、MedicalHome4、Ui05MedicalHome3全部PASS。药品中心合并两个完全相同onBrowse按钮为单一catalogue入口，四语明确BDPM身份/包装与用户来源边界，五项真正未实现卡仍OFF。原生MainActivity及最终必需CI等待PR，不将上述本地测试冒充原生。
+MED-02-EXPOSE（旧名 UI-10）本地证据更新：生产与AndroidTest编译PASS。首次测试未传离线Robolectric目录导致MavenArtifactFetcher连接失败；原日志保存ui10-evidence。正确离线参数后130项中129 PASS，唯一FAIL是新增返回测试直接给底层Activity发Back，未发给当前Dialog；仅将该测试改为对话框窗口Back，所有实际返回/不写入断言保留，AppShell全套随后PASS（27秒）。其余已执行：医疗/药品矩阵各48组、中心四语主题8、药品真实NotesApp导航1、MedicalHome4、Ui05MedicalHome3全部PASS。药品中心合并两个完全相同onBrowse按钮为单一catalogue入口，四语明确BDPM身份/包装与用户来源边界，五项真正未实现卡仍OFF。原生MainActivity及最终必需CI等待PR，不将上述本地测试冒充原生。
 
-UI-10 首轮1439原生保留真实FAIL：API35 PR40557152041/job122376148218及API26 push122375990485在产品合同276行仍查Menu；从新hub入口进入后，真实顶栏是medical-center-back。此前已完成真实就诊SAF/COMMIT/新Activity/认证预览；不是丢数据或保存失败。只将原几何安全断言的对象改为实际返回按钮，仍要求viewer close在真实顶栏下方、仍必须真实触摸关闭；其余业务断言不变。原XML及artifact ID/SHA在ui10-evidence。1439安全PR40557152049/API35在安装emulator报ZipFile unknown archive，未启动设备/未执行测试；原job122376147317和完整日志已保留于PR评论及/workspace/ui10-ci-evidence，仅同源该失败job做一次有界重试，其他安全API全PASS。新测试输入修正后的精确源码仍须CI，不借1439通过项冒充最终全过；不修改生产安全路径或放宽断言。
+MED-02-EXPOSE（旧名 UI-10）首轮1439原生保留真实FAIL：API35 PR40557152041/job122376148218及API26 push122375990485在产品合同276行仍查Menu；从新hub入口进入后，真实顶栏是medical-center-back。此前已完成真实就诊SAF/COMMIT/新Activity/认证预览；不是丢数据或保存失败。只将原几何安全断言的对象改为实际返回按钮，仍要求viewer close在真实顶栏下方、仍必须真实触摸关闭；其余业务断言不变。原XML及artifact ID/SHA在ui10-evidence。1439安全PR40557152049/API35在安装emulator报ZipFile unknown archive，未启动设备/未执行测试；原job122376147317和完整日志已保留于PR评论及/workspace/ui10-ci-evidence，仅同源该失败job做一次有界重试，其他安全API全PASS。新测试输入修正后的精确源码仍须CI，不借1439通过项冒充最终全过；不修改生产安全路径或放宽断言。
+
+
+## ANSM-04/06 正式资料接手 — 2026-10-28
+
+独立 /workspace/HRT-Log-ansm-details，feature/ansm04-06-official-details，实时基线 #140 合并32e3a422；#98/#135/#140均已合并。#141仅UI-11交接文档，#58/#59仍研究分支，本轮不直接复制。先提交全项目 UI_STYLE_AUTHORITY 及 AGENTS/CLAUDE/REQUIREMENTS160引用，尚未修改产品界面。之后复用现有 BdpmCatalogue、UI-11、生成/溯源工具，优先核实正式官网下载与许可；旧2026-10-22 manifest的TEST替代主机不被静默升级为生产最新。原用户关联及CIS/CIP/成分查询不重做，临床/库存/PK及用户库不改，官方正文未取得不能称离线全文。下一步核实官方源、字段/许可和已有管线，再实际接入只读详情、官方文档核对入口与四语界面；最终必须有实际App操作测试和精确源码CI。没有签名/交付/公开Release授权。
+
+ANSM-04/06 已有真实生产实现（未最终验收）：正式生产下载13个文件（11数据集+许可/格式PDF），每文件hash/编码/自己的页面日期，raw gzip和metadata在tools/bdpm/official-sources；临床正文只用下载文件，不捏造RCP正文。实际420个HRT产品页面核对通过，382独立RCP/Notice、11 EMA合并文档；37仿制组成员在当前身份文件缺失，保留CIS+未知，不猜名称。附加只读official.sqlite约1.36MB，CPD667/HAS465/分组归属238/重要信息771/供应5/MITM107；动态信息生成时间未知，检索日不作发布时间。旧身份/成分原始字节相同，420产品/702成分保持；包装550→544变更逐行在package-update-audit.json，旧用户冻结关联不重写。
+
+UI沿UI-11分组和折叠交互，在产品展开和官方已关联详情有按CIS查的官方资料；CPD/HAS/分组/MITM/加强监测/重要信息/供应/来源日期可离线看。RCP/Notice为逐产品验证后的浏览器入口，明确非离线全文，点击先确认；EMA合并文档原网址保留；未提供文档显示未知。中心四个已实现模块进入既有搜索；全量召回仍未证明，保留OFF和已实际HTTP200核对的ANSM安全公告查询入口。无INTERNET或用户DB新schema。
+
+首次新生产URL触发旧ReferencePayload唯一TEST地址约束，两原关联回归真实FAIL已留evidence XML/log。仅增加精确生产下载地址白名单，旧TEST仍可读，其余域名/参数继续拒绝，payload格式未变。旧程序校验器可能拒绝含新生产地址的备份/关联，不承诺回退旧程序可读；新程序旧快照/新关联/备份恢复将复用原事务回归验证。不动加密协议或历史医疗事实。Python原目录7+新资料7项PASS，生产Kotlin编译PASS；新URL修正后的core/app回归与AndroidTest编译进行中，原生及CI未跑不能称正式验收完成。新增MainActivity解锁→药品中心→真实目录→CPD/文档确认取消合同，保留旧完整关联/备份与锁/伪装测试；四语尺寸/字体/主题新组件测试及UI-11截图对照待执行。
+
+ANSM 新读写边界定向回归已通过：BdpmCatalogueTest6（含真实关联→普通加密备份→恢复/历史不变）、原DrugCenter/ReferenceFlow/UI11Center相关任务PASS；新公共组件32组布局/原文/外链确认取消/准确Intent PASS。Python全bdpm54项PASS；新pipeline损坏源回滚拒绝、URL重定向白名单也通过。UI11Link72项中64通过、8项仅因旧测试硬编码下载日2026-10-22而失败；原XML/log留evidence。将日期断言绑定随包manifest实际downloaded_on，仍精确检查结果数2/来源日期，保留所有CIS/包装/单展开/原确认流程断言；针对8配置复验进行中。同步已合并#141（只改HANDOFF两处UI-11最终CI状态），保留双方内容，生产基线仍#140相同代码。未开启全量召回、未打包RCP全文、不签名交付。
+
+ANSM #142 f27d0364 原生原件：push40660379229的API26/29/35新增 MainActivity 官方详情测试均实际PASS；三者唯一旧导航合同失败在centerDialogsBackNavigation仍要求4个已正式实现模块无OnClick。原XML、API35完整job日志及artifact ID/hash在同目录evidence；没有数据、AppLock或外链认证失败证据。仅该旧合同改为四项真实产品选择窗口/返回/会话保持，recalls仍强制无点击，文件Intent监测和0次文件启动原断言保留；14秒AndroidTest编译PASS。新精确SHA最终原生/全部CI仍待实际执行，不把f27通过的子项冒充最终整体PASS。
+
+同源f27 unsigned fullRelease实际PASS，DEX来源精确核对f27+clean；包名/NoINTERNET/附件及ANSM调试隔离PASS。与同环境实际构建且DEX核对#140基线32e3a422相比：14,062,172→14,286,553 bytes，+224,381 bytes(约219KiB)，evidence/unsigned-apk-size-receipt.json记录两APK SHA/每资产压缩尺寸。不签名/交付、不改versionCode；此体积对比对应生产代码冻结f27，后继仅原生合同与证据更新。最终PR及受保护合并/主线CI收据以#142正文和永久评论为准，历史PENDING是该次提交检查点而非未来状态。

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.BdpmCatalogueTest" tests="6" skipped="0" failures="2" errors="0" timestamp="2026-10-28T08:38:38.426Z" hostname="948d99df3df9" time="9.834">
+  <properties/>
+  <testcase name="officialAssociationIsImmutableSeparateFromUserSourcesAndBacksUpSafely" classname="net.plainnotes.app.data.BdpmCatalogueTest" time="8.692">
+    <failure message="java.lang.IllegalArgumentException: Failed requirement." type="java.lang.IllegalArgumentException">java.lang.IllegalArgumentException: Failed requirement.
+	at net.plainnotes.app.data.ReferencePayload.validateProduct(ReferencePayload.kt:202)
+	at net.plainnotes.app.data.ReferencePayload.userProduct(ReferencePayload.kt:189)
+	at net.plainnotes.app.data.BdpmCatalogue$snapshot$2.invokeSuspend(BdpmCatalogue.kt:99)
+	at _COROUTINE._BOUNDARY._(CoroutineDebugging.kt:42)
+	at net.plainnotes.app.data.BdpmCatalogueContract$officialAssociationIsImmutableSeparateFromUserSourcesAndBacksUpSafely$1.invokeSuspend(BdpmCatalogueContract.kt:45)
+Caused by: java.lang.IllegalArgumentException: Failed requirement.
+	at net.plainnotes.app.data.ReferencePayload.validateProduct(ReferencePayload.kt:202)
+	at net.plainnotes.app.data.ReferencePayload.userProduct(ReferencePayload.kt:189)
+	at net.plainnotes.app.data.BdpmCatalogue$snapshot$2.invokeSuspend(BdpmCatalogue.kt:99)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:820)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+</failure>
+  </testcase>
+  <testcase name="genuineBundledProvamesIngredientsIdentifiersAndReopenWithoutUserData" classname="net.plainnotes.app.data.BdpmCatalogueTest" time="0.302"/>
+  <testcase name="officialProductionDetailsPreserveSourceDisagreementDatesAndIdentity" classname="net.plainnotes.app.data.BdpmCatalogueTest" time="0.214"/>
+  <testcase name="officialCacheRepairAndBrowserLinksCannotAffectPrivateRecords" classname="net.plainnotes.app.data.BdpmCatalogueTest" time="0.104"/>
+  <testcase name="malformedOfficialProvenanceAndForgedCatalogueSelectionFailClosed" classname="net.plainnotes.app.data.BdpmCatalogueTest" time="0.072">
+    <failure message="java.lang.IllegalArgumentException: Failed requirement." type="java.lang.IllegalArgumentException">java.lang.IllegalArgumentException: Failed requirement.
+	at net.plainnotes.app.data.ReferencePayload.validateProduct(ReferencePayload.kt:202)
+	at net.plainnotes.app.data.ReferencePayload.userProduct(ReferencePayload.kt:189)
+	at net.plainnotes.app.data.BdpmCatalogue$snapshot$2.invokeSuspend(BdpmCatalogue.kt:99)
+	at _COROUTINE._BOUNDARY._(CoroutineDebugging.kt:42)
+	at net.plainnotes.app.data.BdpmCatalogueContract$malformedOfficialProvenanceAndForgedCatalogueSelectionFailClosed$1.invokeSuspend(BdpmCatalogueContract.kt:103)
+Caused by: java.lang.IllegalArgumentException: Failed requirement.
+	at net.plainnotes.app.data.ReferencePayload.validateProduct(ReferencePayload.kt:202)
+	at net.plainnotes.app.data.ReferencePayload.userProduct(ReferencePayload.kt:189)
+	at net.plainnotes.app.data.BdpmCatalogue$snapshot$2.invokeSuspend(BdpmCatalogue.kt:99)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:820)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+</failure>
+  </testcase>
+  <testcase name="corruptedPublicCopyIsRepairedWithoutTouchingEncryptedData" classname="net.plainnotes.app.data.BdpmCatalogueTest" time="0.039"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

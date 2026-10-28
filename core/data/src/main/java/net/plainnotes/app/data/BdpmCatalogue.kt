@@ -25,8 +25,8 @@ class BdpmCatalogue(context:Context) {
         fun fold(value:String)=Normalizer.normalize(value.lowercase(Locale.ROOT).replace("œ","oe").replace("æ","ae"),Normalizer.Form.NFD).replace(Regex("\\p{M}+"),"")
         private val lock=Any()
     }
-    private fun open():SQLiteDatabase=synchronized(lock) {
-        val manifest=JSONObject(context.assets.open("bdpm/manifest.json").bufferedReader().use{it.readText()})
+    private fun open(manifestName:String="manifest.json",databaseName:String="catalogue.sqlite"):SQLiteDatabase=synchronized(lock) {
+        val manifest=JSONObject(context.assets.open("bdpm/$manifestName").bufferedReader().use{it.readText()})
         val expected=manifest.getString("database_sha256")
         val folder=File(context.noBackupFilesDir,"bdpm").apply{check(mkdirs() || isDirectory)}
         val file=File(folder,"$expected.sqlite")
@@ -38,7 +38,7 @@ class BdpmCatalogue(context:Context) {
         if(!file.exists() || digest(file)!=expected) {
             val temporary=File(folder,"copy.tmp")
             try {
-                context.assets.open("bdpm/catalogue.sqlite").use{source->temporary.outputStream().use{source.copyTo(it)}}
+                context.assets.open("bdpm/$databaseName").use{source->temporary.outputStream().use{source.copyTo(it)}}
                 check(digest(temporary)==expected){"Catalogue digest mismatch"}
                 check(!file.exists() || file.delete());check(temporary.renameTo(file))
             }finally{temporary.delete()}
@@ -67,6 +67,21 @@ class BdpmCatalogue(context:Context) {
         val packages=mutableListOf<BdpmPackage>()
         db.rawQuery("SELECT cip7,description,cip13 FROM package WHERE cis=? ORDER BY rowid",arrayOf(cis)).use{c->while(c.moveToNext())packages+=BdpmPackage(c.getString(0),c.getString(1),c.getString(2))}
         return BdpmProduct(cis,name,form,routes.split(';').filter{it.isNotBlank()},composition,packages)
+    }
+    /** Current public snapshot, separate from the immutable user association. No user DB or network access. */
+    suspend fun official(cis:String,expectedName:String?=null):BdpmOfficialDetails?=withContext(Dispatchers.IO) {
+        require(cis.matches(Regex("[0-9]{8}")))
+        open("official-manifest.json","official.sqlite").use {db->
+            db.rawQuery("SELECT json FROM detail WHERE cis=?",arrayOf(cis)).use {c->
+                if(!c.moveToFirst())return@withContext null
+                val data=JSONObject(c.getString(0))
+                require(data.getString("cis")==cis)
+                require(expectedName==null || fold(data.getString("name"))==fold(expectedName)){"Official identity mismatch"}
+                val meta=JSONObject(context.assets.open("bdpm/official-manifest.json").bufferedReader().use{it.readText()})
+                require(meta.getInt("format")==1){"Unsupported official snapshot"}
+                BdpmOfficialDetails(data,meta)
+            }
+        }
     }
     suspend fun snapshot(product:BdpmProduct,pack:BdpmPackage?):UserReferenceProduct=withContext(Dispatchers.IO) {
         open().use{db->

@@ -1,0 +1,9 @@
+{
+  "recall_query": {
+    "url": "https://ansm.sante.fr/informations-de-securite",
+    "title": "Informations de sécurité - ANSM",
+    "verified_on": "2026-10-28",
+    "sha256": "6b90bf83f2a901b7ab9efdae5630d3fd6d665563f3fd42864b297ac1919ac221",
+    "scope": "Official online safety-notice query only. Not a complete offline recall dataset."
+  }
+}

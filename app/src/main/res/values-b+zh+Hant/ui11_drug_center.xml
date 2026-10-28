@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_back">返回</string>
+    <string name="drug_center_scope">唯讀資料，不提供用藥建議，不改變劑量和庫存。</string>
+    <string name="drug_center_find_title">查找商品資料</string>
+    <string name="drug_link_official">已關聯 BDPM 官方資料</string>
+    <string name="drug_link_user">已關聯我輸入的資料</string>
+    <string name="drug_link_none">未關聯產品來源</string>
+    <string name="drug_link_caption">關聯資料只記錄這條藥物對應哪種商品，不改變劑量。</string>
+    <string name="drug_sources_title">資料來源</string>
+    <string name="drug_src_bdpm_title">BDPM 官方目錄</string>
+    <string name="drug_src_bdpm_info">離線可用 · 資料日期 %1$s</string>
+    <string name="drug_src_bdpm_info_plain">內建，可離線查詢。</string>
+    <string name="drug_src_official_tag">官方</string>
+    <string name="drug_src_user_title">我輸入的資料</string>
+    <string name="drug_src_user_info">已儲存 %1$d 筆 · 未經核實</string>
+    <string name="drug_src_user_info_many">已儲存 %1$d 筆以上 · 未經核實</string>
+    <string name="drug_src_user_info_plain">儲存在本機 · 未經核實。</string>
+    <string name="drug_src_unverified_tag">未核實</string>
+    <string name="drug_center_learn_title">了解這些資料</string>
+    <string name="drug_state_expanded">已展開</string>
+    <string name="drug_state_collapsed">已收合</string>
+    <string name="drug_not_open_tag">尚未開放</string>
+    <string name="drug_not_open_desc">%1$s，尚未開放</string>
+    <string name="drug_center_future_caption">這些模組僅作提示，目前無法開啟。</string>
+    <string name="ref2_page_title">商品資料關聯</string>
+    <string name="ref2_boundary_lead">關聯不會改變劑量、方案或庫存。</string>
+    <string name="ref2_tag_official">BDPM 官方</string>
+    <string name="ref2_tag_user">我輸入 · 未核實</string>
+    <string name="ref2_tag_package">已指定包裝</string>
+    <string name="ref2_view_source">查看資料</string>
+    <string name="ref2_label_cis">CIS</string>
+    <string name="ref2_label_package">包裝（CIP13）</string>
+    <string name="ref2_tab_catalogue">法國 HRT 藥品目錄</string>
+    <string name="ref2_tab_saved">我輸入的資料</string>
+    <string name="bdpm_status_line">%1$s 筆結果 · BDPM 離線 · 資料 %2$s</string>
+    <string name="bdpm_package_selected">已選包裝</string>
+    <string name="ref2_manual_button">＋ 自行輸入商品資料</string>
+    <string name="ref2_manual_caption">找不到時可以手動輸入，資料會標為「未核實」。</string>
+    <string name="ref2_entered_on">輸入於 %1$s</string>
+    <string name="drug_center_states_title">狀態含義</string>
+    <string name="ref2_pill_form">劑型</string>
+    <string name="ref2_pill_strength">規格</string>
+    <string name="ref2_pill_route">途徑</string>
+    <string name="ref2_hide_source">收合資料</string>
+    <string name="ref2_current_link">目前關聯</string>
+</resources>

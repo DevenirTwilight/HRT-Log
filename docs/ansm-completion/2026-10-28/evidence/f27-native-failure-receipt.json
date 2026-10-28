@@ -1,0 +1,8 @@
+{
+  "source_sha": "f27d03644080704cadd6c16e949f8e0363c53ec0",
+  "run_id": 40660379229,
+  "job_id": 122721630173,
+  "artifact_id": 12803768471,
+  "artifact_sha256": "ac5d647ee4fec188a39bf37d7a12f6157836931b512d5e0b9d56dde8a4b4fb41",
+  "failure": "Old center-dialog contract still forbids clicks on four now-implemented official-data routes; no production assertion weakened. New actual MainActivity official-product facts test passed in the same run."
+}

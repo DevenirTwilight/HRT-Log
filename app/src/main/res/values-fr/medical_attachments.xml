@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- MED-02 attachment UI (REQUIREMENTS §149). Not reachable from release navigation. -->
 <resources>
-    <string name="attach_section">Pièces jointes</string>
+    <string name="attach_section">Fichiers associés</string>
     <string name="attach_add">Ajouter un fichier</string>
-    <string name="attach_empty">Aucun fichier n’est encore joint à cet enregistrement.</string>
+    <string name="attach_empty">Ajoutez le rapport en PDF ou en photo pour le garder avec cet enregistrement.</string>
     <string name="attach_kind_pdf">PDF</string>
     <string name="attach_kind_image">Image</string>
     <string name="attach_kind_other">Autre fichier</string>

@@ -1,0 +1,19 @@
+{
+  "kind": "Production component in controlled synthetic Robolectric host, not MainActivity screenshot",
+  "baseline": "32e3a4223bd0b9921e8f860751a21f841a8e1dd3 / docs/ui-audit/2026-10-28-ui11/after",
+  "screenshots": {
+    "en_411dp_1.0x_light.png": "8ab9159fed0249973c54e8a7cdcacabf7716aeb267b4575c1d1196e1c1b4a599",
+    "link_catalogue_expanded_zh-rCN_320dp_2x_dark.png": "e12e3e9d165fd2528a8147ac922b306e2b84055d49915043036320bd460ecfe3",
+    "center_future_en_411dp_1x_light.png": "84c750f1e6bcf34ca02782e60aef243cfb45e8a5e7d15d5fdb9f3924b8c3eff8",
+    "zh-rTW_411dp_1.0x_light.png": "9661b207980d4aa4c8a4c9ab142f2cdd7ffe9f0e44ec38eed4b4266aaefef39c",
+    "center_future_fr_320dp_2x_dark.png": "b2042d1fa6c686c3ff1d5a8b79676579859ce65483f25ed935aa034ae7d12a47",
+    "fr-rFR_320dp_2.0x_dark.png": "fd027958325f7b4f2fa50692facf73501cf16cab9e22ebfdd482c957e2fd4294",
+    "link_catalogue_expanded_en_411dp_1x_light.png": "e6242aca8a80496d496abf293b90978c165e48361c35b334aa33f7d17f139c17",
+    "zh-rCN_320dp_2.0x_dark.png": "6422553d47ba37df04c5a5f29ae0ae59a723a2125051a311b1a3a08907dd525f"
+  },
+  "source_files_sha256": {
+    "app/src/main/java/net/plainnotes/app/ui/BdpmOfficialPanel.kt": "a04ed95d34c7d0eae855aec1b9849fdfc59e06e2e925a944d964a982bb76ac95",
+    "app/src/main/java/net/plainnotes/app/ui/DrugReferenceCenterScreen.kt": "d9fb5e959e9205be2b4cff1c74860fb97fdd244114cf41704afde41336e36825"
+  },
+  "actual_ui11_host_shots": "Existing production MedicationReferenceDialog / DrugReferenceCenterScreen, synthetic private records and public data, Robolectric. Not a physical device."
+}

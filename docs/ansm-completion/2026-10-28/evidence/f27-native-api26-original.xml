@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="32" failures="1" errors="0" skipped="0" time="115.847" timestamp="2026-10-28T09:15:59" hostname="localhost">
+  <testsuite name="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" tests="16" failures="1" errors="0" skipped="0" time="60.105" timestamp="2026-10-28T09:15:59" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 8.0.0" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="6.643">
+      <failure>java.lang.AssertionError: Failed to assert the following: (OnClick is NOT defined)
+Semantics of the node:
+Node #573 at (l=16.0, t=500.0, r=304.0, b=572.0)px, Tag: 'drug-center-rcp'
+Focused = 'false'
+GroupedShape = 'RoundedCornerShape(topStart = CornerSize(size = 24.0.dp), topEnd = CornerSize(size = 24.0.dp), bottomEnd = CornerSize(size = 6.0.dp), bottomStart = CornerSize(size = 6.0.dp))'
+IsContainer = 'true'
+Text = '[RCP · professional product information]'
+Actions = [ClearTextSubstitution, GetTextLayoutResult, OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution]
+MergeDescendants = 'true'
+Has 10 siblings
+Selector used: (TestTag = 'drug-center-rcp')
+
+at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:264)
+at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+at androidx.compose.ui.test.AssertionsKt.assertHasNoClickAction(Assertions.kt:243)
+at net.plainnotes.app.shell.InAppNavigationLockAndroidTest.centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles(InAppNavigationLockAndroidTest.kt:281)
+</failure>
+    </testcase>
+    <testcase name="recreationWhileInBackgroundDoesNotSkipAutoLock" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="1.81" />
+    <testcase name="configurationRecreationKeepsTheSessionAndPage" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.212" />
+    <testcase name="leavingWithImmediateAutoLockStillLocks" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="1.658" />
+    <testcase name="centerRecreationKeepsOpenWindowButActualLeaveStillLocks" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.138" />
+    <testcase name="immediateAutoLockDoesNotTreatRecreationAsLeaving" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="1.461" />
+    <testcase name="actualAppLockExpiryRevokesProtectedResourcesAndUnlockDoesNotRestoreThem" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="1.91" />
+    <testcase name="fileIntentMonitorBlocksDocumentActionsWithoutBlockingTheApp" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="1.231" />
+    <testcase name="labsDrawerMedicalAndConcentrationShareNewHomeAndExistingBatchForm" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="3.818" />
+    <testcase name="realActivityPauseAndRecreationHideSensitivePresentation" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="1.358" />
+    <testcase name="populatedLabDraftSurvivesRotationAndIsDiscardedOnActualLock" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="23.073" />
+    <testcase name="officialProductFactsAreOfflineAndBrowserAccessNeedsConfirmation" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="3.899" />
+    <testcase name="notesDisguiseNavigationAndRecreationKeepTheSession" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.412" />
+    <testcase name="shortLeaveKeepsSessionButFinishingLocks" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.036" />
+    <testcase name="calculatorDisguiseNavigationAndRecreationKeepTheSession" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.235" />
+    <testcase name="internalNavigationNeverAsksForThePinAgain" classname="net.plainnotes.app.shell.InAppNavigationLockAndroidTest" time="2.211" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.shell.ReminderTestDeviceTest" tests="3" failures="0" errors="0" skipped="0" time="19.122" timestamp="2026-10-28T09:15:59" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 8.0.0" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="scheduledTestTravelsTheRealAlarmChain" classname="net.plainnotes.app.shell.ReminderTestDeviceTest" time="5.521" />
+    <testcase name="highReliabilityTestUsesTheSystemAlarmClockAndArrives" classname="net.plainnotes.app.shell.ReminderTestDeviceTest" time="5.52" />
+    <testcase name="scheduledTestSurvivesReturnsToTheApp" classname="net.plainnotes.app.shell.ReminderTestDeviceTest" time="8.081" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.shell.RuntimeRequestUiAndroidTest" tests="1" failures="0" errors="0" skipped="0" time="1.735" timestamp="2026-10-28T09:15:59" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 8.0.0" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="restoreInvalidatesOldPageAndOnlyExplicitNewOwnerCanModifySameInteger" classname="net.plainnotes.app.shell.RuntimeRequestUiAndroidTest" time="1.735" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" tests="9" failures="0" errors="0" skipped="0" time="21.611" timestamp="2026-10-28T09:15:59" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 8.0.0" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="successfulBackupStillRequiresExplicitRestoreAndKeepsUrisDistinct" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="3.795" />
+    <testcase name="cancelledChoiceDoesNotTouchData" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="1.91" />
+    <testcase name="failedBackupReturnsToChoiceAndCannotRestore" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="2.915" />
+    <testcase name="damagedRestoreLeavesAllDataUnchanged" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="2.211" />
+    <testcase name="wrongRestorePasswordLeavesAllDataUnchanged" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="2.411" />
+    <testcase name="cancelledRestorePasswordDoesNotChangeData" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="2.288" />
+    <testcase name="cancelledBackupPickerDoesNotRestore" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="2.01" />
+    <testcase name="sourceCannotBeOverwrittenByProtectionBackup" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="1.96" />
+    <testcase name="recreationDropsPendingSourceOutputAndPassword" classname="net.plainnotes.app.privacy.RestoreProtectionAndroidTest" time="2.111" />
+  </testsuite>
+  <testsuite name="net.plainnotes.app.attachments.MedicalAttachmentUiAndroidTest" tests="3" failures="0" errors="0" skipped="0" time="12.5" timestamp="2026-10-28T09:15:59" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554 - 8.0.0" />
+      <property name="flavor" value="full" />
+      <property name="project" value=":app" />
+    </properties>
+    <testcase name="cancellingLeavesNoOperationAndRecreationKeepsNoPickerResultOrPreview" classname="net.plainnotes.app.attachments.MedicalAttachmentUiAndroidTest" time="3.665" />
+    <testcase name="pngAndPdfImportCommitListViewReleaseLockAndDataSwitch" classname="net.plainnotes.app.attachments.MedicalAttachmentUiAndroidTest" time="7.002" />
+    <testcase name="actualRuntimeTransferAdapterWritesAndAuthenticatesOneHeldChannelAndRevokesIt" classname="net.plainnotes.app.attachments.MedicalAttachmentUiAndroidTest" time="1.833" />
+  </testsuite>
+</testsuites>

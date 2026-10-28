@@ -199,7 +199,9 @@ internal object ReferencePayload {
             val b=json.getJSONObject("bdpm")
             require(b.keys().asSequence().toSet()==setOf("database_sha256","source_dates","cip7","package_description","download_url"))
             require(b.get("database_sha256") is String && b.getString("database_sha256").matches(Regex("[0-9a-f]{64}")))
-            require(b.get("download_url")=="https://bdpmt.ansm.sante.fr/telechargement")
+            // Preserve historical TEST provenance and admit only the exact official production download page.
+            // Payload shape/version and all immutable snapshot checks remain unchanged.
+            require(b.get("download_url") in setOf("https://bdpmt.ansm.sante.fr/telechargement","https://base-donnees-publique.medicaments.gouv.fr/telechargement"))
             require(b.get("source_dates") is String)
             b.getString("source_dates").split(" / ").also{require(it.size in 1..3)}.forEach{LocalDate.parse(it)}
             require(b.isNull("cip7") || b.get("cip7") is String && b.getString("cip7").matches(Regex("[0-9]{7}")))

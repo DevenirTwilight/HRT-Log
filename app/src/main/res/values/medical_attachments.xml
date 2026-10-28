@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- MED-02 attachment UI (REQUIREMENTS §149). Not reachable from release navigation. -->
 <resources>
-    <string name="attach_section">Attached files</string>
-    <string name="attach_add">Add a file</string>
-    <string name="attach_empty">No files are attached to this record yet.</string>
+    <string name="attach_section">Related files</string>
+    <string name="attach_add">Add file</string>
+    <string name="attach_empty">Add a PDF or a photo of the report to keep it with this record.</string>
     <string name="attach_kind_pdf">PDF</string>
     <string name="attach_kind_image">Image</string>
     <string name="attach_kind_other">Other file</string>

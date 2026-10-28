@@ -43,13 +43,16 @@ class DrugCenterMatrixTest(private val locale:String,private val width:Int,priva
             ui.onNodeWithTag("drug-center-catalogue").assertIsDisplayed().assertHasClickAction().performClick()
             list.performScrollToNode(hasTestTag("drug-center-medication:7"))
             ui.onNodeWithTag("drug-center-medication:7").assertIsDisplayed().performClick()
+            // UI-11: the two description rows are expandable (their toggle is the tap target), the five modules are plain rows.
             for(tag in listOf("drug-center-identity","drug-center-packaging")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assert(hasClickAction().not())
+                ui.onNodeWithTag("$tag-toggle").assertIsDisplayed().assertHasClickAction()
             }
-            for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply","drug-center-recalls")) {
+            for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
-                ui.onNodeWithTag("center-unavailable-dialog").assertExists()
-                ui.onNodeWithTag("center-unavailable-close").assertIsDisplayed().performClick()
+            }
+            for(tag in listOf("drug-center-recalls")) {
+                list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assert(hasClickAction().not())
                 ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
             }
             list.performScrollToIndex(0)
@@ -65,7 +68,7 @@ class DrugCenterMatrixTest(private val locale:String,private val width:Int,priva
                 File(folder,"${locale}_${width}dp_${font}x_${if(dark)"dark" else "light"}_${mode.name}.png").outputStream().use{image.compress(Bitmap.CompressFormat.PNG,100,it)}
             }
         }
-        assertEquals("single shared catalogue callback",3,browsed);assertEquals("medication callback",3,linked)
+        assertEquals("shared catalogue plus four supported information entry callbacks",15,browsed);assertEquals("medication callback",3,linked)
         ui.onAllNodesWithTag("attachment-add").assertCountEquals(0)
     }
 }

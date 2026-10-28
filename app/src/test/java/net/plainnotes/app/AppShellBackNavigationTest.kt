@@ -124,7 +124,8 @@ class AppShellBackNavigationTest {
 
     @Test fun medicalCenterOpensRealVisitsAndReturnsWithoutCreatingRecords() {
         show(); open(Destination.MEDICAL)
-        for(tag in listOf("medical-center-visits","medical-center-prepare","medical-center-pack","medical-visit-attachments")) {
+        for((tab,tag) in listOf("records" to "medical-center-visits","files" to "medical-visit-attachments")) {
+            ui.onNodeWithTag("medical-tab:$tab").performClick()
             ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag(tag))
             ui.onNodeWithTag(tag).performClick();ui.waitForIdle()
             ui.onNodeWithText(context.getString(R.string.visits_empty)).assertExists()
@@ -138,6 +139,7 @@ class AppShellBackNavigationTest {
 
     @Test fun medicalCenterOpensExistingCompleteBackupAndReturns() {
         show();open(Destination.MEDICAL)
+        ui.onNodeWithTag("medical-tab:files").performClick()
         ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-complete-backup"))
         ui.onNodeWithTag("medical-complete-backup").performClick()
         ui.onNodeWithText(context.getString(R.string.med_transfer_scope)).assertExists()
@@ -150,19 +152,22 @@ class AppShellBackNavigationTest {
         assertTrue(runBlocking {db.dao().labs().isEmpty()})
     }
 
-    @Test fun medicalFutureModulesKeepExistingDataAndBackOrigin() {
-        runBlocking {repo.appointment(AppointmentEntity(at_utc=Instant.now().plusSeconds(86400).toEpochMilli(),at_zone="UTC",type="CHECKUP",practitioner="Synthetic future-module audit",remind_minutes_before=0))}
+    @Test fun medicalFilesAreaOffersOnlyExplicitRecordsAndKeepsExistingData() {
+        runBlocking {repo.appointment(AppointmentEntity(at_utc=Instant.now().plusSeconds(86400).toEpochMilli(),at_zone="UTC",type="CHECKUP",practitioner="Synthetic file-area audit",remind_minutes_before=0))}
         val before=runBlocking{db.dao().appointments()}
         model.sync();show();open(Destination.MEDICAL)
         val intents=org.robolectric.Shadows.shadowOf(context)
-        for(tag in listOf("medical-future-files","medical-future-practitioners","medical-future-organize")) {
-            ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag(tag))
-            ui.onNodeWithTag(tag).performClick()
-            ui.onNodeWithTag("center-unavailable-dialog").assertExists()
-            ui.onNodeWithTag("center-unavailable-close").performClick()
-            ui.onNodeWithTag("medical-list").assertExists();assertNotCalendar()
-            assertNull("No external document action",intents.nextStartedActivity)
-        }
+        ui.onNodeWithTag("medical-tab:files").performClick()
+        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-files-soon"))
+        ui.onNodeWithTag("medical-files-soon").assertExists().assertHasNoClickAction()
+        // "Add medical file" first asks which explicit record; nothing is created and no picker or external activity starts.
+        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-add-file"))
+        ui.onNodeWithTag("medical-add-file").performClick()
+        ui.onNodeWithTag("file-target-dialog").assertExists()
+        ui.onNodeWithTag("file-target-close").performClick()
+        ui.onNodeWithTag("file-target-dialog").assertDoesNotExist()
+        ui.onNodeWithTag("medical-list").assertExists();assertNotCalendar()
+        assertNull("No picker, document viewer or external activity",intents.nextStartedActivity)
         assertEquals(before,runBlocking{db.dao().appointments()})
         assertTrue(runBlocking{db.dao().labs().isEmpty()})
         assertEquals(0,activityBacks)
@@ -183,8 +188,8 @@ class AppShellBackNavigationTest {
     @Test fun medicalCenterPreparationReachesRealQuestionsAndExportAndCancels() {
         runBlocking { repo.appointment(AppointmentEntity(at_utc=Instant.now().plus(3,ChronoUnit.DAYS).toEpochMilli(),at_zone="UTC",type="CHECKUP",practitioner="Synthetic preparation visit",remind_minutes_before=0)) }
         model.sync();show();open(Destination.MEDICAL)
-        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-center-prepare"))
-        ui.onNodeWithTag("medical-center-prepare").performClick()
+        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-center-visits"))
+        ui.onNodeWithTag("medical-center-visits").performClick()
         ui.waitUntil(10_000){ui.onAllNodesWithText("Synthetic preparation visit",substring=true).fetchSemanticsNodes().isNotEmpty()}
         ui.onAllNodesWithText("Synthetic preparation visit",substring=true).onFirst().performClick()
         ui.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText(context.getString(R.string.visit_question_add)))

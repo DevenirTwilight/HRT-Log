@@ -30,7 +30,7 @@ import kotlin.math.roundToInt
 private val P4_CODES = setOf("P4", "P4_IA", "P4_MS")
 
 @Composable fun LabsScreen(labs: List<LabValueEntity>, doseTimes: List<Instant>, onEdit: (LabValueEntity?) -> Unit, onDelete: (LabValueEntity) -> Unit, contentPadding: PaddingValues,contexts:List<net.plainnotes.app.data.LabContextEntity> = emptyList(),onRebuild:((LabValueEntity,Boolean)->Unit)?=null,
-               panels:List<net.plainnotes.app.data.LabPanelEntity> = emptyList(),onPanel:((net.plainnotes.app.data.LabPanelEntity)->Unit)?=null,onSaveAsPanel:((List<LabValueEntity>)->Unit)?=null,onAttachments:((LabValueEntity)->Unit)?=null) {
+               panels:List<net.plainnotes.app.data.LabPanelEntity> = emptyList(),onPanel:((net.plainnotes.app.data.LabPanelEntity)->Unit)?=null,onSaveAsPanel:((List<LabValueEntity>)->Unit)?=null,onOpenDetail:((LabValueEntity)->Unit)?=null) {
     var category by remember { mutableStateOf<LabHomeCategory?>(null) }
     var query by remember { mutableStateOf("") }
     var searchOpen by remember { mutableStateOf(false) }
@@ -85,17 +85,17 @@ private val P4_CODES = setOf("P4", "P4_IA", "P4_MS")
                 }
             }
             items(labDraws(values, panels), key = { d -> "filtered:" + (d.panel?.id ?: -d.labs.first().id) }) { d ->
-                LabHomeCard(d, { detail = it }, onEdit, onDelete, contexts, onRebuild,
+                LabHomeCard(d, { onOpenDetail?.invoke(it) ?: run { detail = it } }, onEdit, onDelete, contexts, onRebuild,
                     d.panel?.let { p -> onPanel?.let { open -> { open(p) } } }, null)
             }
         // LAB-02: real lab panels (even with one result) are cards; results without a panel keep the LAB-01 display grouping.
         } else items(labDraws(visible, panels), key = { d -> d.panel?.let { "panel:${it.id}" } ?: ("draw:" + d.labs.first().id) }) { d ->
-            LabHomeCard(d, { detail = it }, onEdit, onDelete, contexts, onRebuild,
+            LabHomeCard(d, { onOpenDetail?.invoke(it) ?: run { detail = it } }, onEdit, onDelete, contexts, onRebuild,
                 d.panel?.let { p -> onPanel?.let { open -> { open(p) } } },
                 if (d.panel == null && d.labs.size > 1) onSaveAsPanel?.let { save -> { save(d.labs) } } else null)
         }
     }
-    detail?.let { v -> LabDetailDialogWithAttachments(v, contexts.filter { it.lab_id == v.id }, { detail = null },onAttachments=if(onAttachments==null)null else ({detail=null;onAttachments(v)})) { detail = null; onEdit(v) } }
+    detail?.let { v -> LabDetailFullscreen(v, contexts.filter { it.lab_id == v.id }, { detail = null }, { detail = null; onEdit(v) }) }
 }
 
 private fun max(a: Double, b: Double) = if (a > b) a else b
@@ -161,19 +161,4 @@ private fun max(a: Double, b: Double) = if (a > b) a else b
 
 
 /** Read the original lab and its frozen context; no duplicate row, inferred visit association, or new estimate. */
-@Composable fun LabDetailDialog(v:LabValueEntity,contexts:List<net.plainnotes.app.data.LabContextEntity>,onDismiss:()->Unit,onEdit:()->Unit)=LabDetailDialogWithAttachments(v,contexts,onDismiss,null,onEdit)
-
-@Composable fun LabDetailDialogWithAttachments(v:LabValueEntity,contexts:List<net.plainnotes.app.data.LabContextEntity>,onDismiss:()->Unit,onAttachments:(()->Unit)?=null,onEdit:()->Unit) {
-    val local=Instant.ofEpochMilli(v.sampled_utc).atZone(ZoneId.of(v.sampled_zone))
-    AlertDialog(onDismissRequest=onDismiss,title={Text(analyteLabel(v.analyte_code))},properties = DialogProperties(dismissOnBackPress = true),text={Column(Modifier.heightIn(max=320.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-        Text(labReportNumber(v.value)+" "+v.unit)
-        Text(formatDate(local.toLocalDate())+" · "+formatTime(local.toLocalTime())+" · "+v.sampled_zone)
-        if(v.reference_lower!=null || v.reference_upper!=null)Text(stringResource(R.string.lab_range_value,v.reference_lower?.let{labReportNumber(it)} ?: "–",v.reference_upper?.let{labReportNumber(it)} ?: "–",v.reference_unit ?: ""))
-        listOfNotNull(v.laboratory,v.note).forEach{Text(it)}
-        LabContextSection(v,contexts,null)
-        onAttachments?.let {open->OutlinedButton(onClick=open) {Text(stringResource(R.string.attach_section))}}
-    }},confirmButton={AdaptiveActions(listOf(stringResource(R.string.edit),stringResource(R.string.ok)),contentInset=48.dp){i,mod->
-        if(i==0)OutlinedButton(onClick=onEdit,modifier=mod){Text(stringResource(R.string.edit))}
-        else TextButton(onClick=onDismiss,modifier=mod){Text(stringResource(R.string.ok))}
-    }})
-}
+@Composable fun LabDetailDialog(v:LabValueEntity,contexts:List<net.plainnotes.app.data.LabContextEntity>,onDismiss:()->Unit,onEdit:()->Unit)=LabDetailFullscreen(v,contexts,onDismiss,onEdit)

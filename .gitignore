@@ -34,3 +34,5 @@ node_modules/
 # Python research-tool caches
 __pycache__/
 *.pyc
+
+!core/data/src/main/assets/bdpm/official.sqlite

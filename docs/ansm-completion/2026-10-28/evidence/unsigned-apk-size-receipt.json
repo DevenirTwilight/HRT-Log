@@ -1,0 +1,84 @@
+{
+  "method": "Actual unsigned fullRelease builds, same local JDK21 / Android build-tools37 / clean source worktrees; source identities verified through DEX BuildConfig. No signing or delivery.",
+  "builds": [
+    {
+      "name": "UI-11 baseline",
+      "apk_bytes": 14062172,
+      "provenance": {
+        "apk": "app-full-release-unsigned.apk",
+        "package": {
+          "application_id": "net.plainnotes.app",
+          "version_code": 35,
+          "version_name": "0.2.0"
+        },
+        "apk_sha256": "3621edf30764ae31516a1d90bc5501a4c2417591bd6c50d6c1a0d1eeb83ea4d0",
+        "signing_cert_sha256": [
+          "unsigned or invalid signature"
+        ],
+        "source": {
+          "SOURCE_COMMIT_TIME_UTC": "2026-10-28T06:41:54Z",
+          "SOURCE_DIRTY": "false",
+          "SOURCE_ORIGIN": "git",
+          "SOURCE_SHA": "32e3a4223bd0b9921e8f860751a21f841a8e1dd3"
+        }
+      },
+      "bdpm_assets": [
+        {
+          "name": "assets/bdpm/catalogue.sqlite",
+          "bytes": 360448,
+          "compressed_bytes": 84004
+        },
+        {
+          "name": "assets/bdpm/manifest.json",
+          "bytes": 94823,
+          "compressed_bytes": 7304
+        }
+      ]
+    },
+    {
+      "name": "ANSM implementation",
+      "apk_bytes": 14286553,
+      "provenance": {
+        "apk": "app-full-release-unsigned.apk",
+        "package": {
+          "application_id": "net.plainnotes.app",
+          "version_code": 35,
+          "version_name": "0.2.0"
+        },
+        "apk_sha256": "b28ff06595c5d56f3310b4959839745130e71ad45efc0335ab5859119e17b853",
+        "signing_cert_sha256": [
+          "unsigned or invalid signature"
+        ],
+        "source": {
+          "SOURCE_COMMIT_TIME_UTC": "2026-10-28T08:56:07Z",
+          "SOURCE_DIRTY": "false",
+          "SOURCE_ORIGIN": "git",
+          "SOURCE_SHA": "f27d03644080704cadd6c16e949f8e0363c53ec0"
+        }
+      },
+      "bdpm_assets": [
+        {
+          "name": "assets/bdpm/catalogue.sqlite",
+          "bytes": 368640,
+          "compressed_bytes": 85639
+        },
+        {
+          "name": "assets/bdpm/manifest.json",
+          "bytes": 102509,
+          "compressed_bytes": 8818
+        },
+        {
+          "name": "assets/bdpm/official-manifest.json",
+          "bytes": 11151,
+          "compressed_bytes": 2674
+        },
+        {
+          "name": "assets/bdpm/official.sqlite",
+          "bytes": 1355776,
+          "compressed_bytes": 183523
+        }
+      ]
+    }
+  ],
+  "apk_delta_bytes": 224381
+}
