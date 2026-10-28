@@ -50,11 +50,10 @@ class DrugCenterMatrixTest(private val locale:String,private val width:Int,priva
             }
             for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply")) {
                 list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assertHasClickAction().performClick()
+                ui.onNodeWithTag("official-browser").assertExists()
+                ui.onNodeWithTag("drug-center-close").performClick()
             }
-            for(tag in listOf("drug-center-recalls")) {
-                list.performScrollToNode(hasTestTag(tag));ui.onNodeWithTag(tag).assertIsDisplayed().assert(hasClickAction().not())
-                ui.onNodeWithTag("center-unavailable-dialog").assertDoesNotExist()
-            }
+            ui.onAllNodesWithTag("drug-center-recalls").assertCountEquals(0)
             list.performScrollToIndex(0)
             if(System.getenv("CENTER_SHOTS")=="1" && width==320 && font==2f && !landscape && mode==Contrast.HIGH) {
                 ui.waitForIdle();val view=requireNotNull(org.robolectric.shadows.ShadowDialog.getShownDialogs().lastOrNull{it.isShowing}?.window).decorView
@@ -68,7 +67,7 @@ class DrugCenterMatrixTest(private val locale:String,private val width:Int,priva
                 File(folder,"${locale}_${width}dp_${font}x_${if(dark)"dark" else "light"}_${mode.name}.png").outputStream().use{image.compress(Bitmap.CompressFormat.PNG,100,it)}
             }
         }
-        assertEquals("shared catalogue plus four supported information entry callbacks",15,browsed);assertEquals("medication callback",3,linked)
+        assertEquals("only the catalogue entry uses association browsing",3,browsed);assertEquals("medication callback",3,linked)
         ui.onAllNodesWithTag("attachment-add").assertCountEquals(0)
     }
 }
