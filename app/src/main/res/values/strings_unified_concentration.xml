@@ -42,7 +42,6 @@
     <string name="uc_research_settings">Model comparison settings</string>
     <string name="uc_original_scenario">SL E2 literature scenario</string>
     <string name="uc_original_assumptions">Price Figure 1 group-amplitude scenario, not a validated personal or total E2 prediction.</string>
-    <string name="uc_original_tail">Research tail</string>
     <string name="uc_original_peaks">Isolated 1 mg: Cmax %1$s pg/mL at +%2$s h. Latest-dose 24 h history window (including earlier residuals): peak %3$s pg/mL at +%4$s h.</string>
     <string name="uc_preview_loading">Loading recorded sublingual E2 doses and calculating the selected research curve…</string>
     <string name="uc_preview_failed">The research curve could not be calculated. Your records have not been changed. Select Legacy to view the original calculation.</string>

@@ -42,7 +42,6 @@
     <string name="uc_research_settings">模型比较设置</string>
     <string name="uc_original_scenario">舌下E2文献情景</string>
     <string name="uc_original_assumptions">Price图1群体幅度情景，非经验证的个人或总E2预测。</string>
-    <string name="uc_original_tail">研究尾部</string>
     <string name="uc_original_peaks">单次1mg参考：Cmax %1$s pg/mL，Tmax +%2$s h。最新剂量后24h历史窗口（含前剂残留）：峰值%3$s pg/mL，峰时+%4$s h。</string>
     <string name="uc_preview_loading">正在读取舌下E2记录并计算所选研究曲线…</string>
     <string name="uc_preview_failed">研究曲线计算失败，服药记录未改动。可选择Legacy查看原计算结果。</string>

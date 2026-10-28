@@ -88,6 +88,7 @@ class Ui12ConcentrationTest(private val locale: String, private val width: Int, 
         ui.onNodeWithText(s(R.string.days_short, 7)).performScrollTo().performClick()
         ui.onNodeWithText(s(R.string.days_short, 7)).assertIsSelected()
         shot("sublingual")
+        scrollTo("models-literature-open"); shot("sublingual_bottom")
     }
 
     @Test fun superseded_pageElementsAreGoneAndTheirTextIsReachableUnderModelAndLiterature() {
@@ -192,8 +193,8 @@ class Ui12ConcentrationTest(private val locale: String, private val width: Int, 
 
     @Test fun legendUsesWordsAndDifferentShapesNotColourAlone() {
         setup(); val sc = Ui12Fixture.sublingualOnly(); show(sc)
-        for (id in listOf(R.string.legend_recorded, R.string.uc_original_tail, R.string.legend_labs, R.string.legend_doses)) ui.onNodeWithText(s(id)).performScrollTo().assertExists()
-        assertEquals("four different words", 4, listOf(R.string.legend_recorded, R.string.uc_original_tail, R.string.legend_labs, R.string.legend_doses).map { s(it) }.toSet().size)
+        for (id in listOf(R.string.legend_recorded, R.string.ui12_legend_tail, R.string.legend_labs, R.string.legend_doses)) ui.onNodeWithText(s(id)).performScrollTo().assertExists()
+        assertEquals("four different words", 4, listOf(R.string.legend_recorded, R.string.ui12_legend_tail, R.string.legend_labs, R.string.legend_doses).map { s(it) }.toSet().size)
     }
 
     @Test fun bigNumberAndUnitAreNotTruncatedAtLargeText() {

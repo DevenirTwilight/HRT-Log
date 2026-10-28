@@ -24,4 +24,5 @@
     <string name="ui12_models_subtitle">來源、適用範圍與限制</string>
     <string name="ui12_baseline_once">各途徑相加時，背景基線只計一次。</string>
     <string name="ui12_unknown_records">有些記錄的途徑、劑量或時間不明，未計入合計。補全後才會計入。</string>
+    <string name="ui12_legend_tail">預測尾部</string>
 </resources>

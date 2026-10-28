@@ -24,4 +24,5 @@
     <string name="ui12_models_subtitle">Sources, portée et limites</string>
     <string name="ui12_baseline_once">Quand les voies sont additionnées, la base de fond n\'est comptée qu\'une fois.</string>
     <string name="ui12_unknown_records">Certaines prises ont une voie, une dose ou une heure inconnue et ne sont pas incluses dans ce total. Complétez-les pour les inclure.</string>
+    <string name="ui12_legend_tail">Queue prévue</string>
 </resources>

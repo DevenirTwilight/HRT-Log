@@ -24,4 +24,5 @@
     <string name="ui12_models_subtitle">Sources, scope and limits</string>
     <string name="ui12_baseline_once">When routes are added together, the background baseline is counted once.</string>
     <string name="ui12_unknown_records">Some records have an unknown route, dose or time and are not part of this total. Repair them to include them.</string>
+    <string name="ui12_legend_tail">Forecast tail</string>
 </resources>

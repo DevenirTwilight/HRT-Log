@@ -126,7 +126,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 }
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Legend(stringResource(R.string.legend_recorded), MaterialTheme.colorScheme.primary, dashed = false)
-                    Legend(stringResource(R.string.uc_original_tail), MaterialTheme.colorScheme.primary, dashed = true)
+                    Legend(stringResource(R.string.ui12_legend_tail), MaterialTheme.colorScheme.primary, dashed = true)
                     if (!result?.labs.isNullOrEmpty()) Legend(stringResource(R.string.legend_labs), MaterialTheme.colorScheme.tertiary, dot = true)
                     if (hasDoseMarks) Legend(stringResource(R.string.legend_doses), MaterialTheme.colorScheme.secondary, tick = true)
                 }
@@ -141,10 +141,11 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
         if (result != null && result.others.isNotEmpty()) OtherCurvesCard(result)
 
         if (compatibilityHasSl || previewReady) SectionCard(stringResource(R.string.calib_title)) {
+            // The label has its own line so it never wraps into a narrow column beside the pill and the disabled switch (320 dp, 2x text).
+            Text(stringResource(R.string.calib_enable), style = MaterialTheme.typography.bodyLarge)
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.calib_enable), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
                 StatusPill(stringResource(R.string.ui12_calib_unavailable), MaterialTheme.colorScheme.surfaceContainerHighest, MaterialTheme.colorScheme.onSurfaceVariant)
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.weight(1f))
                 Switch(checked = false, onCheckedChange = {}, enabled = false, modifier = Modifier.testTag("calibration-switch"))
             }
             Text(stringResource(R.string.ui12_calib_unavailable_sl),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("calibration-unavailable-sl"))
