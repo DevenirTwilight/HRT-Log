@@ -74,23 +74,21 @@ class DrugCenterNavigationTest {
             for(tag in listOf("drug-center-rcp","drug-center-notice","drug-center-safety","drug-center-supply")) {
                 ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
                 ui.onNodeWithTag(tag).assertHasClickAction().performClick()
-                ui.onNodeWithTag("reference-window").assertExists()
-                ui.onNodeWithTag("reference-close").performClick()
+                ui.onNodeWithTag("official-browser").assertExists()
+                ui.onNodeWithTag("official-product-search").assertExists()
+                ui.onNodeWithTag("reference-window").assertDoesNotExist()
+                ui.onNodeWithTag("drug-center-close").performClick()
                 ui.onNodeWithTag("drug-center-window").assertExists()
             }
-            for(tag in listOf("drug-center-recalls")) {
-                ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag(tag))
-                // UI-11: the not-yet-open modules are plain rows now; they carry no tap and open nothing.
-                ui.onNodeWithTag(tag).assert(hasClickAction().not())
-                ui.onAllNodesWithTag("center-unavailable-dialog").assertCountEquals(0)
-            }
+            // No verified full recall dataset: the non-functional module is absent.
+            ui.onAllNodesWithTag("drug-center-recalls").assertCountEquals(0)
             ui.onNodeWithTag("drug-center-close").performClick()
             ui.onNodeWithTag("drug-center-window").assertDoesNotExist()
             ui.onNodeWithTag("drug-center-open").assertExists()
             // UI-11: the centre no longer has Medications / Stock shortcut buttons; both stay reachable from the drawer.
             ui.onNodeWithTag("drug-center-open").performClick()
             for(tag in listOf("drug-center-plans","drug-center-stock")) {
-                ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-recalls"))
+                ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-rcp"))
                 ui.onAllNodesWithTag(tag).assertCountEquals(0)
             }
             ui.onNodeWithTag("drug-center-close").performClick()
