@@ -304,9 +304,9 @@ private fun futureIcon(tag: String) = when (tag) {
             }
         }) { padding ->
             Box(Modifier.fillMaxSize().padding(padding)) {
-                officialSection?.let { section -> DrugOfficialBrowserScreen(section) }
-                    ?: DrugReferenceCenterScreen(medications, onBrowse, onReference, PaddingValues(), links, sources,
-                        onOfficial = { officialSection = it })
+                if (officialSection != null) DrugOfficialBrowserScreen(requireNotNull(officialSection))
+                else DrugReferenceCenterScreen(medications, onBrowse, onReference, PaddingValues(), links, sources,
+                    onOfficial = { officialSection = it })
             }
         }
     }
