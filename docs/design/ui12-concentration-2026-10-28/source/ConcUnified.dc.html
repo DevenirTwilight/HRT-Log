@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>浓度估算 · 统一版</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.card{background:#FFFFFF;border-radius:28px;padding:18px 16px 16px}
+.sh{font-size:14px;font-weight:700;color:#006A63;margin:0}
+.t1{font-size:16px;font-weight:600;color:#161D1C;line-height:1.35}
+.t2{font-size:13px;color:#3F4947;line-height:1.5}
+.tag{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.spring{transition:transform .35s cubic-bezier(.34,1.56,.64,1),background-color .2s}
+.num{font-variant-numeric:tabular-nums}
+.row{display:flex;align-items:center;gap:14px;background:#FFFFFF;padding:14px 16px;min-height:44px}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width:390px;min-height:1560px;box-sizing:border-box;background:#F4FBF9;color:#161D1C;font-family:'Noto Sans SC',sans-serif;padding-bottom:32px;">
+
+  <div style="height:64px;display:flex;align-items:center;gap:4px;padding:0 8px 0 4px;">
+    <button aria-label="打开导航" style="width:48px;height:48px;border:0;border-radius:24px;background:transparent;color:#161D1C;display:flex;align-items:center;justify-content:center;">
+      <svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div style="font-size:22px;font-weight:500;">浓度估算</div>
+  </div>
+
+  <div style="padding:0 16px;display:flex;flex-direction:column;gap:14px;">
+
+    <!-- 结果放在最前面 -->
+    <div style="background:#DDF3EF;border-radius:32px;padding:20px 20px 18px;color:#00201D;">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <span class="tag" style="background:#FFFFFF;color:#00504A;">E2 合计</span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:14px;">
+        <span class="num" style="font-size:56px;line-height:1.05;font-weight:800;letter-spacing:-1px;">{{nowV}}</span>
+        <span style="font-size:18px;font-weight:600;">{{unitName}}</span>
+      </div>
+      <div style="font-size:14px;line-height:1.55;margin-top:6px;color:#1F3A37;">{{basisText}}</div>
+      <div style="font-size:12px;line-height:1.5;margin-top:10px;color:#1F3A37;opacity:.85;">估算值，不能代替化验，也不能作为调整剂量的依据。</div>
+    </div>
+
+    <div class="card">
+      <div class="t1" style="font-size:17px;">E2 曲线</div>
+      <div style="margin-top:12px;">
+        <div role="tablist" style="display:grid;grid-template-columns:repeat(2,1fr);gap:3px;background:#E3EAE8;border-radius:999px;padding:3px;">
+          <sc-for list="{{range}}" as="t" hint-placeholder-count="2">
+            <button role="tab" aria-selected="{{t.sel}}" onClick="{{t.pick}}" class="spring" style="height:40px;border:0;border-radius:999px;background:{{t.bg}};color:{{t.fg}};font-size:13px;font-weight:{{t.w}};">{{t.name}}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="position:relative;width:334px;height:236px;margin-top:18px;">
+        <sc-for list="{{c.yt}}" as="g" hint-placeholder-count="4">
+          <div style="position:absolute;left:42px;width:284px;height:1px;background:#E3EAE8;top:{{g.y}}px;"></div>
+          <div class="num" style="position:absolute;left:0;width:36px;text-align:right;font-size:10px;color:#3F4947;top:{{g.y}}px;transform:translateY(-6px);">{{g.l}}</div>
+        </sc-for>
+        <sc-for list="{{c.xt}}" as="g" hint-placeholder-count="4">
+          <div class="num" style="position:absolute;top:212px;left:{{g.x}}px;transform:translateX(-50%);font-size:10px;color:#3F4947;font-weight:{{g.b}};white-space:nowrap;">{{g.l}}</div>
+        </sc-for>
+        <svg width="334" height="236" viewBox="0 0 334 236" style="position:absolute;left:0;top:0;" aria-hidden="true">
+          <path d="{{c.dash}}" fill="none" stroke="#006A63" stroke-width="2" stroke-dasharray="5 4" stroke-linejoin="round"/>
+          <path d="{{c.solid}}" fill="none" stroke="#006A63" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        <sc-for list="{{c.ticks}}" as="k" hint-placeholder-count="4">
+          <div style="position:absolute;top:196px;height:10px;width:2px;background:#8E4D35;border-radius:1px;left:{{k.x}}px;transform:translateX(-1px);"></div>
+        </sc-for>
+        <div style="position:absolute;top:12px;height:194px;width:0;border-left:1px dashed #6F7977;left:{{c.nowX}}px;"></div>
+        <div style="position:absolute;top:-2px;font-size:10px;font-weight:700;color:#3F4947;left:{{c.nowX}}px;transform:translateX(-50%);background:#FFFFFF;padding:0 3px;">此刻</div>
+        <sc-for list="{{labDots}}" as="d" hint-placeholder-count="2">
+          <div style="position:absolute;width:12px;height:12px;border-radius:6px;background:#8E4D35;border:2px solid #FFFFFF;box-sizing:border-box;left:{{d.x}}px;top:{{d.y}}px;transform:translate(-50%,-50%);"></div>
+        </sc-for>
+        <sc-if value="{{c.hasSel}}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:12px;height:194px;width:0;border-left:1.5px solid #00201D;left:{{c.sel.x}}px;"></div>
+          <div style="position:absolute;width:12px;height:12px;border-radius:6px;background:#FFFFFF;border:3px solid #006A63;box-sizing:border-box;left:{{c.sel.x}}px;top:{{c.sel.y}}px;transform:translate(-50%,-50%);"></div>
+                  <div style="position:absolute;top:18px;left:{{c.tipLeft}}px;width:130px;box-sizing:border-box;background:#FFFFFF;border-radius:14px;padding:8px 12px;box-shadow:0 2px 10px rgba(0,32,29,.18);">
+            <div class="t2" style="font-size:11px;">{{c.sel.t}}</div>
+            <div style="display:flex;align-items:baseline;gap:4px;"><span class="num" style="font-size:20px;font-weight:800;line-height:1.25;">{{c.sel.v}}</span><span class="t2" style="font-size:11px;">{{unitName}}</span></div>
+          </div>
+        </sc-if>
+        <div style="position:absolute;left:42px;top:12px;width:284px;height:194px;display:flex;">
+          <sc-for list="{{c.strips}}" as="p" hint-placeholder-count="6">
+            <button aria-label="查看该时刻数值" onClick="{{p.pick}}" style="flex:1;border:0;background:transparent;padding:0;height:194px;"></button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:6px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#3F4947;"><span style="width:22px;height:0;border-top:2.4px solid #006A63;"></span>基于记录</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#3F4947;"><span style="width:22px;height:0;border-top:2px dashed #006A63;"></span>预测尾部</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#3F4947;"><span style="width:10px;height:10px;border-radius:5px;background:#8E4D35;"></span>化验结果</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#3F4947;"><span style="width:2px;height:12px;border-radius:1px;background:#8E4D35;"></span>服药时刻</div>
+      </div>
+      <div style="margin-top:14px;">
+        <div role="tablist" style="display:grid;grid-template-columns:repeat(2,1fr);gap:3px;background:#E3EAE8;border-radius:999px;padding:3px;width:200px;">
+          <sc-for list="{{unit}}" as="t" hint-placeholder-count="2">
+            <button role="tab" aria-selected="{{t.sel}}" onClick="{{t.pick}}" class="spring" style="height:40px;border:0;border-radius:999px;background:{{t.bg}};color:{{t.fg}};font-size:13px;font-weight:{{t.w}};">{{t.name}}</button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- 校准：两种途径同一个入口 -->
+    <div class="card" style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:center;gap:8px;"><div class="t1" style="font-size:17px;flex:1;">化验校准</div><span class="tag" style="background:transparent;border:1px solid #BEC9C6;color:#3F4947;font-weight:500;">暂不能用</span>
+
+      </div>
+      <div class="t2">{{calText}}</div>
+      <button role="switch" aria-checked="{{calAria}}" aria-disabled="{{calOffAria}}" onClick="{{toggleCal}}" style="width:100%;min-height:48px;border:0;background:transparent;display:flex;align-items:center;gap:12px;padding:0;text-align:left;color:#161D1C;opacity:{{calOp}};">
+        <span style="flex:1;font-size:15px;font-weight:600;">按化验校准估算</span>
+        <span style="width:52px;height:32px;border-radius:16px;background:{{calBg}};position:relative;flex:none;" class="spring"><span class="spring" style="position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:12px;background:{{calKnob}};transform:{{calShift}};"></span></span>
+      </button>
+      <button style="align-self:flex-start;height:48px;padding:0 22px;border:1px solid #6F7977;border-radius:999px;background:transparent;color:#006A63;font-size:14px;font-weight:700;">管理化验结果</button>
+    </div>
+
+    <!-- 模型与参数：所有来源和限制的说明都收在这里 -->
+    <div class="sh" style="margin:10px 8px 0;">模型与参数</div>
+    <div style="display:flex;flex-direction:column;gap:3px;">
+      <div class="row" style="border-radius:24px 24px 6px 6px;">
+        <div style="flex:1;"><div class="t1">体重</div><div class="t2">未设置</div></div>
+        <button style="height:40px;padding:0 14px;border:0;border-radius:999px;background:transparent;color:#006A63;font-size:14px;font-weight:700;">编辑</button>
+      </div>
+      <button class="row" style="border:0;border-radius:6px 6px 24px 24px;text-align:left;width:100%;color:#161D1C;">
+        <div style="flex:1;"><div class="t1">模型与文献</div><div class="t2">{{modelSub}}</div></div>
+        <svg class="ic" viewBox="0 0 24 24" style="color:#6F7977;"><path d="M9 6l6 6 6-6" style="display:none"/><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1560}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { parts: false, days: 3, pmol: false, sel: -1, calib: false }; }
+  doseList() {
+    if (this._d) return this._d;
+    var out = [], k;
+    for (k = -75; k <= 0; k++) { var b = k * 24 - 19.83; out.push(b + 8.17); if (k === 0) continue; if (((k % 5) + 5) % 5 === 3) continue; out.push(b + 20.33); }
+    this._d = out; return out;
+  }
+  fmtDate(offH) {
+    var d = new Date(2026, 9, 28, 19, 50 + Math.round(offH * 60));
+    return (d.getMonth() + 1) + '月' + d.getDate() + '日 ' + (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+  }
+  comp(t) {
+    var s = this.state, d = this.doseList(), i, a = 0, b = 0, tau;
+    var ka1 = 2, ke1 = 0.2, n1 = 1 / (Math.exp(-1.28 * ke1) - Math.exp(-1.28 * ka1));
+    var ka2 = 0.5, ke2 = 1 / 30, n2 = 1 / (Math.exp(-5.8 * ke2) - Math.exp(-5.8 * ka2));
+    for (i = 0; i < d.length; i++) {
+      if (d[i] > t) continue; tau = t - d[i];
+      a += n1 * (Math.exp(-tau * ke1) - Math.exp(-tau * ka1));
+      b += n2 * (Math.exp(-tau * ke2) - Math.exp(-tau * ka2));
+    }
+    return { sl: 870 * a, ob: (s.calib ? 1.18 : 1) * 40 * b };
+  }
+  conc(t) { var c = this.comp(t); return 24 + c.sl + c.ob; }
+  renderVals() {
+    var self = this, s = this.state, D = s.days, fac = s.pmol ? 3.671 : 1;
+    var L = 42, R = 326, B = 206, T = 12, PW = R - L, PH = B - T;
+    var t0 = -D * 24, t1 = D <= 3 ? 12 : 24, yMax = 1200;
+    function xp(t) { return L + (t - t0) / (t1 - t0) * PW; }
+    function yp(v) { return B - Math.max(0, Math.min(v, yMax)) / yMax * PH; }
+    var step = Math.max(0.25, (t1 - t0) / 700), solid = '', dash = '', pSL = '', pOB = '', f1 = true, f2 = true, tt;
+    for (tt = t0; tt <= t1 + 1e-6; tt += step) {
+      var X = xp(tt).toFixed(1), Y = yp(this.conc(tt)).toFixed(1);
+      if (tt <= 0) { solid += (f1 ? 'M' : 'L') + X + ' ' + Y; f1 = false; var cc = this.comp(tt); pSL += (pSL ? 'L' : 'M') + X + ' ' + yp(cc.sl).toFixed(1); pOB += (pOB ? 'L' : 'M') + X + ' ' + yp(cc.ob).toFixed(1); }
+      if (tt >= -step) { dash += (f2 ? 'M' : 'L') + X + ' ' + Y; f2 = false; }
+    }
+    var ts = s.pmol ? 1000 : 300, yt = [], g;
+    for (g = 0; g * ts <= yMax * fac + 1e-6; g++) yt.push({ y: yp(g * ts / fac).toFixed(1), l: String(g * ts) });
+    var xt = [], k, m0 = -19.83, dstep = 1;
+    for (k = -Math.ceil(-t0 / 24) - 1; k <= Math.ceil(t1 / 24) + 1; k++) {
+      var tm = m0 + k * 24, dd = new Date(2026, 9, 28 + k);
+      if (D <= 3) {
+        if (tm >= t0 && tm <= t1) xt.push({ x: xp(tm).toFixed(1), l: (dd.getMonth() + 1) + '/' + dd.getDate(), b: '700' });
+        if (tm + 12 >= t0 && tm + 12 <= t1) xt.push({ x: xp(tm + 12).toFixed(1), l: '12时', b: '400' });
+      } else if (tm >= t0 && tm <= t1 && k % 1 === 0) xt.push({ x: xp(tm).toFixed(1), l: (dd.getMonth() + 1) + '/' + dd.getDate(), b: '500' });
+    }
+    var ticks = [], dl = this.doseList(), i;
+    for (i = 0; i < dl.length; i++) if (dl[i] >= t0 && dl[i] <= 0) ticks.push({ x: xp(dl[i]).toFixed(1) });
+    var nS = 36, strips = [];
+    for (i = 0; i < nS; i++) strips.push({ pick: (function (j) { return function () { self.setState({ sel: s.sel === j ? -1 : j }); }; })(i) });
+    var sel = null;
+    if (s.sel >= 0) { var tsel = t0 + (s.sel + 0.5) / nS * (t1 - t0), vv = this.conc(tsel); sel = { x: xp(tsel), y: yp(vv), v: Math.round(vv * fac), t: this.fmtDate(tsel) }; }
+    var c = { tipLeft: (sel && sel.x > 190) ? 52 : 190, partSL: pSL, partOB: pOB, yt: yt, xt: xt, ticks: ticks, strips: strips, solid: solid, dash: dash, nowX: xp(0).toFixed(1), hasSel: !!sel, noSel: !sel, sel: sel || { x: 0, y: 0, v: 0, t: '' } };
+    var labRaw = [{ t: -34.7, f: 0.9 }, { t: -2.2 * 24 - 11, f: 1.12 }, { t: -5.4 * 24, f: 0.95 }].map(function (q) { return { t: q.t, v: self.conc(q.t) * q.f }; });
+    var labDots = labRaw.filter(function (b) { return b.t >= t0 && b.t <= t1; }).map(function (b) { return { x: xp(b.t).toFixed(1), y: yp(b.v).toFixed(1) }; });
+    function btns(list, isOn, pick) { return list.map(function (n, idx) { var on = isOn(idx); return { name: n.name, sel: on ? 'true' : 'false', bg: on ? n.onBg : 'transparent', fg: on ? n.onFg : '#3F4947', w: on ? 700 : 500, pick: function () { pick(idx); } }; }); }
+    var range = btns([{ name: '3 天', onBg: '#006A63', onFg: '#FFFFFF' }, { name: '7 天', onBg: '#006A63', onFg: '#FFFFFF' }], function (i2) { return s.days === [3, 7][i2]; }, function (i2) { self.setState({ days: [3, 7][i2], sel: -1 }); });
+    var unit = btns([{ name: 'pg/mL', onBg: '#CCE8E3', onFg: '#00201D' }, { name: 'pmol/L', onBg: '#CCE8E3', onFg: '#00201D' }], function (i2) { return s.pmol === (i2 === 1); }, function (i2) { self.setState({ pmol: i2 === 1 }); });
+    var cal = s.calib;
+    return {
+      range: range, unit: unit, c: c, labDots: labDots, unitName: s.pmol ? 'pmol/L' : 'pg/mL', nowV: Math.round(this.conc(0) * fac),
+      basisTag: cal ? '已按化验校准' : '群体估算', basisBg: cal ? '#9EF2E8' : '#E3EAE8', basisFg: cal ? '#00201D' : '#3F4947',
+      basisText: '舌下与口服相加 · 基于 111 次服药记录',
+      parts: s.parts, partsAria: s.parts ? 'true' : 'false', partsBg: s.parts ? '#006A63' : '#BEC9C6', partsShift: s.parts ? 'translateX(20px)' : 'translateX(0)', partsOp: s.parts ? '1' : '0',
+      togglePartsFn: function () { self.setState({ parts: !s.parts }); },
+      calText: '有舌下记录时，暂不能校准。',
+      calAria: 'false', calBg: '#E3EAE8', calKnob: '#BEC9C6', calOp: '0.55', calOffAria: 'true', calShift: 'translateX(0)',
+      toggleCal: function () { },
+      modelSub: '来源、适用范围和限制'
+    };
+  }
+}
+</script>
+</body>
+</html>
