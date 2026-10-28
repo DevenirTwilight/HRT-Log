@@ -200,7 +200,8 @@ class Ui11CenterTest(private val locale: String, private val width: Int, private
             ui.onNodeWithTag(tag).performClick()
             ui.onAllNodesWithTag("center-unavailable-dialog").assertCountEquals(0)
         }
-        ui.onAllNodesWithText(s(R.string.drug_not_open_tag)).assertCountEquals(5)
+        // The row's own semantics are one spoken name; the visible tag is a descendant in the unmerged tree.
+        ui.onAllNodesWithText(s(R.string.drug_not_open_tag), useUnmergedTree = true).assertCountEquals(5)
         scrollTo("drug-center-recalls"); shot("center_future")
     }
 }

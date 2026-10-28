@@ -68,6 +68,18 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
     private fun show(name: String? = "SYNTHETIC linked medication") {
         ui.setContent { NotesTheme(mode) { MedicationReferenceDialog(controller, { name }) {} } }
     }
+    /** The same snapshot the real flow would save, written through the existing repository API (no dialogs). */
+    private fun seedOfficial(id: Long) = runBlocking {
+        val catalogue = BdpmCatalogue(ui.activity)
+        val product = catalogue.search("PROVAMES").entries.first { it.cis == "65421374" }
+        repo.associateInitialMedication(id, java.util.UUID.randomUUID().toString(), catalogue.snapshot(product, product.packages.first()), repo.referencePreviewEpoch())
+    }
+    private fun seedUserEntered(id: Long) = runBlocking {
+        repo.associateInitialMedication(id, java.util.UUID.randomUUID().toString(),
+            UserReferenceProduct("SYNTHETIC user product", listOf("SYNTHETIC ingredient"), "2 mg", "tablet", listOf("oral"), sourceVersion = "user-v1", recordedOn = "2026-10-20"), repo.referencePreviewEpoch())
+    }
+    /** Robolectric never idles a nested AlertDialog at 411 dp; dialog flows run at 320 dp only (as in the UI-10 tests). */
+    private fun dialogsOnlyAtSmallWidth() = org.junit.Assume.assumeTrue(width == 320)
     private fun linkOfficialPackage() {
         search("PROVAMES"); click("bdpm-result:65421374"); click("bdpm-package:3400935479341")
         ui.waitUntil(30000) { idle(); ui.onAllNodesWithTag("reference-select").fetchSemanticsNodes().isNotEmpty() }
@@ -105,7 +117,7 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         ui.onNodeWithTag("reference-saved-tab").assertIsSelected(); ui.onNodeWithTag("reference-official-tab").assertIsNotSelected()
         ui.onAllNodesWithTag("bdpm-panel").assertCountEquals(0)
         for (tag in listOf("reference-search", "reference-form-filter", "reference-strength-filter", "reference-route-filter")) { scrollTo(tag); ui.onNodeWithTag(tag).assertExists() }
-        ui.onNodeWithTag("reference-official-tab").performClick(); ui.onNodeWithTag("bdpm-panel").assertExists()
+        scrollTo("reference-official-tab"); ui.onNodeWithTag("reference-official-tab").performClick(); ui.onNodeWithTag("bdpm-panel").assertExists()
     }
 
     @Test fun catalogueResultsExpandOneAtATimeAndPackagesAreRadioCards() {
@@ -124,6 +136,9 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         scrollTo("bdpm-package:3400935479341")
         ui.onNodeWithTag("bdpm-package:3400935479341").assertIsNotSelected().assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, androidx.compose.ui.semantics.Role.RadioButton))
         shot("link_catalogue_expanded")
+        scrollTo("bdpm-product-only"); ui.onNodeWithTag("bdpm-product-only").assertHasClickAction().assertHeightIsAtLeast(48.dp)
+        dialogsOnlyAtSmallWidth()
+        scrollTo("bdpm-package:3400935479341")
         ui.onNodeWithTag("bdpm-package:3400935479341").performClick()
         ui.waitUntil(30000) { idle(); ui.onAllNodesWithTag("reference-select").fetchSemanticsNodes().isNotEmpty() }
         ui.onNodeWithTag("reference-confirm-cancel").assertDoesNotExist()
@@ -133,13 +148,11 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         ui.waitUntil(30000) { idle(); ui.onAllNodesWithTag("reference-select").fetchSemanticsNodes().isNotEmpty() }
         ui.onNodeWithText(s(R.string.cancel)).performClick()
         assertEquals("nothing was written by browsing or previewing", 0, count("reference_event"))
-        scrollTo("bdpm-product-only"); ui.onNodeWithTag("bdpm-product-only").assertHasClickAction().assertHeightIsAtLeast(48.dp)
     }
 
-    @Test fun officialLinkShowsTheCurrentLinkCardAndUnlinkKeepsItsConfirmation() {
-        val id = runBlocking { medication() }; runBlocking { controller.open(id)!!.join() }
-        val before = runBlocking { repo.medications() }
-        show(); linkOfficialPackage()
+    @Test fun officialLinkShowsTheCurrentLinkCard() {
+        val id = runBlocking { medication() }; seedOfficial(id); runBlocking { controller.open(id)!!.join() }
+        show()
         scrollTo("reference-current")
         ui.onNodeWithTag("reference-source-tag").assert(hasText(s(R.string.ref2_tag_official))).assert(SemanticsMatcher.expectValue(DrugTagToneKey, "official"))
         ui.onNodeWithTag("reference-package-tag").assert(hasText(s(R.string.ref2_tag_package)))
@@ -150,9 +163,17 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         shot("link_official")
         // The read-only details toggle with the button.
         scrollTo("reference-details"); ui.onNodeWithTag("reference-details").assertExists()
-        ui.onNodeWithTag("reference-view").performClick(); ui.onAllNodesWithTag("reference-details").assertCountEquals(0)
+        scrollTo("reference-view"); ui.onNodeWithTag("reference-view").performClick(); ui.onAllNodesWithTag("reference-details").assertCountEquals(0)
         ui.onNodeWithTag("reference-view").performClick(); scrollTo("reference-details"); ui.onNodeWithTag("reference-details").assertExists()
-        // Unlinking still asks first.
+        assertEquals(DrugLinkStatus.OFFICIAL, drugLinkStatus(runBlocking { repo.medicationReferenceState(id) }.reference))
+        assertEquals(mapOf(id to DrugLinkStatus.OFFICIAL), runBlocking { controller.links(listOf(id)) }.mapValues { drugLinkStatus(it.value) })
+    }
+
+    @Test fun unlinkingStillAsksFirstAndNeverTouchesTheMedication() {
+        dialogsOnlyAtSmallWidth()
+        val id = runBlocking { medication() }; seedOfficial(id); runBlocking { controller.open(id)!!.join() }
+        val before = runBlocking { repo.medications() }
+        show()
         click("reference-unlink")
         ui.onNodeWithTag("reference-confirm").assertExists()
         ui.onNodeWithTag("reference-confirm-cancel").performClick()
@@ -161,17 +182,22 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         ui.waitUntil(15000) { idle(); controller.state.value.let { it.saved || it.failed } }
         assertNull(runBlocking { repo.medicationReferenceState(id) }.reference!!.product)
         ui.onAllNodesWithTag("reference-current").assertCountEquals(0)
+        assertEquals("a saved change bumps the counter the centre refreshes on", 1, controller.changes.value)
         assertEquals("link and unlink never touch the medication", before, runBlocking { repo.medications() })
     }
 
-    @Test fun userEnteredLinkIsTaggedUnverifiedAndStatusReadsAsUserEntered() {
+    @Test fun officialLinkThroughTheRealFlowStillReachesTheSameCard() {
+        dialogsOnlyAtSmallWidth()
         val id = runBlocking { medication() }; runBlocking { controller.open(id)!!.join() }
+        show(); linkOfficialPackage()
+        scrollTo("reference-current")
+        ui.onNodeWithTag("reference-source-tag").assert(hasText(s(R.string.ref2_tag_official)))
+        assertEquals(DrugLinkStatus.OFFICIAL, drugLinkStatus(runBlocking { repo.medicationReferenceState(id) }.reference))
+    }
+
+    @Test fun userEnteredLinkIsTaggedUnverifiedAndStatusReadsAsUserEntered() {
+        val id = runBlocking { medication() }; seedUserEntered(id); runBlocking { controller.open(id)!!.join() }
         show()
-        click("reference-manual")
-        ui.onNodeWithTag("reference-name").performTextInput("SYNTHETIC user product"); ui.onNodeWithTag("reference-preview").performClick()
-        ui.onNodeWithTag("reference-select").performClick(); ui.onNodeWithTag("reference-confirm").performClick()
-        ui.waitUntil(15000) { idle(); controller.state.value.let { it.saved || it.failed } }
-        assertTrue(controller.state.value.saved)
         scrollTo("reference-current")
         ui.onNodeWithTag("reference-source-tag").assert(hasText(s(R.string.ref2_tag_user))).assert(SemanticsMatcher.expectValue(DrugTagToneKey, "user"))
         ui.onAllNodesWithTag("reference-package-tag").assertCountEquals(0)
@@ -181,17 +207,23 @@ class Ui11LinkTest(private val locale: String, private val width: Int, private v
         ui.waitUntil(10000) { idle(); ui.onAllNodesWithTag("reference-loading").fetchSemanticsNodes().isEmpty() }
         val uuid = runBlocking { repo.savedReferenceProducts() }.entries.single().snapshotUuid
         scrollTo("reference-result:$uuid")
-        ui.onNodeWithTag("reference-result:$uuid").assert(hasAnyDescendant(hasText(s(R.string.ref2_tag_user)))).assertHasClickAction().assertHeightIsAtLeast(56.dp)
+        ui.onNodeWithTag("reference-result:$uuid").assert(hasAnyDescendant(hasText(s(R.string.ref2_tag_user)))).assert(hasAnyDescendant(hasText(s(R.string.ref2_entered_on, "2026-10-20"))))
+            .assertHasClickAction().assertHeightIsAtLeast(56.dp)
         shot("link_mine")
     }
 
-    @Test fun officialAndNoneStatusesComeFromTheExistingAssociation() {
+    @Test fun manualEntryCreatesAUserEnteredLinkAndBumpsTheChangeCounter() {
+        dialogsOnlyAtSmallWidth()
         val id = runBlocking { medication() }; runBlocking { controller.open(id)!!.join() }
-        assertEquals(DrugLinkStatus.NONE, drugLinkStatus(runBlocking { repo.medicationReferenceState(id) }.reference))
-        show(); linkOfficialPackage()
-        assertEquals(DrugLinkStatus.OFFICIAL, drugLinkStatus(runBlocking { repo.medicationReferenceState(id) }.reference))
-        assertEquals(mapOf(id to DrugLinkStatus.OFFICIAL), runBlocking { controller.links(listOf(id)) }.mapValues { drugLinkStatus(it.value) })
-        assertEquals("a saved change bumps the counter the centre refreshes on", 1, controller.changes.value)
+        show()
+        click("reference-manual")
+        ui.onNodeWithTag("reference-name").performTextInput("SYNTHETIC user product"); ui.onNodeWithTag("reference-preview").performClick()
+        ui.onNodeWithTag("reference-select").performClick(); ui.onNodeWithTag("reference-confirm").performClick()
+        ui.waitUntil(15000) { idle(); controller.state.value.let { it.saved || it.failed } }
+        assertTrue(controller.state.value.saved)
+        scrollTo("reference-current")
+        ui.onNodeWithTag("reference-source-tag").assert(hasText(s(R.string.ref2_tag_user)))
+        assertEquals(1, controller.changes.value)
     }
 
     @Test fun manualEntryButtonHasItsUnverifiedCaption() {
