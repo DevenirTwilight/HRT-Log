@@ -1,3 +1,13 @@
+## Build36 正式原证书私人交付完成 — 2026-10-27
+
+负责人明确授权私人签名和交付。从最新已合并正式主线f5d37144acf25e4f0128b15a7fe9969ca34f70b6（含#133/#134/#135，#135任务归属MED-02-EXPOSE）独立干净工作树重新构建fullRelease，外部Gradle finalizeDsl显式0.2.0/code36，未复用旧unsigned缓存，175tasks实际执行、10m40s成功；APK自身DEX SOURCE_SHA准确、git/dirtyfalse。主线Android40564386422、Science40564386608、安全40564386376成功，复用既有三API真实产品验收，不另跑P4/PK研究。
+
+已使用原正式证书989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1签名，文件HRT-Log-build36-full-official.apk，14007301bytes，最终APK SHA256为16aaf2aad6cced5dff3d64440cc4d3657d585e06137e6bc266ceeaffe2de4a62。Google Drive本人专属、sharedfalse、单一owner，已完整回读与本地签名包逐字节相同，下载链接只给负责人、不进公开Git。临时签名材料已移除，私有原备份不改。无公开Release/tag/公开APK。
+
+实际包名net.plainnotes.app、版本36>既有35、非debug、四ABI含ARM64、所有8个ELF LOAD及ZIP16KiB对齐、无INTERNET/PoC Provider/合成入口。PUBLIC入口ON，医疗中心→就诊/单项LAB/完整医疗备份接线包含#135；Room20→21迁移不变，不要求卸载/清库。普通PNBAK1不含原件、应另做完整医疗备份。实际覆盖安装条件PASS，负责人真机安装/人工TalkBack仍NOT_RUN，不能保证未实测OEM行为。
+
+账本仅追加本次真实交付，历史不改；为保留既有delivery_ledger源码版本不得低于已交付版本守卫，后续主线默认versionCode由35同步为36，仅这一必要交付版本常量，无功能变更。APK源仍是上面的干净f5d37144+明确版本构建参数，不冒认本账本提交。校验收据docs/delivery/build36-private-verification.json不含下载令牌/私钥/密码。正常PR保护流程提交此记录；不再开发MED03/UI/性能功能。用户应先保管加密备份/密码、直接覆盖不卸载不清数据，先核既有记录/化验/库存，再用无敏感测试文件试附件；不要对唯一重要资料做恢复实验。
+
 ## UI-11 药品资料中心与商品资料关联重设计（已合并）— 2026-10-28
 
 UI-10（医疗档案重设计）已合并（PR #139，5d383a2d）。UI-11 = 药品资料中心与商品资料关联页面重设计（任务书原称 UI-10，负责人确认改称 UI-11，REQUIREMENTS §158.A、§159）。分支 `feature/ui11-drug-center-20261027`，工作树 /home/user/wt-ui11，基于 5d383a2d。任务书原文 `docs/design/ui10-drug-center-2026-10-27/TASK_BOOK_ORIGINAL.md`；样图同目录（PR #138）。
@@ -4154,3 +4164,19 @@ ANSM 新读写边界定向回归已通过：BdpmCatalogueTest6（含真实关联
 ANSM #142 f27d0364 原生原件：push40660379229的API26/29/35新增 MainActivity 官方详情测试均实际PASS；三者唯一旧导航合同失败在centerDialogsBackNavigation仍要求4个已正式实现模块无OnClick。原XML、API35完整job日志及artifact ID/hash在同目录evidence；没有数据、AppLock或外链认证失败证据。仅该旧合同改为四项真实产品选择窗口/返回/会话保持，recalls仍强制无点击，文件Intent监测和0次文件启动原断言保留；14秒AndroidTest编译PASS。新精确SHA最终原生/全部CI仍待实际执行，不把f27通过的子项冒充最终整体PASS。
 
 同源f27 unsigned fullRelease实际PASS，DEX来源精确核对f27+clean；包名/NoINTERNET/附件及ANSM调试隔离PASS。与同环境实际构建且DEX核对#140基线32e3a422相比：14,062,172→14,286,553 bytes，+224,381 bytes(约219KiB)，evidence/unsigned-apk-size-receipt.json记录两APK SHA/每资产压缩尺寸。不签名/交付、不改versionCode；此体积对比对应生产代码冻结f27，后继仅原生合同与证据更新。最终PR及受保护合并/主线CI收据以#142正文和永久评论为准，历史PENDING是该次提交检查点而非未来状态。
+
+
+## Build37 原证书私人文件交付 — 2026-10-28
+
+负责人明确要求签名APK。最新默认主线f00598e48af0bf1124e48149005930a69b2ba2d6（#142）Android40667142336、Science40667142275、安全40667142298均实际SUCCESS，PR最终42949cc7三API真实入口及完整必要检查PASS，合并树一致。包含MED-02正式入口、UI-11和本批官方只读BDPM资料。
+
+已知实际最高交付Build36（#137未合并记录）保留，故本次full0.2.0/code37。干净独立主线工作树，加源码外version37.init.gradle显式版本参数（哈希见收据），175 tasks实际执行，7m28s成功。只用原正式证书989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1，v2/v3实际PASS，APK HRT-Log-build37-full-official.apk，14,331,038 bytes，SHA256 eb943209ef7893e7c6e52d623fc40495c14a77cedc5d9a0cbe78b68d12423cee。签后逐项验包名/code37/clean源f00598e4、min26、非debug/NoINTERNET、四ABI及8个ELF/ZIP16KiB、正式附件/ANSM隔离、签前签后业务payload字节一致。
+
+本次为负责人共享工作区私人文件提供，不谎称已上传Drive或用户已安装；APK不入Git/公共CI，下载能力/用户接收回执和真机安装未独立确认。可直接覆盖原证书正式版，勿卸载/清数据；医疗资料建议先保存完整备份。临时恢复的私钥与密码已逐文件删除，原私有备份不动，没有公开Release/tag。核验收据docs/delivery/build37-private-verification.json。现有#137记录合并保留Build36及主线双方文档，再追加37与源码版本floor37，无其他产品/DB/密码学改动。首次验包脚本误用旧aapt字段sdkVersion，实际输出是minSdkVersion；更正为精确min26断言后验证PASS，没有降低SDK要求。此记录提交不是APK源码，APK源仍f00598e4+版本参数。
+
+
+## Build37 私人交付通道更正 — 2026-10-28
+
+负责人实际反馈工作区APK链接一直加载，原文件路径没有证明已收到，不能继续声称聊天附件交付成功。按“换个方式交付”要求，仍使用同一Build37/同一SHA eb943209ef7893e7c6e52d623fc40495c14a77cedc5d9a0cbe78b68d12423cee，不重建/重签/升38。网盘未连接，新建GitHub私有库返回403，草稿附件跨host上传返回401且空草稿已删除；最终改用已授权现有私有库的独立orphan交付分支，只含APK、校验文件及说明，原签名备份main和所有密钥文件完全不变，没有公开Release/tag。确认库仍private后成功push，再在新空仓库中仅fetch该独立分支，完整回读14,331,038bytes，与原签名APK逐字节相同；已给负责人真实GitHub文件页/下载入口，链接不入公共Git。
+
+Build37签名/源码/版本/账本身份不变；账本原channel记录初次提供方式，当前通道与失败事实以build37-private-verification.json补充，不改写既有身份记录，不把同一包换渠道再交付算新版本。用户实际下载/手机安装/TalkBack仍待确认，不能仅因远端回读PASS说真机PASS。后续下载需负责人登录原GitHub账号访问私有文件页，不再发工作区本地路径冒充已上传附件。
