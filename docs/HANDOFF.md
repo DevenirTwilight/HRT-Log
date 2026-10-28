@@ -1,3 +1,10 @@
+## MED-03 精确头 4465f518 必需检查全部通过 — 2026-10-28（PR #145 仍 Draft，待本记录提交后的最终 CI、Ready、受保护合并）
+
+- 精确头 `4465f5187c933583e42a118eee637bdb1ab22a63`。**PR 事件运行 40756012781 全部 SUCCESS**：android、device-tests（真实执行 `run_med02_product_native.py`：两个 MainActivity/SAF 产品用例与 3 个核心 MED-03 原生用例；之后 persistent/restore/gate2/b3/lab-panel/undo/medical-records 等全部重启脚本均 `OK`，Gradle BUILD SUCCESSFUL）、jvm、attachment-poc-compatibility 26/29、science-change-gate；security-native 26/27/29/35 与 featherline/library 512MiB 低内存任务同头 SUCCESS。
+- 同头的 push 事件运行 40756002773 有两项**环境性**失败，不是必需检查，且 PR 运行同名任务已通过：device-tests `could not connect to TCP port 5554: Connection refused`（模拟器没起来，未执行任何测试）；attachment-poc-compatibility (29) 的 `AutomaticImportAndroidTest` 抛 `ArrayIndexOutOfBoundsException: length=1280; index=-301`（API 29 框架内，Activity destroy 时，与 MED-03 代码无关）。按“只重跑一次”规则不再改代码；同名任务在 PR 运行通过即为证据。
+- 本轮在 4465f518 前的真实产品缺陷修复：恢复流程不再拒绝独立（未关联）医疗文件（LibraryCollectionRestore / LibraryRestoreCoordinator 的旧“每个文档必须有链接”断言由 MedicalArchiveManifest v1/v2 边界取代）；文件库导入后不再显示“尚无文件”；添加文件对话框增加整次抽血选项；其余见下面检查点。
+- 本地未签名 fullRelease 构建与核对见 PRODUCT_PROGRESS.md 末尾“未签名 fullRelease 核对”。Issue #144 在合并并复核主线 CI 后关闭。仍为 NOT_RUN：真机、人工 TalkBack、硬件断电；私钥签名/私人交付另按负责人后续授权（见下条）。
+
 ## MED-03 正式产品接线检查点 — 2026-10-28（PR #145 继续 Draft，原生待验收）
 
 同一 feature/med03-medical-files-20261028 分支继续，默认仍6ada7402，未覆盖他人提交。cd458159已经推送第一批编译/迁移修复；本检查点追加实际产品代码，不另开总PR。主线/Build37尚不含本候选。
