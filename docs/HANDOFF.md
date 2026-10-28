@@ -1,3 +1,13 @@
+## UI-11 药品资料中心与商品资料关联重设计（进行中）— 2026-10-28
+
+UI-10（医疗档案重设计）已合并（PR #139，5d383a2d）。UI-11 = 药品资料中心与商品资料关联页面重设计（任务书原称 UI-10，负责人确认改称 UI-11，REQUIREMENTS §158.A、§159）。分支 `feature/ui11-drug-center-20261027`，工作树 /home/user/wt-ui11，基于 5d383a2d。任务书原文 `docs/design/ui10-drug-center-2026-10-27/TASK_BOOK_ORIGINAL.md`；样图同目录（PR #138）。
+
+- B0 矩阵已核对：四个目标 UI 文件不在矩阵内，`MedicationsScreen`/`AppShell`/`Components`/`AdaptiveControls` 是 HISTORY_ONLY；不碰 PK_DISPLAY_REVIEW、LIVE_LOCK_*。
+- 补记：UI-10 修改了 PK_DISPLAY_REVIEW 文件 `LabsScreen.kt`（范围、批准来源、回归见 §158.B）。
+- 进度：见下方各节完成后更新。顺序：A 返回按钮 → 删除两个按钮 → B 药品资料中心 → C 商品资料关联 → 测试、截图、报告 77。
+
+---
+
 ## UI-10 医疗档案、医疗文件与化验详情重新设计（进行中）— 2026-10-27
 
 负责人任务书“UI-10：医疗档案、医疗文件库与化验详情全面重新设计”，REQUIREMENTS §157。分支 `feature/ui10-medical-redesign-20261027`，工作树 /home/user/wt-ui10，基于 main `019c805d`。设计、差异矩阵、验收分层：`docs/medical-attachments/2026-10-27/ui10/README.md`；与 MED-03 的接口合同和所有权：同目录 `INTERFACE_CONTRACT.md`；视觉证据（样图 | Before | After）：`docs/ui-audit/2026-10-27-ui10/`。
