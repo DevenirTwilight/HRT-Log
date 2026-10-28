@@ -286,7 +286,7 @@ private fun futureIcon(tag: String) = when (tag) {
         sources = try { loaders.sources() } catch (e: CancellationException) { throw e } catch (_: Exception) { DrugSourceInfo() }
     }
     var officialSection by rememberSaveable { mutableStateOf<String?>(null) }
-    androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss,
+    androidx.compose.ui.window.Dialog(onDismissRequest = { if(officialSection!=null) officialSection=null else onDismiss() },
         properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)) {
         Scaffold(modifier = Modifier.testTag("drug-center-window"), topBar = {
             Surface {
