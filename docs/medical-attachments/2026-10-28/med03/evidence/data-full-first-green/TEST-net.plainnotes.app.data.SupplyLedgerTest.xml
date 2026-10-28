@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.SupplyLedgerTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:57:49.668Z" hostname="948d99df3df9" time="0.857">
+  <properties/>
+  <testcase name="consumesAcrossContainersOpeningSealedOnes" classname="net.plainnotes.app.data.SupplyLedgerTest" time="0.256"/>
+  <testcase name="manualCorrectionUsesAdjustEntries" classname="net.plainnotes.app.data.SupplyLedgerTest" time="0.297"/>
+  <testcase name="reverseRestoresStockAndReopensEmptyContainer" classname="net.plainnotes.app.data.SupplyLedgerTest" time="0.187"/>
+  <testcase name="shortfallIsKeptOnTheRecord" classname="net.plainnotes.app.data.SupplyLedgerTest" time="0.11"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

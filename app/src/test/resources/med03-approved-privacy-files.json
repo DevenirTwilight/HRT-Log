@@ -1,0 +1,26 @@
+{
+ "values": {
+  "privacy_notice_backup_body": {
+   "approvedSha256": "6177ba22000327b9134b56b11676482d1d0efaef71a42de44d58a45b9e47f8a6",
+   "text": "<string name=\"privacy_notice_backup_body\">A backup is encrypted with the password you choose (Argon2id with 32 MiB and 3 passes, then AES-256-GCM). The ordinary .pnbak backup includes structured records but excludes medical attachments, private notes, Notes disguise text and settings. Medical files are stored encrypted on this device. A separate complete medical backup (.pnmedbk2, PNMEDBK2) is available for the supported files. The system file picker may save backups to another app or a cloud provider. Removing a link does not erase a saved medical file or reclaim space. Lost backup passwords cannot be recovered. Files can be kept without a record or explicitly linked to a visit, a whole blood draw or one result. Recycling retains storage; restoration does not revive old links.</string>"
+  }
+ },
+ "values-zh": {
+  "privacy_notice_backup_body": {
+   "approvedSha256": "beac3a7ffde8b5be733f62403e59985bd57bba332e3b32f32af3bda8bdeeef3c",
+   "text": "<string name=\"privacy_notice_backup_body\">备份使用你设置的密码加密（Argon2id，32 MiB、3 轮，然后 AES-256-GCM）。普通 .pnbak 备份包含结构化记录，但不包含医疗附件、私密笔记、伪装笔记中的文字或设置。医疗文件单独加密保存在这台设备上；完整医疗备份（.pnmedbk2，PNMEDBK2）可包含受支持的附件。系统文件选择器可能把备份存到其他应用或云服务。解除关联不会删除已保存的文件或释放空间。忘记的备份密码无法找回。 文件可暂不关联，或明确关联到就诊、整次抽血或单项结果。回收仍占用容量；恢复不会自动恢复旧关联。</string>"
+  }
+ },
+ "values-b+zh+Hant": {
+  "privacy_notice_backup_body": {
+   "approvedSha256": "adde20a8189fd6883bf2bb606c1129313d6422cdf08d360d6ded123cea2530ef",
+   "text": "<string name=\"privacy_notice_backup_body\">備份使用你設定的密碼加密（Argon2id，32 MiB、3 輪，然後 AES-256-GCM）。一般 .pnbak 備份包含結構化紀錄，但不包含醫療附件、私密筆記、偽裝筆記中的文字或設定。醫療檔案另外加密儲存在本機；完整醫療備份（.pnmedbk2，PNMEDBK2）可包含支援的附件。系統檔案選擇器可能將備份存放到其他 App 或雲端服務。解除關聯不會刪除已儲存的檔案或釋放空間。忘記的備份密碼無法找回。 檔案可暫不關聯，或明確關聯至就診、整次抽血或單項結果。回收仍佔用容量；還原不會自動恢復舊關聯。</string>"
+  }
+ },
+ "values-fr": {
+  "privacy_notice_backup_body": {
+   "approvedSha256": "d6dd910d2a2e7c73c0e6f6791d25d68a2fd80d35b6a83c0aefa1d4f6ea2a3681",
+   "text": "<string name=\"privacy_notice_backup_body\">Une sauvegarde est chiffrée avec le mot de passe choisi (Argon2id, 32 Mio et 3 passes, puis AES-256-GCM). La sauvegarde ordinaire .pnbak comprend les données structurées, mais exclut les pièces jointes médicales, les notes privées, le texte du camouflage Notes et les réglages. Les documents médicaux sont conservés chiffrés sur cet appareil. Une sauvegarde médicale complète distincte (.pnmedbk2, PNMEDBK2) peut inclure les fichiers pris en charge. Le sélecteur de fichiers peut enregistrer ces sauvegardes dans une autre application ou dans le cloud. Détacher un document ne supprime pas le fichier stocké et ne libère pas de place. Un mot de passe oublié ne peut pas être récupéré. Un fichier peut rester sans lien ou être associé explicitement à une consultation, à un prélèvement entier ou à un résultat. La corbeille conserve l’espace occupé ; la restauration ne réactive pas les anciens liens.</string>"
+  }
+ }
+}

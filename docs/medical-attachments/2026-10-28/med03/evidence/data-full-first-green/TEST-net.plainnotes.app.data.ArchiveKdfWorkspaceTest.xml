@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.ArchiveKdfWorkspaceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:51:21.151Z" hostname="948d99df3df9" time="1.69">
+  <properties/>
+  <testcase name="wrongPasswordThenCorrectAndDifferentSaltMatchIndependentVectors" classname="net.plainnotes.app.data.ArchiveKdfWorkspaceTest" time="0.872"/>
+  <testcase name="boundedBlocksAreActuallyReusedAfterCompletionOrFailure" classname="net.plainnotes.app.data.ArchiveKdfWorkspaceTest" time="0.013"/>
+  <testcase name="concurrentDifferentArchivesCannotShareLiveWorkBlocks" classname="net.plainnotes.app.data.ArchiveKdfWorkspaceTest" time="0.378"/>
+  <testcase name="cancellationAfterDerivationDoesNotPublishKeyAndNextUseStillWorks" classname="net.plainnotes.app.data.ArchiveKdfWorkspaceTest" time="0.424"/>
+  <testcase name="releasedWorkspaceDropsClearedBlockReferencesAndCanAllocateAgain" classname="net.plainnotes.app.data.ArchiveKdfWorkspaceTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

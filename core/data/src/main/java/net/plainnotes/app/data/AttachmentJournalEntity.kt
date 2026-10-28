@@ -21,7 +21,7 @@ data class AttachmentJournalEntity(
     val record_epoch: String,
     val physical_generation: String,
     val document_uuid: String,
-    val record_uuid: String,
+    val record_uuid: String?,
     val request_sha256: ByteArray,
     val attempt_uuid: String,
     val object_uuid: String,

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2026-10-28T15:02:25.525Z" hostname="948d99df3df9" time="16.43">
+  <properties/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[en/320dp/2x/dark=false]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="6.507"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[en/320dp/2x/dark=true]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.752"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[en/411dp/1x/dark=false]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.587"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[en/411dp/1x/dark=true]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.68"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[zh-rCN/320dp/2x/dark=false]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.703"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[zh-rCN/320dp/2x/dark=true]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.726"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[zh-rCN/411dp/1x/dark=false]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.62"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[zh-rCN/411dp/1x/dark=true]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.548"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[zh-rTW/320dp/2x/dark=false]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.642"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[zh-rTW/320dp/2x/dark=true]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.72"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[zh-rTW/411dp/1x/dark=false]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.576"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[zh-rTW/411dp/1x/dark=true]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.588"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[fr/320dp/2x/dark=false]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.737"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[fr/320dp/2x/dark=true]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.746"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[fr/411dp/1x/dark=false]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.564"/>
+  <testcase name="actualProductProjectionSearchAndStoredTypeFiltersRemainUsable[fr/411dp/1x/dark=true]" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryProductLayoutTest" time="0.617"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

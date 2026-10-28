@@ -164,7 +164,7 @@ class UiPrefs(context: Context) {
     val medicalDialogs = remember { MedicalDialogs() }
     val medicalRefreshText=stringResource(R.string.medical_saved_refresh)
     val medicalErrorText=stringResource(if(medicalSave.stale)R.string.medical_stale else R.string.medical_save_error)
-    LaunchedEffect(medicalSave.saved){if(medicalSave.saved!=null){medicalDialogs.editing=false;medicalDialogs.edit=null;if(medicalSave.refreshFailed)snackbar.showSnackbar(medicalRefreshText);model.clearMedicalVisitSave()}}
+    LaunchedEffect(medicalSave.saved){if(medicalSave.saved!=null && !medicalDialogs.attachAfterSave){medicalDialogs.onCreated?.let {done->medicalDialogs.onCreated=null;done(medicalSave.saved!!)};medicalDialogs.editing=false;medicalDialogs.edit=null;if(medicalSave.refreshFailed)snackbar.showSnackbar(medicalRefreshText);model.clearMedicalVisitSave()}}
     LaunchedEffect(medicalSave.failed){if(medicalSave.failed && !medicalDialogs.editing){snackbar.showSnackbar(medicalErrorText);model.clearMedicalVisitSave()}}
     var wellbeingPrompt by remember { mutableStateOf(prefs.wellbeingPrompt) }
     var simpleMode by remember { mutableStateOf(prefs.simpleMode) }
@@ -295,7 +295,15 @@ class UiPrefs(context: Context) {
                     {model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true},{openMedicalChild(Destination.LABS)},{openMedicalChild(Destination.TIMELINE)},{destination=Destination.SETTINGS},pad,
                     onConfirm={model.clearMedicalVisitSave();model.saveMedicalVisit(it,it)},questionCounts=extra.visitQuestions.groupingBy{it.appointment_id}.eachCount(),onVisits={openMedicalChild(Destination.VISITS)},
                     onMedicalBackup=if(net.plainnotes.app.attachments.AttachmentFlowController.PUBLIC_ENTRY_ENABLED) ({medicalBackupOpen=true}) else null,
-                    labs=extra.labs,onLab={medicalDialogs.lab=it.id},initialTab=medicalTab,onTabChange={medicalTab=it},labPanels=extra.labPanels)
+                    labs=extra.labs,onLab={medicalDialogs.lab=it.id},initialTab=medicalTab,onTabChange={medicalTab=it},labPanels=extra.labPanels,onPanel={labDialogs.panel=it.id},onSaveDraw={labDialogs.saveAs=it},fileLibraryContent={
+                        net.plainnotes.app.attachments.ui.library.MedicalFileLibraryHost(model,state.appointments,extra.labs,extra.labPanels,
+                            onRecord={t->when(t.kind) {
+                                net.plainnotes.app.data.MedicalAttachmentOperations.Kind.APPOINTMENT->{visitId=t.id;medicalOrigin=true;destination=Destination.VISITS}
+                                net.plainnotes.app.data.MedicalAttachmentOperations.Kind.LAB->{medicalDialogs.lab=t.id}
+                                net.plainnotes.app.data.MedicalAttachmentOperations.Kind.LAB_PANEL->{labDialogs.panel=t.id}
+                            }},onNewVisit={done->model.clearMedicalVisitSave();medicalDialogs.onCreated=done;medicalDialogs.edit=null;medicalDialogs.editing=true},
+                            onNewDraw={done->labDialogs.onCreated=done;labDialogs.labNew=true},onPrepare={openMedicalChild(Destination.VISITS)},onBackup={medicalBackupOpen=true})
+                    })
                 Destination.VISITS -> VisitsScreen(state, extra, model, visitId, { visitId = it;if(it==null && medicalOrigin){medicalOrigin=false;destination=Destination.MEDICAL} }, { appointment = true }, pad,
                     medical=medicalOrigin,onMedicalEdit={model.clearMedicalVisitSave();medicalDialogs.edit=it;medicalDialogs.editing=true},onLab={medicalDialogs.lab=it.id},
                     onAddHistorical={model.clearMedicalVisitSave();medicalDialogs.edit=null;medicalDialogs.editing=true})

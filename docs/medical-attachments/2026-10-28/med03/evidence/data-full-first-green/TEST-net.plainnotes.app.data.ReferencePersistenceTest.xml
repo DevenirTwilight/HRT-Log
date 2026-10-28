@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.ReferencePersistenceTest" tests="23" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:57:30.806Z" hostname="948d99df3df9" time="12.022">
+  <properties/>
+  <testcase name="futureHeaderIsRejectedBeforeOpeningDatabaseAndLegacyMaximumCannotReadNewBackup" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.919"/>
+  <testcase name="completeNewBackupRoundtripRetiresOldEditingEpochAndReopensWithoutCatalog" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="1.332"/>
+  <testcase name="corruptDigestOrEventChainFailsWithoutChangingTargetOrEpochOrGuards" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.468"/>
+  <testcase name="openingAndCancellingReferencePreviewWritesNothingAndFirstConfirmationIsAtomic" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.42"/>
+  <testcase name="sameIntegerIdInAnotherDatabaseOrImportedDatasetNeverAcceptsOldScope" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.964"/>
+  <testcase name="linkingCorrectingAndUnlinkingNeverRewritesLegacyFactsOrStock" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.398"/>
+  <testcase name="canonicalUnicodeDigestIsIdenticalAcrossAndroidVersions" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.352"/>
+  <testcase name="futureOrOutOfRangeCaptureRevisionsRejectEvenWithRecomputedDigest" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.501"/>
+  <testcase name="staleAndRacingEditorsCannotAppendTwoHeadsOrOrphanSnapshots" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.397"/>
+  <testcase name="historyReaderUsesFrozenSourceAndRetiresEvenAnEmptyDatasetTicket" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.653"/>
+  <testcase name="referenceCallsAreRejectedInLegacyPrivateSpaceBeforeOpeningAnyDatabase" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.344"/>
+  <testcase name="escapedRunsAndInvalidScalarsPreserveCanonicalBoundariesAcrossAndroidVersions" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.38"/>
+  <testcase name="replacementOfIdentifiedSubjectRejectsWithoutRetiringItsValidEpoch" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.373"/>
+  <testcase name="archivedMedicationRemainsAssociatedAndReferenceHistoryIsAppendOnly" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.347"/>
+  <testcase name="futureRecordCapturesContextNotActualPackageAndCorrectionsLeaveItFrozen" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.386"/>
+  <testcase name="sameOperationIsIdempotentEvenAfterLaterUnlinkButChangedPayloadIsRejected" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.393"/>
+  <testcase name="injectedFailureRollsBackReferenceBusinessRuntimeAndLegacyRows" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.424"/>
+  <testcase name="emptyReferenceRestoreRetiresPreviewWithoutCreatingAnyBusinessIdentity" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.719"/>
+  <testcase name="deletingAndReusingMedicationHandleRetiresEmptyPreview" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.369"/>
+  <testcase name="oldSchemaNineBackupClearsNewReferencesAndKeepsLegacyStockUnknown" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.617"/>
+  <testcase name="wholeUnescapedStringsKeepExplicitCanonicalBytesAcrossAndroidVersions" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.414"/>
+  <testcase name="tombstoneCannotRebindReusedIntegerRecordIdOrRewriteOriginalCapture" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.478"/>
+  <testcase name="sourceHistoryReadsFrozenContextAndDoesNotBackfillTheOlderRecord" classname="net.plainnotes.app.data.ReferencePersistenceTest" time="0.368"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

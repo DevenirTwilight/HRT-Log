@@ -1,0 +1,69 @@
+{
+  "origin": "Robolectric native graphics; actual production content with scripted synthetic gateway metadata; NOT native APK or physical acceptance",
+  "files": {
+    "screenshots/library_en_320dp_2.0x_dark.png": {
+      "sha256": "3011f49132e290ccec2a009c81995008a118df999d6e2474bffb4d2f2f65e2d7",
+      "bytes": 170021
+    },
+    "screenshots/library_en_320dp_2.0x_light.png": {
+      "sha256": "aff88174c4f64731bf7724df04d5cd154a2a500acfdc1d48072f300b3e93577d",
+      "bytes": 166995
+    },
+    "screenshots/library_en_411dp_1.0x_dark.png": {
+      "sha256": "ee43bd669b7eb6c716262bed4f7452342f98dcd4a04e47a3c6a8c257602f6f85",
+      "bytes": 174450
+    },
+    "screenshots/library_en_411dp_1.0x_light.png": {
+      "sha256": "6077da86a6095f5df8e3e8f0eefcea1634b5bf4f1c9ea85359c142ae8bcda11d",
+      "bytes": 169597
+    },
+    "screenshots/library_fr_320dp_2.0x_dark.png": {
+      "sha256": "f1250cde8d63f2ac566e5da4f13c2a3b60c76a6765d1860e45963e9fbe6964c3",
+      "bytes": 175936
+    },
+    "screenshots/library_fr_320dp_2.0x_light.png": {
+      "sha256": "16cb15864ed1fe0381b2d32cda2e9ef1cc5f5f932a1c6fce4bdd992debd4821a",
+      "bytes": 174030
+    },
+    "screenshots/library_fr_411dp_1.0x_dark.png": {
+      "sha256": "de41b1b390bd3d7338b4cf27aaae83f8ef8d40a7c65c885100b91cf056e6d160",
+      "bytes": 200987
+    },
+    "screenshots/library_fr_411dp_1.0x_light.png": {
+      "sha256": "44daa40e46e8ae412b1a83aab3b0a8e7a41e80f2e04f11ffbd9b2f8cee2e41ee",
+      "bytes": 196011
+    },
+    "screenshots/library_zh-rCN_320dp_2.0x_dark.png": {
+      "sha256": "2bfd8e99852dc7b0f5c1d5599ce3a16b2db4b8ed97a434817a1f07566be08469",
+      "bytes": 204430
+    },
+    "screenshots/library_zh-rCN_320dp_2.0x_light.png": {
+      "sha256": "2f9c8495f44f18ac77304d499ceaa73c64fd75d0f22111b1854581dd631604b8",
+      "bytes": 201475
+    },
+    "screenshots/library_zh-rCN_411dp_1.0x_dark.png": {
+      "sha256": "878284fd64d68f5af2d213af3dc360913aa644b0955a433ae841848fd5944b5b",
+      "bytes": 207618
+    },
+    "screenshots/library_zh-rCN_411dp_1.0x_light.png": {
+      "sha256": "ac0f01ef42ba25c121733add29c1c139d270dfba579f951d37407698d0c5fb16",
+      "bytes": 203369
+    },
+    "screenshots/library_zh-rTW_320dp_2.0x_dark.png": {
+      "sha256": "58b306e9118f2a04a77f1ee36a69efdbe3a1ae26dfc0ac06b76b7ea3e87748f5",
+      "bytes": 213905
+    },
+    "screenshots/library_zh-rTW_320dp_2.0x_light.png": {
+      "sha256": "61487852d876ae5cdef4fa4b33725f74efce8dd858f6f4bad08cb4f9e63b290b",
+      "bytes": 211135
+    },
+    "screenshots/library_zh-rTW_411dp_1.0x_dark.png": {
+      "sha256": "dde717f3e133369e7a201466804256613a23676bc8b38905b3069fbbc7847f57",
+      "bytes": 223454
+    },
+    "screenshots/library_zh-rTW_411dp_1.0x_light.png": {
+      "sha256": "2ff5a5c0223352ecd9d77c3a68d18b237efcbd3f7dda24f2e78f8fae9df56b0e",
+      "bytes": 219339
+    }
+  }
+}

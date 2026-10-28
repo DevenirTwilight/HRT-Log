@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.LibraryCollectionSchemaTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:52:44.215Z" hostname="948d99df3df9" time="0.416">
+  <properties/>
+  <testcase name="partialCollectionAndMutableReservationsCannotPublishOrReceiveRefund" classname="net.plainnotes.app.data.LibraryCollectionSchemaTest" time="0.406"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

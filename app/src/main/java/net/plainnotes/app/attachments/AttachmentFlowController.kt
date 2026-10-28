@@ -101,8 +101,19 @@ internal class AttachmentFlowController(
         reconcile()
     }
     suspend fun activate()=session.issue().let {cap->try {permission();check(!closed.get());backend.activate(cap)}finally {cap.close()}}
-    suspend fun documents()=session.issue().let {cap->try {permission();backend.documents(cap,request.target)}finally {cap.close()}}
-    suspend fun unlink(document:UUID)=session.issue().let {cap->try {permission();check(!closed.get());backend.unlink(cap,request.target,document)}finally {cap.close()}}
+    suspend fun documents()=session.issue().let {cap->try {permission();request.target?.let {backend.documents(cap,it)} ?: backend.libraryDocuments(cap,true)}finally {cap.close()}}
+    private suspend fun <T> libraryWork(block:suspend (net.plainnotes.app.domain.AttachmentSession.Capability)->T):T {
+        permission();check(!closed.get())
+        val cap=session.issue();return try {block(cap)}finally {cap.close()}
+    }
+    suspend fun relationships(document:UUID)=libraryWork {backend.relationships(it,document)}
+    suspend fun resolveTarget(target:MedicalAttachmentOperations.Target)=libraryWork {backend.resolveTarget(it,target)}
+    suspend fun associate(operation:UUID,target:MedicalAttachmentOperations.Target,document:UUID,revision:Long,unlink:MedicalAttachmentOperations.Relationship?=null)=
+        libraryWork {backend.associate(it,operation,target,document,revision,unlink)}
+    suspend fun relationStatus(operation:UUID,document:UUID)=libraryWork {backend.relationStatus(it,operation,document)}
+    suspend fun trash(document:UUID,revision:Long)=libraryWork {backend.trash(it,document,revision)}
+    suspend fun restore(document:UUID,revision:Long)=libraryWork {backend.restore(it,document,revision)}
+    suspend fun unlink(document:UUID)=session.issue().let {cap->try {permission();check(!closed.get());backend.unlink(cap,requireNotNull(request.target) {"Choose a specific association"},document)}finally {cap.close()}}
     suspend fun open(document:UUID):MedicalAttachmentOperations.Read {
         permission();check(!closed.get());val cap=session.issue()
         try {

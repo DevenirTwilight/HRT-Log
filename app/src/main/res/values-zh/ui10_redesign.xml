@@ -105,7 +105,7 @@
     <string name="lab_page_same_draw">同一次化验</string>
     <string name="lab_page_current">当前这项</string>
     <string name="lab_page_files_scope">文件只关联这一项（%1$s），不关联整次化验。整次化验的关联暂未开放。</string>
-    <string name="mh_target_lab_help">一份文件只能关联到其中一项结果。整次化验的关联暂未开放。</string>
+    <string name="mh_target_lab_help">一份报告可以关联整次抽血（该次所有结果），也可以只关联其中一项结果。</string>
     <plurals name="mh_lab_draws">
         <item quantity="other">%d 次化验</item>
     </plurals>

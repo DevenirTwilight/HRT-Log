@@ -1,0 +1,177 @@
+
+> Configure project :app
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+
+> Task :importer:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:domain:compileKotlin UP-TO-DATE
+> Task :core:domain:compileJava NO-SOURCE
+> Task :core:domain:processResources NO-SOURCE
+> Task :core:domain:classes UP-TO-DATE
+> Task :core:domain:jar UP-TO-DATE
+> Task :importer:compileKotlin UP-TO-DATE
+> Task :importer:compileJava NO-SOURCE
+> Task :importer:processResources NO-SOURCE
+> Task :importer:classes UP-TO-DATE
+> Task :importer:jar UP-TO-DATE
+> Task :core:data:preBuild UP-TO-DATE
+> Task :core:data:preDebugBuild UP-TO-DATE
+> Task :core:data:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:data:generateDebugResources UP-TO-DATE
+> Task :core:data:packageDebugResources UP-TO-DATE
+> Task :core:data:processDebugNavigationResources UP-TO-DATE
+> Task :core:data:parseDebugLocalResources UP-TO-DATE
+> Task :core:data:generateDebugRFile UP-TO-DATE
+> Task :core:data:javaPreCompileDebug UP-TO-DATE
+> Task :core:data:generateDebugUnitTestAssets UP-TO-DATE
+> Task :core:data:generateDebugAssets UP-TO-DATE
+> Task :core:data:mergeDebugAssets UP-TO-DATE
+> Task :core:data:preDebugUnitTestBuild UP-TO-DATE
+> Task :core:data:mergeDebugUnitTestAssets UP-TO-DATE
+> Task :core:data:writeDebugAarMetadata UP-TO-DATE
+> Task :core:data:checkDebugUnitTestAarMetadata UP-TO-DATE
+> Task :core:data:mapDebugSourceSetPaths UP-TO-DATE
+> Task :core:data:compileDebugLibraryResources UP-TO-DATE
+> Task :core:data:mapDebugUnitTestSourceSetPaths UP-TO-DATE
+> Task :core:data:generateDebugUnitTestResources UP-TO-DATE
+> Task :core:data:mergeDebugUnitTestResources UP-TO-DATE
+> Task :core:data:extractDeepLinksDebug UP-TO-DATE
+> Task :core:data:processDebugManifest UP-TO-DATE
+> Task :core:data:processDebugUnitTestManifest UP-TO-DATE
+> Task :core:data:processDebugUnitTestResources UP-TO-DATE
+> Task :core:data:packageDebugUnitTestForUnitTest UP-TO-DATE
+> Task :core:data:generateDebugUnitTestConfig UP-TO-DATE
+> Task :core:data:prepareAnsm03b0TestSources UP-TO-DATE
+> Task :core:data:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :attachment-poc:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :attachment-poc:compileKotlin UP-TO-DATE
+> Task :attachment-poc:compileJava NO-SOURCE
+> Task :attachment-poc:processResources NO-SOURCE
+> Task :attachment-poc:classes UP-TO-DATE
+> Task :attachment-poc:jar UP-TO-DATE
+> Task :core:data:preDebugAndroidTestBuild UP-TO-DATE
+> Task :core:data:generateDebugAndroidTestResources UP-TO-DATE
+> Task :core:data:packageDebugAndroidTestResources UP-TO-DATE
+> Task :core:data:processDebugAndroidTestNavigationResources UP-TO-DATE
+> Task :core:data:parseDebugAndroidTestLocalResources UP-TO-DATE
+> Task :core:data:generateDebugAndroidTestRFile UP-TO-DATE
+> Task :pk-engine:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :pk-engine:compileKotlin UP-TO-DATE
+> Task :pk-engine:compileJava NO-SOURCE
+> Task :pk-engine:processResources UP-TO-DATE
+> Task :pk-engine:classes UP-TO-DATE
+> Task :pk-engine:jar UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preFullDebugBuild UP-TO-DATE
+> Task :app:generateFullDebugBuildConfig UP-TO-DATE
+> Task :app:generateFullDebugResources
+> Task :app:packageFullDebugResources
+> Task :core:reminder:preBuild UP-TO-DATE
+> Task :core:reminder:preDebugBuild UP-TO-DATE
+> Task :core:reminder:processDebugNavigationResources UP-TO-DATE
+> Task :core:ui:preBuild UP-TO-DATE
+> Task :core:ui:preDebugBuild UP-TO-DATE
+> Task :core:ui:processDebugNavigationResources UP-TO-DATE
+> Task :app:processFullDebugNavigationResources
+> Task :app:parseFullDebugLocalResources
+> Task :app:generateFullDebugRFile
+> Task :core:reminder:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:reminder:generateDebugResources UP-TO-DATE
+> Task :core:reminder:packageDebugResources UP-TO-DATE
+> Task :core:reminder:parseDebugLocalResources UP-TO-DATE
+> Task :core:reminder:generateDebugRFile UP-TO-DATE
+> Task :core:reminder:javaPreCompileDebug UP-TO-DATE
+> Task :core:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:ui:generateDebugResources UP-TO-DATE
+> Task :core:ui:packageDebugResources UP-TO-DATE
+> Task :core:ui:parseDebugLocalResources UP-TO-DATE
+> Task :core:ui:generateDebugRFile UP-TO-DATE
+> Task :core:ui:compileDebugKotlin UP-TO-DATE
+> Task :core:ui:javaPreCompileDebug UP-TO-DATE
+> Task :core:ui:compileDebugJavaWithJavac NO-SOURCE
+> Task :core:ui:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app:javaPreCompileFullDebug UP-TO-DATE
+> Task :core:ui:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :core:ui:processDebugJavaRes UP-TO-DATE
+> Task :core:ui:createFullJarDebug UP-TO-DATE
+> Task :core:reminder:writeDebugAarMetadata UP-TO-DATE
+> Task :core:ui:writeDebugAarMetadata UP-TO-DATE
+> Task :app:checkFullDebugAarMetadata UP-TO-DATE
+> Task :app:mapFullDebugSourceSetPaths
+> Task :app:compileFullDebugNavigationResources UP-TO-DATE
+
+> Task :app:mergeFullDebugResources
+/workspace/HRT-Log-med03-panel/app/src/main/res/values/strings.xml: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med03-panel/app/src/main/res/values-zh/strings.xml: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med03-panel/app/src/main/res/values-zh/strings.xml: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med03-panel/app/src/main/res/values-zh/strings.xml: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med03-panel/app/src/main/res/values-b+zh+Hant/strings.xml: Multiple substitutions specified in non-positional format of string resource string/legend_band_inner. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med03-panel/app/src/main/res/values-b+zh+Hant/strings.xml: Multiple substitutions specified in non-positional format of string resource string/legend_band_outer. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med03-panel/app/src/main/res/values-b+zh+Hant/strings.xml: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+/workspace/HRT-Log-med03-panel/app/src/main/res/values-fr/strings.xml: Multiple substitutions specified in non-positional format of string resource string/pk_assumptions. Did you mean to add the formatted="false" attribute?
+
+> Task :app:createFullDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksFullDebug UP-TO-DATE
+> Task :core:reminder:extractDeepLinksDebug UP-TO-DATE
+> Task :core:reminder:processDebugManifest UP-TO-DATE
+> Task :core:ui:extractDeepLinksDebug UP-TO-DATE
+> Task :core:ui:processDebugManifest UP-TO-DATE
+> Task :app:processFullDebugMainManifest UP-TO-DATE
+> Task :app:processFullDebugManifest UP-TO-DATE
+> Task :app:processFullDebugManifestForPackage UP-TO-DATE
+> Task :core:reminder:mapDebugSourceSetPaths UP-TO-DATE
+> Task :core:reminder:compileDebugLibraryResources UP-TO-DATE
+> Task :core:ui:mapDebugSourceSetPaths UP-TO-DATE
+> Task :core:ui:compileDebugLibraryResources UP-TO-DATE
+> Task :app:processFullDebugResources
+> Task :app:preFullDebugAndroidTestBuild SKIPPED
+> Task :app:processFullDebugAndroidTestManifest UP-TO-DATE
+> Task :app:generateFullDebugAndroidTestBuildConfig UP-TO-DATE
+> Task :app:generateFullDebugAndroidTestResources UP-TO-DATE
+> Task :app:packageFullDebugAndroidTestResources UP-TO-DATE
+> Task :app:processFullDebugAndroidTestNavigationResources UP-TO-DATE
+> Task :app:parseFullDebugAndroidTestLocalResources UP-TO-DATE
+> Task :app:generateFullDebugAndroidTestRFile UP-TO-DATE
+> Task :core:data:kspDebugKotlin
+> Task :core:data:compileDebugKotlin
+> Task :core:data:compileDebugJavaWithJavac UP-TO-DATE
+> Task :core:data:processDebugJavaRes UP-TO-DATE
+> Task :core:data:transformDebugClassesWithAsm
+> Task :core:data:bundleLibRuntimeToJarDebug
+> Task :core:data:bundleLibCompileToJarDebug
+> Task :core:data:createFullJarDebug
+> Task :core:data:kspDebugUnitTestKotlin
+> Task :core:data:kspDebugAndroidTestKotlin
+> Task :core:data:compileDebugUnitTestKotlin
+> Task :core:data:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :core:data:hiltAggregateDepsDebugUnitTest UP-TO-DATE
+> Task :core:data:hiltJavaCompileDebugUnitTest NO-SOURCE
+> Task :core:data:processDebugUnitTestJavaRes UP-TO-DATE
+> Task :core:data:transformDebugUnitTestClassesWithAsm
+> Task :core:data:compileDebugAndroidTestKotlin
+> Task :core:data:testDebugUnitTest
+> Task :core:reminder:kspDebugKotlin
+> Task :core:reminder:compileDebugKotlin UP-TO-DATE
+> Task :core:reminder:compileDebugJavaWithJavac UP-TO-DATE
+> Task :core:reminder:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core:reminder:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :core:reminder:processDebugJavaRes UP-TO-DATE
+> Task :core:reminder:createFullJarDebug UP-TO-DATE
+> Task :app:kspFullDebugKotlin
+> Task :app:compileFullDebugKotlin
+> Task :app:compileFullDebugJavaWithJavac UP-TO-DATE
+> Task :app:hiltAggregateDepsFullDebug UP-TO-DATE
+> Task :app:hiltJavaCompileFullDebug UP-TO-DATE
+> Task :app:bundleFullDebugClassesToCompileJar
+> Task :app:kspFullDebugAndroidTestKotlin
+> Task :app:compileFullDebugAndroidTestKotlin
+
+BUILD SUCCESSFUL in 27s
+119 actionable tasks: 26 executed, 93 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.3.1/userguide/configuration_cache_enabling.html

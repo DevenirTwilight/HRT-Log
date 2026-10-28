@@ -57,6 +57,7 @@ class AppShellBackNavigationTest {
         ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(context.getString(destination.title))).performClick()
         ui.waitForIdle()
     }
+    private fun waitLibrary() {ui.waitUntil(10000) {ui.onAllNodesWithTag("library").fetchSemanticsNodes().isNotEmpty()}}
     private fun assertCalendar() = ui.onNodeWithContentDescription(context.getString(R.string.calendar_pick_start)).assertExists()
     private fun assertNotCalendar() = ui.onNodeWithContentDescription(context.getString(R.string.calendar_pick_start)).assertDoesNotExist()
 
@@ -124,13 +125,13 @@ class AppShellBackNavigationTest {
 
     @Test fun medicalCenterOpensRealVisitsAndReturnsWithoutCreatingRecords() {
         show(); open(Destination.MEDICAL)
-        for((tab,tag) in listOf("records" to "medical-center-visits","files" to "medical-visit-attachments")) {
-            ui.onNodeWithTag("medical-tab:$tab").performClick()
-            ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag(tag))
+        for((tab,tag) in listOf("records" to "medical-center-visits","files" to "library-prepare")) {
+            ui.onNodeWithTag("medical-tab:$tab").performClick();if(tab=="files")waitLibrary()
+            ui.onNodeWithTag(if(tab=="files")"library" else "medical-list").performScrollToNode(hasTestTag(tag))
             ui.onNodeWithTag(tag).performClick();ui.waitForIdle()
             ui.onNodeWithText(context.getString(R.string.visits_empty)).assertExists()
-            ui.onNodeWithTag("medical-center-back").performClick();ui.waitForIdle()
-            ui.onNodeWithTag("medical-list").assertExists()
+            ui.onNodeWithTag("medical-center-back").performClick();ui.waitForIdle();if(tab=="files")waitLibrary()
+            ui.onNodeWithTag(if(tab=="files")"library" else "medical-list").assertExists()
         }
         assertTrue(runBlocking { db.dao().appointments().isEmpty() })
         assertTrue(runBlocking { db.dao().labs().isEmpty() })
@@ -139,34 +140,30 @@ class AppShellBackNavigationTest {
 
     @Test fun medicalCenterOpensExistingCompleteBackupAndReturns() {
         show();open(Destination.MEDICAL)
-        ui.onNodeWithTag("medical-tab:files").performClick()
-        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-complete-backup"))
-        ui.onNodeWithTag("medical-complete-backup").performClick()
+        ui.onNodeWithTag("medical-tab:files").performClick();waitLibrary()
+        ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-backup"))
+        ui.onNodeWithTag("library-backup").performClick()
         ui.onNodeWithText(context.getString(R.string.med_transfer_scope)).assertExists()
         // The focused Dialog has its own window; dispatch Back there, not directly to
         // the underlying Activity dispatcher used for the top-level-page tests.
         ui.runOnUiThread {org.robolectric.shadows.ShadowDialog.getShownDialogs().last {it.isShowing}.onBackPressed()}
         ui.waitForIdle()
-        ui.onNodeWithTag("medical-list").assertExists()
+        ui.onNodeWithTag("library").assertExists()
         assertTrue(runBlocking {db.dao().appointments().isEmpty()})
         assertTrue(runBlocking {db.dao().labs().isEmpty()})
     }
 
-    @Test fun medicalFilesAreaOffersOnlyExplicitRecordsAndKeepsExistingData() {
+    @Test fun medicalFilesLibraryExposesScopedActionsWithoutCreatingData() {
         runBlocking {repo.appointment(AppointmentEntity(at_utc=Instant.now().plusSeconds(86400).toEpochMilli(),at_zone="UTC",type="CHECKUP",practitioner="Synthetic file-area audit",remind_minutes_before=0))}
         val before=runBlocking{db.dao().appointments()}
         model.sync();show();open(Destination.MEDICAL)
         val intents=org.robolectric.Shadows.shadowOf(context)
-        ui.onNodeWithTag("medical-tab:files").performClick()
-        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-files-soon"))
-        ui.onNodeWithTag("medical-files-soon").assertExists().assertHasNoClickAction()
-        // "Add medical file" first asks which explicit record; nothing is created and no picker or external activity starts.
-        ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-add-file"))
-        ui.onNodeWithTag("medical-add-file").performClick()
-        ui.onNodeWithTag("file-target-dialog").assertExists()
-        ui.onNodeWithTag("file-target-close").performClick()
-        ui.onNodeWithTag("file-target-dialog").assertDoesNotExist()
-        ui.onNodeWithTag("medical-list").assertExists();assertNotCalendar()
+        ui.onNodeWithTag("medical-tab:files").performClick();waitLibrary()
+        ui.waitUntil(10000) {ui.onAllNodesWithTag("library").fetchSemanticsNodes().isNotEmpty()}
+        ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-bin"))
+        ui.onNodeWithTag("library-bin").performClick();ui.waitForIdle()
+        back()
+        ui.onNodeWithTag("library").assertExists();assertNotCalendar()
         assertNull("No picker, document viewer or external activity",intents.nextStartedActivity)
         assertEquals(before,runBlocking{db.dao().appointments()})
         assertTrue(runBlocking{db.dao().labs().isEmpty()})

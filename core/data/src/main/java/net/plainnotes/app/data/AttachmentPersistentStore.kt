@@ -23,7 +23,7 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
     private val checkpoint: (Boundary) -> Unit = {},
     private val allocation:LibraryAttachmentAdmission.Permit?=null) {
     enum class Boundary { PREPARED, STAGED, AUTHENTICATED, IN_COMMIT, COMMITTED }
-    data class Request(val operation: UUID, val document: UUID, val record: UUID,
+    data class Request(val operation: UUID, val document: UUID, val record: UUID?,
         val expectedRevision: Long, val title: String, val category: String,
         val mime: String, val plaintextBytes: Long, val plaintextSha256: String) {
         init {
@@ -67,7 +67,7 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
         val current=AttachmentIdentity.current(raw)
         cap.publishFor(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch)) {check(current==scope) {"Dataset changed"}}
     }
-    private data class Journal(val operation: String, val document: String, val record: String,
+    private data class Journal(val operation: String, val document: String, val record: String?,
         val generation: String, val context: AttachmentObjectContext, val stageAlias: String,
         val activeAlias: String, val proof: String, val phase: String, val request: ByteArray,
         val identity: AttachmentOwnedFiles.Identity?, val manifest: AttachmentObjectStreams.Manifest?,
@@ -90,7 +90,7 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
         fun present(n: String)=!c.isNull(c.getColumnIndexOrThrow(n))
         val content=AttachmentObjectContext(UUID.fromString(text("logical_vault_uuid")), UUID.fromString(text("object_uuid")),
             UUID.fromString(text("version_uuid")), UUID.fromString(text("attempt_uuid")), UUID.fromString(text("dek_handle_uuid")))
-        Journal(operation,text("document_uuid"),text("record_uuid"),text("physical_generation"),content,
+        Journal(operation,text("document_uuid"),if(present("record_uuid"))text("record_uuid") else null,text("physical_generation"),content,
             text("stage_alias_uuid"),text("active_alias_uuid"),text("proof"),text("phase"),bytes("request_sha256"),
             if(present("file_inode")) AttachmentOwnedFiles.Identity(number("parent_device"),number("parent_inode"),number("file_device"),number("file_inode")) else null,
             if(present("plaintext_sha256")) AttachmentObjectStreams.Manifest(content,number("plaintext_bytes"),number("ciphertext_bytes"),bytes("plaintext_sha256").hex(),bytes("ciphertext_sha256").hex()) else null,
@@ -120,7 +120,7 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
                     raw.query("SELECT 1 FROM attachment_operation WHERE operation_uuid=? OR idempotency_uuid=? LIMIT 1",arrayOf(request.operation.toString(),request.operation.toString())).use {
                         check(!it.moveToFirst()) {"Operation UUID belongs to another request or dataset"}
                     }
-                    checkRecord(scope,request.record.toString())
+                    checkRecord(scope,request.record?.toString())
                     checkRevision(scope,request)
                     // Under the same writer lock and SQL snapshot, BEFORE prepare/provision/source.
                     val usage=AttachmentStorageAccounting.inspect(raw,directory,keys,storageBudget,cap::check)
@@ -141,7 +141,7 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
                     })
                     insert("attachment_journal",ContentValues().apply {
                         put("store_uuid",scope.dataset);put("operation_uuid",request.operation.toString());put("record_epoch",scope.epoch)
-                        put("physical_generation",gen.second);put("document_uuid",request.document.toString());put("record_uuid",request.record.toString())
+                        put("physical_generation",gen.second);put("document_uuid",request.document.toString());put("record_uuid",request.record?.toString())
                         put("request_sha256",digest);put("attempt_uuid",uuid());put("object_uuid",objectId);put("version_uuid",version);put("dek_handle_uuid",handle)
                         put("stage_alias_uuid",uuid());put("active_alias_uuid",uuid());put("stage_ready",0);put("active_ready",0);put("stage_uses",0);put("active_uses",0);put("proof","RESERVED")
                     })
@@ -222,7 +222,8 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
             }
         } // Native COMMIT completes BEFORE Cipher.init/doFinal; crash never refunds this one-use epoch.
     }
-    private fun checkRecord(scope:AttachmentIdentity.Scope,record:String) {
+    private fun checkRecord(scope:AttachmentIdentity.Scope,record:String?) {
+        if(record==null) {check(raw.version>=MedicalFilesSchema.VERSION) {"Independent import requires medical files schema"};return}
         raw.query("SELECT 1 FROM attachment_record_identity WHERE store_uuid=? AND record_epoch=? AND record_uuid=? AND state='ACTIVE'",arrayOf(scope.dataset,scope.epoch,record)).use { check(it.moveToFirst()) { "Missing active typed record" } }
     }
     private fun checkRevision(scope:AttachmentIdentity.Scope,r:Request) {
@@ -254,7 +255,7 @@ internal class AttachmentPersistentStore(context: Context, private val db: Notes
             listOf(j.context.version.toString(),(r.expectedRevision+1).toString(),r.title,r.category,scope.dataset,j.document,maxOf(1,r.expectedRevision).toString()).forEachIndexed { i,v -> it.bindString(i+1,v) }
             check(it.executeUpdateDelete()==1) { "Document pointer CAS conflict" }
         }
-        raw.query("SELECT 1 FROM attachment_link WHERE store_uuid=? AND document_uuid=? AND record_epoch=? AND record_uuid=? AND state='ACTIVE'",arrayOf(scope.dataset,j.document,scope.epoch,j.record)).use {
+        if(j.record!=null)raw.query("SELECT 1 FROM attachment_link WHERE store_uuid=? AND document_uuid=? AND record_epoch=? AND record_uuid=? AND state='ACTIVE'",arrayOf(scope.dataset,j.document,scope.epoch,j.record)).use {
             if(!it.moveToFirst()) insert("attachment_link",ContentValues().apply {
                 put("store_uuid",scope.dataset);put("link_uuid",uuid());put("record_epoch",scope.epoch);put("record_uuid",j.record);put("document_uuid",j.document);put("revision",1);put("state","ACTIVE")
             })

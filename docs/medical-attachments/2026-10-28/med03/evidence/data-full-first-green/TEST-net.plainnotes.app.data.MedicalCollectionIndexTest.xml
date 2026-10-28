@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.MedicalCollectionIndexTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:56:51.987Z" hostname="948d99df3df9" time="0.05">
+  <properties/>
+  <testcase name="v2HeaderIsExplicitAndV1ReaderStillRejectsItBeforeKdf" classname="net.plainnotes.app.data.MedicalCollectionIndexTest" time="0.025"/>
+  <testcase name="indexBytesShareTheSameManifestLimitRatherThanAddingAnExtraAllowance" classname="net.plainnotes.app.data.MedicalCollectionIndexTest" time="0.005"/>
+  <testcase name="preservesEmptyRetainedLibraryAndScopedSameIdsWithoutMerging" classname="net.plainnotes.app.data.MedicalCollectionIndexTest" time="0.001"/>
+  <testcase name="aggregateLimitsCannotBeMultipliedByLibraryCount" classname="net.plainnotes.app.data.MedicalCollectionIndexTest" time="0.006"/>
+  <testcase name="missingActiveDuplicateLibraryReorderedExtraOrTruncatedBytesRefuse" classname="net.plainnotes.app.data.MedicalCollectionIndexTest" time="0.002"/>
+  <testcase name="duplicateObjectOrVersionUnknownHashNegativeLengthAndPayloadSubstitutionRefuse" classname="net.plainnotes.app.data.MedicalCollectionIndexTest" time="0.002"/>
+  <testcase name="wrappingBindsLibraryAndProtocolAndNeverReusesAnAttempt" classname="net.plainnotes.app.data.MedicalCollectionIndexTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

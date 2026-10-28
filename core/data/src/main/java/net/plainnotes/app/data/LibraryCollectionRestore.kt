@@ -114,7 +114,8 @@ internal class LibraryCollectionRestore(private val access:DatabaseAccess,
                 index.libraries.forEach {forbidden+=it.dataset;forbidden+=it.epoch;forbidden+=it.logicalVault}
                 works.forEach {w->
                     val m=archive.manifest(w.source.id)
-                    require(m.documents.all {d->m.links.any {it.document==d.uuid}}) {"Unlinked document provenance unavailable"}
+                    // MED-03: an independent file with no record is a first-class saved file. Whether a manifest may carry one is decided at
+                    // the archive boundary (MedicalArchiveManifest: v1 requires a link for every document, only v2 allows independent files).
                     w.plan=AttachmentRestorePreflight.inspect(m,w.records.copyOf(),archive.source(w.source.id).members(),w.namespace,
                         m.records.map {AttachmentBackupManifest.Target(it.uuid,it.kind,if(it.state=="PURGED")null else it.sourceId)},
                         m.records.filter {it.state!="PURGED"}.map {AttachmentRestorePreflight.TargetRow(it.uuid,it.kind,it.sourceId,it.state)},forbidden,

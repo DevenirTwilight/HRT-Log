@@ -83,6 +83,10 @@ internal object AttachmentRestorePreflight {
                 for(i in 0 until a.length()) {checkActive();val row=a.getJSONObject(i);require(trash.put(exactId(row,"id"),row)==null)}
                 m.records.forEach {r->
                     checkActive();val live=r.sourceId in byKind.getValue(r.kind)
+                    if(live && r.kind==AttachmentBackupManifest.Kind.LAB_PANEL) {
+                        val panels=tables.getJSONArray("lab_panel")
+                        require((0 until panels.length()).any {panels.getJSONObject(it).let {row->exactId(row,"id")==r.sourceId && row.getString("uuid")==r.uuid.toString()}}) {"Blood draw identity mismatch"}
+                    }
                     when(r.state) {
                         "ACTIVE"->require(live && (r.kind!=AttachmentBackupManifest.Kind.DOSE_RECORD || r.sourceId !in deletedDose)) {"Missing active clinical relationship target"}
                         "PURGED"->require(!live) {"Tombstone conflicts with a live clinical fact"}
@@ -90,7 +94,7 @@ internal object AttachmentRestorePreflight {
                             val reference=r.kind==AttachmentBackupManifest.Kind.DOSE_RECORD
                             require(if(reference)live && r.sourceId in deletedDose else !live)
                             val item=requireNotNull(trash[r.trashId]) {"Missing retained clinical trash"}
-                            val allowed=when(r.kind) {AttachmentBackupManifest.Kind.APPOINTMENT->setOf("APPOINTMENT");AttachmentBackupManifest.Kind.LAB->setOf("LAB","LAB_PANEL");AttachmentBackupManifest.Kind.DOSE_RECORD->setOf("RECORD")}
+                            val allowed=when(r.kind) {AttachmentBackupManifest.Kind.APPOINTMENT->setOf("APPOINTMENT");AttachmentBackupManifest.Kind.LAB->setOf("LAB","LAB_PANEL");AttachmentBackupManifest.Kind.LAB_PANEL->setOf("LAB","LAB_PANEL");AttachmentBackupManifest.Kind.DOSE_RECORD->setOf("RECORD")}
                             require(item.getString("kind") in allowed)
                             val payload=item.getString("payload_json");val bytes=payload.toByteArray(Charsets.UTF_8)
                             try {
@@ -99,7 +103,7 @@ internal object AttachmentRestorePreflight {
                                 if(reference)require(item.getString("ref")==r.sourceId.toString()) {"Wrong soft-deleted record reference"}
                                 else {
                                     val retained=payloadJson.getJSONObject("tables").getJSONArray(table(r.kind))
-                                    require((0 until retained.length()).count {exactId(retained.getJSONObject(it),"id")==r.sourceId}==1) {"Missing or duplicate retained clinical target"}
+                                    require((0 until retained.length()).count {retained.getJSONObject(it).let {row->exactId(row,"id")==r.sourceId && (r.kind!=AttachmentBackupManifest.Kind.LAB_PANEL || row.getString("uuid")==r.uuid.toString())}}==1) {"Missing or duplicate retained clinical target"}
                                 }
                             } finally {bytes.fill(0)}
                         }
@@ -124,7 +128,7 @@ internal object AttachmentRestorePreflight {
         } finally {structuredBytes.fill(0)}
     }
     private fun table(kind:AttachmentBackupManifest.Kind)=when(kind) {
-        AttachmentBackupManifest.Kind.APPOINTMENT->"appointment";AttachmentBackupManifest.Kind.LAB->"lab_value";AttachmentBackupManifest.Kind.DOSE_RECORD->"dose_record"
+        AttachmentBackupManifest.Kind.APPOINTMENT->"appointment";AttachmentBackupManifest.Kind.LAB->"lab_value";AttachmentBackupManifest.Kind.LAB_PANEL->"lab_panel";AttachmentBackupManifest.Kind.DOSE_RECORD->"dose_record"
     }
     private fun <T> immutable(values:List<T>):List<T> = Collections.unmodifiableList(ArrayList(values))
 }

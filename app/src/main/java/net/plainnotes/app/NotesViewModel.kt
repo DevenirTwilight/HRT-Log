@@ -528,9 +528,15 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
         net.plainnotes.app.conc.SublingualEstimatePolicy.apply(net.plainnotes.app.conc.LabEstimate.capture(dao,lab))
     fun saveLab(v:LabValueEntity,includeEstimate:Boolean=false)=change{repo.saveLab(v,recapture=includeEstimate,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}
     /** LAB-01 batch entry: [onDone] says whether all were saved (then the form closes) or none (the form keeps its content). */
-    fun saveLabs(values:List<LabValueEntity>,includeEstimate:Boolean,onDone:(Boolean)->Unit)=viewModelScope.launch {
-        try { mutate{repo.saveLabs(values,recapture=includeEstimate,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}; refresh().join(); onDone(true) }
-        catch(e:CancellationException){throw e}catch(_:Exception){ mutable.value=mutable.value.copy(error=R.string.operation_error); onDone(false) }
+    fun saveLabs(values:List<LabValueEntity>,includeEstimate:Boolean,onDone:(Boolean)->Unit)=saveLabDraw(values,includeEstimate) {onDone(it!=null)}
+    /** The callback acknowledges the exact committed UUID, even when subsequent refresh/reminders fail. */
+    fun saveLabDraw(values:List<LabValueEntity>,includeEstimate:Boolean,onDone:(LabPanelEntity?)->Unit)=viewModelScope.launch {
+        var committed:LabPanelEntity?=null
+        try {
+            mutate {repo.saveLabs(values,recapture=includeEstimate,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null}).also {committed=it}}
+            refresh().join();onDone(committed)
+        }catch(e:CancellationException) {if(committed!=null)onDone(committed);throw e}
+        catch(_:Exception) {if(committed==null)mutable.value=mutable.value.copy(error=R.string.operation_error);onDone(committed)}
     }
     // LAB-02 lab panels (docs/design/lab-panel-adr.md)
     fun saveLabPanel(panel:LabPanelEntity,time:java.time.LocalDateTime,laboratory:String,note:String)=change{
@@ -540,7 +546,18 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     fun addToLabPanel(id:Long,values:List<LabValueEntity>,includeEstimate:Boolean)=change{repo.addToLabPanel(id,values,recapture=includeEstimate,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}
     fun removeFromLabPanel(v:LabValueEntity)=change{repo.removeFromLabPanel(v.id)}
     fun deleteLabPanel(id:Long)=change{repo.deleteLabPanel(id)}
-    fun groupAsLabPanel(labs:List<LabValueEntity>)=change{repo.groupAsLabPanel(labs.map{it.id})}
+    fun groupAsLabPanel(labs:List<LabValueEntity>,onDone:(Long)->Unit={})=viewModelScope.launch {
+        var committed:Long?=null
+        try {mutate {repo.groupAsLabPanel(labs.map {it.id}).also {committed=it}};refresh().join();committed?.let(onDone)}
+        catch(e:CancellationException) {committed?.let(onDone);throw e}
+        catch(_:Exception) {if(committed!=null)onDone(requireNotNull(committed)) else mutable.value=mutable.value.copy(error=R.string.operation_error)}
+    }
+    fun confirmDisplayedDraw(labs:List<LabValueEntity>,onDone:(LabPanelEntity?)->Unit)=viewModelScope.launch {
+        var committed:LabPanelEntity?=null
+        try {mutate {repo.confirmLabPanel(labs.map {it.id}).also {committed=it}};refresh().join();onDone(committed)}
+        catch(e:CancellationException) {committed?.let {onDone(it)};throw e}
+        catch(_:Exception) {if(committed==null)mutable.value=mutable.value.copy(error=R.string.operation_error);onDone(committed)}
+    }
     fun rebuildLabContext(v:LabValueEntity,includeEstimate:Boolean=false)=change{repo.rebuildLabContext(v.id,estimate={dao,lab->if(includeEstimate)newEstimate(dao,lab) else null})}
     fun deleteLab(v:LabValueEntity)=change{repo.deleteLab(v.id)}
     fun delete(id:Long)=change{repo.removeMedication(id)}

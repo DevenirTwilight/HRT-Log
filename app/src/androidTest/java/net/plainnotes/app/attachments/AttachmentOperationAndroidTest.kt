@@ -125,7 +125,7 @@ class AttachmentOperationAndroidTest {
                 waitFor("real commit") {activity?.flow?.state?.value is AttachmentFlowController.State.Saved}
                 val a=requireNotNull(activity);val flow=requireNotNull(a.flow)
                 val receipt=(flow.state.value as AttachmentFlowController.State.Saved).receipt
-                assertEquals(if(lab)MedicalAttachmentOperations.Kind.LAB else MedicalAttachmentOperations.Kind.APPOINTMENT,flow.request.target.kind)
+                assertEquals(if(lab)MedicalAttachmentOperations.Kind.LAB else MedicalAttachmentOperations.Kind.APPOINTMENT,requireNotNull(flow.request.target).kind)
                 val entries=flow.documents();assertEquals(1,entries.size);assertEquals(receipt.document,entries.single().document)
                 assertEquals("ACTIVE",entries.single().linkState)
                 val otherTarget=if(lab)a.fixture.target else a.fixture.labTarget

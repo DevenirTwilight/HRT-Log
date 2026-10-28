@@ -63,8 +63,11 @@ internal object AttachmentCandidateMetadata {
             check(t.kind.name==c.getString(1) && t.localId==if(c.isNull(2))null else c.getLong(2))
             if(c.getString(3)=="PURGED")check(c.isNull(2))
             else {
-                val table=when(t.kind) {AttachmentBackupManifest.Kind.APPOINTMENT->"appointment";AttachmentBackupManifest.Kind.LAB->"lab_value";AttachmentBackupManifest.Kind.DOSE_RECORD->"dose_record"}
-                if(c.getString(3)=="ACTIVE" || t.kind==AttachmentBackupManifest.Kind.DOSE_RECORD)db.query("SELECT 1 FROM $table WHERE id=?",arrayOf(t.localId)).use {check(it.moveToFirst())}
+                val table=when(t.kind) {AttachmentBackupManifest.Kind.APPOINTMENT->"appointment";AttachmentBackupManifest.Kind.LAB->"lab_value";AttachmentBackupManifest.Kind.LAB_PANEL->"lab_panel";AttachmentBackupManifest.Kind.DOSE_RECORD->"dose_record"}
+                if(c.getString(3)=="ACTIVE" || t.kind==AttachmentBackupManifest.Kind.DOSE_RECORD)db.query("SELECT * FROM $table WHERE id=?",arrayOf(t.localId)).use {
+                    check(it.moveToFirst())
+                    if(t.kind==AttachmentBackupManifest.Kind.LAB_PANEL)check(it.getString(it.getColumnIndexOrThrow("uuid"))==id.toString()) {"Candidate blood draw UUID mismatch"}
+                }
                 // LAB/APPOINTMENT trash remains in the original payload, proved by preflight below.
             }
         }}

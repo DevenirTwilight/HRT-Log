@@ -119,8 +119,11 @@ internal class AttachmentBackupPreparation private constructor(private val datab
                         AttachmentBackupManifest.Record(c.uuid(0),AttachmentBackupManifest.Kind.valueOf(c.getString(1)),c.getLong(2),c.getString(3),c.optionalLong(4),c.hex(5))}
                     for(record in records) {
                         child.check()
-                        val table=when(record.kind) {AttachmentBackupManifest.Kind.APPOINTMENT->"appointment";AttachmentBackupManifest.Kind.LAB->"lab_value";AttachmentBackupManifest.Kind.DOSE_RECORD->"dose_record"}
-                        if(record.state=="ACTIVE")raw.query("SELECT 1 FROM $table WHERE id=?",arrayOf(record.sourceId)).use {check(it.moveToFirst()) {"Missing typed source row"}}
+                        val table=when(record.kind) {AttachmentBackupManifest.Kind.APPOINTMENT->"appointment";AttachmentBackupManifest.Kind.LAB->"lab_value";AttachmentBackupManifest.Kind.LAB_PANEL->"lab_panel";AttachmentBackupManifest.Kind.DOSE_RECORD->"dose_record"}
+                        if(record.state=="ACTIVE")raw.query("SELECT * FROM $table WHERE id=?",arrayOf(record.sourceId)).use {
+                            check(it.moveToFirst()) {"Missing typed source row"}
+                            if(record.kind==AttachmentBackupManifest.Kind.LAB_PANEL)check(it.getString(it.getColumnIndexOrThrow("uuid"))==record.uuid.toString()) {"Wrong blood draw UUID"}
+                        }
                         if(record.state=="TRASHED")raw.query("SELECT payload_json,kind,ref FROM trash_item WHERE id=?",arrayOf(record.trashId)).use {c->
                             check(c.moveToFirst());val payload=c.getString(0)
                             val digest=MessageDigest.getInstance("SHA-256").digest(payload.toByteArray(Charsets.UTF_8)).joinToString("") {"%02x".format(it.toInt() and 255)}
@@ -131,9 +134,9 @@ internal class AttachmentBackupPreparation private constructor(private val datab
                                     check(dose.moveToFirst() && !dose.isNull(0)) {"Missing soft-deleted dose fact"}
                                 }
                             } else {
-                                check(c.getString(1) in if(record.kind==AttachmentBackupManifest.Kind.LAB)setOf(Trash.LAB,Trash.LAB_PANEL) else setOf(Trash.APPOINTMENT))
+                                check(c.getString(1) in if(record.kind in setOf(AttachmentBackupManifest.Kind.LAB,AttachmentBackupManifest.Kind.LAB_PANEL))setOf(Trash.LAB,Trash.LAB_PANEL) else setOf(Trash.APPOINTMENT))
                                 val retained=JSONObject(payload).getJSONObject("tables").getJSONArray(table)
-                                check((0 until retained.length()).count {retained.getJSONObject(it).getLong("id")==record.sourceId}==1) {"Wrong typed trash row"}
+                                check((0 until retained.length()).count {retained.getJSONObject(it).let {row->row.getLong("id")==record.sourceId && (record.kind!=AttachmentBackupManifest.Kind.LAB_PANEL || row.getString("uuid")==record.uuid.toString())}}==1) {"Wrong typed trash row"}
                             }
                         }
                     }

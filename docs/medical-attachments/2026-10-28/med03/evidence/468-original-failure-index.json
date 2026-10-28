@@ -1,0 +1,385 @@
+{
+  "source": "46838e4e4bb4e13a36b2e3177e0d163d1bb5cd13",
+  "run": 40691410692,
+  "artifact": 12817702193,
+  "artifact_sha256": "c1432f054e339a6353234bebb17de3f6ab516973f34f11087478aedfeab7e97b",
+  "failures": [
+    {
+      "class": "net.plainnotes.app.data.LabPanelDataTest",
+      "test": "saveAsOneBloodTestOnlyForUngroupedResultsOfOneExactSample",
+      "category": "SINGLETON_GROUP_SEMANTICS_REGRESSION",
+      "exception": [
+        "java.lang.AssertionError: [1] grouped",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat net.plainnotes.app.data.LabPanelDataContract$saveAsOneBloodTestOnlyForUngroupedResultsOfOneExactSample$1.invokeSuspend(LabPanelDataContract.kt:150)",
+        "\tat kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)",
+        "\tat kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)",
+        "\tat kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)",
+        "\tat kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)",
+        "\tat kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)",
+        "\tat kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.LabPanelDataTest",
+      "test": "expandedReportKeepsEveryOriginalUnitPanelContextAndBackupThroughTrash",
+      "category": "CURRENT_VERSION_LITERAL",
+      "exception": [
+        "java.lang.AssertionError: expected:<21> but was:<22>",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.failNotEquals(Assert.java:835)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:120)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:146)",
+        "\tat net.plainnotes.app.data.LabPanelDataContract$expandedReportKeepsEveryOriginalUnitPanelContextAndBackupThroughTrash$1.invokeSuspend(LabPanelDataContract.kt:289)",
+        "\tat kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)",
+        "\tat kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)",
+        "\tat kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.LabPanelDataTest",
+      "test": "room11To12KeepsEveryRowAndGroupsNothing",
+      "category": "CURRENT_VERSION_LITERAL",
+      "exception": [
+        "java.lang.AssertionError: expected:<21> but was:<22>",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.failNotEquals(Assert.java:835)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:120)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:146)",
+        "\tat net.plainnotes.app.data.LabPanelDataContract.room11To12KeepsEveryRowAndGroupsNothing(LabPanelDataContract.kt:73)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "test": "room15LifecycleMigrationRollsBackWithoutInventingOwnership",
+      "category": "INJECTED_MIGRATION_PATH_MISSING_21_TO_22",
+      "exception": [
+        "java.lang.AssertionError",
+        "\tat org.junit.Assert.fail(Assert.java:87)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:42)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:53)",
+        "\tat net.plainnotes.app.data.AttachmentMigrationContract.room15LifecycleMigrationRollsBackWithoutInventingOwnership(AttachmentMigrationContract.kt:218)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)",
+        "\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "test": "nativeOldestSchemaMigrationChainValidatesRoom10",
+      "category": "CURRENT_VERSION_LITERAL",
+      "exception": [
+        "java.lang.AssertionError: expected:<21> but was:<22>",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.failNotEquals(Assert.java:835)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:120)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:146)",
+        "\tat net.plainnotes.app.data.AttachmentMigrationContract.nativeOldestSchemaMigrationChainValidatesRoom10(AttachmentMigrationContract.kt:123)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "test": "room14AuthorityFailureRetainsOriginalDatasetAndLeavesNoPartialControlTables",
+      "category": "INJECTED_MIGRATION_PATH_MISSING_21_TO_22",
+      "exception": [
+        "java.lang.AssertionError: Authority migration fault must actually execute",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:42)",
+        "\tat net.plainnotes.app.data.AttachmentMigrationContract.room14AuthorityFailureRetainsOriginalDatasetAndLeavesNoPartialControlTables(AttachmentMigrationContract.kt:192)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)",
+        "\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+        "\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "test": "nativeMigrationFailureRollsBackDDLAndLeavesOriginalRoom9Readable",
+      "category": "INJECTED_MIGRATION_PATH_MISSING_21_TO_22",
+      "exception": [
+        "java.lang.AssertionError: Injected migration must actually execute",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:42)",
+        "\tat net.plainnotes.app.data.AttachmentMigrationContract.nativeMigrationFailureRollsBackDDLAndLeavesOriginalRoom9Readable(AttachmentMigrationContract.kt:138)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)",
+        "\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+        "\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "test": "room16CollectionMigrationIsAdditiveAndInterruptedDdlRollsBack",
+      "category": "INJECTED_MIGRATION_PATH_MISSING_21_TO_22",
+      "exception": [
+        "java.lang.AssertionError",
+        "\tat org.junit.Assert.fail(Assert.java:87)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:42)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:53)",
+        "\tat net.plainnotes.app.data.AttachmentMigrationContract.room16CollectionMigrationIsAdditiveAndInterruptedDdlRollsBack(AttachmentMigrationContract.kt:240)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)",
+        "\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "test": "room13JournalMigrationPreservesLegacyUnknownAndRollsBackOnFailure",
+      "category": "INJECTED_MIGRATION_PATH_MISSING_21_TO_22",
+      "exception": [
+        "java.lang.AssertionError: Injected journal migration must actually execute",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:42)",
+        "\tat net.plainnotes.app.data.AttachmentMigrationContract.room13JournalMigrationPreservesLegacyUnknownAndRollsBackOnFailure(AttachmentMigrationContract.kt:164)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)",
+        "\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)",
+        "\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "test": "encryptedRoom9MigratesAllLegacyRowsIndicesGuardsAndReopens",
+      "category": "CURRENT_VERSION_LITERAL",
+      "exception": [
+        "java.lang.AssertionError: expected:<21> but was:<22>",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.failNotEquals(Assert.java:835)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:120)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:146)",
+        "\tat net.plainnotes.app.data.AttachmentMigrationContract$encryptedRoom9MigratesAllLegacyRowsIndicesGuardsAndReopens$1.invokeSuspend(AttachmentMigrationContract.kt:95)",
+        "\tat kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)",
+        "\tat kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)",
+        "\tat kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.AttachmentMigrationTest",
+      "test": "publishedRoom20UpgradesWithoutRewritingRowsAndOldReaderRefusesRoom21",
+      "category": "CURRENT_VERSION_LITERAL",
+      "exception": [
+        "java.lang.AssertionError: expected:<21> but was:<22>",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.failNotEquals(Assert.java:835)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:120)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:146)",
+        "\tat net.plainnotes.app.data.AttachmentMigrationContract$publishedRoom20UpgradesWithoutRewritingRowsAndOldReaderRefusesRoom21$1.invokeSuspend(AttachmentMigrationContract.kt:324)",
+        "\tat kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)",
+        "\tat kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)",
+        "\tat kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "test": "failedElevenToTwelveFenceRollsBackWithAllReferenceFactsAndEpochIntact",
+      "category": "INJECTED_MIGRATION_PATH_MISSING_21_TO_22",
+      "exception": [
+        "java.lang.AssertionError",
+        "\tat org.junit.Assert.fail(Assert.java:87)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:42)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:53)",
+        "\tat net.plainnotes.app.data.ReferenceMigrationContract.failedElevenToTwelveFenceRollsBackWithAllReferenceFactsAndEpochIntact(ReferenceMigrationContract.kt:377)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)",
+        "\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "test": "monaSeventeenToEighteenIsAdditiveAndFailedUpgradeRollsBack",
+      "category": "INJECTED_MIGRATION_PATH_MISSING_21_TO_22",
+      "exception": [
+        "java.lang.AssertionError",
+        "\tat org.junit.Assert.fail(Assert.java:87)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:42)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:53)",
+        "\tat net.plainnotes.app.data.ReferenceMigrationContract.monaSeventeenToEighteenIsAdditiveAndFailedUpgradeRollsBack(ReferenceMigrationContract.kt:504)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)",
+        "\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "test": "failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable",
+      "category": "INJECTED_MIGRATION_PATH_MISSING_21_TO_22",
+      "exception": [
+        "java.lang.AssertionError",
+        "\tat org.junit.Assert.fail(Assert.java:87)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:42)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:53)",
+        "\tat net.plainnotes.app.data.ReferenceMigrationContract.failedTenToElevenMigrationRollsBackDdlAndKeepsOriginalEncryptedDatabaseReadable(ReferenceMigrationContract.kt:479)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)",
+        "\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "test": "everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve",
+      "category": "CURRENT_VERSION_LITERAL",
+      "exception": [
+        "java.lang.AssertionError: expected:<21> but was:<22>",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.failNotEquals(Assert.java:835)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:120)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:146)",
+        "\tat net.plainnotes.app.data.ReferenceMigrationContract.everyPublishedRoomOneThroughElevenUpgradesNonDestructivelyToTwelve(ReferenceMigrationContract.kt:304)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "test": "featherlineEighteenToNineteenIsAdditiveAndFailedUpgradeRollsBack",
+      "category": "INJECTED_MIGRATION_PATH_MISSING_21_TO_22",
+      "exception": [
+        "java.lang.AssertionError",
+        "\tat org.junit.Assert.fail(Assert.java:87)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:42)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:53)",
+        "\tat net.plainnotes.app.data.ReferenceMigrationContract.featherlineEighteenToNineteenIsAdditiveAndFailedUpgradeRollsBack(ReferenceMigrationContract.kt:536)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)",
+        "\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.ReferenceMigrationTest",
+      "test": "failedMainTwelveToThirteenFenceKeepsPanelLinksLegacyBitsAndEpoch",
+      "category": "INJECTED_MIGRATION_PATH_MISSING_21_TO_22",
+      "exception": [
+        "java.lang.AssertionError",
+        "\tat org.junit.Assert.fail(Assert.java:87)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:42)",
+        "\tat org.junit.Assert.assertTrue(Assert.java:53)",
+        "\tat net.plainnotes.app.data.ReferenceMigrationContract.failedMainTwelveToThirteenFenceKeepsPanelLinksLegacyBitsAndEpoch(ReferenceMigrationContract.kt:452)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)",
+        "\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.HistoricalVisitTest",
+      "test": "encryptedBackupRetainsVisitsAndTrashAcrossAdditiveReferenceSchema",
+      "category": "CURRENT_VERSION_LITERAL",
+      "exception": [
+        "java.lang.AssertionError: expected:<21> but was:<22>",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.failNotEquals(Assert.java:835)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:120)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:146)",
+        "\tat net.plainnotes.app.data.HistoricalVisitContract$encryptedBackupRetainsVisitsAndTrashAcrossAdditiveReferenceSchema$1.invokeSuspend(HistoricalVisitContract.kt:33)",
+        "\tat kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)",
+        "\tat kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)",
+        "\tat kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.MedicalFilesMigrationTest",
+      "test": "ddlFailureRollsBackOriginalRowsTablesIndicesAndTriggers",
+      "category": "PUBLISHED_FIXTURE_OPTIONAL_INDEX_METADATA",
+      "exception": [
+        "org.json.JSONException: No value for indices",
+        "\tat org.json.JSONObject.get(JSONObject.java:392)",
+        "\tat org.json.JSONObject.getJSONArray(JSONObject.java:587)",
+        "\tat net.plainnotes.app.data.MedicalFilesMigrationContract$old$1.onCreate(MedicalFilesMigrationContract.kt:26)",
+        "\tat androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.onCreate(FrameworkSQLiteOpenHelper.android.kt:236)",
+        "\tat android.database.sqlite.SQLiteOpenHelper.$$robo$$android_database_sqlite_SQLiteOpenHelper$getDatabaseLocked(SQLiteOpenHelper.java:393)",
+        "\tat android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java)",
+        "\tat android.database.sqlite.SQLiteOpenHelper.$$robo$$android_database_sqlite_SQLiteOpenHelper$getWritableDatabase(SQLiteOpenHelper.java:298)",
+        "\tat android.database.sqlite.SQLiteOpenHelper.getWritableDatabase(SQLiteOpenHelper.java)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.MedicalFilesMigrationTest",
+      "test": "published21RetainsRowsIdentitiesAndValidatesRoom22AfterReopen",
+      "category": "PUBLISHED_FIXTURE_OPTIONAL_INDEX_METADATA",
+      "exception": [
+        "org.json.JSONException: No value for indices",
+        "\tat org.json.JSONObject.get(JSONObject.java:392)",
+        "\tat org.json.JSONObject.getJSONArray(JSONObject.java:587)",
+        "\tat net.plainnotes.app.data.MedicalFilesMigrationContract$old$1.onCreate(MedicalFilesMigrationContract.kt:26)",
+        "\tat androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.onCreate(FrameworkSQLiteOpenHelper.android.kt:236)",
+        "\tat android.database.sqlite.SQLiteOpenHelper.$$robo$$android_database_sqlite_SQLiteOpenHelper$getDatabaseLocked(SQLiteOpenHelper.java:393)",
+        "\tat android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java)",
+        "\tat android.database.sqlite.SQLiteOpenHelper.$$robo$$android_database_sqlite_SQLiteOpenHelper$getWritableDatabase(SQLiteOpenHelper.java:298)",
+        "\tat android.database.sqlite.SQLiteOpenHelper.getWritableDatabase(SQLiteOpenHelper.java)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.AttachmentFoundationTest",
+      "test": "room11KeepsThreeAttachmentDomainsDefaultDisabled",
+      "category": "CURRENT_VERSION_LITERAL",
+      "exception": [
+        "java.lang.AssertionError: expected:<21> but was:<22>",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.failNotEquals(Assert.java:835)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:120)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:146)",
+        "\tat net.plainnotes.app.data.AttachmentFoundationContract$room11KeepsThreeAttachmentDomainsDefaultDisabled$1.invokeSuspend(AttachmentFoundationContract.kt:101)",
+        "\tat kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)",
+        "\tat kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)",
+        "\tat kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "test": "candidateDDLFailureRollsBackWithoutChangingRoomVersionOrLegacyRows",
+      "category": "CURRENT_VERSION_LITERAL",
+      "exception": [
+        "java.lang.AssertionError: expected:<21> but was:<22>",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.failNotEquals(Assert.java:835)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:120)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:146)",
+        "\tat net.plainnotes.app.data.Ansm03b0InventoryContract$candidateDDLFailureRollsBackWithoutChangingRoomVersionOrLegacyRows$1.invokeSuspend(Ansm03b0InventoryContract.kt:342)",
+        "\tat kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)",
+        "\tat kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:98)",
+        "\tat kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)"
+      ]
+    },
+    {
+      "class": "net.plainnotes.app.data.Ansm03b0InventoryTest",
+      "test": "allOldRoomVersionsUpgradeThenAcceptSeparateCandidateWithoutBackfillingInventory",
+      "category": "CURRENT_VERSION_LITERAL",
+      "exception": [
+        "java.lang.AssertionError: expected:<21> but was:<22>",
+        "\tat org.junit.Assert.fail(Assert.java:89)",
+        "\tat org.junit.Assert.failNotEquals(Assert.java:835)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:120)",
+        "\tat org.junit.Assert.assertEquals(Assert.java:146)",
+        "\tat net.plainnotes.app.data.Ansm03b0InventoryContract.allOldRoomVersionsUpgradeThenAcceptSeparateCandidateWithoutBackfillingInventory(Ansm03b0InventoryContract.kt:366)",
+        "\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)",
+        "\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)",
+        "\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)"
+      ]
+    },
+    {
+      "class": "ReferenceMigrationTest",
+      "test": "roomTenReverseLedgerAndAllThirtySevenLegacyEntitiesRemainBitExactAndDowngradeRejects",
+      "category": "UNNECESSARY_PUBLISHED_TABLE_DDL_REWRITE",
+      "exception": [
+        "org.junit.ComparisonFailure: expected:<...tity\",\"CREATE TABLE [`attachment_record_identity` (`store_uuid` TEXT NOT NULL, `record_epoch` TEXT NOT NULL, `record_uuid` TEXT NOT NULL, `target_kind` TEXT NOT NULL, `legacy_id` INTEGER NOT NULL, `state` TEXT NOT NULL, `trash_id` INTEGER, `evidence_digest` BLOB NOT NULL, PRIMARY KEY(`store_uuid`, `record_epoch`, `record_uuid`), FOREIGN KEY(`store_uuid`, `record_epoch`) REFERENCES `attachment_store`(`store_uuid`, `record_epoch`) ON UPDATE NO ACTION ON DELETE RESTRICT )\"]],\"attachment_document\":[],\"ddl_attachment_document\":[[\"index\",\"index_attachment_document_store_uuid_document_uuid_active_version_uuid\",\"CREATE INDEX `index_attachment_document_store_uuid_document_uuid_active_version_uuid` ON `attachment_document` (`store_uuid`, `document_uuid`, `active_version_uuid`)\"],[\"index\",\"sqlite_autoindex_attachment_document_1\",null],[\"table\",\"attachment_document\",\"CREATE TABLE `attachment_document` (`store_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `revision` INTEGER NOT NULL, `title` TEXT NOT NULL, `category` TEXT NOT NULL, `state` TEXT NOT NULL, `active_version_uuid` TEXT, `deleted_utc` INTEGER, PRIMARY KEY(`store_uuid`, `document_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`, `active_version_uuid`) REFERENCES `attachment_version`(`store_uuid`, `document_uuid`, `version_uuid`) ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`store_uuid`) REFERENCES `attachment_store`(`store_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )\"]],\"attachment_version\":[],\"ddl_attachment_version\":[[\"index\",\"index_attachment_version_store_uuid_document_uuid_ordinal\",\"CREATE UNIQUE INDEX `index_attachment_version_store_uuid_document_uuid_ordinal` ON `attachment_version` (`store_uuid`, `document_uuid`, `ordinal`)\"],[\"index\",\"index_attachment_version_store_uuid_object_uuid\",\"CREATE UNIQUE INDEX `index_attachment_version_store_uuid_object_uuid` ON `attachment_version` (`store_uuid`, `object_uuid`)\"],[\"index\",\"index_attachment_version_store_uuid_status\",\"CREATE INDEX `index_attachment_version_store_uuid_status` ON `attachment_version` (`store_uuid`, `status`)\"],[\"index\",\"sqlite_autoindex_attachment_version_1\",null],[\"table\",\"attachment_version\",\"CREATE TABLE `attachment_version` (`store_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `version_uuid` TEXT NOT NULL, `ordinal` INTEGER NOT NULL, `object_uuid` TEXT NOT NULL, `protocol_revision` INTEGER NOT NULL, `dek_handle_uuid` TEXT NOT NULL, `plaintext_sha256` BLOB NOT NULL, `ciphertext_sha256` BLOB NOT NULL, `plaintext_bytes` INTEGER NOT NULL, `ciphertext_bytes` INTEGER NOT NULL, `mime` TEXT NOT NULL, `status` TEXT NOT NULL, PRIMARY KEY(`store_uuid`, `document_uuid`, `version_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`) REFERENCES `attachment_document`(`store_uuid`, `document_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )\"]],\"attachment_link\":[],\"ddl_attachment_link\":[[\"index\",\"index_attachment_link_store_uuid_document_uuid_state\",\"CREATE INDEX `index_attachment_link_store_uuid_document_uuid_state` ON `attachment_link` (`store_uuid`, `document_uuid`, `state`)\"],[\"index\",\"index_attachment_link_store_uuid_record_epoch_record_uuid_document_uuid\",\"CREATE UNIQUE INDEX index_attachment_link_store_uuid_record_epoch_record_uuid_document_uuid ON attachment_link(store_uuid,record_epoch,record_uuid,document_uuid) WHERE state='ACTIVE'\"],[\"index\",\"sqlite_autoindex_attachment_link_1\",null],[\"table\",\"attachment_link\",\"CREATE TABLE `attachment_link` (`store_uuid` TEXT NOT NULL, `link_uuid` TEXT NOT NULL, `record_epoch` TEXT NOT NULL, `record_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `revision` INTEGER NOT NULL, `state` TEXT NOT NULL, PRIMARY KEY(`store_uuid`, `link_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`) REFERENCES `attachment_document`(`store_uuid`, `document_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT , FOREIGN KEY(`store_uuid`, `record_epoch`, `record_uuid`) REFERENCES `attachment_record_identity`(`store_uuid`, `record_epoch`, `record_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT ])\"]],\"attachment_ope...> but was:<...tity\",\"CREATE TABLE [attachment_record_identity (\\n store_uuid TEXT NOT NULL, record_epoch TEXT NOT NULL,\\n record_uuid TEXT NOT NULL CHECK(length(record_uuid)=36),\\n target_kind TEXT NOT NULL CHECK(target_kind IN('APPOINTMENT','LAB','LAB_PANEL','DOSE_RECORD')),\\n legacy_id INTEGER NOT NULL CHECK(legacy_id>0),\\n state TEXT NOT NULL CHECK(state IN('ACTIVE','TRASHED','PURGED')),\\n trash_id INTEGER, evidence_digest BLOB NOT NULL CHECK(length(evidence_digest)=32),\\n PRIMARY KEY(store_uuid,record_epoch,record_uuid),\\n FOREIGN KEY(store_uuid,record_epoch) REFERENCES attachment_store(store_uuid,record_epoch) ON DELETE RESTRICT,\\n CHECK((state='TRASHED' AND trash_id IS NOT NULL) OR (state!='TRASHED' AND trash_id IS NULL))\\n)\"]],\"attachment_document\":[],\"ddl_attachment_document\":[[\"index\",\"index_attachment_document_store_uuid_document_uuid_active_version_uuid\",\"CREATE INDEX `index_attachment_document_store_uuid_document_uuid_active_version_uuid` ON `attachment_document` (`store_uuid`, `document_uuid`, `active_version_uuid`)\"],[\"index\",\"sqlite_autoindex_attachment_document_1\",null],[\"table\",\"attachment_document\",\"CREATE TABLE `attachment_document` (`store_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `revision` INTEGER NOT NULL, `title` TEXT NOT NULL, `category` TEXT NOT NULL, `state` TEXT NOT NULL, `active_version_uuid` TEXT, `deleted_utc` INTEGER, PRIMARY KEY(`store_uuid`, `document_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`, `active_version_uuid`) REFERENCES `attachment_version`(`store_uuid`, `document_uuid`, `version_uuid`) ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY(`store_uuid`) REFERENCES `attachment_store`(`store_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )\"]],\"attachment_version\":[],\"ddl_attachment_version\":[[\"index\",\"index_attachment_version_store_uuid_document_uuid_ordinal\",\"CREATE UNIQUE INDEX `index_attachment_version_store_uuid_document_uuid_ordinal` ON `attachment_version` (`store_uuid`, `document_uuid`, `ordinal`)\"],[\"index\",\"index_attachment_version_store_uuid_object_uuid\",\"CREATE UNIQUE INDEX `index_attachment_version_store_uuid_object_uuid` ON `attachment_version` (`store_uuid`, `object_uuid`)\"],[\"index\",\"index_attachment_version_store_uuid_status\",\"CREATE INDEX `index_attachment_version_store_uuid_status` ON `attachment_version` (`store_uuid`, `status`)\"],[\"index\",\"sqlite_autoindex_attachment_version_1\",null],[\"table\",\"attachment_version\",\"CREATE TABLE `attachment_version` (`store_uuid` TEXT NOT NULL, `document_uuid` TEXT NOT NULL, `version_uuid` TEXT NOT NULL, `ordinal` INTEGER NOT NULL, `object_uuid` TEXT NOT NULL, `protocol_revision` INTEGER NOT NULL, `dek_handle_uuid` TEXT NOT NULL, `plaintext_sha256` BLOB NOT NULL, `ciphertext_sha256` BLOB NOT NULL, `plaintext_bytes` INTEGER NOT NULL, `ciphertext_bytes` INTEGER NOT NULL, `mime` TEXT NOT NULL, `status` TEXT NOT NULL, PRIMARY KEY(`store_uuid`, `document_uuid`, `version_uuid`), FOREIGN KEY(`store_uuid`, `document_uuid`) REFERENCES `attachment_document`(`store_uuid`, `document_uuid`) ON UPDATE NO ACTION ON DELETE RESTRICT )\"]],\"attachment_link\":[],\"ddl_attachment_link\":[[\"index\",\"index_attachment_link_store_uuid_document_uuid_state\",\"CREATE INDEX `index_attachment_link_store_uuid_document_uuid_state` ON `attachment_link` (`store_uuid`, `document_uuid`, `state`)\"],[\"index\",\"index_attachment_link_store_uuid_record_epoch_record_uuid_document_uuid\",\"CREATE UNIQUE INDEX index_attachment_link_store_uuid_record_epoch_record_uuid_document_uuid ON attachment_link(store_uuid,record_epoch,record_uuid,document_uuid) WHERE state='ACTIVE'\"],[\"index\",\"sqlite_autoindex_attachment_link_1\",null],[\"table\",\"attachment_link\",\"CREATE TABLE attachment_link (\\n store_uuid TEXT NOT NULL, link_uuid TEXT NOT NULL CHECK(length(link_uuid)=36),\\n record_epoch TEXT NOT NULL, record_uuid TEXT NOT NULL, document_uuid TEXT NOT NULL,\\n revision INTEGER NOT NULL CHECK(revision>=1), state TEXT NOT NULL CHECK(state IN('ACTIVE','RETRACTED','QUARANTINED')),\\n PRIMARY KEY(store_uuid,link_uuid),\\n FOREIGN KEY(store_uuid,record_epoch,record_uuid) REFERENCES attachment_record_identity(store_uuid,record_epoch,record_uuid) ON DELETE RESTRICT,\\n FOREIGN KEY(store_uuid,document_uuid) REFERENCES attachment_document(store_uuid,document_uuid) ON DELETE RESTRICT\\n])\"]],\"attachment_ope...>",
+        "\tat org.junit.Assert.assertEquals(Assert.java:117)"
+      ]
+    }
+  ]
+}

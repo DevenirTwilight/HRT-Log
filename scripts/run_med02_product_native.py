@@ -21,19 +21,38 @@ def reset(label):
 def main():
     assert subprocess.check_output(['adb', 'shell', 'getprop', 'ro.kernel.qemu'], text=True).strip() == '1', 'Synthetic emulator only'
     REPORT.mkdir(parents=True, exist_ok=True)
-    reset('before')
-    result = subprocess.run(['./gradlew', ':app:connectedFullDebugAndroidTest',
-        f'-Pandroid.testInstrumentationRunnerArguments.class={CLASS}', '--no-parallel', '--max-workers=2'], cwd=ROOT)
-    for source, label in [('outputs/androidTest-results', 'results'), ('reports/androidTests', 'html')]:
-        path = ROOT / 'app/build' / source
-        if path.exists():
-            shutil.copytree(path, REPORT / label, dirs_exist_ok=True)
+    names=('mainActivityVisitAndIndividualLabSafCommitReopenPreviewUnlinkAndTransfer',
+           'standalonePdfExplicitWholeDrawLinkFiveMembersAndReopenUseOneOriginal')
+    for name in names:
+        reset(f'before-{name}')
+        result = subprocess.run(['./gradlew', ':app:connectedFullDebugAndroidTest',
+            f'-Pandroid.testInstrumentationRunnerArguments.class={CLASS}#{name}', '--no-parallel', '--max-workers=2'], cwd=ROOT)
+        for source, label in [('outputs/androidTest-results', 'results'), ('reports/androidTests', 'html')]:
+            path = ROOT / 'app/build' / source
+            if path.exists():
+                shutil.copytree(path, REPORT / name / label, dirs_exist_ok=True)
+        result.check_returncode()
+        cases = [case for path in (REPORT / name / 'results').rglob('TEST-*.xml')
+                 for case in ET.parse(path).getroot().iter('testcase') if case.get('classname') == CLASS]
+        assert len(cases) == 1 and cases[0].get('name') == name
+        assert all(not list(case.iter(tag)) for case in cases for tag in ('failure', 'error', 'skipped'))
+        reset(f'after-{name}')
+
+    core_classes=('net.plainnotes.app.data.MedicalFilesOperationAndroidTest',
+                  'net.plainnotes.app.data.MedicalFilesSqlCipherMigrationTest')
+    result=subprocess.run(['./gradlew', ':core:data:connectedDebugAndroidTest',
+        '-Pandroid.testInstrumentationRunnerArguments.class='+','.join(core_classes), '--no-parallel','--max-workers=2'],cwd=ROOT)
+    for source,label in [('outputs/androidTest-results','results'),('reports/androidTests','html')]:
+        path=ROOT/'core/data/build'/source
+        if path.exists():shutil.copytree(path,REPORT/'core-med03'/label,dirs_exist_ok=True)
     result.check_returncode()
-    cases = [case for path in (REPORT / 'results').rglob('TEST-*.xml')
-             for case in ET.parse(path).getroot().iter('testcase') if case.get('classname') == CLASS]
-    assert len(cases) == 1 and cases[0].get('name') == 'mainActivityVisitAndIndividualLabSafCommitReopenPreviewUnlinkAndTransfer'
-    assert all(not list(case.iter(tag)) for case in cases for tag in ('failure', 'error', 'skipped'))
-    reset('after')
+    cases=[case for path in (REPORT/'core-med03/results').rglob('TEST-*.xml') for case in ET.parse(path).getroot().iter('testcase') if case.get('classname') in core_classes]
+    assert len(cases)==3 and {case.get('name') for case in cases}=={
+        'oneOriginalFivePanelMembersStandaloneMultiLinkRecycleAndAuthenticatedRestore',
+        'published21RetainsRowsIdentitiesAndValidatesRoom22AfterReopen',
+        'ddlFailureRollsBackOriginalRowsTablesIndicesAndTriggers'}
+    assert all(not list(case.iter(tag)) for case in cases for tag in ('failure','error','skipped'))
+
 
 
 if __name__ == '__main__':
