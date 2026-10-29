@@ -1709,3 +1709,19 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 
 **守卫（核对后的更正）**：SL-CAL-01 报告第 11 节建议把新引擎登记进 `guard-classification.json`；核对发现该文件属于研究归档，`research_archive.verify_records` 要求归档内容与归档提交逐字节一致，不能再改；`check_protocol.check()` 的文档也写明新产品文件由可执行测试管辖，不再靠 SHA 批准。所以引擎 `app/.../conc/TotalE2Calibration.kt` **不登记**，它是普通产品文件，由与 Python 参考的逐位对照测试（`TotalE2CalibrationParityTest`、`test_sl_cal_02.py` 复现夹具）和规则测试保护；`test_sl_cal_01.py` 里「没有未分类文件」的断言改为只允许这一个文件。改动 `conc/` 与 `pk-engine/` 会触发 `research-deep`（科学门）。`ConcentrationCalculator.kt`、`CalibrationEligibility.kt`、`LabEstimate.kt`、`LabFit.kt`、`Engine.kt`、`pk-params.json`、M2 候选、`Exports.kt` **一律不改**（它们仍是 LIVE_LOCK 或 PK_DISPLAY_REVIEW）。
 **禁止与保持**：`m2_absolute_pgml=false` 不改；不声称临床准确性已确立（`clinical_accuracy_established=false`）；不提供剂量建议，不把残差解释为「化验错了」；真实健康数据不进仓库（对照测试只用合成用户）；负责人本地检查脚本仍是 NOT_RUN。
+
+## 167. SL-CAL-02 步骤 4 — 把校准接到浓度页（2026-10-29）
+
+负责人 2026-10-29 原话：「继续步骤4，把校准接到界面，都做完给apk」。依据：§166 第 ④ 步（显示接入，会修改 PK_DISPLAY_REVIEW 文件并各自追加 `display-approvals` 记录）。仍是 PK 算法的显示接入，不占 `UI-*` 编号。
+
+**做了什么**
+- 有舌下记录且 M2 可用时，校准开关**可用**（沿用同一个设置项 `calib_enabled`，默认开）；开启后用 `TotalE2Calibration` 对「M2 − B（舌下）+ 非舌下兼容曲线（N）」整体乘一个系数 k，`B` 只计一次、不缩放：`C = B + k·((M2−B)+N)`。关闭或被拒绝时曲线与改前逐点相同。
+- 适配器 `ui/E2Calibration.kt`（只读）：化验来自已保存的 E2 化验行；历史门 = 既有 `CalibrationEligibility`（P1-B，未改）且首次服药至少早于化验 24 小时；采样时间「恰好本地 00:00」视为日期占位而拒绝（E1 已知限制，见 §166）；距上次舌下服药的小时数取自 M2 快照里的舌下服药时刻（`ConcentrationPreview.sublingualDoseH`，只读新增字段）。
+- 校准卡写明：用了几次化验、信息档位（充分/有限）、「用其余化验预测其中一次，相差约 x%」、使用了你记录的抽血时间、降权的化验数、每个被拒绝原因各有几次；被拒绝时写明原因，曲线保持未校准。**不画区间带。** 四语言（en / zh-CN / zh-TW / fr）。
+- 没有舌下记录时仍是旧的兼容校准（`CalibrationCard`），没有改。M2 不可用（Legacy/待定）时开关仍禁用并写明原因。
+- 不改：任何模型、参数、候选、LIVE_LOCK 文件、导出 / PDF / 就诊资料包 / 化验快照（§67 D-2）、Room、备份；校准系数不持久化；`m2_absolute_pgml=false`、`clinical_accuracy_established=false` 不变。
+- 迁移的 UI-12 断言（原含义保留）：「有舌下记录时校准开关禁用并写原因」被 §166/§167 取代，改为开关可用、拒绝原因有文字；「化验不改 M2 数值」仍断言（开启校准后 `lastPreview.values` 逐位不变）。
+
+**显示批准记录（追加式）**：`PD-2026-10-29-SLCAL02-CONCENTRATIONSCREEN`（`ConcentrationScreen.kt`：校准卡与合计的校准接线）、`PD-2026-10-29-SLCAL02-PREVIEW`（`ConcentrationPreview.kt`：只读字段 `sublingualDoseH`，无任何数值、网格或背景计算改动）。`ConcChart.kt`、`UnifiedConcentrationScreen.kt`、`ChartViewport.kt` 未改。
+
+**NOT_RUN / 待负责人复核**：真机与人工 TalkBack；信息档位阈值 0.75 是设计选择；E1 只能把本地午夜当占位（真正的「估计时间」标记需要 Room 迁移，另行请示）；引擎未登记进守卫（归档不可改，见 §166）。

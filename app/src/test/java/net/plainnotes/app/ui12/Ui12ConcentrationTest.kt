@@ -53,9 +53,9 @@ class Ui12ConcentrationTest(private val locale: String, private val width: Int, 
         ui.setContent { NotesTheme(mode) {
             ConcentrationScreen(sc.state, sc.result, false, weight, ConcSettings(pmol, calibrate, CalibrationMode.RETROSPECTIVE),
                 { pmol = it.pmol; calibrate = it.calibrate }, {}, {}, {}, PaddingValues(), sc.records, sc.state.profiles,
-                preview = sc.preview, e2NonSublingual = sc.nonSublingual, doseTimes = sc.doseTimes)
+                preview = sc.preview, e2NonSublingual = sc.nonSublingual, doseTimes = sc.doseTimes, labs = sc.labs)
         } }
-        ui.waitUntil(30_000) { ui.onAllNodesWithTag("e2-estimate-card").fetchSemanticsNodes().isNotEmpty() || ui.onAllNodesWithTag("empty-state").fetchSemanticsNodes().isNotEmpty() ||
+        ui.waitUntil(30_000) { ui.onAllNodesWithTag("e2-estimate-card").fetchSemanticsNodes().isNotEmpty() || ui.onAllNodesWithTag("calibration-switch").fetchSemanticsNodes().isNotEmpty() || ui.onAllNodesWithTag("empty-state").fetchSemanticsNodes().isNotEmpty() ||
             ui.onAllNodesWithText(s(R.string.pk_need_weight_title)).fetchSemanticsNodes().isNotEmpty() }
         ui.waitForIdle()
     }
@@ -111,14 +111,73 @@ class Ui12ConcentrationTest(private val locale: String, private val width: Int, 
         ui.onAllNodesWithTag("models-literature-window").assertCountEquals(0)
     }
 
-    @Test fun calibrationIsUnavailableWhileSublingualIsRecordedAndNormalOtherwise() {
-        setup(); val sl = Ui12Fixture.sublingualOnly(); show(sl)
+    // SL-CAL-02 step 4 (REQUIREMENTS §166): replaces UI-12's "calibration unavailable while sublingual is recorded".
+    @Test fun sublingualLabsCalibrateTheTotalAndTheCardSaysWhatWasDone() {
+        setup(); val sc = Ui12Fixture.sublingualCalibrated(); show(sc)
+        val outcome = sc.outcome as net.plainnotes.app.conc.TotalE2Calibration.Calibrated
+        assertEquals(1.3, outcome.factor, 0.12)
+        assertEquals(listOf(1L, 2L, 3L), outcome.usedLabIds)
+        scrollTo("calibration-switch")
+        ui.onNodeWithTag("calibration-switch").assertIsEnabled().assertIsOn()
+        assertEquals(s(R.string.ui12_cal_used, 3), text("calibration-used"))
+        val tier = text("calibration-tier")
+        assertTrue(tier == s(R.string.ui12_cal_tier_sufficient) || tier == s(R.string.ui12_cal_tier_limited))
+        assertEquals(s(R.string.ui12_cal_loo, outcome.leaveOneOut!!.medianPercent.roundToInt()), text("calibration-loo"))
+        // One lab with fewer than 24 h of history before it and one date-only lab are named, not hidden.
+        val skipped = ui.onAllNodesWithTag("calibration-skipped", useUnmergedTree = true).fetchSemanticsNodes().map { it.config[SemanticsProperties.Text].joinToString("") { t -> t.text } }.toSet()
+        assertEquals(setOf(s(R.string.ui12_cal_skipped, 1, s(R.string.ui12_cal_r_history)), s(R.string.ui12_cal_skipped, 1, s(R.string.ui12_cal_r_time))), skipped)
+        ui.onAllNodesWithTag("calibration-downweighted").assertCountEquals(0)
+        ui.onNodeWithText(s(R.string.calib_manage_labs)).assertHasClickAction().assertHeightIsAtLeast(48.dp)
+        // The headline is the calibrated total, labelled so, and it differs from the uncalibrated one.
+        val total = sc.total!!
+        assertTrue(total.calibrated)
+        assertEquals(total.nowValue!!.roundToInt().toString(), text("e2-now-value"))
+        assertNotEquals(sc.totalUncalibrated!!.nowValue!!.roundToInt(), total.nowValue!!.roundToInt())
+        // The estimate card and the calibration card both say it.
+        ui.onAllNodesWithText(s(R.string.ui12_label_calibrated), useUnmergedTree = true).assertCountEquals(2)
+        shot("sublingual_calibrated")
+    }
+
+    @Test fun switchingCalibrationOffRestoresTheUncalibratedTotal() {
+        setup(); val sc = Ui12Fixture.sublingualCalibrated(); show(sc)
+        scrollTo("calibration-switch"); shot("before_switch_off"); ui.onNodeWithTag("calibration-switch").performClick()
+        ui.waitUntil(30_000) { text("e2-now-value") == sc.totalUncalibrated!!.nowValue!!.roundToInt().toString() }
+        scrollTo("calibration-switch"); ui.onNodeWithTag("calibration-switch").assertIsEnabled().assertIsOff()
+        ui.onNodeWithText(s(R.string.ui12_cal_off)).assertExists()
+        assertEquals(s(R.string.ui12_cal_explain), text("calibration-explain"))
+        ui.onAllNodesWithTag("calibration-used").assertCountEquals(0)
+        shot("sublingual_calibration_off")
+    }
+
+    @Test fun mixedRoutesCalibrateAsOneTotal() {
+        setup(); val sc = Ui12Fixture.mixedCalibrated(); show(sc)
+        val outcome = sc.outcome as net.plainnotes.app.conc.TotalE2Calibration.Calibrated
+        assertEquals(1.3, outcome.factor, 0.12)
+        assertEquals(s(R.string.ui12_label_total), text("e2-label"))
+        assertEquals(sc.total!!.nowValue!!.roundToInt().toString(), text("e2-now-value"))
+        scrollTo("calibration-switch"); ui.onNodeWithTag("calibration-switch").assertIsEnabled().assertIsOn()
+        shot("mixed_calibrated")
+    }
+
+    @Test fun twoLabsTooCloseToADoseAreAcceptedButCountForLessOrRefusedInWords() {
+        setup(); val sc = Ui12Fixture.sublingualOnly(); show(sc)   // two labs, both within 2.5 h of a sublingual dose
+        scrollTo("calibration-switch")
+        val outcome = sc.outcome
+        when (outcome) {
+            is net.plainnotes.app.conc.TotalE2Calibration.Calibrated -> assertEquals(s(R.string.ui12_cal_downweighted, 2), text("calibration-downweighted"))
+            is net.plainnotes.app.conc.TotalE2Calibration.Refused -> { ui.onNodeWithTag("calibration-refused").assertExists(); ui.onNodeWithText(s(R.string.ui12_cal_not_applied)).assertExists() }
+            null -> fail("labs exist")
+        }
+        shot("sublingual_two_labs")
+    }
+
+    @Test fun withoutAnySublingualEstimateTheSwitchIsUnavailableWithItsReason() {
+        setup(); val base = Ui12Fixture.sublingualOnly()
+        show(Ui12Fixture.Scenario(base.state, base.records, base.result, null, null, base.doseTimes, base.labs))
         scrollTo("calibration-switch")
         ui.onNodeWithTag("calibration-switch").assertIsNotEnabled()
         ui.onNodeWithText(s(R.string.ui12_calib_unavailable)).assertExists()
         assertEquals(s(R.string.ui12_calib_unavailable_sl), text("calibration-unavailable-sl"))
-        ui.onNodeWithText(s(R.string.calib_manage_labs)).assertHasClickAction().assertHeightIsAtLeast(48.dp)
-        shot("sublingual_calibration")
     }
 
     @Test fun onlyOralKeepsTheExistingCalibration() {
@@ -143,7 +202,7 @@ class Ui12ConcentrationTest(private val locale: String, private val width: Int, 
         // No "separate display" control, no per-route legend.
         ui.onAllNodesWithText(s(R.string.legend_band_outer)).assertCountEquals(0)
         ui.onAllNodesWithText(s(R.string.ui12_reminder)).assertCountEquals(1)
-        ui.onNodeWithTag("calibration-switch").performScrollTo().assertIsNotEnabled()
+        ui.onNodeWithTag("calibration-switch").performScrollTo().assertIsEnabled()
         shot("mixed")
     }
 

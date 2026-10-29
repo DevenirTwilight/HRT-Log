@@ -1,6 +1,7 @@
 package net.plainnotes.app.ui
 
 import net.plainnotes.app.conc.ConcentrationResult
+import net.plainnotes.app.conc.TotalE2Calibration
 import net.plainnotes.app.data.HistoricalContext
 import net.plainnotes.app.data.MedicationEntity
 import net.plainnotes.app.data.MedicationSnapshot
@@ -16,7 +17,7 @@ import net.plainnotes.app.pk.Pk
  * The sublingual part is the existing M2 [ConcentrationPreview] (values unchanged); the other routes are the existing
  * compatibility calculation run a second time on non-sublingual estradiol only, so no sublingual dose is counted twice.
  * M2's `C = B + A*H` carries the one background; the compatibility part has none unless a lab calibration adds one,
- * and calibration is off whenever a sublingual record is part of the total. Nothing here changes a model, a parameter,
+ * and (SL-CAL-02) a total with sublingual doses is calibrated only by the common coefficient of [TotalE2Calibration]. Nothing here changes a model, a parameter,
  * a candidate or an export.
  */
 object E2Total {
@@ -55,7 +56,10 @@ object E2Total {
      * @property breaks calibration refit boundaries; only a single compatibility route (calibrated) has any.
      */
     class Curve(val timeH: DoubleArray, val values: DoubleArray, val nowH: Double, val nowValue: Double?, val breaks: DoubleArray,
-                val routes: List<Route>, val doseCount: Int, val calibrated: Boolean, val readAt: (Double, () -> Unit) -> Double?)
+                val routes: List<Route>, val doseCount: Int, val calibrated: Boolean,
+                /** SL-CAL-02: the common-coefficient calibration this total was scaled with (null = uncalibrated or the legacy single-route calibration). */
+                val calibration: TotalE2Calibration.Calibrated? = null,
+                val readAt: (Double, () -> Unit) -> Double?)
 
     private fun routesOf(result: ConcentrationResult): List<Route> {
         val keys = result.models[net.plainnotes.app.pk.Curve.E2].orEmpty().map { it.key }
@@ -71,9 +75,10 @@ object E2Total {
      * @param preview the M2 snapshot (empty/pending counts as absent)
      * @param compat the original full compatibility result of the page (labs, calibration, missing inputs, other medicines)
      * @param nonSublingual the compatibility result for non-sublingual estradiol only; null when there is none
+     * @param calibration SL-CAL-02: the fitted common coefficient; the total becomes `B + k·((M2 − B) + N)`, the background B still counted once
      * @return null when there is nothing to total, including: sublingual exposure exists but M2 cannot cover it (never undercounted)
      */
-    fun curve(preview: ConcentrationPreview?, compat: ConcentrationResult?, nonSublingual: ConcentrationResult?): Curve? {
+    fun curve(preview: ConcentrationPreview?, compat: ConcentrationResult?, nonSublingual: ConcentrationResult?, calibration: TotalE2Calibration.Calibrated? = null): Curve? {
         val m2 = preview?.takeIf { it.timeH.isNotEmpty() }
         val compatHasSl = compat?.models?.get(net.plainnotes.app.pk.Curve.E2)?.any { it.key == "E2_SL" } == true
         if (m2 == null) {
@@ -84,22 +89,27 @@ object E2Total {
         }
         val other = nonSublingual?.takeIf { it.timeH.isNotEmpty() && it.models.containsKey(net.plainnotes.app.pk.Curve.E2) }
         val nowH = m2.asOfH ?: compat?.nowH ?: other?.nowH ?: 0.0
+        val background = m2.anchor.background
+        // Uncalibrated: plain sum (M2 already holds the one background). Calibrated: B + k·((M2 − B) + N); the background is never scaled.
+        fun combine(sublingual: Double, others: Double): Double =
+            if (calibration == null) sublingual + others else background + calibration.factor * ((sublingual - background).coerceAtLeast(0.0) + others)
         if (other == null) {
-            return Curve(m2.timeH, m2.values, nowH, m2.currentPgMl, doubleArrayOf(), listOf(Route.SUBLINGUAL), m2.doseCount, false) { h, cancel -> cancel(); m2.valueAt(h) }
+            return Curve(m2.timeH, DoubleArray(m2.values.size) { combine(m2.values[it], 0.0) }, nowH, m2.currentPgMl?.let { combine(it, 0.0) }, doubleArrayOf(),
+                listOf(Route.SUBLINGUAL), m2.doseCount, calibration != null, calibration) { h, cancel -> cancel(); m2.valueAt(h)?.let { combine(it, 0.0) } }
         }
         // Union time grid: the exact M2 value plus the compatibility curve on its own grid (display interpolation only).
         val times = (m2.timeH.asList() + other.timeH.asList()).distinct().sorted().toDoubleArray()
         val values = DoubleArray(times.size) { i ->
             val h = times[i]
-            (m2.valueAt(h) ?: 0.0) + (Pk.interpolate(other.timeH, other.e2, h) ?: 0.0)
+            combine(m2.valueAt(h) ?: 0.0, Pk.interpolate(other.timeH, other.e2, h) ?: 0.0)
         }
         fun total(h: Double, cancel: () -> Unit): Double? {
             cancel()
             val a = m2.valueAt(h) ?: return null
             val b = other.evaluateAt(h, cancel)?.center ?: return null
-            return a + b
+            return combine(a, b)
         }
-        return Curve(times, values, nowH, total(nowH) {}, doubleArrayOf(), listOf(Route.SUBLINGUAL) + routesOf(other), m2.doseCount + other.usedDoses, false, ::total)
+        return Curve(times, values, nowH, total(nowH) {}, doubleArrayOf(), listOf(Route.SUBLINGUAL) + routesOf(other), m2.doseCount + other.usedDoses, calibration != null, calibration, ::total)
     }
 
     /** Every E2 lab is a dot on the total curve (all routes, UI-12), in the displayed unit; nothing is filtered or rescaled beyond the unit factor. */
