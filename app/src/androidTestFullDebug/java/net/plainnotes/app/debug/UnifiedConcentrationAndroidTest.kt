@@ -55,7 +55,9 @@ class UnifiedConcentrationAndroidTest {
         val value=kotlin.math.round(ResearchSublingualV01.studyScenario(0.0,listOf(-30.0,-20.0,-3.0).map{ExperimentalDose(it,1.0)},ResearchDisplayProtocol.candidate(ResearchModel.M2),ResearchDisplayProtocol.anchor(ResearchModel.M2))).toInt().toString()
         // D-1: no on-screen current number; the scenario is read from the preview the screen was given.
         fun scenario()=ui.activity.lastPreview!!.let{p->kotlin.math.round(p.valueAt(p.asOfH!!)!!).toInt().toString()}
-        org.junit.Assert.assertEquals(value,scenario());ui.onAllNodesWithText(value).assertCountEquals(0)
+        org.junit.Assert.assertEquals(value,scenario())
+        // UI-12 (§162) supersedes D-1 here: the estimate card shows the total as its one big number; with only sublingual doses it is the M2 scenario value.
+        ui.onNodeWithTag("e2-now-value").performScrollTo().assertTextContains(value,substring=true)
         val before=ui.activity.lastPreview!!.values.copyOf()
         ui.runOnUiThread { ui.activity.syntheticLabPgMl=9000.0;ui.activity.syntheticHistoryRevision++ }
         await("e2-chart");ui.waitForIdle();org.junit.Assert.assertEquals(value,scenario())
