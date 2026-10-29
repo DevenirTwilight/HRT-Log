@@ -361,7 +361,7 @@ private const val SWIPE_DISTANCE_DP=64f
     Surface(color=MaterialTheme.colorScheme.surfaceContainerLow) {
         Column(Modifier.fillMaxWidth().testTag("attachment-viewer-controls")) {
             if(viewer.busy)LinearProgressIndicator(Modifier.fillMaxWidth().height(2.dp).testTag("attachment-viewer-page-loading"))
-            if(viewer.pdf)Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.Center) {
+            if(viewer.pdf)Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
                 if(viewer.pageCount>1)IconButton({onPage(viewer.pageIndex-1)},Modifier.size(48.dp).testTag("attachment-viewer-prev"),enabled=!viewer.busy && viewer.pageIndex>0) {
                     Icon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft,stringResource(R.string.med05_prev_page))
                 }
@@ -371,7 +371,7 @@ private const val SWIPE_DISTANCE_DP=64f
                     Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,stringResource(R.string.med05_next_page))
                 }
             }
-            Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.Center) {
+            Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
                 val steps=listOf(1f,1.5f,2f,3f,5f)
                 IconButton({onScale(steps.lastOrNull {it<scale-0.01f} ?: 1f)},Modifier.size(48.dp).testTag("attachment-viewer-zoom-out"),enabled=scale>1.01f) {
                     Icon(Icons.Outlined.ZoomOut,stringResource(R.string.med05_zoom_out))

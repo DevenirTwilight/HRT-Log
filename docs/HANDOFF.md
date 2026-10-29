@@ -1,3 +1,9 @@
+## 2026-10-29 接手检查点：PR156 精确失败修复待验收
+
+当前正式主线d95952ee；PR156原头54abbdaa。已在原分支修复DocumentsUI虚拟列表遍历、LabPanel Dialog BACK、两处违反UI09的居中控件；共享原生测试布局坐标移至主线程。集合恢复测试将同一加密夹具建立独立为受限source阶段，仍真实执行各恢复/强停/独立进程核验，不改变512MiB/192MiB或断言。旧60秒混合阶段失败、清理强停与未知LMK原因保留，不能称恢复内存已修复。详见[精确失败与边界](medical-attachments/2026-10-29-feedback/takeover-acceptance.md)。本地定向编译在运行，新SHA原生/完整CI待执行，PR仍Draft。
+
+PR153当前8c491bec：push原生API26/29/35通过，PR事件API29有共享SnapshotStateObserver失败，API35模拟器下载ZipFile失败未执行测试；Android主job尚在运行。已只读核对保存化验/实际服药/M2→TotalE2Calibration→同一合计曲线，不降低资格门槛。PR155当前831f81b0：原生失败同类Snapshot观察线程问题；另有MedicalHomeConfirmFlowTest第110行断言，待独立定位。未签名/构建交付APK；真机/人工TalkBack NOT_RUN。下一步完成本地结果→推送原PR156→独立处理153/155→精确HEAD必需CI/保护合并，不重复MED03或P4。
+
 ## 编辑快照 CAS 补验 — 2026-10-29
 
 审查发现Host仅存编辑布尔值，列表刷新可使旧草稿重绑定最新Document/Detail revision，绕过用户预期CAS。已在打开编辑时冻结文档、信息及双revision，保存不再读最新列表revision；撤权/目标消失即隐藏清草稿。同一Host的“别人同时改标题+信息”与“只改信息”场景均保持旧草稿并返回CONFLICT，不覆盖新值。Controller/编辑器定向通过；正式Host四语16参数冲突回归通过。手势32项修复后回归通过，原始32FAIL保留。

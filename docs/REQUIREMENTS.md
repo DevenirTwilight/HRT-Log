@@ -1745,3 +1745,8 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 
 **守卫（核对后的更正）**：SL-CAL-01 报告第 11 节建议把新引擎登记进 `guard-classification.json`；核对发现该文件属于研究归档，`research_archive.verify_records` 要求归档内容与归档提交逐字节一致，不能再改；`check_protocol.check()` 的文档也写明新产品文件由可执行测试管辖，不再靠 SHA 批准。所以引擎 `app/.../conc/TotalE2Calibration.kt` **不登记**，它是普通产品文件，由与 Python 参考的逐位对照测试（`TotalE2CalibrationParityTest`、`test_sl_cal_02.py` 复现夹具）和规则测试保护；`test_sl_cal_01.py` 里「没有未分类文件」的断言改为只允许这一个文件。改动 `conc/` 与 `pk-engine/` 会触发 `research-deep`（科学门）。`ConcentrationCalculator.kt`、`CalibrationEligibility.kt`、`LabEstimate.kt`、`LabFit.kt`、`Engine.kt`、`pk-params.json`、M2 候选、`Exports.kt` **一律不改**（它们仍是 LIVE_LOCK 或 PK_DISPLAY_REVIEW）。
 **禁止与保持**：`m2_absolute_pgml=false` 不改；不声称临床准确性已确立（`clinical_accuracy_established=false`）；不提供剂量建议，不把残差解释为「化验错了」；真实健康数据不进仓库（对照测试只用合成用户）；负责人本地检查脚本仍是 NOT_RUN。
+
+
+## 167. 2026-10-29 完整接手与三项用户反馈收尾
+
+负责人要求接续现有PR153/155/156，以实时远端为准，优先交付文件名称编辑、真正全屏PDF/图片阅读、满足科学条件时的舌下E2合计校准。不得重复已合并MED03–05或另起重复PR。保留实际SAF、真实COMMIT、主线数据/备份/权限/科学门槛与所有有效负向断言；准确区分代码、本地、CI、合并、APK交付和真机状态。必须定位已知DocumentsUI、API26返回、SnapshotStateObserver和低内存真实失败，不凭超时断言LMK或筛选绿色。原始失败保留；只在最终HEAD必需检查通过且符合§106保护规则后合并。当前未授权新私人APK签名或公开Release；不触碰密钥，真机与人工TalkBack未执行时记NOT_RUN。

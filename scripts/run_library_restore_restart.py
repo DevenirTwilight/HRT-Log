@@ -22,7 +22,7 @@ def main(test_class="LibraryRestoreRestartAndroidTest", report=REPORT, marker_na
         # The old watchdog included unrelated creation/encryption of four source
         # objects before the restore began. Keep both phases bounded and measured,
         # not a longer live-restore deadline or a smaller source fixture.
-        if test_class == "LibraryRestoreRestartAndroidTest":
+        if test_class == "LibraryRestoreRestartAndroidTest" or (test_class == "LibraryCollectionRestartAndroidTest" and seam == "PREPARED"):
             started = time.monotonic()
             try:
                 source = subprocess.run(base + ["source", COMPONENT], capture_output=True, text=True, timeout=60)

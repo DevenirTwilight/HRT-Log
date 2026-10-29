@@ -41,6 +41,9 @@ import java.time.LocalDateTime
     val duplicates = LabBatchRules.duplicates(added) + added.filterNot(LabBatchRules::blank).map { it.code }.filter { it in present }
     val changed = time != Instant.ofEpochMilli(panel.sampled_utc).toLocalHere() || lab.trim() != panel.laboratory.orEmpty() || note.trim() != panel.note.orEmpty()
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        // Keep system BACK in this window. A subsequently composed authenticated
+        // file viewer registers above this handler and closes its own page first.
+        androidx.activity.compose.BackHandler(onBack=onDismiss)
         Surface(Modifier.fillMaxSize().testTag("lab-panel-detail"), color = MaterialTheme.colorScheme.surface) {
             Column(Modifier.fillMaxSize().systemBarsPadding().imePadding()) {
                 Row(Modifier.fillMaxWidth().padding(start = 4.dp, end = 16.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
