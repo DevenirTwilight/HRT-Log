@@ -593,7 +593,7 @@ class MedicalAttachmentProductAndroidTest {
             ui.onNode(hasText(image.title) and hasAnyAncestor(hasTestTag("file-detail"))).assertExists()
             // A process/activity restart must keep both original objects and the renamed document title.
             scenario!!.close();scenario=null;launch();open(Destination.MEDICAL);tag("medical-tab:files")
-            await {ui.onAllNodesWithTag("library-doc:${original.document}").fetchSemanticsNodes().isNotEmpty()}
+            await {reveal(hasTestTag("library-doc:${original.document}"));ui.onAllNodesWithTag("library-doc:${original.document}").fetchSemanticsNodes().isNotEmpty()}
             ui.onNode(hasText(renamed) and hasAnyAncestor(hasTestTag("library-doc:${original.document}")),useUnmergedTree=true).assertExists()
             runBlocking {model.libraryRuntime.attachments(null,"SYNTHETIC no reader duplicates").use {assertEquals(2,it.documents().size)}}
         } finally {UiPrefs(context).allowScreenshots=false}

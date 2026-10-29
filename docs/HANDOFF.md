@@ -1,3 +1,7 @@
+## 最终原生/UI测试精确同步修正 — 2026-10-29
+
+PR156 source3294ba6e API26 run40938869568/job123677175796已到原596行重启后列表查找，前面的独立图片查看/缩放/返回已执行；新Activity的LazyColumn从顶部开始，目标文件卡在分类下方未组合。现用已有reveal真实滚动后查指定UUID，再核对新名；不直注URI，不绕过重启。PR155 source7710d670 Android run40936737557/job123669608636的原始HTML确认MedicalHomeTest:110是找不到medical-correction-confirm，而非DB撤回断言失败。现在先使真实撤回按钮进入可见区并等待确认按钮出现，再保留实际点击及数据库completed_utc=null断言；无sleep/不改10秒上限。定向回归及最终CI待跑，旧失败不改PASS。PR153已合并aeb56839。
+
 ## PR156 原生列表名称断言修正 — 2026-10-29
 
 79747b02 run40937297721 job123671128600：真实MainActivity/SAF已执行到三页PDF、缩放、返回，原575行断言失败。失败节点library-doc:UUID有MergeDescendants但没有Text，内部DocumentRow自身mergeDescendants=true，是独立合并边界；不是数据库已证明改名丢失。现两处列表/重启名称断言检查指定UUID卡片下的精确新名称子节点，不扩大到全页面、不取消重启或名称断言，生产代码不改。原失败保留；整条方法尚未PASS，图像阶段仍待最终原生。此前整合源码编译已PASS（2m27s）。PR153已合并aeb56839，其主线CI另行等待；155仍需原生线程验收。
