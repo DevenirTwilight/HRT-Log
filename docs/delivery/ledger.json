@@ -181,6 +181,19 @@
       "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
       "file_name": "HRT-Log-build38-full-official.apk",
       "channel": "shared-workspace-private-file"
+    },
+    {
+      "date": "2026-10-29T14:58:14.512059+00:00",
+      "version_code": 39,
+      "version_name": "0.2.0",
+      "application_id": "net.plainnotes.app",
+      "source_sha": "d95952eed3f6732dd99297019a5fb02ca4304191",
+      "source_origin": "git",
+      "source_dirty": false,
+      "apk_sha256": "9c639f8c0a9ff3f30404fc965166f0500220d33c214f4aedb80de55f6f43a850",
+      "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+      "file_name": "HRT-Log-build39-full-official.apk",
+      "channel": "github-private-owner-delivery-branch"
     }
   ]
 }

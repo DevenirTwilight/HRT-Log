@@ -1,3 +1,13 @@
+## Build39 私人交付完成 — 2026-10-29
+
+负责人「干完了给apk」恢复APK交付（REQUIREMENTS §167）。#152 查看器和 #151 校准引擎均已合并；#154 修正记录成功回执等待，合并 `d95952eed3f6732dd99297019a5fb02ca4304191`，该主线 Android `40887646155` 五 job、Science `40887646147`、四 API 安全 `40887646281` 全部 SUCCESS。此前主线 `40873641886` API35 test tag 超时保持历史 FAIL；#154 当前源和合并树一致，未删业务断言。#153 校准界面是独立开放工作，不在本包中。
+
+从干净主线 d95952ee 构建 fullRelease（源码外 `version39.init.gradle` 仅把版本38→39，哈希见核验收据）；原正式证书 `989ba045…79b1`，包名 `net.plainnotes.app`、39/0.2.0。文件 `HRT-Log-build39-full-official.apk`，14,486,686 bytes，SHA-256 `9c639f8c0a9ff3f30404fc965166f0500220d33c214f4aedb80de55f6f43a850`。v2/v3、四ABI、64位ELF/ZIP16KiB、无INTERNET、非debug、Release隔离全部核验；签前后324个业务条目逐字节一致。私钥/密码临时副本已删除，原私有签名备份main完全不变。
+
+已上传既有本人私有库的独立orphan交付分支（只有APK、SHA256SUMS、说明与非敏感核验JSON）；确认仅负责人有访问权，并从全新空仓库仅fetch该交付分支、完整回读14,486,686bytes及相同SHA。下载入口仅给负责人，不入公开Git；不使用之前一直加载的工作区链接。没有公开Release/tag/公开APK。回读不等于负责人已下载/安装；真机、人工TalkBack、硬件断电仍NOT_RUN，独立外审NOT_REVIEWED_EXTERNALLY。建议先导出PNMEDBK2完整备份，再覆盖安装，勿卸载或清数据。
+
+核验收据 `docs/delivery/build39-private-verification.json`；账本追加39并将源码versionCode下限同步39。本记录提交不是APK源码，APK来源仍是d95952ee加已记录的外部版本参数，不把后续文档源码冒充已交付包。
+
 ## 接手最终主线回归修正 — 2026-10-29
 
 #152 已合并 `3ce3b739990d878cc2060d0f9128fd42e7b5f5ed`，#151 已合并 `14574302e4070c2b9bc885e8a8776ad4a94e16ab`。#151 最终源码 `acfa2cca0181f178b764283c76e6de1a1096dd7f` 与 squash 合并树一致；精确头全部检查成功。最终主线 Science `40873642195`、安全 `40873641935` 成功；Android `40873641886` 的 device-tests job `123446801031` 失败，其余四 job 成功，不得报告主线全绿。
