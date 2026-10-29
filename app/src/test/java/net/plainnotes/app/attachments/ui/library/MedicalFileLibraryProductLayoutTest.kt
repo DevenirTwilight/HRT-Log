@@ -111,6 +111,30 @@ class MedicalFileLibraryProductLayoutTest(private val locale:String,private val 
             ui.onNode(hasText("SYNTHETIC Pharmacy") and hasAnyAncestor(hasTestTag("file-detail-facts"))).performScrollTo().assertExists()
             // The original's own revision never moved.
             assertEquals(1L,controller.state.value.documents.first {it.document==image.document}.revision)
+            // An open editor keeps its own draft even if a later list refresh sees another writer.
+            // Cover both a changed document title/revision and a detail-only concurrent change.
+            for(changeTitle in listOf(true,false)) {
+                val frozenDocument=controller.state.value.documents.single {it.document==image.document}
+                val frozenDetail=controller.state.value.details.getValue(image.document)
+                ui.onNodeWithTag("file-detail-edit-info").performScrollTo().performClick()
+                ui.onNodeWithTag("file-info-title").assert(hasText(frozenDocument.title))
+                ui.onNodeWithTag("file-info-title").performTextReplacement("SYNTHETIC drafted name")
+                val currentDocument=if(changeTitle)frozenDocument.copy(title="SYNTHETIC concurrent name",revision=frozenDocument.revision+1)else frozenDocument
+                val currentDetail=frozenDetail.copy(institution="SYNTHETIC concurrent clinic",revision=frozenDetail.revision+1)
+                ui.runOnIdle {
+                    gateway.docs=gateway.docs.map {if(it.document==image.document)currentDocument else it}
+                    gateway.stored=gateway.stored+(image.document to currentDetail)
+                    controller.refresh()
+                }
+                ui.waitForIdle()
+                ui.onNodeWithTag("file-info-title").assert(hasText("SYNTHETIC drafted name"))
+                ui.onNodeWithTag("file-info-save").performScrollTo().performClick()
+                ui.waitForIdle()
+                assertEquals(frozenDocument.revision to frozenDetail.revision,gateway.lastInfoRevisions)
+                assertEquals(MedicalFileLibraryController.DetailOutcome.CONFLICT,controller.state.value.detailOutcome)
+                assertEquals(currentDocument,gateway.docs.single {it.document==image.document})
+                assertEquals(currentDetail,gateway.stored.getValue(image.document))
+            }
         }finally {controller.close()}
     }
 }

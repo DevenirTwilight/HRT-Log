@@ -72,6 +72,10 @@ internal interface MedicalFileGateway:MedicalAttachmentGateway {
     suspend fun details():Map<UUID,MedicalAttachmentOperations.Detail>
     /** Compare-and-set on the detail's own revision (0 = none yet); returns the new revision. */
     suspend fun saveDetail(document:UUID,revision:Long,detail:MedicalAttachmentOperations.Detail):Long
+    suspend fun saveFileInfo(document:UUID,documentRevision:Long,detailRevision:Long,title:String,detail:MedicalAttachmentOperations.Detail):MedicalAttachmentOperations.FileInfoReceipt = error("File information editing unavailable")
+    fun infoPending():Pair<UUID,UUID>?=null
+    fun infoRetain(operation:UUID,document:UUID) {}
+    fun infoResolved(operation:UUID,document:UUID) {}
     fun relationPending():Pair<UUID,UUID>?
     fun relationRetain(operation:UUID,document:UUID)
     fun relationResolved(operation:UUID,document:UUID)
@@ -88,6 +92,15 @@ internal class RuntimeAttachmentGateway(private val context:Context,private val 
         requireNotNull((runtime.state.value as? RuntimeLibrarySession.State.Ready)?.scope),null,"RELATION")
     private val lifecycleRecovery=AttachmentReconciliationStore(context,
         requireNotNull((runtime.state.value as? RuntimeLibrarySession.State.Ready)?.scope),null,"LIFECYCLE")
+    private val infoRecovery=AttachmentReconciliationStore(context,
+        requireNotNull((runtime.state.value as? RuntimeLibrarySession.State.Ready)?.scope),null,"FILE_INFO")
+    override fun infoPending()=infoRecovery.pending()
+    override fun infoRetain(operation:UUID,document:UUID)=infoRecovery.retain(operation,document)
+    override fun infoResolved(operation:UUID,document:UUID) {
+        // A finished earlier page may already have acknowledged the same neutral checkpoint.
+        // Absence is a no-op; a different pending operation still fails the store's identity check.
+        if(infoRecovery.pending()!=null)infoRecovery.resolved(operation,document)
+    }
     override fun relationPending()=relationRecovery.pending()
     override fun relationRetain(operation:UUID,document:UUID)=relationRecovery.retain(operation,document)
     override fun relationResolved(operation:UUID,document:UUID)=relationRecovery.resolved(operation,document)
@@ -113,6 +126,8 @@ internal class RuntimeAttachmentGateway(private val context:Context,private val 
     override suspend fun restore(document:UUID,revision:Long)=browse().use {it.restore(document,revision)}
     override suspend fun details()=browse().use {it.details()}
     override suspend fun saveDetail(document:UUID,revision:Long,detail:MedicalAttachmentOperations.Detail)=browse().use {it.saveDetail(document,revision,detail)}
+    override suspend fun saveFileInfo(document:UUID,documentRevision:Long,detailRevision:Long,title:String,detail:MedicalAttachmentOperations.Detail)=
+        browse().use {it.saveFileInfo(document,documentRevision,detailRevision,title,detail)}
     override suspend fun pickerIntent()=browse().use {it.pickerIntent()}
     override suspend fun preview(document:UUID):MedicalAttachmentGateway.Preview {
         val flow=browse()

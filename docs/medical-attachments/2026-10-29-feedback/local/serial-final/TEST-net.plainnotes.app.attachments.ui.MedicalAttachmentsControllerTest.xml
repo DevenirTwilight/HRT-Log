@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2026-10-29T18:20:22.585Z" hostname="081e144673fb" time="0.769">
+  <properties/>
+  <testcase name="viewerErrorsCloseResourcesAndExplain" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.114"/>
+  <testcase name="viewerShowsThenReleasesOnClose" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.094"/>
+  <testcase name="finalNativeScopeRefusalCannotPublishAnAlreadyDecodedPage" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.038"/>
+  <testcase name="unknownRefusesAnotherPickerAndReconstructedControllerOnlyQueriesOriginalIdentity" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.054"/>
+  <testcase name="latePixelsAfterHideOrRevokeAndResumeCannotReappear" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.032"/>
+  <testcase name="savedOnlyFromRealCommitWithTheConfirmedName" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.056"/>
+  <testcase name="refreshFailureAfterCommitStillReportsSaved" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.05"/>
+  <testcase name="revocationDuringSaveNeedsAReadOnlyCheck" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.057"/>
+  <testcase name="dataSwitchEndsThePageForGood" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.038"/>
+  <testcase name="pauseDiscardsUnconfirmedSelectionWithoutStartingAnImport" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.061"/>
+  <testcase name="listShowsKindAndAvailability" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.036"/>
+  <testcase name="choosingCreatesNoOperationAndCancelLeavesNothingPending" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.058"/>
+  <testcase name="failedAndUnknownOutcomes" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.037"/>
+  <testcase name="revocationDropsPageListAndChoiceBeforeAnythingElse" classname="net.plainnotes.app.attachments.ui.MedicalAttachmentsControllerTest" time="0.032"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

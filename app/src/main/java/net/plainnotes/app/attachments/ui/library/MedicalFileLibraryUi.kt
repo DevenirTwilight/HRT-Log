@@ -344,17 +344,26 @@ private fun LibraryState.unsorted() = toSort ?: unlinked
     if (pick) DatePickerModal(date ?: LocalDate.now(), { pick = false }) { onDate(it); pick = false }
 }
 
-/** Editing what the user typed about one file. Saving writes only these three optional values. */
-@Composable internal fun FileInfoEditor(initial: MedicalAttachmentOperations.Detail?, onSave: (MedicalAttachmentOperations.Detail) -> Unit, onCancel: () -> Unit, modifier: Modifier = Modifier) {
+/** One existing editor: the real name first, followed by optional category/date/institution. */
+@Composable internal fun FileInfoEditor(initial: MedicalAttachmentOperations.Detail?, onSave: (MedicalAttachmentOperations.Detail) -> Unit, onCancel: () -> Unit, modifier: Modifier = Modifier,
+    initialTitle:String?=null,onSaveFileInfo:((String,MedicalAttachmentOperations.Detail)->Unit)?=null) {
+    var title by remember {mutableStateOf(initialTitle.orEmpty())}
+    val editingTitle=onSaveFileInfo!=null
+    val titleValid=!editingTitle || MedicalAttachmentOperations.validTitle(title)
     var category by remember { mutableStateOf(initial?.category?.let { runCatching { FileCategory.valueOf(it) }.getOrNull() }) }
     var date by remember { mutableStateOf(initial?.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() }) }
     var institution by remember { mutableStateOf(initial?.institution.orEmpty()) }
     Column(modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp).testTag("file-info-editor"), verticalArrangement = Arrangement.spacedBy(20.dp)) {
         Text(stringResource(R.string.med04_info_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, modifier = Modifier.semantics { heading() })
+        if(editingTitle)OutlinedTextField(title,{title=it},Modifier.fillMaxWidth().testTag("file-info-title"),
+            label={Text(stringResource(R.string.file_info_title_label))},singleLine=true,isError=!titleValid,
+            supportingText={Text(if(titleValid)"${title.length}/${MedicalAttachmentOperations.TITLE_MAX}" else stringResource(R.string.file_info_title_invalid))})
         FileInfoFields(category, date, institution, { category = it }, { date = it }, { institution = it }, "file-info")
         FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button({ onSave(MedicalAttachmentOperations.Detail(category?.name, date?.toString(), MedicalAttachmentOperations.Detail.institutionOf(institution), initial?.revision ?: 0)) },
-                Modifier.heightIn(min = 56.dp).testTag("file-info-save")) { Text(stringResource(R.string.save)) }
+            Button({
+                val detail=MedicalAttachmentOperations.Detail(category?.name,date?.toString(),MedicalAttachmentOperations.Detail.institutionOf(institution),initial?.revision ?: 0)
+                if(onSaveFileInfo!=null)onSaveFileInfo(title,detail)else onSave(detail)
+            },Modifier.heightIn(min = 56.dp).testTag("file-info-save"),enabled=titleValid) { Text(stringResource(R.string.save)) }
             TextButton(onCancel, Modifier.heightIn(min = 56.dp).testTag("file-info-cancel")) { Text(stringResource(R.string.cancel)) }
         }
     }

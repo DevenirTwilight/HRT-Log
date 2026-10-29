@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="file_info_title_label">Nom du fichier</string>
+    <string name="file_info_title_invalid">Saisissez un nom non vide de 256 caractères maximum, sans caractères de contrôle.</string>
+    <string name="file_info_conflict">Ce fichier a été modifié ailleurs. Rouvrez ses informations avant de les enregistrer.</string>
+    <string name="file_info_checked">Les informations actuelles ont été vérifiées. Le résultat du précédent enregistrement ne peut pas être attribué ; vérifiez le nom et les informations affichés avant une nouvelle modification.</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="reader_hide_controls">Hide reading controls</string>
+    <string name="reader_show_controls">Show reading controls</string>
+    <string name="reader_controls_shown">Reading controls visible</string>
+    <string name="reader_controls_hidden">Reading controls hidden</string>
+</resources>

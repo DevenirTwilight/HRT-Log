@@ -20,12 +20,17 @@ class MedicalFileLibraryControllerTest {
     internal class Gateway:MedicalFileGateway {
         override val target:Ops.Target?=null
         override var scopeEnded=false
-        var docs=listOf<Ops.Document>();var failList=false;var failCommitResponse=false
+        var docs=listOf<Ops.Document>();var failList=false;var failCommitResponse=false;var documentReads=0
         var writes=0;var reads=0;var afterCommit:(()->Unit)?=null
         var relation:Pair<UUID,UUID>?=null;var life:Pair<UUID,UUID>?=null;var fact:Ops.RelationReceipt?=null
         val revoked=mutableListOf<()->Unit>()
         override fun pending():Pair<UUID,UUID>?=null
-        override suspend fun documents():List<Ops.Document> {if(failList)error("synthetic refresh failure");return docs}
+        var pauseNextDocumentRead:CompletableDeferred<Unit>?=null
+        override suspend fun documents():List<Ops.Document> {
+            documentReads++;if(failList)error("synthetic refresh failure")
+            val snapshot=docs;val pause=pauseNextDocumentRead;pauseNextDocumentRead=null
+            pause?.await();return snapshot
+        }
         override suspend fun pickerIntent()=Intent(Intent.ACTION_OPEN_DOCUMENT)
         override suspend fun preview(document:UUID):MedicalAttachmentGateway.Preview=error("not used")
         override suspend fun newImport(title:String):MedicalAttachmentGateway.Import=error("not used")
@@ -50,6 +55,26 @@ class MedicalFileLibraryControllerTest {
             stored=stored+(document to detail.copy(revision=revision+1))
             if(saveAppliesThenFails)error("synthetic lost acknowledgement")
             return revision+1
+        }
+        var info:Pair<UUID,UUID>?=null
+        var infoAppliesThenFails=false
+        var infoGate:CompletableDeferred<Unit>?=null
+        var infoAfterCommit:(()->Unit)?=null
+        var lastInfoRevisions:Pair<Long,Long>?=null
+        override fun infoPending()=info
+        override fun infoRetain(operation:UUID,document:UUID) {check(info==null || info==(operation to document));info=operation to document}
+        override fun infoResolved(operation:UUID,document:UUID) {if(info!=null){check(info==(operation to document));info=null}}
+        override suspend fun saveFileInfo(document:UUID,documentRevision:Long,detailRevision:Long,title:String,detail:Ops.Detail):Ops.FileInfoReceipt {
+            writes++;lastInfoRevisions=documentRevision to detailRevision;infoGate?.await()
+            val row=docs.firstOrNull {it.document==document}
+            if(row==null || row.state!="ACTIVE" || row.revision!=documentRevision || (stored[document]?.revision ?: 0L)!=detailRevision)throw Ops.FileInfoConflict()
+            if(failSave)error("synthetic file information failure")
+            val receipt=Ops.FileInfoReceipt(document,documentRevision+(if(title!=row.title)1L else 0L),detailRevision+1,title,detail.copy(revision=detailRevision+1))
+            docs=docs.map {if(it.document==document)it.copy(title=title,revision=receipt.documentRevision)else it}
+            stored=stored+(document to receipt.detail)
+            infoAfterCommit?.invoke()
+            if(infoAppliesThenFails)error("synthetic lost file information response")
+            return receipt
         }
         override fun relationPending()=relation
         override fun relationRetain(operation:UUID,document:UUID) {check(relation==null);relation=operation to document}
@@ -108,6 +133,127 @@ class MedicalFileLibraryControllerTest {
             c.saveDetail(document,typed)
             assertEquals(MedicalFileLibraryController.DetailOutcome.SAVED,c.state.value.detailOutcome)
             assertEquals(typed.copy(revision=1),c.state.value.details[document.document])
+        }
+    }
+    @Test fun renamingUsesTheSameRealDocumentAndUpdatesTheListWithoutDuplicatingOrImporting() {
+        val g=Gateway().apply {docs=listOf(document)}
+        controller(g).use {c->
+            c.saveFileInfo(document,"2026年10月雌二醇化验报告.pdf",typed)
+            assertEquals(1,g.writes);assertNull(g.info)
+            assertEquals(MedicalFileLibraryController.DetailOutcome.SAVED,c.state.value.detailOutcome)
+            assertEquals(document.copy(title="2026年10月雌二醇化验报告.pdf",revision=2),c.state.value.documents.single())
+            assertEquals(typed.copy(revision=1),c.state.value.details.getValue(document.document))
+        }
+    }
+    @Test fun aListReadThatStartedBeforeTheRenameCannotRepublishTheOldNameAfterItsCommit() {
+        val g=Gateway().apply {docs=listOf(document)}
+        controller(g).use {c->
+            val oldRead=CompletableDeferred<Unit>();g.pauseNextDocumentRead=oldRead;c.refresh()
+            c.saveFileInfo(document,"New authoritative name",typed)
+            assertEquals("New authoritative name",c.state.value.documents.single().title)
+            oldRead.complete(Unit)
+            assertEquals("New authoritative name",c.state.value.documents.single().title)
+            assertEquals(MedicalFileLibraryController.DetailOutcome.SAVED,c.state.value.detailOutcome)
+        }
+    }
+    @Test fun aCommittedRenameKeepsItsReceiptAndNewNameWhenTheFollowingRefreshFails() {
+        val g=Gateway().apply {docs=listOf(document);infoAfterCommit={failList=true}}
+        controller(g).use {c->
+            c.saveFileInfo(document,"Saved despite refresh failure",typed)
+            assertTrue(c.state.value.failed)
+            assertEquals(MedicalFileLibraryController.DetailOutcome.SAVED,c.state.value.detailOutcome)
+            assertEquals("Saved despite refresh failure",c.state.value.documents.single().title)
+            assertNull(g.info);assertEquals(1,g.writes)
+        }
+    }
+    @Test fun lostRenameResponseOnlyChecksCurrentValuesAcrossAReplacementController() {
+        val g=Gateway().apply {docs=listOf(document);infoAppliesThenFails=true}
+        controller(g).use {first->
+            first.saveFileInfo(document,"New name",typed)
+            assertEquals(MedicalFileLibraryController.Outcome.UNKNOWN,first.state.value.outcome)
+            first.saveFileInfo(document,"Do not replay",typed);assertEquals(1,g.writes)
+            assertNotNull(g.info)
+        }
+        controller(g).use {replacement->
+            assertEquals(MedicalFileLibraryController.Outcome.UNKNOWN,replacement.state.value.outcome)
+            replacement.saveFileInfo(g.docs.single(),"Do not replay after restart",typed);assertEquals(1,g.writes)
+            replacement.checkStatus();assertEquals(1,g.writes);assertNull(g.info)
+            assertEquals(MedicalFileLibraryController.Outcome.CHECKED,replacement.state.value.outcome)
+            assertEquals(MedicalFileLibraryController.DetailOutcome.CHECKED,replacement.state.value.detailOutcome)
+            assertEquals("New name",replacement.state.value.documents.single().title)
+            assertNotEquals(MedicalFileLibraryController.DetailOutcome.SAVED,replacement.state.value.detailOutcome)
+        }
+    }
+    @Test fun aReplacementPageCannotCheckOrReplayWhileTheEarlierMetadataWorkerIsStillAlive() {
+        val gate=CompletableDeferred<Unit>()
+        val g=Gateway().apply {docs=listOf(document);infoGate=gate}
+        val earlier=controller(g)
+        earlier.saveFileInfo(document,"A still-running save",typed);assertNotNull(g.info)
+        earlier.close()
+        controller(g).use {replacement->
+            val reads=g.documentReads
+            replacement.checkStatus()
+            assertEquals(reads,g.documentReads);assertNotNull(g.info)
+            replacement.saveFileInfo(document,"Do not race it",typed);assertEquals(1,g.writes)
+            gate.complete(Unit)
+            replacement.checkStatus()
+            assertEquals(MedicalFileLibraryController.Outcome.CHECKED,replacement.state.value.outcome)
+            assertEquals("A still-running save",replacement.state.value.documents.single().title)
+            assertNull(g.info);assertEquals(1,g.writes)
+        }
+    }
+    @Test fun unknownRenameWithUnavailableReadStaysUnknownAndCannotWrite() {
+        val g=Gateway().apply {docs=listOf(document);infoAppliesThenFails=true}
+        controller(g).use {c->
+            c.saveFileInfo(document,"New name",typed);g.failList=true;c.checkStatus()
+            assertEquals(MedicalFileLibraryController.Outcome.UNKNOWN,c.state.value.outcome)
+            assertNotNull(g.info);c.saveFileInfo(document,"No retry",typed);assertEquals(1,g.writes)
+        }
+    }
+    @Test fun staleRenameAndDetailRevisionDoNotOverwriteAConcurrentChange() {
+        val g=Gateway().apply {docs=listOf(document)}
+        controller(g).use {c->
+            g.docs=listOf(document.copy(title="Someone else",revision=2))
+            c.saveFileInfo(document,"My stale name",typed)
+            assertEquals(MedicalFileLibraryController.DetailOutcome.CONFLICT,c.state.value.detailOutcome)
+            assertEquals("Someone else",c.state.value.documents.single().title);assertNull(g.info)
+        }
+    }
+    @Test fun refreshedRevisionsNeverRebaseAnOlderFileInformationDraft() {
+        for(changeTitle in listOf(false,true)) {
+            val original=typed.copy(revision=3)
+            val g=Gateway().apply {docs=listOf(document);stored=mapOf(document.document to original)}
+            controller(g).use {c->
+                val frozenDocument=c.state.value.documents.single()
+                val frozenDetail=c.state.value.details.getValue(document.document)
+                g.docs=listOf(if(changeTitle)document.copy(title="A concurrent name",revision=2)else document)
+                val concurrent=typed.copy(institution="Another editor",revision=4)
+                g.stored=mapOf(document.document to concurrent)
+                c.refresh() // The list now knows the new revisions, but the form still owns its old draft.
+                c.saveFileInfo(frozenDocument,"A stale draft",frozenDetail.copy(institution="My uncommitted edit"))
+                assertEquals(1L to 3L,g.lastInfoRevisions)
+                assertEquals(MedicalFileLibraryController.DetailOutcome.CONFLICT,c.state.value.detailOutcome)
+                assertEquals(if(changeTitle)"A concurrent name" else document.title,g.docs.single().title)
+                assertEquals(concurrent,g.stored.getValue(document.document))
+                assertNull(g.info)
+            }
+        }
+    }
+    @Test fun revocationAfterTheRenameCommitNeverInventsASaveFailureOrPublishesMetadata() {
+        val g=Gateway().apply {docs=listOf(document);infoAfterCommit={scopeEnded=true;revoked.toList().forEach {it()}}}
+        controller(g).use {c->
+            c.saveFileInfo(document,"Saved before lock",typed)
+            assertTrue(c.state.value.revoked);assertTrue(c.state.value.documents.isEmpty())
+            assertEquals(MedicalFileLibraryController.DetailOutcome.SAVED,c.state.value.detailOutcome)
+            c.saveFileInfo(document,"Must not write",typed);assertEquals(1,g.writes)
+        }
+    }
+    @Test fun invalidOrTrashedNamesNeverReachTheWriter() {
+        val g=Gateway().apply {docs=listOf(document)}
+        controller(g).use {c->
+            for(name in listOf("", " ", "bad\nname", "x".repeat(257)))c.saveFileInfo(document,name,typed)
+            c.saveFileInfo(document.copy(state="TRASHED"),"No bin edit",typed)
+            assertEquals(0,g.writes)
         }
     }
     @Test fun unreadableDetailsNeverBlockTheFileListAndAreNeverEdited() {

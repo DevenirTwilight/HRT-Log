@@ -64,10 +64,13 @@ class MedicalViewerPagesTest {
         val pages=Pages(3);val (c,_)=opened(pages)
         val first=showing(c).page
         c.showPage(1)
-        val s=showing(c);assertEquals(1,s.pageIndex);assertFalse(s.busy);assertNotSame(first,s.page);assertFalse(s.page.isRecycled)
+        val s=showing(c);assertEquals(1,s.pageIndex);assertTrue(s.busy);assertNotSame(first,s.page);assertFalse(s.page.isRecycled)
         assertFalse("the page that was on screen is not recycled in the same step",first.isRecycled)
+        c.showPage(2)
+        assertEquals("No third bitmap before the retained frame is released",listOf(0,1),pages.made.map {it.first})
+        assertFalse(showing(c).pageFailed)
         shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(600))
-        assertTrue(first.isRecycled);assertEquals(listOf(first),pages.released)
+        assertTrue(first.isRecycled);assertEquals(listOf(first),pages.released);assertFalse(showing(c).busy)
         c.showPage(2);assertEquals(2,showing(c).pageIndex)
         c.close()
     }
