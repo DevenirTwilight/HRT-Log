@@ -9,6 +9,30 @@
 - B 的验证与 A 同类：v2/v3 单签名者、四 ABI、64 位 ELF 与 ZIP 16KiB 对齐、无 INTERNET、非 debug、签名前后 324 个业务条目逐字节相同；真机安装与人工 TalkBack NOT_RUN。主线 `aeb56839` CI：`android` 首次失败于 `Ui12ConcentrationTest.mixedRoutesCalibrateAsOneTotal[en/320dp/2x/dark=false]`（等待估算卡 30 秒超时，同一测试在 PR 运行中通过），按规则重跑一次后成功。
 - 本轮合并汇总：#149 UI-12、#150 MED-04、#151 SL-CAL-02 引擎、#152 MED-05、#153 校准接到浓度页，主线 `aeb56839d708c325b5330e62e672be968992fa42`。待负责人复核（不变）：信息档位阈值 0.75；E1 午夜占位；法文 320dp 2× 横轴日期标签重叠（UI-12 遗留）；大图按 2 的幂次缩小解码的放宽；Android 8 PDF 仍不支持；真机/TalkBack 未做；导出/PDF/快照不含校准后的合计（§67 D-2）。
 
+## 截图收集判断纠正与生命周期修正 — 2026-10-29
+
+b6589279关于PNG double-escape的根因判断已被独立真实PNG复验证伪：原AST字节常量也是89504e470d0a1a0a，不能宣称改成整数常量修复了问题。保留原断言FAIL与错误判断历史。真实产品UI测试在a194cb48/API35已经PASS，失败在测试退出后读取私有截图文件；现测试在退出前将其生成的PNG/JSON通过受限shell复制到固定hrt-synthetic-reader路径并严格校验成功标记，脚本在APK可能被AGP卸载后仍能读取。只允许固定合成截图名、隔离emulator，前后删除精确列举的测试产物，不碰医疗原件/密文/密钥；不加权限、不涉及Release。原PNG头严格校验保留，失败新增文件名/32字节诊断。新源码仍待编译与原生，未写PASS。
+
+## PR156 API35真实产品测试已通过，截图收集器修正 — 2026-10-29
+
+sourcea194cb48 run40941683948/job123686784063：fullscreenReaderRenamesThreePagePdfAndLargeImageThenReturnsToTheSameFile的instrumentation BUILD SUCCESSFUL，完整改名/三页PDF/图片缩放/返回/重开流程已通过；脚本随后49行断言失败，因PNG magic写成双重转义ASCII而非PNG头字节。现仍严格检查非空及准确8字节89504e470d0a1a0a，用明确字节常量避免转义错误，不取消截图/JSON采集。该次job整体FAIL，后续core-med03阶段未执行，不能以UI通过冒充整项CI/备份恢复通过。最终源码需完整CI。原失败保留；153已合并aeb56839，155确认流程定向及AndroidTest编译PASS后已推送c0e3ea93。
+
+## 最终原生/UI测试精确同步修正 — 2026-10-29
+
+PR156 source3294ba6e API26 run40938869568/job123677175796已到原596行重启后列表查找，前面的独立图片查看/缩放/返回已执行；新Activity的LazyColumn从顶部开始，目标文件卡在分类下方未组合。现用已有reveal真实滚动后查指定UUID，再核对新名；不直注URI，不绕过重启。PR155 source7710d670 Android run40936737557/job123669608636的原始HTML确认MedicalHomeTest:110是找不到medical-correction-confirm，而非DB撤回断言失败。现在先使真实撤回按钮进入可见区并等待确认按钮出现，再保留实际点击及数据库completed_utc=null断言；无sleep/不改10秒上限。定向回归及最终CI待跑，旧失败不改PASS。PR153已合并aeb56839。
+
+## PR156 原生列表名称断言修正 — 2026-10-29
+
+79747b02 run40937297721 job123671128600：真实MainActivity/SAF已执行到三页PDF、缩放、返回，原575行断言失败。失败节点library-doc:UUID有MergeDescendants但没有Text，内部DocumentRow自身mergeDescendants=true，是独立合并边界；不是数据库已证明改名丢失。现两处列表/重启名称断言检查指定UUID卡片下的精确新名称子节点，不扩大到全页面、不取消重启或名称断言，生产代码不改。原失败保留；整条方法尚未PASS，图像阶段仍待最终原生。此前整合源码编译已PASS（2m27s）。PR153已合并aeb56839，其主线CI另行等待；155仍需原生线程验收。
+
+## 2026-10-29 独立LMK失败证据已确认
+
+PR156 sourcecfd44c55的Featherline低内存run40934190600/job123660585591/artifact12923869325：内核明确LMK杀应用PID3878，终止观测RSS230012KiB非峰值；最后采样阶段before-wrong-password-kdf，不能归咎于logcat-clear，也不能断言已定位所有分配。精确原件/摘录见medical-attachments/2026-10-29-feedback/low-memory-40934190600。保留Issue117，未调整RAM/heap/KDF/夹具/预算，最终源码原生与低内存仍待验收。PR153已MERGED aeb56839，主线CI正在执行；155当前7710d670，156当前e3e81a69已同步该主线并保留双方文档。
+
+## 2026-10-29 PR153 已受保护合并，156整合检查点
+
+PR153最终源码dfa7f6e9的全部必需检查通过（Android两job、JVM、科学、API26/29/35及安全），无未解决评审；已正常squash合并为aeb56839d708c325b5330e62e672be968992fa42，未用admin绕过。正式主线开始复验，APK未构建交付。PR156已一次性同步这条已验收主线，保留双方全部HANDOFF与需求、校准实现和根节点测试修正；本轮自身仍Draft。新原生页码先更新/按钮等待旧页释放的测试时序已改为观察真实按钮恢复后再保留原assert。Featherline低内存run40934190600 job123660585591原始Process crashed与工件12923869325待独立核查，不能凭failed to clear log断言LMK。PR155根查询修正后API29 job123660106334仍有Snapshot线程失败，必须保留并继续定位，不能称已修复。
+
 ## 校准历史时间回归补验 — 2026-10-29
 
 此前d31cfd95的E2Calibration定向测试及AndroidTest Kotlin编译PASS（5m48s）。补充校准实际服药时间适配函数，仍使用同一HistoricalContext冻结解析规则；新增合成回归覆盖较早规则快照补全、无快照拒绝、IMPORT不补猜、删除和SKIPPED不计入。该新增回归正在/workspace/scratch/153-historical-regression.log执行，尚未写PASS。PR156当前061fe4de部分JVM/安全原生通过，完整Android/低内存待完成；两个PR无未解决行内讨论。PR153/156正文已更新。下一步读取本地测试→最终SHA必需CI→有据合并，不再扩展功能。
@@ -38,6 +62,46 @@ PR153：浓度计算通过 HistoricalContext.resolved 使用已冻结规则补�
 - 依赖：#149（UI-12）、#150（MED-04）、#151（引擎）、#152（MED-05）均已合并到主线；本 PR 基于最新主线。
 - 下一步：本 PR 合并且主线 CI 通过后，做 Build 39 私下签名交付（负责人 2026-10-29「都做完给apk」已恢复；沿用既有私有正式签名、versionCode ≥ 39、不发公开 Release/tag；账本与收据走单独 docs PR）。
 - 待负责人复核：阈值 0.75；E1 午夜占位；法文 320dp 2× 横轴标签重叠（UI-12 遗留）；真机 / TalkBack 未做。
+
+## 共享根节点测试路径补正 — 2026-10-29
+
+PR156也独立采用collection根查询，再主线程读坐标，避免fetchOneOrThrow在测试线程打印整棵动态根树；该源码路径在Compose ui-test1.9.3已核对，仍须原生证据验证与SnapshotStateObserver异常的因果关系。PR155同一最小测试修正5fb1bbf8，不混入双方生产代码。246项定向回归和已成功编译原件仍保留；56c17936最后一次本地编译日志停在KSP且进程已不存在，不能冒称成功，最终CI必须验证本次源码。
+
+## 原生剩余失败跟进 — 2026-10-29
+
+PR153最终dfa7f6e9：API26/29/35原生已成功，当前仅两个Android主作业待结束。PR155 df7d1010 run40925785461 job123630783670仍出现SnapshotStateObserver线程异常，证明仅移动bounds不足；未改写PASS。检查Compose ui-test1.9.3源码，fetchOneOrThrow在测试线程保存printToString语义快照，1.9.5仍同实现；这是待验证的库级候选原因，不擅自升级依赖或关闭观察器。PR156 91848eb0 run40930251829 job123646480535仍在原484行BACK超时，树显示实验室Focused=true；IconButton在触摸模式下不能可靠取得初始焦点，现将请求目标移到独立focusable根容器，不禁用文本编辑。原生仍待验证。所有失败原作业保留。
+
+## 2026-10-29 最终串行定向回归检查点
+
+PR156生产/测试源码6e6822d7：串行246项PASS，0失败/0skip（MedicalViewerPages7、Med05ViewerUi224、MedicalHomeConfirmFlow1、MedicalAttachmentsController14），2m29s，XML在medical-attachments/2026-10-29-feedback/local/serial-final。App AndroidTest Kotlin编译PASS。此前并行启动两个Gradle实例争用同一binary结果文件，首轮NoSuchFileException为本地执行安排错误，原日志/workspace/scratch/156-page-transition.log保留，不能计作产品FAIL或PASS；串行完整相关回归消除了争用。061fe4de独立低内存run40925404991的library/Featherline两job均PASS，不能代替最终SHA验收。当前153/155受保护auto-merge已启用，Android检查未结束；156保持Draft等待最终原生结果，API26焦点修正尚未得到原生PASS。未签名/交付新APK，真机/人工TalkBack NOT_RUN。
+
+## API26 BACK 具体原因与修正候选 — 2026-10-29
+
+原失败树明确显示lab-panel-lab的Focused=true，BACK后仍在panel，符合初次系统BACK先交给IME的路径；先前只加BackHandler不足。Dialog现在打开时显式聚焦关闭控件，避免浏览抽血详情时自动聚焦实验室文本输入。用户主动编辑仍保留键盘正常返回语义。精确新SHA原生验证待完成，不标PASS；不改测试为重复BACK、不绕过窗口。翻页两页上限修复定向回归仍执行中。
+
+## PR156 第二轮真实原生阻断 — 2026-10-29
+
+061fe4de run40925393040：API35翻到第三页失败，第二页仍显示pageFailed；生产允许旧页延迟300ms释放前发起下一次渲染，触及原两页上限。现保持busy直到旧页释放成功，不提高内存上限，不提前回收仍可能绘制的像素。API29返回列表断言缺少等待真实列表/虚拟行，补状态等待和已有reveal。API26 panel BACK仍失败，先前BackHandler未解决，不能写PASS，需继续定位实际窗口事件。低内存专项独立结果待核对。PR153新增HistoricalContext与E2适配本地定向PASS（3m27s），未等同原生通过。当前未合并或交付APK。
+
+## 2026-10-29 接手检查点：PR156 精确失败修复待验收
+
+当前正式主线d95952ee；PR156原头54abbdaa。已在原分支修复DocumentsUI虚拟列表遍历、LabPanel Dialog BACK、两处违反UI09的居中控件；共享原生测试布局坐标移至主线程。集合恢复测试将同一加密夹具建立独立为受限source阶段，仍真实执行各恢复/强停/独立进程核验，不改变512MiB/192MiB或断言。旧60秒混合阶段失败、清理强停与未知LMK原因保留，不能称恢复内存已修复。详见[精确失败与边界](medical-attachments/2026-10-29-feedback/takeover-acceptance.md)。本地Ui09四项全部PASS/0skip，app和core AndroidTest Kotlin编译PASS（8m24s）。新SHA原生/完整CI仍待执行，PR仍Draft。已同步README/PRIVACY的真正全屏、按需多页能力，Android8 PDF安全限制保留。
+
+PR153当前8c491bec：push原生API26/29/35通过，PR事件API29有共享SnapshotStateObserver失败，API35模拟器下载ZipFile失败未执行测试；Android主job尚在运行。已只读核对保存化验/实际服药/M2→TotalE2Calibration→同一合计曲线，不降低资格门槛。PR155当前831f81b0：原生失败同类Snapshot观察线程问题；另有MedicalHomeConfirmFlowTest第110行断言，待独立定位。未签名/构建交付APK；真机/人工TalkBack NOT_RUN。下一步完成本地结果→推送原PR156→独立处理153/155→精确HEAD必需CI/保护合并，不重复MED03或P4。
+
+## 编辑快照 CAS 补验 — 2026-10-29
+
+审查发现Host仅存编辑布尔值，列表刷新可使旧草稿重绑定最新Document/Detail revision，绕过用户预期CAS。已在打开编辑时冻结文档、信息及双revision，保存不再读最新列表revision；撤权/目标消失即隐藏清草稿。同一Host的“别人同时改标题+信息”与“只改信息”场景均保持旧草稿并返回CONFLICT，不覆盖新值。Controller/编辑器定向通过；正式Host四语16参数冲突回归通过。手势32项修复后回归通过，原始32FAIL保留。
+
+首轮PR156（bc9e2e9a）CI原件：安全API35 job123596884459在下载Android Emulator时 `Error on ZipFile unknown archive`，随后5554 refused，尚未执行原生测试，归类启动基础设施失败；Featherline512 job123596885268出现main log清理失败和instrumentation Process crashed，未凭此认定LMK，ROOT_CAUSE_NOT_PROVEN。两者不写PASS，不重复重跑旧头；新双revision生产修复必须由新精确HEAD重新验收，原始run40916177345/40916177324保留。当前不因这两个结果降低RAM/heap/KDF/样本或安全断言。
+
+## 用户反馈：文件名称与真正全屏阅读（2026-10-29，候选待原生CI）
+
+基于受保护主线d95952ee，复用Room23/MED03–05，没有新Room迁移或密码学/容器变更。重命名走现有编辑信息入口，title+Detail同一AttachmentTransaction CAS；保留原文档UUID、版本、密文、密钥、全部链接和原import journal。只有名称变化推进document.revision，元信息自己的revision保持MED04语义。校验≤256且非空/无ISO控制符，不截断用户输入。FILE_INFO checkpoint仅op/doc中性身份；未知只读回看报告CHECKED，不冒充历史COMMIT，不重写；同进程旧writer未结束不能清屏障。旧列表回调不能把成功CAS的新名称覆回旧名。
+
+阅读器使用独立Dialog、安全边距与继承截图保护；内容占据工具栏以外全部阅读区，工具栏隐藏后占满安全区域。去除固定460dp预览卡/详情元数据；保留认证读取、API26/27 PDF拒绝、JPEG/PNG、按需翻页、5×缩放与内存上限。首轮针对性共742项：32个新增显隐/双指手势失败，28项既有条件skip，其余通过；原始日志/XML保存在/workspace/hrt-feedback-evidence/reader-first-failure，不改写为PASS。根因：同批MotionEvent先于重组，旧scale/offset快照覆盖增量；生产改为手势局部累计，末尾翻页判断使用最终scale。显隐测试等待双击识别窗口后的真实toolbar状态，不加sleep/不放宽面积断言。修复后这32项全部PASS，0skip。标题单测1项通过，App/core AndroidTest源码编译通过；最终完整必需CI及真实设备执行仍待验收，不能称NATIVE_PASS。
+
+新增真实MainActivity/SAF三页PDF与2400×1600PNG，重命名→列表/详情/整次LabPanel五成员→viewer标题、缩放/翻页/显隐/返回/重开；保留旧样本与断言。native截图与采样非峰值内存JSON由既有med02-product-native工件收集，尚未实际运行。core原生五成员/多关系场景补旧import核对、CAS冲突、回滚、不可变对象与完整归档恢复新名。校准在原PR #153独立接手，不混改PK或压低门槛。真机/人工TalkBack未执行；本候选未签名/交付APK。
 
 ## 接手最终主线回归修正 — 2026-10-29
 

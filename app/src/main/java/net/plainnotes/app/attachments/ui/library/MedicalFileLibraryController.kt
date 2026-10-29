@@ -14,7 +14,7 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
     private val io:CoroutineDispatcher=Dispatchers.IO):AutoCloseable {
     enum class Outcome { IDLE, WORKING, COMMITTED, LIST_STALE, NOT_SAVED, UNKNOWN, CHECKED }
     /** MED-04: the result of saving what the user typed about a file; independent of the link/bin outcome. */
-    enum class DetailOutcome { NONE, SAVED, FAILED }
+    enum class DetailOutcome { NONE, SAVED, FAILED, CONFLICT, CHECKED }
     data class State(val documents:List<Ops.Document> = emptyList(),val details:Map<UUID,Ops.Detail> = emptyMap(),val detailsFailed:Boolean=false,
         val detailOutcome:DetailOutcome=DetailOutcome.NONE,val loading:Boolean=true,val failed:Boolean=false,
         val selected:UUID?=null,val links:List<Ops.Relationship> = emptyList(),val linksFailed:Boolean=false,val linksLoading:Boolean=false,
@@ -25,35 +25,38 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
     private val hidden=gateway.onHidden {thumbnails.clear()}
     private var pendingRelation:Pair<UUID,UUID>?=null
     private var pendingLifecycle:Pair<UUID,UUID>?=null
+    private var pendingInfo:Pair<UUID,UUID>?=null
     private var invalidCheckpoint=false
     private val mutable=MutableStateFlow(State())
     val state=mutable.asStateFlow()
     private var closed=false
     private var writing:Job?=null
     private var selection=0L
+    private var refreshGeneration=0L
     private val revoked=gateway.onRevoked {
         thumbnails.clear()
         mutable.value=State(loading=false,revoked=true,outcome=mutable.value.outcome)
     }
     init {
-        try {pendingRelation=gateway.relationPending();pendingLifecycle=gateway.lifecyclePending()}
+        try {pendingRelation=gateway.relationPending();pendingLifecycle=gateway.lifecyclePending();pendingInfo=gateway.infoPending()}
         catch(_:Exception) {invalidCheckpoint=true}
-        if(pendingRelation!=null || pendingLifecycle!=null || invalidCheckpoint)mutable.update {it.copy(outcome=Outcome.UNKNOWN)}
+        if(pendingRelation!=null || pendingLifecycle!=null || pendingInfo!=null || invalidCheckpoint)mutable.update {it.copy(outcome=Outcome.UNKNOWN)}
     }
     fun canWrite()=!closed && !state.value.revoked && !gateway.scopeEnded && state.value.outcome!=Outcome.WORKING &&
-        !state.value.loading && !state.value.failed && !invalidCheckpoint && pendingRelation==null && pendingLifecycle==null &&
+        !state.value.loading && !state.value.failed && !invalidCheckpoint && pendingRelation==null && pendingLifecycle==null && pendingInfo==null &&
         files.state.value.import !in setOf(MedicalAttachmentsController.Import.Saving,MedicalAttachmentsController.Import.Unknown,MedicalAttachmentsController.Import.Checking)
     fun refresh() {
         if(closed || state.value.revoked)return
         files.refresh()
+        val generation=++refreshGeneration
         scope.launch {
             try {
                 val docs=withContext(io) {gateway.documents()}
                 // The file list never waits for, or fails with, the user's own notes about the files.
                 val details=try {withContext(io) {gateway.details()}}catch(e:CancellationException) {throw e}catch(_:Exception) {null}
-                if(!closed && !state.value.revoked)mutable.update {it.copy(documents=docs,details=details.orEmpty(),detailsFailed=details==null,loading=false,failed=false)}
+                if(!closed && !state.value.revoked && generation==refreshGeneration)mutable.update {it.copy(documents=docs,details=details.orEmpty(),detailsFailed=details==null,loading=false,failed=false)}
             }catch(e:CancellationException) {throw e}
-            catch(_:Exception) {if(!closed && !state.value.revoked)mutable.update {it.copy(loading=false,failed=true,outcome=if(it.outcome==Outcome.COMMITTED)Outcome.LIST_STALE else it.outcome)}}
+            catch(_:Exception) {if(!closed && !state.value.revoked && generation==refreshGeneration)mutable.update {it.copy(loading=false,failed=true,outcome=if(it.outcome==Outcome.COMMITTED)Outcome.LIST_STALE else it.outcome)}}
         }
     }
     fun select(document:UUID?) {
@@ -109,6 +112,39 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
             then?.invoke()
         }
     }
+    /** Editing a name is a metadata CAS, not an import. A lost response retains only neutral IDs;
+     * no title/URI/bytes survive and no failure handler automatically repeats this write. */
+    fun saveFileInfo(document:Ops.Document,title:String,detail:Ops.Detail) {
+        if(!canWrite() || document.state!="ACTIVE" || state.value.detailsFailed || !Ops.validTitle(title))return
+        // The caller freezes this revision when the editor opens. Refreshing the list must
+        // never promote a stale draft to the newest metadata revision.
+        val revision=detail.revision
+        val operation=UUID.randomUUID();pendingInfo=operation to document.document
+        refreshGeneration++ // An earlier list read cannot overwrite the real CAS receipt with an old name.
+        files.closeViewer()
+        mutable.update {it.copy(outcome=Outcome.WORKING,detailOutcome=DetailOutcome.NONE)}
+        val worker=operation to document.document
+        check(infoWorkers.putIfAbsent(worker,Unit)==null)
+        writing=scope.launch {
+            var conflict=false
+            val receipt=try {withContext(io) {
+                gateway.infoRetain(operation,document.document)
+                gateway.saveFileInfo(document.document,document.revision,revision,title,detail.copy(revision=revision))
+            }}catch(e:CancellationException) {mutable.update {it.copy(outcome=Outcome.UNKNOWN)};throw e}
+            catch(_:Ops.FileInfoConflict) {conflict=true;null}catch(_:Exception){null}
+            if(receipt!=null || conflict) {
+                val cleared=runCatching {withContext(io) {gateway.infoResolved(operation,document.document)}}.isSuccess
+                if(cleared)pendingInfo=null
+                if(!closed)mutable.update {before->
+                    before.copy(outcome=if(cleared)Outcome.IDLE else Outcome.UNKNOWN,
+                        detailOutcome=if(receipt!=null)DetailOutcome.SAVED else if(cleared)DetailOutcome.CONFLICT else DetailOutcome.NONE,
+                        documents=if(receipt!=null && !before.revoked)before.documents.map {if(it.document==receipt.document)it.copy(title=receipt.title,revision=receipt.documentRevision)else it} else before.documents,
+                        details=if(receipt!=null && !before.revoked)before.details+(receipt.document to receipt.detail)else before.details)
+                }
+                if(!closed && !state.value.revoked)refresh()
+            }else if(!closed)mutable.update {it.copy(outcome=Outcome.UNKNOWN)}
+        }.also {job->job.invokeOnCompletion {infoWorkers.remove(worker)}}
+    }
     fun dismissDetailOutcome() {mutable.update {it.copy(detailOutcome=DetailOutcome.NONE)}}
     /** Existing CAS-based soft lifecycle, retaining every original, key, quota and quarantined link. */
     fun recycle(document:Ops.Document,restore:Boolean) {
@@ -132,11 +168,23 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
     }
     /** Never invokes associate/trash/restore. Absence is decisive only after this owner's worker has ended. */
     fun checkStatus() {
-        if(closed || state.value.revoked || writing?.isActive==true || invalidCheckpoint)return
+        if(closed || state.value.revoked || writing?.isActive==true || invalidCheckpoint || pendingInfo?.let(infoWorkers::containsKey)==true)return
         mutable.update {it.copy(outcome=Outcome.WORKING)}
         writing=scope.launch {
             try {
                 var committed=false
+                var infoChecked=false
+                pendingInfo?.let {(operation,document)->
+                    // No operation receipt exists for file information. Show only authenticated
+                    // CURRENT values, never claim which historical writer committed them.
+                    val docs=withContext(io) {gateway.documents()}
+                    val details=withContext(io) {gateway.details()}
+                    check(docs.any {it.document==document})
+                    if(closed || state.value.revoked || gateway.scopeEnded)return@launch
+                    withContext(io) {gateway.infoResolved(operation,document)}
+                    pendingInfo=null;infoChecked=true
+                    mutable.update {it.copy(documents=docs,details=details,detailsFailed=false)}
+                }
                 pendingRelation?.let {(operation,document)->
                     val result=withContext(io) {gateway.relationStatus(operation,document)}
                     if(result?.phase==Ops.Phase.PENDING) {mutable.update {it.copy(outcome=Outcome.UNKNOWN)};return@launch}
@@ -151,13 +199,18 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
                     pendingLifecycle=null
                 }
                 if(!closed && !state.value.revoked) {
-                    mutable.update {it.copy(outcome=if(committed)Outcome.COMMITTED else Outcome.CHECKED)}
+                    mutable.update {it.copy(outcome=if(committed)Outcome.COMMITTED else Outcome.CHECKED,detailOutcome=if(infoChecked)DetailOutcome.CHECKED else it.detailOutcome)}
                     refresh();select(state.value.selected)
                 }
             }catch(e:CancellationException){throw e}catch(_:Exception){if(!closed && !state.value.revoked)mutable.update {it.copy(outcome=Outcome.UNKNOWN)}}
         }
     }
     fun dismissOutcome() {if(canWrite())mutable.update {it.copy(outcome=Outcome.IDLE)}}
+    private companion object {
+        // A replacement page must not clear a checkpoint while this process still has its writer.
+        // New processes start empty: a dead process cannot leave a live SQL worker behind.
+        val infoWorkers=java.util.concurrent.ConcurrentHashMap<Pair<UUID,UUID>,Unit>()
+    }
     override fun close() {
         if(closed)return
         files.close() // remove pixels before releasing runtime resources

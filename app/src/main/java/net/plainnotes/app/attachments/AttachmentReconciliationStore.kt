@@ -12,7 +12,7 @@ import java.util.UUID
  * Synchronous commit precedes dispatch. A corrupt checkpoint refuses new operations.
  */
 internal class AttachmentReconciliationStore(context:Context,scope:LibraryRequestScope,target:MedicalAttachmentOperations.Target?,purpose:String?=null) {
-    init {require(purpose==null || purpose in setOf("RELATION","LIFECYCLE"))}
+    init {require(purpose==null || purpose in setOf("RELATION","LIFECYCLE","FILE_INFO"))}
     private val ownerEpoch=synchronized(monitor) {wipeEpoch}
     private val prefs=context.getSharedPreferences("attachment-reconciliation-v1",Context.MODE_PRIVATE)
     private val key=MessageDigest.getInstance("SHA-256").digest(

@@ -75,19 +75,23 @@ class MedicalAttachmentProductAndroidTest {
             throw AssertionError("Condition not met; production tree: "+ui.onAllNodes(isRoot(),useUnmergedTree=true).printToString(maxDepth=24),e)
         }
     }
+    /** Semantics lookup is a test API; coordinate resolution can measure/draw an Owner
+     * and must execute on the same main thread as its AndroidComposeView. */
+    private fun bounds(matcher:SemanticsMatcher):androidx.compose.ui.geometry.Rect {
+        val semantic=ui.onAllNodes(matcher).fetchSemanticsNodes().single()
+        return ui.runOnIdle {semantic.boundsInRoot}
+    }
     /**
      * performScrollTo() aligns a row with the viewport edge, which on a 320x640 screen is behind the status/navigation bars and
      * the floating add button. A person scrolls until the row is comfortably inside; so does this, with real swipes on the list.
      */
-    private fun bounds(node:SemanticsNodeInteraction):androidx.compose.ui.geometry.Rect {
-        val semantic=node.fetchSemanticsNode()
-        return ui.runOnIdle {semantic.boundsInRoot}
-    }
-    private fun scrollIntoComfort(list:String,node:SemanticsNodeInteraction) {
+    private fun scrollIntoComfort(list:String,node:SemanticsNodeInteraction,matcher:SemanticsMatcher) {
         node.performScrollTo()
         repeat(4) {
-            val root=bounds(ui.onAllNodes(isRoot()).onFirst())
-            val bounds=bounds(node)
+            // Do not make fetchOneOrThrow print the full dynamic root on the test thread.
+            val rootNode=ui.onAllNodes(isRoot()).fetchSemanticsNodes().first()
+            val root=ui.runOnIdle {rootNode.boundsInRoot}
+            val bounds=bounds(matcher)
             val margin=root.height*0.2f
             val shift=when {bounds.bottom>root.bottom-margin->-(bounds.bottom-(root.bottom-margin)+16f)
                 bounds.top<root.top+margin->(root.top+margin-bounds.top)+16f else->0f}
@@ -156,12 +160,12 @@ class MedicalAttachmentProductAndroidTest {
         await {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty() || ui.onAllNodes(collapsedDraw).fetchSemanticsNodes().isNotEmpty()}
         // The floating add button overlaps the centre of this wide control on 320 dp; tap its free left part.
         if(ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isEmpty()) {
-            scrollIntoComfort("labs-home",ui.onAllNodes(collapsedDraw).onFirst())
+            scrollIntoComfort("labs-home",ui.onAllNodes(collapsedDraw).onFirst(),collapsedDraw)
             ui.onAllNodes(collapsedDraw).onFirst().performTouchInput {click(androidx.compose.ui.geometry.Offset(width*0.12f,center.y))}
         }
         await {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty()}
         val row=ui.onNodeWithTag("lab-group-row:$id")
-        scrollIntoComfort("labs-home",row)
+        scrollIntoComfort("labs-home",row,hasTestTag("lab-group-row:$id"))
         // The real Labs FAB overlaps the right side of a low visible row on 320dp.
         // Tap its unobscured label side, relative to the actual semantic row bounds.
         // This is still a real touch on the existing result, not a ViewModel/URI shortcut.
@@ -271,7 +275,25 @@ class MedicalAttachmentProductAndroidTest {
         }
         waitSystem("MED-02 sample directory") {loadedDirectory()}
         val name="SYNTHETIC sample.$kind"
-        waitSystem(name) {systemNode(name)!=null && !rootsOpen()}
+        // DocumentsUI virtualizes its grid/list. A loaded directory does not imply
+        // every provider child is currently represented in the accessibility tree.
+        val seen=mutableSetOf<String>()
+        waitSystem(name) {
+            if(rootsOpen())false else if(systemNode(name)!=null)true else {
+                val list=systemId("dir_list")
+                fun signature(n:AccessibilityNodeInfo):String=buildString {
+                    n.text?.let {append(it);append('|')}
+                    for(i in 0 until n.childCount)n.getChild(i)?.let {append(signature(it))}
+                }
+                val visible=list?.let(::signature)
+                if(list!=null && visible!=null && seen.add(visible)) {
+                    assertTrue("Requested document is absent from the fully traversed provider directory: $name",
+                        list.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD))
+                    settlePicker()
+                }
+                false
+            }
+        }
         settlePicker();touch(requireNotNull(systemNode(name)))
         waitSystem("production Activity resumed") {scenario?.state==Lifecycle.State.RESUMED && pickerRoot()==null}
         await {ui.onAllNodesWithTag(confirmation).fetchSemanticsNodes().isNotEmpty()}
@@ -338,9 +360,11 @@ class MedicalAttachmentProductAndroidTest {
         val label=context.getString(R.string.attach_item_description,saved.title,text(R.string.attach_kind_image),text(R.string.attach_status_saved))
         press(hasContentDescription(label))
         await {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
-        val closeBounds=ui.onNodeWithTag("attachment-viewer-close").fetchSemanticsNode().boundsInRoot
-        val navigationBounds=ui.onNodeWithTag("medical-center-back").assertExists().fetchSemanticsNode().boundsInRoot
-        assertTrue("Preview close must be below the real shell app bar, not covered by its Back button",closeBounds.top>=navigationBounds.bottom)
+        val closeBounds=bounds(hasTestTag("attachment-viewer-close"))
+        val readerBounds=bounds(hasTestTag("attachment-viewer"))
+        val viewport=bounds(hasTestTag("attachment-viewer-viewport"))
+        assertTrue("Reader Back belongs to the independent fullscreen window",closeBounds.top>=readerBounds.top && closeBounds.bottom<=viewport.top)
+        assertEquals(readerBounds.width,viewport.width,1f)
         tag("attachment-viewer-close")
         await {ui.onAllNodesWithTag("attachment-viewer").fetchSemanticsNodes().isEmpty()}
         // A retained uncertain result is resolved only by the visible, read-only action.
@@ -439,18 +463,28 @@ class MedicalAttachmentProductAndroidTest {
             assertEquals(1,flow.documents().size);assertEquals(1,flow.relationships(document.document).size)
             assertEquals(MedicalAttachmentOperations.Kind.LAB_PANEL,flow.relationships(document.document).single().target.kind)
         }}
+        val renamed="2026年10月雌二醇化验报告.pdf"
+        renameFromFileDetail("SYNTHETIC whole blood draw",renamed)
         scenario!!.close();scenario=null;launch()
-        val members=model.extra.value.labs.filter {it.panel_id==panel.id}
         await {model.extra.value.labs.count {it.panel_id==panel.id}==5}
-        for(member in model.extra.value.labs.filter {it.panel_id==panel.id}) {
+        val members=model.extra.value.labs.filter {it.panel_id==panel.id}
+        for(member in members) {
             open(Destination.LABS);labDetail(member.id)
             await {ui.onAllNodesWithTag("attachment:${document.document}",useUnmergedTree=true).fetchSemanticsNodes().isNotEmpty()}
             assertTrue("the result page names the whole draw its file belongs to",ui.onAllNodesWithText(context.getString(R.string.med03_whole_draw,5),substring=true).fetchSemanticsNodes().isNotEmpty())
+            ui.onNode(hasText(renamed) and hasAnyAncestor(hasTestTag("attachment:${document.document}")),useUnmergedTree=true).assertExists()
             val panelTarget=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.LAB_PANEL,panel.id,java.util.UUID.fromString(panel.uuid),member.id)
             runBlocking {model.libraryRuntime.attachments(panelTarget,"SYNTHETIC shared draw original").use {flow->
                 assertEquals(document.document,flow.documents().single().document)
                 flow.open(document.document).use {reader->val b=ByteArray(5);assertEquals(5,reader.readAt(0,b,0,5));assertEquals("%PDF-",String(b,Charsets.US_ASCII))}
             }}
+            if(member.id==members.first().id) {
+                tag("lab-detail-open-draw")
+                await {ui.onAllNodesWithTag("lab-panel-detail").fetchSemanticsNodes().isNotEmpty()}
+                await {ui.onAllNodesWithTag("attachment:${document.document}",useUnmergedTree=true).fetchSemanticsNodes().isNotEmpty()}
+                ui.onNode(hasText(renamed) and hasAnyAncestor(hasTestTag("attachment:${document.document}")),useUnmergedTree=true).assertExists()
+                back();await {ui.onAllNodesWithTag("lab-panel-detail").fetchSemanticsNodes().isEmpty()}
+            }
             back();await {ui.onAllNodesWithTag("lab-detail").fetchSemanticsNodes().isEmpty()}
         }
         // Select while the visit is still a form: cancellation does not discard its fields.
@@ -480,4 +514,132 @@ class MedicalAttachmentProductAndroidTest {
         tag("new-record-files-done")
 
     }
+    /** Actual MainActivity + DocumentsUI + encrypted gateway, never an injected URI or synthetic Activity.
+     * The screenshot preference is explicitly enabled only on an isolated, guarded emulator with generated files.
+     */
+    @Test fun fullscreenReaderRenamesThreePagePdfAndLargeImageThenReturnsToTheSameFile() {
+        UiPrefs(context).allowScreenshots=true
+        try {
+            launch()
+            runBlocking {val repo=model.libraryRuntime.currentRepository();assertTrue(repo.appointments().isEmpty() && repo.labs().isEmpty())}
+            open(Destination.MEDICAL);tag("medical-tab:files");tag("library-add")
+            pickSample("threepage.pdf","add-document-confirm")
+            ui.onNodeWithTag("add-document-title").performTextClearance();ui.onNodeWithTag("add-document-title").performTextInput("report.pdf")
+            tag("add-document-confirm")
+            await {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
+            val original=runBlocking {model.libraryRuntime.attachments(null,"SYNTHETIC reader original").use {it.documents().single()}}
+            tag("library-doc:${original.document}")
+            val renamed="2026年10月雌二醇化验报告.pdf"
+            renameFromFileDetail("report.pdf",renamed)
+            tag("file-detail-view")
+            if(android.os.Build.VERSION.SDK_INT<28) {
+                await {ui.onAllNodesWithTag("attachment-viewer-message").fetchSemanticsNodes().isNotEmpty()}
+                ui.onNodeWithTag("attachment-viewer-message").assert(hasText(text(R.string.viewer_pdf_unsupported)))
+                nativeReaderShot("pdf-android8-refused")
+            } else {
+                await {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
+                ui.onNodeWithTag("attachment-viewer-title").assert(hasText(renamed))
+                assertNativeReadingArea();nativeReaderShot("pdf-page1")
+                for(page in 2..3) {
+                    await {ui.onAllNodes(hasTestTag("attachment-viewer-next") and isEnabled()).fetchSemanticsNodes().isNotEmpty()}
+                    tag("attachment-viewer-next")
+                    await {ui.onAllNodes(hasTestTag("attachment-viewer-page-number") and hasText(context.getString(R.string.med05_page_of,page,3))).fetchSemanticsNodes().isNotEmpty()}
+                    // The displayed page can update before the retained frame is released.
+                    // Wait for the real transition to finish; do not relax the button assertion.
+                    await {ui.onAllNodes(hasTestTag("attachment-viewer-prev") and isEnabled()).fetchSemanticsNodes().isNotEmpty()}
+                    ui.onNodeWithTag("attachment-viewer-prev").assertIsEnabled()
+                    nativeReaderShot("pdf-page$page")
+                }
+                ui.onNodeWithTag("attachment-viewer-next").assertIsNotEnabled()
+                ui.onNodeWithTag("attachment-viewer-page").performTouchInput {doubleClick()}
+                ui.onNodeWithTag("attachment-viewer-zoom-reset").assertIsEnabled()
+                ui.onNodeWithTag("attachment-viewer-page").performTouchInput {swipeLeft()}
+                ui.onNodeWithTag("attachment-viewer-page-number").assert(hasText(context.getString(R.string.med05_page_of,3,3)))
+                nativeReaderShot("pdf-zoom-pan");tag("attachment-viewer-zoom-reset")
+                ui.onNodeWithTag("attachment-viewer-zoom-reset").assertIsNotEnabled()
+                val before=bounds(hasTestTag("attachment-viewer-viewport")).height
+                ui.onNodeWithTag("attachment-viewer-page").performTouchInput {click()}
+                await {ui.onAllNodesWithTag("attachment-viewer-controls").fetchSemanticsNodes().isEmpty()}
+                val full=bounds(hasTestTag("attachment-viewer-viewport"))
+                assertEquals(bounds(hasTestTag("attachment-viewer-safe-area")),full)
+                assertTrue(full.height>before);nativeReaderShot("pdf-controls-hidden")
+                ui.onNodeWithTag("attachment-viewer-page").performTouchInput {click()}
+                await {ui.onAllNodesWithTag("attachment-viewer-close").fetchSemanticsNodes().isNotEmpty()}
+            }
+            tag("attachment-viewer-close")
+            await {ui.onAllNodesWithTag("attachment-viewer").fetchSemanticsNodes().isEmpty()}
+            ui.onNode(hasText(renamed) and hasAnyAncestor(hasTestTag("file-detail"))).assertExists()
+            tag("file-detail-back")
+            await {ui.onAllNodesWithTag("library").fetchSemanticsNodes().isNotEmpty()}
+            reveal(hasTestTag("library-doc:${original.document}"))
+            ui.onNode(hasText(renamed) and hasAnyAncestor(hasTestTag("library-doc:${original.document}")),useUnmergedTree=true).assertExists()
+            tag("library-add");pickSample("large.png","add-document-confirm")
+            ui.onNodeWithTag("add-document-title").performTextClearance();ui.onNodeWithTag("add-document-title").performTextInput("SYNTHETIC large image")
+            tag("add-document-confirm")
+            await {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
+            val image=runBlocking {model.libraryRuntime.attachments(null,"SYNTHETIC large image").use {it.documents().single {d->d.document!=original.document}}}
+            tag("library-doc:${image.document}");tag("file-detail-view")
+            await {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
+            assertNativeReadingArea();nativeReaderShot("image-fit")
+            ui.onNodeWithTag("attachment-viewer-page").performTouchInput {
+                val near=androidx.compose.ui.geometry.Offset(width*.05f,0f);val far=androidx.compose.ui.geometry.Offset(width*.3f,0f)
+                pinch(center-near,center-far,center+near,center+far)
+            }
+            ui.onNodeWithTag("attachment-viewer-zoom-reset").assertIsEnabled()
+            ui.onNodeWithTag("attachment-viewer-page").performTouchInput {swipeLeft()};nativeReaderShot("image-zoom-pan")
+            tag("attachment-viewer-zoom-reset");ui.onNodeWithTag("attachment-viewer-zoom-reset").assertIsNotEnabled()
+            tag("attachment-viewer-close")
+            await {ui.onAllNodesWithTag("attachment-viewer").fetchSemanticsNodes().isEmpty()}
+            ui.onNode(hasText(image.title) and hasAnyAncestor(hasTestTag("file-detail"))).assertExists()
+            // A process/activity restart must keep both original objects and the renamed document title.
+            scenario!!.close();scenario=null;launch();open(Destination.MEDICAL);tag("medical-tab:files")
+            await {reveal(hasTestTag("library-doc:${original.document}"));ui.onAllNodesWithTag("library-doc:${original.document}").fetchSemanticsNodes().isNotEmpty()}
+            ui.onNode(hasText(renamed) and hasAnyAncestor(hasTestTag("library-doc:${original.document}")),useUnmergedTree=true).assertExists()
+            runBlocking {model.libraryRuntime.attachments(null,"SYNTHETIC no reader duplicates").use {assertEquals(2,it.documents().size)}}
+        } finally {UiPrefs(context).allowScreenshots=false}
+    }
+    private fun renameFromFileDetail(before:String,after:String) {
+        tag("file-detail-edit-info")
+        ui.onNodeWithTag("file-info-title").assert(hasText(before)).performTextClearance()
+        ui.onNodeWithTag("file-info-title").performTextInput(after);tag("file-info-save")
+        await {ui.onAllNodesWithTag("library-detail-result").fetchSemanticsNodes().isNotEmpty()}
+        ui.onNodeWithTag("library-detail-result").assert(hasText(text(R.string.med04_detail_saved)))
+        await {ui.onAllNodes(hasText(after) and hasAnyAncestor(hasTestTag("file-detail")),useUnmergedTree=true).fetchSemanticsNodes().isNotEmpty()}
+        ui.onNode(hasText(after) and hasAnyAncestor(hasTestTag("file-detail")),useUnmergedTree=true).assertExists()
+    }
+    private fun assertNativeReadingArea() {
+        val viewport=bounds(hasTestTag("attachment-viewer-viewport"))
+        val toolbar=bounds(hasTestTag("attachment-viewer-toolbar"))
+        val controls=bounds(hasTestTag("attachment-viewer-controls"))
+        val safe=bounds(hasTestTag("attachment-viewer-safe-area"))
+        assertEquals(safe.width,viewport.width,1f);assertEquals(toolbar.bottom,viewport.top,1f);assertEquals(controls.top,viewport.bottom,1f)
+        assertEquals(viewport,bounds(hasTestTag("attachment-viewer-page")))
+        ui.onAllNodesWithTag("attachment-viewer-linked").assertCountEquals(0);ui.onAllNodesWithTag("attachment-viewer-details").assertCountEquals(0)
+    }
+    private fun nativeReaderShot(name:String) {
+        ui.waitForIdle()
+        val bitmap=requireNotNull(instrumentation.uiAutomation.takeScreenshot()) {"Actual device screenshot unavailable"}
+        try {
+            val reader=bounds(hasTestTag("attachment-viewer"))
+            assertEquals("Reader covers the native display width",bitmap.width.toFloat(),reader.width,2f)
+            assertEquals("Reader covers the native display height",bitmap.height.toFloat(),reader.height,2f)
+            java.io.File(context.filesDir,"synthetic-reader-$name.png").outputStream().use {assertTrue(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,it))}
+            val memory=android.os.Debug.MemoryInfo();android.os.Debug.getMemoryInfo(memory)
+            val value=org.json.JSONObject().put("api",android.os.Build.VERSION.SDK_INT).put("source",net.plainnotes.app.BuildConfig.SOURCE_SHA)
+                .put("synthetic_only",true).put("sampled_not_peak",true).put("pss_kib",memory.totalPss).put("native_pss_kib",memory.nativePss)
+                .put("display_width",bitmap.width).put("display_height",bitmap.height).put("reader_width",reader.width).put("reader_height",reader.height)
+            java.io.File(context.filesDir,"synthetic-reader-$name.json").writeText(value.toString())
+            // Only generated emulator evidence. Preserve it before AGP may remove
+            // the target APK/private directory after instrumentation completes.
+            require(name.matches(Regex("[a-z0-9-]+")))
+            val script="run-as net.plainnotes.app cat files/synthetic-reader-$name.png>/data/local/tmp/hrt-synthetic-reader-$name.png&&run-as net.plainnotes.app cat files/synthetic-reader-$name.json>/data/local/tmp/hrt-synthetic-reader-$name.json&&echo HRT_SYNTHETIC_CAPTURE_OK"
+            // API26 UiAutomation uses Runtime.exec(String), which does not group
+            // quoted shell arguments. Keep the fixed script one token for sh -c.
+            val command="sh -c "+script.replace(" ", '$'.toString()+"{IFS}")
+            val copied=android.os.ParcelFileDescriptor.AutoCloseInputStream(instrumentation.uiAutomation.executeShellCommand(command))
+                .bufferedReader().use {it.readText().trim()}
+            assertEquals("Generated native evidence must be copied before test exit","HRT_SYNTHETIC_CAPTURE_OK",copied)
+        } finally {bitmap.recycle()}
+    }
+
 }

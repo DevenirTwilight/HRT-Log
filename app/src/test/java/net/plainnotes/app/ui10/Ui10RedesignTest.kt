@@ -77,10 +77,16 @@ class Ui10RedesignTest(private val locale: String, private val width: Int, priva
     private fun shot(name: String, dialog: Boolean = false) {
         val dir = System.getenv("UI10_SHOTS")?.takeIf { it.isNotBlank() } ?: return
         ui.waitForIdle()
-        val view = if (dialog) requireNotNull(org.robolectric.shadows.ShadowDialog.getShownDialogs().lastOrNull { it.isShowing }?.window).decorView else ui.activity.window.decorView
-        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888); view.draw(Canvas(bitmap))
-        File("build/ui10-shots/$dir").apply { mkdirs() }.resolve("${name}_${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}.png")
-            .outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        val reader=ui.onAllNodesWithTag("attachment-viewer").fetchSemanticsNodes().isNotEmpty()
+        ui.runOnUiThread {
+            val view = if (dialog || reader) requireNotNull(org.robolectric.shadows.ShadowDialog.getShownDialogs().lastOrNull { it.isShowing }?.window).decorView else ui.activity.window.decorView
+            val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+            try {
+                view.draw(Canvas(bitmap))
+                File("build/ui10-shots/$dir").apply { mkdirs() }.resolve("${name}_${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}.png")
+                    .outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+            } finally {bitmap.recycle()}
+        }
     }
     /** A plain synthetic page bitmap (grey bars on white); no real document. */
     private fun page(): Bitmap = Bitmap.createBitmap(420, 560, Bitmap.Config.ARGB_8888).also { b ->
@@ -197,7 +203,7 @@ class Ui10RedesignTest(private val locale: String, private val width: Int, priva
 
     // --- file page --------------------------------------------------------------------------------------------------------
 
-    @Test fun filePageShowsPreviewTypeTitleLinkedRecordAndDetails() {
+    @Test fun readerShowsTheFileAndTitleWithoutDuplicatingTheDetailPage() {
         setup()
         var closed = 0
         var pdfPage by androidx.compose.runtime.mutableStateOf(true)
@@ -205,10 +211,10 @@ class Ui10RedesignTest(private val locale: String, private val width: Int, priva
         for (isPdf in listOf(true, false)) {
             ui.runOnIdle { pdfPage = isPdf }
             ui.onNodeWithTag("attachment-viewer-page").assertExists()
-            ui.onNodeWithTag("attachment-viewer-linked").performScrollTo().assert(hasText("Synthetic visit · 7 Oct")).assert(hasText(s(R.string.viewer_linked_record)))
-            ui.onNodeWithTag("attachment-viewer-details").performScrollTo()
-            val preview = s(if (isPdf) R.string.viewer_preview_first_page else R.string.viewer_preview_full)
-            ui.onNode(hasText(preview) and hasAnyAncestor(hasTestTag("attachment-viewer-details"))).assertExists()
+            ui.onNodeWithTag("attachment-viewer-title").assert(hasText(if(isPdf)pdf.title else image.title))
+            ui.onAllNodesWithTag("attachment-viewer-linked").assertCountEquals(0)
+            ui.onAllNodesWithTag("attachment-viewer-details").assertCountEquals(0)
+            ui.onAllNodesWithText("Synthetic visit · 7 Oct").assertCountEquals(0)
             // Nothing unverified is claimed: no size, date, source or integrity line.
             ui.onAllNodesWithText("KB", substring = true).assertCountEquals(0)
             ui.onNodeWithTag("attachment-viewer-close").assertHasClickAction().performClick()

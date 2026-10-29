@@ -1,0 +1,2 @@
+[  401.149073] lowmemorykiller: Killing '.plainnotes.app' (3878), adj 0,\x0a   to free 230012kB on behalf of 'kswapd0' (521) because\x0a   cache 27000kB is below limit 37916kB for oom_score_adj 0\x0a   Free memory is 27856kB above reserved
+[  401.158158] lowmemorykiller: Killing 'Jit thread pool' (3883), adj 0,\x0a   to free 242596kB on behalf of 'kswapd0' (521) because\x0a   cache 27552kB is below limit 37916kB for oom_score_adj 0\x0a   Free memory is 29088kB above reserved

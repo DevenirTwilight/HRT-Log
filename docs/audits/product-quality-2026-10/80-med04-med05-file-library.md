@@ -53,3 +53,19 @@
 - 很多文件时缩略图会逐个生成，首次进入页面可能先看到类型图标再换成缩略图；未测大批量（上百份）性能。
 - 缩放后位图分辨率上限 1600 像素，放大到 5 倍时文字会变软（不重新渲染）。
 - 没有的东西：上次备份日期、医生/机构管理页、从文件内容识别类别/日期（按 §164 不做）。
+
+## 用户反馈修复候选 — 2026-10-29
+
+### 名称
+
+正式入口：医疗档案→医疗文件→文件详情→编辑文件信息（名称、类别、日期、机构）。名称预填真实document.title，不重新导入/加密；title和Detail在Room23现有表一次事务双revision CAS，失败原子回滚、取消不写、撤权拒绝。UNKNOWN保留中性op/doc，只读核对当前状态，不能归属历史COMMIT或自动重放；旧worker及旧列表回调都有窄竞态回归。完整备份使用已有manifest当前标题，不更改任何备份格式。原生测试扩展原五成员/多关联/独立恢复路径，证明一个原件与链接/UUID/封装/journal不变、旧import可核对，恢复后新名称保留。
+
+### 阅读
+
+正式“全屏查看”现在是独立阅读窗口，不含详情的机构/关系卡片或固定高度圆角框；fit读取区居中、保持比例，顶部标题返回与底部页码/翻页/缩放控件在必要安全边距内，单击显隐工具栏。Pinch/double tap/zoom pan复用现有认证Controller和GuardedBitmap；手势以局部值累计，不依赖逐事件已重组；仅main线程发布状态，未改位图分配、解析/内存上限或撤权流程。
+
+### 证据与限制
+
+首轮742项中32项新手势失败、28项既有skip，其余通过；32项修复后目标重验PASS。标题边界1项PASS，App/core native测试源码编译PASS；最终CI/原生截图未完成前不得标原生已验收。新增真实MainActivity方法 `fullscreenReaderRenamesThreePagePdfAndLargeImageThenReturnsToTheSameFile` 在既有runner中执行，生成三页PDF/大图、真实截图及标注sampled_not_peak的进程PSS JSON，来源是设备UiAutomation，不是Robolectric或ImageGen。旧standalone方法验证Panel与五结果新标题同步，core既有方法验证完整归档与独立恢复原件不变。API26/27继续拒绝系统PDF预览、图片可读；真机、人工TalkBack、硬件断电仍NOT_RUN。所有文件与医疗记录均人工合成。
+
+后续CAS审查及回归：正式Host进入编辑时冻结Document+Detail快照/双revision，列表刷新不能将旧草稿“升级”为最新revision；并发改名/元信息或仅元信息均报告CONFLICT，保留并发新值。Controller/编辑器与正式Host四语16参数定向PASS，旧草稿不静默覆盖。首轮CI API35安全job在Emulator下载ZIP损坏后未启动设备；Featherline512进程崩溃根因未证明，均保留原始FAIL，不等同于本文件功能PASS；新生产修复源需新CI验收。

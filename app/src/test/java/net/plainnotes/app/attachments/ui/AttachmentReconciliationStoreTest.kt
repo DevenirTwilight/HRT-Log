@@ -50,11 +50,13 @@ class AttachmentReconciliationStoreTest {
     @Test fun importRelationAndLifecycleKeepIndependentNeutralCheckpointsAndAllObeyWipe() {
         val context=ApplicationProvider.getApplicationContext<Context>()
         val scope=LibraryRequestScope("LEGACY",UUID.randomUUID().toString(),UUID.randomUUID().toString())
-        val stores=listOf(AttachmentReconciliationStore(context,scope,null),AttachmentReconciliationStore(context,scope,null,"RELATION"),AttachmentReconciliationStore(context,scope,null,"LIFECYCLE"))
-        val pairs=List(3){UUID.randomUUID() to UUID.randomUUID()}
+        val stores=listOf(AttachmentReconciliationStore(context,scope,null),AttachmentReconciliationStore(context,scope,null,"RELATION"),AttachmentReconciliationStore(context,scope,null,"LIFECYCLE"),AttachmentReconciliationStore(context,scope,null,"FILE_INFO"))
+        val pairs=List(4){UUID.randomUUID() to UUID.randomUUID()}
         stores.forEachIndexed {i,store->store.retain(pairs[i].first,pairs[i].second)}
         assertEquals(pairs,stores.map {it.pending()})
         assertEquals(pairs[1],AttachmentReconciliationStore(context,scope,null,"RELATION").pending())
+        assertEquals(pairs[3],AttachmentReconciliationStore(context,scope,null,"FILE_INFO").pending())
+        assertNull(AttachmentReconciliationStore(context,scope.copy(epoch=UUID.randomUUID().toString()),null,"FILE_INFO").pending())
         val prefs=context.getSharedPreferences("attachment-reconciliation-v1",Context.MODE_PRIVATE)
         assertTrue(prefs.all.values.all {it is String && it.matches(Regex("[0-9a-f-]{36}\\|[0-9a-f-]{36}"))})
         AttachmentReconciliationStore.clearAll(prefs)

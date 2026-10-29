@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.attachments.ui.MedicalViewerPagesTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-29T18:20:23.424Z" hostname="081e144673fb" time="0.301">
+  <properties/>
+  <testcase name="anotherPageReplacesTheShownOneAndTheOldBitmapIsReleasedAMomentLater" classname="net.plainnotes.app.attachments.ui.MedicalViewerPagesTest" time="0.051"/>
+  <testcase name="lockingWhileAPageIsBeingMadeDiscardsItAndShowsNothing" classname="net.plainnotes.app.attachments.ui.MedicalViewerPagesTest" time="0.046"/>
+  <testcase name="aPdfOpensOnItsFirstPageWithItsPageCount" classname="net.plainnotes.app.attachments.ui.MedicalViewerPagesTest" time="0.053"/>
+  <testcase name="aPageThatCannotBeMadeKeepsTheShownPageAndSaysSo" classname="net.plainnotes.app.attachments.ui.MedicalViewerPagesTest" time="0.031"/>
+  <testcase name="closingTheViewerWhileAPageIsBeingMadeDiscardsIt" classname="net.plainnotes.app.attachments.ui.MedicalViewerPagesTest" time="0.031"/>
+  <testcase name="anImageHasNoPagesToTurn" classname="net.plainnotes.app.attachments.ui.MedicalViewerPagesTest" time="0.054"/>
+  <testcase name="outOfRangeSamePageAndBusyRequestsAreIgnored" classname="net.plainnotes.app.attachments.ui.MedicalViewerPagesTest" time="0.03"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

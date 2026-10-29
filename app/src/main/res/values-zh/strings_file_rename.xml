@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="file_info_title_label">文件名称</string>
+    <string name="file_info_title_invalid">名称不能为空，最多256个字符，且不能含控制字符。</string>
+    <string name="file_info_conflict">文件已在其他地方更改。请重新打开文件信息后再保存。</string>
+    <string name="file_info_checked">已核对当前文件信息，无法确认上一次保存的提交归属。请先核对显示的名称和信息，再进行新的修改。</string>
+</resources>
