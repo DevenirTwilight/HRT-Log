@@ -259,8 +259,9 @@ class UiPrefs(context: Context) {
                     onUnconfirmedMore = { rows -> destination = Destination.HISTORY; importedRecordIds = rows.map { it.id }.toSet() })
                 Destination.MEDICATIONS -> MedicationsScreen(state, { model.edit(null) }, { model.edit(it) }, { medicationDialogs.archive = it }, pad,onReference={openReference(it)},onBrowseReference={openReference(null)},referenceLoaders=referenceLoaders,referenceVersion=referenceVersion)
                 Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, extra.labs, pad,
-                    content = { innerPad, preview, selector -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
-                        { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,selector,m2Only=true) })
+                    content = { innerPad, preview, status, basis -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
+                        { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,status,basis,
+                        e2NonSublingual = conc.nonSublingual, doseTimes = conc.doseTimes) })
                 Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labDialogs.labEdit = it; labDialogs.labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)},
                     extra.labPanels,{labDialogs.panel=it.id},{labDialogs.saveAs=it},onOpenDetail={medicalDialogs.lab=it.id})
                 Destination.SETTINGS -> {
