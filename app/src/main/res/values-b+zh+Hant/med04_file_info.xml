@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="med04_search_hint">搜尋標題、機構、類別</string>
+    <string name="med04_date_unknown">日期未知</string>
+    <string name="med04_imported_on">匯入於 %1$s</string>
+    <string name="lib_info_date">檔案日期</string>
+    <string name="lib_info_institution">機構</string>
+    <string name="med04_edit_info">編輯檔案資訊</string>
+    <string name="med04_info_title">檔案資訊</string>
+    <string name="med04_info_note">只顯示您填寫的內容。應用程式不會從檔案猜測類別、日期或機構。再點一次已選的類別即可清除。</string>
+    <string name="med04_date_label">檔案日期（選填）</string>
+    <string name="med04_date_pick">選擇日期</string>
+    <string name="med04_date_clear">清除日期</string>
+    <string name="med04_institution_label">機構（選填）</string>
+    <string name="med04_detail_saved">已儲存檔案資訊。</string>
+    <string name="med04_detail_failed">檔案資訊沒有儲存。請開啟該檔案，點「編輯檔案資訊」重試。</string>
+    <string name="med04_details_unavailable">暫時讀不到檔案資訊，所以現在不顯示類別和日期。</string>
+    <plurals name="med04_to_sort_body">
+        <item quantity="other">%d 份檔案還沒填日期或類別</item>
+    </plurals>
+</resources>

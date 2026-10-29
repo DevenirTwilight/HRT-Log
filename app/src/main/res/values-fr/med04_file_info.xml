@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="med04_search_hint">Rechercher titre, établissement ou catégorie</string>
+    <string name="med04_date_unknown">Date inconnue</string>
+    <string name="med04_imported_on">Importé le %1$s</string>
+    <string name="lib_info_date">Date du document</string>
+    <string name="lib_info_institution">Établissement</string>
+    <string name="med04_edit_info">Modifier les informations</string>
+    <string name="med04_info_title">Informations du fichier</string>
+    <string name="med04_info_note">Seul ce que vous saisissez est affiché. L’application ne devine jamais une catégorie, une date ou un établissement à partir du fichier. Touchez de nouveau une catégorie choisie pour l’effacer.</string>
+    <string name="med04_date_label">Date du document (facultatif)</string>
+    <string name="med04_date_pick">Choisir la date</string>
+    <string name="med04_date_clear">Effacer la date</string>
+    <string name="med04_institution_label">Établissement (facultatif)</string>
+    <string name="med04_detail_saved">Informations du fichier enregistrées.</string>
+    <string name="med04_detail_failed">Les informations du fichier n’ont pas été enregistrées. Ouvrez le fichier et choisissez « Modifier les informations » pour réessayer.</string>
+    <string name="med04_details_unavailable">Les informations des fichiers sont illisibles pour l’instant ; catégories et dates ne sont pas affichées.</string>
+    <plurals name="med04_to_sort_body">
+        <item quantity="one">%d fichier sans date ou catégorie</item>
+        <item quantity="other">%d fichiers sans date ou catégorie</item>
+    </plurals>
+</resources>

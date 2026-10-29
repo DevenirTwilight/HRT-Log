@@ -40,6 +40,17 @@ class MedicalFileLibraryControllerTest {
         override suspend fun relationStatus(operation:UUID,document:UUID):Ops.RelationReceipt? {reads++;check(relation==operation to document);return fact}
         override suspend fun trash(document:UUID,revision:Long) {writes++;docs=docs.map {it.copy(state="TRASHED",revision=it.revision+1)}}
         override suspend fun restore(document:UUID,revision:Long) {writes++;docs=docs.map {it.copy(state="ACTIVE",revision=it.revision+1)}}
+        var stored=mapOf<UUID,Ops.Detail>();var failDetails=false;var failSave=false;var saveAppliesThenFails=false
+        override suspend fun details():Map<UUID,Ops.Detail> {if(failDetails)error("synthetic detail read failure");return stored}
+        override suspend fun saveDetail(document:UUID,revision:Long,detail:Ops.Detail):Long {
+            writes++
+            val current=stored[document]?.revision ?: 0L
+            check(current==revision) {"File details changed elsewhere"}
+            if(failSave)error("synthetic detail failure")
+            stored=stored+(document to detail.copy(revision=revision+1))
+            if(saveAppliesThenFails)error("synthetic lost acknowledgement")
+            return revision+1
+        }
         override fun relationPending()=relation
         override fun relationRetain(operation:UUID,document:UUID) {check(relation==null);relation=operation to document}
         override fun relationResolved(operation:UUID,document:UUID) {check(relation==operation to document);relation=null}
@@ -70,5 +81,50 @@ class MedicalFileLibraryControllerTest {
     @Test fun interruptedLifecycleChecksPresentStateWithoutClaimingItsHistoricalCommit() {
         val g=Gateway().apply {docs=listOf(document.copy(state="TRASHED",revision=2));life=UUID.randomUUID() to document.document}
         controller(g).use {c->assertFalse(c.canWrite());c.checkStatus();assertEquals(MedicalFileLibraryController.Outcome.CHECKED,c.state.value.outcome);assertNull(g.life);assertEquals(0,g.writes)}
+    }
+
+    private val typed=Ops.Detail("LAB_REPORT","2026-10-07","Synthetic clinic")
+    @Test fun savingFileInformationWritesOnlyTheDetailAndShowsItOnTheNextRead() {
+        val g=Gateway().apply {docs=listOf(document)}
+        controller(g).use {c->
+            assertTrue(c.state.value.details.isEmpty())
+            c.saveDetail(document,typed)
+            assertEquals(1,g.writes);assertEquals(MedicalFileLibraryController.DetailOutcome.SAVED,c.state.value.detailOutcome)
+            assertEquals(typed.copy(revision=1),c.state.value.details[document.document]);assertEquals(MedicalFileLibraryController.Outcome.IDLE,c.state.value.outcome)
+            c.saveDetail(document,Ops.Detail(null,null,null))
+            assertEquals(2L,c.state.value.details[document.document]?.revision);assertTrue(c.state.value.details.getValue(document.document).empty)
+        }
+    }
+    @Test fun aFailedSaveReportsFailureAndNeverRetriesOrChangesTheStoredValue() {
+        val g=Gateway().apply {docs=listOf(document);failSave=true}
+        controller(g).use {c->
+            c.saveDetail(document,typed)
+            assertEquals(1,g.writes);assertEquals(MedicalFileLibraryController.DetailOutcome.FAILED,c.state.value.detailOutcome);assertTrue(c.state.value.details.isEmpty())
+        }
+    }
+    @Test fun aLostAcknowledgementIsReadBackNotGuessed() {
+        val g=Gateway().apply {docs=listOf(document);saveAppliesThenFails=true}
+        controller(g).use {c->
+            c.saveDetail(document,typed)
+            assertEquals(MedicalFileLibraryController.DetailOutcome.SAVED,c.state.value.detailOutcome)
+            assertEquals(typed.copy(revision=1),c.state.value.details[document.document])
+        }
+    }
+    @Test fun unreadableDetailsNeverBlockTheFileListAndAreNeverEdited() {
+        val g=Gateway().apply {docs=listOf(document);failDetails=true}
+        controller(g).use {c->
+            assertEquals(1,c.state.value.documents.size);assertTrue(c.state.value.detailsFailed);assertFalse(c.state.value.failed)
+            c.saveDetail(document,typed);assertEquals(0,g.writes)
+        }
+    }
+    @Test fun aFileInTheBinOrAStaleRevisionIsNotEdited() {
+        val g=Gateway().apply {docs=listOf(document.copy(state="TRASHED",revision=2))}
+        controller(g).use {c->c.saveDetail(g.docs.single(),typed);assertEquals(0,g.writes)}
+        val h=Gateway().apply {docs=listOf(document);stored=mapOf(document.document to typed.copy(revision=5))}
+        controller(h).use {c->
+            h.stored=mapOf(document.document to typed.copy(revision=6)) // changed after the list was read
+            c.saveDetail(document,Ops.Detail("OTHER",null,null))
+            assertEquals(MedicalFileLibraryController.DetailOutcome.FAILED,c.state.value.detailOutcome);assertEquals("LAB_REPORT",c.state.value.details.getValue(document.document).category)
+        }
     }
 }

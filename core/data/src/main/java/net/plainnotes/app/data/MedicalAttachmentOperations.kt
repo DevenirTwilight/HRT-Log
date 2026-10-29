@@ -252,6 +252,7 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
         }
         val empty get()=category==null && date==null && institution==null
         companion object {
+            const val INSTITUTION_MAX=MedicalFileDetailSchema.INSTITUTION_MAX
             /** User text to a stored value: trimmed, blank means not entered, over-long input is rejected rather than cut. */
             fun institutionOf(text:String):String? {val t=text.trim();require(t.length<=MedicalFileDetailSchema.INSTITUTION_MAX && t.none {it.code<32 || it.code==127});return t.ifEmpty {null}}
         }
