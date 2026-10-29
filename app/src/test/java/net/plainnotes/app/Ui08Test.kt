@@ -304,10 +304,12 @@ class Ui08PdfSummaryUnchangedTest {
     @Test fun summaryCodeAndStringsAreTheBase() {
         assertEquals("df0d246ba308f43dd869c131b5d781dfba4125ec940df9fd55dcc15ddb1c497b", sha(File("src/main/java/net/plainnotes/app/export/WellbeingSummary.kt").readBytes()))
         assertEquals("a9a2de731d4d0ffcfbd7c4ce154eef6a720f4c7b0420e5098c51d65026ba4fc0", sha(File("src/test/java/net/plainnotes/app/export/LegacyPdfReport.kt").readBytes()))
-        // ConcChart.kt: the original hash, or the one approved for UI-12 (REQUIREMENTS §162, display-approvals id PD-2026-10-29-UI12-CONCCHART:
-        // readout card, dose ticks, day axis, no red "now" line; the wellbeing summary does not use the chart).
-        assertTrue("ConcChart.kt must be the original or the UI-12 approved version", sha(File("src/main/java/net/plainnotes/app/ui/ConcChart.kt").readBytes()) in
-            setOf("51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06", "9fca1d03a34499c9597dcb2b4cdaf7a9f8e0e33cb784981845145277d675023a"))
+        // ConcChart.kt: the original hash, or an approved one: UI-12 (REQUIREMENTS §162, display-approvals id PD-2026-10-29-UI12-CONCCHART:
+        // readout card, dose ticks, day axis, no red "now" line) and the axis-label fix (§171, PD-2026-10-29-CONCCHART-AXIS-LABELS:
+        // overlapping/cut-off axis labels only). The wellbeing summary does not use the chart.
+        assertTrue("ConcChart.kt must be the original or an approved version", sha(File("src/main/java/net/plainnotes/app/ui/ConcChart.kt").readBytes()) in
+            setOf("51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06", "9fca1d03a34499c9597dcb2b4cdaf7a9f8e0e33cb784981845145277d675023a",
+                "20f224d607ebc48d9a0dd036f4b070ba0935f26bae7d67f6b2fd37916528c5dc"))
         val base = mapOf("values" to "caa533fbbe4165f32d7ba7f7a1f9c3620995c4b4a2de1e9f81353c9fd3a4638a", "values-zh" to "7d0d69f1e8734cde743aa0e94f669895003c4b6508acf76b6d2920b269f1ef84",
             "values-b+zh+Hant" to "2c53efeec7e47153485abac6f345dd11f43047849e9ebc140067b991be459a29", "values-fr" to "b12b41def544ec6069e8e941af03589bb9837403cb8426b4a1c16975c254eaf0")
         for ((dir, digest) in base) {

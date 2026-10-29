@@ -195,6 +195,28 @@ private fun niceStep(span: Double, target: Int): Double {
 private inline fun DrawScope.clipRectSafe(l: Float, t: Float, r: Float, b: Float, block: DrawScope.() -> Unit) =
     drawContext.canvas.let { canvas -> canvas.save(); canvas.clipRect(l, t, r, b); block(); canvas.restore() }
 
+/**
+ * Which of the axis labels can be drawn without touching one another. A smaller [rank] wins a contested spot (the bold date beats the
+ * half-day mark); among equal ranks the earlier label wins. At normal text size nothing overlaps and every label is kept; at 2x text on a
+ * narrow screen the half-day marks give way first instead of printing over the dates.
+ */
+internal fun axisLabelsToDraw(centers: FloatArray, widths: FloatArray, rank: IntArray, gap: Float): BooleanArray {
+    require(centers.size == widths.size && centers.size == rank.size)
+    val keep = BooleanArray(centers.size)
+    val taken = ArrayList<Pair<Float, Float>>()
+    for (i in centers.indices.sortedWith(compareBy({ rank[it] }, { it }))) {
+        val left = centers[i] - widths[i] / 2f - gap / 2f
+        val right = centers[i] + widths[i] / 2f + gap / 2f
+        if (left.isNaN() || right.isNaN()) continue
+        if (taken.none { left < it.second && right > it.first }) { keep[i] = true; taken += left to right }
+    }
+    return keep
+}
+
+/** Keeps a label of [width] fully inside a canvas of [total] width; a label wider than the canvas is centred. */
+internal fun clampAxisLabelCenter(center: Float, width: Float, total: Float): Float =
+    if (!center.isFinite() || !width.isFinite() || !total.isFinite()) center else if (width >= total) total / 2f else center.coerceIn(width / 2f, total - width / 2f)
+
 private fun DrawScope.drawTimeAxis(measurer: TextMeasurer, style: TextStyle, start: Double, end: Double, px: (Double) -> Float, y: Float, grid: Color,
                                    hourFmt: DateTimeFormatter, dayFmt: DateTimeFormatter, days: Boolean = false, noonLabel: String = "12:00") {
     val span = end - start
@@ -204,14 +226,21 @@ private fun DrawScope.drawTimeAxis(measurer: TextMeasurer, style: TextStyle, sta
     val fmt = if (stepH < 24) hourFmt else dayFmt
     val offsetH = zone.rules.getOffset(Instant.ofEpochMilli((start * 3_600_000).toLong())).totalSeconds / 3600.0
     var t = ceil((start + offsetH) / stepH) * stepH - offsetH
+    val ticks = ArrayList<Triple<Float, androidx.compose.ui.text.TextLayoutResult, Boolean>>()
     while (t <= end) {
         val x = px(t)
         drawLine(grid.copy(alpha = 0.5f), Offset(x, 0f), Offset(x, y), 1f)
         val at = Instant.ofEpochMilli((t * 3_600_000).toLong()).atZone(zone)
         // UI-12: with day labels the date is bold at local midnight and the half-day tick says "12時"/"12 h" instead of a clock time.
         val label = if (dayLabels) (if (at.hour == 12) noonLabel else at.format(dayFmt)) else at.format(fmt)
-        val m = measurer.measure(label, if (dayLabels && at.hour != 12) style.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold) else style)
-        drawText(m, topLeft = Offset(x - m.size.width / 2f, y + 4f))
+        val half = dayLabels && at.hour == 12
+        val m = measurer.measure(label, if (dayLabels && !half) style.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold) else style)
+        ticks += Triple(x, m, half)
         t += stepH
     }
+    // A label near the edge of the canvas is moved inside it (never cut off); the plan then works on the positions actually drawn.
+    val centers = FloatArray(ticks.size) { clampAxisLabelCenter(ticks[it].first, ticks[it].second.size.width.toFloat(), size.width) }
+    val keep = axisLabelsToDraw(centers, FloatArray(ticks.size) { ticks[it].second.size.width.toFloat() },
+        IntArray(ticks.size) { if (ticks[it].third) 1 else 0 }, 6.dp.toPx())
+    ticks.forEachIndexed { i, (_, m, _) -> if (keep[i]) drawText(m, topLeft = Offset(centers[i] - m.size.width / 2f, y + 4f)) }
 }
