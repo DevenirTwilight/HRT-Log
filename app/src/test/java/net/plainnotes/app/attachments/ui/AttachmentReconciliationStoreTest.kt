@@ -47,5 +47,18 @@ class AttachmentReconciliationStoreTest {
         fresh.retain(pair.first,pair.second)
         assertEquals(pair,fresh.pending())
     }
+    @Test fun importRelationAndLifecycleKeepIndependentNeutralCheckpointsAndAllObeyWipe() {
+        val context=ApplicationProvider.getApplicationContext<Context>()
+        val scope=LibraryRequestScope("LEGACY",UUID.randomUUID().toString(),UUID.randomUUID().toString())
+        val stores=listOf(AttachmentReconciliationStore(context,scope,null),AttachmentReconciliationStore(context,scope,null,"RELATION"),AttachmentReconciliationStore(context,scope,null,"LIFECYCLE"))
+        val pairs=List(3){UUID.randomUUID() to UUID.randomUUID()}
+        stores.forEachIndexed {i,store->store.retain(pairs[i].first,pairs[i].second)}
+        assertEquals(pairs,stores.map {it.pending()})
+        assertEquals(pairs[1],AttachmentReconciliationStore(context,scope,null,"RELATION").pending())
+        val prefs=context.getSharedPreferences("attachment-reconciliation-v1",Context.MODE_PRIVATE)
+        assertTrue(prefs.all.values.all {it is String && it.matches(Regex("[0-9a-f-]{36}\\|[0-9a-f-]{36}"))})
+        AttachmentReconciliationStore.clearAll(prefs)
+        stores.forEachIndexed {i,store->assertNull(store.pending());try {store.retain(pairs[i].first,pairs[i].second);fail("Late old owner rewrote wiped neutral identity")}catch(_:IllegalStateException){}}
+    }
 
 }

@@ -22,6 +22,7 @@ internal object LibraryRestoreSequences {
         records.forEach {r->checkActive();retain(when(r.kind) {
             AttachmentBackupManifest.Kind.APPOINTMENT->"appointment"
             AttachmentBackupManifest.Kind.LAB->"lab_value"
+            AttachmentBackupManifest.Kind.LAB_PANEL->"lab_panel"
             AttachmentBackupManifest.Kind.DOSE_RECORD->"dose_record"
         },r.sourceId)}
         db.query("SELECT payload_json FROM trash_item").use {c->while(c.moveToNext()) {

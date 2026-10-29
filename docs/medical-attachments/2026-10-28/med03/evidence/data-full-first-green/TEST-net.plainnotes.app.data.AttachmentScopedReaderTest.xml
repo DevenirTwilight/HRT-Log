@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.AttachmentScopedReaderTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:51:40.929Z" hostname="948d99df3df9" time="0.336">
+  <properties/>
+  <testcase name="committedDatasetSwitchRefusesAlreadyOpenLeaseWithoutDependingOnCallerRevocation" classname="net.plainnotes.app.data.AttachmentScopedReaderTest" time="0.137"/>
+  <testcase name="datasetSwitchDuringCipherReadClearsLatePlaintextBeforeReturning" classname="net.plainnotes.app.data.AttachmentScopedReaderTest" time="0.09"/>
+  <testcase name="callerSnapshotCannotServeAsCurrentDatasetAuthority" classname="net.plainnotes.app.data.AttachmentScopedReaderTest" time="0.106"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,3 +1,58 @@
+## MED-03 已合并 + Build38 私人交付 — 2026-10-28
+
+- **MED-03 已合并**：PR #145 → 主线 `64fca05b955516bd54d835e21a4708d561bdffb0`（含 Room 22 独立 LAB_PANEL、独立医疗文件库、整次抽血报告关联、record-first 附件、PNMEDBK2 v1/v2 备份恢复、restore 接受独立文件）。合并前精确头 `c78480e5` 上全部必需检查和 `run_med02_product_native.py` 真实两个 MainActivity/SAF 用例及全部重启脚本 SUCCESS（PR 运行 40763719638）；合并前最后一轮头 `cc7689a3` 的两个环境性失败（`android` 在 sdkmanager 阶段退出、`library-api26-512m` 低内存启动超时）各重跑一次并在 PR 上说明。
+- **主线 CI（64fca05b，push 运行 40784374425）**：jvm、android、device-tests、attachment-poc-compatibility 26、Science、MED-02 安全均 SUCCESS；**attachment-poc-compatibility 29 失败**：`InAppNavigationLockAndroidTest.centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles` 在点开“文件”页后立即 `performScrollToNode`，此时库列表尚未加载（`could not find any node that satisfies TestTag = library`）——MED-03 把文件库改成异步加载后暴露的测试竞态，不是产品错误；已对失败任务重跑一次，并在本记录所在 PR 里让测试先等待 `library` 出现（不缩短超时、不删断言）。
+- **Issue #144**：合并后关闭，评论说明实现范围与 NOT_RUN（真机、人工 TalkBack、硬件断电）。
+- **Build38 私人交付（负责人明确要求“加个步骤签名给我”）**：从主线 `64fca05b` 干净独立工作树，加源码外 `version38.init.gradle`（只把 versionCode 37→38，哈希见收据）构建 fullRelease；只用原正式证书 `989ba045…79b1`（私有备份仓库 DevenirTwilight/- 确认 Private，只读克隆到受限临时目录，签后删除，原备份未改）。成品 `HRT-Log-build38-full-official.apk` 14,433,438 字节，SHA-256 `9097607bea5c5460c976efd1869f0ac7ba92da9961f00ded28613d1fd4b958a3`；v2/v3 通过，包名 net.plainnotes.app/38/0.2.0，四 ABI、所有 64 位 ELF LOAD 与 ZIP 16KiB 对齐、无 INTERNET、非 debug、无测试 provider，签名前后 324 个业务条目逐字节相同。核验收据 `docs/delivery/build38-private-verification.json`（不含私钥、密码、下载链接）；账本追加 38，源码 versionCode 下限同步 38。会话私有文件发送，**不入 Git/公共 CI/Release/tag**；真机安装和人工 TalkBack 为 NOT_RUN。可直接覆盖安装；勿卸载、勿清数据；覆盖前先导出完整备份。
+- 此处理的 PR 同时包含上述测试竞态修复；其余研究/UI 工作见下面各节（SL-CAL-01 已合并 `65378035`，主线 CI 全绿；UI-12 在分支 `feature/ui12-concentration-20261028` 进行中）。
+
+---
+
+## MED-03 精确头 4465f518 必需检查全部通过 — 2026-10-28（PR #145 仍 Draft，待本记录提交后的最终 CI、Ready、受保护合并）
+
+- 精确头 `4465f5187c933583e42a118eee637bdb1ab22a63`。**PR 事件运行 40756012781 全部 SUCCESS**：android、device-tests（真实执行 `run_med02_product_native.py`：两个 MainActivity/SAF 产品用例与 3 个核心 MED-03 原生用例；之后 persistent/restore/gate2/b3/lab-panel/undo/medical-records 等全部重启脚本均 `OK`，Gradle BUILD SUCCESSFUL）、jvm、attachment-poc-compatibility 26/29、science-change-gate；security-native 26/27/29/35 与 featherline/library 512MiB 低内存任务同头 SUCCESS。
+- 同头的 push 事件运行 40756002773 有两项**环境性**失败，不是必需检查，且 PR 运行同名任务已通过：device-tests `could not connect to TCP port 5554: Connection refused`（模拟器没起来，未执行任何测试）；attachment-poc-compatibility (29) 的 `AutomaticImportAndroidTest` 抛 `ArrayIndexOutOfBoundsException: length=1280; index=-301`（API 29 框架内，Activity destroy 时，与 MED-03 代码无关）。按“只重跑一次”规则不再改代码；同名任务在 PR 运行通过即为证据。
+- 本轮在 4465f518 前的真实产品缺陷修复：恢复流程不再拒绝独立（未关联）医疗文件（LibraryCollectionRestore / LibraryRestoreCoordinator 的旧“每个文档必须有链接”断言由 MedicalArchiveManifest v1/v2 边界取代）；文件库导入后不再显示“尚无文件”；添加文件对话框增加整次抽血选项；其余见下面检查点。
+- 本地未签名 fullRelease 构建与核对见 PRODUCT_PROGRESS.md 末尾“未签名 fullRelease 核对”。Issue #144 在合并并复核主线 CI 后关闭。仍为 NOT_RUN：真机、人工 TalkBack、硬件断电；私钥签名/私人交付另按负责人后续授权（见下条）。
+
+## MED-03 正式产品接线检查点 — 2026-10-28（PR #145 继续 Draft，原生待验收）
+
+同一 feature/med03-medical-files-20261028 分支继续，默认仍6ada7402，未覆盖他人提交。cd458159已经推送第一批编译/迁移修复；本检查点追加实际产品代码，不另开总PR。主线/Build37尚不含本候选。
+
+- 第一批完整core:data回归664/664 PASS、0skip；此前24项原始失败及第一次修复后3项失败均保留，见med03/evidence。随后补强published21夹具，新增版本/封装/journal/关系原始字节快照；初始不合法ACTIVE链接被原触发器拒绝（原XML保留），改为真实合法的隔离历史链接，未移除触发器；新增夹具2/2 PASS。manifest v1原向量保持，v2独立文件/类型化panel及伪装v1拒绝定向1/1 PASS。
+- 已接生产MedicalFileLibraryHost→同一RuntimeAttachmentGateway/Flow/Operations；文件页支持独立导入、搜索真实标题/实际类型、未关联、详情、显式多关联及单关联撤回、现有CAS回收/认证恢复。临床类别尚无用户设置来源，categories保持false，不猜分类。关系/LIFECYCLE仅持久保存中性op/doc，UNKNOWN只核对；恢复不复活隔离链接。
+- 新建历史就诊/抽血表单可先选文件，内存暂存ActivityResult、不读取；真实记录COMMIT后取得实际ID/panel UUID，再转移一次选择、显示明确附件确认。记录成功和文件状态分别显示。已有记录提供“选择已有文件”，只新增关系、不复制密文。显示组合并的原>=2 API保留；新增显式确认API允许单项建立真实panel。
+- 本地最终产品定向46/46 PASS（18 AppShell返回/导航、4 release授权边界、5关系/UNKNOWN控制器、3中性检查点、16四语320/411dp/1x/2x明暗实际生产Compose布局），0skip。Android app/core测试源码都编译PASS；**本地无adb设备、无/dev/kvm，实际原生NOT_RUN，须看新HEAD的GitHub原始结果，不能以编译冒充。** 真实Compose截图16张在med03/screenshots，合成metadata gateway，不是APK或真机证据。
+- 原生候选已扩展同一产品runner：两个独立干净安装MainActivity真实SAF场景（保留原MED02链，并新增独立PDF→显式panel→5成员共享→新建就诊/抽血附档），以及独立SQLCipher迁移/完整集合恢复测试；bulk排除同一测试避免重复/whole-UID污染。尚未执行成功。旧source468/CD检查仍FAIL，不得借本地结果写整体PASS。
+
+继续事项：提交/推送本产品候选、读取其精确HEAD的全部checks和原生原件；发现真实失败最小修复；补足真实UI/创建/恢复/锁定验收后才Ready、保护合并、关闭144、核对主线及unsigned fullRelease。不能称MED03_PRODUCT_INTEGRATION_COMPLETE。PHYSICAL/TALKBACK/HARDWARE_POWER_NOT_RUN；本轮没有签名授权，不取私钥、不交付APK/Release。
+
+## MED-03 接手修复检查点 — 2026-10-28（继续实施，未完成产品）
+
+实时远端#145仍46838e4e，默认6ada7402；旧本地工作区/日志未保留，已在同名原分支恢复独立工作树HRT-Log-med03-panel，没有强推或另开总PR。原GitHub host40691410692/artifact12817702193的24项失败报告及sha留在med03/evidence。Compose错误最小修复为合法Composable for读取本地化标签，再纯join；app:compileFullDebugKotlin实际PASS。
+
+24项归因并修复：旧当前Room断言21→22（不改旧fixture/回滚版本），故障注入链补21→22使原injected必须执行；published21夹具indices可缺省（真实21.JSON确有无索引表），BLOB行快照改为类型保持/原始字节比较；候选误把至少2项显示组合并改成任意非空，恢复原>=2业务断言；迁移现在保留实际旧DDL，只替换必要目标CHECK/journal nullable，旧实体字节指纹断言不删除。新增relation表以完整10表名称集合核对，不只是改计数。第一次修复后暴露3个夹具/结构断言问题，原XML也保存；第二轮108项定向迁移/身份/既有历史及app编译全部PASS，XML/log在evidence/migration-repair-green。
+
+仍须继续：正式文件库Host/关联收据与UNKNOWN对账、记录创建时选附件、一次5结果单PDF/ID碰撞/删除恢复/版本化归档真实闭环、UI/原生API26/29/35和精确HEAD必需CI。此检查点不是MED03_PRODUCT_INTEGRATION_COMPLETE，不Ready/不关闭Issue144；未签名、未交付新APK。旧版本APP必须拒绝22回退，不清库；保护临床/库存/ANSM/密码学边界不变。
+
+## MED-03 实施检查点 — 2026-10-28（未完成，不可交付）
+
+#143 已受保护合并：源码 `3c50d7eb7c7fb1cf32fa70213827c10473e946bb`，主线合并 `6ada7402b28bf7ca2cc70acff158efbe1900bb98`；push 40683340703 / PR 40683348274 六项必需检查 PASS。只读官方资料、删除不可靠召回卡、补录历史就诊不再待实现。保留原32项旧召回断言失败证据。
+
+从该正式主线新建 `feature/med03-medical-files-20261028`（工作区 HRT-Log-med03-panel）。用户最新任务授权完整8项MED-03产品修复，包含独立文件导入、双向关联、真实整次抽血、创建时选报告；不是仅完成 #143 或存储即结项。当前生产在主线仍使用 Room21，本分支候选 Room22；不签名、不交付APK、不改PK/库存/数据集/权限。
+
+已写生产候选（尚未完成验收）：Room21→22同一事务内复制/重建原身份、链接和journal表；保留旧LAB身份，新增实际LabPanel.uuid约束，journal允许真正未关联导入，不虚造临床对象；局部关联操作收据以UUID/载荷/实际链接COMMIT对账，保留旧历史链接且不自动重新激活；批次删除隔离，恢复仍隔离；完整备份增加内部manifest v2表达新类型/独立文件，外层PNMEDBK/KDF/Tink/PNBAK1不变，旧manifest v1读取保留。正式批次/单项UI已初步接入父报告与“仅此项目”区分，医疗档案目标选择改为整批；尚未完成文件库实际Host、新建时选附件、端到端和所有兼容回归。
+
+实际证据：原Room21“panel17与无关lab17”真实RED（missing typed target）；最小Room22 typed identity测试 GREEN 1项（XML保留）。早期core:data编译PASS不等于后来全部候选PASS。新增published21迁移/故障回滚测试第一次编译失败（Trash.rows缺args、Room非Closeable），已最小修正，原日志本机scratch/med03-model-tests.log；本次完整定向测试+app编译正在执行 scratch/med03-panel-integration.log，结果待核查。真实SQLCipher/API26/29/35、实际SAF/COMMIT/重启、全库恢复、四语截图、真机/TalkBack均未可声称PASS。
+
+下一步继续同一分支：先检查当前构建/迁移测试，修复确切问题；完成未接线的文件库和保存时报告流程；增加真实5结果单文件/ID碰撞/移除成员撤权/旧LAB兼容/备份恢复及MainActivity验收。保持当前正式入口与既有加密合同，不删除旧证据、不绕过所有权或CI。Issue #144仍OPEN。不要再创建重复MED-03分支或PR，不把本检查点当作完成。
+
+---
+
+## SL-CAL-01 用化验校准 E2 合计（研究完成，PR 待合并）— 2026-10-28
+
+分支 `research/sl-cal-01-20261028`，工作树 /home/user/wt-slcal。REQUIREMENTS §163，报告 `docs/pk-research/sl-cal/sl-cal-01-report.md`，审计 79。只研究，不改任何生产文件。结论：可做、只能到整体比例校正；推荐 SL-CAL-02 起点是“方案 C 共同系数 + 峰值附近 delta 降权 + 信息增益 <0.5 拒绝 + 先验 sd≈0.9”；两系数在谷值-only/峰值-only 下共线；名义 90% 区间覆盖率仅 0.53–0.80，不适合展示；背景基线/形状错误是主要误差。守卫：LIVE_LOCK 55 文件一致，历史 164/164 与 5/5 回放逐字节一致，阶段范围守卫通过。曾误改字节锁定的 `docs/pk-research/README.md`，守卫当场报错，已还原，入口改放 `docs/pk-research/sl-cal/README.md`。可选的负责人本地验证 NOT_RUN。下一步：PR 自动合并（§106）并复核默认分支 CI；SL-CAL-02 需负责人批准后另开。
+
 ## #143 最终验收：旧召回占位断言修正 — 2026-10-28
 
 接手精确1ed73d07，push40678509368/android122783344100及PR40678516954/android122783525605实际FAIL：App3129项32失败593原跳过，32项均为Ui11CenterTest两方法×16矩阵。生产已按§161删除不可靠召回模块，旧测试仍performScrollToNode(drug-center-recalls)，因此line66找不到节点；不是去回退生产入口或删测试。最小修复：已删除plans/stock负向遍历使用仍存在的supply末行锚点；原future测试改成四只读模块真实点击→精确documents/documents/safety/supply回调、48dp、无不可用弹窗、召回节点不存在、两个私人关联回调均0。原语言/对比/返回/关联状态等断言不变；没有重做药品中心或ANSM功能。针对性Ui11CenterTest完整144项实际PASS（0 fail/error/skip），7m14s；原失败摘录与通过XML已入库。修复准确SHA的完整必需CI仍待执行，不用旧绿替代。同步已受保护合并#137（e9d8f943），保留Build36/37真实交付账本与versionCode37；只解决两份进度/授权文档的并行插入冲突，完整保留双方原文。并行§161收口：真机反馈保持161，既有Build37授权移至161.A，不改交付事实；本轮不签名。

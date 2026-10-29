@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.MonaSchemaTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:56:56.562Z" hostname="948d99df3df9" time="0.473">
+  <properties/>
+  <testcase name="distinctSourceOriginDoesNotImpersonateTheExistingImporters" classname="net.plainnotes.app.data.MonaSchemaTest" time="0.289"/>
+  <testcase name="immutableSourceReceiptsHaveDedicatedStorage" classname="net.plainnotes.app.data.MonaSchemaTest" time="0.178"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.MonaImportTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:56:53.532Z" hostname="948d99df3df9" time="3.027">
+  <properties/>
+  <testcase name="missingTargetsAndMultipleConflictsAreReportedWithoutRecreation" classname="net.plainnotes.app.data.MonaImportTest" time="0.224"/>
+  <testcase name="cancellationInsideActualWriteRollsBackTheWholeTransaction" classname="net.plainnotes.app.data.MonaImportTest" time="0.129"/>
+  <testcase name="clinicalTrashRestoreAndPurgeKeepExactSourceOwnershipWithoutResurrection" classname="net.plainnotes.app.data.MonaImportTest" time="0.184"/>
+  <testcase name="encryptedBusinessFourteenRoundTripPreservesSourcesAndOldReaderRefuses" classname="net.plainnotes.app.data.MonaImportTest" time="0.955"/>
+  <testcase name="legacyExportOmitsUnusedSourceTableAndKeepsSchemaTwelve" classname="net.plainnotes.app.data.MonaImportTest" time="0.385"/>
+  <testcase name="sameSourceIdChangedContentIsAConflictAndDifferentIdIsNotADuplicate" classname="net.plainnotes.app.data.MonaImportTest" time="0.234"/>
+  <testcase name="repeatedAndLaterExportsAreIdempotentWithoutOrphanMedications" classname="net.plainnotes.app.data.MonaImportTest" time="0.209"/>
+  <testcase name="receiptCannotBeReusedForAnotherAttemptAndNeverAcknowledgesBeforeCommit" classname="net.plainnotes.app.data.MonaImportTest" time="0.169"/>
+  <testcase name="actualTimesOriginalUnitsAndDrawAreCommittedWithoutPlansStockOrPk" classname="net.plainnotes.app.data.MonaImportTest" time="0.127"/>
+  <testcase name="newLabPartJoinsOnlyItsUnmodifiedOriginalSourceDraw" classname="net.plainnotes.app.data.MonaImportTest" time="0.145"/>
+  <testcase name="localCorrectionAndDeletedHistoryAreNeverOverwrittenOrResurrected" classname="net.plainnotes.app.data.MonaImportTest" time="0.126"/>
+  <testcase name="insertFailureRollsBackClinicalRowsSourceReceiptsAndCommitAcknowledgement" classname="net.plainnotes.app.data.MonaImportTest" time="0.125"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

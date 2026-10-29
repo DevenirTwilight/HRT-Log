@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.MedicalFilesSchemaTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2026-10-28T12:31:53.160Z" hostname="4b9f8fb3781e" time="4.739">
+  <properties/>
+  <testcase name="persistedPanelHasItsOwnIdentityEvenWhenAnUnrelatedResultHasTheSameInteger" classname="net.plainnotes.app.data.MedicalFilesSchemaTest" time="4.322">
+    <failure message="android.database.sqlite.SQLiteConstraintException: missing typed target (code 1811 SQLITE_CONSTRAINT_TRIGGER)" type="android.database.sqlite.SQLiteConstraintException">android.database.sqlite.SQLiteConstraintException: missing typed target (code 1811 SQLITE_CONSTRAINT_TRIGGER)
+	at org.robolectric.nativeruntime.SQLiteConnectionNatives.nativeExecuteForChangedRowCount(Native Method)
+	at org.robolectric.shadows.ShadowNativeSQLiteConnection.lambda$nativeExecuteForChangedRowCount$11(ShadowNativeSQLiteConnection.java:142)
+	at org.robolectric.util.PerfStatsCollector.measure(PerfStatsCollector.java:52)
+	at org.robolectric.shadows.ShadowNativeSQLiteConnection.nativeExecuteForChangedRowCount(ShadowNativeSQLiteConnection.java:139)
+	at android.database.sqlite.SQLiteConnection.nativeExecuteForChangedRowCount(SQLiteConnection.java)
+	at android.database.sqlite.SQLiteConnection.executeForChangedRowCount(SQLiteConnection.java:748)
+	at android.database.sqlite.SQLiteSession.executeForChangedRowCount(SQLiteSession.java:754)
+	at android.database.sqlite.SQLiteStatement.executeUpdateDelete(SQLiteStatement.java:64)
+	at android.database.sqlite.SQLiteDatabase.executeSql(SQLiteDatabase.java:1770)
+	at android.database.sqlite.SQLiteDatabase.execSQL(SQLiteDatabase.java:1748)
+	at androidx.sqlite.db.framework.FrameworkSQLiteDatabase.execSQL(FrameworkSQLiteDatabase.android.kt:269)
+	at net.plainnotes.app.data.MedicalFilesSchemaTest$persistedPanelHasItsOwnIdentityEvenWhenAnUnrelatedResultHasTheSameInteger$1$1.invokeSuspend$bind(MedicalFilesSchemaTest.kt:27)
+	at net.plainnotes.app.data.MedicalFilesSchemaTest$persistedPanelHasItsOwnIdentityEvenWhenAnUnrelatedResultHasTheSameInteger$1$1.invokeSuspend(MedicalFilesSchemaTest.kt:29)
+	at net.plainnotes.app.data.MedicalFilesSchemaTest$persistedPanelHasItsOwnIdentityEvenWhenAnUnrelatedResultHasTheSameInteger$1$1.invoke(MedicalFilesSchemaTest.kt)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransaction$2.invokeSuspend(RoomDatabase.android.kt:2044)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransaction$2.invoke(RoomDatabase.android.kt)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransactionContext$transactionBlock$1.invokeSuspend(RoomDatabase.android.kt:2058)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$withTransactionContext$transactionBlock$1.invoke(RoomDatabase.android.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndspatched(Undispatched.kt:66)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:43)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:165)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$startTransactionCoroutine$2$1$1.invokeSuspend(RoomDatabase.android.kt:2087)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at androidx.room.RoomDatabaseKt__RoomDatabase_androidKt$startTransactionCoroutine$2$1.run(RoomDatabase.android.kt:2084)
+	at androidx.room.TransactionExecutor.execute$lambda$1$lambda$0(TransactionExecutor.android.kt:38)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

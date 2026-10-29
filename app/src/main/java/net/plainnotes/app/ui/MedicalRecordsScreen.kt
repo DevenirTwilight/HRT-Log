@@ -54,7 +54,7 @@ import java.time.*
     onLabs:()->Unit,onHistory:()->Unit,onTrash:()->Unit,contentPadding:PaddingValues,onConfirm:(AppointmentEntity)->Unit={onVisit(it)},
     questionCounts:Map<Long,Int> = emptyMap(),now:Instant=Instant.now(),onVisits:(()->Unit)?=null,onMedicalBackup:(()->Unit)?=null,
     labs:List<LabValueEntity> = emptyList(),onLab:((LabValueEntity)->Unit)?=null,initialTab:Int=0,onTabChange:(Int)->Unit={},
-    labPanels:List<LabPanelEntity> = emptyList()) {
+    labPanels:List<LabPanelEntity> = emptyList(),onPanel:((LabPanelEntity)->Unit)?=null,onSaveDraw:((List<LabValueEntity>)->Unit)?=null,onFileLibrary:(()->Unit)?=null,fileLibraryContent:(@Composable ()->Unit)?=null) {
     val past=MedicalRecordIndex.past(appointments,now)
     val confirmed=past.filter{it.completed_utc!=null}
     val unconfirmed=past.filter{it.completed_utc==null}
@@ -71,13 +71,14 @@ import java.time.*
             Tab(tab==0,{tab=0;onTabChange(0)},Modifier.heightIn(min=48.dp).testTag("medical-tab:records"),text={Text(stringResource(R.string.mh_tab_records))})
             Tab(tab==1,{tab=1;onTabChange(1)},Modifier.heightIn(min=48.dp).testTag("medical-tab:files"),text={Text(stringResource(R.string.mh_tab_files))})
         }
-        LazyColumn(Modifier.fillMaxSize().testTag("medical-list"),contentPadding=PaddingValues(start=16.dp,end=16.dp,
+        if(tab==1 && fileLibraryContent!=null)Box(Modifier.weight(1f).padding(bottom=contentPadding.calculateBottomPadding())) {fileLibraryContent()}
+        else LazyColumn(Modifier.fillMaxSize().testTag("medical-list"),contentPadding=PaddingValues(start=16.dp,end=16.dp,
             top=if(filesAvailable)16.dp else contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
             if(!filesAvailable || tab==0)recordsArea(next,unconfirmed,past.isEmpty(),confirmed,byYear,questionCounts,now,onVisit,onConfirm,onVisits,onLabs,onHistory,onTrash,drawCount,labs.size,onAdd)
-            else filesArea(onVisits,onLabs,onMedicalBackup,onAddFile={choosing=true})
+            else filesArea(onVisits,onLabs,onMedicalBackup,onAddFile={onFileLibrary?.invoke() ?: run {choosing=true}})
         }
     }
-    if(choosing)AddFileTargetDialog(appointments,labs,labPanels,onVisit={choosing=false;onVisit(it)},onLab=onLab?.let{open->{v:LabValueEntity->choosing=false;open(v)}},onDismiss={choosing=false})
+    if(choosing)AddFileTargetDialog(appointments,labs,labPanels,onVisit={choosing=false;onVisit(it)},onLab=onLab?.let{open->{v:LabValueEntity->choosing=false;open(v)}},onDismiss={choosing=false},onPanel=onPanel?.let {open->{p:LabPanelEntity->choosing=false;open(p)}},onSaveDraw=onSaveDraw?.let {save->{group:List<LabValueEntity>->choosing=false;save(group)}})
 }
 
 private fun LazyListScope.recordsArea(next:AppointmentEntity?,unconfirmed:List<AppointmentEntity>,noVisits:Boolean,confirmed:List<AppointmentEntity>,byYear:Map<Int,List<AppointmentEntity>>,
@@ -209,7 +210,7 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
  * files and the single add action are. A lab result opens the individual result, never a panel.
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable private fun AddFileTargetDialog(appointments:List<AppointmentEntity>,labs:List<LabValueEntity>,panels:List<LabPanelEntity>,onVisit:(AppointmentEntity)->Unit,onLab:((LabValueEntity)->Unit)?,onDismiss:()->Unit) {
+@Composable private fun AddFileTargetDialog(appointments:List<AppointmentEntity>,labs:List<LabValueEntity>,panels:List<LabPanelEntity>,onVisit:(AppointmentEntity)->Unit,onLab:((LabValueEntity)->Unit)?,onDismiss:()->Unit,onPanel:((LabPanelEntity)->Unit)?=null,onSaveDraw:((List<LabValueEntity>)->Unit)?=null) {
     var kind by remember{mutableIntStateOf(0)}
     val visits=remember(appointments){appointments.sortedWith(compareByDescending<AppointmentEntity>{it.at_utc}.thenByDescending{it.id})}
     // Lab results are offered per blood test, newest first, the same grouping as the labs page; a file still links to one result.
@@ -248,15 +249,23 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
                                     val place=(d.panel?.laboratory ?: first.laboratory)?.trim()?.takeIf{it.isNotEmpty()}
                                     val when_=formatDate(local.toLocalDate())+" · "+formatTime(local.toLocalTime())
                                     Column(Modifier.testTag("file-target-draw:${d.panel?.id ?: "g${first.id}"}"),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-                                        // One header per blood test with several results; a single result keeps its own date line.
-                                        if(d.labs.size>1)Text(listOfNotNull(when_,place,stringResource(R.string.lab_group_count,d.labs.size)).joinToString(" · "),
-                                            style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold,modifier=Modifier.semantics{heading()})
+                                        val panel=d.panel
+                                        val whole=d.labs.size>1 || panel!=null
+                                        // A real draw (or a display group that can be saved as one) is the first choice; a file may still link to one result only.
+                                        if(whole)GroupedItem(0,1,onClick={if(panel!=null)onPanel?.invoke(panel) else onSaveDraw?.invoke(d.labs)},modifier=Modifier.testTag("file-target:${if(panel!=null)"panel:${panel.id}" else "save-draw:${first.id}"}")) {
+                                            Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
+                                                Text(listOfNotNull(when_,place).joinToString(" · "),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
+                                                Text(stringResource(R.string.med03_whole_draw,d.labs.size),style=MaterialTheme.typography.bodyMedium)
+                                                if(panel==null)Text(stringResource(R.string.lab_panel_save_as),color=MaterialTheme.colorScheme.primary)
+                                            }
+                                        }
+                                        if(whole)Text(stringResource(R.string.med03_or_one_result),style=MaterialTheme.typography.labelLarge,color=MaterialTheme.colorScheme.onSurfaceVariant,modifier=Modifier.padding(start=4.dp,top=4.dp))
                                         Column(verticalArrangement=Arrangement.spacedBy(GroupedGap)) {
                                             d.labs.forEachIndexed{i,v->
                                                 GroupedItem(i,d.labs.size,onClick={onLab(v)},modifier=Modifier.testTag("file-target:lab:${v.id}")) {
                                                     Column(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
                                                         Text(analyteLabel(v.analyte_code)+" · "+displayNumber(v.value)+" "+v.unit,style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
-                                                        if(d.labs.size==1)Text(when_+(place?.let{" · $it"} ?: ""),style=MaterialTheme.typography.bodyMedium)
+                                                        if(!whole)Text(when_+(place?.let{" · $it"} ?: ""),style=MaterialTheme.typography.bodyMedium)
                                                     }
                                                 }
                                             }
@@ -371,7 +380,10 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
 }
 
 /** Drafts stay in memory; failure retains them. A stored instant is not reinterpreted in the device's current zone. */
-@Composable fun MedicalVisitDialog(initial:AppointmentEntity?,state:MedicalVisitSaveState,onDismiss:()->Unit,onSave:(AppointmentEntity)->Unit) {
+@Composable fun MedicalVisitDialog(initial:AppointmentEntity?,state:MedicalVisitSaveState,onDismiss:()->Unit,onSave:(AppointmentEntity)->Unit) =
+    MedicalVisitDialogWithFiles(initial,state,onDismiss,onSave)
+
+@Composable internal fun MedicalVisitDialogWithFiles(initial:AppointmentEntity?,state:MedicalVisitSaveState,onDismiss:()->Unit,onSave:(AppointmentEntity)->Unit,files:(@Composable ()->Unit)?=null) {
     var zone by remember(initial?.id){mutableStateOf(ZoneId.of(initial?.at_zone ?: ZoneId.systemDefault().id))}
     var chooseZone by remember{mutableStateOf(false)}
     var time by remember(initial?.id){mutableStateOf(initial?.let{Instant.ofEpochMilli(it.at_utc).atZone(zone).toLocalDateTime()} ?: Instant.now().minusSeconds(60).atZone(zone).toLocalDateTime().withSecond(0).withNano(0))}
@@ -387,6 +399,7 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
     AlertDialog(onDismissRequest={if(!state.saving)onDismiss()},title={Text(stringResource(if(initial==null)R.string.medical_add_visit else R.string.medical_edit_visit))},
         text={Column(Modifier.heightIn(max=240.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.medical_past_help))
+            files?.invoke()
             if(state.failed)Text(stringResource(if(state.stale)R.string.medical_stale else R.string.medical_save_error),color=MaterialTheme.colorScheme.error)
             Text(stringResource(R.string.medical_visit_zone,zone.id),modifier=Modifier.testTag("medical-zone"))
             TextButton(enabled=!state.saving,onClick={chooseZone=true},modifier=Modifier.testTag("medical-change-zone")){Text(stringResource(R.string.medical_change_zone))}

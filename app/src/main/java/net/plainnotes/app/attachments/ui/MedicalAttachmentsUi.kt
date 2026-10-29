@@ -49,11 +49,13 @@ import net.plainnotes.app.ui.StatusPill
     /** Offered only when the file library can link an already stored file (not available yet); null draws nothing. */
     onChooseExisting:(()->Unit)?=null,
     /** What the files are linked to when that is narrower than the page suggests (one result of a multi-result blood test). */
-    scopeNote:String?=null) {
+    scopeNote:String?=null,
+    /** The file library lists files itself: show only the import / unlink status here, never an empty "No files yet" card after a save. */
+    statusOnly:Boolean=false) {
     var pendingUnlink by remember {mutableStateOf<Item?>(null)}
     Column(modifier.fillMaxWidth().testTag("attachments"),verticalArrangement=Arrangement.spacedBy(12.dp)) {
         val ready=(state.files as? Files.Ready)?.takeIf {!state.revoked && !state.ended}
-        Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+        if(!statusOnly)Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.attach_section),style=MaterialTheme.typography.titleMedium,fontWeight=FontWeight.Bold,
                 modifier=Modifier.weight(1f).semantics {heading()})
             if(ready!=null && ready.items.isNotEmpty()) {
@@ -79,7 +81,7 @@ import net.plainnotes.app.ui.StatusPill
                 val saving=state.import==Import.Saving || state.import==Import.Checking || state.import==Import.Unknown ||
                     state.unlinkStatus in setOf(UnlinkStatus.WORKING,UnlinkStatus.UNKNOWN)
                 val canAdd=!saving && state.import !is Import.Confirming
-                when(val files=state.files) {
+                if(!statusOnly)when(val files=state.files) {
                     Files.Loading->LinearProgressIndicator(Modifier.fillMaxWidth().testTag("attachments-loading"))
                     Files.Failed->Surface(Modifier.fillMaxWidth(),shape=Corners.card,color=MaterialTheme.colorScheme.surfaceContainerLow) {
                         Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {

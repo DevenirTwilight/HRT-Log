@@ -54,6 +54,21 @@ abstract class MedicalArchiveContract {
         val gap=m.copy(versions=m.versions.filter {it.document!=document || it.ordinal>1})
         reject {MedicalArchiveManifest.encode(gap,decoded.envelopes.filterKeys {v->gap.versions.any {it.context.version==v}})}
     }
+    @Test fun internalV2PreservesStandaloneAndTypedPanelAndCannotMasqueradeAsV1() {
+        val old=MedicalArchiveManifest.decode(canonical())
+        // No clinical or filename inference: an independent original has no record or link.
+        val unlinked=old.manifest.copy(records=emptyList(),links=emptyList())
+        val independent=MedicalArchiveManifest.encode(unlinked,old.envelopes)
+        assertTrue(String(independent,Charsets.UTF_8).startsWith("{\"version\":2,"))
+        assertEquals(unlinked,MedicalArchiveManifest.decode(independent).manifest)
+        reject {MedicalArchiveManifest.decode(String(independent,Charsets.UTF_8).replaceFirst("\"version\":2","\"version\":1").toByteArray())}
+        val first=old.manifest.records.first()
+        val panel=old.manifest.copy(records=old.manifest.records.map {if(it.uuid==first.uuid)it.copy(kind=AttachmentBackupManifest.Kind.LAB_PANEL) else it})
+        val encoded=MedicalArchiveManifest.encode(panel,old.envelopes)
+        assertEquals(AttachmentBackupManifest.Kind.LAB_PANEL,MedicalArchiveManifest.decode(encoded).manifest.records.single {it.uuid==first.uuid}.kind)
+        reject {MedicalArchiveManifest.decode(String(encoded,Charsets.UTF_8).replaceFirst("\"version\":2","\"version\":1").toByteArray())}
+        assertArrayEquals(canonical(),MedicalArchiveManifest.encode(old.manifest,old.envelopes))
+    }
     @Test fun exactHeaderRejectsUnknownParametersReservedBitsPhysicalTailAndOverflowBeforeKdf() {
         val h=MedicalArchiveCrypto.fresh(65536);assertEquals(80,h.bytes().size)
         assertEquals(h.archive,MedicalArchiveCrypto.parse(h.bytes(),h.ciphertextBytes+80).archive)

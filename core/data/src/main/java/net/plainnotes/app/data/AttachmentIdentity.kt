@@ -43,13 +43,13 @@ internal object AttachmentIdentity {
     }
     fun bind(db:SupportSQLiteDatabase,expected:Scope,kind:String,id:Long):String {
         check(db.inTransaction());check(current(db)==expected){"Stale dataset"}
-        val table=when(kind){"APPOINTMENT"->"appointment";"LAB"->"lab_value";"DOSE_RECORD"->"dose_record";else->error("Unsupported target")}
+        val table=when(kind){"APPOINTMENT"->"appointment";"LAB"->"lab_value";"LAB_PANEL"->"lab_panel";"DOSE_RECORD"->"dose_record";else->error("Unsupported target")}
         val where=if(kind=="DOSE_RECORD") "id=? AND deleted_at_utc IS NULL AND status IN('ON_TIME','LATE') AND taken_utc IS NOT NULL AND actual_dose>0" else "id=?"
         val rows=Trash.rows(db,table,where,arrayOf(id));require(rows.length()==1){"Missing real typed record"}
         db.query("SELECT record_uuid,state FROM attachment_record_identity WHERE store_uuid=? AND record_epoch=? AND target_kind=? AND legacy_id=? AND state!='PURGED'",arrayOf(expected.dataset,expected.epoch,kind,id)).use {
             if(it.moveToFirst()){check(it.getString(1)=="ACTIVE");return it.getString(0)}
         }
-        val record=uuid()
+        val record=if(kind=="LAB_PANEL")rows.getJSONObject(0).getString("uuid") else uuid()
         db.insert("attachment_record_identity",SQLiteDatabase.CONFLICT_ABORT,ContentValues().apply {
             put("store_uuid",expected.dataset);put("record_epoch",expected.epoch);put("record_uuid",record);put("target_kind",kind);put("legacy_id",id);put("state","ACTIVE");put("evidence_digest",digest(rows.toString()))
         })
@@ -62,6 +62,16 @@ internal object AttachmentIdentity {
         // LAB-02: a whole lab panel carries the identities of every result in it (its ref is the panel uuid, not a row id).
         val ids=if(trashKind==Trash.LAB_PANEL)org.json.JSONObject(payload).getJSONObject("tables").getJSONArray("lab_value").let{a->(0 until a.length()).map{a.getJSONObject(it).getLong("id")}}
             else listOf(ref.toLongOrNull() ?: error("Invalid record ref"))
+        // A genuine panel carried by either whole-draw trash or deletion of its last result
+        // retains its own typed UUID. Never infer a draw from the member integer IDs.
+        if(trashKind==Trash.LAB_PANEL || trashKind==Trash.LAB) {
+            val tables=JSONObject(payload).getJSONObject("tables")
+            tables.optJSONArray("lab_panel")?.let {panels->for(i in 0 until panels.length()) {
+                val panel=panels.getJSONObject(i)
+                db.execSQL("UPDATE attachment_record_identity SET state='TRASHED',trash_id=?,evidence_digest=? WHERE store_uuid=? AND record_epoch=? AND target_kind='LAB_PANEL' AND legacy_id=? AND record_uuid=? AND state='ACTIVE'",
+                    arrayOf(trashId,digest(payload),s.dataset,s.epoch,panel.getLong("id"),panel.getString("uuid")))
+            }}
+        }
         ids.forEach{id->db.execSQL("UPDATE attachment_record_identity SET state='TRASHED',trash_id=?,evidence_digest=? WHERE store_uuid=? AND record_epoch=? AND target_kind=? AND legacy_id=? AND state='ACTIVE'",arrayOf(trashId,digest(payload),s.dataset,s.epoch,type,id))}
         db.execSQL("UPDATE attachment_link SET state='QUARANTINED',revision=revision+1 WHERE store_uuid=? AND record_epoch=? AND record_uuid IN(SELECT record_uuid FROM attachment_record_identity WHERE store_uuid=? AND trash_id=?) AND state='ACTIVE'",arrayOf(s.dataset,s.epoch,s.dataset,trashId))
     }

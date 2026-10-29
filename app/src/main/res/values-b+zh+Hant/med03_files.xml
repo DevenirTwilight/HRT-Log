@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="med03_whole_draw">整次抽血（%1$d 項結果）</string>
+    <string name="med03_only_result">僅此項目</string>
+    <string name="med03_default_file">醫療文件</string>
+    <string name="med03_library_body">可先獨立儲存檔案，再明確關聯同一原件至就診或整次抽血。</string>
+    <string name="med03_link_confirm">將「%1$s」關聯至「%2$s」？不會複製加密原件。</string>
+    <string name="med03_relation_done">操作已提交。</string>
+    <string name="med03_relation_unknown">結果未知。請核對原操作，不要重複提交。</string>
+    <string name="med03_state_checked">已核對目前狀態；這不代表能確認中斷操作已成功提交。</string>
+    <string name="med03_relation_failed">關聯未儲存，原件仍然保留。</string>
+    <string name="med03_new_prompt">檔案已儲存。新增記錄後再關聯；取消會保留未關聯檔案。</string>
+    <string name="med03_save_record_first">先儲存記錄，再確認所選檔案及關聯對象。記錄與檔案分別回報儲存結果。</string>
+    <string name="med03_file_chosen">已在記憶體中暫存檔案選擇，尚未讀取或儲存。</string>
+    <string name="med03_selected_file">已選擇檔案 · 類型尚未驗證</string>
+    <string name="med03_link_target_title">選擇明確的記錄</string>
+    <string name="med03_no_target">沒有可用記錄。請先新增就診或抽血記錄，再關聯此檔案。</string>
+    <string name="med03_bin_confirm">移至資源回收筒？關聯將被隔離，原件、歷史及占用容量仍保留。還原不會自動還原舊關聯。</string>
+    <string name="med03_restore_confirm">還原經過認證的原件？舊關聯仍被隔離，需要重新明確關聯。</string>
+    <string name="med03_unknown_links">關聯詳情無法取得或包含不支援管理的舊目標，未修改任何關聯。</string>
+    <string name="med03_types">已儲存的檔案類型</string>
+    <string name="med03_all_types">全部類型</string>
+    <string name="med03_type_unknown">僅在確認後依實際位元組檢查檔案類型。</string>
+    <string name="med03_open_library">開啟醫療檔案庫</string>
+    <string name="med03_operation_stale">操作已提交，但清單未能重新整理。</string>
+    <string name="med03_select_target">請選擇要關聯的明確紀錄。</string>
+    <string name="med03_search_hint">搜尋檔案標題</string>
+    <string name="med03_or_one_result">或只關聯其中一項結果</string>
+</resources>

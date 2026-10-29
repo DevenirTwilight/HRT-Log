@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="med03_whole_draw">Whole blood draw (%1$d results)</string>
+    <string name="med03_only_result">This result only</string>
+    <string name="med03_default_file">Medical file</string>
+    <string name="med03_library_body">Save a file independently, then explicitly link the same original to visits or whole blood draws.</string>
+    <string name="med03_link_confirm">Link “%1$s” to “%2$s”? The encrypted original is not copied.</string>
+    <string name="med03_relation_done">Operation committed.</string>
+    <string name="med03_relation_unknown">Outcome unknown. Check the existing operation; do not repeat it.</string>
+    <string name="med03_state_checked">Current state checked. This does not attribute an interrupted action to a successful commit.</string>
+    <string name="med03_relation_failed">The relationship was not saved. The original remains stored.</string>
+    <string name="med03_new_prompt">File saved. Create a record to link it; cancelling leaves the file unlinked.</string>
+    <string name="med03_save_record_first">The record saves first. Then confirm the selected file and target. Record and file results are separate.</string>
+    <string name="med03_file_chosen">A file is selected in memory. It has not been read or saved.</string>
+    <string name="med03_selected_file">Selected document · type not yet verified</string>
+    <string name="med03_link_target_title">Choose an explicit record</string>
+    <string name="med03_no_target">No compatible record. Create a visit or blood draw, then link this file.</string>
+    <string name="med03_bin_confirm">Move to the bin? Links will be quarantined. Original bytes, history and storage remain retained. Restoration never reactivates old links.</string>
+    <string name="med03_restore_confirm">Restore this authenticated original? Old links stay quarantined; associate them explicitly again.</string>
+    <string name="med03_unknown_links">Relationships unavailable or contain unsupported legacy targets. No link was changed.</string>
+    <string name="med03_types">Saved file type</string>
+    <string name="med03_all_types">All types</string>
+    <string name="med03_type_unknown">The file’s type is checked from its bytes only after confirmation.</string>
+    <string name="med03_open_library">Open medical files</string>
+    <string name="med03_operation_stale">The operation committed, but the list could not be refreshed.</string>
+    <string name="med03_select_target">Choose the exact record to link.</string>
+    <string name="med03_search_hint">Search file titles</string>
+    <string name="med03_or_one_result">Or link one result only</string>
+</resources>

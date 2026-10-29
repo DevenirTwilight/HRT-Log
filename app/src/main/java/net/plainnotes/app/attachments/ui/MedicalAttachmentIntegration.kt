@@ -12,10 +12,20 @@ import net.plainnotes.app.data.MedicalAttachmentOperations
 /** Visit/individual-lab integration. This boundary does not itself grant authorization.
  * The release flag is checked BEFORE accessing the real user's runtime or target. Debug synthetic
  * hosts continue to construct their gateway directly from their isolated fixture only. */
-internal fun NotesViewModel.medicalAttachmentsForRecord(context:Context,owner:LifecycleOwner,target:MedicalAttachmentOperations.Target,scope:CoroutineScope):MedicalAttachmentsController {
+internal fun NotesViewModel.medicalAttachmentsForRecord(context:Context,owner:LifecycleOwner,target:MedicalAttachmentOperations.Target?,scope:CoroutineScope):MedicalAttachmentsController {
     check(AttachmentFlowController.PUBLIC_ENTRY_ENABLED) {"Medical attachment entry is OFF"}
     check(owner.lifecycle.currentState!=Lifecycle.State.DESTROYED)
     val controller=MedicalAttachmentsController(RuntimeAttachmentGateway(context,libraryRuntime,target),scope)
+    owner.lifecycle.addObserver(object:DefaultLifecycleObserver {
+        override fun onDestroy(owner:LifecycleOwner) {controller.close();owner.lifecycle.removeObserver(this)}
+    })
+    return controller
+}
+
+internal fun NotesViewModel.medicalFileLibrary(context:Context,owner:LifecycleOwner,scope:CoroutineScope):net.plainnotes.app.attachments.ui.library.MedicalFileLibraryController {
+    check(AttachmentFlowController.PUBLIC_ENTRY_ENABLED)
+    check(owner.lifecycle.currentState!=Lifecycle.State.DESTROYED)
+    val controller=net.plainnotes.app.attachments.ui.library.MedicalFileLibraryController(RuntimeAttachmentGateway(context,libraryRuntime,null),scope)
     owner.lifecycle.addObserver(object:DefaultLifecycleObserver {
         override fun onDestroy(owner:LifecycleOwner) {controller.close();owner.lifecycle.removeObserver(this)}
     })

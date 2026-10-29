@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryControllerTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-28T15:02:17.731Z" hostname="948d99df3df9" time="7.783">
+  <properties/>
+  <testcase name="pendingRelationshipRemainsUnknownAcrossNewControllerAndNoWritesAreAllowed" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryControllerTest" time="6.812"/>
+  <testcase name="revokedScopeClearsMetadataAndRefusesLateActions" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryControllerTest" time="0.054"/>
+  <testcase name="interruptedLifecycleChecksPresentStateWithoutClaimingItsHistoricalCommit" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryControllerTest" time="0.064"/>
+  <testcase name="lostResponseOnlyReadsTheSameReceiptAndNeverReplays" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryControllerTest" time="0.088"/>
+  <testcase name="realCommitIsNotReclassifiedWhenListRefreshFails" classname="net.plainnotes.app.attachments.ui.library.MedicalFileLibraryControllerTest" time="0.074"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

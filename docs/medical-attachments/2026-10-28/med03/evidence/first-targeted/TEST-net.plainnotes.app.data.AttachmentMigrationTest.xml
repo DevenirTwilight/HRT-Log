@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.AttachmentMigrationTest" tests="9" skipped="0" failures="1" errors="0" timestamp="2026-10-28T14:13:40.917Z" hostname="948d99df3df9" time="9.006">
+  <properties/>
+  <testcase name="room15LifecycleMigrationRollsBackWithoutInventingOwnership" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="0.953"/>
+  <testcase name="twoEncryptedDatabasesKeepSameIntegerTargetsAndAttachmentNamespaceSeparate" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="1.003"/>
+  <testcase name="publishedRoom20UpgradesWithoutRewritingRowsAndOldReaderRefusesRoom21" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="1.27"/>
+  <testcase name="nativeMigrationFailureRollsBackDDLAndLeavesOriginalRoom9Readable" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="1.002"/>
+  <testcase name="nativeOldestSchemaMigrationChainValidatesRoom10" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="0.447"/>
+  <testcase name="room13JournalMigrationPreservesLegacyUnknownAndRollsBackOnFailure" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="1.433"/>
+  <testcase name="encryptedRoom9MigratesAllLegacyRowsIndicesGuardsAndReopens" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="0.591">
+    <failure message="java.lang.AssertionError: expected:&lt;9&gt; but was:&lt;10&gt;" type="java.lang.AssertionError">java.lang.AssertionError: expected:&lt;9&gt; but was:&lt;10&gt;
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at net.plainnotes.app.data.AttachmentMigrationContract$encryptedRoom9MigratesAllLegacyRowsIndicesGuardsAndReopens$1.invokeSuspend(AttachmentMigrationContract.kt:97)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at net.plainnotes.app.data.AttachmentMigrationContract.encryptedRoom9MigratesAllLegacyRowsIndicesGuardsAndReopens(AttachmentMigrationContract.kt:56)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:524)
+	at org.robolectric.internal.SandboxTestRunner.executeInSandbox(SandboxTestRunner.java:494)
+	at org.robolectric.internal.SandboxTestRunner.access$900(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$7.evaluate(SandboxTestRunner.java:442)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.robolectric.internal.SandboxTestRunner.access$600(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$6.evaluate(SandboxTestRunner.java:333)
+	at org.robolectric.internal.SandboxTestRunner$3.evaluate(SandboxTestRunner.java:233)
+	at org.robolectric.internal.SandboxTestRunner$5.lambda$evaluate$0(SandboxTestRunner.java:317)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:101)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <testcase name="room14AuthorityFailureRetainsOriginalDatasetAndLeavesNoPartialControlTables" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="0.872"/>
+  <testcase name="room16CollectionMigrationIsAdditiveAndInterruptedDdlRollsBack" classname="net.plainnotes.app.data.AttachmentMigrationTest" time="1.429"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

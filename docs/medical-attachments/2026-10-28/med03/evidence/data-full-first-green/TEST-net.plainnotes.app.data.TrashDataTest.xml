@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.TrashDataTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:57:50.533Z" hostname="948d99df3df9" time="4.492">
+  <properties/>
+  <testcase name="userContentGoesToTheBinComesBackIdenticalAndIsPurgedForGood" classname="net.plainnotes.app.data.TrashDataTest" time="0.429"/>
+  <testcase name="binSurvivesBackupAndOlderBackupsFillIt" classname="net.plainnotes.app.data.TrashDataTest" time="2.887"/>
+  <testcase name="aDailyValueEnteredAgainIsSwappedIntoTheBinOnRestore" classname="net.plainnotes.app.data.TrashDataTest" time="0.398"/>
+  <testcase name="periodsAndCorrectionsUseTheBinAndPurgeRemovesTheUsersOwnRows" classname="net.plainnotes.app.data.TrashDataTest" time="0.491"/>
+  <testcase name="recordsAreRestoredOrPurgedAndLedgerRecordsAreHiddenInstead" classname="net.plainnotes.app.data.TrashDataTest" time="0.282"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -33,10 +33,10 @@ CSV, PDF report and visit pack exports are plain files. You choose where to save
 
 ## Medical files and complete medical backups
 
-- Medical attachments that you explicitly add to an existing visit or individual lab result are stored in the app's private storage as encrypted file objects, with the relationship and metadata recorded in the protected database.
+- Medical attachments that you explicitly add through the file library or a medical record are stored in the app's private storage as encrypted file objects, with metadata and any explicit relationships recorded in the protected database. A file can be kept without a record, or linked to a visit, a whole blood draw (LabPanel), or one individual result. Whole-draw and single-result relationships stay distinct.
 - The separate complete medical encrypted backup (.pnmedbk2, format PNMEDBK2) includes supported medical files and related records from the authorized collection. It is distinct from the ordinary .pnbak backup and requires the password you choose. Backup destinations are chosen in Android's system file picker and may belong to another app or cloud provider.
 - Internal previews require app authorization. PDF previews show only the first page on Android 9 and newer; on Android 8, a PDF may be saved and backed up but cannot be previewed in the app.
-- Removing a file's link to one record does not delete its encrypted contents, other links, or recover disk space. The current interface does not promise immediate permanent erasure of individual medical attachments. Backups already saved elsewhere are not revoked by removing a link.
+- Removing a file's link to one record does not delete its encrypted contents, other links, or recover disk space. The current interface does not promise immediate permanent erasure of individual medical attachments. Moving a file to the recycle bin also retains its ciphertext and occupied space. Restoring a file or medical record does not automatically restore quarantined relationships; link it again explicitly. Backups already saved elsewhere are not revoked by removing a link.
 
 ## Imports
 

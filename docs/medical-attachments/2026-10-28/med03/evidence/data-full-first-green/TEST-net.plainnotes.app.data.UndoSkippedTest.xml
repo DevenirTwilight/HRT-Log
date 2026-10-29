@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.UndoSkippedTest" tests="33" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:57:55.044Z" hostname="948d99df3df9" time="11.32">
+  <properties/>
+  <testcase name="writeFailureRollsBackOverrideRecordAndRetention" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.366"/>
+  <testcase name="autoAndConfirmedMissedCannotBeUndone" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.235"/>
+  <testcase name="rescheduleAndDoseRemainAfterUndo" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.302"/>
+  <testcase name="movedPastSlotKeepsObservedTimezoneAcrossReplanAndUndo" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.35"/>
+  <testcase name="staleUndoCannotOverwriteSubsequentIntake" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.349"/>
+  <testcase name="undoThenFuturePlanChangeDoesNotCreateGhostDemand" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.304"/>
+  <testcase name="skippedStateStaysUndoneAfterDatabaseReopen" classname="net.plainnotes.app.data.UndoSkippedTest" time="1.553"/>
+  <testcase name="realEarlyIntakeSurvivesTheSameFuturePlanCut" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.12"/>
+  <testcase name="forecastDemandReturnsButActualInventoryDoesNotChange" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.302"/>
+  <testcase name="timezoneReplanPreservesCapturedOriginAndDoesNotUncancelFutureSlot" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.22"/>
+  <testcase name="legacyMovedRetentionWithoutOriginalProofIsNotTrusted" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.342"/>
+  <testcase name="subsequentNormalRecordDeductsOnlyOnce" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.306"/>
+  <testcase name="voidedPackageAndLedgerNeverParticipateInUndoOrLaterIntake" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.176"/>
+  <testcase name="savedPlanAndSnapshotsSurviveLaterPlanChange" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.204"/>
+  <testcase name="otherDatesAndRealRecordsAreNotWritten" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.318"/>
+  <testcase name="cannotFabricateUnknownHistoricalSlot" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.363"/>
+  <testcase name="overrideChangedWithoutMatchingRecordIsRejected" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.411"/>
+  <testcase name="failedMissedInsertionRollsBackTheWholeUndo" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.413"/>
+  <testcase name="todayUndoReturnsToPendingWithoutConsumption" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.614"/>
+  <testcase name="missingManualOverrideIsNotInvented" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.563"/>
+  <testcase name="differentInventoryUnitsDoNotReinterpretTheHistoricalDose" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.31"/>
+  <testcase name="legacyWallMoveWithoutOriginalEvidenceRejectsSafely" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.307"/>
+  <testcase name="currentTimeDeterminesSoonAndOverdue" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.297"/>
+  <testcase name="doseOverrideIsKept" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.324"/>
+  <testcase name="encryptedBackupKeepsCorrectionEvidenceAndProjection" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.794"/>
+  <testcase name="realIntakeCannotBeUndoneAndStockIsUntouched" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.131"/>
+  <testcase name="futureSlotCancelledByPlanChangeIsNotRecreated" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.192"/>
+  <testcase name="legacyUndoAlsoGetsScopedEvidenceAndCannotCreateGhostDemand" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.17"/>
+  <testcase name="originalProofRestoresMovedSkipWithoutDerivedRetention" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.121"/>
+  <testcase name="pastUndoCreatesOnlyUnconfirmedMissedAndKeepsSkipEvidence" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.186"/>
+  <testcase name="legacyUnmovedSkipWithoutRetentionUsesItsSavedZone" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.184"/>
+  <testcase name="repeatedUndoRejectsWithoutFurtherWrites" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.198"/>
+  <testcase name="staleSkipRevisionIsRejected" classname="net.plainnotes.app.data.UndoSkippedTest" time="0.137"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

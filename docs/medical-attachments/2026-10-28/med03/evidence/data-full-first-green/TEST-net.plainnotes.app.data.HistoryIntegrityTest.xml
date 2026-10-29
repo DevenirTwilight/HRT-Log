@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.HistoryIntegrityTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:52:15.165Z" hostname="948d99df3df9" time="8.183">
+  <properties/>
+  <testcase name="lexicalAndStreamLimitsRejectBeforeParsing" classname="net.plainnotes.app.data.HistoryIntegrityTest" time="0.156"/>
+  <testcase name="invalidAuthenticatedBackupRollsBackExistingData" classname="net.plainnotes.app.data.HistoryIntegrityTest" time="7.353"/>
+  <testcase name="backfilledHistoricalUnitIsNotDeductedFromDifferentCurrentUnit" classname="net.plainnotes.app.data.HistoryIntegrityTest" time="0.163"/>
+  <testcase name="productEditPreservesActualAndCreatesNewPlanContext" classname="net.plainnotes.app.data.HistoryIntegrityTest" time="0.126"/>
+  <testcase name="noteEditDoesNotRecaptureSourceContext" classname="net.plainnotes.app.data.HistoryIntegrityTest" time="0.193"/>
+  <testcase name="overdueWithoutRecordRemainsUnconfirmedUntilUserConfirms" classname="net.plainnotes.app.data.HistoryIntegrityTest" time="0.118"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

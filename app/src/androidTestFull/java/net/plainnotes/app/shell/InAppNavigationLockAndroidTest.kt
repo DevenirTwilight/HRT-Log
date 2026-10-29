@@ -253,18 +253,19 @@ class InAppNavigationLockAndroidTest {
         instrumentation.addMonitor(monitor)
         try {
             launch(); unlock(); open(Destination.MEDICAL)
-            // UI-10: the three "not open" cards became one explanatory card in the Files area (no dialog). The real dialog window
-            // of that area is the "Add medical file" record chooser: Back dismisses only it, nothing launches, the session stays unlocked.
+            // The accepted product now opens the library. Its backup confirmation is a real dialog;
+            // merely visiting it or cancelling must not launch SAF or grant a file operation.
             ui.onNodeWithTag("medical-tab:files").performClick()
-            ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-files-soon"))
-            ui.onNodeWithTag("medical-files-soon").assertExists()
-            ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-add-file"))
-            ui.onNodeWithTag("medical-add-file").performClick()
-            ui.onNodeWithTag("file-target-dialog").assertExists()
-            back("file-target-dialog")
-            ui.onNodeWithTag("file-target-dialog").assertDoesNotExist()
-            ui.onNodeWithTag("medical-list").assertExists()
-            assertUnlocked("Back from the add-file record chooser")
+            // The library host loads its state asynchronously; scroll only once the real list exists (no timeout shortened, no assertion removed).
+            ui.waitUntil(15_000) { ui.onAllNodesWithTag("library").fetchSemanticsNodes().isNotEmpty() }
+            ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-backup"))
+            ui.onNodeWithTag("library-backup").performClick()
+            ui.waitUntil(15_000) { ui.onAllNodesWithText(context.getString(R.string.med_transfer_scope)).fetchSemanticsNodes().isNotEmpty() }
+            ui.onNodeWithText(context.getString(R.string.med_transfer_scope)).assertExists()
+            instrumentation.sendKeyDownUpSync(android.view.KeyEvent.KEYCODE_BACK)
+            ui.waitUntil(10000) {ui.onAllNodesWithText(context.getString(R.string.med_transfer_scope)).fetchSemanticsNodes().isEmpty()}
+            ui.onNodeWithTag("library").assertExists()
+            assertUnlocked("Back from the complete-backup dialog")
             open(Destination.MEDICATIONS)
             ui.onNodeWithTag("drug-center-open").performClick()
             ui.onNodeWithTag("drug-center-list").performScrollToNode(hasTestTag("drug-center-catalogue"))

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.MedicalArchiveTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-28T14:56:42.835Z" hostname="948d99df3df9" time="9.13">
+  <properties/>
+  <testcase name="fixedArgonHkdfVectorAndStrictPasswordOwnership" classname="net.plainnotes.app.data.MedicalArchiveTest" time="0.575"/>
+  <testcase name="independentArchiveAuthenticatesOuterFooterEveryInnerAndRevocation" classname="net.plainnotes.app.data.MedicalArchiveTest" time="0.694"/>
+  <testcase name="authenticatedCollectionMissingExtraCrossLibraryWrapAndInnerCorruptionAllRefuse" classname="net.plainnotes.app.data.MedicalArchiveTest" time="3.036"/>
+  <testcase name="independentCollectionPreservesScopedCopiesAndAuthenticatesAllLibraries" classname="net.plainnotes.app.data.MedicalArchiveTest" time="0.596"/>
+  <testcase name="authenticatedButMissingSubstitutedCorruptOrBadEnvelopeMembersRefuseWholeArchive" classname="net.plainnotes.app.data.MedicalArchiveTest" time="3.061"/>
+  <testcase name="wrongPasswordTruncationPhysicalTailAndOuterTagRefuseWithoutReturningPartialArchive" classname="net.plainnotes.app.data.MedicalArchiveTest" time="1.011"/>
+  <testcase name="exactHeaderRejectsUnknownParametersReservedBitsPhysicalTailAndOverflowBeforeKdf" classname="net.plainnotes.app.data.MedicalArchiveTest" time="0.018"/>
+  <testcase name="portableWrapIsBoundToArchiveAndFullObjectContextAndAttemptCannotRetry" classname="net.plainnotes.app.data.MedicalArchiveTest" time="0.033"/>
+  <testcase name="productionCanonicalCodecMatchesIndependentPythonVectorAndRejectsEquivalentEncodings" classname="net.plainnotes.app.data.MedicalArchiveTest" time="0.089"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
