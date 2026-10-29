@@ -283,6 +283,45 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
             expectedRevision+1
         }
     }
+    /** The document display name and optional user information are one CAS transaction. The original
+     * import request/journal, versions, keys and links are immutable inputs, never rewritten here. */
+    data class FileInfoReceipt(val document:UUID,val documentRevision:Long,val detailRevision:Long,val title:String,val detail:Detail)
+    class FileInfoConflict:IllegalStateException("File information changed elsewhere")
+    suspend fun saveFileInfo(cap:AttachmentSession.Capability,document:UUID,expectedDocumentRevision:Long,expectedDetailRevision:Long,
+        title:String,detail:Detail):FileInfoReceipt=work(cap) {db,s->
+        require(validTitle(title));require(expectedDocumentRevision>=1 && expectedDocumentRevision<Long.MAX_VALUE)
+        require(expectedDetailRevision>=0 && expectedDetailRevision<Long.MAX_VALUE)
+        AttachmentTransaction.commit(db,s,cap) {
+            permission();val raw=db.openHelper.writableDatabase
+            val current=raw.query("SELECT revision,state,title FROM attachment_document WHERE store_uuid=? AND document_uuid=?",arrayOf(s.dataset,document.toString())).use {c->
+                if(c.moveToFirst())Triple(c.getLong(0),c.getString(1),c.getString(2)) else null
+            }
+            if(current==null || current.first!=expectedDocumentRevision || current.second!="ACTIVE")throw FileInfoConflict()
+            val renamed=current.third!=title
+            val currentDetail=raw.query("SELECT detail_revision FROM ${MedicalFileDetailSchema.TABLE} WHERE store_uuid=? AND document_uuid=?",arrayOf(s.dataset,document.toString())).use {c->if(c.moveToFirst())c.getLong(0) else 0L}
+            if(currentDetail!=expectedDetailRevision)throw FileInfoConflict()
+            if(renamed)raw.compileStatement("UPDATE attachment_document SET title=?,revision=revision+1 WHERE store_uuid=? AND document_uuid=? AND revision=? AND state='ACTIVE'").use {st->
+                st.bindString(1,title);st.bindString(2,s.dataset);st.bindString(3,document.toString());st.bindLong(4,expectedDocumentRevision)
+                if(st.executeUpdateDelete()!=1)throw FileInfoConflict()
+            }
+            val now=System.currentTimeMillis()
+            if(expectedDetailRevision==0L)raw.compileStatement("INSERT INTO ${MedicalFileDetailSchema.TABLE}(store_uuid,document_uuid,file_category,document_date,institution,detail_revision,updated_utc) VALUES(?,?,?,?,?,1,?)").use {st->
+                st.bindString(1,s.dataset);st.bindString(2,document.toString())
+                detail.category?.let {st.bindString(3,it)} ?: st.bindNull(3);detail.date?.let {st.bindString(4,it)} ?: st.bindNull(4);detail.institution?.let {st.bindString(5,it)} ?: st.bindNull(5)
+                st.bindLong(6,now);check(st.executeInsert()>=0)
+            } else raw.compileStatement("UPDATE ${MedicalFileDetailSchema.TABLE} SET file_category=?,document_date=?,institution=?,detail_revision=detail_revision+1,updated_utc=? WHERE store_uuid=? AND document_uuid=? AND detail_revision=?").use {st->
+                detail.category?.let {st.bindString(1,it)} ?: st.bindNull(1);detail.date?.let {st.bindString(2,it)} ?: st.bindNull(2);detail.institution?.let {st.bindString(3,it)} ?: st.bindNull(3)
+                st.bindLong(4,now);st.bindString(5,s.dataset);st.bindString(6,document.toString());st.bindLong(7,expectedDetailRevision)
+                if(st.executeUpdateDelete()!=1)throw FileInfoConflict()
+            }
+            permission();FileInfoReceipt(document,expectedDocumentRevision+(if(renamed)1L else 0L),expectedDetailRevision+1,title,detail.copy(revision=expectedDetailRevision+1))
+        }
+    }
+    companion object {
+        const val TITLE_MAX=256
+        /** Display text only, never a filesystem path. Invalid input is rejected, never truncated. */
+        fun validTitle(title:String)=title.isNotBlank() && title.length<=TITLE_MAX && title.none {Character.isISOControl(it)}
+    }
     /** Freeze a real typed identity when the user selects a relationship target; never infer one. */
     suspend fun resolveTarget(cap:AttachmentSession.Capability,target:Target):Target=work(cap) {db,s->
         AttachmentTransaction.commit(db,s,cap) {permission();target.copy(expectedUuid=UUID.fromString(requireNotNull(bindTarget(db,s,target))))}

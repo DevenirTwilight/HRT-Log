@@ -122,7 +122,12 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
             if(state.loading || state.outcome==MedicalFileLibraryController.Outcome.WORKING)LinearProgressIndicator(Modifier.fillMaxWidth())
             if(state.detailsFailed)Text(stringResource(R.string.med04_details_unavailable),Modifier.padding(16.dp).testTag("library-details-unavailable"),style=MaterialTheme.typography.bodySmall)
             if(state.detailOutcome!=MedicalFileLibraryController.DetailOutcome.NONE) {
-                Text(stringResource(if(state.detailOutcome==MedicalFileLibraryController.DetailOutcome.SAVED)R.string.med04_detail_saved else R.string.med04_detail_failed),
+                Text(stringResource(when(state.detailOutcome) {
+                    MedicalFileLibraryController.DetailOutcome.SAVED->R.string.med04_detail_saved
+                    MedicalFileLibraryController.DetailOutcome.CONFLICT->R.string.file_info_conflict
+                    MedicalFileLibraryController.DetailOutcome.CHECKED->R.string.file_info_checked
+                    else->R.string.med04_detail_failed
+                }),
                     Modifier.padding(16.dp).semantics {liveRegion=LiveRegionMode.Polite}.testTag("library-detail-result"))
                 TextButton(controller::dismissDetailOutcome,Modifier.testTag("library-detail-result-dismiss")) {Text(stringResource(R.string.attach_dismiss))}
             }
@@ -199,7 +204,8 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
         }
     }}
     if(editInfo && selected!=null)FileWindow("",{editInfo=false}) {
-        FileInfoEditor(state.details[selected.document],onSave={detail->editInfo=false;controller.saveDetail(selected,detail)},onCancel={editInfo=false})
+        FileInfoEditor(state.details[selected.document],onSave={detail->editInfo=false;controller.saveDetail(selected,detail)},onCancel={editInfo=false},
+            initialTitle=selected.title,onSaveFileInfo={title,detail->editInfo=false;controller.saveFileInfo(selected,title,detail)})
     }
     if(picker)MedicalFileTargetPicker(appointments,labs,panels,onDismiss={picker=false},onSaveDraw=onSaveDraw) {target,label->
         picker=false
