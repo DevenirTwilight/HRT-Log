@@ -260,6 +260,7 @@ class InAppNavigationLockAndroidTest {
             ui.waitUntil(15_000) { ui.onAllNodesWithTag("library").fetchSemanticsNodes().isNotEmpty() }
             ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-backup"))
             ui.onNodeWithTag("library-backup").performClick()
+            ui.waitUntil(15_000) { ui.onAllNodesWithText(context.getString(R.string.med_transfer_scope)).fetchSemanticsNodes().isNotEmpty() }
             ui.onNodeWithText(context.getString(R.string.med_transfer_scope)).assertExists()
             instrumentation.sendKeyDownUpSync(android.view.KeyEvent.KEYCODE_BACK)
             ui.waitUntil(10000) {ui.onAllNodesWithText(context.getString(R.string.med_transfer_scope)).fetchSemanticsNodes().isEmpty()}
