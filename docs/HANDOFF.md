@@ -1,3 +1,7 @@
+## Build39 交付记录 PR155 原生失败检查点 — 2026-10-29
+
+原始run40897072088 API35 job123529017532 的 MainActivity 附件测试报 SnapshotStateObserver 跨线程；测试中直接在instrumentation线程读取布局坐标，已改为主线程读取，保留真实SAF与全部断言，根因和修复仍须新HEAD原生复验。另一次run40897063139 Android主job的 MedicalHomeConfirmFlowTest 第110行失败，原因尚未确定，不归咎于交付文档，也不写成PASS。原始失败保留；尚未构建/签名/交付新APK。
+
 ## Build39 私人交付完成 — 2026-10-29
 
 负责人「干完了给apk」恢复APK交付（REQUIREMENTS §167）。#152 查看器和 #151 校准引擎均已合并；#154 修正记录成功回执等待，合并 `d95952eed3f6732dd99297019a5fb02ca4304191`，该主线 Android `40887646155` 五 job、Science `40887646147`、四 API 安全 `40887646281` 全部 SUCCESS。此前主线 `40873641886` API35 test tag 超时保持历史 FAIL；#154 当前源和合并树一致，未删业务断言。#153 校准界面是独立开放工作，不在本包中。
