@@ -1,5 +1,4 @@
 """SL-CAL-02 guards: the parity fixture is reproducible from the research reference, and the new production file is registered byte-locked."""
-import hashlib
 import json
 import subprocess
 import sys
@@ -17,12 +16,27 @@ ENGINE = 'app/src/main/java/net/plainnotes/app/conc/TotalE2Calibration.kt'
 
 
 class SlCal02Tests(unittest.TestCase):
-    def test_parity_fixture_is_reproduced_byte_for_byte_by_the_reference(self):
+    def test_parity_fixture_is_reproduced_by_the_reference_to_numerical_tolerance(self):
+        # Byte equality is not stable across numpy/scipy builds (CI differs from a laptop in the last bits), so structure must match exactly
+        # and every number to 1e-7 relative (the fit stops at a step below 1e-8, so optimizer-converged values can differ in the 9th digit between builds); the Kotlin engine is compared with the committed fixture separately (TotalE2CalibrationParityTest).
         with tempfile.TemporaryDirectory() as tmp:
             out = Path(tmp) / 'parity.json'
             subprocess.run([sys.executable, str(HERE / 'sl_cal/make_parity_fixture.py'), '--out', str(out)], check=True, capture_output=True)
-            self.assertEqual(hashlib.sha256(out.read_bytes()).hexdigest(), hashlib.sha256(FIXTURE.read_bytes()).hexdigest(),
-                             'regenerate with tools/pk-research/sl_cal/make_parity_fixture.py (numerics differ across numpy/scipy builds only beyond 1e-12)')
+            self.assertSameShape(json.loads(out.read_text()), json.loads(FIXTURE.read_text()), '$')
+
+    def assertSameShape(self, got, want, path):
+        if isinstance(want, dict):
+            self.assertIsInstance(got, dict, path); self.assertEqual(sorted(got), sorted(want), path)
+            for key in want:
+                self.assertSameShape(got[key], want[key], f'{path}.{key}')
+        elif isinstance(want, list):
+            self.assertIsInstance(got, list, path); self.assertEqual(len(got), len(want), path)
+            for i, (g, w) in enumerate(zip(got, want)):
+                self.assertSameShape(g, w, f'{path}[{i}]')
+        elif isinstance(want, float) and not isinstance(want, bool):
+            self.assertAlmostEqual(got, want, delta=1e-7 * max(1.0, abs(want)), msg=path)
+        else:
+            self.assertEqual(got, want, path)
 
     def test_the_engine_is_the_only_file_outside_the_archived_classification_and_the_archive_stays_untouched(self):
         # The archived guard classification is immutable (research_archive.verify_records), so the engine is NOT registered there;

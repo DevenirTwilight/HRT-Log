@@ -1,5 +1,22 @@
 package net.plainnotes.app.attachments.ui
 
+import android.graphics.Bitmap
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculatePan
+import androidx.compose.foundation.gestures.calculateZoom
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChanged
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.unit.IntSize
+import net.plainnotes.app.attachments.ui.library.GuardedBitmap
+import kotlin.math.abs
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -245,8 +262,11 @@ import net.plainnotes.app.ui.StatusPill
  * still owns; on revocation the controller has already replaced it with [Viewer.Closed], so no stale medical page stays on
  * screen. Nothing is claimed that was not read: no size, date, source or integrity line.
  */
-@Composable internal fun MedicalAttachmentViewer(viewer:Viewer,onClose:()->Unit,modifier:Modifier=Modifier,targetLabel:String="") {
+@Composable internal fun MedicalAttachmentViewer(viewer:Viewer,onClose:()->Unit,modifier:Modifier=Modifier,targetLabel:String="",onPage:(Int)->Unit={}) {
     if(viewer==Viewer.Closed)return
+    val showing=viewer as? Viewer.Showing
+    var scale by remember(showing?.page) {mutableFloatStateOf(1f)}
+    var offset by remember(showing?.page) {mutableStateOf(Offset.Zero)}
     val title=when(viewer) {is Viewer.Opening->viewer.title;is Viewer.Showing->viewer.title;is Viewer.Message->viewer.title;else->""}
     Surface(modifier.fillMaxSize().testTag("attachment-viewer"),color=MaterialTheme.colorScheme.surface) {
         Column(Modifier.fillMaxSize()) {
@@ -265,16 +285,18 @@ import net.plainnotes.app.ui.StatusPill
                                 is Viewer.Message->Text(stringResource(when(viewer.reason) {Reason.PDF_NEEDS_ANDROID_9->R.string.viewer_pdf_unsupported;Reason.NO_PREVIEW_FOR_TYPE->R.string.viewer_no_preview;Reason.FAILED->R.string.viewer_failed}),
                                     Modifier.fillMaxWidth().testTag("attachment-viewer-message").semantics {liveRegion=LiveRegionMode.Polite})
                                 is Viewer.Showing-> {
-                                    val label=stringResource(if(viewer.pdf)R.string.viewer_page else R.string.viewer_image,viewer.title)
+                                    val label=if(viewer.pdf && viewer.pageCount>1)stringResource(R.string.med05_page_label,viewer.title,viewer.pageIndex+1,viewer.pageCount)
+                                        else stringResource(if(viewer.pdf)R.string.viewer_page else R.string.viewer_image,viewer.title)
                                     // Defensive: a recycled page is never drawn even if a frame races the revocation.
                                     if(!viewer.page.isRecycled)Surface(Modifier.aspectRatio(viewer.page.width.toFloat()/viewer.page.height.coerceAtLeast(1)),shape=MaterialTheme.shapes.extraSmall,
                                         color=androidx.compose.ui.graphics.Color.White,shadowElevation=2.dp) {
-                                        // Scales to the preview area; the page keeps its proportions.
-                                        Image(remember(viewer.page) {viewer.page.asImageBitmap()},label,Modifier.fillMaxSize().testTag("attachment-viewer-page"),contentScale=ContentScale.Fit)
+                                        ZoomablePage(viewer.page,label,scale,offset,{scale=it},{offset=it},{step->if(viewer.pdf && !viewer.busy)onPage(viewer.pageIndex+step)})
                                     }
-                                    if(viewer.pdf)Surface(Modifier.align(Alignment.BottomEnd),shape=MaterialTheme.shapes.extraLarge,color=MaterialTheme.colorScheme.inverseSurface.copy(alpha=0.8f),
+                                    // The page number sits in the controls below once there is more than one page; the badge stays for a single page.
+                                    if(viewer.pdf && viewer.pageCount==1)Surface(Modifier.align(Alignment.BottomEnd),shape=MaterialTheme.shapes.extraLarge,color=MaterialTheme.colorScheme.inverseSurface.copy(alpha=0.8f),
                                         contentColor=MaterialTheme.colorScheme.inverseOnSurface) {
-                                        Text(stringResource(R.string.viewer_pdf_first_page),Modifier.padding(horizontal=12.dp,vertical=6.dp),style=MaterialTheme.typography.labelMedium)
+                                        Text(stringResource(R.string.viewer_pdf_first_page),
+                                            Modifier.padding(horizontal=12.dp,vertical=6.dp),style=MaterialTheme.typography.labelMedium)
                                     }
                                 }
                                 Viewer.Closed->{}
@@ -282,6 +304,7 @@ import net.plainnotes.app.ui.StatusPill
                         }
                     }
                 }
+                showing?.let {ViewerControls(it,scale,onPage,{scale=it;if(it<=1f)offset=Offset.Zero},{scale=1f;offset=Offset.Zero})}
                 Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
                     (viewer as? Viewer.Showing)?.let {
                         val tone=MaterialTheme.colorScheme
@@ -290,7 +313,7 @@ import net.plainnotes.app.ui.StatusPill
                     Text(title,Modifier.semantics {heading()},style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.SemiBold,maxLines=3,overflow=TextOverflow.Ellipsis)
                 }
                 if(targetLabel.isNotBlank())LinkedRecord(targetLabel)
-                (viewer as? Viewer.Showing)?.let {FileDetails(it.pdf)}
+                (viewer as? Viewer.Showing)?.let {FileDetails(it.pdf,it.pageCount)}
                 Spacer(Modifier.height(8.dp))
             }
         }
@@ -311,9 +334,9 @@ import net.plainnotes.app.ui.StatusPill
     }
 }
 
-@Composable private fun FileDetails(pdf:Boolean) {
+@Composable private fun FileDetails(pdf:Boolean,pageCount:Int=1) {
     val rows=listOf(stringResource(R.string.viewer_detail_type) to stringResource(if(pdf)R.string.attach_kind_pdf else R.string.attach_kind_image),
-        stringResource(R.string.viewer_detail_preview) to stringResource(if(pdf)R.string.viewer_preview_first_page else R.string.viewer_preview_full))
+        stringResource(R.string.viewer_detail_preview) to (if(pdf && pageCount>1)stringResource(R.string.med05_preview_pages,pageCount) else stringResource(if(pdf)R.string.viewer_preview_first_page else R.string.viewer_preview_full)))
     Column(Modifier.testTag("attachment-viewer-details"),verticalArrangement=Arrangement.spacedBy(8.dp)) {
         Text(stringResource(R.string.viewer_details),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold,modifier=Modifier.semantics {heading()})
         Column(verticalArrangement=Arrangement.spacedBy(3.dp)) {
@@ -326,5 +349,74 @@ import net.plainnotes.app.ui.StatusPill
                 }
             }
         }
+    }
+}
+
+/** The page with pinch zoom, pan when zoomed, double tap to zoom and (at normal size) a sideways swipe for the next or previous page. */
+@Composable private fun ZoomablePage(bitmap:Bitmap,label:String,scale:Float,offset:Offset,onScale:(Float)->Unit,onOffset:(Offset)->Unit,onSwipe:(Int)->Unit) {
+    var size by remember {mutableStateOf(IntSize.Zero)}
+    fun clamp(o:Offset,s:Float):Offset {
+        val x=size.width*(s-1f)/2f;val y=size.height*(s-1f)/2f
+        return Offset(o.x.coerceIn(-x,x),o.y.coerceIn(-y,y))
+    }
+    val currentScale by rememberUpdatedState(scale);val currentOffset by rememberUpdatedState(offset)
+    Box(Modifier.fillMaxSize().clipToBounds().onSizeChanged {size=it}
+        .pointerInput(Unit) {detectTapGestures(onDoubleTap={if(currentScale>1.2f){onScale(1f);onOffset(Offset.Zero)}else onScale(DOUBLE_TAP_SCALE)})}
+        .pointerInput(bitmap) {
+            awaitEachGesture {
+                awaitFirstDown(requireUnconsumed=false)
+                var swipe=0f;var multi=false
+                do {
+                    val event=awaitPointerEvent()
+                    if(event.changes.count {it.pressed}>1)multi=true
+                    val zoom=event.calculateZoom();val pan=event.calculatePan()
+                    if(multi || currentScale>1.01f) {
+                        val next=(currentScale*zoom).coerceIn(1f,MAX_SCALE)
+                        onScale(next);onOffset(clamp(currentOffset+pan,next))
+                        if(zoom!=1f || pan!=Offset.Zero)event.changes.forEach {if(it.positionChanged())it.consume()}
+                    } else if(abs(pan.x)>abs(pan.y)) {
+                        swipe+=pan.x;event.changes.forEach {if(it.positionChanged())it.consume()}
+                    }
+                } while(event.changes.any {it.pressed})
+                if(!multi && currentScale<=1.01f && abs(swipe)>SWIPE_DISTANCE_DP*density)onSwipe(if(swipe<0)1 else -1)
+            }
+        }
+        .semantics {contentDescription=label;role=Role.Image}.testTag("attachment-viewer-page")) {
+        GuardedBitmap(bitmap,Modifier.fillMaxSize().graphicsLayer {scaleX=scale;scaleY=scale;translationX=offset.x;translationY=offset.y},crop=false)
+    }
+}
+
+private const val MAX_SCALE=5f
+private const val DOUBLE_TAP_SCALE=2.5f
+private const val SWIPE_DISTANCE_DP=64f
+
+/** Page buttons and zoom buttons: everything the gestures do can also be done with a tap (TalkBack, switch access). */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable private fun ViewerControls(viewer:Viewer.Showing,scale:Float,onPage:(Int)->Unit,onScale:(Float)->Unit,onReset:()->Unit) {
+    Column(Modifier.testTag("attachment-viewer-controls"),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+        FlowRow(horizontalArrangement=Arrangement.spacedBy(4.dp),verticalArrangement=Arrangement.spacedBy(4.dp),itemVerticalAlignment=Alignment.CenterVertically) {
+            if(viewer.pdf && viewer.pageCount>1) {
+                IconButton({onPage(viewer.pageIndex-1)},Modifier.size(48.dp).testTag("attachment-viewer-prev"),enabled=!viewer.busy && viewer.pageIndex>0) {
+                    Icon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft,stringResource(R.string.med05_prev_page))
+                }
+                Text(stringResource(R.string.med05_page_of,viewer.pageIndex+1,viewer.pageCount),Modifier.testTag("attachment-viewer-page-number").semantics {liveRegion=LiveRegionMode.Polite},
+                    style=MaterialTheme.typography.titleSmall)
+                IconButton({onPage(viewer.pageIndex+1)},Modifier.size(48.dp).testTag("attachment-viewer-next"),enabled=!viewer.busy && viewer.pageIndex<viewer.pageCount-1) {
+                    Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,stringResource(R.string.med05_next_page))
+                }
+                Spacer(Modifier.width(12.dp))
+            }
+            val steps=listOf(1f,1.5f,2f,3f,5f)
+            TextButton({onScale(steps.lastOrNull {it<scale-0.01f} ?: 1f)},Modifier.heightIn(min=48.dp).testTag("attachment-viewer-zoom-out"),enabled=scale>1.01f) {
+                Text("−",style=MaterialTheme.typography.titleMedium)
+                Spacer(Modifier.width(4.dp));Text(stringResource(R.string.med05_zoom_out))
+            }
+            TextButton({onScale(steps.firstOrNull {it>scale+0.01f} ?: MAX_SCALE)},Modifier.heightIn(min=48.dp).testTag("attachment-viewer-zoom-in"),enabled=scale<MAX_SCALE-0.01f) {
+                Text("+",style=MaterialTheme.typography.titleMedium);Spacer(Modifier.width(4.dp));Text(stringResource(R.string.med05_zoom_in))
+            }
+            TextButton(onReset,Modifier.heightIn(min=48.dp).testTag("attachment-viewer-zoom-reset"),enabled=scale>1.01f) {Text(stringResource(R.string.med05_zoom_reset))}
+        }
+        if(viewer.pageFailed)Text(stringResource(R.string.med05_page_failed),Modifier.testTag("attachment-viewer-page-failed").semantics {liveRegion=LiveRegionMode.Polite},color=MaterialTheme.colorScheme.error,style=MaterialTheme.typography.bodyMedium)
+        Text(stringResource(R.string.med05_zoom_hint),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

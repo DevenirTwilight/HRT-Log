@@ -101,7 +101,7 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
     val state by files.controller.state.collectAsState()
     val open=state.viewer!=MedicalAttachmentsController.Viewer.Closed
     BackHandler(open) {files.controller.closeViewer()}
-    MedicalAttachmentViewer(state.viewer,files.controller::closeViewer,modifier,targetLabel)
+    MedicalAttachmentViewer(state.viewer,files.controller::closeViewer,modifier,targetLabel,onPage=files.controller::showPage)
 }
 
 /** Shared by the production page and the existing guarded synthetic host.
@@ -118,6 +118,6 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
                 onDismissMessage=controller::dismissImportMessage,onRetry=controller::refresh,onOpen=controller::open,
                 onUnlink=controller::unlink,onDismissUnlinkMessage=controller::dismissUnlinkMessage)
         }
-        MedicalAttachmentViewer(state.viewer,controller::closeViewer,targetLabel=targetLabel)
+        MedicalAttachmentViewer(state.viewer,controller::closeViewer,targetLabel=targetLabel,onPage=controller::showPage)
     }
 }

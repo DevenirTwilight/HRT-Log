@@ -25,6 +25,15 @@ class MedicalFilesOperationAndroidTest {
                 ops.import(cap,standalone,MedicalAttachmentOperationAndroidTest().uri("pdfok"))
                 assertEquals(standalone.document,ops.libraryDocuments(cap).single().document)
                 assertTrue(ops.relationships(cap,standalone.document).isEmpty())
+                // MED-04: what the user typed is its own small write, compare-and-set on its own revision, and never touches the original's revision.
+                val typed=MedicalAttachmentOperations.Detail("LAB_REPORT","2026-10-07","SYNTHETIC clinic")
+                assertTrue(ops.details(cap).isEmpty())
+                assertEquals(1L,ops.saveDetail(cap,standalone.document,0,typed))
+                assertEquals(typed.copy(revision=1),ops.details(cap).getValue(standalone.document))
+                reject {runBlocking {ops.saveDetail(cap,standalone.document,0,typed)}}
+                reject {runBlocking {ops.saveDetail(cap,UUID.randomUUID(),0,typed)}}
+                assertEquals(2L,ops.saveDetail(cap,standalone.document,1,typed.copy(institution=null)))
+                assertEquals(1L,ops.libraryDocuments(cap).single().revision)
                 val target=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.LAB_PANEL,panel.id,UUID.fromString(panel.uuid))
                 val frozen=ops.resolveTarget(cap,target)
                 val link=ops.associate(cap,UUID.randomUUID(),frozen,standalone.document,1)
@@ -45,6 +54,7 @@ class MedicalFilesOperationAndroidTest {
                 ops.associate(cap,UUID.randomUUID(),visit,standalone.document,1,relationship)
                 assertTrue(ops.documents(cap,visit).isEmpty());assertEquals(1,ops.documents(cap,target).size)
                 ops.trash(cap,standalone.document,1)
+                reject {runBlocking {ops.saveDetail(cap,standalone.document,2,typed)}} // a file in the bin is not edited
                 assertTrue(ops.libraryDocuments(cap).isEmpty());assertEquals("TRASHED",ops.libraryDocuments(cap,true).single().state)
                 ops.restore(cap,standalone.document,2)
                 assertTrue(ops.relationships(cap,standalone.document).isEmpty())
@@ -65,6 +75,8 @@ class MedicalFilesOperationAndroidTest {
                     try {
                         val restored=fresh.forGeneration(scope).pinnedTo(Space.PRIMARY).medicalAttachments();val newCap=session.issue()
                         assertEquals(2,restored.libraryDocuments(newCap).size)
+                        assertEquals(typed.copy(institution=null,revision=2),restored.details(newCap).getValue(standalone.document))
+                        assertNull(restored.details(newCap)[unlinked.document])
                         for(member in members)assertEquals(standalone.document,restored.documents(newCap,target.copy(memberLabId=member.id)).single().document)
                         restored.open(newCap,target,standalone.document).use {reader->val b=ByteArray(5);assertEquals(5,reader.readAt(0,b,0,5));assertEquals("%PDF-",String(b,Charsets.US_ASCII))}
                         assertTrue(restored.relationships(newCap,unlinked.document).isEmpty())

@@ -43,6 +43,12 @@ internal interface MedicalAttachmentGateway {
         fun pdfFirstPage():Bitmap
         fun image():Bitmap
         fun release(bitmap:Bitmap)
+        /** MED-05: pages in a PDF (1 for an image). Defaults keep earlier gateways valid. */
+        fun pageCount():Int=1
+        /** One PDF page whose longest side is at most [maxEdge] pixels; the previous page must be released first. */
+        fun pdfPage(index:Int,maxEdge:Int):Bitmap=pdfFirstPage()
+        /** An image reduced so its longest side is at most [maxEdge] pixels. */
+        fun image(maxEdge:Int):Bitmap=image()
     }
     interface Import:AutoCloseable {
         val operation:UUID
@@ -62,6 +68,10 @@ internal interface MedicalFileGateway:MedicalAttachmentGateway {
     suspend fun relationStatus(operation:UUID,document:UUID):MedicalAttachmentOperations.RelationReceipt?
     suspend fun trash(document:UUID,revision:Long)
     suspend fun restore(document:UUID,revision:Long)
+    /** MED-04: what the user typed about each file; empty when nothing was ever saved. */
+    suspend fun details():Map<UUID,MedicalAttachmentOperations.Detail>
+    /** Compare-and-set on the detail's own revision (0 = none yet); returns the new revision. */
+    suspend fun saveDetail(document:UUID,revision:Long,detail:MedicalAttachmentOperations.Detail):Long
     fun relationPending():Pair<UUID,UUID>?
     fun relationRetain(operation:UUID,document:UUID)
     fun relationResolved(operation:UUID,document:UUID)
@@ -101,6 +111,8 @@ internal class RuntimeAttachmentGateway(private val context:Context,private val 
     override suspend fun relationStatus(operation:UUID,document:UUID)=browse().use {it.relationStatus(operation,document)}
     override suspend fun trash(document:UUID,revision:Long)=browse().use {it.trash(document,revision)}
     override suspend fun restore(document:UUID,revision:Long)=browse().use {it.restore(document,revision)}
+    override suspend fun details()=browse().use {it.details()}
+    override suspend fun saveDetail(document:UUID,revision:Long,detail:MedicalAttachmentOperations.Detail)=browse().use {it.saveDetail(document,revision,detail)}
     override suspend fun pickerIntent()=browse().use {it.pickerIntent()}
     override suspend fun preview(document:UUID):MedicalAttachmentGateway.Preview {
         val flow=browse()
@@ -111,6 +123,9 @@ internal class RuntimeAttachmentGateway(private val context:Context,private val 
                 override fun pdfFirstPage()=viewer.pdfPage(0)
                 override fun image()=viewer.image()
                 override fun release(bitmap:Bitmap)=viewer.release(bitmap)
+                override fun pageCount()=viewer.pageCount()
+                override fun pdfPage(index:Int,maxEdge:Int)=viewer.pdfPageFit(index,maxEdge)
+                override fun image(maxEdge:Int)=viewer.image(maxEdge)
                 override fun close() {try {viewer.close()}finally {flow.close()}}
             }
         }catch(e:Throwable) {flow.close();throw e}

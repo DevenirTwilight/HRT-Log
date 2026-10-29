@@ -18,6 +18,10 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -30,13 +34,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import net.plainnotes.app.R
 import net.plainnotes.app.attachments.ui.FileTile
+import net.plainnotes.app.data.MedicalAttachmentOperations
+import net.plainnotes.app.ui.DatePickerModal
+import net.plainnotes.app.ui.formatMediumDate
+import java.time.LocalDate
 import net.plainnotes.app.attachments.ui.MedicalAttachmentsController.FileKind
 import net.plainnotes.app.ui.Corners
 import net.plainnotes.app.ui.GroupedItem
 import net.plainnotes.app.ui.NotesTheme
 import net.plainnotes.app.ui.StatusPill
 
-private fun FileCategory.label() = when (this) {
+internal fun FileCategory.label() = when (this) {
     FileCategory.LAB_REPORT -> R.string.lib_cat_lab; FileCategory.PRESCRIPTION -> R.string.lib_cat_rx; FileCategory.VISIT_NOTE -> R.string.lib_cat_note
     FileCategory.CERTIFICATE -> R.string.lib_cat_cert; FileCategory.IMAGING -> R.string.lib_cat_imaging; FileCategory.OTHER -> R.string.lib_cat_other
 }
@@ -50,13 +58,15 @@ private fun FileKind.label() = when (this) { FileKind.PDF -> R.string.attach_kin
 @OptIn(ExperimentalLayoutApi::class)
 @Composable internal fun MedicalFileLibraryScreen(state: LibraryState, caps: LibraryCapabilities, onAdd: () -> Unit, onPrepare: () -> Unit, onOpen: (DocumentSummary) -> Unit,
     onUnsorted: () -> Unit, onCategory: (FileCategory) -> Unit, onShowAll: () -> Unit, onBackup: () -> Unit, onBin: () -> Unit, query: String = "", onQuery: (String) -> Unit = {},
-    modifier: Modifier = Modifier, typeCounts:Map<FileKind,Int> = emptyMap(),typeFilter:FileKind?=null,onType:(FileKind?)->Unit={},busy:Boolean=false) {
+    modifier: Modifier = Modifier, typeCounts:Map<FileKind,Int> = emptyMap(),typeFilter:FileKind?=null,onType:(FileKind?)->Unit={},busy:Boolean=false,
+    onUnlinked: (() -> Unit)? = null, categoryFilter: FileCategory? = null,
+    thumbs: Map<FileThumbnails.Key, FileThumbnails.Thumb> = emptyMap(), onThumb: (DocumentSummary) -> Unit = {}) {
     val c = MaterialTheme.colorScheme
     val narrow = LocalDensity.current.fontScale > 1.3f || androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp < 360
     LazyColumn(modifier.fillMaxSize().testTag("library"), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         item("search") {
             TextField(query, onQuery, Modifier.fillMaxWidth().testTag("library-search"), enabled = caps.search, singleLine = true, shape = Corners.full,
-                leadingIcon = { Icon(Icons.Outlined.Search, null) }, placeholder = { Text(stringResource(if(caps.categories)R.string.lib_search_hint else R.string.med03_search_hint)) },
+                leadingIcon = { Icon(Icons.Outlined.Search, null) }, placeholder = { Text(stringResource(if(caps.categories)R.string.med04_search_hint else R.string.med03_search_hint)) },
                 supportingText = if (!caps.search) ({ Text(stringResource(R.string.lib_not_yet), Modifier.testTag("library-search-reason")) }) else null,
                 colors = TextFieldDefaults.colors(focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent, unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
                     disabledIndicatorColor = androidx.compose.ui.graphics.Color.Transparent))
@@ -91,7 +101,7 @@ private fun FileKind.label() = when (this) { FileKind.PDF -> R.string.attach_kin
                     }
                     Column(Modifier.weight(1f)) {
                         Text(stringResource(R.string.lib_unsorted_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                        Text(pluralStringResource(R.plurals.lib_unsorted_body, state.unsorted(), state.unsorted()), style = MaterialTheme.typography.bodyMedium)
+                        Text(pluralStringResource(if (state.toSort != null) R.plurals.med04_to_sort_body else R.plurals.lib_unsorted_body, state.unsorted(), state.unsorted()), style = MaterialTheme.typography.bodyMedium)
                     }
                     Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, null)
                 }
@@ -104,7 +114,8 @@ private fun FileKind.label() = when (this) { FileKind.PDF -> R.string.attach_kin
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         row.forEach { cat ->
                             val n = state.categoryCounts[cat] ?: 0
-                            Surface({ onCategory(cat) }, Modifier.weight(1f).heightIn(min = 88.dp).testTag("library-category:${cat.name}"), enabled = n > 0, shape = Corners.card, color = c.surfaceContainerLow) {
+                            Surface({ onCategory(cat) }, Modifier.weight(1f).heightIn(min = 88.dp).testTag("library-category:${cat.name}").semantics { selected = categoryFilter == cat }, enabled = n > 0, shape = Corners.card,
+                                color = if (categoryFilter == cat) c.primaryContainer else c.surfaceContainerLow) {
                                 Column(Modifier.padding(16.dp).semantics(mergeDescendants = true) {}, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                     Text(n.toString(), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = if (n > 0) c.onSurface else c.outline)
                                     Text(stringResource(cat.label()), style = MaterialTheme.typography.bodyMedium, color = if (n > 0) c.onSurface else c.outline)
@@ -125,7 +136,8 @@ private fun FileKind.label() = when (this) { FileKind.PDF -> R.string.attach_kin
         if (state.documents.isEmpty()) item("empty") { Text(stringResource(R.string.lib_empty), Modifier.testTag("library-empty"), color = c.onSurfaceVariant) }
         else item("recent") {
             Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                state.documents.forEachIndexed { i, d -> GroupedItem(i, state.documents.size, onClick = { onOpen(d) }, modifier = Modifier.testTag("library-doc:${d.document}")) { DocumentRow(d) } }
+                state.documents.forEachIndexed { i, d -> GroupedItem(i, state.documents.size, onClick = { onOpen(d) }, modifier = Modifier.testTag("library-doc:${d.document}")) {
+                    DocumentRow(d, thumbs[FileThumbnails.Key(d.document, FileThumbnails.Size.ROW)], onThumb) } }
             }
         }
         item("backup") {
@@ -142,26 +154,29 @@ private fun FileKind.label() = when (this) { FileKind.PDF -> R.string.attach_kin
         }
         item("footer") {
             FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                TextButton(onUnsorted, Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.lib_unlinked_files, state.unsorted())) }
+                TextButton(onUnlinked ?: onUnsorted, Modifier.heightIn(min = 48.dp).testTag("library-unlinked")) { Text(stringResource(R.string.lib_unlinked_files, state.unlinked)) }
                 TextButton(onBin, Modifier.heightIn(min = 48.dp).testTag("library-bin"), enabled = caps.recycle) { Text(stringResource(R.string.lib_bin)) }
             }
         }
     }
 }
 
-private fun LibraryState.unsorted() = unlinked
+private fun LibraryState.unsorted() = toSort ?: unlinked
 
-@Composable private fun DocumentRow(d: DocumentSummary) {
+@Composable private fun DocumentRow(d: DocumentSummary, thumb: FileThumbnails.Thumb? = null, onThumb: (DocumentSummary) -> Unit = {}) {
+    androidx.compose.runtime.LaunchedEffect(d.document) { onThumb(d) }
     val c = MaterialTheme.colorScheme
     val kind = stringResource(d.kind.label())
     val link = when (val l = d.link) {
         LinkState.Unlinked -> stringResource(R.string.lib_not_linked)
         is LinkState.Linked -> pluralStringResource(R.plurals.lib_linked_n, l.count, l.count)
     }
-    val line = listOfNotNull(d.category?.let { stringResource(it.label()) } ?: kind, d.addedLabel).joinToString(" · ")
+    val line = if (d.detailsKnown) listOfNotNull(d.category?.let { stringResource(it.label()) }, d.dateLabel ?: stringResource(R.string.med04_date_unknown),
+        d.institution, if (d.dateLabel == null) d.addedLabel?.let { stringResource(R.string.med04_imported_on, it) } else null).joinToString(" · ")
+    else listOfNotNull(d.category?.let { stringResource(it.label()) } ?: kind, d.addedLabel).joinToString(" · ")
     Row(Modifier.fillMaxWidth().heightIn(min = 72.dp).padding(horizontal = 16.dp, vertical = 12.dp).semantics(mergeDescendants = true) { role = Role.Button },
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        FileTile(d.kind, true)
+        RowThumb(d.kind, thumb)
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(d.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Text(line, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
@@ -176,7 +191,7 @@ private fun LibraryState.unsorted() = unlinked
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable internal fun MedicalFileDetailPage(detail: DocumentDetail, caps: LibraryCapabilities, preview: @Composable () -> Unit, onBack: () -> Unit, onViewFull: () -> Unit,
-    onAddLink: () -> Unit, onUnlink: (DocumentLink) -> Unit, onOpenRecord: (RecordTarget) -> Unit, onRestore: () -> Unit, modifier: Modifier = Modifier,operationsEnabled:Boolean=true) {
+    onAddLink: () -> Unit, onUnlink: (DocumentLink) -> Unit, onOpenRecord: (RecordTarget) -> Unit, onRestore: () -> Unit, modifier: Modifier = Modifier,operationsEnabled:Boolean=true,onEditInfo:(()->Unit)?=null) {
     val c = MaterialTheme.colorScheme
     val s = detail.summary
     Scaffold(modifier.testTag("file-detail"), topBar = {
@@ -199,6 +214,7 @@ private fun LibraryState.unsorted() = unlinked
             } else FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 if (caps.bidirectionalLinks) Button(onAddLink, Modifier.heightIn(min = 56.dp).testTag("file-detail-add-link"),enabled=operationsEnabled) { Text(stringResource(R.string.lib_detail_add_link)) }
                 OutlinedButton(onViewFull, Modifier.heightIn(min = 56.dp).testTag("file-detail-view")) { Text(stringResource(R.string.lib_view_full)) }
+                if (onEditInfo != null) OutlinedButton(onEditInfo, Modifier.heightIn(min = 56.dp).testTag("file-detail-edit-info"), enabled = operationsEnabled) { Text(stringResource(R.string.med04_edit_info)) }
             }
             Surface(Modifier.fillMaxWidth().testTag("file-detail-links"), shape = Corners.card, color = c.surfaceContainerLow) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -207,7 +223,8 @@ private fun LibraryState.unsorted() = unlinked
                     detail.links.forEach { LinkRow(it, caps.bidirectionalLinks && operationsEnabled, { onOpenRecord(it.target) }, { onUnlink(it) }) }
                 }
             }
-            val facts = listOfNotNull(s.category?.let { R.string.lib_info_category to stringResource(it.label()) }, s.addedLabel?.let { R.string.lib_info_added to it },
+            val facts = listOfNotNull(s.category?.let { R.string.lib_info_category to stringResource(it.label()) }, s.dateLabel?.let { R.string.lib_info_date to it },
+                s.institution?.let { R.string.lib_info_institution to it }, s.addedLabel?.let { R.string.lib_info_added to it },
                 detail.sizeLabel?.let { R.string.lib_info_size to it }, R.string.viewer_detail_type to stringResource(s.kind.label()))
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.viewer_details), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, modifier = Modifier.semantics { heading() })
@@ -269,13 +286,8 @@ private fun LibraryState.unsorted() = unlinked
             }
         }
         OutlinedTextField(draft.title, { onChange(draft.copy(title = it.take(256))) }, Modifier.fillMaxWidth().testTag("add-document-title"), label = { Text(stringResource(R.string.attach_confirm_name)) }, singleLine = true)
-        if (caps.categories) Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(stringResource(R.string.lib_import_category), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FileCategory.entries.forEach { cat -> FilterChip(draft.category == cat, { onChange(draft.copy(category = if (draft.category == cat) null else cat)) }, { Text(stringResource(cat.label())) },
-                    Modifier.heightIn(min = 48.dp).testTag("add-document-category:${cat.name}")) }
-            }
-        }
+        if (caps.categories) FileInfoFields(draft.category, draft.date, draft.institution, { onChange(draft.copy(category = it)) }, { onChange(draft.copy(date = it)) },
+            { onChange(draft.copy(institution = it)) }, "add-document")
         Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.selectableGroup()) {
             Text(stringResource(R.string.lib_import_link), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, modifier = Modifier.semantics { heading() })
             LinkChoice.entries.forEach { choice ->
@@ -299,6 +311,51 @@ private fun LibraryState.unsorted() = unlinked
         FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(onConfirm, Modifier.heightIn(min = 56.dp).testTag("add-document-confirm"), enabled = valid && caps.standaloneImport) { Text(stringResource(R.string.attach_confirm_action)) }
             TextButton(onCancel, Modifier.heightIn(min = 56.dp).testTag("add-document-cancel")) { Text(stringResource(R.string.cancel)) }
+        }
+    }
+}
+
+/** What the user can say about a file: a category, the date on the document and the institution. All optional, none of it guessed; shared by the add flow and the editor. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable internal fun FileInfoFields(category: FileCategory?, date: LocalDate?, institution: String, onCategory: (FileCategory?) -> Unit, onDate: (LocalDate?) -> Unit,
+    onInstitution: (String) -> Unit, tag: String, modifier: Modifier = Modifier) {
+    val c = MaterialTheme.colorScheme
+    var pick by remember { mutableStateOf(false) }
+    Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(R.string.lib_import_category), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, modifier = Modifier.semantics { heading() })
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FileCategory.entries.forEach { cat -> FilterChip(category == cat, { onCategory(if (category == cat) null else cat) }, { Text(stringResource(cat.label())) },
+                    Modifier.heightIn(min = 48.dp).testTag("$tag-category:${cat.name}")) }
+            }
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(R.string.med04_date_label), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, modifier = Modifier.semantics { heading() })
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton({ pick = true }, Modifier.heightIn(min = 48.dp).testTag("$tag-date")) { Text(date?.let { formatMediumDate(it) } ?: stringResource(R.string.med04_date_pick)) }
+                if (date != null) TextButton({ onDate(null) }, Modifier.heightIn(min = 48.dp).testTag("$tag-date-clear")) { Text(stringResource(R.string.med04_date_clear)) }
+            }
+        }
+        OutlinedTextField(institution, { onInstitution(it.filter { ch -> ch.code >= 32 && ch.code != 127 }.take(MedicalAttachmentOperations.Detail.INSTITUTION_MAX)) }, Modifier.fillMaxWidth().testTag("$tag-institution"),
+            label = { Text(stringResource(R.string.med04_institution_label)) }, singleLine = true,
+            supportingText = { Text("${institution.length}/${MedicalAttachmentOperations.Detail.INSTITUTION_MAX}") })
+        Text(stringResource(R.string.med04_info_note), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+    }
+    if (pick) DatePickerModal(date ?: LocalDate.now(), { pick = false }) { onDate(it); pick = false }
+}
+
+/** Editing what the user typed about one file. Saving writes only these three optional values. */
+@Composable internal fun FileInfoEditor(initial: MedicalAttachmentOperations.Detail?, onSave: (MedicalAttachmentOperations.Detail) -> Unit, onCancel: () -> Unit, modifier: Modifier = Modifier) {
+    var category by remember { mutableStateOf(initial?.category?.let { runCatching { FileCategory.valueOf(it) }.getOrNull() }) }
+    var date by remember { mutableStateOf(initial?.date?.let { runCatching { LocalDate.parse(it) }.getOrNull() }) }
+    var institution by remember { mutableStateOf(initial?.institution.orEmpty()) }
+    Column(modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp).testTag("file-info-editor"), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        Text(stringResource(R.string.med04_info_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, modifier = Modifier.semantics { heading() })
+        FileInfoFields(category, date, institution, { category = it }, { date = it }, { institution = it }, "file-info")
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button({ onSave(MedicalAttachmentOperations.Detail(category?.name, date?.toString(), MedicalAttachmentOperations.Detail.institutionOf(institution), initial?.revision ?: 0)) },
+                Modifier.heightIn(min = 56.dp).testTag("file-info-save")) { Text(stringResource(R.string.save)) }
+            TextButton(onCancel, Modifier.heightIn(min = 56.dp).testTag("file-info-cancel")) { Text(stringResource(R.string.cancel)) }
         }
     }
 }

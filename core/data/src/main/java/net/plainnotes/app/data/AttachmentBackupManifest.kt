@@ -9,8 +9,9 @@ internal data class AttachmentBackupManifest(
 ) {
     enum class Kind { APPOINTMENT, LAB, LAB_PANEL, DOSE_RECORD }
     data class Record(val uuid:UUID,val kind:Kind,val sourceId:Long,val state:String,val trashId:Long?,val evidenceSha256:String)
+    /** [detail] is what the user typed about the file (MED-04); null when nothing was ever saved. Carried by manifest wire version 3 only. */
     data class Document(val uuid:UUID,val revision:Long,val title:String,val category:String,val state:String,
-        val activeVersion:UUID,val deletedUtc:Long?)
+        val activeVersion:UUID,val deletedUtc:Long?,val detail:MedicalAttachmentOperations.Detail?=null)
     data class Version(val document:UUID,val ordinal:Long,val context:AttachmentObjectContext,
         val manifest:AttachmentObjectStreams.Manifest,val mime:String)
     data class Link(val uuid:UUID,val record:UUID,val document:UUID,val revision:Long,val state:String)
@@ -33,6 +34,7 @@ internal data class AttachmentBackupManifest(
             require(d.category in setOf("REPORT","PRESCRIPTION","CERTIFICATE","RECORD","OTHER"))
             require(d.state in setOf("ACTIVE","TRASHED","PURGE_PENDING","PURGED"))
             require((d.state=="ACTIVE")== (d.deletedUtc==null))
+            require(d.detail==null || d.detail.revision>=1)
             require(vs[d.activeVersion]?.document==d.uuid) {"Missing active retained version"}}
         var bytes=0L
         versions.forEach {v->require(v.document in ds && v.ordinal>0 && v.context.logicalVault==logicalVault)

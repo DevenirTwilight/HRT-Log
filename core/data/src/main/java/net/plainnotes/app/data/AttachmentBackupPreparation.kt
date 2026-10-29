@@ -140,9 +140,13 @@ internal class AttachmentBackupPreparation private constructor(private val datab
                             }
                         }
                     }
-                    val documents=read("SELECT document_uuid,revision,title,category,state,active_version_uuid,deleted_utc FROM attachment_document WHERE store_uuid=? ORDER BY document_uuid") {c->
+                    val documents=read("""SELECT d.document_uuid,d.revision,d.title,d.category,d.state,d.active_version_uuid,d.deleted_utc,
+                        x.detail_revision,x.file_category,x.document_date,x.institution
+                        FROM attachment_document d LEFT JOIN attachment_document_detail x ON x.store_uuid=d.store_uuid AND x.document_uuid=d.document_uuid
+                        WHERE d.store_uuid=? ORDER BY d.document_uuid""") {c->
                         check(!c.isNull(5)) {"Unproven retained document"}
-                        AttachmentBackupManifest.Document(c.uuid(0),c.getLong(1),c.getString(2),c.getString(3),c.getString(4),c.uuid(5),c.optionalLong(6))}
+                        val detail=if(c.isNull(7))null else MedicalAttachmentOperations.Detail(c.getString(8),c.getString(9),c.getString(10),c.getLong(7))
+                        AttachmentBackupManifest.Document(c.uuid(0),c.getLong(1),c.getString(2),c.getString(3),c.getString(4),c.uuid(5),c.optionalLong(6),detail)}
                     val versions=read("""SELECT v.document_uuid,v.ordinal,v.version_uuid,v.object_uuid,v.dek_handle_uuid,
                         v.plaintext_bytes,v.ciphertext_bytes,v.plaintext_sha256,v.ciphertext_sha256,v.mime,v.status,v.protocol_revision,
                         j.attempt_uuid,j.parent_device,j.parent_inode,j.file_device,j.file_inode,j.operation_uuid,j.physical_generation,j.active_alias_uuid,j.proof,o.phase
