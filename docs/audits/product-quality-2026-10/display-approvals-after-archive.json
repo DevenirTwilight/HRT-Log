@@ -257,6 +257,25 @@
     "path": "docs/REQUIREMENTS.md"
    },
    "owner_decision": "Owner explicitly requests real MainActivity calibration input tracing, accurate failure reasons, preserving common coefficient and scientific gates; see REQUIREMENTS §169."
+  },
+  {
+   "id": "PD-2026-10-29-CONCCHART-AXIS-LABELS",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcChart.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-29",
+   "scope": "Chart time axis only: labels that would overlap give way (half-day marks before dates) and a label near the canvas edge is moved inside it. Curve, grid, data, readouts and readAt unchanged; at normal text size nothing changes.",
+   "previous_sha256": "9fca1d03a34499c9597dcb2b4cdaf7a9f8e0e33cb784981845145277d675023a",
+   "new_sha256": "20f224d607ebc48d9a0dd036f4b070ba0935f26bae7d67f6b2fd37916528c5dc",
+   "evidence": {
+    "commit": "12b6d744fabef50b5391e6eebe6a7420ca9631b6",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §171 (2026-10-29): the owner's takeover instruction to fix real problems and not to degrade four languages, small screens and 2x text (UI_STYLE_AUTHORITY), together with the existing §162 authorization for the chart's day axis in ConcChart.kt. LIVE_LOCK files, Exports.kt, ChartViewport.kt untouched.",
+   "verification": {
+    "previous_blob": "9fca1d03… = this file as merged in PR #149 (PD-2026-10-29-UI12-CONCCHART) and unchanged until now",
+    "tests": "ConcChartAxisTest (8, incl. 500 random spacings: kept labels never overlap, the best label is always kept); Ui12ConcentrationTest 256 parameterised runs; full :app:testFullDebugUnitTest and PeriodStabilityTest in CI"
+   },
+   "human_review": "recommended: compare docs/ui-audit/2026-10-29-conc-axis/{before,after} (fr 320dp 2x light shows the fix)."
   }
  ]
 }
