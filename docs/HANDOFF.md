@@ -1,3 +1,7 @@
+## PR155 根节点诊断快照修正 — 2026-10-29
+
+df7d1010仍复现线程异常。进一步核对Compose ui-test1.9.3源码：fetchOneOrThrow先在调用线程保存整节点printToString，再返回节点；旧bounds helper在主线程读取坐标前仍调用这个单根节点路径。现仅把根查询改为collection.fetchSemanticsNodes().first，再主线程读取bounds，避免非必要的整棵动态树诊断快照；不禁用线程检查、不改断言、不升级依赖。准确新SHA原生验证待执行，不能提前写修复成功。原始job123630783670失败保留。当前PR153原生API26/29/35全部通过，仅Android主job待完成；PR156当前56c17936继续独立验收。
+
 ## Build39 交付记录 PR155 原生失败检查点 — 2026-10-29
 
 原始run40897072088 API35 job123529017532 的 MainActivity 附件测试报 SnapshotStateObserver 跨线程；测试中直接在instrumentation线程读取布局坐标，已改为主线程读取，保留真实SAF与全部断言，根因和修复仍须新HEAD原生复验。另一次run40897063139 Android主job的 MedicalHomeConfirmFlowTest 第110行失败，原因尚未确定，不归咎于交付文档，也不写成PASS。原始失败保留；尚未构建/签名/交付新APK。
