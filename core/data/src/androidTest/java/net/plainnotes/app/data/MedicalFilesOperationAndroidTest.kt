@@ -60,6 +60,36 @@ class MedicalFilesOperationAndroidTest {
                 assertTrue(ops.relationships(cap,standalone.document).isEmpty())
                 assertTrue(ops.documents(cap,target).isEmpty()) // never revive quarantined associations
                 ops.associate(cap,UUID.randomUUID(),frozen,standalone.document,3)
+                // Rename the single retained original after its lifecycle/history/link operations.
+                // Metadata CAS must not rewrite the import request digest, ciphertext/key rows or any link.
+                fun immutableRows(table:String)=f.raw.query("SELECT * FROM $table ORDER BY rowid").use {c->
+                    buildList {while(c.moveToNext())add((0 until c.columnCount).map {i->when(c.getType(i)) {
+                        android.database.Cursor.FIELD_TYPE_NULL->null
+                        android.database.Cursor.FIELD_TYPE_BLOB->c.getBlob(i).contentToString()
+                        else->c.getString(i)
+                    }})}
+                }
+                val retained=listOf("attachment_version","attachment_key_envelope","attachment_link","attachment_journal","attachment_operation")
+                val beforeRename=retained.associateWith(::immutableRows)
+                val priorReceipt=ops.reconcile(cap,standalone.operation,document=standalone.document)
+                val renamed="2026年10月雌二醇化验报告.pdf"
+                val renameReceipt=ops.saveFileInfo(cap,standalone.document,3,2,renamed,typed.copy(institution=null))
+                assertEquals(4L,renameReceipt.documentRevision);assertEquals(3L,renameReceipt.detailRevision)
+                assertEquals(beforeRename,retained.associateWith(::immutableRows))
+                assertEquals(priorReceipt,ops.reconcile(cap,standalone.operation,document=standalone.document))
+                assertEquals(renamed,ops.libraryDocuments(cap).single().title)
+                for(member in members)assertEquals(renamed,ops.documents(cap,target.copy(memberLabId=member.id)).single().title)
+                fun fileRows()=immutableRows("attachment_document") to immutableRows(MedicalFileDetailSchema.TABLE)
+                val savedNames=fileRows()
+                for(invalid in listOf("", "   ", "x".repeat(257), "bad\nname", "bad\u007fname"))
+                    reject {runBlocking {ops.saveFileInfo(cap,standalone.document,4,3,invalid,typed)}}
+                reject {runBlocking {ops.saveFileInfo(cap,standalone.document,3,3,"stale document",typed)}}
+                reject {runBlocking {ops.saveFileInfo(cap,standalone.document,4,2,"stale detail",typed)}}
+                assertEquals(savedNames,fileRows())
+                f.raw.execSQL("CREATE TRIGGER synthetic_file_info_abort BEFORE UPDATE ON ${MedicalFileDetailSchema.TABLE} BEGIN SELECT RAISE(ABORT,'synthetic metadata interruption'); END")
+                try {reject {runBlocking {ops.saveFileInfo(cap,standalone.document,4,3,"must roll back",typed)}}}
+                finally {f.raw.execSQL("DROP TRIGGER synthetic_file_info_abort")}
+                assertEquals(savedNames,fileRows());assertEquals(beforeRename,retained.associateWith(::immutableRows))
                 val unlinked=standalone.copy(operation=UUID.randomUUID(),document=UUID.randomUUID(),title="SYNTHETIC kept unlinked")
                 ops.import(cap,unlinked,MedicalAttachmentOperationAndroidTest().uri("unknown"))
                 val file=File.createTempFile("synthetic-med03-",".cipher",app.cacheDir)
@@ -67,6 +97,7 @@ class MedicalFilesOperationAndroidTest {
                     ops.writeCollection(cap,"SYNTHETIC med03 archive".toCharArray(),file.outputStream())
                     MedicalCollectionReader.read(cap,"SYNTHETIC med03 archive".toCharArray(),FileInputStream(file).channel).use {archive->
                         assertEquals(2,archive.manifest(archive.index().active).documents.size)
+                        assertEquals(renamed,archive.manifest(archive.index().active).documents.single {it.uuid==standalone.document}.title)
                         assertEquals(1,archive.manifest(archive.index().active).records.count {it.kind==AttachmentBackupManifest.Kind.LAB_PANEL})
                         LibraryCollectionRestore(f.access).restore(f.scope,cap,UUID.randomUUID(),archive)
                     }
@@ -75,7 +106,8 @@ class MedicalFilesOperationAndroidTest {
                     try {
                         val restored=fresh.forGeneration(scope).pinnedTo(Space.PRIMARY).medicalAttachments();val newCap=session.issue()
                         assertEquals(2,restored.libraryDocuments(newCap).size)
-                        assertEquals(typed.copy(institution=null,revision=2),restored.details(newCap).getValue(standalone.document))
+                        assertEquals(typed.copy(institution=null,revision=3),restored.details(newCap).getValue(standalone.document))
+                        assertEquals(renamed,restored.libraryDocuments(newCap).single {it.document==standalone.document}.title)
                         assertNull(restored.details(newCap)[unlinked.document])
                         for(member in members)assertEquals(standalone.document,restored.documents(newCap,target.copy(memberLabId=member.id)).single().document)
                         restored.open(newCap,target,standalone.document).use {reader->val b=ByteArray(5);assertEquals(5,reader.readAt(0,b,0,5));assertEquals("%PDF-",String(b,Charsets.US_ASCII))}
@@ -93,9 +125,11 @@ class MedicalFilesOperationAndroidTest {
                         activeRepo.restoreTrash(trashed.id)
                         assertTrue(restored.documents(newCap,target).isEmpty())
                         assertEquals(2,restored.libraryDocuments(newCap).size)
-                        restored.associate(newCap,UUID.randomUUID(),restored.resolveTarget(newCap,target),standalone.document,3)
+                        restored.associate(newCap,UUID.randomUUID(),restored.resolveTarget(newCap,target),standalone.document,4)
                         assertEquals(1,restored.documents(newCap,target).size)
                         reject {runBlocking {ops.libraryDocuments(cap)}}
+                        reject {runBlocking {ops.saveFileInfo(cap,standalone.document,4,3,"old scope must not rename",typed)}}
+                        assertEquals(renamed,restored.libraryDocuments(newCap).single {it.document==standalone.document}.title)
                     }finally {session.revoke()}
                 }finally {file.delete()}
             }finally {cap.close()}

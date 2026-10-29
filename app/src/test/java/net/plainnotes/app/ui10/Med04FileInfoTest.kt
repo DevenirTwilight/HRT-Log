@@ -132,6 +132,32 @@ class Med04FileInfoTest(private val locale: String, private val width: Int, priv
         ui.onAllNodes(hasClickAction()).fetchSemanticsNodes().forEach { assertTrue("${it.config}", it.size.height >= 48 * ui.density.density - 1) }
     }
 
+    @Test fun theExistingEditorPrefillsTheRealNameAndRejectsRatherThanTruncatesBadNames() {
+        setup()
+        val existing=Ops.Detail("LAB_REPORT","2026-10-07","Synthetic Clinic",3)
+        var saved:Pair<String,Ops.Detail>?=null;var cancelled=0
+        ui.setContent {NotesTheme(mode) {FileInfoEditor(existing,{error("The production editor must use the atomic name-and-detail writer")},{cancelled++},
+            initialTitle="report.pdf",onSaveFileInfo={name,detail->saved=name to detail})}}
+        ui.onNodeWithTag("file-info-title").assert(hasText("report.pdf"))
+        val longName="x".repeat(257)
+        ui.onNodeWithTag("file-info-title").performTextReplacement(longName)
+        ui.onNodeWithTag("file-info-title").assert(hasText(longName))
+        ui.onNodeWithTag("file-info-save").performScrollTo().assertIsNotEnabled()
+        ui.onNodeWithTag("file-info-title").performScrollTo().performTextReplacement("   ")
+        ui.onNodeWithTag("file-info-save").performScrollTo().assertIsNotEnabled()
+        ui.onNodeWithTag("file-info-title").performScrollTo().performTextReplacement("bad\u007fname")
+        ui.onNodeWithTag("file-info-save").performScrollTo().assertIsNotEnabled()
+        assertNull(saved)
+        val name="2026年10月雌二醇化验报告.pdf"
+        ui.onNodeWithTag("file-info-title").performScrollTo().performTextReplacement(name)
+        ui.onNodeWithTag("file-info-save").performScrollTo().assertIsEnabled().performClick()
+        assertEquals(name to existing,saved)
+        ui.onNodeWithTag("file-info-title").performScrollTo().performTextReplacement("An unsubmitted change")
+        ui.onNodeWithTag("file-info-cancel").performScrollTo().performClick()
+        assertEquals(1,cancelled);assertEquals(name to existing,saved)
+        shot("editor_name")
+    }
+
     @Test fun institutionIsCappedAndNeverContainsControlCharacters() {
         setup()
         var saved: Ops.Detail? = null

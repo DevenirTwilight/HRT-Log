@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="file_info_title_label">File name</string>
+    <string name="file_info_title_invalid">Enter a non-blank name of at most 256 characters, without control characters.</string>
+    <string name="file_info_conflict">This file changed elsewhere. Open its information again before saving.</string>
+    <string name="file_info_checked">Current file information has been checked. The earlier save outcome cannot be attributed; review the displayed name and details before making a new change.</string>
+</resources>

@@ -1,6 +1,7 @@
 package net.plainnotes.app.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -9,6 +10,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -41,7 +44,12 @@ import java.time.LocalDateTime
     val duplicates = LabBatchRules.duplicates(added) + added.filterNot(LabBatchRules::blank).map { it.code }.filter { it in present }
     val changed = time != Instant.ofEpochMilli(panel.sampled_utc).toLocalHere() || lab.trim() != panel.laboratory.orEmpty() || note.trim() != panel.note.orEmpty()
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
-        Surface(Modifier.fillMaxSize().testTag("lab-panel-detail"), color = MaterialTheme.colorScheme.surface) {
+        // Keep system BACK in this window. A subsequently composed authenticated
+        // file viewer registers above this handler and closes its own page first.
+        androidx.activity.compose.BackHandler(onBack=onDismiss)
+        val initialFocus=remember {FocusRequester()}
+        LaunchedEffect(Unit) {initialFocus.requestFocus()}
+        Surface(Modifier.fillMaxSize().testTag("lab-panel-detail").focusRequester(initialFocus).focusable(), color = MaterialTheme.colorScheme.surface) {
             Column(Modifier.fillMaxSize().systemBarsPadding().imePadding()) {
                 Row(Modifier.fillMaxWidth().padding(start = 4.dp, end = 16.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = onDismiss) { Icon(Icons.Outlined.Close, stringResource(R.string.cancel)) }

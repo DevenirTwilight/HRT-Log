@@ -289,10 +289,16 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
                         owner.publish {
                             val shown=state.value.viewer
                             if(closed || state.value.revoked || presentationEpoch!=epoch || shown !is Viewer.Showing || shown.page!==current.page)false
-                            else {mutable.update {it.copy(viewer=shown.copy(page=next,pageIndex=index,busy=false,pageFailed=false))};true}
+                            else {mutable.update {it.copy(viewer=shown.copy(page=next,pageIndex=index,busy=true,pageFailed=false))};true}
                         }
                     }
-                    if(accepted)releaseLater(owner,current.page) else runCatching {owner.release(next)}
+                    if(accepted)releaseLater(owner,current.page) {
+                        synchronized(this@MedicalAttachmentsController) {
+                            val shown=state.value.viewer
+                            if(!closed && !state.value.revoked && presentationEpoch==epoch && shown is Viewer.Showing && shown.page===next)
+                                mutable.update {it.copy(viewer=shown.copy(busy=false))}
+                        }
+                    } else runCatching {owner.release(next)}
                 }
             }catch(e:CancellationException) {throw e}
             catch(e:Exception) {
@@ -304,8 +310,8 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
             }
         }
     }
-    private fun releaseLater(owner:MedicalAttachmentGateway.Preview,old:Bitmap) {
-        Handler(Looper.getMainLooper()).postDelayed({runCatching {owner.release(old)}},RELEASE_DELAY_MS)
+    private fun releaseLater(owner:MedicalAttachmentGateway.Preview,old:Bitmap,afterRelease:()->Unit) {
+        Handler(Looper.getMainLooper()).postDelayed({runCatching {owner.release(old)}.onSuccess {afterRelease()}},RELEASE_DELAY_MS)
     }
     /** A real pause also discards an unconfirmed selection, never a committed receipt. */
     @Synchronized private fun hidePresentation() {closeViewer();cancelImport()}

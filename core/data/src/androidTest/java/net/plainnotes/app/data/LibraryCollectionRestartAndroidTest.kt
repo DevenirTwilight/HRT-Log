@@ -20,20 +20,14 @@ class LibraryCollectionRestartAndroidTest {
     private fun hash(bytes:ByteArray)=MedicalArchiveCrypto.hex(MessageDigest.getInstance("SHA-256").digest(bytes))
     @Test fun persistentAuthorityChoosesExactlyOldOrVerifiedNewAfterProcessDeath() {
         val args=InstrumentationRegistry.getArguments();val phase=args.getString("generation_phase")
-        assumeTrue(phase in listOf("prepare","verify"))
+        assumeTrue(phase in listOf("source","prepare","verify"))
         val seam=requireNotNull(args.getString("generation_seam"));require(seam in setOf("PREPARED","OBJECTS_COMMITTED","IN_SWITCH","SWITCHED"))
         val app=InstrumentationRegistry.getInstrumentation().targetContext
         val marker=File(app.filesDir,"synthetic-collection-restart-ready")
-        if(phase=="prepare") {
-            check(!marker.exists())
-            // The four fault cases restore the SAME encrypted fixture. Generate
-            // it once, not again inside every60s live-seam startup window. Each
-            // case still authenticates it and reconstructs a fresh target in a
-            // separate process; neither KDF nor any restore work is bypassed.
-            val file=File(app.cacheDir,"synthetic-collection-restart-fixture.cipher")
-            if(seam=="PREPARED") {
-                check(file.createNewFile())
-                LibraryRestoreAndroidTest.SourceBundle(app).use {source->LibraryRestoreAndroidTest.RootFixture(app).use {a->
+        val file=File(app.cacheDir,"synthetic-collection-restart-fixture.cipher")
+        if(phase=="source") {
+            check(seam=="PREPARED" && file.createNewFile())
+            LibraryRestoreAndroidTest.SourceBundle(app).use {source->LibraryRestoreAndroidTest.RootFixture(app).use {a->
                 MedicalArchiveReader.read(a.session.issue(),source.password(),FileInputStream(source.file).channel).use {
                     LibraryRestoreCoordinator(a.access).restore(a.scope,a.session.issue(),UUID.randomUUID(),it)
                 }
@@ -41,7 +35,10 @@ class LibraryCollectionRestartAndroidTest {
                 val session=AttachmentSession(UUID.fromString(scope.dataset),UUID.fromString(scope.epoch))
                 try {LibraryCollectionCapture(a.access).write(scope,session.issue(),UUID.randomUUID(),password(),file.outputStream())}finally {session.revoke()}
                 }}
-            } else check(file.isFile && file.length()>80)
+            return
+        }
+        if(phase=="prepare") {
+            check(!marker.exists());check(file.isFile && file.length()>80)
             val target=LibraryRestoreAndroidTest.RootFixture(app);val original=hash(target.facts());val operation=UUID.randomUUID()
             MedicalCollectionReader.read(target.session.issue(),password(),FileInputStream(file).channel).use {archive->
                 LibraryCollectionRestore(target.access,checkpoint={boundary->if(boundary.name==seam) {

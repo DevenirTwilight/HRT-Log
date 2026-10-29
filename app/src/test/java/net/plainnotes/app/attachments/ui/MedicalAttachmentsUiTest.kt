@@ -50,10 +50,16 @@ class MedicalAttachmentsUiTest(private val locale:String,private val width:Int,p
     private fun shot(name:String) {
         val dir=System.getenv("MED02_UI_SHOTS")?.takeIf {it.isNotBlank()} ?: return
         ui.waitForIdle()
-        val view=ui.activity.window.decorView
-        val bitmap=Bitmap.createBitmap(view.width,view.height,Bitmap.Config.ARGB_8888);view.draw(android.graphics.Canvas(bitmap))
-        val out=File("build/med02-ui-shots/$dir").apply {mkdirs()}
-        File(out,"${name}_${locale}_${width}dp_${if(font==1f)"1x" else "2x"}.png").outputStream().use {bitmap.compress(Bitmap.CompressFormat.PNG,100,it)}
+        val reader=ui.onAllNodesWithTag("attachment-viewer").fetchSemanticsNodes().isNotEmpty()
+        ui.runOnUiThread {
+            val view=if(reader)requireNotNull(org.robolectric.shadows.ShadowDialog.getShownDialogs().lastOrNull {it.isShowing}?.window).decorView else ui.activity.window.decorView
+            val bitmap=Bitmap.createBitmap(view.width,view.height,Bitmap.Config.ARGB_8888)
+            try {
+                view.draw(android.graphics.Canvas(bitmap))
+                val out=File("build/med02-ui-shots/$dir").apply {mkdirs()}
+                File(out,"${name}_${locale}_${width}dp_${if(font==1f)"1x" else "2x"}.png").outputStream().use {bitmap.compress(Bitmap.CompressFormat.PNG,100,it)}
+            } finally {bitmap.recycle()}
+        }
     }
 
     @Test fun listRowsAreLabelledButtonsAndUnavailableRowsAreNotClickable() {
@@ -132,7 +138,7 @@ class MedicalAttachmentsUiTest(private val locale:String,private val width:Int,p
         var closes=0
         ui.setContent {NotesTheme {Box {MedicalAttachmentViewer(viewer,{closes++})}}}
         ui.onNodeWithContentDescription(s(R.string.viewer_page,pdf.title)).assertIsDisplayed()
-        ui.onNodeWithText(s(R.string.viewer_pdf_first_page)).assertIsDisplayed()
+        ui.onNodeWithTag("attachment-viewer-page-number").assert(hasText(s(R.string.med05_page_of,1,1)))
         ui.onNodeWithContentDescription(s(R.string.viewer_close)).assertHasClickAction()
         shot("6_viewer")
         // Revocation: the controller replaces the page with Closed before recycling it.

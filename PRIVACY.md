@@ -26,7 +26,7 @@ CSV, PDF report and visit pack exports are plain files. You choose where to save
 
 ## Encrypted backups (`.pnbak`)
 
-- Encrypted with the password you choose: Argon2id (32 MiB memory, 3 passes, parallelism 1) derives a 256-bit key; AES-256-GCM encrypts the backup (format `PNBAK1`, structured record serialization 11).
+- Encrypted with the password you choose: Argon2id (32 MiB memory, 3 passes, parallelism 1) derives a 256-bit key; AES-256-GCM encrypts the backup (format `PNBAK1`, versioned structured record serialization, selected for the data present).
 - Contains your structured records, including recycle-bin items until you purge them.
 - Does not contain private notes, Notes disguise text, settings or medical file attachments. A .pnbak backup alone is not sufficient to move medical file originals to another phone.
 - A forgotten backup password cannot be recovered.
@@ -35,7 +35,7 @@ CSV, PDF report and visit pack exports are plain files. You choose where to save
 
 - Medical attachments that you explicitly add through the file library or a medical record are stored in the app's private storage as encrypted file objects, with metadata and any explicit relationships recorded in the protected database. A file can be kept without a record, or linked to a visit, a whole blood draw (LabPanel), or one individual result. Whole-draw and single-result relationships stay distinct.
 - The separate complete medical encrypted backup (.pnmedbk2, format PNMEDBK2) includes supported medical files and related records from the authorized collection. It is distinct from the ordinary .pnbak backup and requires the password you choose. Backup destinations are chosen in Android's system file picker and may belong to another app or cloud provider.
-- Internal previews require app authorization. PDF previews show only the first page on Android 9 and newer; on Android 8, a PDF may be saved and backed up but cannot be previewed in the app.
+- Internal previews require app authorization. On Android 9 and newer, the internal PDF reader renders pages on demand and supports page navigation and zoom; JPEG/PNG images also support zoom. The full-screen reader does not persist a plaintext preview file. On Android 8, a PDF may be saved and backed up but cannot be previewed in the app. Locking the app or losing library authorization revokes the reader.
 - Removing a file's link to one record does not delete its encrypted contents, other links, or recover disk space. The current interface does not promise immediate permanent erasure of individual medical attachments. Moving a file to the recycle bin also retains its ciphertext and occupied space. Restoring a file or medical record does not automatically restore quarantined relationships; link it again explicitly. Backups already saved elsewhere are not revoked by removing a link.
 
 ## Imports
