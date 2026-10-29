@@ -9,6 +9,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -44,10 +46,12 @@ import java.time.LocalDateTime
         // Keep system BACK in this window. A subsequently composed authenticated
         // file viewer registers above this handler and closes its own page first.
         androidx.activity.compose.BackHandler(onBack=onDismiss)
+        val initialFocus=remember {FocusRequester()}
+        LaunchedEffect(Unit) {initialFocus.requestFocus()}
         Surface(Modifier.fillMaxSize().testTag("lab-panel-detail"), color = MaterialTheme.colorScheme.surface) {
             Column(Modifier.fillMaxSize().systemBarsPadding().imePadding()) {
                 Row(Modifier.fillMaxWidth().padding(start = 4.dp, end = 16.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(onClick = onDismiss) { Icon(Icons.Outlined.Close, stringResource(R.string.cancel)) }
+                    IconButton(onClick = onDismiss,modifier=Modifier.focusRequester(initialFocus)) { Icon(Icons.Outlined.Close, stringResource(R.string.cancel)) }
                     Text(stringResource(R.string.lab_panel_title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).semantics { heading() })
                 }
                 Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp).testTag("lab-panel-scroll"),
