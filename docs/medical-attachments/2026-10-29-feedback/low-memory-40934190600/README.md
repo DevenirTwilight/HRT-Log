@@ -1,0 +1,3 @@
+# Exact low-memory failure preserved
+
+Run40934190600, job123660585591, artifact12923869325 (ZIP SHA2565b7d22d7d44f3cf721640da6625c8b86e559ac253304961efd7bd8524c9ad632), sourcecfd44c55. API26 guest512MiB/ART192MiB. Instrumentation AutomaticImportAndroidTest exited Process crashed; kernel explicitly records application PID3878 killed by LMK, observed RSS230012KiB at termination (not peak), followed by JIT process3883. Last sampled phase before-wrong-password-kdf;20ms sampled values are not continuous peaks and do not identify every allocation. Logcat-clear failure is not the cause established here. No resource/KDF/fixture limit changed, no failure relabeled PASS. This remains an independent Issue117 risk; current final-head acceptance must determine status.

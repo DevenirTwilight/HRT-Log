@@ -1,3 +1,7 @@
+## 2026-10-29 独立LMK失败证据已确认
+
+PR156 sourcecfd44c55的Featherline低内存run40934190600/job123660585591/artifact12923869325：内核明确LMK杀应用PID3878，终止观测RSS230012KiB非峰值；最后采样阶段before-wrong-password-kdf，不能归咎于logcat-clear，也不能断言已定位所有分配。精确原件/摘录见medical-attachments/2026-10-29-feedback/low-memory-40934190600。保留Issue117，未调整RAM/heap/KDF/夹具/预算，最终源码原生与低内存仍待验收。PR153已MERGED aeb56839，主线CI正在执行；155当前7710d670，156当前e3e81a69已同步该主线并保留双方文档。
+
 ## 2026-10-29 PR153 已受保护合并，156整合检查点
 
 PR153最终源码dfa7f6e9的全部必需检查通过（Android两job、JVM、科学、API26/29/35及安全），无未解决评审；已正常squash合并为aeb56839d708c325b5330e62e672be968992fa42，未用admin绕过。正式主线开始复验，APK未构建交付。PR156已一次性同步这条已验收主线，保留双方全部HANDOFF与需求、校准实现和根节点测试修正；本轮自身仍Draft。新原生页码先更新/按钮等待旧页释放的测试时序已改为观察真实按钮恢复后再保留原assert。Featherline低内存run40934190600 job123660585591原始Process crashed与工件12923869325待独立核查，不能凭failed to clear log断言LMK。PR155根查询修正后API29 job123660106334仍有Snapshot线程失败，必须保留并继续定位，不能称已修复。

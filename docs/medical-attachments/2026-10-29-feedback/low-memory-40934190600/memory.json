@@ -1,0 +1,1 @@
+{"phase":"before-wrong-password-kdf","api":26,"sampledNotPeak":true,"sampleIntervalMs":20,"maxHeapBytes":201326592,"javaObservedBytes":11826264,"nativeObservedBytes":18473968,"pssObservedKib":147969,"samples":616}
