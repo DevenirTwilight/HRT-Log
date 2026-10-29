@@ -632,7 +632,10 @@ class MedicalAttachmentProductAndroidTest {
             // Only generated emulator evidence. Preserve it before AGP may remove
             // the target APK/private directory after instrumentation completes.
             require(name.matches(Regex("[a-z0-9-]+")))
-            val command="sh -c 'run-as net.plainnotes.app cat files/synthetic-reader-$name.png > /data/local/tmp/hrt-synthetic-reader-$name.png && run-as net.plainnotes.app cat files/synthetic-reader-$name.json > /data/local/tmp/hrt-synthetic-reader-$name.json && echo HRT_SYNTHETIC_CAPTURE_OK'"
+            val script="run-as net.plainnotes.app cat files/synthetic-reader-$name.png>/data/local/tmp/hrt-synthetic-reader-$name.png&&run-as net.plainnotes.app cat files/synthetic-reader-$name.json>/data/local/tmp/hrt-synthetic-reader-$name.json&&echo HRT_SYNTHETIC_CAPTURE_OK"
+            // API26 UiAutomation uses Runtime.exec(String), which does not group
+            // quoted shell arguments. Keep the fixed script one token for sh -c.
+            val command="sh -c "+script.replace(" ", '$'.toString()+"{IFS}")
             val copied=android.os.ParcelFileDescriptor.AutoCloseInputStream(instrumentation.uiAutomation.executeShellCommand(command))
                 .bufferedReader().use {it.readText().trim()}
             assertEquals("Generated native evidence must be copied before test exit","HRT_SYNTHETIC_CAPTURE_OK",copied)
