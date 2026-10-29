@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -52,7 +51,7 @@ internal fun Reason.messageRes()=when(this) {
 /** A file-library row's picture: the first page when it is ready, otherwise the type tile (never an empty frame). Decorative: the row names the file. */
 @Composable internal fun RowThumb(kind:FileKind,thumb:Thumb?,modifier:Modifier=Modifier) {
     val ready=(thumb as? Thumb.Ready)?.bitmap?.takeUnless {it.isRecycled}
-    Box(modifier.size(width=56.dp,height=72.dp).clearAndSetSemantics {},contentAlignment=Alignment.Center) {
+    Box(modifier.size(width=56.dp,height=72.dp),contentAlignment=Alignment.Center) {
         if(ready!=null) Surface(Modifier.fillMaxSize(),shape=MaterialTheme.shapes.small,color=Color.White,border=androidx.compose.foundation.BorderStroke(1.dp,MaterialTheme.colorScheme.outlineVariant)) {
             GuardedBitmap(ready,Modifier.fillMaxSize().testTag("library-thumb"))
         } else FileTile(kind,true)

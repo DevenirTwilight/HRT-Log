@@ -119,7 +119,7 @@ class Med05ViewerUiTest(private val locale: String, private val width: Int, priv
         val asked = mutableListOf<UUID>()
         ui.setContent { NotesTheme(mode) { MedicalFileLibraryScreen(LibraryState(listOf(summary), emptyMap(), 1, 1), LibraryCapabilities(standaloneImport = true, search = true), {}, {}, {}, {}, {}, {}, {}, {},
             thumbs = mapOf(FileThumbnails.Key(id, Size.ROW) to ready), onThumb = { asked += it.document }) } }
-        ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-thumb"))
+        ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-doc:$id"))
         ui.onNodeWithTag("library-thumb", useUnmergedTree = true).assertExists()
         assertEquals(listOf(id), asked.distinct())
         ui.onAllNodesWithText("PDF", useUnmergedTree = true).assertCountEquals(0)
