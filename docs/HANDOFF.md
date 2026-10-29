@@ -1,3 +1,7 @@
+## PR156 API35真实产品测试已通过，截图收集器修正 — 2026-10-29
+
+sourcea194cb48 run40941683948/job123686784063：fullscreenReaderRenamesThreePagePdfAndLargeImageThenReturnsToTheSameFile的instrumentation BUILD SUCCESSFUL，完整改名/三页PDF/图片缩放/返回/重开流程已通过；脚本随后49行断言失败，因PNG magic写成双重转义ASCII而非PNG头字节。现仍严格检查非空及准确8字节89504e470d0a1a0a，用明确字节常量避免转义错误，不取消截图/JSON采集。该次job整体FAIL，后续core-med03阶段未执行，不能以UI通过冒充整项CI/备份恢复通过。最终源码需完整CI。原失败保留；153已合并aeb56839，155确认流程定向及AndroidTest编译PASS后已推送c0e3ea93。
+
 ## 最终原生/UI测试精确同步修正 — 2026-10-29
 
 PR156 source3294ba6e API26 run40938869568/job123677175796已到原596行重启后列表查找，前面的独立图片查看/缩放/返回已执行；新Activity的LazyColumn从顶部开始，目标文件卡在分类下方未组合。现用已有reveal真实滚动后查指定UUID，再核对新名；不直注URI，不绕过重启。PR155 source7710d670 Android run40936737557/job123669608636的原始HTML确认MedicalHomeTest:110是找不到medical-correction-confirm，而非DB撤回断言失败。现在先使真实撤回按钮进入可见区并等待确认按钮出现，再保留实际点击及数据库completed_utc=null断言；无sleep/不改10秒上限。定向回归及最终CI待跑，旧失败不改PASS。PR153已合并aeb56839。

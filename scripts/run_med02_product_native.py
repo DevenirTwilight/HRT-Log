@@ -46,7 +46,7 @@ def main():
             for picture in pictures:
                 for suffix in ('png', 'json'):
                     value = subprocess.check_output(['adb', 'exec-out', 'run-as', 'net.plainnotes.app', 'cat', f'files/synthetic-reader-{picture}.{suffix}'])
-                    assert value and (suffix != 'png' or value.startswith(b'\x89PNG\r\n\x1a\n'))
+                    assert value and (suffix != 'png' or value.startswith(bytes((137,80,78,71,13,10,26,10))))
                     (target / f'{picture}.{suffix}').write_bytes(value)
         reset(f'after-{name}')
 
