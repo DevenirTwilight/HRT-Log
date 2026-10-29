@@ -1,3 +1,7 @@
+## 2026-10-29 最终串行定向回归检查点
+
+PR156生产/测试源码6e6822d7：串行246项PASS，0失败/0skip（MedicalViewerPages7、Med05ViewerUi224、MedicalHomeConfirmFlow1、MedicalAttachmentsController14），2m29s，XML在medical-attachments/2026-10-29-feedback/local/serial-final。App AndroidTest Kotlin编译PASS。此前并行启动两个Gradle实例争用同一binary结果文件，首轮NoSuchFileException为本地执行安排错误，原日志/workspace/scratch/156-page-transition.log保留，不能计作产品FAIL或PASS；串行完整相关回归消除了争用。061fe4de独立低内存run40925404991的library/Featherline两job均PASS，不能代替最终SHA验收。当前153/155受保护auto-merge已启用，Android检查未结束；156保持Draft等待最终原生结果，API26焦点修正尚未得到原生PASS。未签名/交付新APK，真机/人工TalkBack NOT_RUN。
+
 ## API26 BACK 具体原因与修正候选 — 2026-10-29
 
 原失败树明确显示lab-panel-lab的Focused=true，BACK后仍在panel，符合初次系统BACK先交给IME的路径；先前只加BackHandler不足。Dialog现在打开时显式聚焦关闭控件，避免浏览抽血详情时自动聚焦实验室文本输入。用户主动编辑仍保留键盘正常返回语义。精确新SHA原生验证待完成，不标PASS；不改测试为重复BACK、不绕过窗口。翻页两页上限修复定向回归仍执行中。

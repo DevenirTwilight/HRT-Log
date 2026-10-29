@@ -22,3 +22,7 @@ Shared native test geometry reads now resolve `SemanticsNode.boundsInRoot` insid
 - New-source native API26/29/35, low-memory and full required CI: PENDING.
 - Physical device, manual TalkBack: NOT_RUN.
 - #156 remains Draft. Original failures are not relabeled PASS. #153/#155 retain independent PRs; old uncommitted MED03 worktree is preserved and excluded.
+
+## Serial final targeted result
+
+Implementation/test source6e6822d7:246 tests PASS,0 failures/errors/skips; XML in local/serial-final. App AndroidTest Kotlin compilation PASS. Earlier overlapping local Gradle invocations collided in the shared binary-result directory (NoSuchFileException), preserved at /workspace/scratch/156-page-transition.log; that run is invalid as product acceptance. All affected controller/viewer/navigation tests were then executed together serially, BUILD SUCCESSFUL in2m29s. Native final-head checks remain PENDING; physical device/TalkBack NOT_RUN. Low-memory run40925404991 passed both jobs for061fe4de, with the setup timing boundary described above unchanged.
