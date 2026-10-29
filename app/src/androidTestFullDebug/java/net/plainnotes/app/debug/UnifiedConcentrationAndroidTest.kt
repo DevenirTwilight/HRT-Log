@@ -34,7 +34,7 @@ class UnifiedConcentrationAndroidTest {
     @Test fun unifiedUiHasOneEstimateAndOneChart() {
         await("e2-chart");noSelector();await("e2-estimate-card");ui.onAllNodesWithTag("research-not-personal").assertCountEquals(0)
         for(id in listOf(R.string.ui12_curve_title,R.string.calib_title,R.string.pk_model_title))ui.onNodeWithText(ui.activity.getString(id)).assertExists()
-        ui.onNodeWithTag("calibration-switch").performScrollTo().assertIsNotEnabled()
+        ui.onNodeWithTag("calibration-switch").performScrollTo().assertIsEnabled()
         ui.onNodeWithText("pmol/L").performScrollTo().performClick()
         ui.onNodeWithTag("e2-chart").performScrollTo().performTouchInput { click(center) }
         ui.waitUntil(10_000){ui.onAllNodesWithTag("chart-readout").fetchSemanticsNodes().isNotEmpty()}
@@ -62,10 +62,10 @@ class UnifiedConcentrationAndroidTest {
         ui.runOnUiThread { ui.activity.syntheticLabPgMl=9000.0;ui.activity.syntheticHistoryRevision++ }
         await("e2-chart");ui.waitForIdle();org.junit.Assert.assertEquals(value,scenario())
         org.junit.Assert.assertArrayEquals(before,ui.activity.lastPreview!!.values,0.0)
-        // UI-12: labs are dots on the total (no separate list); calibration stays unavailable with sublingual doses.
+        // UI-12: labs are dots on the total (no separate list). SL-CAL-02 step 4: with sublingual doses the switch is usable (off here); labs only scale the total when it is on.
         ui.onAllNodesWithTag("m2-labs-separate").assertCountEquals(0)
-        ui.onNodeWithTag("calibration-unavailable-sl").performScrollTo().assertExists()
-        ui.onNodeWithTag("calibration-switch").assertIsNotEnabled()
+        ui.onAllNodesWithTag("calibration-unavailable-sl").assertCountEquals(0)
+        ui.onNodeWithTag("calibration-switch").performScrollTo().assertIsEnabled().assertIsOff()
     }
     @Test fun mixedRoutesAreOneTotalAndOnlyOtherRoutesUseCompatibilityCalibration() {
         await("e2-chart");ui.runOnUiThread { ui.activity.syntheticExtraRoute="ORAL" }

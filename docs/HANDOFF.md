@@ -1,3 +1,33 @@
+## 校准历史时间回归补验 — 2026-10-29
+
+此前d31cfd95的E2Calibration定向测试及AndroidTest Kotlin编译PASS（5m48s）。补充校准实际服药时间适配函数，仍使用同一HistoricalContext冻结解析规则；新增合成回归覆盖较早规则快照补全、无快照拒绝、IMPORT不补猜、删除和SKIPPED不计入。该新增回归正在/workspace/scratch/153-historical-regression.log执行，尚未写PASS。PR156当前061fe4de部分JVM/安全原生通过，完整Android/低内存待完成；两个PR无未解决行内讨论。PR153/156正文已更新。下一步读取本地测试→最终SHA必需CI→有据合并，不再扩展功能。
+
+## 2026-10-29 校准接手检查点
+
+PR153：浓度计算通过 HistoricalContext.resolved 使用已冻结规则补齐历史上下文，而此前 doseTimes 只解码记录本身，可能遗漏有可信规则快照的较早 E2 服药，导致24小时门槛错误拒绝；现统一使用同一可信解析器，不采用当前用药配置、不改变科学门槛。真实原生测试坐标与校准值读取改在主线程执行；SnapshotStateObserver 根因仍待精确HEAD原生复验。定向测试与CI尚未完成，不宣称合并或实际设备通过。PR156原分支已推送061fe4de，Ui09四项及AndroidTest编译通过，原生CI待验收。真机和人工TalkBack NOT_RUN；未签名或交付APK。
+
+## 校准反馈定向验证 — 2026-10-29
+
+#153候选：新增最终E2适配/引擎19项 + 四语失败/旧值清除16项=35项全部通过、0skip；App AndroidTest Kotlin编译通过。之前四语/小屏/明暗完整Ui12 272项也通过。第一次编译使用不存在的retry资源失败，已最小改为现有attach_retry并通过，保留原/tmp日志。未改M2/CalibrationEligibility/参数；新增真实数据库读取失败清空旧结果、提供明确失败与重试，避免旧模型被误认当前成功。
+
+真实MainActivity原生覆盖现在分为两个独立进程：首次用已保存21次合成SL记录+2次E2拟合、切换改变数字、真实BACK与重进；force-stop后第二个PID读取同一库和开关、重新拟合并写中性测试receipt。API26/29/35由现有CI在隔离模拟器执行，执行前仍NOT_RUN。文件重命名/全屏在独立医疗反馈PR，不覆盖彼此源码；已定位手势逐事件累积生产缺陷，32个目标回归修复后通过，完整native仍待CI。
+
+## 三项用户反馈接手 — 2026-10-29（进行中，未宣称验收）
+
+本轮授权见REQUIREMENTS §169。基线主线d95952ee，Build39已交付但不含仍OPEN的#153校准UI；Build39登记在#155，不能冒充新功能验收。继续#153原分支修正校准接线与状态，不新建重复校准PR。其旧PR事件40875393451的android失败为MedicalHomeConfirmFlowTest:110（原始job123452781579）；同源push成功，仍保留原始FAIL，尚未证明根因，不盲目重跑。已正常合并d959主线并保留HANDOFF双方内容。
+
+文件所有权：file_rename代理负责MedicalAttachmentOperations/Gateway/Flow、library Controller/Host/编辑区和rename回归；fullscreen_reader代理负责MedicalAttachmentsUi查看器与native产品阅读场景/样本/截图；主负责人负责#153的ConcentrationScreen/E2Calibration与显示批准、文档、统一构建和最终CI。共享资源拆成独立四语XML。禁止同时跑Gradle挤占内存；签名仍须最终源验收及有效授权。
+
+目前发现与处理中的校准边界：produceState输入变更需隔离旧k、显式计算失败而非无限加载、未知单位不能被当成无化验、非法时区不回退当前系统时区、最早/最后服药时间不依赖列表顺序。保留共同系数、信息增益门及既有CalibrationEligibility，未动M2或科研归档。午夜精度现有模型不能区分，继续保守并给明确说明，不造时间、不贸然迁移。所有新行为仍待实际测试，不把候选代码标PASS。
+
+## SL-CAL-02 步骤 4：校准接到浓度页 — 2026-10-29（分支 feature/slcal02-ui-20261029）
+
+- 已完成：校准开关在有舌下记录时可用；合计 = B + k·((M2−B)+N)（`ui/E2Calibration.kt`、`ui/E2Total.kt`、`ConcentrationScreen.kt` 的 `SublingualCalibrationCard`）；四语言文字；`E2CalibrationTest`、迁移的 UI-12/统一页测试；两条追加式显示批准；报告 `docs/audits/product-quality-2026-10/81-slcal02-calibration-ui.md`，截图 `docs/ui-audit/2026-10-29-slcal02-ui/`（REQUIREMENTS §167）。
+- 验证：合并 UI-12 后全量 `:app:testFullDebugUnitTest` 3451 测试 0 失败，`lintFullDebug` 通过；Python 研究/审计/脚本测试与账本检查通过。
+- 依赖：#149（UI-12）、#150（MED-04）、#151（引擎）、#152（MED-05）均已合并到主线；本 PR 基于最新主线。
+- 下一步：本 PR 合并且主线 CI 通过后，做 Build 39 私下签名交付（负责人 2026-10-29「都做完给apk」已恢复；沿用既有私有正式签名、versionCode ≥ 39、不发公开 Release/tag；账本与收据走单独 docs PR）。
+- 待负责人复核：阈值 0.75；E1 午夜占位；法文 320dp 2× 横轴标签重叠（UI-12 遗留）；真机 / TalkBack 未做。
+
 ## 接手最终主线回归修正 — 2026-10-29
 
 #152 已合并 `3ce3b739990d878cc2060d0f9128fd42e7b5f5ed`，#151 已合并 `14574302e4070c2b9bc885e8a8776ad4a94e16ab`。#151 最终源码 `acfa2cca0181f178b764283c76e6de1a1096dd7f` 与 squash 合并树一致；精确头全部检查成功。最终主线 Science `40873642195`、安全 `40873641935` 成功；Android `40873641886` 的 device-tests job `123446801031` 失败，其余四 job 成功，不得报告主线全绿。

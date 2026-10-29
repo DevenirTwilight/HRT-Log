@@ -56,8 +56,9 @@ class UnifiedConcentrationUiTest {
         ui.onNodeWithText(text(R.string.uc_original_assumptions)).assertExists()
         closeWindow()
         ui.onNodeWithText(text(R.string.legend_band_outer)).assertDoesNotExist()
-        ui.onNodeWithTag("calibration-switch").performScrollTo().assertIsNotEnabled()
-        ui.onNodeWithTag("calibration-unavailable-sl").assertExists()
+        // SL-CAL-02 step 4: the switch is usable with sublingual doses (it starts off in this harness); the old "unavailable" note is gone.
+        ui.onNodeWithTag("calibration-switch").performScrollTo().assertIsEnabled().assertIsOff()
+        ui.onAllNodesWithTag("calibration-unavailable-sl").assertCountEquals(0)
     }
     // UI-12 migration of m2ShowsNoCurrentNumberAndItsCurveIsTheFixedKernel:
     //  kept: the curve is exactly the frozen M2 scenario value; no selector; no Legacy card; no second caveat stacked on the page;
@@ -97,8 +98,14 @@ class UnifiedConcentrationUiTest {
         ui.onNodeWithText(text(R.string.legend_labs)).performScrollTo().assertExists()
         ui.onAllNodesWithTag("m2-labs-separate").assertCountEquals(0)
         ui.onNodeWithText(text(R.string.m2_observed_labs)).assertDoesNotExist()
-        ui.onNodeWithTag("calibration-switch").performScrollTo().assertIsNotEnabled()
-        ui.onNodeWithTag("calibration-unavailable-sl").assertExists()
+        ui.onNodeWithTag("calibration-switch").performScrollTo().assertIsEnabled().assertIsOff()
+        ui.onAllNodesWithTag("calibration-unavailable-sl").assertCountEquals(0)
+        // SL-CAL-02: turning the calibration on may scale the displayed total, but never the frozen M2 kernel values.
+        ui.onNodeWithTag("calibration-switch").performClick()
+        ui.waitUntil(30_000){ui.onAllNodesWithTag("calibration-switch").fetchSemanticsNodes().isNotEmpty()};awaitChart();ui.waitForIdle()
+        assertArrayEquals(before,ui.activity.lastPreview!!.values,0.0)
+        ui.onNodeWithTag("calibration-switch").performScrollTo().performClick()
+        awaitChart();ui.waitForIdle()
         ui.onNodeWithText(text(R.string.model_e2_sl)).assertDoesNotExist()
         openWindow()
         ui.onNodeWithText(text(R.string.model_e2_sl)).assertDoesNotExist()
@@ -167,7 +174,7 @@ class UnifiedConcentrationUiTest {
             assertTrue("total ($shown) must exceed the sublingual part ($route)",shown>expected().toInt())
             ui.onAllNodesWithText(text(R.string.m2_partial_scope)).assertCountEquals(0)
             ui.onNodeWithText(text(R.string.pk_current)).assertDoesNotExist()
-            ui.onNodeWithTag("calibration-switch").performScrollTo().assertIsNotEnabled()
+            ui.onNodeWithTag("calibration-switch").performScrollTo().assertIsEnabled()
         }
         ui.runOnUiThread { ui.activity.syntheticExtraRoute="EV" }
         ui.waitUntil(30_000){ui.onAllNodesWithText(text(R.string.unsupported_sl_ev)).fetchSemanticsNodes().isNotEmpty()}

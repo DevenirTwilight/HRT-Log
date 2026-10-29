@@ -14,7 +14,9 @@ class ConcentrationPreview(val model: ResearchModel, val timeH: DoubleArray, val
     /** The single time base of this snapshot (D-1): curve, "now" line, readouts and the shown calculation time. */
     val asOfH: Double? = null,
     /** UI-12: number of sublingual doses the snapshot was built from (display count only; no model value depends on it). */
-    val doseCount: Int = 0) {
+    val doseCount: Int = 0,
+    /** SL-CAL-02: hours of the sublingual doses the snapshot was built from, ascending (read-only; the lab calibration needs "hours since the last dose"). */
+    val sublingualDoseH: DoubleArray = doubleArrayOf()) {
     fun valueAt(hour: Double): Double? = exact?.invoke(hour)
     companion object {
         fun pending(model: ResearchModel) = ConcentrationPreview(model,doubleArrayOf(),doubleArrayOf(),null,
@@ -69,7 +71,7 @@ class ConcentrationPreview(val model: ResearchModel, val timeH: DoubleArray, val
             val values=DoubleArray(x.size){exact(x[it])};val current=exact(nowH)
             constructionCache=null
             return ConcentrationPreview(model,x,values,current,selected.id,::exact,
-                anchor,single,peak,origin,nowH,doses.size)
+                anchor,single,peak,origin,nowH,doses.size,DoubleArray(doses.size){doses[it].atHour})
         }
     }
 }

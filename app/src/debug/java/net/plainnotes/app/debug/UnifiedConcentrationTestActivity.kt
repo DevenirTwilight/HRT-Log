@@ -74,7 +74,7 @@ class UnifiedConcentrationTestActivity : ComponentActivity() {
                 SideEffect { lastPreview=preview }
                 ConcentrationScreen(state,result,false,70.0,ConcSettings(pmol,calibrate,net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE),
                     {pmol=it.pmol;calibrate=it.calibrate},{},{},{},pad,records,state.profiles,preview=preview,referenceNotice=status,basisNotice=basis,
-                    e2NonSublingual=nonSublingual,doseTimes=records.mapNotNull{it.taken_utc}.map{java.time.Instant.ofEpochMilli(it)})
+                    e2NonSublingual=nonSublingual,doseTimes=records.mapNotNull{it.taken_utc}.map{java.time.Instant.ofEpochMilli(it)},labs=labs)
             },{now.plusMillis(clockShiftMillis)}, refreshMillis = refreshMillis, previewComputer = { audit,model,hour ->
                 kotlinx.coroutines.delay(previewDelayMillis)
                 check(!previewFails)

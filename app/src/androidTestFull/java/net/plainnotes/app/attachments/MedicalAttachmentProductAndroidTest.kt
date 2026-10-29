@@ -79,11 +79,15 @@ class MedicalAttachmentProductAndroidTest {
      * performScrollTo() aligns a row with the viewport edge, which on a 320x640 screen is behind the status/navigation bars and
      * the floating add button. A person scrolls until the row is comfortably inside; so does this, with real swipes on the list.
      */
+    private fun bounds(node:SemanticsNodeInteraction):androidx.compose.ui.geometry.Rect {
+        val semantic=node.fetchSemanticsNode()
+        return ui.runOnIdle {semantic.boundsInRoot}
+    }
     private fun scrollIntoComfort(list:String,node:SemanticsNodeInteraction) {
         node.performScrollTo()
         repeat(4) {
-            val root=ui.onAllNodes(isRoot()).onFirst().fetchSemanticsNode().boundsInRoot
-            val bounds=node.fetchSemanticsNode().boundsInRoot
+            val root=bounds(ui.onAllNodes(isRoot()).onFirst())
+            val bounds=bounds(node)
             val margin=root.height*0.2f
             val shift=when {bounds.bottom>root.bottom-margin->-(bounds.bottom-(root.bottom-margin)+16f)
                 bounds.top<root.top+margin->(root.top+margin-bounds.top)+16f else->0f}
