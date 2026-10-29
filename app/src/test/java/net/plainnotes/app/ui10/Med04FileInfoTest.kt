@@ -77,7 +77,9 @@ class Med04FileInfoTest(private val locale: String, private val width: Int, priv
         ui.onNodeWithTag("library-unsorted").assert(hasText(ui.activity.resources.getQuantityString(R.plurals.med04_to_sort_body, 2, 2), substring = true)).performClick()
         assertEquals(1, sorted)
         ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-category:LAB_REPORT"))
-        ui.onNodeWithTag("library-category:LAB_REPORT").assertIsEnabled().assertHasClickAction().assert(hasText("1", substring = true)).performClick()
+        ui.onNodeWithTag("library-category:LAB_REPORT").assertIsEnabled().assertHasClickAction()
+        ui.onNode(hasText("1") and hasAnyAncestor(hasTestTag("library-category:LAB_REPORT")), useUnmergedTree = true).assertExists()
+        ui.onNodeWithTag("library-category:LAB_REPORT").performClick()
         assertEquals(FileCategory.LAB_REPORT, category)
         ui.onNodeWithTag("library-category:PRESCRIPTION").assert(SemanticsMatcher.expectValue(SemanticsProperties.Selected, true))
         ui.onNodeWithTag("library-category:LAB_REPORT").assert(SemanticsMatcher.expectValue(SemanticsProperties.Selected, false))
@@ -122,7 +124,7 @@ class Med04FileInfoTest(private val locale: String, private val width: Int, priv
         ui.onNodeWithTag("file-info-save").performScrollTo().performClick()
         assertEquals(Ops.Detail("PRESCRIPTION", "2026-10-07", "New Clinic", 3), saved)
         ui.onNodeWithTag("file-info-date-clear").performScrollTo().performClick()
-        ui.onNodeWithTag("file-info-category:PRESCRIPTION").performClick()   // tap again clears the category
+        ui.onNodeWithTag("file-info-category:PRESCRIPTION").performScrollTo().performClick()   // tap again clears the category
         ui.onNodeWithTag("file-info-institution").performTextReplacement("   ")
         ui.onNodeWithTag("file-info-save").performScrollTo().performClick()
         assertEquals(Ops.Detail(null, null, null, 3), saved)
@@ -153,9 +155,13 @@ class Med04FileInfoTest(private val locale: String, private val width: Int, priv
         assertEquals("Synthetic Clinic", draft.institution)
         assertNull(draft.date)
         shot("add_flow_info")
-        val off = LibraryCapabilities(standaloneImport = true)
-        ui.setContent { NotesTheme(mode) { AddDocumentDetails(draft, off, { draft = it }, {}, {}, {}) } }
+    }
+
+    @Test fun theAddFlowOffersNoInformationFieldsWithoutTheCategoriesCapability() {
+        setup()
+        ui.setContent { NotesTheme(mode) { AddDocumentDetails(ImportDraft("synthetic.pdf", "Synthetic title"), LibraryCapabilities(standaloneImport = true), {}, {}, {}, {}) } }
         ui.onAllNodesWithTag("add-document-institution").assertCountEquals(0)
+        ui.onAllNodesWithTag("add-document-date").assertCountEquals(0)
     }
 
     @Test fun filePageShowsTheEnteredFactsAndOffersEditingOnlyWhenAllowed() {
@@ -168,7 +174,11 @@ class Med04FileInfoTest(private val locale: String, private val width: Int, priv
         ui.onNode(hasText("Synthetic Clinic") and hasAnyAncestor(hasTestTag("file-detail-facts"))).assertExists()
         ui.onNode(hasText("Oct 7, 2026") and hasAnyAncestor(hasTestTag("file-detail-facts"))).assertExists()
         shot("file_page_info")
-        ui.setContent { NotesTheme(mode) { MedicalFileDetailPage(DocumentDetail(report, emptyList(), inBin = true), on, { Box(Modifier.fillMaxSize()) }, {}, {}, {}, {}, {}, {}, onEditInfo = { edits++ }) } }
+    }
+
+    @Test fun aFileInTheBinOffersNoEditing() {
+        setup()
+        ui.setContent { NotesTheme(mode) { MedicalFileDetailPage(DocumentDetail(report, emptyList(), inBin = true), on, { Box(Modifier.fillMaxSize()) }, {}, {}, {}, {}, {}, {}, onEditInfo = {}) } }
         ui.onAllNodesWithTag("file-detail-edit-info").assertCountEquals(0)
     }
 }
