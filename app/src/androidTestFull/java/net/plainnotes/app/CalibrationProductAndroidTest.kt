@@ -68,12 +68,13 @@ class CalibrationProductAndroidTest {
             }
         } }
         val preview=ConcentrationPreview.compute(ResearchHistoricalSlAdapter.audit(records,emptyMap(),nowH),ResearchModel.M2,nowH)
-        runBlocking { repo.saveLabs(listOf(30L,54L).map { ago ->
+        // saveLabs writes ONE sample time per call (a lab panel), so each draw is its own call.
+        runBlocking { listOf(30L,54L).forEach { ago ->
             val sample=now.minusSeconds(ago*3600)
             val expected=checkNotNull(preview.valueAt(ConcentrationCalculator.hours(sample)))
-            LabValueEntity(analyte_code="E2",value=preview.anchor.background+1.6*(expected-preview.anchor.background),unit="pg/mL",
-                sampled_utc=sample.toEpochMilli(),sampled_zone="UTC")
-        }) }
+            repo.saveLabs(listOf(LabValueEntity(analyte_code="E2",value=preview.anchor.background+1.6*(expected-preview.anchor.background),unit="pg/mL",
+                sampled_utc=sample.toEpochMilli(),sampled_zone="UTC")))
+        } }
         model.refresh()
         ui.waitUntil(30_000) { model.extra.value.records.size==21 && model.extra.value.labs.size==2 }
         navigate(Destination.CONCENTRATION)
