@@ -1,3 +1,13 @@
+## MED-03 已合并 + Build38 私人交付 — 2026-10-28
+
+- **MED-03 已合并**：PR #145 → 主线 `64fca05b955516bd54d835e21a4708d561bdffb0`（含 Room 22 独立 LAB_PANEL、独立医疗文件库、整次抽血报告关联、record-first 附件、PNMEDBK2 v1/v2 备份恢复、restore 接受独立文件）。合并前精确头 `c78480e5` 上全部必需检查和 `run_med02_product_native.py` 真实两个 MainActivity/SAF 用例及全部重启脚本 SUCCESS（PR 运行 40763719638）；合并前最后一轮头 `cc7689a3` 的两个环境性失败（`android` 在 sdkmanager 阶段退出、`library-api26-512m` 低内存启动超时）各重跑一次并在 PR 上说明。
+- **主线 CI（64fca05b，push 运行 40784374425）**：jvm、android、device-tests、attachment-poc-compatibility 26、Science、MED-02 安全均 SUCCESS；**attachment-poc-compatibility 29 失败**：`InAppNavigationLockAndroidTest.centerDialogsBackNavigationKeepsSessionAndNeverLaunchesFiles` 在点开“文件”页后立即 `performScrollToNode`，此时库列表尚未加载（`could not find any node that satisfies TestTag = library`）——MED-03 把文件库改成异步加载后暴露的测试竞态，不是产品错误；已对失败任务重跑一次，并在本记录所在 PR 里让测试先等待 `library` 出现（不缩短超时、不删断言）。
+- **Issue #144**：合并后关闭，评论说明实现范围与 NOT_RUN（真机、人工 TalkBack、硬件断电）。
+- **Build38 私人交付（负责人明确要求“加个步骤签名给我”）**：从主线 `64fca05b` 干净独立工作树，加源码外 `version38.init.gradle`（只把 versionCode 37→38，哈希见收据）构建 fullRelease；只用原正式证书 `989ba045…79b1`（私有备份仓库 DevenirTwilight/- 确认 Private，只读克隆到受限临时目录，签后删除，原备份未改）。成品 `HRT-Log-build38-full-official.apk` 14,433,438 字节，SHA-256 `9097607bea5c5460c976efd1869f0ac7ba92da9961f00ded28613d1fd4b958a3`；v2/v3 通过，包名 net.plainnotes.app/38/0.2.0，四 ABI、所有 64 位 ELF LOAD 与 ZIP 16KiB 对齐、无 INTERNET、非 debug、无测试 provider，签名前后 324 个业务条目逐字节相同。核验收据 `docs/delivery/build38-private-verification.json`（不含私钥、密码、下载链接）；账本追加 38，源码 versionCode 下限同步 38。会话私有文件发送，**不入 Git/公共 CI/Release/tag**；真机安装和人工 TalkBack 为 NOT_RUN。可直接覆盖安装；勿卸载、勿清数据；覆盖前先导出完整备份。
+- 此处理的 PR 同时包含上述测试竞态修复；其余研究/UI 工作见下面各节（SL-CAL-01 已合并 `65378035`，主线 CI 全绿；UI-12 在分支 `feature/ui12-concentration-20261028` 进行中）。
+
+---
+
 ## MED-03 精确头 4465f518 必需检查全部通过 — 2026-10-28（PR #145 仍 Draft，待本记录提交后的最终 CI、Ready、受保护合并）
 
 - 精确头 `4465f5187c933583e42a118eee637bdb1ab22a63`。**PR 事件运行 40756012781 全部 SUCCESS**：android、device-tests（真实执行 `run_med02_product_native.py`：两个 MainActivity/SAF 产品用例与 3 个核心 MED-03 原生用例；之后 persistent/restore/gate2/b3/lab-panel/undo/medical-records 等全部重启脚本均 `OK`，Gradle BUILD SUCCESSFUL）、jvm、attachment-poc-compatibility 26/29、science-change-gate；security-native 26/27/29/35 与 featherline/library 512MiB 低内存任务同头 SUCCESS。
