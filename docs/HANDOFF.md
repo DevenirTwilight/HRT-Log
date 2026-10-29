@@ -1,3 +1,7 @@
+## PR155 原始节点读取剩余路径 — 2026-10-29
+
+5fb1bbf8原生失败仍保留。共享bounds helper虽然已把坐标放主线程，仍先fetchSemanticsNode()触发单节点诊断打印；现所有自定义坐标查询都直接用collection.fetchSemanticsNodes().single，再主线程读坐标，严格保留唯一节点要求，根查询保持原first语义。真实点击/滚动/SAF和原断言不改。准确新SHA原生待验证，不声称因果关系已完整证明。PR153已合并aeb56839；本PR待同步新主线并验收，Build39仍为原始交付，无新APK。
+
 ## PR155 根节点诊断快照修正 — 2026-10-29
 
 df7d1010仍复现线程异常。进一步核对Compose ui-test1.9.3源码：fetchOneOrThrow先在调用线程保存整节点printToString，再返回节点；旧bounds helper在主线程读取坐标前仍调用这个单根节点路径。现仅把根查询改为collection.fetchSemanticsNodes().first，再主线程读取bounds，避免非必要的整棵动态树诊断快照；不禁用线程检查、不改断言、不升级依赖。准确新SHA原生验证待执行，不能提前写修复成功。原始job123630783670失败保留。当前PR153原生API26/29/35全部通过，仅Android主job待完成；PR156当前56c17936继续独立验收。

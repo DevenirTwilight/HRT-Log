@@ -79,18 +79,18 @@ class MedicalAttachmentProductAndroidTest {
      * performScrollTo() aligns a row with the viewport edge, which on a 320x640 screen is behind the status/navigation bars and
      * the floating add button. A person scrolls until the row is comfortably inside; so does this, with real swipes on the list.
      */
-    private fun bounds(node:SemanticsNodeInteraction):androidx.compose.ui.geometry.Rect {
-        val semantic=node.fetchSemanticsNode()
+    private fun bounds(matcher:SemanticsMatcher):androidx.compose.ui.geometry.Rect {
+        val semantic=ui.onAllNodes(matcher).fetchSemanticsNodes().single()
         return ui.runOnIdle {semantic.boundsInRoot}
     }
-    private fun scrollIntoComfort(list:String,node:SemanticsNodeInteraction) {
+    private fun scrollIntoComfort(list:String,node:SemanticsNodeInteraction,matcher:SemanticsMatcher) {
         node.performScrollTo()
         repeat(4) {
             // Collection lookup is transformed on the UI thread. Unlike fetching one
             // root, it does not print the entire dynamic subtree on the test thread.
             val rootNode=ui.onAllNodes(isRoot()).fetchSemanticsNodes().first()
             val root=ui.runOnIdle {rootNode.boundsInRoot}
-            val bounds=bounds(node)
+            val bounds=bounds(matcher)
             val margin=root.height*0.2f
             val shift=when {bounds.bottom>root.bottom-margin->-(bounds.bottom-(root.bottom-margin)+16f)
                 bounds.top<root.top+margin->(root.top+margin-bounds.top)+16f else->0f}
@@ -159,12 +159,12 @@ class MedicalAttachmentProductAndroidTest {
         await {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty() || ui.onAllNodes(collapsedDraw).fetchSemanticsNodes().isNotEmpty()}
         // The floating add button overlaps the centre of this wide control on 320 dp; tap its free left part.
         if(ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isEmpty()) {
-            scrollIntoComfort("labs-home",ui.onAllNodes(collapsedDraw).onFirst())
+            scrollIntoComfort("labs-home",ui.onAllNodes(collapsedDraw).onFirst(),collapsedDraw)
             ui.onAllNodes(collapsedDraw).onFirst().performTouchInput {click(androidx.compose.ui.geometry.Offset(width*0.12f,center.y))}
         }
         await {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty()}
         val row=ui.onNodeWithTag("lab-group-row:$id")
-        scrollIntoComfort("labs-home",row)
+        scrollIntoComfort("labs-home",row,hasTestTag("lab-group-row:$id"))
         // The real Labs FAB overlaps the right side of a low visible row on 320dp.
         // Tap its unobscured label side, relative to the actual semantic row bounds.
         // This is still a real touch on the existing result, not a ViewModel/URI shortcut.
@@ -341,8 +341,8 @@ class MedicalAttachmentProductAndroidTest {
         val label=context.getString(R.string.attach_item_description,saved.title,text(R.string.attach_kind_image),text(R.string.attach_status_saved))
         press(hasContentDescription(label))
         await {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
-        val closeBounds=bounds(ui.onNodeWithTag("attachment-viewer-close"))
-        val navigationBounds=bounds(ui.onNodeWithTag("medical-center-back").assertExists())
+        val closeBounds=bounds(hasTestTag("attachment-viewer-close"))
+        val navigationBounds=bounds(hasTestTag("medical-center-back"))
         assertTrue("Preview close must be below the real shell app bar, not covered by its Back button",closeBounds.top>=navigationBounds.bottom)
         tag("attachment-viewer-close")
         await {ui.onAllNodesWithTag("attachment-viewer").fetchSemanticsNodes().isEmpty()}
