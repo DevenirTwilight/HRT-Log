@@ -544,7 +544,9 @@ class MedicalAttachmentProductAndroidTest {
                     await {ui.onAllNodes(hasTestTag("attachment-viewer-next") and isEnabled()).fetchSemanticsNodes().isNotEmpty()}
                     tag("attachment-viewer-next")
                     await {ui.onAllNodes(hasTestTag("attachment-viewer-page-number") and hasText(context.getString(R.string.med05_page_of,page,3))).fetchSemanticsNodes().isNotEmpty()}
-                    // The number comes from the authenticated native renderer, not the picker or filename.
+                    // The displayed page can update before the retained frame is released.
+                    // Wait for the real transition to finish; do not relax the button assertion.
+                    await {ui.onAllNodes(hasTestTag("attachment-viewer-prev") and isEnabled()).fetchSemanticsNodes().isNotEmpty()}
                     ui.onNodeWithTag("attachment-viewer-prev").assertIsEnabled()
                     nativeReaderShot("pdf-page$page")
                 }
