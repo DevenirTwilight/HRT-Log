@@ -86,7 +86,7 @@ class MedicalFilesOperationAndroidTest {
                 reject {runBlocking {ops.saveFileInfo(cap,standalone.document,3,3,"stale document",typed)}}
                 reject {runBlocking {ops.saveFileInfo(cap,standalone.document,4,2,"stale detail",typed)}}
                 assertEquals(savedNames,fileRows())
-                f.raw.execSQL("CREATE TEMP TRIGGER synthetic_file_info_abort BEFORE UPDATE ON ${MedicalFileDetailSchema.TABLE} BEGIN SELECT RAISE(ABORT,'synthetic metadata interruption'); END")
+                f.raw.execSQL("CREATE TRIGGER synthetic_file_info_abort BEFORE UPDATE ON ${MedicalFileDetailSchema.TABLE} BEGIN SELECT RAISE(ABORT,'synthetic metadata interruption'); END")
                 try {reject {runBlocking {ops.saveFileInfo(cap,standalone.document,4,3,"must roll back",typed)}}}
                 finally {f.raw.execSQL("DROP TRIGGER synthetic_file_info_abort")}
                 assertEquals(savedNames,fileRows());assertEquals(beforeRename,retained.associateWith(::immutableRows))
