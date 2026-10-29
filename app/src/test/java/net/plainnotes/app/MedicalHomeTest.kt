@@ -106,7 +106,8 @@ class MedicalHomeConfirmFlowTest {
             ui.onNodeWithTag("medical-visit:$id").performClick(); ui.waitForIdle()
             // The medical detail's own undo: Retract, then its explicit confirmation.
             ui.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText(context.getString(R.string.medical_retract)) and hasClickAction())
-            ui.onNode(hasText(context.getString(R.string.medical_retract)) and hasClickAction()).performClick()
+            ui.onNode(hasText(context.getString(R.string.medical_retract)) and hasClickAction()).performScrollTo().assertIsDisplayed().performClick()
+            ui.waitUntil(10_000) { ui.onAllNodesWithTag("medical-correction-confirm").fetchSemanticsNodes().isNotEmpty() }
             ui.onNodeWithTag("medical-correction-confirm").performClick()
             ui.waitUntil(10_000) { runBlocking { db.dao().appointments().single().completed_utc } == null }
         } finally { androidx.lifecycle.ViewModelStore().apply { put("model", model); clear() }; db.close() }

@@ -1,3 +1,7 @@
+## PR155 就诊撤回确认失败定位 — 2026-10-29
+
+原始HTML报告run40936737557/job123669608636/artifact12927745737明确110行失败为Failed to inject touch input / 找不到medical-correction-confirm；不是撤回后的DB断言失败。保留真正撤回按钮点击、确认按钮点击、原始时间不变及completed_utc清空断言。仅先滚动使撤回按钮可见，再用原10秒界限等待确认节点出现，不sleep、不删断言。原始失败HTML在/workspace/scratch/155-MedicalHome-failure.html；定向1项PASS/0skip、AndroidTest Kotlin编译PASS（5m48s），证据在delivery/build39-ci-followup-2026-10-29；最终CI另验。PR153已正常合并aeb56839。
+
 ## 校准历史时间回归补验 — 2026-10-29
 
 此前d31cfd95的E2Calibration定向测试及AndroidTest Kotlin编译PASS（5m48s）。补充校准实际服药时间适配函数，仍使用同一HistoricalContext冻结解析规则；新增合成回归覆盖较早规则快照补全、无快照拒绝、IMPORT不补猜、删除和SKIPPED不计入。该新增回归正在/workspace/scratch/153-historical-regression.log执行，尚未写PASS。PR156当前061fe4de部分JVM/安全原生通过，完整Android/低内存待完成；两个PR无未解决行内讨论。PR153/156正文已更新。下一步读取本地测试→最终SHA必需CI→有据合并，不再扩展功能。
