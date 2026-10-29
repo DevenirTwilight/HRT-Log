@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="reader_hide_controls">隐藏阅读工具栏</string>
+    <string name="reader_show_controls">显示阅读工具栏</string>
+    <string name="reader_controls_shown">阅读工具栏已显示</string>
+    <string name="reader_controls_hidden">阅读工具栏已隐藏</string>
+</resources>

@@ -21,21 +21,33 @@ def reset(label):
 def main():
     assert subprocess.check_output(['adb', 'shell', 'getprop', 'ro.kernel.qemu'], text=True).strip() == '1', 'Synthetic emulator only'
     REPORT.mkdir(parents=True, exist_ok=True)
-    names=('mainActivityVisitAndIndividualLabSafCommitReopenPreviewUnlinkAndTransfer',
-           'standalonePdfExplicitWholeDrawLinkFiveMembersAndReopenUseOneOriginal')
-    for name in names:
+    cases=((CLASS, 'mainActivityVisitAndIndividualLabSafCommitReopenPreviewUnlinkAndTransfer'),
+           (CLASS, 'standalonePdfExplicitWholeDrawLinkFiveMembersAndReopenUseOneOriginal'),
+           (CLASS, 'fullscreenReaderRenamesThreePagePdfAndLargeImageThenReturnsToTheSameFile'))
+    for test_class, name in cases:
         reset(f'before-{name}')
         result = subprocess.run(['./gradlew', ':app:connectedFullDebugAndroidTest',
-            f'-Pandroid.testInstrumentationRunnerArguments.class={CLASS}#{name}', '--no-parallel', '--max-workers=2'], cwd=ROOT)
+            f'-Pandroid.testInstrumentationRunnerArguments.class={test_class}#{name}', '--no-parallel', '--max-workers=2'], cwd=ROOT)
         for source, label in [('outputs/androidTest-results', 'results'), ('reports/androidTests', 'html')]:
             path = ROOT / 'app/build' / source
             if path.exists():
                 shutil.copytree(path, REPORT / name / label, dirs_exist_ok=True)
         result.check_returncode()
         cases = [case for path in (REPORT / name / 'results').rglob('TEST-*.xml')
-                 for case in ET.parse(path).getroot().iter('testcase') if case.get('classname') == CLASS]
+                 for case in ET.parse(path).getroot().iter('testcase') if case.get('classname') == test_class]
         assert len(cases) == 1 and cases[0].get('name') == name
         assert all(not list(case.iter(tag)) for case in cases for tag in ('failure', 'error', 'skipped'))
+        if name == 'fullscreenReaderRenamesThreePagePdfAndLargeImageThenReturnsToTheSameFile':
+            api = int(subprocess.check_output(['adb', 'shell', 'getprop', 'ro.build.version.sdk'], text=True).strip())
+            pictures = ['pdf-page1', 'pdf-page2', 'pdf-page3', 'pdf-zoom-pan', 'pdf-controls-hidden'] if api >= 28 else ['pdf-android8-refused']
+            pictures += ['image-fit', 'image-zoom-pan']
+            target = REPORT / name / 'native-screenshots'
+            target.mkdir(parents=True, exist_ok=True)
+            for picture in pictures:
+                for suffix in ('png', 'json'):
+                    value = subprocess.check_output(['adb', 'exec-out', 'run-as', 'net.plainnotes.app', 'cat', f'files/synthetic-reader-{picture}.{suffix}'])
+                    assert value and (suffix != 'png' or value.startswith(b'\x89PNG\r\n\x1a\n'))
+                    (target / f'{picture}.{suffix}').write_bytes(value)
         reset(f'after-{name}')
 
     core_classes=('net.plainnotes.app.data.MedicalFilesOperationAndroidTest',
