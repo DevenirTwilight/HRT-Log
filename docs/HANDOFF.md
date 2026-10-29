@@ -1,3 +1,9 @@
+## SL-CAL-02 步骤 1–3：校准引擎（不接界面）— 2026-10-29
+
+负责人「开始 SL-CAL-02，按推荐方案做」→ REQUIREMENTS §166。已做：纯 Kotlin 引擎 `app/.../conc/TotalE2Calibration.kt`（共同系数 k、先验 sd 0.9、delta 降权、信息增益 <0.5 拒绝、留一化验一致性、档位）；Python 参考的逐位对照夹具 `app/src/test/resources/sl-cal-02/parity.json`（96 个合成用户 + 资格规则表，`tools/pk-research/sl_cal/make_parity_fixture.py` 可复现，`test_sl_cal_02.py` 守卫）；引擎在 D-13 守卫里按 `live_lock_additional` 锁定哈希。**未接界面、未改任何 LIVE_LOCK 文件、不改导出/Room**。下一步（步骤 4，另开 PR）：把校准接到 UI-12 的估算卡与曲线（需修改 `ConcentrationScreen.kt`/`ConcChart.kt`，各追加 display-approval），依赖 PR #149（UI-12）先合并。
+
+---
+
 ## MED-03 已合并 + Build38 私人交付 — 2026-10-28
 
 - **MED-03 已合并**：PR #145 → 主线 `64fca05b955516bd54d835e21a4708d561bdffb0`（含 Room 22 独立 LAB_PANEL、独立医疗文件库、整次抽血报告关联、record-first 附件、PNMEDBK2 v1/v2 备份恢复、restore 接受独立文件）。合并前精确头 `c78480e5` 上全部必需检查和 `run_med02_product_native.py` 真实两个 MainActivity/SAF 用例及全部重启脚本 SUCCESS（PR 运行 40763719638）；合并前最后一轮头 `cc7689a3` 的两个环境性失败（`android` 在 sdkmanager 阶段退出、`library-api26-512m` 低内存启动超时）各重跑一次并在 PR 上说明。
