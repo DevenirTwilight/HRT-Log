@@ -1,3 +1,7 @@
+## PR156 第二轮真实原生阻断 — 2026-10-29
+
+061fe4de run40925393040：API35翻到第三页失败，第二页仍显示pageFailed；生产允许旧页延迟300ms释放前发起下一次渲染，触及原两页上限。现保持busy直到旧页释放成功，不提高内存上限，不提前回收仍可能绘制的像素。API29返回列表断言缺少等待真实列表/虚拟行，补状态等待和已有reveal。API26 panel BACK仍失败，先前BackHandler未解决，不能写PASS，需继续定位实际窗口事件。低内存专项独立结果待核对。PR153新增HistoricalContext与E2适配本地定向PASS（3m27s），未等同原生通过。当前未合并或交付APK。
+
 ## 2026-10-29 接手检查点：PR156 精确失败修复待验收
 
 当前正式主线d95952ee；PR156原头54abbdaa。已在原分支修复DocumentsUI虚拟列表遍历、LabPanel Dialog BACK、两处违反UI09的居中控件；共享原生测试布局坐标移至主线程。集合恢复测试将同一加密夹具建立独立为受限source阶段，仍真实执行各恢复/强停/独立进程核验，不改变512MiB/192MiB或断言。旧60秒混合阶段失败、清理强停与未知LMK原因保留，不能称恢复内存已修复。详见[精确失败与边界](medical-attachments/2026-10-29-feedback/takeover-acceptance.md)。本地Ui09四项全部PASS/0skip，app和core AndroidTest Kotlin编译PASS（8m24s）。新SHA原生/完整CI仍待执行，PR仍Draft。已同步README/PRIVACY的真正全屏、按需多页能力，Android8 PDF安全限制保留。

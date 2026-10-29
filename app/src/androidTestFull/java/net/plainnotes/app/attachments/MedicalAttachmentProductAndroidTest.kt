@@ -539,6 +539,7 @@ class MedicalAttachmentProductAndroidTest {
                 ui.onNodeWithTag("attachment-viewer-title").assert(hasText(renamed))
                 assertNativeReadingArea();nativeReaderShot("pdf-page1")
                 for(page in 2..3) {
+                    await {ui.onAllNodes(hasTestTag("attachment-viewer-next") and isEnabled()).fetchSemanticsNodes().isNotEmpty()}
                     tag("attachment-viewer-next")
                     await {ui.onAllNodes(hasTestTag("attachment-viewer-page-number") and hasText(context.getString(R.string.med05_page_of,page,3))).fetchSemanticsNodes().isNotEmpty()}
                     // The number comes from the authenticated native renderer, not the picker or filename.
@@ -565,6 +566,8 @@ class MedicalAttachmentProductAndroidTest {
             await {ui.onAllNodesWithTag("attachment-viewer").fetchSemanticsNodes().isEmpty()}
             ui.onNode(hasText(renamed) and hasAnyAncestor(hasTestTag("file-detail"))).assertExists()
             tag("file-detail-back")
+            await {ui.onAllNodesWithTag("library").fetchSemanticsNodes().isNotEmpty()}
+            reveal(hasTestTag("library-doc:${original.document}"))
             ui.onNodeWithTag("library-doc:${original.document}").assert(hasText(renamed))
             tag("library-add");pickSample("large.png","add-document-confirm")
             ui.onNodeWithTag("add-document-title").performTextClearance();ui.onNodeWithTag("add-document-title").performTextInput("SYNTHETIC large image")
