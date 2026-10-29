@@ -205,6 +205,44 @@
     "tests": "E2TotalTest (single route identical point for point, mixed total = M2 + non-sublingual compat with background once, no sublingual double count, no undercount); M2 contract tests and M2ScenarioDisplayTest; Ui12ConcentrationTest and migrated UnifiedConcentrationUiTest; PK display regression and PeriodStabilityTest in the full :app:testFullDebugUnitTest (3367 tests, 0 failed) plus lintFullDebug"
    },
    "human_review": "recommended: compare docs/ui-audit/2026-10-28-ui12/{before,after,compare}."
+  },
+  {
+   "id": "PD-2026-10-29-SLCAL02-CONCENTRATIONSCREEN",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-29",
+   "scope": "SL-CAL-02 step 4: with sublingual doses the calibration switch is usable; the total is built with the fitted common coefficient; the calibration card shows labs used, information tier, leave-one-out agreement, down-weighted labs and the reason each unused lab or a refusal. No model, parameter, candidate, LIVE_LOCK file or export changed.",
+   "previous_sha256": "426925ca611caee8cea171091bc566e4ea0e439d8c700cc09b4e67e5d5ba38e7",
+   "new_sha256": "d124f3df6acd70fbd54ae8e35473c6a7b3b2d4d5ee8a559707f7481512aee831",
+   "evidence": {
+    "commit": "e3338cea3f4df99bd288b902f5e5bb5b39767acb",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §166 item 4 (2026-10-29, \"开始 SL-CAL-02，按推荐方案做\") and §167 (2026-10-29, \"继续步骤4，把校准接到界面，都做完给apk\"): the owner approves connecting the common-coefficient lab calibration to the concentration page, which changes the PK_DISPLAY_REVIEW file ConcentrationScreen.kt and the display host ConcentrationPreview.kt. LIVE_LOCK files, Exports.kt, ConcChart.kt and ChartViewport.kt untouched.",
+   "verification": {
+    "previous_blob": "426925ca… = this file at the end of UI-12 (PD-2026-10-29-UI12-CONCENTRATIONSCREEN)",
+    "tests": "E2CalibrationTest (labs judged by rule, calibrated total = B + k*((M2-B)+N) with B once and unscaled, factor 1 equals uncalibrated, refusal leaves the curve uncalibrated, labs never change M2 values); Ui12ConcentrationTest (calibration card in four languages x 320dp/2x and 411dp/1x x light/dark); migrated UnifiedConcentrationUiTest; TotalE2CalibrationParityTest/TotalE2CalibrationTest; PeriodStabilityTest and the full :app:testFullDebugUnitTest"
+   },
+   "human_review": "recommended: compare docs/ui-audit/2026-10-29-slcal02-ui/{before,after}."
+  },
+  {
+   "id": "PD-2026-10-29-SLCAL02-PREVIEW",
+   "file": "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-29",
+   "scope": "SL-CAL-02 step 4: adds the read-only field sublingualDoseH (hours of the sublingual doses the snapshot was built from). No value, grid or background computation changed.",
+   "previous_sha256": "1f51e19c07c83b4bffe54ced0dcdb4a75fadc91163f33f35c5d7b8dc14c81d5b",
+   "new_sha256": "443a9158b00980f40e56b56f70c278e955a5c940774002d665991f419af9887e",
+   "evidence": {
+    "commit": "e3338cea3f4df99bd288b902f5e5bb5b39767acb",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §166 item 4 (2026-10-29, \"开始 SL-CAL-02，按推荐方案做\") and §167 (2026-10-29, \"继续步骤4，把校准接到界面，都做完给apk\"): the owner approves connecting the common-coefficient lab calibration to the concentration page, which changes the PK_DISPLAY_REVIEW file ConcentrationScreen.kt and the display host ConcentrationPreview.kt. LIVE_LOCK files, Exports.kt, ConcChart.kt and ChartViewport.kt untouched.",
+   "verification": {
+    "previous_blob": "1f51e19c… = this file at the end of UI-12 (PD-2026-10-29-UI12-PREVIEW)",
+    "tests": "E2CalibrationTest (labs judged by rule, calibrated total = B + k*((M2-B)+N) with B once and unscaled, factor 1 equals uncalibrated, refusal leaves the curve uncalibrated, labs never change M2 values); Ui12ConcentrationTest (calibration card in four languages x 320dp/2x and 411dp/1x x light/dark); migrated UnifiedConcentrationUiTest; TotalE2CalibrationParityTest/TotalE2CalibrationTest; PeriodStabilityTest and the full :app:testFullDebugUnitTest"
+   },
+   "human_review": "not required: one read-only field."
   }
  ]
 }
