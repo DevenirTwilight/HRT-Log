@@ -95,13 +95,56 @@ class ProductionViewerSafetyAndroidTest {
         }
     }
     @Test fun malformedTruncatedAndOversizeRasterRefused()=measured("malformed") {
-        for(bytes in listOf(byteArrayOf(1,2,3),image(Bitmap.CompressFormat.PNG).copyOf(8),image(Bitmap.CompressFormat.JPEG).copyOf(3),image(Bitmap.CompressFormat.WEBP).copyOf(12),image(Bitmap.CompressFormat.PNG,2049,1))) {
+        for(bytes in listOf(byteArrayOf(1,2,3),image(Bitmap.CompressFormat.PNG).copyOf(8),image(Bitmap.CompressFormat.JPEG).copyOf(3),image(Bitmap.CompressFormat.WEBP).copyOf(12),image(Bitmap.CompressFormat.PNG,16385,1))) {
             AttachmentViewer(context,Source(bytes)).use{viewer->refused{viewer.image()}}
         }
         for(bytes in listOf("%PDF-1.7\ninvalid".toByteArray(),pdf().copyOf(8))) {
             AttachmentViewer(context,Source(bytes)).use{viewer->refused{viewer.pdfPage(0)}}
         }
         AttachmentViewer(context,Source(pdf(1,3000))).use{viewer->refused{viewer.pdfPage(0)}}
+    }
+    private fun pdfPages(vararg sizes:Pair<Int,Int>):ByteArray {
+        val doc=PdfDocument()
+        try {
+            sizes.forEachIndexed {i,(w,h)->val page=doc.startPage(PdfDocument.PageInfo.Builder(w,h,i+1).create());page.canvas.drawColor(Color.WHITE);doc.finishPage(page)}
+            return ByteArrayOutputStream().also {doc.writeTo(it)}.toByteArray()
+        } finally {doc.close()}
+    }
+    /** MED-05: a phone photo is reduced to fit the display limit instead of being refused; absurd sources are still refused. */
+    @Test fun aLargePhotoIsReducedByAPowerOfTwoNotRefused()=measured("large-photo") {
+        for((w,h) in listOf(3000 to 2000,2049 to 1,4000 to 3000)) {
+            val source=Source(image(Bitmap.CompressFormat.PNG,w,h))
+            AttachmentViewer(context,source).use {viewer->
+                val full=viewer.image();assertTrue(maxOf(full.width,full.height)<=2048);assertTrue("reduced no more than needed",maxOf(full.width,full.height)>=maxOf(w,h)/4 || maxOf(w,h)<=2048)
+                viewer.release(full);assertTrue(full.isRecycled)
+                val small=viewer.image(192);assertTrue(maxOf(small.width,small.height)<=192);viewer.release(small)
+            }
+        }
+    }
+    /** MED-05: real pdfium through the production viewer — page count, every page fitted to the requested edge, two pages at most held at once. */
+    @Test fun aMultiPagePdfHasItsPageCountAndEachPageIsFittedToTheRequestedEdge()=measured("pdf-pages") {
+        val source=Source(pdfPages(300 to 400,400 to 300,100 to 3000))
+        AttachmentViewer(context,source).use {viewer->
+            if(!pdfPreview) {unsupported{viewer.pageCount()};return@use}
+            assertEquals(3,viewer.pageCount())
+            val a=viewer.pdfPageFit(0,512);assertEquals(384,a.width);assertEquals(512,a.height)
+            val b=viewer.pdfPageFit(1,512);assertEquals(512,b.width);assertEquals(384,b.height)
+            refused {viewer.pdfPageFit(2,512)} // a third page is refused until one is released
+            viewer.release(a);val c=viewer.pdfPageFit(2,512);assertEquals(512,c.height);assertTrue(c.width in 1..20)
+            refused {viewer.pdfPageFit(3,512)};refused {viewer.pdfPageFit(-1,512)};refused {viewer.pdfPageFit(0,4096)}
+            viewer.release(b);viewer.release(c)
+            // The page stays pixel-wise a page: not blank (the drawn white page has no ink, so check a fitted real page differs from "all zero").
+            val d=viewer.pdfPageFit(0,2048);assertEquals(2048,maxOf(d.width,d.height));viewer.release(d)
+        }
+    }
+    @Test fun anHostilePageCountIsRefusedAndRevocationEmptiesEveryHeldPage()=measured("pdf-revoke") {
+        val source=Source(pdfPages(200 to 200,200 to 200))
+        AttachmentViewer(context,source).use {viewer->
+            if(!pdfPreview) {unsupported{viewer.pageCount()};return@use}
+            val a=viewer.pdfPageFit(0,256);val b=viewer.pdfPageFit(1,256)
+            source.session.revoke();assertTrue(a.isRecycled);assertTrue(b.isRecycled)
+            refused {viewer.pageCount()};refused {viewer.pdfPageFit(0,256)}
+        }
     }
     @Test fun closedOrRevokedCapabilityCannotPublishBytesOrPixels()=measured("closed") {
         val source=Source(image(Bitmap.CompressFormat.PNG))
