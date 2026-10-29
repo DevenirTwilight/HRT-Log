@@ -1,3 +1,14 @@
+## 重复的 Build 39（B）— 2026-10-29（事故记录，已披露）
+
+- **事实**：同一天有**两份不同的 APK 都使用 versionCode 39**，证书相同（`989ba045…79b1`），文件名都叫 `HRT-Log-build39-full-official.apk`：
+  - **A**：源码 `d95952ee`（不含舌下校准 UI），SHA-256 `9c639f8c0a9ff3f30404fc965166f0500220d33c214f4aedb80de55f6f43a850`，14,486,686 字节，2026-10-29 14:57Z 签名，经负责人私有 GitHub 交付分支交付，记录在 PR #155（REQUIREMENTS §168）。
+  - **B**：源码 `aeb56839`（含 #149–#153，即 UI-12、MED-04、MED-05、校准引擎与校准界面），SHA-256 `14f9cf51c1c2760a15767607bc519aa279ceaa7505faa6b9c635f1c0f5961c5a`，14,519,454 字节，2026-10-29 晚按负责人「都做完给apk」在会话里作为附件发出。
+- **原因**：构建 B 的会话开工前没有查看仍是 OPEN 的交付记录 PR #155，不知道 A 已交付。这是流程错误，不是签名或代码问题。
+- **处理**：账本只能严格递增，39 已由 #155 记录为 A；B 不进账本，只在 `docs/delivery/build39b-duplicate-version-verification.json` 留存核验与身份（含「如何区分」）。**下一次交付必须 versionCode ≥ 40，并同时取代 A 和 B。** 在那之前两个包都能覆盖安装，但应用内版本号分不出它们，请以文件 SHA-256 区分。
+- **教训**：任何签名交付前，先 `gh pr list` 查看所有 OPEN 的 delivery/ledger PR 和 `docs/delivery/ledger.json` 的主线与分支状态；不依赖单一会话记忆。
+- B 的验证与 A 同类：v2/v3 单签名者、四 ABI、64 位 ELF 与 ZIP 16KiB 对齐、无 INTERNET、非 debug、签名前后 324 个业务条目逐字节相同；真机安装与人工 TalkBack NOT_RUN。主线 `aeb56839` CI：`android` 首次失败于 `Ui12ConcentrationTest.mixedRoutesCalibrateAsOneTotal[en/320dp/2x/dark=false]`（等待估算卡 30 秒超时，同一测试在 PR 运行中通过），按规则重跑一次后成功。
+- 本轮合并汇总：#149 UI-12、#150 MED-04、#151 SL-CAL-02 引擎、#152 MED-05、#153 校准接到浓度页，主线 `aeb56839d708c325b5330e62e672be968992fa42`。待负责人复核（不变）：信息档位阈值 0.75；E1 午夜占位；法文 320dp 2× 横轴日期标签重叠（UI-12 遗留）；大图按 2 的幂次缩小解码的放宽；Android 8 PDF 仍不支持；真机/TalkBack 未做；导出/PDF/快照不含校准后的合计（§67 D-2）。
+
 ## 阅读器偶发「这个文件无法显示」：存储进程锁立即失败 — 2026-10-29（接手后修复）
 
 - **现象**（合并 #156 后的 CI，同一原生用例 `fullscreenReaderRenamesThreePagePdfAndLargeImageThenReturnsToTheSameFile`）：#158 的 API 29 运行里，大图 PNG 的「全屏查看」打开后阅读器显示的是「这个文件无法显示」（`attachment-viewer-message`），30 秒内没有页面（run 40954203055、job 123729916632，工件 attachment-poc-api29）；同一用例在 #156 的 PR 运行（API 26/29/35 各 2 次）、主线 f4402a36 的 API 29/35 都通过。另一次（#157，run 40951055441、job 123719684213，API 35）是 Compose 内部断言 `performMeasureAndLayout called during measure layout`，发生在导入后点文件卡片的位置，**根因未证明**，不当作已解释。
