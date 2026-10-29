@@ -1724,3 +1724,24 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 **开源代码决定（AI，供负责人复核）**：用 Android 系统自带的 `PdfRenderer`（即 Android 内置的开源 pdfium，AOSP，Apache-2.0）渲染，翻页/缩放的交互参照 AOSP `PdfRendererBasic` 示例的做法自行实现，不另打包第三方 pdfium/PDF 库。理由：第三方打包的 pdfium 版本通常落后系统，等于把解析不可信 PDF 的原生代码换成更旧、更难更新的一份；会新增原生库（约 +10–16 MB）、网络依赖和供应链风险；现有的撤权/认证读取（ProxyFileDescriptor）也是围绕 `PdfRenderer` 设计的。代价：Android 8 仍不能预览 PDF（该系统的 `PdfRenderer` 在打开失败时会破坏进程内 pdfium 的状态，是 AOSP 已知缺陷，只在 Android 9 修复），Android 8 上 PDF 仍只保存与备份，图片不受影响。如负责人要求 Android 8 也能看 PDF，须另行批准依赖与安全评估。
 
 **测试与交付**：先写失败测试；缩略图缓存的上限与撤权清除、坏文件隔离、翻页边界、缩放上限、四语 × 320/411dp × 字号 1×/2× × 明暗；真机或模拟器的真实 PDF/图片渲染由设备测试覆盖，本地只能跑 Robolectric，真机未验证须标 NOT_RUN。PR 按 §106 自动合并。APK 仍按「apk暂缓」暂停。
+
+## 166. SL-CAL-02 — 用化验校准 E2 合计（实现阶段，2026-10-29 负责人批准）
+
+负责人 2026-10-29 原话：「开始 SL-CAL-02，按推荐方案做」。依据：SL-CAL-01 研究报告 `docs/pk-research/sl-cal/sl-cal-01-report.md`（审计 79）第 9、11 节的推荐。这是 PK 算法工作，不占 `UI-*` 编号。
+
+**批准并按此实施的内容（逐条取自报告的推荐）**
+1. **方案 C：一个共同系数 k**，作用于「背景之上的整条曲线」：`C(t) = B + k·(S(t)+N(t))`；`B`（24 pg/mL）合计里只计一次，不随 k 缩放；`S` 是舌下 M2 曲线，`N` 是其他途径的兼容曲线。MAP（阻尼 Gauss–Newton + 回溯）+ Laplace 标准差；不设浓度上限，不裁剪结果。
+2. **先验 sd(ln k) = 0.9**（P1-A 的 0.455 是旧舌下模型语义，不复用旧先验或旧冻结参数）。观测噪声沿用生产的 `LabFit.SIGMA_LAB`（√ln(1+0.299²) ≈ 0.2926；SL-CAL-01 报告里写的 0.2937 是笔误，研究与生产代码实际用的都是 0.2926）。
+3. **峰值附近降权，不排除**：delta 法 `σ_eff² = σ² + (σ_t · d ln C/dt)²`，`σ_t = 15 分钟`（设计假设）；距上次舌下服药 <2.5 小时的化验另标「峰值附近」。
+4. **信息增益拒绝**：`1 − 后验方差/先验方差 < 0.5` 就拒绝校准，曲线仍显示未校准，并显示具体原因。
+5. **资格条件 E1–E8**（报告第 6 节）：沿用 P1-B 的历史门（不改），新增：采样时间不是日期占位（E1）、上一次舌下服药时间已知（E2）、前 24 小时记录完整（E3）、至少一次可用化验（E5）、信息增益（E6）、单一系数（E7）、单位与检测方法保留原值，检测方法未知时标注（E8）。
+6. **不确定性表达（报告第 8 节建议的 (a)+(b)）**：「留一化验一致性」（用其余化验预测这一次，相差 x%）和「校准档位」（信息充分 / 信息有限）；**不画区间带**（合成验证里名义 90% 区间只覆盖 53%–80%）。
+7. **不新增「检测方法」字段、不做 Room 迁移**；校准系数**不持久化**（每次由化验和记录实时算出）；不改导出、PDF、就诊资料包、化验快照（§67 D-2 继续有效），所以不需要新的 `calculator_version`，既有 `calculator_version=1/2` 快照不受影响。
+8. **B2（两系数部分合并）不实施**，仍是报告里的升级路径；若将来要做，另行请示。
+
+**AI 对「按推荐方案做」的解释（供负责人复核）**：包括报告第 11 节的交付顺序——①本节批准记录；②守卫登记新文件；③纯 Kotlin 引擎 + 与 Python 参考的逐位对照；④显示接入（会修改 PK_DISPLAY_REVIEW 文件 `ConcentrationScreen.kt`、`ConcChart.kt` 的显示部分，各自追加 `display-approvals` 记录）；⑤导出/快照另案，本阶段不改。每步单独 PR、单独 CI。
+
+**E1 的已知限制（如实记录）**：化验记录只存采样时间戳，没有「时间是否精确」的标记；本阶段在不改 Room 的前提下，只能把「恰好本地 00:00」当作日期占位而拒绝，其余时间当作用户记录的采样时间，并在校准卡上说明「使用了您记录的抽血时间」。若要区分「估计的时间」，需要一个 Room 迁移，另行请示。
+
+**守卫（核对后的更正）**：SL-CAL-01 报告第 11 节建议把新引擎登记进 `guard-classification.json`；核对发现该文件属于研究归档，`research_archive.verify_records` 要求归档内容与归档提交逐字节一致，不能再改；`check_protocol.check()` 的文档也写明新产品文件由可执行测试管辖，不再靠 SHA 批准。所以引擎 `app/.../conc/TotalE2Calibration.kt` **不登记**，它是普通产品文件，由与 Python 参考的逐位对照测试（`TotalE2CalibrationParityTest`、`test_sl_cal_02.py` 复现夹具）和规则测试保护；`test_sl_cal_01.py` 里「没有未分类文件」的断言改为只允许这一个文件。改动 `conc/` 与 `pk-engine/` 会触发 `research-deep`（科学门）。`ConcentrationCalculator.kt`、`CalibrationEligibility.kt`、`LabEstimate.kt`、`LabFit.kt`、`Engine.kt`、`pk-params.json`、M2 候选、`Exports.kt` **一律不改**（它们仍是 LIVE_LOCK 或 PK_DISPLAY_REVIEW）。
+**禁止与保持**：`m2_absolute_pgml=false` 不改；不声称临床准确性已确立（`clinical_accuracy_established=false`）；不提供剂量建议，不把残差解释为「化验错了」；真实健康数据不进仓库（对照测试只用合成用户）；负责人本地检查脚本仍是 NOT_RUN。

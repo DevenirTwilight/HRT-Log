@@ -1,3 +1,13 @@
+## 接手验收与基线同步 — 2026-10-29
+
+MED-05 PR #152 已在11:18:18 UTC受保护合并，源码b73f72c7，合并3ce3b739990d878cc2060d0f9128fd42e7b5f5ed；PR全部检查成功，API26/512MiB查看器7项原生成功。本地精确头缩略图/翻页/四语UI定向206项零失败零跳过。主线Science/安全专项成功，Android完整构建及API29仍运行，不能写主线全绿。APK仍暂缓。
+
+SL-CAL-02 PR #151 原头7770e96e全部检查成功；本地Kotlin引擎/参考对照13项、Python参考32项成功。#152合并后严格保护要求更新基线，GitHub update-branch返回HANDOFF并行插入冲突；本提交仅正常合并主线并保留双方交接原文，没有改校准/查看器生产逻辑、容差或测试断言。新合并头必须等待自身必需CI，已有auto-merge保持；未签名、未交付APK。
+
+## SL-CAL-02 步骤 1–3：校准引擎（不接界面）— 2026-10-29
+
+负责人「开始 SL-CAL-02，按推荐方案做」→ REQUIREMENTS §166。已做：纯 Kotlin 引擎 `app/.../conc/TotalE2Calibration.kt`（共同系数 k、先验 sd 0.9、delta 降权、信息增益 <0.5 拒绝、留一化验一致性、档位）；Python 参考的逐位对照夹具 `app/src/test/resources/sl-cal-02/parity.json`（96 个合成用户 + 资格规则表，`tools/pk-research/sl_cal/make_parity_fixture.py` 可复现，`test_sl_cal_02.py` 守卫）；引擎**不登记**进归档的 `guard-classification.json`（研究归档不可改，见 §166 守卫更正），改由对照测试保护。**未接界面、未改任何 LIVE_LOCK 文件、不改导出/Room**。下一步（步骤 4，另开 PR）：把校准接到 UI-12 的估算卡与曲线（需修改 `ConcentrationScreen.kt`/`ConcChart.kt`，各追加 display-approval），依赖 PR #149（UI-12）先合并。
+
 ## MED-04 / MED-05 状态 — 2026-10-29
 
 - **MED-04**（用户自填类别/日期/机构）：PR #150（分支 feature/med04-file-category-20261029），自动合并已开，等 CI。Room 23 新表 + 备份清单版本 3 + 编辑界面 + 文件库按样图 06 显示。

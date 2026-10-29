@@ -219,7 +219,10 @@ class ResearchGuard(unittest.TestCase):
         new = [str(p.relative_to(ROOT)) for p in list((HERE / 'sl_cal').glob('*.py')) + list((ROOT / 'docs/pk-research/sl-cal').rglob('*')) if p.is_file()]
         self.assertTrue(new)
         self.assertEqual([n for n in new if n.startswith(prefixes)], [])
-        self.assertEqual(guard.unclassified(cls, json.loads((ROOT / 'docs/pk-research/p2/production-baseline.json').read_text())), [])
+        # SL-CAL-02 (REQUIREMENTS section 166) adds the total-E2 calibration engine under conc/. The archived classification cannot be edited
+        # (research_archive.verify_records), and current doctrine governs new product files by executable tests, so only that engine may be unclassified.
+        self.assertEqual(guard.unclassified(cls, json.loads((ROOT / 'docs/pk-research/p2/production-baseline.json').read_text())),
+                         ['app/src/main/java/net/plainnotes/app/conc/TotalE2Calibration.kt'])
 
     def test_phase_matcher_rejects_production_ui_export_schema_and_workflow_paths(self):
         for bad in ('app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt', 'pk-engine/src/main/kotlin/net/plainnotes/app/pk/LabFit.kt',
