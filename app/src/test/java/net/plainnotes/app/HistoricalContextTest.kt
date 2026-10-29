@@ -13,6 +13,19 @@ class HistoricalContextTest {
     private val med=MedicationEntity(1,"Synthetic original","E2","ORAL","MG",2.0,40.0,site_rotation=false,notifications_on=true,active=true,sort_order=0)
     private fun record(snapshot:String)=RecordEntity(1,1,taken_utc=now.minusSeconds(3600).toEpochMilli(),taken_zone="UTC",actual_dose=2.0,status="ON_TIME",origin="APP",revision=1,config_snapshot=snapshot)
 
+    @Test fun calibrationDoseTimesUseFrozenRulesButNeverInventImportedHistory() {
+        val frozen=MedicationSnapshot.encode(med,ProfileEntity(1,"EV","oral"))
+        val early=record("{}").copy(id=71,rule_version_id=10,taken_utc=now.minusSeconds(48*3600).toEpochMilli())
+        val recent=record(frozen).copy(id=72)
+        val imported=early.copy(id=73,origin="IMPORT_TM")
+        val deleted=early.copy(id=74,deleted_at_utc=now.toEpochMilli())
+        val skipped=early.copy(id=75,status="SKIPPED")
+        val actual=net.plainnotes.app.ui.E2Calibration.actualDoseTimes(listOf(recent,imported,deleted,skipped,early),mapOf(10L to frozen))
+        assertEquals(listOf(Instant.ofEpochMilli(early.taken_utc!!),Instant.ofEpochMilli(recent.taken_utc!!)),actual)
+        assertEquals(ConcentrationCalculator.hours(Instant.ofEpochMilli(early.taken_utc!!)),net.plainnotes.app.ui.E2Calibration.firstDoseH(actual)!!,0.0)
+        assertEquals(listOf(Instant.ofEpochMilli(recent.taken_utc!!)),net.plainnotes.app.ui.E2Calibration.actualDoseTimes(listOf(early,recent),emptyMap()))
+    }
+
     @Test fun changingCurrentRouteOrMoleculeDoesNotChangePastCurve() {
         val p=ProfileEntity(1,"EV","oral")
         val records=listOf(record(MedicationSnapshot.encode(med,p)))

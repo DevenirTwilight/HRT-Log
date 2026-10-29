@@ -8,6 +8,8 @@ import net.plainnotes.app.conc.experimental.ResearchHistoricalSlAdapter
 import net.plainnotes.app.data.*
 import net.plainnotes.app.experimental.ConcentrationPreview
 import net.plainnotes.app.pk.experimental.ResearchModel
+import net.plainnotes.app.conc.TotalE2Calibration
+import net.plainnotes.app.ui.E2Calibration
 import net.plainnotes.app.ui.E2Total
 import java.time.Instant
 
@@ -24,7 +26,10 @@ object Ui12Fixture {
 
     class Scenario(val state: NotesState, val records: List<RecordEntity>, val result: ConcentrationResult, val preview: ConcentrationPreview?,
                    val nonSublingual: ConcentrationResult?, val doseTimes: List<Instant>, val labs: List<LabValueEntity>) {
-        val total get() = E2Total.curve(preview, result, nonSublingual)
+        /** SL-CAL-02: what the page computes with the calibration switch on (the same adapter and engine). */
+        val outcome get() = E2Calibration.run(preview, nonSublingual, labs, result, doseTimes.firstOrNull()?.let { ConcentrationCalculator.hours(it) }, nowH) {}
+        val total get() = E2Total.curve(preview, result, nonSublingual, outcome as? TotalE2Calibration.Calibrated)
+        val totalUncalibrated get() = E2Total.curve(preview, result, nonSublingual)
     }
 
     private fun record(id: Long, m: MedicationEntity, p: ProfileEntity?, hoursAgo: Long, dose: Double = 1.0) = RecordEntity(id, m.id,
@@ -37,7 +42,7 @@ object Ui12Fixture {
 
     private fun compute(meds: List<MedicationEntity>, records: List<RecordEntity>, weight: Double? = 70.0, labs: List<LabValueEntity> = emptyList()) =
         ConcentrationCalculator.compute(meds, profiles, records, emptyList(), labs, weight, now, calibrate = true, historyRead = HistoryRead(true, nowH))
-    private fun preview(records: List<RecordEntity>) = ConcentrationPreview.compute(ResearchHistoricalSlAdapter.audit(records, emptyMap(), nowH), ResearchModel.M2, nowH)
+    private fun preview(records: List<RecordEntity>): ConcentrationPreview? = ConcentrationPreview.compute(ResearchHistoricalSlAdapter.audit(records, emptyMap(), nowH), ResearchModel.M2, nowH)
     private fun times(records: List<RecordEntity>) = records.mapNotNull { it.taken_utc }.map { Instant.ofEpochMilli(it) }.sorted()
     private fun state(meds: List<MedicationEntity>) = NotesState(medications = meds, profiles = profiles, loading = false)
 
@@ -50,6 +55,24 @@ object Ui12Fixture {
         val x = E2Total.nonSublingualInputs(meds, profiles, all, emptyList(), emptyMap())
         val other = ConcentrationCalculator.compute(x.medications, x.profiles, x.records, x.planned, emptyList(), 70.0, now, calibrate = false, historyRead = HistoryRead(true, nowH))
         return Scenario(state(meds), all, compute(meds, all, labs = labs), preview(all), other, times(all), labs)
+    }
+    /** Labs 30 % above the uncalibrated total: 3 usable (3–4 h after a sublingual dose), one before 24 h of history, one date-only (midnight). */
+    private fun scaledLabs(uncalibrated: (Double) -> Double): List<LabValueEntity> {
+        fun at(hoursAgo: Double) = now.toEpochMilli() - (hoursAgo * 3_600_000).toLong()
+        fun lab(id: Long, t: Long) = LabValueEntity(id, "E2", uncalibrated(ConcentrationCalculator.hours(t)) * 1.3, "pg/mL", t, "UTC")
+        return listOf(lab(1, at(5.0)), lab(2, at(28.0)), lab(3, at(52.0)), lab(4, at(76.0)),
+            lab(5, java.time.LocalDate.of(2026, 3, 9).atStartOfDay(java.time.ZoneOffset.UTC).toInstant().toEpochMilli()))
+    }
+    fun sublingualCalibrated(): Scenario { val meds = listOf(sl); val p = preview(slRecords)!!
+        val l = scaledLabs { p.valueAt(it)!! }
+        return Scenario(state(meds), slRecords, compute(meds, slRecords, labs = l), p, null, times(slRecords), l) }
+    fun mixedCalibrated(): Scenario {
+        val meds = listOf(sl, oral); val all = slRecords + oralRecords
+        val x = E2Total.nonSublingualInputs(meds, profiles, all, emptyList(), emptyMap())
+        val other = ConcentrationCalculator.compute(x.medications, x.profiles, x.records, x.planned, emptyList(), 70.0, now, calibrate = false, historyRead = HistoryRead(true, nowH))
+        val p = preview(all)!!
+        val l = scaledLabs { p.valueAt(it)!! + (other.evaluateAt(it)?.center ?: 0.0) }
+        return Scenario(state(meds), all, compute(meds, all, labs = l), p, other, times(all), l)
     }
     fun noRecords(): Scenario { val meds = listOf(oral); return Scenario(state(meds), emptyList(), compute(meds, emptyList()), null, null, emptyList(), emptyList()) }
     /** An oral estradiol plus cyproterone acetate with no weight recorded: the page asks for the weight. */
