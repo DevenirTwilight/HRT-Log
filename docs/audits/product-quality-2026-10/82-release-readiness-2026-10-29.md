@@ -32,7 +32,7 @@
 
 | 现象 | 出现 | 判断 |
 | --- | --- | --- |
-| Compose `performMeasureAndLayout called during measure layout` | #157 的 API35 `device-tests`，在导入后点文件卡片处（run 40951055441） | 根因未证明；同一用例在 #156、主线的其它 7 次执行中通过 |
+| Compose `performMeasureAndLayout called during measure layout` | #157 的 API35 `device-tests`，在导入后点文件卡片处（run 40951055441） | 根因未证明；同一用例在 #156、#157 的其它任务和主线上通过了十多次 |
 | Compose `SlotWriter.moveSlotGapTo` 数组越界，发生在 Activity 销毁时 | #159 的 API29（run 40958033699）；MED-03 时期 API29 `AutomaticImportAndroidTest` 也出现过同类（length=1280; index=-301） | 早于 MED-05，API29 上的已知间歇故障；重跑通过 |
 | `SnapshotStateObserver` 多线程访问 | #153/#155/#156 的历史记录 | 测试读取语义坐标改到主线程后仍有间歇 |
 | API26 校准脚本收尾 `adb shell pm list packages` 返回 255 | #158 run 40954203055 | 两个校准用例本身已通过；模拟器连接抖动 |
