@@ -1,3 +1,13 @@
+## UI-12 浓度页统一（一条 E2 合计曲线）— 2026-10-29（分支 feature/ui12-concentration-20261028，PR 待开）
+
+- 已完成：显示层 `ui/E2Total.kt`（M2 舌下 + 非舌下兼容计算按小时相加，背景只计一次；有舌下但 M2 不可用则不显示合计）；`ConcentrationScreen/ConcChart/UnifiedConcentrationScreen/ConcentrationPreview` 显示改动；四语言字符串；`E2TotalTest`、`Ui12ConcentrationTest` 和迁移的旧断言；REQUIREMENTS §162；追加式批准记录 `PD-2026-10-29-UI12-*`（4 条，哈希见 `display-approvals-after-archive.json`）；报告 `docs/audits/product-quality-2026-10/78-ui12-concentration.md`；截图 `docs/ui-audit/2026-10-28-ui12/`。
+- 验证：合并 default d18b2c91 后全量 `:app:testFullDebugUnitTest` 3367 测试 0 失败 0 错误，`lintFullDebug` 通过；本地 `science_change_gate`、`delivery_ledger check`、`check_protocol` 通过。
+- 未做（NOT_RUN）：真机、人工 TalkBack、411dp 嵌套对话框、本页专门的对比度/减少动态断言。
+- 下一步：开 PR（base `claude/new-session-1959qb`），按 §106 开自动合并；CI 失败只对环境类问题重跑一次；合并后复验 default CI。**Build 39 APK 按负责人 2026-10-29「apk暂缓」暂停，未经负责人恢复不构建、不发送。**
+- 待负责人决定（2026-10-29 提问）：医疗文件库页与样图 06 的差异（类别方块、每行日期/机构、记录区、上次备份日期）是否要对齐；这些差异是因为没有真实数据来源而有意不画。选项：保持 / 新增用户自选类别字段 / 只做不涉及数据的版式对齐。
+
+---
+
 ## MED-03 已合并 + Build38 私人交付 — 2026-10-28
 
 - **MED-03 已合并**：PR #145 → 主线 `64fca05b955516bd54d835e21a4708d561bdffb0`（含 Room 22 独立 LAB_PANEL、独立医疗文件库、整次抽血报告关联、record-first 附件、PNMEDBK2 v1/v2 备份恢复、restore 接受独立文件）。合并前精确头 `c78480e5` 上全部必需检查和 `run_med02_product_native.py` 真实两个 MainActivity/SAF 用例及全部重启脚本 SUCCESS（PR 运行 40763719638）；合并前最后一轮头 `cc7689a3` 的两个环境性失败（`android` 在 sdkmanager 阶段退出、`library-api26-512m` 低内存启动超时）各重跑一次并在 PR 上说明。
