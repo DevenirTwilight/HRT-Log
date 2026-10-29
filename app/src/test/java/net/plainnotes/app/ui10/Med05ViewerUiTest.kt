@@ -42,7 +42,26 @@ class Med05ViewerUiTest(private val locale: String, private val width: Int, priv
     private val mode get() = if (dark) ThemeMode.DARK else ThemeMode.LIGHT
     private fun s(id: Int, vararg a: Any) = ui.activity.getString(id, *a)
     private fun setup() { RuntimeEnvironment.setQualifiers("$locale-w${width}dp-h${if (width == 320) 640 else 891}dp-xxhdpi"); RuntimeEnvironment.setFontScale(font) }
-    private fun page() = Bitmap.createBitmap(120, 170, Bitmap.Config.ARGB_8888).apply { eraseColor(android.graphics.Color.WHITE) }
+    /** A synthetic page (a made-up report heading and rows), so the screenshots show what a thumbnail and a page look like. Never real data. */
+    private fun page(n: Int = 1): Bitmap = Bitmap.createBitmap(420, 594, Bitmap.Config.ARGB_8888).apply {
+        eraseColor(android.graphics.Color.WHITE)
+        val c = android.graphics.Canvas(this); val p = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
+        p.color = 0xFF00695C.toInt(); c.drawRect(0f, 0f, 420f, 70f, p)
+        p.color = android.graphics.Color.WHITE; p.textSize = 30f; c.drawText("SYNTHETIC REPORT  p.$n", 24f, 46f, p)
+        p.color = 0xFF37474F.toInt(); p.textSize = 22f
+        for (i in 0 until 14) { c.drawText("Synthetic test ${i + 1}", 24f, 120f + i * 34f, p); c.drawText("${10 + i * 3}.${i}", 300f, 120f + i * 34f, p)
+            p.color = 0xFFCFD8DC.toInt(); c.drawRect(24f, 128f + i * 34f, 396f, 129f + i * 34f, p); p.color = 0xFF37474F.toInt() }
+    }
+    private fun shot(name: String) {
+        val dir = System.getenv("MED05_SHOTS")?.takeIf { it.isNotBlank() } ?: return
+        ui.waitForIdle()
+        val view = ui.activity.window.decorView
+        ui.runOnUiThread {
+            val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888); view.draw(android.graphics.Canvas(bitmap))
+            java.io.File("build/med05-shots/$dir").apply { mkdirs() }.resolve("${name}_${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}.png")
+                .outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        }
+    }
 
     private fun viewer(index: Int, count: Int, busy: Boolean = false, failed: Boolean = false) = Viewer.Showing("Synthetic scan", page(), true, index, count, busy, failed)
 
@@ -54,6 +73,7 @@ class Med05ViewerUiTest(private val locale: String, private val width: Int, priv
         ui.onNodeWithTag("attachment-viewer-next").performScrollTo().assertIsEnabled().performClick(); assertEquals(1, requested)
         ui.onNodeWithTag("attachment-viewer-page-number").assert(hasText(s(R.string.med05_page_of, 1, 3)))
         ui.onNodeWithTag("attachment-viewer-page").assert(hasContentDescription(s(R.string.med05_page_label, "Synthetic scan", 1, 3)))
+        shot("viewer_page1")
     }
     @Test fun theLastPageHasNoNextAndAMiddlePageHasBoth() {
         setup()
@@ -121,6 +141,7 @@ class Med05ViewerUiTest(private val locale: String, private val width: Int, priv
             thumbs = mapOf(FileThumbnails.Key(id, Size.ROW) to ready), onThumb = { asked += it.document }) } }
         ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-doc:$id"))
         ui.onNodeWithTag("library-thumb", useUnmergedTree = true).assertExists()
+        shot("library_row_thumb")
         assertEquals(listOf(id), asked.distinct())
         ui.onAllNodesWithText("PDF", useUnmergedTree = true).assertCountEquals(0)
     }
@@ -151,7 +172,8 @@ class Med05ViewerUiTest(private val locale: String, private val width: Int, priv
         ui.onNodeWithTag("file-detail-thumb-reason").assert(hasText(s(R.string.viewer_pdf_unsupported)))
         mode2 = Thumb.Unavailable(Reason.FAILED); ui.waitForIdle()
         ui.onNodeWithTag("file-detail-thumb-reason").assert(hasText(s(R.string.viewer_failed)))
-        mode2 = Thumb.Ready(page()); ui.waitForIdle()
+        mode2 = Thumb.Ready(page(2)); ui.waitForIdle()
         ui.onNodeWithTag("file-detail-thumb").assertExists(); ui.onAllNodesWithTag("file-detail-thumb-reason").assertCountEquals(0)
+        shot("file_page_preview")
     }
 }
