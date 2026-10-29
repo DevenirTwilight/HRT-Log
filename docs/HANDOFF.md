@@ -1,3 +1,9 @@
+## 编辑快照 CAS 补验 — 2026-10-29
+
+审查发现Host仅存编辑布尔值，列表刷新可使旧草稿重绑定最新Document/Detail revision，绕过用户预期CAS。已在打开编辑时冻结文档、信息及双revision，保存不再读最新列表revision；撤权/目标消失即隐藏清草稿。同一Host的“别人同时改标题+信息”与“只改信息”场景均保持旧草稿并返回CONFLICT，不覆盖新值。Controller/编辑器定向通过；正式Host四语16参数冲突回归通过。手势32项修复后回归通过，原始32FAIL保留。
+
+首轮PR156（bc9e2e9a）CI原件：安全API35 job123596884459在下载Android Emulator时 `Error on ZipFile unknown archive`，随后5554 refused，尚未执行原生测试，归类启动基础设施失败；Featherline512 job123596885268出现main log清理失败和instrumentation Process crashed，未凭此认定LMK，ROOT_CAUSE_NOT_PROVEN。两者不写PASS，不重复重跑旧头；新双revision生产修复必须由新精确HEAD重新验收，原始run40916177345/40916177324保留。当前不因这两个结果降低RAM/heap/KDF/样本或安全断言。
+
 ## 用户反馈：文件名称与真正全屏阅读（2026-10-29，候选待原生CI）
 
 基于受保护主线d95952ee，复用Room23/MED03–05，没有新Room迁移或密码学/容器变更。重命名走现有编辑信息入口，title+Detail同一AttachmentTransaction CAS；保留原文档UUID、版本、密文、密钥、全部链接和原import journal。只有名称变化推进document.revision，元信息自己的revision保持MED04语义。校验≤256且非空/无ISO控制符，不截断用户输入。FILE_INFO checkpoint仅op/doc中性身份；未知只读回看报告CHECKED，不冒充历史COMMIT，不重写；同进程旧writer未结束不能清屏障。旧列表回调不能把成功CAS的新名称覆回旧名。
