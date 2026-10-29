@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.platform.LocalDensity
@@ -182,7 +182,7 @@ private fun niceStep(span: Double, target: Int): Double {
             val spoken = androidx.compose.ui.res.stringResource(net.plainnotes.app.R.string.ui12_readout_spoken, whenText, number, data.unitSpoken ?: data.unit)
             Surface(color = c.inverseSurface, contentColor = c.inverseOnSurface, shape = MaterialTheme.shapes.small,
                 modifier = Modifier.offset { androidx.compose.ui.unit.IntOffset(x.toInt(), y.toInt()) }.onSizeChanged { cardSize = it }
-                    .testTag("chart-readout").clearAndSetSemantics { contentDescription = spoken; liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite }) {
+                    .testTag("chart-readout").semantics(mergeDescendants = true) { contentDescription = spoken; liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite }) {
                 Column(Modifier.padding(horizontal = 10.dp, vertical = 6.dp)) {
                     Text(whenText, style = MaterialTheme.typography.labelMedium)
                     Text("$number ${data.unit}", style = MaterialTheme.typography.titleSmall)
