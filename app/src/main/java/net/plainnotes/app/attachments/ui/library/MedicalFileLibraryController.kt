@@ -116,7 +116,9 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
      * no title/URI/bytes survive and no failure handler automatically repeats this write. */
     fun saveFileInfo(document:Ops.Document,title:String,detail:Ops.Detail) {
         if(!canWrite() || document.state!="ACTIVE" || state.value.detailsFailed || !Ops.validTitle(title))return
-        val revision=state.value.details[document.document]?.revision ?: 0L
+        // The caller freezes this revision when the editor opens. Refreshing the list must
+        // never promote a stale draft to the newest metadata revision.
+        val revision=detail.revision
         val operation=UUID.randomUUID();pendingInfo=operation to document.document
         refreshGeneration++ // An earlier list read cannot overwrite the real CAS receipt with an old name.
         files.closeViewer()

@@ -53,6 +53,8 @@ import java.util.UUID
 }
 
 private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Target,val label:String,val unlink:Ops.Relationship?=null)
+/** The edit form owns the exact two CAS revisions it opened with, not a later list projection. */
+private data class FileInfoEditSnapshot(val document:Ops.Document,val detail:Ops.Detail?)
 
 /** Same production components and controller in native UI and bounded component regressions. */
 @Composable internal fun MedicalFileLibraryContent(controller:MedicalFileLibraryController,onAdd:()->Unit,
@@ -65,7 +67,7 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
     var unlinked by remember {mutableStateOf(false)};var bin by remember {mutableStateOf(false)}
     var picker by remember {mutableStateOf(false)}
     var toSortOnly by remember {mutableStateOf(false)};var categoryFilter by remember {mutableStateOf<FileCategory?>(null)}
-    var editInfo by remember {mutableStateOf(false)};var afterImportDetail by remember {mutableStateOf<Ops.Detail?>(null)}
+    var editInfo by remember {mutableStateOf<FileInfoEditSnapshot?>(null)};var afterImportDetail by remember {mutableStateOf<Ops.Detail?>(null)}
     var confirmation by remember {mutableStateOf<LinkConfirmation?>(null)}
     var recycle by remember {mutableStateOf<Ops.Document?>(null)}
     var draft by remember {mutableStateOf<ImportDraft?>(null)}
@@ -76,6 +78,9 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
     var error by remember {mutableStateOf(false)}
     val thumbs by controller.thumbnails.state.collectAsState()
     val selected=state.documents.firstOrNull {it.document==state.selected}
+    LaunchedEffect(state.revoked,selected?.document) {
+        if(state.revoked || selected?.document!=editInfo?.document?.document)editInfo=null
+    }
     val canWrite=controller.canWrite()
     val chosenLabel=chooseFor?.let {targetLabel(it,appointments,labs,panels)}.orEmpty()
     val caps=LibraryCapabilities(standaloneImport=true,search=true,categories=true,bidirectionalLinks=true,panelLinks=true,chooseExisting=true,recycle=true)
@@ -168,7 +173,7 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
                         if(canWrite)state.links.firstOrNull {sameTarget(link.target,it.target)}?.let {r->confirmation=LinkConfirmation(selected,r.target,link.target.label,r)}
                     },onOpenRecord={target->state.links.firstOrNull {sameTarget(target,it.target)}?.let {onRecord(it.target)}},
                     onRestore={if(canWrite)recycle=selected},modifier=Modifier.weight(1f),operationsEnabled=canWrite,
-                    onEditInfo=if(!state.detailsFailed && selected.state=="ACTIVE") ({editInfo=true}) else null)
+                    onEditInfo=if(!state.detailsFailed && selected.state=="ACTIVE") ({editInfo=FileInfoEditSnapshot(selected,state.details[selected.document])}) else null)
                 if(selected.state=="ACTIVE")TextButton({recycle=selected},Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("file-detail-recycle"),enabled=canWrite) {Text(stringResource(R.string.lib_bin))}
             } else if(!state.loading) {
                 val available=state.documents.filter {if(bin)it.state=="TRASHED" else it.state=="ACTIVE"}
@@ -203,9 +208,11 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
         },onCancel=controller.files::cancelImport)
         }
     }}
-    if(editInfo && selected!=null)FileWindow("",{editInfo=false}) {
-        FileInfoEditor(state.details[selected.document],onSave={detail->editInfo=false;controller.saveDetail(selected,detail)},onCancel={editInfo=false},
-            initialTitle=selected.title,onSaveFileInfo={title,detail->editInfo=false;controller.saveFileInfo(selected,title,detail)})
+    editInfo?.takeIf {!state.revoked && selected?.document==it.document.document}?.let {draftInfo->
+        FileWindow("",{editInfo=null}) {
+            FileInfoEditor(draftInfo.detail,onSave={detail->editInfo=null;controller.saveFileInfo(draftInfo.document,draftInfo.document.title,detail)},onCancel={editInfo=null},
+                initialTitle=draftInfo.document.title,onSaveFileInfo={title,detail->editInfo=null;controller.saveFileInfo(draftInfo.document,title,detail)})
+        }
     }
     if(picker)MedicalFileTargetPicker(appointments,labs,panels,onDismiss={picker=false},onSaveDraw=onSaveDraw) {target,label->
         picker=false

@@ -60,11 +60,12 @@ class MedicalFileLibraryControllerTest {
         var infoAppliesThenFails=false
         var infoGate:CompletableDeferred<Unit>?=null
         var infoAfterCommit:(()->Unit)?=null
+        var lastInfoRevisions:Pair<Long,Long>?=null
         override fun infoPending()=info
         override fun infoRetain(operation:UUID,document:UUID) {check(info==null || info==(operation to document));info=operation to document}
         override fun infoResolved(operation:UUID,document:UUID) {if(info!=null){check(info==(operation to document));info=null}}
         override suspend fun saveFileInfo(document:UUID,documentRevision:Long,detailRevision:Long,title:String,detail:Ops.Detail):Ops.FileInfoReceipt {
-            writes++;infoGate?.await()
+            writes++;lastInfoRevisions=documentRevision to detailRevision;infoGate?.await()
             val row=docs.firstOrNull {it.document==document}
             if(row==null || row.state!="ACTIVE" || row.revision!=documentRevision || (stored[document]?.revision ?: 0L)!=detailRevision)throw Ops.FileInfoConflict()
             if(failSave)error("synthetic file information failure")
@@ -216,6 +217,26 @@ class MedicalFileLibraryControllerTest {
             c.saveFileInfo(document,"My stale name",typed)
             assertEquals(MedicalFileLibraryController.DetailOutcome.CONFLICT,c.state.value.detailOutcome)
             assertEquals("Someone else",c.state.value.documents.single().title);assertNull(g.info)
+        }
+    }
+    @Test fun refreshedRevisionsNeverRebaseAnOlderFileInformationDraft() {
+        for(changeTitle in listOf(false,true)) {
+            val original=typed.copy(revision=3)
+            val g=Gateway().apply {docs=listOf(document);stored=mapOf(document.document to original)}
+            controller(g).use {c->
+                val frozenDocument=c.state.value.documents.single()
+                val frozenDetail=c.state.value.details.getValue(document.document)
+                g.docs=listOf(if(changeTitle)document.copy(title="A concurrent name",revision=2)else document)
+                val concurrent=typed.copy(institution="Another editor",revision=4)
+                g.stored=mapOf(document.document to concurrent)
+                c.refresh() // The list now knows the new revisions, but the form still owns its old draft.
+                c.saveFileInfo(frozenDocument,"A stale draft",frozenDetail.copy(institution="My uncommitted edit"))
+                assertEquals(1L to 3L,g.lastInfoRevisions)
+                assertEquals(MedicalFileLibraryController.DetailOutcome.CONFLICT,c.state.value.detailOutcome)
+                assertEquals(if(changeTitle)"A concurrent name" else document.title,g.docs.single().title)
+                assertEquals(concurrent,g.stored.getValue(document.document))
+                assertNull(g.info)
+            }
         }
     }
     @Test fun revocationAfterTheRenameCommitNeverInventsASaveFailureOrPublishesMetadata() {
