@@ -111,6 +111,8 @@ internal class AttachmentFlowController(
     suspend fun associate(operation:UUID,target:MedicalAttachmentOperations.Target,document:UUID,revision:Long,unlink:MedicalAttachmentOperations.Relationship?=null)=
         libraryWork {backend.associate(it,operation,target,document,revision,unlink)}
     suspend fun relationStatus(operation:UUID,document:UUID)=libraryWork {backend.relationStatus(it,operation,document)}
+    suspend fun details()=libraryWork {backend.details(it)}
+    suspend fun saveDetail(document:UUID,revision:Long,detail:MedicalAttachmentOperations.Detail)=libraryWork {backend.saveDetail(it,document,revision,detail)}
     suspend fun trash(document:UUID,revision:Long)=libraryWork {backend.trash(it,document,revision)}
     suspend fun restore(document:UUID,revision:Long)=libraryWork {backend.restore(it,document,revision)}
     suspend fun unlink(document:UUID)=session.issue().let {cap->try {permission();check(!closed.get());backend.unlink(cap,requireNotNull(request.target) {"Choose a specific association"},document)}finally {cap.close()}}

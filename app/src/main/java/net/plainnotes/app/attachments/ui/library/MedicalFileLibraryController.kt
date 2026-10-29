@@ -13,7 +13,10 @@ import java.util.UUID
 internal class MedicalFileLibraryController(private val gateway:MedicalFileGateway,private val scope:CoroutineScope,
     private val io:CoroutineDispatcher=Dispatchers.IO):AutoCloseable {
     enum class Outcome { IDLE, WORKING, COMMITTED, LIST_STALE, NOT_SAVED, UNKNOWN, CHECKED }
-    data class State(val documents:List<Ops.Document> = emptyList(),val loading:Boolean=true,val failed:Boolean=false,
+    /** MED-04: the result of saving what the user typed about a file; independent of the link/bin outcome. */
+    enum class DetailOutcome { NONE, SAVED, FAILED }
+    data class State(val documents:List<Ops.Document> = emptyList(),val details:Map<UUID,Ops.Detail> = emptyMap(),val detailsFailed:Boolean=false,
+        val detailOutcome:DetailOutcome=DetailOutcome.NONE,val loading:Boolean=true,val failed:Boolean=false,
         val selected:UUID?=null,val links:List<Ops.Relationship> = emptyList(),val linksFailed:Boolean=false,val linksLoading:Boolean=false,
         val outcome:Outcome=Outcome.IDLE,val revoked:Boolean=false)
     val files=MedicalAttachmentsController(gateway,scope,io)
@@ -42,7 +45,9 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
         scope.launch {
             try {
                 val docs=withContext(io) {gateway.documents()}
-                if(!closed && !state.value.revoked)mutable.update {it.copy(documents=docs,loading=false,failed=false)}
+                // The file list never waits for, or fails with, the user's own notes about the files.
+                val details=try {withContext(io) {gateway.details()}}catch(e:CancellationException) {throw e}catch(_:Exception) {null}
+                if(!closed && !state.value.revoked)mutable.update {it.copy(documents=docs,details=details.orEmpty(),detailsFailed=details==null,loading=false,failed=false)}
             }catch(e:CancellationException) {throw e}
             catch(_:Exception) {if(!closed && !state.value.revoked)mutable.update {it.copy(loading=false,failed=true,outcome=if(it.outcome==Outcome.COMMITTED)Outcome.LIST_STALE else it.outcome)}}
         }
@@ -83,6 +88,24 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
             }else mutable.update {it.copy(outcome=Outcome.UNKNOWN)}
         }
     }
+    /** Saves what the user typed about an active file. Never touches the original, its key or its links; a failure only reports and never retries by itself. */
+    fun saveDetail(document:Ops.Document,detail:Ops.Detail,then:(()->Unit)?=null) {
+        if(!canWrite() || document.state!="ACTIVE" || state.value.detailsFailed) {then?.invoke();return}
+        val revision=state.value.details[document.document]?.revision ?: 0L
+        mutable.update {it.copy(outcome=Outcome.WORKING,detailOutcome=DetailOutcome.NONE)}
+        writing=scope.launch {
+            val saved=try {withContext(io) {gateway.saveDetail(document.document,revision,detail.copy(revision=revision))};true}
+                catch(e:CancellationException) {mutable.update {it.copy(outcome=Outcome.IDLE)};throw e}catch(_:Exception) {false}
+            if(closed || state.value.revoked)return@launch
+            // After a failure the stored value may still equal what was asked for (a commit whose acknowledgement was lost): read it, do not guess.
+            val actual=runCatching {withContext(io) {gateway.details()}}.getOrNull()?.get(document.document)
+            val ok=saved || (actual!=null && actual.category==detail.category && actual.date==detail.date && actual.institution==detail.institution && actual.revision>revision)
+            mutable.update {it.copy(outcome=Outcome.IDLE,detailOutcome=if(ok)DetailOutcome.SAVED else DetailOutcome.FAILED)}
+            refresh()
+            then?.invoke()
+        }
+    }
+    fun dismissDetailOutcome() {mutable.update {it.copy(detailOutcome=DetailOutcome.NONE)}}
     /** Existing CAS-based soft lifecycle, retaining every original, key, quota and quarantined link. */
     fun recycle(document:Ops.Document,restore:Boolean) {
         if(!canWrite() || restore!=(document.state=="TRASHED"))return

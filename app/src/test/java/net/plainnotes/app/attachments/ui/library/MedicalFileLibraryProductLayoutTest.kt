@@ -59,4 +59,58 @@ class MedicalFileLibraryProductLayoutTest(private val locale:String,private val 
             ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-empty"));ui.onNodeWithTag("library-empty").assertExists()
         }finally {controller.close()}
     }
+
+    /** MED-04 through the real host: tiles and filters come from what the user typed, editing writes through the controller, nothing is inferred. */
+    @Test fun actualHostFiltersByTypedCategorySearchesInstitutionAndEditsThroughTheController() {
+        RuntimeEnvironment.setQualifiers("$locale-w${width}dp-h891dp-xxhdpi");RuntimeEnvironment.setFontScale(font)
+        val pdf=Ops.Document(UUID.randomUUID(),1,"SYNTHETIC report","application/pdf","ACTIVE","ACTIVE",1,1024,1000)
+        val image=Ops.Document(UUID.randomUUID(),1,"SYNTHETIC photo","image/png","ACTIVE","ACTIVE",0,512,2000)
+        val gateway=MedicalFileLibraryControllerTest.Gateway().apply {docs=listOf(pdf,image);stored=mapOf(pdf.document to Ops.Detail("LAB_REPORT","2026-10-07","SYNTHETIC Clinic",1))}
+        val controller=MedicalFileLibraryController(gateway,CoroutineScope(Dispatchers.Unconfined),Dispatchers.Unconfined)
+        controller.refresh()
+        fun s(id:Int,vararg a:Any)=ui.activity.getString(id,*a)
+        try {
+            ui.setContent {NotesTheme(if(dark)ThemeMode.DARK else ThemeMode.LIGHT) {
+                MedicalFileLibraryContent(controller,{},emptyList(),emptyList(),emptyList(),{}, {}, {}, {}, {}, {_,done->done(null)})
+            }}
+            // Only the typed category has a tile with files; the file with nothing typed is the one that still needs sorting.
+            ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-category:LAB_REPORT"))
+            ui.onNodeWithTag("library-category:LAB_REPORT").assertIsEnabled()
+            ui.onNodeWithTag("library-category:PRESCRIPTION").assertIsNotEnabled()
+            ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-unsorted"))
+            ui.onNodeWithTag("library-unsorted").assert(hasText(ui.activity.resources.getQuantityString(net.plainnotes.app.R.plurals.med04_to_sort_body,1,1),substring=true))
+            ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-doc:${pdf.document}"))
+            ui.onAllNodes(hasText("SYNTHETIC Clinic",substring=true) and hasAnyAncestor(hasTestTag("library-doc:${pdf.document}"))).assertCountEquals(1)
+            ui.onAllNodes(hasText(s(net.plainnotes.app.R.string.med04_date_unknown),substring=true) and hasAnyAncestor(hasTestTag("library-doc:${image.document}"))).assertCountEquals(1)
+            // Filter by the tile, clear, then search by institution and by category name.
+            ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-category:LAB_REPORT"))
+            ui.onNodeWithTag("library-category:LAB_REPORT").performClick()
+            ui.onNodeWithTag("library-clear-filter").assertExists()
+            ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-doc:${pdf.document}"))
+            ui.onAllNodesWithTag("library-doc:${image.document}").assertCountEquals(0)
+            ui.onNodeWithTag("library-clear-filter").performClick()
+            ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-search"))
+            ui.onNodeWithTag("library-search").performTextInput("clinic")
+            ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-doc:${pdf.document}"))
+            ui.onAllNodesWithTag("library-doc:${image.document}").assertCountEquals(0)
+            ui.onNodeWithTag("library-search").performTextReplacement(s(net.plainnotes.app.R.string.lib_cat_lab))
+            ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-doc:${pdf.document}"))
+            ui.onAllNodesWithTag("library-doc:${image.document}").assertCountEquals(0)
+            ui.onNodeWithTag("library-search").performTextReplacement("")
+            // Edit the untyped file through the production editor.
+            ui.onNodeWithTag("library").performScrollToNode(hasTestTag("library-doc:${image.document}"))
+            ui.onNodeWithTag("library-doc:${image.document}").performClick()
+            ui.onNodeWithTag("file-detail-edit-info").performScrollTo().performClick()
+            ui.onNodeWithTag("file-info-category:PRESCRIPTION").performScrollTo().performClick()
+            ui.onNodeWithTag("file-info-institution").performScrollTo().performTextReplacement("SYNTHETIC Pharmacy")
+            ui.onNodeWithTag("file-info-save").performScrollTo().performClick()
+            ui.waitForIdle()
+            assertEquals(Ops.Detail("PRESCRIPTION",null,"SYNTHETIC Pharmacy",1),gateway.stored[image.document])
+            assertEquals(MedicalFileLibraryController.DetailOutcome.SAVED,controller.state.value.detailOutcome)
+            ui.onNodeWithTag("library-detail-result").assertExists()
+            ui.onNode(hasText("SYNTHETIC Pharmacy") and hasAnyAncestor(hasTestTag("file-detail-facts"))).performScrollTo().assertExists()
+            // The original's own revision never moved.
+            assertEquals(1L,controller.state.value.documents.first {it.document==image.document}.revision)
+        }finally {controller.close()}
+    }
 }

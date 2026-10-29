@@ -33,7 +33,8 @@ internal class LibraryRestoreObjects(private val context:LibraryGenerationContex
             insert("attachment_store","store_uuid" to scope.dataset,"logical_vault_uuid" to scope.logicalVault,"store_state" to "CURRENT","space" to "PRIMARY","record_epoch" to scope.epoch,"generation" to 1L,"feature_enabled" to 0)
             insert("attachment_generation","store_uuid" to scope.dataset,"generation_uuid" to p.namespace.generation.toString(),"state" to "STAGING","created_utc" to System.currentTimeMillis())
             p.manifest.records.forEach {r->cap.check();insert("attachment_record_identity","store_uuid" to scope.dataset,"record_epoch" to scope.epoch,"record_uuid" to r.uuid.toString(),"target_kind" to r.kind.name,"legacy_id" to r.sourceId,"state" to r.state,"trash_id" to r.trashId,"evidence_digest" to MedicalArchiveCrypto.unhex(r.evidenceSha256))}
-            p.manifest.documents.forEach {d->cap.check();insert("attachment_document","store_uuid" to scope.dataset,"document_uuid" to d.uuid.toString(),"revision" to d.revision,"title" to d.title,"category" to d.category,"state" to d.state,"deleted_utc" to d.deletedUtc)}
+            p.manifest.documents.forEach {d->cap.check();insert("attachment_document","store_uuid" to scope.dataset,"document_uuid" to d.uuid.toString(),"revision" to d.revision,"title" to d.title,"category" to d.category,"state" to d.state,"deleted_utc" to d.deletedUtc)
+                d.detail?.let {x->insert("attachment_document_detail","store_uuid" to scope.dataset,"document_uuid" to d.uuid.toString(),"file_category" to x.category,"document_date" to x.date,"institution" to x.institution,"detail_revision" to x.revision,"updated_utc" to System.currentTimeMillis())}}
             cap.check()
         }
         AttachmentOwnedFiles(context).locked().use {directory->
