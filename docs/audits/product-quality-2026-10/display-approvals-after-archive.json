@@ -129,6 +129,82 @@
     "tests": "Pdf01Test (text identical to the frozen pre-PDF-01 renderer LegacyPdfReport in zh-CN/en/fr/zh-Hant-TW for report, visit pack and wellbeing summary with all and partial parts; digest; drawChart calls identical up to a vertical offset; layout rules); PK display regression: CausalTimeUiTest, ExportTest, D-2 report plan tests, concentration and lab-context tests in the full :app:testFullDebugUnitTest"
    },
    "human_review": "recommended: compare the before/after samples in docs/ui-audit/2026-10-23-pdf01/."
+  },
+  {
+   "id": "PD-2026-10-29-UI12-CONCENTRATIONSCREEN",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-29",
+   "scope": "UI-12: the E2 estimate card (one total curve, route legend, now value, basis line, reminder, models-and-literature window, calibration switch state) and the other-curves card (3/7 days, no bands). Display only; no model, parameter, candidate, calibration rule or export changed.",
+   "previous_sha256": "7ed4e28f51c2bea6446036d6bd522af177569f712102eb6f2f0bbc3f319d3142",
+   "new_sha256": "426925ca611caee8cea171091bc566e4ea0e439d8c700cc09b4e67e5d5ba38e7",
+   "evidence": {
+    "commit": "cb21b8a9f5232fa47c7f2358c4cb96610fdf92c8",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §162 (2026-10-28), quoting the UI-12 task book (docs/design/ui12-concentration-2026-10-28/TASK_BOOK_ORIGINAL.md): the owner explicitly approves changing the PK_DISPLAY_REVIEW files ConcentrationScreen.kt, ConcChart.kt and ChartViewport.kt for the display changes of section 2; UnifiedConcentrationScreen.kt and ConcentrationPreview.kt only as far as hosting the display requires. LIVE_LOCK files and Exports.kt untouched.",
+   "verification": {
+    "previous_blob": "7ed4e28f… = this file on the default branch d18b2c91 before UI-12",
+    "tests": "E2TotalTest (single route identical point for point, mixed total = M2 + non-sublingual compat with background once, no sublingual double count, no undercount); M2 contract tests and M2ScenarioDisplayTest; Ui12ConcentrationTest and migrated UnifiedConcentrationUiTest; PK display regression and PeriodStabilityTest in the full :app:testFullDebugUnitTest (3367 tests, 0 failed) plus lintFullDebug"
+   },
+   "human_review": "recommended: compare docs/ui-audit/2026-10-28-ui12/{before,after,compare}."
+  },
+  {
+   "id": "PD-2026-10-29-UI12-CONCCHART",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcChart.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-29",
+   "scope": "UI-12: chart drawing and reading only (dose marks, day axis and noon labels, line width, forecast-tail legend, spoken readout card, now-line colour, tap again to close). Same data in, same exact readAt callback.",
+   "previous_sha256": "51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06",
+   "new_sha256": "9fca1d03a34499c9597dcb2b4cdaf7a9f8e0e33cb784981845145277d675023a",
+   "evidence": {
+    "commit": "cb21b8a9f5232fa47c7f2358c4cb96610fdf92c8",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §162 (2026-10-28), quoting the UI-12 task book (docs/design/ui12-concentration-2026-10-28/TASK_BOOK_ORIGINAL.md): the owner explicitly approves changing the PK_DISPLAY_REVIEW files ConcentrationScreen.kt, ConcChart.kt and ChartViewport.kt for the display changes of section 2; UnifiedConcentrationScreen.kt and ConcentrationPreview.kt only as far as hosting the display requires. LIVE_LOCK files and Exports.kt untouched.",
+   "verification": {
+    "previous_blob": "51d0f88b… = this file on the default branch d18b2c91 before UI-12",
+    "tests": "E2TotalTest (single route identical point for point, mixed total = M2 + non-sublingual compat with background once, no sublingual double count, no undercount); M2 contract tests and M2ScenarioDisplayTest; Ui12ConcentrationTest and migrated UnifiedConcentrationUiTest; PK display regression and PeriodStabilityTest in the full :app:testFullDebugUnitTest (3367 tests, 0 failed) plus lintFullDebug"
+   },
+   "human_review": "recommended: compare docs/ui-audit/2026-10-28-ui12/{before,after,compare}."
+  },
+  {
+   "id": "PD-2026-10-29-UI12-UNIFIEDSCREEN",
+   "file": "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-29",
+   "scope": "UI-12: hosts the unified page: content lambda receives the M2 preview, status and basis; unknown-records notice replaces the partial-scope notice. No M2 value changed.",
+   "previous_sha256": "29c09d46f0b300eeb6ba6abdb030577a6cb70ddbff06f404fe441e9ce807def5",
+   "new_sha256": "01808b49cd13d5bb9796c3d3c24b75321b084fa3d72dd53be19232f76e54161c",
+   "evidence": {
+    "commit": "cb21b8a9f5232fa47c7f2358c4cb96610fdf92c8",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §162 (2026-10-28), quoting the UI-12 task book (docs/design/ui12-concentration-2026-10-28/TASK_BOOK_ORIGINAL.md): the owner explicitly approves changing the PK_DISPLAY_REVIEW files ConcentrationScreen.kt, ConcChart.kt and ChartViewport.kt for the display changes of section 2; UnifiedConcentrationScreen.kt and ConcentrationPreview.kt only as far as hosting the display requires. LIVE_LOCK files and Exports.kt untouched.",
+   "verification": {
+    "previous_blob": "29c09d46… = this file on the default branch d18b2c91 before UI-12",
+    "tests": "E2TotalTest (single route identical point for point, mixed total = M2 + non-sublingual compat with background once, no sublingual double count, no undercount); M2 contract tests and M2ScenarioDisplayTest; Ui12ConcentrationTest and migrated UnifiedConcentrationUiTest; PK display regression and PeriodStabilityTest in the full :app:testFullDebugUnitTest (3367 tests, 0 failed) plus lintFullDebug"
+   },
+   "human_review": "recommended: compare docs/ui-audit/2026-10-28-ui12/{before,after,compare}."
+  },
+  {
+   "id": "PD-2026-10-29-UI12-PREVIEW",
+   "file": "app/src/main/java/net/plainnotes/app/experimental/ConcentrationPreview.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-29",
+   "scope": "UI-12: adds the read-only field doseCount (number of doses in the snapshot). No value, grid or background computation changed.",
+   "previous_sha256": "846017d2f465dc78e9db08d714c91da58031f2b6d24c33e00995a11201afdc16",
+   "new_sha256": "1f51e19c07c83b4bffe54ced0dcdb4a75fadc91163f33f35c5d7b8dc14c81d5b",
+   "evidence": {
+    "commit": "cb21b8a9f5232fa47c7f2358c4cb96610fdf92c8",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §162 (2026-10-28), quoting the UI-12 task book (docs/design/ui12-concentration-2026-10-28/TASK_BOOK_ORIGINAL.md): the owner explicitly approves changing the PK_DISPLAY_REVIEW files ConcentrationScreen.kt, ConcChart.kt and ChartViewport.kt for the display changes of section 2; UnifiedConcentrationScreen.kt and ConcentrationPreview.kt only as far as hosting the display requires. LIVE_LOCK files and Exports.kt untouched.",
+   "verification": {
+    "previous_blob": "846017d2… = this file on the default branch d18b2c91 before UI-12",
+    "tests": "E2TotalTest (single route identical point for point, mixed total = M2 + non-sublingual compat with background once, no sublingual double count, no undercount); M2 contract tests and M2ScenarioDisplayTest; Ui12ConcentrationTest and migrated UnifiedConcentrationUiTest; PK display regression and PeriodStabilityTest in the full :app:testFullDebugUnitTest (3367 tests, 0 failed) plus lintFullDebug"
+   },
+   "human_review": "recommended: compare docs/ui-audit/2026-10-28-ui12/{before,after,compare}."
   }
  ]
 }

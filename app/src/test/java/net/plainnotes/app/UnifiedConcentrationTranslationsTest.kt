@@ -15,7 +15,7 @@ class UnifiedConcentrationTranslationsTest {
         val english=strings("values")
         for(locale in listOf("values","values-zh","values-b+zh+Hant","values-fr")) {
             // D-1 replaced uc_original_research_note with the collapsible research basis; the same stale-wording check applies.
-            for(key in listOf("m2_research_basis_body","m2_scenario_body","m2_chart_title"))
+            for(key in listOf("m2_research_basis_body","m2_scenario_body")) // UI-12 removed m2_chart_title (the chart is "E2 curve" now)
                 assertFalse("Stale calibration instruction in $locale/$key",strings(locale).getValue(key).contains("Legacy",ignoreCase=true))
         }
         for(locale in listOf("values-zh","values-b+zh+Hant","values-fr")) {
