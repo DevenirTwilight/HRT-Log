@@ -37,7 +37,7 @@ class TotalE2CalibrationParityTest {
         assertEquals(k.getDouble("min_information_gain"), TotalE2Calibration.MIN_INFORMATION_GAIN, 0.0)
         assertEquals(k.getDouble("sigma_lab"), TotalE2Calibration.SIGMA_LAB, 1e-15)
         assertEquals("the production observation noise", net.plainnotes.app.pk.LabFit.SIGMA_LAB, TotalE2Calibration.SIGMA_LAB, 0.0)
-        assertEquals(k.getDouble("sigma_lab"), 0.2937, 5e-5)
+        assertEquals("sqrt(ln(1 + 0.299^2)); the SL-CAL-01 report rounds it as 0.2937 by mistake", 0.29262, k.getDouble("sigma_lab"), 5e-6)
     }
 
     @Test fun everySyntheticCaseGivesTheReferencesNumbersAndDecision() {
