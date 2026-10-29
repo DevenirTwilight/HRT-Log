@@ -1746,7 +1746,31 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 **守卫（核对后的更正）**：SL-CAL-01 报告第 11 节建议把新引擎登记进 `guard-classification.json`；核对发现该文件属于研究归档，`research_archive.verify_records` 要求归档内容与归档提交逐字节一致，不能再改；`check_protocol.check()` 的文档也写明新产品文件由可执行测试管辖，不再靠 SHA 批准。所以引擎 `app/.../conc/TotalE2Calibration.kt` **不登记**，它是普通产品文件，由与 Python 参考的逐位对照测试（`TotalE2CalibrationParityTest`、`test_sl_cal_02.py` 复现夹具）和规则测试保护；`test_sl_cal_01.py` 里「没有未分类文件」的断言改为只允许这一个文件。改动 `conc/` 与 `pk-engine/` 会触发 `research-deep`（科学门）。`ConcentrationCalculator.kt`、`CalibrationEligibility.kt`、`LabEstimate.kt`、`LabFit.kt`、`Engine.kt`、`pk-params.json`、M2 候选、`Exports.kt` **一律不改**（它们仍是 LIVE_LOCK 或 PK_DISPLAY_REVIEW）。
 **禁止与保持**：`m2_absolute_pgml=false` 不改；不声称临床准确性已确立（`clinical_accuracy_established=false`）；不提供剂量建议，不把残差解释为「化验错了」；真实健康数据不进仓库（对照测试只用合成用户）；负责人本地检查脚本仍是 NOT_RUN。
 
+## 167. SL-CAL-02 步骤 4 — 把校准接到浓度页（2026-10-29）
 
-## 167. 2026-10-29 完整接手与三项用户反馈收尾
+负责人 2026-10-29 原话：「继续步骤4，把校准接到界面，都做完给apk」。依据：§166 第 ④ 步（显示接入，会修改 PK_DISPLAY_REVIEW 文件并各自追加 `display-approvals` 记录）。仍是 PK 算法的显示接入，不占 `UI-*` 编号。
+
+**做了什么**
+- 有舌下记录且 M2 可用时，校准开关**可用**（沿用同一个设置项 `calib_enabled`，默认开）；开启后用 `TotalE2Calibration` 对「M2 − B（舌下）+ 非舌下兼容曲线（N）」整体乘一个系数 k，`B` 只计一次、不缩放：`C = B + k·((M2−B)+N)`。关闭或被拒绝时曲线与改前逐点相同。
+- 适配器 `ui/E2Calibration.kt`（只读）：化验来自已保存的 E2 化验行；历史门 = 既有 `CalibrationEligibility`（P1-B，未改）且首次服药至少早于化验 24 小时；采样时间「恰好本地 00:00」视为日期占位而拒绝（E1 已知限制，见 §166）；距上次舌下服药的小时数取自 M2 快照里的舌下服药时刻（`ConcentrationPreview.sublingualDoseH`，只读新增字段）。
+- 校准卡写明：用了几次化验、信息档位（充分/有限）、「用其余化验预测其中一次，相差约 x%」、使用了你记录的抽血时间、降权的化验数、每个被拒绝原因各有几次；被拒绝时写明原因，曲线保持未校准。**不画区间带。** 四语言（en / zh-CN / zh-TW / fr）。
+- 没有舌下记录时仍是旧的兼容校准（`CalibrationCard`），没有改。M2 不可用（Legacy/待定）时开关仍禁用并写明原因。
+- 不改：任何模型、参数、候选、LIVE_LOCK 文件、导出 / PDF / 就诊资料包 / 化验快照（§67 D-2）、Room、备份；校准系数不持久化；`m2_absolute_pgml=false`、`clinical_accuracy_established=false` 不变。
+- 迁移的 UI-12 断言（原含义保留）：「有舌下记录时校准开关禁用并写原因」被 §166/§167 取代，改为开关可用、拒绝原因有文字；「化验不改 M2 数值」仍断言（开启校准后 `lastPreview.values` 逐位不变）。
+
+**显示批准记录（追加式）**：`PD-2026-10-29-SLCAL02-CONCENTRATIONSCREEN`（`ConcentrationScreen.kt`：校准卡与合计的校准接线）、`PD-2026-10-29-SLCAL02-PREVIEW`（`ConcentrationPreview.kt`：只读字段 `sublingualDoseH`，无任何数值、网格或背景计算改动）。`ConcChart.kt`、`UnifiedConcentrationScreen.kt`、`ChartViewport.kt` 未改。
+
+**NOT_RUN / 待负责人复核**：真机与人工 TalkBack；信息档位阈值 0.75 是设计选择；E1 只能把本地午夜当占位（真正的「估计时间」标记需要 Room 迁移，另行请示）；引擎未登记进守卫（归档不可改，见 §166）。
+
+## 169. 用户反馈修复：文件名称、全屏阅读与舌下 E2 校准（2026-10-29）
+
+负责人要求：在既有文件信息编辑中加入256字符内的持久名称更新；原件、UUID、密钥、版本和其它关联不变，CAS/撤权/UNKNOWN只读核对、完整备份恢复均须真实验证。阅读器改为独立全屏内容区，保留API26/27 PDF拒绝、按需逐页/缩放/平移、工具栏显隐和安全撤权，不更改解析/内存配额或建立第二读取器。校准继续现有PR #153，正式MainActivity接线与真实数据输入、异步重算、单位/时区/历史资格和失败原因必须可核对；共同系数及信息增益等科学门不放宽，不改M2参数、研究归档、Room或备份格式。
+
+本条是显示修改批准 `PD-2026-10-29-USER-FEEDBACK-CALIBRATION`：ConcentrationScreen.kt仅校准异步状态重置、明确失败/计算中/补全指引、切换设置及最早记录时间接线；其余数值模型不变，追加显示哈希记录。午夜记录尚无精度字段，不能把日期占位或非法时区猜成准确时刻，真实午夜与仅日期无法区分的限制必须明示，不用虚假时间绕过门槛。
+
+允许三项互不冲突的修复并行，文件所有权与最终集成统一负责，保留原CI失败、不得删安全断言。签名仅在最终合并源通过且最新有效私人交付授权覆盖时执行；不自动发布Release或tag。真机和人工TalkBack未实际执行必须NOT_RUN。
+
+
+## 170. 2026-10-29 完整接手与三项用户反馈收尾
 
 负责人要求接续现有PR153/155/156，以实时远端为准，优先交付文件名称编辑、真正全屏PDF/图片阅读、满足科学条件时的舌下E2合计校准。不得重复已合并MED03–05或另起重复PR。保留实际SAF、真实COMMIT、主线数据/备份/权限/科学门槛与所有有效负向断言；准确区分代码、本地、CI、合并、APK交付和真机状态。必须定位已知DocumentsUI、API26返回、SnapshotStateObserver和低内存真实失败，不凭超时断言LMK或筛选绿色。原始失败保留；只在最终HEAD必需检查通过且符合§106保护规则后合并。当前未授权新私人APK签名或公开Release；不触碰密钥，真机与人工TalkBack未执行时记NOT_RUN。

@@ -24,6 +24,8 @@ import net.plainnotes.app.NotesState
 import net.plainnotes.app.R
 import net.plainnotes.app.conc.ConcentrationResult
 import net.plainnotes.app.conc.MissingInput
+import net.plainnotes.app.conc.TotalE2Calibration
+import kotlinx.coroutines.ensureActive
 import net.plainnotes.app.pk.BandedCurve
 import net.plainnotes.app.pk.CalibrationMode
 import net.plainnotes.app.pk.Curve
@@ -35,6 +37,9 @@ import net.plainnotes.app.pk.Pk
 import kotlin.math.roundToInt
 
 class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: CalibrationMode)
+
+/** The page's total and, when labs were fitted, the calibration outcome behind it (shown in the calibration card). */
+private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Calibration.Outcome?, val failed: Boolean = false)
 
 /**
  * UI-12 (REQUIREMENTS §162): one page for every route. The E2 estimate is the sum of the routes ([E2Total]); the result comes first,
@@ -50,7 +55,10 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                                     /** The compatibility result for non-sublingual estradiol only ([E2Total.nonSublingualInputs]); null when there is none. */
                                     e2NonSublingual: ConcentrationResult? = null,
                                     /** Times of the doses actually taken; only those before "now" are drawn as ticks. */
-                                    doseTimes: List<java.time.Instant> = emptyList()) {
+                                    doseTimes: List<java.time.Instant> = emptyList(),
+                                    /** SL-CAL-02: the saved lab rows; the common-coefficient calibration reads the E2 ones (never edits them). */
+                                    labs: List<net.plainnotes.app.data.LabValueEntity> = emptyList(),
+                                    calculationInputFailed: Boolean = false, onRetryCalculation: () -> Unit = {}) {
     var repair by remember{mutableStateOf<net.plainnotes.app.data.MedicationEntity?>(null)}
     var editWeight by remember { mutableStateOf(false) }
     var modelsOpen by rememberSaveable { mutableStateOf(false) }
@@ -61,12 +69,28 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
     fun fmt(v: Double) = (v * factor).roundToInt().toString()
     val compatibilityHasSl = result?.models?.get(Curve.E2)?.any { it.key=="E2_SL" } == true
     val previewReady = preview?.timeH?.isNotEmpty() == true
-    // A mixed total reads M2 at every compatibility grid point, so it is built off the main thread; single routes are O(1).
-    val needsAsync = previewReady && e2NonSublingual != null
-    val total: E2Total.Curve? = if (!needsAsync) remember(preview, result, e2NonSublingual) { E2Total.curve(preview, result, e2NonSublingual) }
-        else produceState<E2Total.Curve?>(null, preview, result, e2NonSublingual) { value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { E2Total.curve(preview, result, e2NonSublingual) } }.value
+    // SL-CAL-02: with sublingual doses the labs scale the whole total by one coefficient ([TotalE2Calibration]); the fit and a mixed total read M2 at many
+    // points, so they are built off the main thread; a single uncalibrated route is O(1).
+    val wantCalibration = settings.calibrate && previewReady && labs.any { it.analyte_code == net.plainnotes.app.conc.ConcentrationCalculator.E2_CODE }
+    val needsAsync = previewReady && (e2NonSublingual != null || wantCalibration)
+    val firstDoseH = E2Calibration.firstDoseH(doseTimes)
+    var calibrationRetry by remember { mutableIntStateOf(0) }
+    fun build(cancel: () -> Unit): TotalWithOutcome {
+        val outcome = if (wantCalibration) E2Calibration.run(preview, e2NonSublingual, labs, result, firstDoseH, preview?.asOfH ?: result?.nowH ?: 0.0, cancel) else null
+        return TotalWithOutcome(E2Total.curve(preview, result, e2NonSublingual, outcome as? TotalE2Calibration.Calibrated), outcome)
+    }
+    val built: TotalWithOutcome? = if (!needsAsync) remember(preview, result, e2NonSublingual) { build {} }
+        else key(preview, result, e2NonSublingual, labs, wantCalibration, firstDoseH, calibrationRetry) {
+            produceState<TotalWithOutcome?>(null) {
+                value = try { kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { build { ensureActive() } } }
+                catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled }
+                catch (_: Exception) { TotalWithOutcome(null, null, failed = true) }
+            }.value
+        }
+    val total: E2Total.Curve? = if (loading || calculationInputFailed) null else built?.curve
+    val calibrationOutcome = built?.outcome
     val hasTotal = total != null
-    val pending = needsAsync && !hasTotal
+    val pending = needsAsync && built == null
     val missing = result?.missing.orEmpty()
     val statusCards: @Composable () -> Unit = {
         if (missing.any { it.medicationId == null && it.input == MissingInput.WEIGHT }) SectionCard(stringResource(R.string.pk_need_weight_title)) {
@@ -140,17 +164,15 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
 
         if (result != null && result.others.isNotEmpty()) OtherCurvesCard(result)
 
-        if (compatibilityHasSl || previewReady) SectionCard(stringResource(R.string.calib_title)) {
-            // The label has its own line so it never wraps into a narrow column beside the pill and the disabled switch (320 dp, 2x text).
-            Text(stringResource(R.string.calib_enable), style = MaterialTheme.typography.bodyLarge)
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                StatusPill(stringResource(R.string.ui12_calib_unavailable), MaterialTheme.colorScheme.surfaceContainerHighest, MaterialTheme.colorScheme.onSurfaceVariant)
-                Spacer(Modifier.weight(1f))
-                Switch(checked = false, onCheckedChange = {}, enabled = false, modifier = Modifier.testTag("calibration-switch"))
-            }
-            Text(stringResource(R.string.ui12_calib_unavailable_sl),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("calibration-unavailable-sl"))
-            OutlinedButton(onClick=onOpenLabs,modifier=Modifier.heightIn(min=48.dp)) { Text(stringResource(R.string.calib_manage_labs)) }
-        } else CalibrationCard(result, settings, onSettings, onOpenLabs, ::fmt, unit)
+        if (calculationInputFailed && !compatibilityHasSl && !previewReady) SectionCard(stringResource(R.string.calib_title)) {
+            Text(stringResource(R.string.feedback_calculation_failed), modifier = Modifier.testTag("calibration-failed"))
+            OutlinedButton(onClick = onRetryCalculation, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.attach_retry)) }
+        }
+        if (compatibilityHasSl || previewReady) SublingualCalibrationCard(previewReady, settings, onSettings, calibrationOutcome,
+            labs.none { it.analyte_code == net.plainnotes.app.conc.ConcentrationCalculator.E2_CODE }, onOpenLabs,
+            pending || loading, built?.failed == true || calculationInputFailed, { calibrationRetry++; onRetryCalculation() }, onOpenHistory, result, ::fmt, unit,
+            labs.count { it.analyte_code == net.plainnotes.app.conc.ConcentrationCalculator.E2_CODE && it.unit !in setOf("pg/mL", "pmol/L") })
+        else CalibrationCard(result, settings, onSettings, onOpenLabs, ::fmt, unit)
 
         SectionCard(stringResource(R.string.pk_model_title)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -244,6 +266,79 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 }
             }
         }
+    }
+}
+
+/**
+ * SL-CAL-02: calibration of the total when sublingual doses are recorded. The switch is the same setting as before; the card says in plain
+ * words what was done (labs used, how well they agree, how much they say) or why nothing was done. No interval is shown.
+ */
+@Composable private fun SublingualCalibrationCard(m2Ready: Boolean, settings: ConcSettings, onSettings: (ConcSettings) -> Unit, outcome: TotalE2Calibration.Outcome?,
+                                                  noLabs: Boolean, onOpenLabs: () -> Unit, computing: Boolean = false, failed: Boolean = false, onRetry: () -> Unit = {}, onOpenHistory: () -> Unit = {}, history: ConcentrationResult? = null, fmt: (Double) -> String = { it.toString() }, unit: String = "", unsupportedUnits: Int = 0) {
+    SectionCard(stringResource(R.string.calib_title)) {
+        // Label and switch share a row (the switch never leaves the screen); the status pill has its own line so a long word (French, 2x text) can wrap.
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(stringResource(R.string.calib_enable), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+            Spacer(Modifier.width(12.dp))
+            Switch(checked = m2Ready && settings.calibrate, onCheckedChange = { onSettings(ConcSettings(settings.pmol, it, settings.mode)) }, enabled = m2Ready, modifier = Modifier.testTag("calibration-switch"))
+        }
+        val (pill, container, content) = when {
+            !m2Ready -> Triple(R.string.ui12_calib_unavailable, MaterialTheme.colorScheme.surfaceContainerHighest, MaterialTheme.colorScheme.onSurfaceVariant)
+            !settings.calibrate -> Triple(R.string.ui12_cal_off, MaterialTheme.colorScheme.surfaceContainerHighest, MaterialTheme.colorScheme.onSurfaceVariant)
+            computing -> Triple(R.string.feedback_calculating, MaterialTheme.colorScheme.surfaceContainerHighest, MaterialTheme.colorScheme.onSurfaceVariant)
+            failed -> Triple(R.string.feedback_calculation_failed, MaterialTheme.colorScheme.errorContainer, MaterialTheme.colorScheme.onErrorContainer)
+            outcome is TotalE2Calibration.Calibrated -> Triple(R.string.ui12_label_calibrated, MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.onPrimaryContainer)
+            else -> Triple(R.string.ui12_cal_not_applied, MaterialTheme.colorScheme.surfaceContainerHighest, MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        StatusPill(stringResource(pill), container, content)
+        when {
+            !m2Ready -> Text(stringResource(R.string.ui12_calib_unavailable_sl), style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("calibration-unavailable-sl"))
+            !settings.calibrate -> Text(stringResource(R.string.ui12_cal_explain), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.testTag("calibration-explain"))
+            computing -> Text(stringResource(R.string.feedback_calculating), modifier = Modifier.testTag("calibration-calculating"))
+            failed -> Column {
+                Text(stringResource(R.string.feedback_calculation_failed), modifier = Modifier.testTag("calibration-failed"))
+                OutlinedButton(onClick = onRetry, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.attach_retry)) }
+            }
+            noLabs || outcome == null -> Text(stringResource(R.string.calib_no_labs), style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("calibration-no-labs"))
+            outcome is TotalE2Calibration.Calibrated -> Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.testTag("calibration-result")) {
+                Text(stringResource(R.string.ui12_cal_explain), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.ui12_cal_used, outcome.usedLabIds.size), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("calibration-used"))
+                Text(stringResource(if (TotalE2Calibration.tier(outcome.informationGain) == TotalE2Calibration.Tier.SUFFICIENT) R.string.ui12_cal_tier_sufficient else R.string.ui12_cal_tier_limited),
+                    style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("calibration-tier"))
+                val loo = outcome.leaveOneOut
+                Text(if (loo == null) stringResource(R.string.ui12_cal_loo_single) else stringResource(R.string.ui12_cal_loo, loo.medianPercent.roundToInt()),
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.testTag("calibration-loo"))
+                Text(stringResource(R.string.ui12_cal_time_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.testTag("calibration-time-note"))
+                CalibrationNotes(outcome.decisions)
+            }
+            outcome is TotalE2Calibration.Refused -> Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.testTag("calibration-refused")) {
+                Text(stringResource(if (outcome.reasons.contains(TotalE2Calibration.Reason.INSUFFICIENT_INFORMATION)) R.string.ui12_cal_refused_info else R.string.ui12_cal_refused_none),
+                    style = MaterialTheme.typography.bodyMedium)
+                CalibrationNotes(outcome.decisions)
+            }
+        }
+        if (settings.calibrate && unsupportedUnits > 0) Text(stringResource(R.string.feedback_unit, unsupportedUnits), modifier = Modifier.testTag("calibration-unsupported-unit"))
+        CalibrationEligibilitySection(history, fmt, unit)
+        if (outcome?.decisions?.any { TotalE2Calibration.Reason.HISTORY_NOT_ELIGIBLE in it.reasons || TotalE2Calibration.Reason.SL_LAST_DOSE_UNKNOWN in it.reasons } == true)
+            OutlinedButton(onClick = onOpenHistory, modifier = Modifier.heightIn(min = 48.dp).testTag("calibration-open-history")) { Text(stringResource(R.string.history)) }
+        if (outcome?.decisions?.any { TotalE2Calibration.Reason.LAB_TIME_NOT_PRECISE in it.reasons } == true)
+            Text(stringResource(R.string.feedback_sampling_time), style = MaterialTheme.typography.bodySmall)
+        OutlinedButton(onClick = onOpenLabs, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.calib_manage_labs)) }
+    }
+}
+
+/** How many labs count for less, and why each unused lab was left out. */
+@Composable private fun CalibrationNotes(decisions: List<TotalE2Calibration.LabDecision>) {
+    val down = decisions.count { it.use == TotalE2Calibration.Use.DOWNWEIGHT }
+    if (down > 0) Text(stringResource(R.string.ui12_cal_downweighted, down), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.testTag("calibration-downweighted"))
+    decisions.filter { it.use == TotalE2Calibration.Use.REJECT }.flatMap { d -> d.reasons }.groupingBy { it }.eachCount().forEach { (reason, count) ->
+        val text = stringResource(when (reason) {
+            TotalE2Calibration.Reason.HISTORY_NOT_ELIGIBLE -> R.string.ui12_cal_r_history
+            TotalE2Calibration.Reason.LAB_TIME_NOT_PRECISE -> R.string.ui12_cal_r_time
+            TotalE2Calibration.Reason.SL_LAST_DOSE_UNKNOWN -> R.string.ui12_cal_r_sl_unknown
+            else -> R.string.ui12_cal_r_invalid
+        })
+        Text(stringResource(R.string.ui12_cal_skipped, count, text), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.testTag("calibration-skipped"))
     }
 }
 

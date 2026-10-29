@@ -1,0 +1,6 @@
+<resources>
+  <string name="feedback_calculating">Calcul de la calibration…</string>
+  <string name="feedback_calculation_failed">Le calcul a échoué. Les données et le modèle non calibré restent inchangés.</string>
+  <string name="feedback_sampling_time">Vérifiez la date, l’heure et le fuseau du prélèvement dans Analyses. Une date seule ou un prélèvement à minuit non distinguable ne peut pas être ajusté. N’inventez pas une autre heure.</string>
+  <string name="feedback_unit">%1$d résultats E2 ont une unité non prise en charge. Seuls pg/mL et pmol/L peuvent être ajustés.</string>
+</resources>

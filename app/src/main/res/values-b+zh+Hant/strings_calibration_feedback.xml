@@ -1,0 +1,6 @@
+<resources>
+  <string name="feedback_calculating">正在計算校準…</string>
+  <string name="feedback_calculation_failed">校準計算失敗，紀錄和未校準模型未被修改。</string>
+  <string name="feedback_sampling_time">請在化驗中核對原始採樣時間與時區。只有日期或無法區分的午夜樣本不參與擬合，請勿編造其他時間。</string>
+  <string name="feedback_unit">%1$d 次 E2 化驗的原始單位暫不支援；僅 pg/mL 和 pmol/L 可參與擬合。</string>
+</resources>
