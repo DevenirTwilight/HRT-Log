@@ -20,6 +20,9 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
         val selected:UUID?=null,val links:List<Ops.Relationship> = emptyList(),val linksFailed:Boolean=false,val linksLoading:Boolean=false,
         val outcome:Outcome=Outcome.IDLE,val revoked:Boolean=false)
     val files=MedicalAttachmentsController(gateway,scope,io)
+    /** MED-05: in-memory first-page pictures; dropped on lock, disguise, a data switch, leaving the page and close. */
+    val thumbnails=FileThumbnails(scope,io,{document->gateway.preview(document)})
+    private val hidden=gateway.onHidden {thumbnails.clear()}
     private var pendingRelation:Pair<UUID,UUID>?=null
     private var pendingLifecycle:Pair<UUID,UUID>?=null
     private var invalidCheckpoint=false
@@ -29,6 +32,7 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
     private var writing:Job?=null
     private var selection=0L
     private val revoked=gateway.onRevoked {
+        thumbnails.clear()
         mutable.value=State(loading=false,revoked=true,outcome=mutable.value.outcome)
     }
     init {
@@ -157,6 +161,7 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
     override fun close() {
         if(closed)return
         files.close() // remove pixels before releasing runtime resources
+        thumbnails.close();hidden.close()
         closed=true;selection++;mutable.value=State(loading=false,revoked=true)
         revoked.close()
     }

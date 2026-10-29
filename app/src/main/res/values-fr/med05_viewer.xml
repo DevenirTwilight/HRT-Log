@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="med05_open_viewer">Ouvrir le fichier complet</string>
+    <string name="med05_page_of">Page %1$d sur %2$d</string>
+    <string name="med05_prev_page">Page précédente</string>
+    <string name="med05_next_page">Page suivante</string>
+    <string name="med05_zoom_in">Agrandir</string>
+    <string name="med05_zoom_out">Réduire</string>
+    <string name="med05_zoom_reset">Ajuster à l’écran</string>
+    <string name="med05_zoom_hint">Pincez pour zoomer, faites glisser pour déplacer, balayez sur le côté pour changer de page.</string>
+    <string name="med05_page_label">%1$s, page %2$d sur %3$d</string>
+    <string name="med05_page_failed">Cette page n’a pas pu être affichée. La page précédente reste affichée.</string>
+    <string name="med05_preview_pages">Les %d pages</string>
+</resources>

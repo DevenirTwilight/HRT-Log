@@ -2,6 +2,7 @@ package net.plainnotes.app.attachments.ui.library
 
 import android.text.format.Formatter
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
@@ -72,6 +74,7 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
     var createAfterImport by remember {mutableStateOf(false)}
     var createRecord by remember {mutableStateOf(false)}
     var error by remember {mutableStateOf(false)}
+    val thumbs by controller.thumbnails.state.collectAsState()
     val selected=state.documents.firstOrNull {it.document==state.selected}
     val canWrite=controller.canWrite()
     val chosenLabel=chooseFor?.let {targetLabel(it,appointments,labs,panels)}.orEmpty()
@@ -148,7 +151,14 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
                 if(state.linksLoading)LinearProgressIndicator(Modifier.fillMaxWidth())
                 if(state.linksFailed)Text(stringResource(R.string.med03_unknown_links),Modifier.padding(16.dp))
                 MedicalFileDetailPage(DocumentDetail(summary(selected),links,selected.bytes?.let {Formatter.formatShortFileSize(context,it)},selected.state=="TRASHED",!state.linksFailed && !state.linksLoading),caps,
-                    preview={FileTile(selected.fileKind(),selected.state=="ACTIVE")},onBack={controller.select(null)},onViewFull={controller.preview(selected)},
+                    preview={
+                        val active=selected.state=="ACTIVE"
+                        LaunchedEffect(selected.document) {if(active)controller.thumbnails.request(selected.document,selected.fileKind(),FileThumbnails.Size.PAGE)}
+                        Box(Modifier.fillMaxSize().then(if(active && selected.fileKind()!=MedicalAttachmentsController.FileKind.OTHER)
+                            Modifier.clickable(onClickLabel=stringResource(R.string.med05_open_viewer),role=Role.Button) {controller.preview(selected)}.testTag("file-detail-preview") else Modifier)) {
+                            PagePreview(selected.fileKind(),thumbs[FileThumbnails.Key(selected.document,FileThumbnails.Size.PAGE)],active)
+                        }
+                    },onBack={controller.select(null)},onViewFull={controller.preview(selected)},
                     onAddLink={if(canWrite)picker=true},onUnlink={link->
                         if(canWrite)state.links.firstOrNull {sameTarget(link.target,it.target)}?.let {r->confirmation=LinkConfirmation(selected,r.target,link.target.label,r)}
                     },onOpenRecord={target->state.links.firstOrNull {sameTarget(target,it.target)}?.let {onRecord(it.target)}},
@@ -174,12 +184,12 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
                         if(chooseFor==null)controller.select(item.document) else request(chooseFor,document,chosenLabel)
                     },onUnsorted={toSortOnly=true;unlinked=false;bin=false;categoryFilter=null},onCategory={categoryFilter=it;toSortOnly=false;unlinked=false;bin=false},
                     onShowAll={unlinked=false;toSortOnly=false;categoryFilter=null;query="";type=null},onBackup=onBackup,onBin={bin=true;unlinked=false;toSortOnly=false;categoryFilter=null},query=query,onQuery={query=it.take(256)},
-                    modifier=Modifier.weight(1f),typeCounts=available.groupingBy {it.fileKind()}.eachCount(),typeFilter=type,onType={type=it},busy=!canWrite,
+                    modifier=Modifier.weight(1f),typeCounts=available.groupingBy {it.fileKind()}.eachCount(),typeFilter=type,onType={type=it},busy=!canWrite,thumbs=thumbs,onThumb={controller.thumbnails.request(it.document,it.kind,FileThumbnails.Size.ROW)},
                     onUnlinked={unlinked=true;toSortOnly=false;categoryFilter=null;bin=false},categoryFilter=categoryFilter)
             }
         }
     }
-    MedicalAttachmentViewer(fileState.viewer,controller.files::closeViewer,targetLabel=stringResource(R.string.mh_files_title))
+    MedicalAttachmentViewer(fileState.viewer,controller.files::closeViewer,targetLabel=stringResource(R.string.mh_files_title),onPage=controller.files::showPage)
     draft?.let {d->FileWindow("",{controller.files.cancelImport()}) {
         Column {Text(stringResource(R.string.med03_type_unknown),Modifier.padding(16.dp))
         AddDocumentDetails(d,caps,onChange={if(it.choice!=draft?.choice || it.chosen!=draft?.chosen)chosenTarget=null;draft=it},onChoose={picker=true},onConfirm={

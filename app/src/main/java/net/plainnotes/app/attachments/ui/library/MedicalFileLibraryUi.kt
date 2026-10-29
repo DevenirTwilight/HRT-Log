@@ -59,7 +59,8 @@ private fun FileKind.label() = when (this) { FileKind.PDF -> R.string.attach_kin
 @Composable internal fun MedicalFileLibraryScreen(state: LibraryState, caps: LibraryCapabilities, onAdd: () -> Unit, onPrepare: () -> Unit, onOpen: (DocumentSummary) -> Unit,
     onUnsorted: () -> Unit, onCategory: (FileCategory) -> Unit, onShowAll: () -> Unit, onBackup: () -> Unit, onBin: () -> Unit, query: String = "", onQuery: (String) -> Unit = {},
     modifier: Modifier = Modifier, typeCounts:Map<FileKind,Int> = emptyMap(),typeFilter:FileKind?=null,onType:(FileKind?)->Unit={},busy:Boolean=false,
-    onUnlinked: (() -> Unit)? = null, categoryFilter: FileCategory? = null) {
+    onUnlinked: (() -> Unit)? = null, categoryFilter: FileCategory? = null,
+    thumbs: Map<FileThumbnails.Key, FileThumbnails.Thumb> = emptyMap(), onThumb: (DocumentSummary) -> Unit = {}) {
     val c = MaterialTheme.colorScheme
     val narrow = LocalDensity.current.fontScale > 1.3f || androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp < 360
     LazyColumn(modifier.fillMaxSize().testTag("library"), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -135,7 +136,8 @@ private fun FileKind.label() = when (this) { FileKind.PDF -> R.string.attach_kin
         if (state.documents.isEmpty()) item("empty") { Text(stringResource(R.string.lib_empty), Modifier.testTag("library-empty"), color = c.onSurfaceVariant) }
         else item("recent") {
             Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                state.documents.forEachIndexed { i, d -> GroupedItem(i, state.documents.size, onClick = { onOpen(d) }, modifier = Modifier.testTag("library-doc:${d.document}")) { DocumentRow(d) } }
+                state.documents.forEachIndexed { i, d -> GroupedItem(i, state.documents.size, onClick = { onOpen(d) }, modifier = Modifier.testTag("library-doc:${d.document}")) {
+                    DocumentRow(d, thumbs[FileThumbnails.Key(d.document, FileThumbnails.Size.ROW)], onThumb) } }
             }
         }
         item("backup") {
@@ -161,7 +163,8 @@ private fun FileKind.label() = when (this) { FileKind.PDF -> R.string.attach_kin
 
 private fun LibraryState.unsorted() = toSort ?: unlinked
 
-@Composable private fun DocumentRow(d: DocumentSummary) {
+@Composable private fun DocumentRow(d: DocumentSummary, thumb: FileThumbnails.Thumb? = null, onThumb: (DocumentSummary) -> Unit = {}) {
+    androidx.compose.runtime.LaunchedEffect(d.document) { onThumb(d) }
     val c = MaterialTheme.colorScheme
     val kind = stringResource(d.kind.label())
     val link = when (val l = d.link) {
@@ -173,7 +176,7 @@ private fun LibraryState.unsorted() = toSort ?: unlinked
     else listOfNotNull(d.category?.let { stringResource(it.label()) } ?: kind, d.addedLabel).joinToString(" · ")
     Row(Modifier.fillMaxWidth().heightIn(min = 72.dp).padding(horizontal = 16.dp, vertical = 12.dp).semantics(mergeDescendants = true) { role = Role.Button },
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        FileTile(d.kind, true)
+        RowThumb(d.kind, thumb)
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(d.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Text(line, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
