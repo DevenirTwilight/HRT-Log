@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import net.plainnotes.app.attachments.AttachmentFlowController
+import android.os.Handler
+import android.os.Looper
 import net.plainnotes.app.attachments.AttachmentViewer
 import net.plainnotes.app.data.MedicalAttachmentOperations
 import java.util.UUID
@@ -43,7 +45,8 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
     sealed interface Viewer {
         data object Closed:Viewer
         data class Opening(val title:String):Viewer
-        data class Showing(val title:String,val page:Bitmap,val pdf:Boolean):Viewer
+        /** [pageIndex] is zero-based; [busy] while another page is being made; [pageFailed] when it could not be shown (the previous page stays). */
+        data class Showing(val title:String,val page:Bitmap,val pdf:Boolean,val pageIndex:Int=0,val pageCount:Int=1,val busy:Boolean=false,val pageFailed:Boolean=false):Viewer
         data class Message(val title:String,val reason:Reason):Viewer
     }
     enum class Reason { PDF_NEEDS_ANDROID_9, NO_PREVIEW_FOR_TYPE, FAILED }
@@ -244,13 +247,14 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
                         if(closed || state.value.revoked || presentationEpoch!=epoch)false else {preview=owner;true}
                     }
                     if(!adopted) {owner.close();return@withContext}
-                    val page=if(item.kind==FileKind.PDF)owner.pdfFirstPage() else owner.image()
+                    val count=if(item.kind==FileKind.PDF)owner.pageCount() else 1
+                    val page=if(item.kind==FileKind.PDF)owner.pdfPage(0,VIEW_EDGE) else owner.image(VIEW_EDGE)
                     val accepted=synchronized(this@MedicalAttachmentsController) {
                         owner.publish {
                             if(closed || state.value.revoked || presentationEpoch!=epoch || state.value.viewer !is Viewer.Opening)false
                             else {
                                 preview=owner
-                                mutable.update {it.copy(viewer=Viewer.Showing(item.title,page,item.kind==FileKind.PDF))}
+                                mutable.update {it.copy(viewer=Viewer.Showing(item.title,page,item.kind==FileKind.PDF,0,count))}
                                 true
                             }
                         }
@@ -265,6 +269,43 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
                 }
             }
         }
+    }
+    /**
+     * MED-05: another page of the open PDF. The next page is made while the shown one stays on screen, then swapped in; the old
+     * bitmap is recycled where frames are drawn, a moment later, so no frame ever draws a recycled bitmap. A failure keeps the
+     * page that is showing and says so; closing, locking or revoking while a page is being made discards it.
+     */
+    @Synchronized fun showPage(index:Int) {
+        val current=state.value.viewer as? Viewer.Showing ?: return
+        val owner=preview ?: return
+        if(closed || state.value.revoked || !current.pdf || current.busy || index !in 0 until current.pageCount || index==current.pageIndex)return
+        val epoch=presentationEpoch
+        mutable.update {it.copy(viewer=current.copy(busy=true,pageFailed=false))}
+        scope.launch {
+            try {
+                withContext(io) {
+                    val next=owner.pdfPage(index,VIEW_EDGE)
+                    val accepted=synchronized(this@MedicalAttachmentsController) {
+                        owner.publish {
+                            val shown=state.value.viewer
+                            if(closed || state.value.revoked || presentationEpoch!=epoch || shown !is Viewer.Showing || shown.page!==current.page)false
+                            else {mutable.update {it.copy(viewer=shown.copy(page=next,pageIndex=index,busy=false,pageFailed=false))};true}
+                        }
+                    }
+                    if(accepted)releaseLater(owner,current.page) else runCatching {owner.release(next)}
+                }
+            }catch(e:CancellationException) {throw e}
+            catch(e:Exception) {
+                synchronized(this@MedicalAttachmentsController) {
+                    val shown=state.value.viewer
+                    if(!closed && !state.value.revoked && presentationEpoch==epoch && shown is Viewer.Showing && shown.page===current.page)
+                        mutable.update {it.copy(viewer=shown.copy(busy=false,pageFailed=true))}
+                }
+            }
+        }
+    }
+    private fun releaseLater(owner:MedicalAttachmentGateway.Preview,old:Bitmap) {
+        Handler(Looper.getMainLooper()).postDelayed({runCatching {owner.release(old)}},RELEASE_DELAY_MS)
     }
     /** A real pause also discards an unconfirmed selection, never a committed receipt. */
     @Synchronized private fun hidePresentation() {closeViewer();cancelImport()}
@@ -315,5 +356,10 @@ internal class MedicalAttachmentsController(private val gateway:MedicalAttachmen
         discardAttempt()
         runCatching {hidden.close()}
         runCatching {revocation.close()}
+    }
+    companion object {
+        /** Longest side, in pixels, of a page or picture shown in the viewer (bounded by the reader's own 16 MiB limit). */
+        const val VIEW_EDGE=1600
+        private const val RELEASE_DELAY_MS=300L
     }
 }

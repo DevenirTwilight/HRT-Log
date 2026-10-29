@@ -42,6 +42,30 @@ internal class AttachmentViewer(private val context:Context,private val read:Med
     }
     fun pdfPage(index:Int,width:Int=512):Bitmap=synchronized(monitor) {
         valid();require(width in 1..2048);check(synchronized(images) {images.isEmpty()}) {"Release the previous page"}
+        val renderer=openPdf()
+        renderer.openPage(index).use {page->
+            val height=(width.toLong()*page.height/page.width).coerceAtLeast(1);require(height<=2048 && width.toLong()*height*4<=16*1024*1024)
+            val bitmap=Bitmap.createBitmap(width,height.toInt(),Bitmap.Config.ARGB_8888)
+            try {page.render(bitmap,null,null,PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);retain(bitmap)}catch(e:Throwable) {bitmap.recycle();throw e}
+        }
+    }
+    /** MED-05: number of pages, bounded so a hostile document cannot make the viewer walk an unbounded list. */
+    fun pageCount():Int=synchronized(monitor) {valid();openPdf().pageCount.also {check(it in 1..MAXIMUM_PAGES) {"Unsupported page count"}}}
+    /** MED-05: one page scaled so neither side exceeds [maxEdge] pixels (a tall page gets a narrower bitmap instead of failing). */
+    fun pdfPageFit(index:Int,maxEdge:Int):Bitmap=synchronized(monitor) {
+        // Two pages may be held for a moment while the next replaces the shown one; a third is refused.
+        valid();require(maxEdge in 16..2048);check(synchronized(images) {images.size<2}) {"Release the previous page"}
+        val renderer=openPdf();require(index in 0 until renderer.pageCount)
+        renderer.openPage(index).use {page->
+            val scale=maxEdge.toDouble()/maxOf(page.width,page.height).coerceAtLeast(1)
+            val width=(page.width*scale).toInt().coerceAtLeast(1);val height=(page.height*scale).toInt().coerceAtLeast(1)
+            require(width.toLong()*height*4<=16*1024*1024)
+            val bitmap=Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888)
+            try {page.render(bitmap,null,null,PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);retain(bitmap)}catch(e:Throwable) {bitmap.recycle();throw e}
+        }
+    }
+    /** Callers hold [monitor]. Opens the renderer once; the same descriptor/handler lifecycle as before. */
+    private fun openPdf():PdfRenderer {
         // Android 8.0/8.1 PdfRenderer sets mInput before nativeCreate; when a document cannot be
         // opened, its finalizer later calls nativeClose(0) and unbalances pdfium's process-wide init
         // count, so every later PDF in the process fails (AOSP O doClose; fixed in P). Untrusted
@@ -63,15 +87,11 @@ internal class AttachmentViewer(private val context:Context,private val read:Med
                 pdf=PdfRenderer(requireNotNull(descriptor).dup())
             }catch(e:Throwable) {close();throw e}
         }
-        requireNotNull(pdf).openPage(index).use {page->
-            val height=(width.toLong()*page.height/page.width).coerceAtLeast(1);require(height<=2048 && width.toLong()*height*4<=16*1024*1024)
-            val bitmap=Bitmap.createBitmap(width,height.toInt(),Bitmap.Config.ARGB_8888)
-            try {page.render(bitmap,null,null,PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);retain(bitmap)}catch(e:Throwable) {bitmap.recycle();throw e}
-        }
+        return requireNotNull(pdf)
     }
     /** Decode dimensions before allocating pixels. No provider MIME or filename participates. */
-    fun image():Bitmap=synchronized(monitor) {
-        valid();check(synchronized(images) {images.isEmpty()})
+    fun image(maxEdge:Int=2048):Bitmap=synchronized(monitor) {
+        require(maxEdge in 16..2048);valid();check(synchronized(images) {images.isEmpty()})
         fun stream():InputStream=object:InputStream() {
             var position=0L
             override fun read():Int {val b=ByteArray(1);return if(read(b,0,1)<0)-1 else b[0].toInt() and 255}
@@ -79,8 +99,14 @@ internal class AttachmentViewer(private val context:Context,private val read:Med
         }
         val bounds=BitmapFactory.Options().apply {inJustDecodeBounds=true}
         stream().use {BitmapFactory.decodeStream(it,null,bounds)}
-        require(bounds.outWidth in 1..2048 && bounds.outHeight in 1..2048 && bounds.outWidth.toLong()*bounds.outHeight*4<=16*1024*1024)
-        retain(requireNotNull(stream().use {BitmapFactory.decodeStream(it)}))
+        // A phone photo is larger than the display limit: it is decoded at a power-of-two reduction instead of being refused.
+        require(bounds.outWidth in 1..MAXIMUM_SOURCE_EDGE && bounds.outHeight in 1..MAXIMUM_SOURCE_EDGE && bounds.outWidth.toLong()*bounds.outHeight<=MAXIMUM_SOURCE_PIXELS)
+        var sample=1
+        while(maxOf(bounds.outWidth,bounds.outHeight)/sample>maxEdge)sample*=2
+        val options=BitmapFactory.Options().apply {inSampleSize=sample}
+        val decoded=requireNotNull(stream().use {BitmapFactory.decodeStream(it,null,options)})
+        require(decoded.width.toLong()*decoded.height*4<=16*1024*1024) {decoded.recycle();"Decoded image too large"}
+        retain(decoded)
     }
     fun prefix(maximum:Int=256):ByteArray=synchronized(monitor) {
         valid();require(maximum in 1..4096);val b=ByteArray(minOf(read.size,maximum.toLong()).toInt())
@@ -101,5 +127,10 @@ internal class AttachmentViewer(private val context:Context,private val read:Med
     }
     /** The stored PDF stays encrypted and readable; only the on-device page preview is refused. */
     class PdfPreviewUnsupported:UnsupportedOperationException("PDF preview requires Android 9 or later")
-    companion object {private val cleanup=CoroutineScope(SupervisorJob()+Dispatchers.IO)}
+    companion object {
+        private val cleanup=CoroutineScope(SupervisorJob()+Dispatchers.IO)
+        const val MAXIMUM_PAGES=2000
+        private const val MAXIMUM_SOURCE_EDGE=16384
+        private const val MAXIMUM_SOURCE_PIXELS=100_000_000L
+    }
 }
