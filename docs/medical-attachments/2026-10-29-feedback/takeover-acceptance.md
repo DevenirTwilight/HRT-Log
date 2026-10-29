@@ -18,7 +18,7 @@ Shared native test geometry reads now resolve `SemanticsNode.boundsInRoot` insid
 ## Validation status at this checkpoint
 
 - Python runner syntax: PASS; git diff whitespace: PASS.
-- Targeted Ui09 source guard + app/core AndroidTest compilation: RUNNING locally; result will be appended before claiming local success.
+- Targeted Ui09 source guard: PASS (4 tests,0 failures,0 skips); app/core AndroidTest Kotlin compilation: PASS. Gradle119 tasks, BUILD SUCCESSFUL in8m24s. Local log retained as `/workspace/scratch/156-takeover-targeted.log`; no local emulator/KVM, so this is not native acceptance.
 - New-source native API26/29/35, low-memory and full required CI: PENDING.
 - Physical device, manual TalkBack: NOT_RUN.
 - #156 remains Draft. Original failures are not relabeled PASS. #153/#155 retain independent PRs; old uncommitted MED03 worktree is preserved and excluded.

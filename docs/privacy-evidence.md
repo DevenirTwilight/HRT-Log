@@ -31,3 +31,7 @@ P4 candidate (2026-10-19): business serialization12 adds explicit inventory enco
 BDPM (2026-10-22): official format-2 historical snapshots require business backup13; user-only exports still12. No PNBAK1/KDF/cipher/key change, public catalogue excluded from user backup. Privacy parameter/permission assertions remain mandatory.
 
 MED-02 (2026-10-27): production attachment source is `MedicalAttachmentOperations.kt`, scoped capability/read authorization in `AttachmentFlowController.kt`, local encrypted object storage in `AttachmentPersistentStore.kt`, full medical collection export and restore in `MedicalLibraryTransfer.kt` / `LibraryCollectionCapture.kt`. UI entry, explicit link retraction and four-locale privacy wording are in PR #133. Unlink retains ciphertext and quota. No INTERNET permission added, and SAF destination can be managed by external/cloud apps. Exact SHA native E2E and real-device checks must be recorded independently; this evidence table does not certify them.
+
+## 2026-10-29 reader correction
+
+PR156 removes the stale first-page-only description: `MedicalAttachmentsUi.kt` consumes authenticated, bounded, on-demand PDF pages in an independent full-screen reader; Android8 PDF rejection remains. No plaintext temporary file is introduced. JPEG/PNG rendering, lock/revocation and page navigation keep their existing bounds. Local source guard and AndroidTest compilation passed; exact native acceptance remains pending (see `medical-attachments/2026-10-29-feedback/takeover-acceptance.md`).

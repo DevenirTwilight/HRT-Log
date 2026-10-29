@@ -62,6 +62,8 @@ See [`docs/HANDOFF.md`](docs/HANDOFF.md) for verification and remaining work,
 removed model port (now rewritten independently from published literature).
 Published-literature parameter and engine validation tests are implemented.
 This is not clinical validation. Physical-device acceptance remains separate.
+
+The medical file library supports explicit visit, whole-blood-draw (LabPanel) and individual-result links. File information includes an editable name without reimporting the encrypted original. The independent full-screen reader supports JPEG/PNG and on-demand PDF pages with zoom on Android9+; Android8 retains its PDF-preview safety restriction. Ordinary record backups exclude medical originals; use the separate complete medical backup. Source implementation, CI acceptance and installed APK availability are tracked separately in HANDOFF.
 The [sublingual E2 P0 audit](docs/pk-research/sublingual-v2.md) adds independently
 sourced study summaries and reproducible test comparisons. It records the original
 calibration defects subsequently addressed by P1-A/B/C1/C2; production parameters remain unchanged and external scientific
@@ -70,8 +72,7 @@ Health information must never be committed; use only synthetic test data.
 
 Build 24 adds trash/restore; Build 25 implements explicit historical-period creation,
 editing, deletion, overlap handling and legacy projection compatibility. These have
-passing functional CI and a prior official-signature delivery record. Current UI
-repairs keep Build 25/schema 9 and are not a new APK delivery. See
+passing functional CI and a prior official-signature delivery record. Those Build25/schema9 results are historical, not the current delivery baseline; consult the delivery ledger and HANDOFF for newer builds. See
 [`timeline design`](docs/design/timeline-editing-v2.md) and the current handoff.
 
 ### Historical implementation notes

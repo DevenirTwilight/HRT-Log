@@ -1,6 +1,6 @@
 ## 2026-10-29 接手检查点：PR156 精确失败修复待验收
 
-当前正式主线d95952ee；PR156原头54abbdaa。已在原分支修复DocumentsUI虚拟列表遍历、LabPanel Dialog BACK、两处违反UI09的居中控件；共享原生测试布局坐标移至主线程。集合恢复测试将同一加密夹具建立独立为受限source阶段，仍真实执行各恢复/强停/独立进程核验，不改变512MiB/192MiB或断言。旧60秒混合阶段失败、清理强停与未知LMK原因保留，不能称恢复内存已修复。详见[精确失败与边界](medical-attachments/2026-10-29-feedback/takeover-acceptance.md)。本地定向编译在运行，新SHA原生/完整CI待执行，PR仍Draft。
+当前正式主线d95952ee；PR156原头54abbdaa。已在原分支修复DocumentsUI虚拟列表遍历、LabPanel Dialog BACK、两处违反UI09的居中控件；共享原生测试布局坐标移至主线程。集合恢复测试将同一加密夹具建立独立为受限source阶段，仍真实执行各恢复/强停/独立进程核验，不改变512MiB/192MiB或断言。旧60秒混合阶段失败、清理强停与未知LMK原因保留，不能称恢复内存已修复。详见[精确失败与边界](medical-attachments/2026-10-29-feedback/takeover-acceptance.md)。本地Ui09四项全部PASS/0skip，app和core AndroidTest Kotlin编译PASS（8m24s）。新SHA原生/完整CI仍待执行，PR仍Draft。已同步README/PRIVACY的真正全屏、按需多页能力，Android8 PDF安全限制保留。
 
 PR153当前8c491bec：push原生API26/29/35通过，PR事件API29有共享SnapshotStateObserver失败，API35模拟器下载ZipFile失败未执行测试；Android主job尚在运行。已只读核对保存化验/实际服药/M2→TotalE2Calibration→同一合计曲线，不降低资格门槛。PR155当前831f81b0：原生失败同类Snapshot观察线程问题；另有MedicalHomeConfirmFlowTest第110行断言，待独立定位。未签名/构建交付APK；真机/人工TalkBack NOT_RUN。下一步完成本地结果→推送原PR156→独立处理153/155→精确HEAD必需CI/保护合并，不重复MED03或P4。
 
