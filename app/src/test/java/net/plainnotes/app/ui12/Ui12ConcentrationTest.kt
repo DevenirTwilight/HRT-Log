@@ -135,18 +135,18 @@ class Ui12ConcentrationTest(private val locale: String, private val width: Int, 
         assertNotEquals(sc.totalUncalibrated!!.nowValue!!.roundToInt(), total.nowValue!!.roundToInt())
         // The estimate card and the calibration card both say it.
         ui.onAllNodesWithText(s(R.string.ui12_label_calibrated), useUnmergedTree = true).assertCountEquals(2)
-        shot("sublingual_calibrated")
+        shot("sublingual_calibrated"); scrollTo("calibration-time-note"); shot("sublingual_calibrated_card")
     }
 
     @Test fun switchingCalibrationOffRestoresTheUncalibratedTotal() {
         setup(); val sc = Ui12Fixture.sublingualCalibrated(); show(sc)
-        scrollTo("calibration-switch"); shot("before_switch_off"); ui.onNodeWithTag("calibration-switch").performClick()
+        scrollTo("calibration-switch"); ui.onNodeWithTag("calibration-switch").performClick()
         ui.waitUntil(30_000) { text("e2-now-value") == sc.totalUncalibrated!!.nowValue!!.roundToInt().toString() }
         scrollTo("calibration-switch"); ui.onNodeWithTag("calibration-switch").assertIsEnabled().assertIsOff()
         ui.onNodeWithText(s(R.string.ui12_cal_off)).assertExists()
         assertEquals(s(R.string.ui12_cal_explain), text("calibration-explain"))
         ui.onAllNodesWithTag("calibration-used").assertCountEquals(0)
-        shot("sublingual_calibration_off")
+        scrollTo("calibration-explain"); shot("sublingual_calibration_off_card")
     }
 
     @Test fun mixedRoutesCalibrateAsOneTotal() {
@@ -156,7 +156,7 @@ class Ui12ConcentrationTest(private val locale: String, private val width: Int, 
         assertEquals(s(R.string.ui12_label_total), text("e2-label"))
         assertEquals(sc.total!!.nowValue!!.roundToInt().toString(), text("e2-now-value"))
         scrollTo("calibration-switch"); ui.onNodeWithTag("calibration-switch").assertIsEnabled().assertIsOn()
-        shot("mixed_calibrated")
+        scrollTo("calibration-time-note"); shot("mixed_calibrated_card")
     }
 
     @Test fun twoLabsTooCloseToADoseAreAcceptedButCountForLessOrRefusedInWords() {
@@ -168,7 +168,7 @@ class Ui12ConcentrationTest(private val locale: String, private val width: Int, 
             is net.plainnotes.app.conc.TotalE2Calibration.Refused -> { ui.onNodeWithTag("calibration-refused").assertExists(); ui.onNodeWithText(s(R.string.ui12_cal_not_applied)).assertExists() }
             null -> fail("labs exist")
         }
-        shot("sublingual_two_labs")
+        shot("sublingual_two_labs_card")
     }
 
     @Test fun withoutAnySublingualEstimateTheSwitchIsUnavailableWithItsReason() {

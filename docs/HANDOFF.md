@@ -1,3 +1,11 @@
+## SL-CAL-02 步骤 4：校准接到浓度页 — 2026-10-29（分支 feature/slcal02-ui-20261029）
+
+- 已完成：校准开关在有舌下记录时可用；合计 = B + k·((M2−B)+N)（`ui/E2Calibration.kt`、`ui/E2Total.kt`、`ConcentrationScreen.kt` 的 `SublingualCalibrationCard`）；四语言文字；`E2CalibrationTest`、迁移的 UI-12/统一页测试；两条追加式显示批准；报告 `docs/audits/product-quality-2026-10/81-slcal02-calibration-ui.md`，截图 `docs/ui-audit/2026-10-29-slcal02-ui/`（REQUIREMENTS §167）。
+- 验证：合并 UI-12 后全量 `:app:testFullDebugUnitTest` 3451 测试 0 失败，`lintFullDebug` 通过；Python 研究/审计/脚本测试与账本检查通过。
+- 依赖：本分支含 #151（引擎）的合并提交；#151 先合并，本 PR 再合并主线（有 HANDOFF/REQUIREMENTS 文本冲突，保留两边）。
+- 下一步：开 PR（自动合并 §106）；#149 已合并，#150（MED-04）、#151（引擎）、MED-05（分支 feature/med05-thumbnails-viewer-20261029，#150 合并后开 PR）按序合并；全部合并且主线 CI 通过后做 Build 39 私下签名交付（负责人 2026-10-29「都做完给apk」已恢复；沿用既有私有正式签名、versionCode ≥ 39、不发公开 Release/tag）。
+- 待负责人复核：阈值 0.75；E1 午夜占位；法文 320dp 2× 横轴标签重叠（UI-12 遗留）；真机 / TalkBack 未做。
+
 ## UI-12 浓度页统一（一条 E2 合计曲线）— 2026-10-29（分支 feature/ui12-concentration-20261028，PR 待开）
 
 - 已完成：显示层 `ui/E2Total.kt`（M2 舌下 + 非舌下兼容计算按小时相加，背景只计一次；有舌下但 M2 不可用则不显示合计）；`ConcentrationScreen/ConcChart/UnifiedConcentrationScreen/ConcentrationPreview` 显示改动；四语言字符串；`E2TotalTest`、`Ui12ConcentrationTest` 和迁移的旧断言；REQUIREMENTS §162；追加式批准记录 `PD-2026-10-29-UI12-*`（4 条，哈希见 `display-approvals-after-archive.json`）；报告 `docs/audits/product-quality-2026-10/78-ui12-concentration.md`；截图 `docs/ui-audit/2026-10-28-ui12/`。
