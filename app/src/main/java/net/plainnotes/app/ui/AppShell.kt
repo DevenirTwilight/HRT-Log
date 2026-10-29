@@ -261,7 +261,7 @@ class UiPrefs(context: Context) {
                 Destination.CONCENTRATION -> net.plainnotes.app.experimental.UnifiedConcentrationScreen(extra.records, state.ruleSnapshots, extra.labs, pad,
                     content = { innerPad, preview, status, basis -> ConcentrationScreen(state, conc.result, conc.loading, conc.weight, concSettings, { concSettings = it; prefs.conc = it },
                         { model.setWeight(it) }, { model.editById(it) }, { destination = Destination.LABS }, innerPad,extra.records,state.profiles,model::confirmHistoricalContext,{destination=Destination.HISTORY},preview,status,basis,
-                        e2NonSublingual = conc.nonSublingual, doseTimes = conc.doseTimes, labs = conc.labs) })
+                        e2NonSublingual = conc.nonSublingual, doseTimes = conc.doseTimes, labs = conc.labs, calculationInputFailed = conc.failed, onRetryCalculation = { model.loadConcentration() }) })
                 Destination.LABS -> LabsScreen(extra.labs, conc.doseTimes, { labDialogs.labEdit = it; labDialogs.labNew = it == null }, { model.deleteLab(it) }, pad,extra.labContexts,{v,estimate->model.rebuildLabContext(v,estimate)},
                     extra.labPanels,{labDialogs.panel=it.id},{labDialogs.saveAs=it},onOpenDetail={medicalDialogs.lab=it.id})
                 Destination.SETTINGS -> {

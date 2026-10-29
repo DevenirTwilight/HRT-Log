@@ -243,6 +243,20 @@
     "tests": "E2CalibrationTest (labs judged by rule, calibrated total = B + k*((M2-B)+N) with B once and unscaled, factor 1 equals uncalibrated, refusal leaves the curve uncalibrated, labs never change M2 values); Ui12ConcentrationTest (calibration card in four languages x 320dp/2x and 411dp/1x x light/dark); migrated UnifiedConcentrationUiTest; TotalE2CalibrationParityTest/TotalE2CalibrationTest; PeriodStabilityTest and the full :app:testFullDebugUnitTest"
    },
    "human_review": "not required: one read-only field."
+  },
+  {
+   "id": "PD-2026-10-29-USER-FEEDBACK-CALIBRATION",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-29",
+   "scope": "Owner three-feedback task C / REQUIREMENTS §169: reset asynchronous calibration projections on changed inputs, explicit calculating/failure/retry and history/time/unit guidance, earliest saved-dose lookup and suppression of stale totals after a failed database read. No model, parameter, information threshold, frozen eligibility, export or database format changes.",
+   "previous_sha256": "d124f3df6acd70fbd54ae8e35473c6a7b3b2d4d5ee8a559707f7481512aee831",
+   "new_sha256": "0de295e4c79f48bddf017ebc037655758c34287b3a11b82c6346bc0ef64a3a6f",
+   "evidence": {
+    "commit": "7df7206d7c46519999bbdf21109ba854c62b8558",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "Owner explicitly requests real MainActivity calibration input tracing, accurate failure reasons, preserving common coefficient and scientific gates; see REQUIREMENTS §169."
   }
  ]
 }

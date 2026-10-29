@@ -53,3 +53,15 @@
 - 信息档位阈值 0.75；E1 的午夜占位规则；引擎未登记进守卫（归档不可改）。
 - 本页专门的文字对比度与减少动态断言：未新增（沿用既有主题测试）。
 - 导出 / PDF / 就诊资料包仍不含校准后的合计（§67 D-2，未改）。
+
+## 8. 用户反馈修复接手（2026-10-29，候选待原生与最终CI）
+
+Build39来源d95952ee，不含本PR，不作为校准UI验收。沿原#153接手，未重新开发引擎。正式AppShell→NotesViewModel使用完整dao.records/labs快照，canonical E2代码为E2，pg/mL与pmol/L转换沿用原LabFit；panel_id不会排除E2。首次/最后一次服药时间改用min/max，不依赖容器顺序。未知单位仍出现在拒绝报告，不被误报成无化验；非法时区不再回退系统时区。现有无精度字段，真实午夜/仅日期不能安全区分，仍保守拒绝且提示核对，未造时间或加Room迁移。原180日模拟窗口与历史门、信息增益/降权等不变，可从校准卡进入已有逐化验历史资格详情及用药历史。
+
+异步状态按输入key隔离，读取中不展示旧k；计算异常有明确失败与重试，数据库读取失败清除旧投影而不伪装当前成功。M2/其他途径曲线输入非有限或缺失时报告计算失败，不误用0或把输入错误混作信息不足。共同系数、背景只计一次、关闭后回到原曲线的公式未改。
+
+定向证据：E2适配9项、引擎10项、旧MedicalHome失败用例本地1项全部通过；四语×320/411dp×字号1/2×明暗的Ui12ConcentrationTest 272项通过（首次状态修复版本）。随后补数据库失败状态与真实进程验收，需以最终候选重验。初次编译缺少通用retry资源已改用现有attach_retry，原失败日志保留，不计作PASS。旧PR事件40875393451的MedicalHomeConfirmFlowTest:110失败保留，根因未证明，同源push与本地目标通过，不改无关业务或弱化断言。
+
+新增CalibrationProductAndroidTest从MainActivity真实读取已保存21次合成SL服药和2次E2化验，验证k有效、开关改变实际数字、退出返回、Activity重建；run_calibration_product_native.py再强停目标/仪器进程，在新PID中重开并重新拟合，保留raw instrumentation和reopen.json到既有med02-product-native工件。API26/29/35由现有workflow执行，未执行前不标原生PASS；不使用隔离ConcentrationTestActivity冒充正式导航。真机、人工TalkBack及独立临床验证仍NOT_RUN/未确立。
+
+最终本地目标补验：适配9 + 引擎10 + 四语失败/读取错误旧值清除16 = 35项，0失败/0skip；App AndroidTest Kotlin编译成功。原生两进程用例仍待CI，不把编译成功冒充原生通过。

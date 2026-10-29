@@ -39,7 +39,7 @@ import kotlin.math.roundToInt
 class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: CalibrationMode)
 
 /** The page's total and, when labs were fitted, the calibration outcome behind it (shown in the calibration card). */
-private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Calibration.Outcome?)
+private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Calibration.Outcome?, val failed: Boolean = false)
 
 /**
  * UI-12 (REQUIREMENTS §162): one page for every route. The E2 estimate is the sum of the routes ([E2Total]); the result comes first,
@@ -57,7 +57,8 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
                                     /** Times of the doses actually taken; only those before "now" are drawn as ticks. */
                                     doseTimes: List<java.time.Instant> = emptyList(),
                                     /** SL-CAL-02: the saved lab rows; the common-coefficient calibration reads the E2 ones (never edits them). */
-                                    labs: List<net.plainnotes.app.data.LabValueEntity> = emptyList()) {
+                                    labs: List<net.plainnotes.app.data.LabValueEntity> = emptyList(),
+                                    calculationInputFailed: Boolean = false, onRetryCalculation: () -> Unit = {}) {
     var repair by remember{mutableStateOf<net.plainnotes.app.data.MedicationEntity?>(null)}
     var editWeight by remember { mutableStateOf(false) }
     var modelsOpen by rememberSaveable { mutableStateOf(false) }
@@ -72,17 +73,24 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
     // points, so they are built off the main thread; a single uncalibrated route is O(1).
     val wantCalibration = settings.calibrate && previewReady && labs.any { it.analyte_code == net.plainnotes.app.conc.ConcentrationCalculator.E2_CODE }
     val needsAsync = previewReady && (e2NonSublingual != null || wantCalibration)
-    val firstDoseH = doseTimes.firstOrNull()?.let { net.plainnotes.app.conc.ConcentrationCalculator.hours(it) }
+    val firstDoseH = E2Calibration.firstDoseH(doseTimes)
+    var calibrationRetry by remember { mutableIntStateOf(0) }
     fun build(cancel: () -> Unit): TotalWithOutcome {
         val outcome = if (wantCalibration) E2Calibration.run(preview, e2NonSublingual, labs, result, firstDoseH, preview?.asOfH ?: result?.nowH ?: 0.0, cancel) else null
         return TotalWithOutcome(E2Total.curve(preview, result, e2NonSublingual, outcome as? TotalE2Calibration.Calibrated), outcome)
     }
     val built: TotalWithOutcome? = if (!needsAsync) remember(preview, result, e2NonSublingual) { build {} }
-        else produceState<TotalWithOutcome?>(null, preview, result, e2NonSublingual, labs, wantCalibration, firstDoseH) { value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { build { ensureActive() } } }.value
-    val total: E2Total.Curve? = built?.curve
+        else key(preview, result, e2NonSublingual, labs, wantCalibration, firstDoseH, calibrationRetry) {
+            produceState<TotalWithOutcome?>(null) {
+                value = try { kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { build { ensureActive() } } }
+                catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled }
+                catch (_: Exception) { TotalWithOutcome(null, null, failed = true) }
+            }.value
+        }
+    val total: E2Total.Curve? = if (loading || calculationInputFailed) null else built?.curve
     val calibrationOutcome = built?.outcome
     val hasTotal = total != null
-    val pending = needsAsync && !hasTotal
+    val pending = needsAsync && built == null
     val missing = result?.missing.orEmpty()
     val statusCards: @Composable () -> Unit = {
         if (missing.any { it.medicationId == null && it.input == MissingInput.WEIGHT }) SectionCard(stringResource(R.string.pk_need_weight_title)) {
@@ -156,7 +164,14 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
 
         if (result != null && result.others.isNotEmpty()) OtherCurvesCard(result)
 
-        if (compatibilityHasSl || previewReady) SublingualCalibrationCard(previewReady, settings, onSettings, calibrationOutcome, result?.labs.isNullOrEmpty(), onOpenLabs)
+        if (calculationInputFailed && !compatibilityHasSl && !previewReady) SectionCard(stringResource(R.string.calib_title)) {
+            Text(stringResource(R.string.feedback_calculation_failed), modifier = Modifier.testTag("calibration-failed"))
+            OutlinedButton(onClick = onRetryCalculation, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.attach_retry)) }
+        }
+        if (compatibilityHasSl || previewReady) SublingualCalibrationCard(previewReady, settings, onSettings, calibrationOutcome,
+            labs.none { it.analyte_code == net.plainnotes.app.conc.ConcentrationCalculator.E2_CODE }, onOpenLabs,
+            pending || loading, built?.failed == true || calculationInputFailed, { calibrationRetry++; onRetryCalculation() }, onOpenHistory, result, ::fmt, unit,
+            labs.count { it.analyte_code == net.plainnotes.app.conc.ConcentrationCalculator.E2_CODE && it.unit !in setOf("pg/mL", "pmol/L") })
         else CalibrationCard(result, settings, onSettings, onOpenLabs, ::fmt, unit)
 
         SectionCard(stringResource(R.string.pk_model_title)) {
@@ -259,7 +274,7 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
  * words what was done (labs used, how well they agree, how much they say) or why nothing was done. No interval is shown.
  */
 @Composable private fun SublingualCalibrationCard(m2Ready: Boolean, settings: ConcSettings, onSettings: (ConcSettings) -> Unit, outcome: TotalE2Calibration.Outcome?,
-                                                  noLabs: Boolean, onOpenLabs: () -> Unit) {
+                                                  noLabs: Boolean, onOpenLabs: () -> Unit, computing: Boolean = false, failed: Boolean = false, onRetry: () -> Unit = {}, onOpenHistory: () -> Unit = {}, history: ConcentrationResult? = null, fmt: (Double) -> String = { it.toString() }, unit: String = "", unsupportedUnits: Int = 0) {
     SectionCard(stringResource(R.string.calib_title)) {
         // Label and switch share a row (the switch never leaves the screen); the status pill has its own line so a long word (French, 2x text) can wrap.
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -270,6 +285,8 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
         val (pill, container, content) = when {
             !m2Ready -> Triple(R.string.ui12_calib_unavailable, MaterialTheme.colorScheme.surfaceContainerHighest, MaterialTheme.colorScheme.onSurfaceVariant)
             !settings.calibrate -> Triple(R.string.ui12_cal_off, MaterialTheme.colorScheme.surfaceContainerHighest, MaterialTheme.colorScheme.onSurfaceVariant)
+            computing -> Triple(R.string.feedback_calculating, MaterialTheme.colorScheme.surfaceContainerHighest, MaterialTheme.colorScheme.onSurfaceVariant)
+            failed -> Triple(R.string.feedback_calculation_failed, MaterialTheme.colorScheme.errorContainer, MaterialTheme.colorScheme.onErrorContainer)
             outcome is TotalE2Calibration.Calibrated -> Triple(R.string.ui12_label_calibrated, MaterialTheme.colorScheme.primaryContainer, MaterialTheme.colorScheme.onPrimaryContainer)
             else -> Triple(R.string.ui12_cal_not_applied, MaterialTheme.colorScheme.surfaceContainerHighest, MaterialTheme.colorScheme.onSurfaceVariant)
         }
@@ -277,6 +294,11 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
         when {
             !m2Ready -> Text(stringResource(R.string.ui12_calib_unavailable_sl), style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("calibration-unavailable-sl"))
             !settings.calibrate -> Text(stringResource(R.string.ui12_cal_explain), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.testTag("calibration-explain"))
+            computing -> Text(stringResource(R.string.feedback_calculating), modifier = Modifier.testTag("calibration-calculating"))
+            failed -> Column {
+                Text(stringResource(R.string.feedback_calculation_failed), modifier = Modifier.testTag("calibration-failed"))
+                OutlinedButton(onClick = onRetry, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.attach_retry)) }
+            }
             noLabs || outcome == null -> Text(stringResource(R.string.calib_no_labs), style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("calibration-no-labs"))
             outcome is TotalE2Calibration.Calibrated -> Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.testTag("calibration-result")) {
                 Text(stringResource(R.string.ui12_cal_explain), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -295,6 +317,12 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
                 CalibrationNotes(outcome.decisions)
             }
         }
+        if (settings.calibrate && unsupportedUnits > 0) Text(stringResource(R.string.feedback_unit, unsupportedUnits), modifier = Modifier.testTag("calibration-unsupported-unit"))
+        CalibrationEligibilitySection(history, fmt, unit)
+        if (outcome?.decisions?.any { TotalE2Calibration.Reason.HISTORY_NOT_ELIGIBLE in it.reasons || TotalE2Calibration.Reason.SL_LAST_DOSE_UNKNOWN in it.reasons } == true)
+            OutlinedButton(onClick = onOpenHistory, modifier = Modifier.heightIn(min = 48.dp).testTag("calibration-open-history")) { Text(stringResource(R.string.history)) }
+        if (outcome?.decisions?.any { TotalE2Calibration.Reason.LAB_TIME_NOT_PRECISE in it.reasons } == true)
+            Text(stringResource(R.string.feedback_sampling_time), style = MaterialTheme.typography.bodySmall)
         OutlinedButton(onClick = onOpenLabs, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.calib_manage_labs)) }
     }
 }

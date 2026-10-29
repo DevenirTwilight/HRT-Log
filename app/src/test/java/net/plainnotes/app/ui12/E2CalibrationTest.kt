@@ -84,4 +84,23 @@ class E2CalibrationTest {
         assertNull(E2Calibration.run(sl.preview, null, emptyList(), sl.result, 0.0, Ui12Fixture.nowH) {})
         assertNull(E2Calibration.run(null, null, sl.labs, sl.result, 0.0, Ui12Fixture.nowH) {})
     }
+    @Test fun earliestExposureAndLastDoseDoNotDependOnListOrdering() {
+        assertEquals(sl.doseTimes.minOf { it.toEpochMilli()/3_600_000.0 }, E2Calibration.firstDoseH(sl.doseTimes.reversed())!!, 0.0)
+        val p=sl.preview!!
+        val shuffled=net.plainnotes.app.experimental.ConcentrationPreview(p.model,p.timeH,p.values,p.currentPgMl,p.candidateId,{h->checkNotNull(p.valueAt(h))},
+            p.anchor,p.singleDosePeak,p.historyWindowPeak,p.historyOriginH,p.asOfH,p.doseCount,p.sublingualDoseH.reversedArray())
+        val before=E2Calibration.labsFor(sl.labs,sl.result.labEligibility,p,E2Calibration.firstDoseH(sl.doseTimes),Ui12Fixture.nowH)
+        val after=E2Calibration.labsFor(sl.labs,sl.result.labEligibility,shuffled,E2Calibration.firstDoseH(sl.doseTimes),Ui12Fixture.nowH)
+        assertEquals(before,after)
+    }
+    @Test fun panelMembershipAndSupportedUnitsDoNotHideE2ButUnknownUnitsRemainInTheReport() {
+        val rows=sl.labs.take(1)
+        val pg=E2Calibration.labsFor(rows,sl.result.labEligibility,sl.preview!!,E2Calibration.firstDoseH(sl.doseTimes),Ui12Fixture.nowH).single()
+        val pmol=rows.map {it.copy(panel_id=99,value=it.value*net.plainnotes.app.pk.Pk.PMOL_PER_PG,unit="pmol/L")}
+        assertEquals(pg.pgPerMl,E2Calibration.labsFor(pmol,sl.result.labEligibility,sl.preview!!,E2Calibration.firstDoseH(sl.doseTimes),Ui12Fixture.nowH).single().pgPerMl,1e-9)
+        val unknown=E2Calibration.labsFor(rows.map {it.copy(unit="unknown")},sl.result.labEligibility,sl.preview!!,E2Calibration.firstDoseH(sl.doseTimes),Ui12Fixture.nowH).single()
+        assertEquals(TotalE2Calibration.Reason.INVALID_VALUE,TotalE2Calibration.assess(unknown).reasons.single())
+        assertFalse(E2Calibration.recordedClockTime(rows.single().copy(sampled_zone="not/a/zone")))
+    }
+
 }

@@ -292,4 +292,29 @@ class Ui12ConcentrationTest(private val locale: String, private val width: Int, 
         ui.onNodeWithTag("m2-research-basis-toggle").assertDoesNotExist() // the basis toggle is supplied by the unified host, not this fixture
         assertEquals("window", emptyList<String>(), clipped())
     }
+    @Test fun failedRecalculationClearsTheOldFitAndShowsAFiniteRetryState() {
+        setup(); val sc=Ui12Fixture.sublingualCalibrated()
+        var preview by mutableStateOf(sc.preview!!)
+        var inputFailed by mutableStateOf(false)
+        ui.setContent { NotesTheme(mode) {
+            ConcentrationScreen(sc.state,sc.result,false,70.0,ConcSettings(false,true,CalibrationMode.RETROSPECTIVE),
+                {},{},{},{},PaddingValues(),sc.records,sc.state.profiles,preview=preview,doseTimes=sc.doseTimes,labs=sc.labs,calculationInputFailed=inputFailed)
+        } }
+        ui.waitUntil(30_000) { ui.onAllNodesWithTag("calibration-used").fetchSemanticsNodes().isNotEmpty() }
+        ui.runOnIdle {
+            val p=sc.preview!!
+            preview=net.plainnotes.app.experimental.ConcentrationPreview(p.model,p.timeH,p.values,p.currentPgMl,p.candidateId,
+                {throw IllegalStateException("SYNTHETIC model input failure")},p.anchor,p.singleDosePeak,p.historyWindowPeak,p.historyOriginH,p.asOfH,p.doseCount,p.sublingualDoseH)
+        }
+        ui.waitUntil(30_000) { ui.onAllNodesWithTag("calibration-failed").fetchSemanticsNodes().isNotEmpty() }
+        ui.onAllNodesWithTag("calibration-used").assertCountEquals(0)
+        ui.onAllNodesWithTag("e2-now-value").assertCountEquals(0)
+        ui.onAllNodesWithTag("calibration-calculating").assertCountEquals(0)
+        ui.onNodeWithTag("calibration-failed").performScrollTo().assertTextEquals(s(R.string.feedback_calculation_failed))
+        // A failed database read must likewise hide the former total, rather than treating stale inputs as current.
+        ui.runOnIdle { preview=sc.preview!!; inputFailed=true }
+        ui.waitUntil(30_000) { ui.onAllNodesWithTag("calibration-failed").fetchSemanticsNodes().isNotEmpty() }
+        ui.onAllNodesWithTag("e2-now-value").assertCountEquals(0)
+    }
+
 }
