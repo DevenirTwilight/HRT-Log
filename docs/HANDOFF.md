@@ -1,3 +1,9 @@
+## MED-04 文件信息（用户自填类别/日期/机构）— 2026-10-29（分支 feature/med04-file-category-20261029，进行中）
+
+负责人要求前两项样图 06 差异（类别方块、每行日期/机构）由用户自填后实现，见 REQUIREMENTS §164。方案：Room 23 新表 `attachment_document_detail` + 备份清单版本 3（仅有信息时）+ 导入第二步与详情页编辑 + 文件库按样图显示。步骤与状态：①需求入库（本条）②数据层：实体、迁移 22→23、触发器、操作 ③备份清单 v3 往返 ④宿主接线与 UI（caps.categories 打开）⑤测试与截图 ⑥报告、PR。每步完成后更新本条。APK 仍暂缓。
+
+---
+
 ## MED-03 已合并 + Build38 私人交付 — 2026-10-28
 
 - **MED-03 已合并**：PR #145 → 主线 `64fca05b955516bd54d835e21a4708d561bdffb0`（含 Room 22 独立 LAB_PANEL、独立医疗文件库、整次抽血报告关联、record-first 附件、PNMEDBK2 v1/v2 备份恢复、restore 接受独立文件）。合并前精确头 `c78480e5` 上全部必需检查和 `run_med02_product_native.py` 真实两个 MainActivity/SAF 用例及全部重启脚本 SUCCESS（PR 运行 40763719638）；合并前最后一轮头 `cc7689a3` 的两个环境性失败（`android` 在 sdkmanager 阶段退出、`library-api26-512m` 低内存启动超时）各重跑一次并在 PR 上说明。
