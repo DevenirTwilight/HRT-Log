@@ -1,6 +1,7 @@
 package net.plainnotes.app.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -48,10 +49,10 @@ import java.time.LocalDateTime
         androidx.activity.compose.BackHandler(onBack=onDismiss)
         val initialFocus=remember {FocusRequester()}
         LaunchedEffect(Unit) {initialFocus.requestFocus()}
-        Surface(Modifier.fillMaxSize().testTag("lab-panel-detail"), color = MaterialTheme.colorScheme.surface) {
+        Surface(Modifier.fillMaxSize().testTag("lab-panel-detail").focusRequester(initialFocus).focusable(), color = MaterialTheme.colorScheme.surface) {
             Column(Modifier.fillMaxSize().systemBarsPadding().imePadding()) {
                 Row(Modifier.fillMaxWidth().padding(start = 4.dp, end = 16.dp, top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(onClick = onDismiss,modifier=Modifier.focusRequester(initialFocus)) { Icon(Icons.Outlined.Close, stringResource(R.string.cancel)) }
+                    IconButton(onClick = onDismiss) { Icon(Icons.Outlined.Close, stringResource(R.string.cancel)) }
                     Text(stringResource(R.string.lab_panel_title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).semantics { heading() })
                 }
                 Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp).testTag("lab-panel-scroll"),

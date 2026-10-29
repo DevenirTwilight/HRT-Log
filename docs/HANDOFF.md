@@ -1,3 +1,7 @@
+## 原生剩余失败跟进 — 2026-10-29
+
+PR153最终dfa7f6e9：API26/29/35原生已成功，当前仅两个Android主作业待结束。PR155 df7d1010 run40925785461 job123630783670仍出现SnapshotStateObserver线程异常，证明仅移动bounds不足；未改写PASS。检查Compose ui-test1.9.3源码，fetchOneOrThrow在测试线程保存printToString语义快照，1.9.5仍同实现；这是待验证的库级候选原因，不擅自升级依赖或关闭观察器。PR156 91848eb0 run40930251829 job123646480535仍在原484行BACK超时，树显示实验室Focused=true；IconButton在触摸模式下不能可靠取得初始焦点，现将请求目标移到独立focusable根容器，不禁用文本编辑。原生仍待验证。所有失败原作业保留。
+
 ## 2026-10-29 最终串行定向回归检查点
 
 PR156生产/测试源码6e6822d7：串行246项PASS，0失败/0skip（MedicalViewerPages7、Med05ViewerUi224、MedicalHomeConfirmFlow1、MedicalAttachmentsController14），2m29s，XML在medical-attachments/2026-10-29-feedback/local/serial-final。App AndroidTest Kotlin编译PASS。此前并行启动两个Gradle实例争用同一binary结果文件，首轮NoSuchFileException为本地执行安排错误，原日志/workspace/scratch/156-page-transition.log保留，不能计作产品FAIL或PASS；串行完整相关回归消除了争用。061fe4de独立低内存run40925404991的library/Featherline两job均PASS，不能代替最终SHA验收。当前153/155受保护auto-merge已启用，Android检查未结束；156保持Draft等待最终原生结果，API26焦点修正尚未得到原生PASS。未签名/交付新APK，真机/人工TalkBack NOT_RUN。
