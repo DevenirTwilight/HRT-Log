@@ -1,3 +1,11 @@
+## 三项用户反馈接手 — 2026-10-29（进行中，未宣称验收）
+
+本轮授权见REQUIREMENTS §169。基线主线d95952ee，Build39已交付但不含仍OPEN的#153校准UI；Build39登记在#155，不能冒充新功能验收。继续#153原分支修正校准接线与状态，不新建重复校准PR。其旧PR事件40875393451的android失败为MedicalHomeConfirmFlowTest:110（原始job123452781579）；同源push成功，仍保留原始FAIL，尚未证明根因，不盲目重跑。已正常合并d959主线并保留HANDOFF双方内容。
+
+文件所有权：file_rename代理负责MedicalAttachmentOperations/Gateway/Flow、library Controller/Host/编辑区和rename回归；fullscreen_reader代理负责MedicalAttachmentsUi查看器与native产品阅读场景/样本/截图；主负责人负责#153的ConcentrationScreen/E2Calibration与显示批准、文档、统一构建和最终CI。共享资源拆成独立四语XML。禁止同时跑Gradle挤占内存；签名仍须最终源验收及有效授权。
+
+目前发现与处理中的校准边界：produceState输入变更需隔离旧k、显式计算失败而非无限加载、未知单位不能被当成无化验、非法时区不回退当前系统时区、最早/最后服药时间不依赖列表顺序。保留共同系数、信息增益门及既有CalibrationEligibility，未动M2或科研归档。午夜精度现有模型不能区分，继续保守并给明确说明，不造时间、不贸然迁移。所有新行为仍待实际测试，不把候选代码标PASS。
+
 ## SL-CAL-02 步骤 4：校准接到浓度页 — 2026-10-29（分支 feature/slcal02-ui-20261029）
 
 - 已完成：校准开关在有舌下记录时可用；合计 = B + k·((M2−B)+N)（`ui/E2Calibration.kt`、`ui/E2Total.kt`、`ConcentrationScreen.kt` 的 `SublingualCalibrationCard`）；四语言文字；`E2CalibrationTest`、迁移的 UI-12/统一页测试；两条追加式显示批准；报告 `docs/audits/product-quality-2026-10/81-slcal02-calibration-ui.md`，截图 `docs/ui-audit/2026-10-29-slcal02-ui/`（REQUIREMENTS §167）。
