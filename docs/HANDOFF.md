@@ -1,3 +1,11 @@
+## 用户反馈：文件名称与真正全屏阅读（2026-10-29，候选待原生CI）
+
+基于受保护主线d95952ee，复用Room23/MED03–05，没有新Room迁移或密码学/容器变更。重命名走现有编辑信息入口，title+Detail同一AttachmentTransaction CAS；保留原文档UUID、版本、密文、密钥、全部链接和原import journal。只有名称变化推进document.revision，元信息自己的revision保持MED04语义。校验≤256且非空/无ISO控制符，不截断用户输入。FILE_INFO checkpoint仅op/doc中性身份；未知只读回看报告CHECKED，不冒充历史COMMIT，不重写；同进程旧writer未结束不能清屏障。旧列表回调不能把成功CAS的新名称覆回旧名。
+
+阅读器使用独立Dialog、安全边距与继承截图保护；内容占据工具栏以外全部阅读区，工具栏隐藏后占满安全区域。去除固定460dp预览卡/详情元数据；保留认证读取、API26/27 PDF拒绝、JPEG/PNG、按需翻页、5×缩放与内存上限。首轮针对性共742项：32个新增显隐/双指手势失败，28项既有条件skip，其余通过；原始日志/XML保存在/workspace/hrt-feedback-evidence/reader-first-failure，不改写为PASS。根因：同批MotionEvent先于重组，旧scale/offset快照覆盖增量；生产改为手势局部累计，末尾翻页判断使用最终scale。显隐测试等待双击识别窗口后的真实toolbar状态，不加sleep/不放宽面积断言。修复后这32项全部PASS，0skip。标题单测1项通过，App/core AndroidTest源码编译通过；最终完整必需CI及真实设备执行仍待验收，不能称NATIVE_PASS。
+
+新增真实MainActivity/SAF三页PDF与2400×1600PNG，重命名→列表/详情/整次LabPanel五成员→viewer标题、缩放/翻页/显隐/返回/重开；保留旧样本与断言。native截图与采样非峰值内存JSON由既有med02-product-native工件收集，尚未实际运行。core原生五成员/多关系场景补旧import核对、CAS冲突、回滚、不可变对象与完整归档恢复新名。校准在原PR #153独立接手，不混改PK或压低门槛。真机/人工TalkBack未执行；本候选未签名/交付APK。
+
 ## 接手最终主线回归修正 — 2026-10-29
 
 #152 已合并 `3ce3b739990d878cc2060d0f9128fd42e7b5f5ed`，#151 已合并 `14574302e4070c2b9bc885e8a8776ad4a94e16ab`。#151 最终源码 `acfa2cca0181f178b764283c76e6de1a1096dd7f` 与 squash 合并树一致；精确头全部检查成功。最终主线 Science `40873642195`、安全 `40873641935` 成功；Android `40873641886` 的 device-tests job `123446801031` 失败，其余四 job 成功，不得报告主线全绿。
