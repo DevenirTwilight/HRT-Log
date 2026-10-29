@@ -292,9 +292,10 @@ import net.plainnotes.app.ui.StatusPill
                                         color=androidx.compose.ui.graphics.Color.White,shadowElevation=2.dp) {
                                         ZoomablePage(viewer.page,label,scale,offset,{scale=it},{offset=it},{step->if(viewer.pdf && !viewer.busy)onPage(viewer.pageIndex+step)})
                                     }
-                                    if(viewer.pdf)Surface(Modifier.align(Alignment.BottomEnd),shape=MaterialTheme.shapes.extraLarge,color=MaterialTheme.colorScheme.inverseSurface.copy(alpha=0.8f),
+                                    // The page number sits in the controls below once there is more than one page; the badge stays for a single page.
+                                    if(viewer.pdf && viewer.pageCount==1)Surface(Modifier.align(Alignment.BottomEnd),shape=MaterialTheme.shapes.extraLarge,color=MaterialTheme.colorScheme.inverseSurface.copy(alpha=0.8f),
                                         contentColor=MaterialTheme.colorScheme.inverseOnSurface) {
-                                        Text(if(viewer.pageCount>1)stringResource(R.string.med05_page_of,viewer.pageIndex+1,viewer.pageCount) else stringResource(R.string.viewer_pdf_first_page),
+                                        Text(stringResource(R.string.viewer_pdf_first_page),
                                             Modifier.padding(horizontal=12.dp,vertical=6.dp),style=MaterialTheme.typography.labelMedium)
                                     }
                                 }
@@ -312,7 +313,7 @@ import net.plainnotes.app.ui.StatusPill
                     Text(title,Modifier.semantics {heading()},style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.SemiBold,maxLines=3,overflow=TextOverflow.Ellipsis)
                 }
                 if(targetLabel.isNotBlank())LinkedRecord(targetLabel)
-                (viewer as? Viewer.Showing)?.let {FileDetails(it.pdf)}
+                (viewer as? Viewer.Showing)?.let {FileDetails(it.pdf,it.pageCount)}
                 Spacer(Modifier.height(8.dp))
             }
         }
@@ -333,9 +334,9 @@ import net.plainnotes.app.ui.StatusPill
     }
 }
 
-@Composable private fun FileDetails(pdf:Boolean) {
+@Composable private fun FileDetails(pdf:Boolean,pageCount:Int=1) {
     val rows=listOf(stringResource(R.string.viewer_detail_type) to stringResource(if(pdf)R.string.attach_kind_pdf else R.string.attach_kind_image),
-        stringResource(R.string.viewer_detail_preview) to stringResource(if(pdf)R.string.viewer_preview_first_page else R.string.viewer_preview_full))
+        stringResource(R.string.viewer_detail_preview) to (if(pdf && pageCount>1)stringResource(R.string.med05_preview_pages,pageCount) else stringResource(if(pdf)R.string.viewer_preview_first_page else R.string.viewer_preview_full)))
     Column(Modifier.testTag("attachment-viewer-details"),verticalArrangement=Arrangement.spacedBy(8.dp)) {
         Text(stringResource(R.string.viewer_details),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold,modifier=Modifier.semantics {heading()})
         Column(verticalArrangement=Arrangement.spacedBy(3.dp)) {

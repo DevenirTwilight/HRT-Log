@@ -73,6 +73,12 @@ class Med05ViewerUiTest(private val locale: String, private val width: Int, priv
         ui.onNodeWithTag("attachment-viewer-next").performScrollTo().assertIsEnabled().performClick(); assertEquals(1, requested)
         ui.onNodeWithTag("attachment-viewer-page-number").assert(hasText(s(R.string.med05_page_of, 1, 3)))
         ui.onNodeWithTag("attachment-viewer-page").assert(hasContentDescription(s(R.string.med05_page_label, "Synthetic scan", 1, 3)))
+        // With several pages the number lives in the controls (no badge over the page), and the details no longer say "first page only".
+        ui.onAllNodesWithText(s(R.string.viewer_pdf_first_page)).assertCountEquals(0)
+        ui.onNodeWithTag("attachment-viewer-details").performScrollTo()
+        ui.onNode(hasText(s(R.string.med05_preview_pages, 3)) and hasAnyAncestor(hasTestTag("attachment-viewer-details"))).assertExists()
+        ui.onAllNodes(hasText(s(R.string.viewer_preview_first_page)) and hasAnyAncestor(hasTestTag("attachment-viewer-details"))).assertCountEquals(0)
+        ui.onNodeWithTag("attachment-viewer-page").performScrollTo()
         shot("viewer_page1")
     }
     @Test fun theLastPageHasNoNextAndAMiddlePageHasBoth() {
