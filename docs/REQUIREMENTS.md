@@ -1782,3 +1782,9 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 **做了什么（仅显示）**：`ConcChart.kt` 的 `drawTimeAxis` 先量出每个标签，再由纯函数 `axisLabelsToDraw` 决定画哪些：日期（粗体）优先于半日标记，同级别按先后；字号正常、空间够时全部保留，结果与改前相同；空间不够时先让出半日标记，仍不够再每隔一个画一个。`clampAxisLabelCenter` 把标签中心限制在画布内，不再被截断。网格线、曲线、数据、点读数、`readAt` 一律不变。测试 `ConcChartAxisTest`（8 项，含 500 组随机间距的「保留的标签两两不重叠、最优先标签必保留」不变量）；四语 × 320dp/2× 与 411dp/1× × 明暗截图对照见 `docs/ui-audit/2026-10-29-conc-axis/{before,after}`。
 
 **显示批准记录（追加式）**：`PD-2026-10-29-CONCCHART-AXIS-LABELS`（`ConcChart.kt`）。不改任何模型、参数、候选、LIVE_LOCK 文件、导出、Room 或备份。真机与人工 TalkBack：NOT_RUN。
+
+## 172. 存储进程锁改为有界等待（2026-10-29，接手后修复真实问题）
+
+依据：负责人 2026-10-29 接手指令（修复真实问题、核实全屏阅读在正式生产路径可用、不得放宽安全断言）。合并 #156 后，全屏阅读器的原生用例出现间歇失败；其中一次阅读器显示「这个文件无法显示」。分析见 HANDOFF 同日条目。
+
+**决定**：`AttachmentOwnedFiles.ProcessLease` 在另一个线程持有进程内存储锁时等待最多 5 秒再失败（不再立即失败）；同一线程重入仍立即失败。这是进程内互斥的等待策略，不改变加密容器、密钥、备份协议、Room、权限或任何断言。新增 `AttachmentProcessLeaseAndroidTest` 三项。根因是推断而非已证明；真机与人工 TalkBack：NOT_RUN。

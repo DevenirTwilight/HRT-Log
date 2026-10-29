@@ -12,6 +12,7 @@ import java.io.FileOutputStream
 import java.nio.channels.FileLock
 import java.util.UUID
 import java.util.concurrent.Semaphore
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -44,8 +45,18 @@ internal class AttachmentOwnedFiles(context: Context,namespace:Namespace=Namespa
     /** Acquire BEFORE even opening lockfile: closing another fd can release this process's POSIX locks. */
     internal class ProcessLease:AutoCloseable {
         private val closed=AtomicBoolean(false)
-        init {check(processGate.tryAcquire()) {"Attachment storage busy"}}
-        override fun close() {if(closed.compareAndSet(false,true))processGate.release()}
+        init {
+            // The same thread asking twice is a bug in the caller (it would wait for itself): refuse at once, as before.
+            check(holder.get()!==Thread.currentThread()) {"Attachment storage busy"}
+            // Another in-process operation (a thumbnail, the viewer, an import, a link change) holds the gate only while it verifies,
+            // opens or commits one object. Wait for it briefly instead of failing the one that merely overlapped (a viewer opened
+            // while its own thumbnail was being made used to show "This file couldn't be displayed"). Never an unbounded wait.
+            val acquired=try {processGate.tryAcquire(waitMillis,TimeUnit.MILLISECONDS)}
+                catch(interrupted:InterruptedException) {Thread.currentThread().interrupt();false}
+            check(acquired) {"Attachment storage busy"}
+            holder.set(Thread.currentThread())
+        }
+        override fun close() {if(closed.compareAndSet(false,true)){holder.set(null);processGate.release()}}
     }
 
     private fun own(fd:java.io.FileDescriptor):ParcelFileDescriptor =
@@ -148,7 +159,12 @@ internal class AttachmentOwnedFiles(context: Context,namespace:Namespace=Namespa
             }
         }
     }
-    companion object {private val processGate=Semaphore(1)}
+    companion object {
+        private val processGate=Semaphore(1)
+        private val holder=java.util.concurrent.atomic.AtomicReference<Thread?>(null)
+        /** How long a caller waits for another in-process storage operation. Tests shorten it; production keeps the default. */
+        @Volatile internal var waitMillis=5_000L
+    }
     class Created internal constructor(private val output: FileOutputStream, val identity: Identity): AutoCloseable {
         /** Separate owned descriptor: crypto writer closes its sink, then coordinator fsyncs the original. */
         fun sink() = ParcelFileDescriptor.AutoCloseOutputStream(ParcelFileDescriptor.dup(output.fd))
