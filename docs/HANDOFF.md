@@ -1,3 +1,7 @@
+## 校准历史时间回归补验 — 2026-10-29
+
+此前d31cfd95的E2Calibration定向测试及AndroidTest Kotlin编译PASS（5m48s）。补充校准实际服药时间适配函数，仍使用同一HistoricalContext冻结解析规则；新增合成回归覆盖较早规则快照补全、无快照拒绝、IMPORT不补猜、删除和SKIPPED不计入。该新增回归正在/workspace/scratch/153-historical-regression.log执行，尚未写PASS。PR156当前061fe4de部分JVM/安全原生通过，完整Android/低内存待完成；两个PR无未解决行内讨论。PR153/156正文已更新。下一步读取本地测试→最终SHA必需CI→有据合并，不再扩展功能。
+
 ## 2026-10-29 校准接手检查点
 
 PR153：浓度计算通过 HistoricalContext.resolved 使用已冻结规则补齐历史上下文，而此前 doseTimes 只解码记录本身，可能遗漏有可信规则快照的较早 E2 服药，导致24小时门槛错误拒绝；现统一使用同一可信解析器，不采用当前用药配置、不改变科学门槛。真实原生测试坐标与校准值读取改在主线程执行；SnapshotStateObserver 根因仍待精确HEAD原生复验。定向测试与CI尚未完成，不宣称合并或实际设备通过。PR156原分支已推送061fe4de，Ui09四项及AndroidTest编译通过，原生CI待验收。真机和人工TalkBack NOT_RUN；未签名或交付APK。

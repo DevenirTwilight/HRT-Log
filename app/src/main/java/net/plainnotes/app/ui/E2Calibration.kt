@@ -21,6 +21,12 @@ object E2Calibration {
     /** The page must not depend on repository/list ordering to find the beginning of recorded exposure. */
     fun firstDoseH(doses: List<Instant>): Double? = doses.minOfOrNull { ConcentrationCalculator.hours(it) }
 
+    /** Same frozen historical identity resolver as the concentration engine; never current medication settings. */
+    fun actualDoseTimes(records: List<net.plainnotes.app.data.RecordEntity>, snapshots: Map<Long,String>): List<Instant> =
+        records.filter { net.plainnotes.app.data.MedicationSnapshot.decode(net.plainnotes.app.data.HistoricalContext.resolved(it,snapshots),it.medication_id)?.molecule == "E2" &&
+            it.deleted_at_utc == null && it.status in listOf("ON_TIME","LATE") && it.taken_utc != null }
+            .map { Instant.ofEpochMilli(it.taken_utc!!) }.sorted()
+
     /** A lab row as the engine needs it, plus the display facts the page lists. */
     fun labsFor(labs: List<LabValueEntity>, eligibility: List<LabEligibility>, preview: ConcentrationPreview, firstDoseH: Double?, nowH: Double): List<TotalE2Calibration.Lab> {
         val gate = eligibility.associateBy { it.labId }
