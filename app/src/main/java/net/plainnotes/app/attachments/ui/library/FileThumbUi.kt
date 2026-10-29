@@ -66,7 +66,7 @@ internal fun Reason.messageRes()=when(this) {
             ready!=null->Surface(Modifier.fillMaxHeight().aspectRatio(ready.width.toFloat()/ready.height.coerceAtLeast(1)),shape=MaterialTheme.shapes.small,color=Color.White,shadowElevation=2.dp) {
                 GuardedBitmap(ready,Modifier.fillMaxSize().testTag("file-detail-thumb"),crop=false)
             }
-            thumb is Thumb.Unavailable->Column(horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(12.dp)) {
+            thumb is Thumb.Unavailable->Column(horizontalAlignment=Alignment.Start,verticalArrangement=Arrangement.spacedBy(12.dp)) {
                 FileTile(kind,available)
                 Text(stringResource(thumb.reason.messageRes()),Modifier.testTag("file-detail-thumb-reason"),style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
             }
