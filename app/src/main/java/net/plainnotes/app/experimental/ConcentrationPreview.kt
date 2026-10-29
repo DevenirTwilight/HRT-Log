@@ -12,7 +12,9 @@ class ConcentrationPreview(val model: ResearchModel, val timeH: DoubleArray, val
     /** Latest actual dose → +24 h, includes earlier residuals; not the isolated single-dose Tmax. */
     val historyWindowPeak: ResearchPeak?, val historyOriginH: Double?,
     /** The single time base of this snapshot (D-1): curve, "now" line, readouts and the shown calculation time. */
-    val asOfH: Double? = null) {
+    val asOfH: Double? = null,
+    /** UI-12: number of sublingual doses the snapshot was built from (display count only; no model value depends on it). */
+    val doseCount: Int = 0) {
     fun valueAt(hour: Double): Double? = exact?.invoke(hour)
     companion object {
         fun pending(model: ResearchModel) = ConcentrationPreview(model,doubleArrayOf(),doubleArrayOf(),null,
@@ -67,7 +69,7 @@ class ConcentrationPreview(val model: ResearchModel, val timeH: DoubleArray, val
             val values=DoubleArray(x.size){exact(x[it])};val current=exact(nowH)
             constructionCache=null
             return ConcentrationPreview(model,x,values,current,selected.id,::exact,
-                anchor,single,peak,origin,nowH)
+                anchor,single,peak,origin,nowH,doses.size)
         }
     }
 }

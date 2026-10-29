@@ -1,0 +1,12 @@
+e: file:///home/user/wt-ui12/app/src/test/java/net/plainnotes/app/E2TotalTest.kt:13:30 Unresolved reference 'E2Total'.
+e: file:///home/user/wt-ui12/app/src/test/java/net/plainnotes/app/E2TotalTest.kt:51:22 Unresolved reference 'E2Total'.
+e: file:///home/user/wt-ui12/app/src/test/java/net/plainnotes/app/E2TotalTest.kt:51:84 Cannot infer type for type parameter 'K'. Specify it explicitly.
+e: file:///home/user/wt-ui12/app/src/test/java/net/plainnotes/app/E2TotalTest.kt:51:84 Cannot infer type for type parameter 'V'. Specify it explicitly.
+e: file:///home/user/wt-ui12/app/src/test/java/net/plainnotes/app/E2TotalTest.kt:58:21 Unresolved reference 'E2Total'.
+e: file:///home/user/wt-ui12/app/src/test/java/net/plainnotes/app/E2TotalTest.kt:59:42 Unresolved reference 'timeH'.
+e: file:///home/user/wt-ui12/app/src/test/java/net/plainnotes/app/E2TotalTest.kt:60:43 Unresolved reference 'values'.
+e: file:///home/user/wt-ui12/app/src/test/java/net/plainnotes/app/E2TotalTest.kt:61:101 Unresolved reference 'readAt'.
+e: file:///home/user/wt-ui12/app/src/test/java/net/plainnotes/app/E2TotalTest.kt:62:22 Cannot infer type for type parameter 'T'. Specify it explicitly.
+e: file:///home/user/wt-ui12/app/src/test/java/net/plainnotes/app/E2TotalTest.kt:62:29 Unresolved reference 'E2Total'.
+e: file:///home/user/wt-ui12/app/src/test/java/net/plainnotes/app/E2TotalTest.kt:62:62 Unresolved reference 'routes'.
+e: file:///home/user/wt-ui12/app/src/test/java/net/plainnotes/app/E2TotalTest.kt:63:24 Unresolved reference 'doseCount'.

@@ -63,10 +63,18 @@ class UnifiedConcentrationTestActivity : ComponentActivity() {
             var calibrate by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
             val labs=remember(syntheticLabPgMl) { listOf(LabValueEntity(1,"E2",syntheticLabPgMl,"pg/mL",now.minusSeconds(2*3600).toEpochMilli(),"UTC")) }
             val result=remember(records,labs,calibrate) { ConcentrationCalculator.compute(state.medications,state.profiles,records,emptyList(),labs,70.0,now,calibrate=calibrate) }
-            UnifiedConcentrationScreen(records,emptyMap(),labs,PaddingValues(),{pad,preview,selector ->
+            // UI-12: the same second compatibility run the app performs for the non-sublingual half of the total.
+            val nonSublingual=remember(records,labs) {
+                if(result.models[net.plainnotes.app.pk.Curve.E2]?.any{it.key=="E2_SL"}!=true) null else {
+                    val x=E2Total.nonSublingualInputs(state.medications,state.profiles,records,emptyList(),emptyMap())
+                    if(x.records.isEmpty()) null else ConcentrationCalculator.compute(x.medications,x.profiles,x.records,x.planned,emptyList(),70.0,now,calibrate=false)
+                }
+            }
+            UnifiedConcentrationScreen(records,emptyMap(),labs,PaddingValues(),{pad,preview,status,basis ->
                 SideEffect { lastPreview=preview }
                 ConcentrationScreen(state,result,false,70.0,ConcSettings(pmol,calibrate,net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE),
-                    {pmol=it.pmol;calibrate=it.calibrate},{},{},{},pad,records,state.profiles,preview=preview,referenceNotice=selector,m2Only=true)
+                    {pmol=it.pmol;calibrate=it.calibrate},{},{},{},pad,records,state.profiles,preview=preview,referenceNotice=status,basisNotice=basis,
+                    e2NonSublingual=nonSublingual,doseTimes=records.mapNotNull{it.taken_utc}.map{java.time.Instant.ofEpochMilli(it)})
             },{now.plusMillis(clockShiftMillis)}, refreshMillis = refreshMillis, previewComputer = { audit,model,hour ->
                 kotlinx.coroutines.delay(previewDelayMillis)
                 check(!previewFails)
