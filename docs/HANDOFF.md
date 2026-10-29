@@ -1,3 +1,13 @@
+## MED-04 / MED-05 状态 — 2026-10-29
+
+- **MED-04**（用户自填类别/日期/机构）：PR #150（分支 feature/med04-file-category-20261029），自动合并已开，等 CI。Room 23 新表 + 备份清单版本 3 + 编辑界面 + 文件库按样图 06 显示。
+- **MED-05**（缩略图 + 查看器翻页/缩放）：分支 feature/med05-thumbnails-viewer-20261029，叠在 MED-04 之上；本地 JVM 全绿；**待 PR #150 合并后合并主线、开 PR**。报告 `docs/audits/product-quality-2026-10/80-med04-med05-file-library.md`，截图 `docs/ui-audit/2026-10-29-med04-05/after/`。
+- 有意放宽须复核：图片 >2048 像素改为按 2 的幂次缩小解码而不是拒绝（见报告 §3）。
+- **UI-12 / PR #149**：device-tests 曾红两次——一次是本 PR 仪器测试仍按旧 D-1（已修，edeb4232），一次是 `MedicalAttachmentProductAndroidTest#standalonePdf…` 在 API 29 超时，同一提交的另一次运行通过（判为 CI 负载下的偶发），按规则只重跑一次。
+- 仍未做：APK（暂缓，等负责人恢复）；医疗文件库「上次备份日期」「医生/机构」不做。
+
+---
+
 ## MED-04 文件信息（用户自填类别/日期/机构）— 2026-10-29（分支 feature/med04-file-category-20261029，进行中）
 
 负责人要求前两项样图 06 差异（类别方块、每行日期/机构）由用户自填后实现，见 REQUIREMENTS §164。方案：Room 23 新表 `attachment_document_detail` + 备份清单版本 3（仅有信息时）+ 导入第二步与详情页编辑 + 文件库按样图显示。步骤与状态：①需求入库（本条）②数据层：实体、迁移 22→23、触发器、操作 ③备份清单 v3 往返 ④宿主接线与 UI（caps.categories 打开）⑤测试与截图 ⑥报告、PR。每步完成后更新本条。APK 仍暂缓。
