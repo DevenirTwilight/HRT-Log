@@ -1,0 +1,97 @@
+{
+ "apk": "HRT-Log-build39-full-official.apk",
+ "package": {
+  "application_id": "net.plainnotes.app",
+  "version_code": 39,
+  "version_name": "0.2.0"
+ },
+ "apk_sha256": "14f9cf51c1c2760a15767607bc519aa279ceaa7505faa6b9c635f1c0f5961c5a",
+ "signing_cert_sha256": [
+  "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+ ],
+ "source": {
+  "SOURCE_SHA": "aeb56839d708c325b5330e62e672be968992fa42",
+  "SOURCE_DIRTY": "false",
+  "SOURCE_ORIGIN": "git"
+ },
+ "bytes": 14519454,
+ "unsigned_apk_sha256": "a9dd2769a7249974bde687eceabcb073c8aeeea8ec8db93a9581783fb5dd64db",
+ "build_input_sha256": "253337d9fec307af546104067334b451644b01d9bdadd08eb11039d2764db75f",
+ "build_input": "External version39.init.gradle; changes only versionCode from source default 38 to 39; source tree clean",
+ "native_libraries": [
+  {
+   "name": "lib/arm64-v8a/libandroidx.graphics.path.so",
+   "sha256": "41e9a793c43a0f4fddb19e33f346bace464f30f888ba7b9eaf96294ea115bfb6",
+   "load_alignments": [
+    16384,
+    16384,
+    16384
+   ]
+  },
+  {
+   "name": "lib/arm64-v8a/libsqlcipher.so",
+   "sha256": "bc85746647ce4ea5f390eccd61e5236fbd11786a91802877b9fdbbb66a55192d",
+   "load_alignments": [
+    16384,
+    16384,
+    16384
+   ]
+  },
+  {
+   "name": "lib/armeabi-v7a/libandroidx.graphics.path.so",
+   "sha256": "41399eba6fc2a60f6f14642375c1824f3cf25eb8fec7397d753730a3ceda3e2b",
+   "load_alignments": []
+  },
+  {
+   "name": "lib/armeabi-v7a/libsqlcipher.so",
+   "sha256": "a3d6e16e4477961cffc563ad9e9b49aa9cf0f4def5f008a9b349c9afacec6170",
+   "load_alignments": []
+  },
+  {
+   "name": "lib/x86/libandroidx.graphics.path.so",
+   "sha256": "eb0570b41fd3bff25d8204a967c03bd7550719e768b791f680cc40cbe35f29af",
+   "load_alignments": []
+  },
+  {
+   "name": "lib/x86/libsqlcipher.so",
+   "sha256": "efd77986abfa03cff177ea1d9801bd3080bd8bfc90a26ac1a977da169c5b89c8",
+   "load_alignments": []
+  },
+  {
+   "name": "lib/x86_64/libandroidx.graphics.path.so",
+   "sha256": "4e56c996f13670e70082658de7880c4020eabf4f25e43387f88ed78a713fc9f0",
+   "load_alignments": [
+    16384,
+    16384,
+    16384
+   ]
+  },
+  {
+   "name": "lib/x86_64/libsqlcipher.so",
+   "sha256": "482f62c4d77e136d7cb7eb30d74a5c4cbadc3577d10ced1f13f3e745e1be7e7a",
+   "load_alignments": [
+    16384,
+    16384,
+    16384
+   ]
+  }
+ ],
+ "elf_16k": "PASS",
+ "zip_16k": "PASS",
+ "no_internet": "PASS",
+ "release_nondebug": "PASS",
+ "signature": "v2 and v3 verified, one signer",
+ "payload_unchanged_by_signing": "PASS (324 non-META-INF entries identical before and after signing)",
+ "attachment_release_isolation": "PASS (check_attachment_release_isolation.py, 1 DEX)",
+ "physical_device": "NOT_RUN",
+ "manual_talkback": "NOT_RUN",
+ "mainline_ci": {
+  "source_push_run": 40936445038,
+  "status_at_delivery": "jvm, device-tests, attachment-poc-compatibility (26) and (29), research-deep, science-change-gate and security-native: SUCCESS on aeb56839; android: first attempt FAILED in Ui12ConcentrationTest.mixedRoutesCalibrateAsOneTotal[en/320dp/2x/dark=false] (30 s wait for the estimate card timed out under CI load; the same test passed in the PR run); the failed job was re-run once and passed"
+ },
+ "contents": "UI-12 unified E2 total, MED-04 file info, MED-05 thumbnails and viewer, SL-CAL-02 lab calibration of the E2 total (engine + page)",
+ "public_release": "NOT_AUTHORIZED",
+ "signed_at": "2026-10-29T20:17:36.101618+00:00",
+ "temporary_credentials_removed": true,
+ "delivery_channel": "Session file attachment (private); not committed, not a public Release, no tag, no CI artifact"
+}

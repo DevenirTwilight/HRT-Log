@@ -1,3 +1,11 @@
+## Build 39 私人交付 + 本轮合并汇总 — 2026-10-29
+
+- **已合并到主线**：#149 UI-12（一条 E2 合计曲线）、#150 MED-04（文件信息）、#151 SL-CAL-02 引擎、#152 MED-05（缩略图与查看器）、#153 校准接到浓度页。主线 `aeb56839d708c325b5330e62e672be968992fa42`。
+- **主线 CI（push 运行 40936445038）**：jvm、device-tests、attachment-poc-compatibility 26/29、research-deep、science-change-gate、security-native 全部 SUCCESS；`android` 首次失败于 `Ui12ConcentrationTest.mixedRoutesCalibrateAsOneTotal[en/320dp/2x/dark=false]`（等估算卡的 30 秒在 CI 负载下超时，同一测试在 PR 运行里通过），按“只重跑一次”规则重跑，成功。若再出现，应把 `show()` 的等待放宽并查异步校准的耗时（不删断言）。
+- **Build39 私人交付（负责人「都做完给apk」）**：从主线 `aeb56839` 干净独立工作树，加源码外 `version39.init.gradle`（只把 versionCode 38→39）构建 fullRelease；只用原正式证书 `989ba045…79b1`（私有备份仓库 DevenirTwilight/- 确认 Private，只读克隆到受限临时目录，签后已删除，原备份未改）。成品 `HRT-Log-build39-full-official.apk` 14,519,454 字节，SHA-256 `14f9cf51c1c2760a15767607bc519aa279ceaa7505faa6b9c635f1c0f5961c5a`；v2/v3 通过，包名 net.plainnotes.app/39/0.2.0，四 ABI、64 位 ELF 与 ZIP 16KiB 对齐、无 INTERNET、非 debug，签名前后 324 个业务条目逐字节相同。收据 `docs/delivery/build39-private-verification.json`；账本追加 39，源码 versionCode 下限同步 39（下次交付需 ≥ 40）。会话私有文件发送，**不入 Git/公共 CI/Release/tag**；真机安装和人工 TalkBack 为 NOT_RUN。可直接覆盖安装；勿卸载、勿清数据；覆盖前先导出完整备份。
+- **协作提示**：#153 分支期间有其他账号（Reah Shirayuki、Celeste Twilight）推送了校准的失败状态/重试、已保存历史上下文解析与新的真机校准测试（`CalibrationProductAndroidTest`）；我只修了该测试把两个不同时间的化验放进一次 `saveLabs` 的错误。以后在同一分支工作前先 `git fetch` 看有没有别人的提交。
+- 待负责人复核（不变）：信息档位阈值 0.75；E1 午夜占位；法文 320dp 2× 图表横轴日期标签重叠（UI-12 遗留）；大图 2 的幂次缩小解码的放宽；Android 8 的 PDF 仍不支持；真机 / TalkBack 未做；导出 / PDF / 快照仍不含校准后的合计（§67 D-2）。
+
 ## 校准历史时间回归补验 — 2026-10-29
 
 此前d31cfd95的E2Calibration定向测试及AndroidTest Kotlin编译PASS（5m48s）。补充校准实际服药时间适配函数，仍使用同一HistoricalContext冻结解析规则；新增合成回归覆盖较早规则快照补全、无快照拒绝、IMPORT不补猜、删除和SKIPPED不计入。该新增回归正在/workspace/scratch/153-historical-regression.log执行，尚未写PASS。PR156当前061fe4de部分JVM/安全原生通过，完整Android/低内存待完成；两个PR无未解决行内讨论。PR153/156正文已更新。下一步读取本地测试→最终SHA必需CI→有据合并，不再扩展功能。
