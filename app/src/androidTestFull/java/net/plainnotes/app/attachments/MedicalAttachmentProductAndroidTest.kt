@@ -629,6 +629,13 @@ class MedicalAttachmentProductAndroidTest {
                 .put("synthetic_only",true).put("sampled_not_peak",true).put("pss_kib",memory.totalPss).put("native_pss_kib",memory.nativePss)
                 .put("display_width",bitmap.width).put("display_height",bitmap.height).put("reader_width",reader.width).put("reader_height",reader.height)
             java.io.File(context.filesDir,"synthetic-reader-$name.json").writeText(value.toString())
+            // Only generated emulator evidence. Preserve it before AGP may remove
+            // the target APK/private directory after instrumentation completes.
+            require(name.matches(Regex("[a-z0-9-]+")))
+            val command="sh -c 'run-as net.plainnotes.app cat files/synthetic-reader-$name.png > /data/local/tmp/hrt-synthetic-reader-$name.png && run-as net.plainnotes.app cat files/synthetic-reader-$name.json > /data/local/tmp/hrt-synthetic-reader-$name.json && echo HRT_SYNTHETIC_CAPTURE_OK'"
+            val copied=android.os.ParcelFileDescriptor.AutoCloseInputStream(instrumentation.uiAutomation.executeShellCommand(command))
+                .bufferedReader().use {it.readText().trim()}
+            assertEquals("Generated native evidence must be copied before test exit","HRT_SYNTHETIC_CAPTURE_OK",copied)
         } finally {bitmap.recycle()}
     }
 

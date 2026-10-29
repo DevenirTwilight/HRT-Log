@@ -1,3 +1,7 @@
+## 截图收集判断纠正与生命周期修正 — 2026-10-29
+
+b6589279关于PNG double-escape的根因判断已被独立真实PNG复验证伪：原AST字节常量也是89504e470d0a1a0a，不能宣称改成整数常量修复了问题。保留原断言FAIL与错误判断历史。真实产品UI测试在a194cb48/API35已经PASS，失败在测试退出后读取私有截图文件；现测试在退出前将其生成的PNG/JSON通过受限shell复制到固定hrt-synthetic-reader路径并严格校验成功标记，脚本在APK可能被AGP卸载后仍能读取。只允许固定合成截图名、隔离emulator，前后删除精确列举的测试产物，不碰医疗原件/密文/密钥；不加权限、不涉及Release。原PNG头严格校验保留，失败新增文件名/32字节诊断。新源码仍待编译与原生，未写PASS。
+
 ## PR156 API35真实产品测试已通过，截图收集器修正 — 2026-10-29
 
 sourcea194cb48 run40941683948/job123686784063：fullscreenReaderRenamesThreePagePdfAndLargeImageThenReturnsToTheSameFile的instrumentation BUILD SUCCESSFUL，完整改名/三页PDF/图片缩放/返回/重开流程已通过；脚本随后49行断言失败，因PNG magic写成双重转义ASCII而非PNG头字节。现仍严格检查非空及准确8字节89504e470d0a1a0a，用明确字节常量避免转义错误，不取消截图/JSON采集。该次job整体FAIL，后续core-med03阶段未执行，不能以UI通过冒充整项CI/备份恢复通过。最终源码需完整CI。原失败保留；153已合并aeb56839，155确认流程定向及AndroidTest编译PASS后已推送c0e3ea93。

@@ -8,9 +8,13 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parent.parent
 REPORT = ROOT / 'app/build/reports/med02-product-native'
 CLASS = 'net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest'
+SHOT_NAMES = ('pdf-page1','pdf-page2','pdf-page3','pdf-zoom-pan','pdf-controls-hidden','pdf-android8-refused','image-fit','image-zoom-pan')
 
 
 def reset(label):
+    # Only generated synthetic evidence, never a library object or user file.
+    subprocess.run(['adb','shell','rm','-f',*[f'/data/local/tmp/hrt-synthetic-reader-{name}.{suffix}'
+                    for name in SHOT_NAMES for suffix in ('png','json')]],check=True)
     for package in ('net.plainnotes.app.test', 'net.plainnotes.app'):
         result = subprocess.run(['adb', 'uninstall', package], capture_output=True, text=True)
         (REPORT / f'{label}-{package}.log').write_text(result.stdout + result.stderr)
@@ -45,8 +49,8 @@ def main():
             target.mkdir(parents=True, exist_ok=True)
             for picture in pictures:
                 for suffix in ('png', 'json'):
-                    value = subprocess.check_output(['adb', 'exec-out', 'run-as', 'net.plainnotes.app', 'cat', f'files/synthetic-reader-{picture}.{suffix}'])
-                    assert value and (suffix != 'png' or value.startswith(bytes((137,80,78,71,13,10,26,10))))
+                    value = subprocess.check_output(['adb', 'exec-out', 'cat', f'/data/local/tmp/hrt-synthetic-reader-{picture}.{suffix}'])
+                    assert value and (suffix != 'png' or value.startswith(bytes((137,80,78,71,13,10,26,10)))), f'Invalid synthetic screenshot {picture}.{suffix}: {value[:32]!r}'
                     (target / f'{picture}.{suffix}').write_bytes(value)
         reset(f'after-{name}')
 
