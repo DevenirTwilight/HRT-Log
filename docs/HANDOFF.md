@@ -1,3 +1,7 @@
+## PR156 原生列表名称断言修正 — 2026-10-29
+
+79747b02 run40937297721 job123671128600：真实MainActivity/SAF已执行到三页PDF、缩放、返回，原575行断言失败。失败节点library-doc:UUID有MergeDescendants但没有Text，内部DocumentRow自身mergeDescendants=true，是独立合并边界；不是数据库已证明改名丢失。现两处列表/重启名称断言检查指定UUID卡片下的精确新名称子节点，不扩大到全页面、不取消重启或名称断言，生产代码不改。原失败保留；整条方法尚未PASS，图像阶段仍待最终原生。此前整合源码编译已PASS（2m27s）。PR153已合并aeb56839，其主线CI另行等待；155仍需原生线程验收。
+
 ## 2026-10-29 独立LMK失败证据已确认
 
 PR156 sourcecfd44c55的Featherline低内存run40934190600/job123660585591/artifact12923869325：内核明确LMK杀应用PID3878，终止观测RSS230012KiB非峰值；最后采样阶段before-wrong-password-kdf，不能归咎于logcat-clear，也不能断言已定位所有分配。精确原件/摘录见medical-attachments/2026-10-29-feedback/low-memory-40934190600。保留Issue117，未调整RAM/heap/KDF/夹具/预算，最终源码原生与低内存仍待验收。PR153已MERGED aeb56839，主线CI正在执行；155当前7710d670，156当前e3e81a69已同步该主线并保留双方文档。

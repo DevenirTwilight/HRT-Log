@@ -572,7 +572,7 @@ class MedicalAttachmentProductAndroidTest {
             tag("file-detail-back")
             await {ui.onAllNodesWithTag("library").fetchSemanticsNodes().isNotEmpty()}
             reveal(hasTestTag("library-doc:${original.document}"))
-            ui.onNodeWithTag("library-doc:${original.document}").assert(hasText(renamed))
+            ui.onNode(hasText(renamed) and hasAnyAncestor(hasTestTag("library-doc:${original.document}")),useUnmergedTree=true).assertExists()
             tag("library-add");pickSample("large.png","add-document-confirm")
             ui.onNodeWithTag("add-document-title").performTextClearance();ui.onNodeWithTag("add-document-title").performTextInput("SYNTHETIC large image")
             tag("add-document-confirm")
@@ -594,7 +594,7 @@ class MedicalAttachmentProductAndroidTest {
             // A process/activity restart must keep both original objects and the renamed document title.
             scenario!!.close();scenario=null;launch();open(Destination.MEDICAL);tag("medical-tab:files")
             await {ui.onAllNodesWithTag("library-doc:${original.document}").fetchSemanticsNodes().isNotEmpty()}
-            ui.onNodeWithTag("library-doc:${original.document}").assert(hasText(renamed))
+            ui.onNode(hasText(renamed) and hasAnyAncestor(hasTestTag("library-doc:${original.document}")),useUnmergedTree=true).assertExists()
             runBlocking {model.libraryRuntime.attachments(null,"SYNTHETIC no reader duplicates").use {assertEquals(2,it.documents().size)}}
         } finally {UiPrefs(context).allowScreenshots=false}
     }
