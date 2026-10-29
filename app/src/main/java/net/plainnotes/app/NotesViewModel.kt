@@ -186,7 +186,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             if(x.records.isEmpty() && x.planned.isEmpty()) null
             else ConcentrationCalculator.compute(x.medications,x.profiles,x.records,x.planned,emptyList(),weight,now,false,CalibrationMode.RETROSPECTIVE,snapshots,net.plainnotes.app.conc.HistoryRead(true,ConcentrationCalculator.hours(now)),checkCancelled={ensureActive()})
         } else null
-        val doseTimes=records.filter{MedicationSnapshot.decode(it.config_snapshot,it.medication_id)?.molecule=="E2" && it.deleted_at_utc==null && it.status in listOf("ON_TIME","LATE") && it.taken_utc!=null}.map{Instant.ofEpochMilli(it.taken_utc!!)}.sorted()
+        val doseTimes=records.filter{MedicationSnapshot.decode(HistoricalContext.resolved(it,snapshots),it.medication_id)?.molecule=="E2" && it.deleted_at_utc==null && it.status in listOf("ON_TIME","LATE") && it.taken_utc!=null}.map{Instant.ofEpochMilli(it.taken_utc!!)}.sorted()
         ensureActive();runtime.verify();runtime.checkRequest();conc.value=ConcState(false,result,weight,labs,doseTimes,nonSublingual)
     }catch(e:CancellationException){throw e}catch(e:Exception){conc.value=ConcState(failed=true);readFailure(e)} }.also{concJob=it} }
     // History, stock and well-being

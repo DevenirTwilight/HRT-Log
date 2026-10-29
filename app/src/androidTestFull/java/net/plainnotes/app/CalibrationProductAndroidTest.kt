@@ -47,7 +47,7 @@ class CalibrationProductAndroidTest {
         ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(label)).performClick()
     }
     private fun showing(tag: String) = ui.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()
-    private fun value() = ui.onNodeWithTag("e2-now-value").fetchSemanticsNode().config[SemanticsProperties.Text].joinToString("") { it.text }
+    private fun value():String { val node=ui.onNodeWithTag("e2-now-value").fetchSemanticsNode(); return ui.runOnIdle { node.config[SemanticsProperties.Text].joinToString("") { it.text } } }
     private fun switch() { ui.onNodeWithTag("calibration-switch").performScrollTo().performClick() }
 
     @Test fun savedSublingualHistoryCalibratesTheProductionTotalAndSurvivesReopen() {
