@@ -1,6 +1,6 @@
 ## SL-CAL-02 步骤 1–3：校准引擎（不接界面）— 2026-10-29
 
-负责人「开始 SL-CAL-02，按推荐方案做」→ REQUIREMENTS §166。已做：纯 Kotlin 引擎 `app/.../conc/TotalE2Calibration.kt`（共同系数 k、先验 sd 0.9、delta 降权、信息增益 <0.5 拒绝、留一化验一致性、档位）；Python 参考的逐位对照夹具 `app/src/test/resources/sl-cal-02/parity.json`（96 个合成用户 + 资格规则表，`tools/pk-research/sl_cal/make_parity_fixture.py` 可复现，`test_sl_cal_02.py` 守卫）；引擎在 D-13 守卫里按 `live_lock_additional` 锁定哈希。**未接界面、未改任何 LIVE_LOCK 文件、不改导出/Room**。下一步（步骤 4，另开 PR）：把校准接到 UI-12 的估算卡与曲线（需修改 `ConcentrationScreen.kt`/`ConcChart.kt`，各追加 display-approval），依赖 PR #149（UI-12）先合并。
+负责人「开始 SL-CAL-02，按推荐方案做」→ REQUIREMENTS §166。已做：纯 Kotlin 引擎 `app/.../conc/TotalE2Calibration.kt`（共同系数 k、先验 sd 0.9、delta 降权、信息增益 <0.5 拒绝、留一化验一致性、档位）；Python 参考的逐位对照夹具 `app/src/test/resources/sl-cal-02/parity.json`（96 个合成用户 + 资格规则表，`tools/pk-research/sl_cal/make_parity_fixture.py` 可复现，`test_sl_cal_02.py` 守卫）；引擎**不登记**进归档的 `guard-classification.json`（研究归档不可改，见 §166 守卫更正），改由对照测试保护。**未接界面、未改任何 LIVE_LOCK 文件、不改导出/Room**。下一步（步骤 4，另开 PR）：把校准接到 UI-12 的估算卡与曲线（需修改 `ConcentrationScreen.kt`/`ConcChart.kt`，各追加 display-approval），依赖 PR #149（UI-12）先合并。
 
 ---
 

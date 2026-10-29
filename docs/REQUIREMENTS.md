@@ -1685,5 +1685,5 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 
 **E1 的已知限制（如实记录）**：化验记录只存采样时间戳，没有「时间是否精确」的标记；本阶段在不改 Room 的前提下，只能把「恰好本地 00:00」当作日期占位而拒绝，其余时间当作用户记录的采样时间，并在校准卡上说明「使用了您记录的抽血时间」。若要区分「估计的时间」，需要一个 Room 迁移，另行请示。
 
-**守卫**：新的 `app/.../conc/TotalE2Calibration.kt` 等文件在受扫描前缀内，须按 D-13 登记（锁定哈希）并更新 `guard-classification-lock.json`；`ConcentrationCalculator.kt`、`CalibrationEligibility.kt`、`LabEstimate.kt`、`LabFit.kt`、`Engine.kt`、`pk-params.json`、M2 候选、`Exports.kt` **一律不改**。
+**守卫（核对后的更正）**：SL-CAL-01 报告第 11 节建议把新引擎登记进 `guard-classification.json`；核对发现该文件属于研究归档，`research_archive.verify_records` 要求归档内容与归档提交逐字节一致，不能再改；`check_protocol.check()` 的文档也写明新产品文件由可执行测试管辖，不再靠 SHA 批准。所以引擎 `app/.../conc/TotalE2Calibration.kt` **不登记**，它是普通产品文件，由与 Python 参考的逐位对照测试（`TotalE2CalibrationParityTest`、`test_sl_cal_02.py` 复现夹具）和规则测试保护；`test_sl_cal_01.py` 里「没有未分类文件」的断言改为只允许这一个文件。改动 `conc/` 与 `pk-engine/` 会触发 `research-deep`（科学门）。`ConcentrationCalculator.kt`、`CalibrationEligibility.kt`、`LabEstimate.kt`、`LabFit.kt`、`Engine.kt`、`pk-params.json`、M2 候选、`Exports.kt` **一律不改**（它们仍是 LIVE_LOCK 或 PK_DISPLAY_REVIEW）。
 **禁止与保持**：`m2_absolute_pgml=false` 不改；不声称临床准确性已确立（`clinical_accuracy_established=false`）；不提供剂量建议，不把残差解释为「化验错了」；真实健康数据不进仓库（对照测试只用合成用户）；负责人本地检查脚本仍是 NOT_RUN。

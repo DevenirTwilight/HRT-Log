@@ -24,11 +24,15 @@ class SlCal02Tests(unittest.TestCase):
             self.assertEqual(hashlib.sha256(out.read_bytes()).hexdigest(), hashlib.sha256(FIXTURE.read_bytes()).hexdigest(),
                              'regenerate with tools/pk-research/sl_cal/make_parity_fixture.py (numerics differ across numpy/scipy builds only beyond 1e-12)')
 
-    def test_the_engine_file_is_byte_locked_and_classified(self):
+    def test_the_engine_is_the_only_file_outside_the_archived_classification_and_the_archive_stays_untouched(self):
+        # The archived guard classification is immutable (research_archive.verify_records), so the engine is NOT registered there;
+        # it is an ordinary product file protected by the parity and rule tests. Nothing else may appear unclassified.
         cls = guard.classification()
-        self.assertEqual(cls['live_lock_additional'][ENGINE], hashlib.sha256((ROOT / ENGINE).read_bytes()).hexdigest())
         baseline = json.loads((ROOT / 'docs/pk-research/p2/production-baseline.json').read_text())
-        self.assertEqual(guard.unclassified(cls, baseline), [])
+        self.assertEqual(guard.unclassified(cls, baseline), [ENGINE])
+        self.assertNotIn(ENGINE, cls['live_lock_additional'])
+        import research_archive
+        self.assertGreater(research_archive.verify_records(), 0)
 
     def test_no_protected_production_file_is_among_the_files_this_phase_added(self):
         # The engine reads production constants only through tests; it imports nothing from LIVE_LOCK files.
