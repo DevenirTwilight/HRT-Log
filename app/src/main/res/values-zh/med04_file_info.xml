@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="med04_search_hint">搜索标题、机构、类别</string>
+    <string name="med04_date_unknown">日期未知</string>
+    <string name="med04_imported_on">导入于 %1$s</string>
+    <string name="lib_info_date">文件日期</string>
+    <string name="lib_info_institution">机构</string>
+    <string name="med04_edit_info">编辑文件信息</string>
+    <string name="med04_info_title">文件信息</string>
+    <string name="med04_info_note">只显示您填写的内容。应用不会从文件里猜类别、日期或机构。再点一次已选的类别可以清除。</string>
+    <string name="med04_date_label">文件日期（可选）</string>
+    <string name="med04_date_pick">选择日期</string>
+    <string name="med04_date_clear">清除日期</string>
+    <string name="med04_institution_label">机构（可选）</string>
+    <string name="med04_detail_saved">已保存文件信息。</string>
+    <string name="med04_detail_failed">文件信息没有保存。请打开该文件，点「编辑文件信息」重试。</string>
+    <string name="med04_details_unavailable">暂时读不到文件信息，所以现在不显示类别和日期。</string>
+    <plurals name="med04_to_sort_body">
+        <item quantity="other">%d 份文件还没填日期或类别</item>
+    </plurals>
+</resources>

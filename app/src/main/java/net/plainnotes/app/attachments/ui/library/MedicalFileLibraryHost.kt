@@ -12,7 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,6 +30,7 @@ import net.plainnotes.app.data.MedicalAttachmentOperations as Ops
 import net.plainnotes.app.runtime.RuntimeLibrarySession
 import net.plainnotes.app.ui.*
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import java.util.UUID
 
@@ -59,6 +62,8 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
     var query by remember {mutableStateOf("")};var type by remember {mutableStateOf<MedicalAttachmentsController.FileKind?>(null)}
     var unlinked by remember {mutableStateOf(false)};var bin by remember {mutableStateOf(false)}
     var picker by remember {mutableStateOf(false)}
+    var toSortOnly by remember {mutableStateOf(false)};var categoryFilter by remember {mutableStateOf<FileCategory?>(null)}
+    var editInfo by remember {mutableStateOf(false)};var afterImportDetail by remember {mutableStateOf<Ops.Detail?>(null)}
     var confirmation by remember {mutableStateOf<LinkConfirmation?>(null)}
     var recycle by remember {mutableStateOf<Ops.Document?>(null)}
     var draft by remember {mutableStateOf<ImportDraft?>(null)}
@@ -70,7 +75,7 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
     val selected=state.documents.firstOrNull {it.document==state.selected}
     val canWrite=controller.canWrite()
     val chosenLabel=chooseFor?.let {targetLabel(it,appointments,labs,panels)}.orEmpty()
-    val caps=LibraryCapabilities(standaloneImport=true,search=true,bidirectionalLinks=true,panelLinks=true,chooseExisting=true,recycle=true)
+    val caps=LibraryCapabilities(standaloneImport=true,search=true,categories=true,bidirectionalLinks=true,panelLinks=true,chooseExisting=true,recycle=true)
     fun request(target:Ops.Target,document:Ops.Document,label:String) {
         scope.launch {try {val frozen=controller.resolve(target);confirmation=LinkConfirmation(document,frozen,label)}catch(_:Exception){error=true}}
     }
@@ -85,21 +90,39 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
         val receipt=fileState.receipt ?: return@LaunchedEffect
         if(fileState.import !is MedicalAttachmentsController.Import.Saved)return@LaunchedEffect
         val document=state.documents.firstOrNull {it.document==receipt.document} ?: return@LaunchedEffect
-        val target=afterImportTarget
-        if(target!=null) {afterImportTarget=null;controller.relate(document,target)}
-        if(createAfterImport) {createAfterImport=false;controller.select(document.document);createRecord=true}
+        val target=afterImportTarget;val detail=afterImportDetail;val create=createAfterImport
+        afterImportTarget=null;afterImportDetail=null;createAfterImport=false
+        fun proceed() {
+            if(target!=null)controller.relate(document,target)
+            if(create) {controller.select(document.document);createRecord=true}
+        }
+        // The file is already saved; its typed details are a separate small write, done first so the link write that may follow is not blocked.
+        if(detail!=null)controller.saveDetail(document,detail,::proceed) else proceed()
     }
     LaunchedEffect(state.outcome) {
         if(chooseFor!=null && state.outcome in setOf(MedicalFileLibraryController.Outcome.COMMITTED,MedicalFileLibraryController.Outcome.LIST_STALE))onChosen()
     }
-    BackHandler(selected!=null || bin || unlinked || fileState.viewer!=MedicalAttachmentsController.Viewer.Closed) {
-        when {fileState.viewer!=MedicalAttachmentsController.Viewer.Closed->controller.files.closeViewer();selected!=null->controller.select(null);else->{bin=false;unlinked=false;query="";type=null}}
+    BackHandler(selected!=null || bin || unlinked || toSortOnly || categoryFilter!=null || fileState.viewer!=MedicalAttachmentsController.Viewer.Closed) {
+        when {fileState.viewer!=MedicalAttachmentsController.Viewer.Closed->controller.files.closeViewer();selected!=null->controller.select(null);else->{bin=false;unlinked=false;toSortOnly=false;categoryFilter=null;query="";type=null}}
     }
-    fun summary(d:Ops.Document)=DocumentSummary(d.document,d.title,d.fileKind(),if(d.linkCount==0)LinkState.Unlinked else LinkState.Linked(d.linkCount))
+    @Composable fun summary(d:Ops.Document):DocumentSummary {
+        val x=state.details[d.document]
+        val category=x?.category?.let {runCatching {FileCategory.valueOf(it)}.getOrNull()}
+        return DocumentSummary(d.document,d.title,d.fileKind(),if(d.linkCount==0)LinkState.Unlinked else LinkState.Linked(d.linkCount),category,
+            d.importedUtc?.let {formatMediumDate(Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate())},
+            x?.date?.let {runCatching {formatMediumDate(LocalDate.parse(it))}.getOrNull()},x?.institution,!state.detailsFailed)
+    }
+    val categoryNames=FileCategory.entries.associateWith {stringResource(it.label())}
     Column(Modifier.fillMaxSize().testTag("medical-file-library-host")) {
         if(state.revoked)Text(stringResource(R.string.library_scope_changed))
         else {
             if(state.loading || state.outcome==MedicalFileLibraryController.Outcome.WORKING)LinearProgressIndicator(Modifier.fillMaxWidth())
+            if(state.detailsFailed)Text(stringResource(R.string.med04_details_unavailable),Modifier.padding(16.dp).testTag("library-details-unavailable"),style=MaterialTheme.typography.bodySmall)
+            if(state.detailOutcome!=MedicalFileLibraryController.DetailOutcome.NONE) {
+                Text(stringResource(if(state.detailOutcome==MedicalFileLibraryController.DetailOutcome.SAVED)R.string.med04_detail_saved else R.string.med04_detail_failed),
+                    Modifier.padding(16.dp).semantics {liveRegion=LiveRegionMode.Polite}.testTag("library-detail-result"))
+                TextButton(controller::dismissDetailOutcome,Modifier.testTag("library-detail-result-dismiss")) {Text(stringResource(R.string.attach_dismiss))}
+            }
             if(state.failed || error) {
                 Text(stringResource(R.string.operation_error),color=MaterialTheme.colorScheme.error)
                 TextButton({error=false;controller.refresh()}) {Text(stringResource(R.string.attach_retry))}
@@ -129,18 +152,30 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
                     onAddLink={if(canWrite)picker=true},onUnlink={link->
                         if(canWrite)state.links.firstOrNull {sameTarget(link.target,it.target)}?.let {r->confirmation=LinkConfirmation(selected,r.target,link.target.label,r)}
                     },onOpenRecord={target->state.links.firstOrNull {sameTarget(target,it.target)}?.let {onRecord(it.target)}},
-                    onRestore={if(canWrite)recycle=selected},modifier=Modifier.weight(1f),operationsEnabled=canWrite)
+                    onRestore={if(canWrite)recycle=selected},modifier=Modifier.weight(1f),operationsEnabled=canWrite,
+                    onEditInfo=if(!state.detailsFailed && selected.state=="ACTIVE") ({editInfo=true}) else null)
                 if(selected.state=="ACTIVE")TextButton({recycle=selected},Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("file-detail-recycle"),enabled=canWrite) {Text(stringResource(R.string.lib_bin))}
             } else if(!state.loading) {
                 val available=state.documents.filter {if(bin)it.state=="TRASHED" else it.state=="ACTIVE"}
-                val filtered=available.filter {(!unlinked || it.linkCount==0) && (type==null || it.fileKind()==type) && it.title.contains(query.trim(),true)}
-                if(bin || unlinked)TextButton({bin=false;unlinked=false}) {Text(stringResource(R.string.lib_all,available.size))}
-                MedicalFileLibraryScreen(LibraryState(filtered.map(::summary),emptyMap(),available.count {it.linkCount==0},available.size),caps,
+                fun categoryOf(d:Ops.Document)=state.details[d.document]?.category?.let {runCatching {FileCategory.valueOf(it)}.getOrNull()}
+                fun needsSorting(d:Ops.Document)=categoryOf(d)==null || state.details[d.document]?.date==null
+                fun matches(d:Ops.Document):Boolean {
+                    val q=query.trim();if(q.isEmpty())return true
+                    return d.title.contains(q,true) || state.details[d.document]?.institution?.contains(q,true)==true || categoryOf(d)?.let {categoryNames.getValue(it).contains(q,true)}==true
+                }
+                val filtered=available.filter {(!unlinked || it.linkCount==0) && (!toSortOnly || needsSorting(it)) && (categoryFilter==null || categoryOf(it)==categoryFilter) &&
+                    (type==null || it.fileKind()==type) && matches(it)}
+                val counts=if(state.detailsFailed)emptyMap() else available.mapNotNull(::categoryOf).groupingBy {it}.eachCount()
+                if(bin || unlinked || toSortOnly || categoryFilter!=null)TextButton({bin=false;unlinked=false;toSortOnly=false;categoryFilter=null},Modifier.testTag("library-clear-filter")) {Text(stringResource(R.string.lib_all,available.size))}
+                MedicalFileLibraryScreen(LibraryState(filtered.map {summary(it)},counts,available.count {it.linkCount==0},available.size,
+                        toSort=if(state.detailsFailed || bin)null else available.count(::needsSorting)),caps,
                     onAdd={if(canWrite)onAdd()},onPrepare=onPrepare,onOpen={item->
                         val document=available.first {it.document==item.document}
                         if(chooseFor==null)controller.select(item.document) else request(chooseFor,document,chosenLabel)
-                    },onUnsorted={unlinked=true;bin=false},onCategory={},onShowAll={unlinked=false;query="";type=null},onBackup=onBackup,onBin={bin=true;unlinked=false},query=query,onQuery={query=it.take(256)},
-                    modifier=Modifier.weight(1f),typeCounts=available.groupingBy {it.fileKind()}.eachCount(),typeFilter=type,onType={type=it},busy=!canWrite)
+                    },onUnsorted={toSortOnly=true;unlinked=false;bin=false;categoryFilter=null},onCategory={categoryFilter=it;toSortOnly=false;unlinked=false;bin=false},
+                    onShowAll={unlinked=false;toSortOnly=false;categoryFilter=null;query="";type=null},onBackup=onBackup,onBin={bin=true;unlinked=false;toSortOnly=false;categoryFilter=null},query=query,onQuery={query=it.take(256)},
+                    modifier=Modifier.weight(1f),typeCounts=available.groupingBy {it.fileKind()}.eachCount(),typeFilter=type,onType={type=it},busy=!canWrite,
+                    onUnlinked={unlinked=true;toSortOnly=false;categoryFilter=null;bin=false},categoryFilter=categoryFilter)
             }
         }
     }
@@ -148,10 +183,14 @@ private data class LinkConfirmation(val document:Ops.Document,val target:Ops.Tar
     draft?.let {d->FileWindow("",{controller.files.cancelImport()}) {
         Column {Text(stringResource(R.string.med03_type_unknown),Modifier.padding(16.dp))
         AddDocumentDetails(d,caps,onChange={if(it.choice!=draft?.choice || it.chosen!=draft?.chosen)chosenTarget=null;draft=it},onChoose={picker=true},onConfirm={
-            if(canWrite && (d.choice !in setOf(LinkChoice.EXISTING_VISIT,LinkChoice.EXISTING_RECORD) || chosenTarget!=null)) {afterImportTarget=chosenTarget;createAfterImport=d.choice==LinkChoice.NEW_RECORD;controller.files.confirmImport(d.title)}
+            if(canWrite && (d.choice !in setOf(LinkChoice.EXISTING_VISIT,LinkChoice.EXISTING_RECORD) || chosenTarget!=null)) {afterImportTarget=chosenTarget;createAfterImport=d.choice==LinkChoice.NEW_RECORD
+            afterImportDetail=Ops.Detail(d.category?.name,d.date?.toString(),Ops.Detail.institutionOf(d.institution)).takeUnless {it.empty};controller.files.confirmImport(d.title)}
         },onCancel=controller.files::cancelImport)
         }
     }}
+    if(editInfo && selected!=null)FileWindow("",{editInfo=false}) {
+        FileInfoEditor(state.details[selected.document],onSave={detail->editInfo=false;controller.saveDetail(selected,detail)},onCancel={editInfo=false})
+    }
     if(picker)MedicalFileTargetPicker(appointments,labs,panels,onDismiss={picker=false},onSaveDraw=onSaveDraw) {target,label->
         picker=false
         if(draft!=null)scope.launch {try {chosenTarget=controller.resolve(target);draft=draft?.copy(chosen=recordTargetValue(target,label,panels,labs))}catch(_:Exception){error=true}}

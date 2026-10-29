@@ -30,13 +30,13 @@ internal object AttachmentCandidateMetadata {
         val ddl=listOf(
             "CREATE TEMP TABLE rc_scope(dataset TEXT PRIMARY KEY,epoch TEXT NOT NULL,generation TEXT NOT NULL,vault TEXT NOT NULL,feature_enabled INTEGER NOT NULL CHECK(feature_enabled IN(0,1)))",
             "CREATE TEMP TABLE rc_identity(uuid TEXT PRIMARY KEY,kind TEXT NOT NULL,source_id INTEGER NOT NULL,target_id INTEGER,state TEXT NOT NULL,trash_id INTEGER,evidence TEXT NOT NULL,UNIQUE(kind,target_id))",
-            "CREATE TEMP TABLE rc_document(uuid TEXT PRIMARY KEY,revision INTEGER NOT NULL,title TEXT NOT NULL,category TEXT NOT NULL,state TEXT NOT NULL,active TEXT NOT NULL,deleted INTEGER,FOREIGN KEY(uuid,active) REFERENCES rc_version(document,version) DEFERRABLE INITIALLY DEFERRED)",
+            "CREATE TEMP TABLE rc_document(uuid TEXT PRIMARY KEY,revision INTEGER NOT NULL,title TEXT NOT NULL,category TEXT NOT NULL,state TEXT NOT NULL,active TEXT NOT NULL,deleted INTEGER,detail_revision INTEGER,detail_category TEXT,detail_date TEXT,detail_institution TEXT,FOREIGN KEY(uuid,active) REFERENCES rc_version(document,version) DEFERRABLE INITIALLY DEFERRED)",
             "CREATE TEMP TABLE rc_version(document TEXT NOT NULL,ordinal INTEGER NOT NULL,version TEXT PRIMARY KEY,object TEXT NOT NULL UNIQUE,vault TEXT NOT NULL,attempt TEXT NOT NULL,dek TEXT NOT NULL,plain_bytes INTEGER NOT NULL,cipher_bytes INTEGER NOT NULL,plain_hash TEXT NOT NULL,cipher_hash TEXT NOT NULL,mime TEXT NOT NULL,UNIQUE(document,version),UNIQUE(document,ordinal),FOREIGN KEY(document) REFERENCES rc_document(uuid) DEFERRABLE INITIALLY DEFERRED)",
             "CREATE TEMP TABLE rc_link(uuid TEXT PRIMARY KEY,record TEXT NOT NULL,document TEXT NOT NULL,revision INTEGER NOT NULL,state TEXT NOT NULL,FOREIGN KEY(record) REFERENCES rc_identity(uuid),FOREIGN KEY(document) REFERENCES rc_document(uuid))")
         ddl.forEach(db::execSQL)
         db.execSQL("INSERT INTO rc_scope VALUES(?,?,?,?,?)",arrayOf(p.namespace.dataset.toString(),p.namespace.epoch.toString(),p.namespace.generation.toString(),p.manifest.logicalVault.toString(),featureEnabled))
         p.manifest.records.forEach {r->db.execSQL("INSERT INTO rc_identity VALUES(?,?,?,?,?,?,?)",arrayOf(r.uuid.toString(),r.kind.name,r.sourceId,p.mapping.getValue(r.uuid).localId,r.state,r.trashId,r.evidenceSha256))}
-        p.manifest.documents.forEach {d->db.execSQL("INSERT INTO rc_document VALUES(?,?,?,?,?,?,?)",arrayOf(d.uuid.toString(),d.revision,d.title,d.category,d.state,d.activeVersion.toString(),d.deletedUtc))}
+        p.manifest.documents.forEach {d->db.execSQL("INSERT INTO rc_document VALUES(?,?,?,?,?,?,?,?,?,?,?)",arrayOf(d.uuid.toString(),d.revision,d.title,d.category,d.state,d.activeVersion.toString(),d.deletedUtc,d.detail?.revision,d.detail?.category,d.detail?.date,d.detail?.institution))}
         p.manifest.versions.forEach {v->db.execSQL("INSERT INTO rc_version VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",arrayOf(v.document.toString(),v.ordinal,v.context.version.toString(),v.context.objectId.toString(),v.context.logicalVault.toString(),v.context.attempt.toString(),v.context.dekHandle.toString(),v.manifest.plaintextBytes,v.manifest.ciphertextBytes,v.manifest.plaintextSha256,v.manifest.ciphertextSha256,v.mime))}
         p.manifest.links.forEach {l->db.execSQL("INSERT INTO rc_link VALUES(?,?,?,?,?)",arrayOf(l.uuid.toString(),l.record.toString(),l.document.toString(),l.revision,l.state))}
     }
@@ -48,7 +48,9 @@ internal object AttachmentCandidateMetadata {
         fun android.database.Cursor.uuid(i:Int)=UUID.fromString(getString(i))
         fun android.database.Cursor.optionalLong(i:Int)=if(isNull(i))null else getLong(i)
         val records=rows("SELECT uuid,kind,source_id,state,trash_id,evidence FROM rc_identity ORDER BY uuid") {c->AttachmentBackupManifest.Record(c.uuid(0),AttachmentBackupManifest.Kind.valueOf(c.getString(1)),c.getLong(2),c.getString(3),c.optionalLong(4),c.getString(5))}
-        val documents=rows("SELECT uuid,revision,title,category,state,active,deleted FROM rc_document ORDER BY uuid") {c->AttachmentBackupManifest.Document(c.uuid(0),c.getLong(1),c.getString(2),c.getString(3),c.getString(4),c.uuid(5),c.optionalLong(6))}
+        val documents=rows("SELECT uuid,revision,title,category,state,active,deleted,detail_revision,detail_category,detail_date,detail_institution FROM rc_document ORDER BY uuid") {c->
+            AttachmentBackupManifest.Document(c.uuid(0),c.getLong(1),c.getString(2),c.getString(3),c.getString(4),c.uuid(5),c.optionalLong(6),
+                if(c.isNull(7))null else MedicalAttachmentOperations.Detail(c.getString(8),c.getString(9),c.getString(10),c.getLong(7)))}
         val versions=rows("SELECT document,ordinal,version,object,vault,attempt,dek,plain_bytes,cipher_bytes,plain_hash,cipher_hash,mime FROM rc_version ORDER BY document,ordinal") {c->
             val context=AttachmentObjectContext(c.uuid(4),c.uuid(3),c.uuid(2),c.uuid(5),c.uuid(6))
             AttachmentBackupManifest.Version(c.uuid(0),c.getLong(1),context,AttachmentObjectStreams.Manifest(context,c.getLong(7),c.getLong(8),c.getString(9),c.getString(10)),c.getString(11))}

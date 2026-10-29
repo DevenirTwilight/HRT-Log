@@ -26,7 +26,9 @@ internal sealed interface LinkState {
 }
 
 internal data class DocumentSummary(val document: UUID, val title: String, val kind: FileKind, val link: LinkState,
-    val category: FileCategory? = null, val addedLabel: String? = null)
+    val category: FileCategory? = null, val addedLabel: String? = null,
+    /** MED-04: what the user typed. [detailsKnown] says the backend supplies these, so an empty date is drawn as "date unknown" instead of being left out. */
+    val dateLabel: String? = null, val institution: String? = null, val detailsKnown: Boolean = false)
 
 internal data class DocumentLink(val target: RecordTarget)
 
@@ -34,7 +36,8 @@ internal data class DocumentDetail(val summary: DocumentSummary, val links: List
     /** True while the file is in the bin: it can be restored, nothing else. */
     val inBin: Boolean = false,val linksKnown:Boolean=true)
 
-internal data class LibraryState(val documents: List<DocumentSummary>, val categoryCounts: Map<FileCategory, Int>, val unlinked: Int, val total: Int)
+/** [toSort] is the number of files still without a category or a date (MED-04); null keeps the earlier meaning, files without a record. */
+internal data class LibraryState(val documents: List<DocumentSummary>, val categoryCounts: Map<FileCategory, Int>, val unlinked: Int, val total: Int, val toSort: Int? = null)
 
 /** What the backend can do today. Defaults are closed; only a verified production gateway advertises capabilities. A disabled control says why; it never pretends. */
 internal data class LibraryCapabilities(val standaloneImport: Boolean = false, val search: Boolean = false, val categories: Boolean = false,
@@ -44,7 +47,8 @@ internal enum class LinkChoice { EXISTING_VISIT, EXISTING_RECORD, NEW_RECORD, LA
 
 /** The two-step add flow from the file side: the chosen file, an editable title, an optional category and one explicit link choice. */
 internal data class ImportDraft(val fileName: String, val title: String, val category: FileCategory? = null, val choice: LinkChoice = LinkChoice.LATER,
-    val chosen: RecordTarget? = null, val verifiedKind:FileKind?=null)
+    val chosen: RecordTarget? = null, val verifiedKind:FileKind?=null,
+    val date: java.time.LocalDate? = null, val institution: String = "")
 
 /** What happened to the file when a record was saved first. The two outcomes are reported separately and an unknown one is never retried. */
 internal enum class RecordFileOutcome { NONE, ADDED, NOT_SAVED, UNKNOWN }

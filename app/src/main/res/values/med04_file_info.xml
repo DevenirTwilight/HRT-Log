@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="med04_search_hint">Search title, institution or category</string>
+    <string name="med04_date_unknown">Date unknown</string>
+    <string name="med04_imported_on">Imported %1$s</string>
+    <string name="lib_info_date">File date</string>
+    <string name="lib_info_institution">Institution</string>
+    <string name="med04_edit_info">Edit file info</string>
+    <string name="med04_info_title">File information</string>
+    <string name="med04_info_note">Only what you enter is shown. The app never guesses a category, date or institution from the file. Tap a chosen category again to clear it.</string>
+    <string name="med04_date_label">File date (optional)</string>
+    <string name="med04_date_pick">Choose date</string>
+    <string name="med04_date_clear">Clear date</string>
+    <string name="med04_institution_label">Institution (optional)</string>
+    <string name="med04_detail_saved">File information saved.</string>
+    <string name="med04_detail_failed">The file information wasn’t saved. Open the file and choose “Edit file info” to try again.</string>
+    <string name="med04_details_unavailable">File information couldn’t be read, so categories and dates aren’t shown right now.</string>
+    <plurals name="med04_to_sort_body">
+        <item quantity="one">%d file still needs a date or category</item>
+        <item quantity="other">%d files still need a date or category</item>
+    </plurals>
+</resources>

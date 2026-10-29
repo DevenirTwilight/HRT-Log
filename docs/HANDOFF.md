@@ -2,6 +2,12 @@
 
 负责人「开始 SL-CAL-02，按推荐方案做」→ REQUIREMENTS §166。已做：纯 Kotlin 引擎 `app/.../conc/TotalE2Calibration.kt`（共同系数 k、先验 sd 0.9、delta 降权、信息增益 <0.5 拒绝、留一化验一致性、档位）；Python 参考的逐位对照夹具 `app/src/test/resources/sl-cal-02/parity.json`（96 个合成用户 + 资格规则表，`tools/pk-research/sl_cal/make_parity_fixture.py` 可复现，`test_sl_cal_02.py` 守卫）；引擎**不登记**进归档的 `guard-classification.json`（研究归档不可改，见 §166 守卫更正），改由对照测试保护。**未接界面、未改任何 LIVE_LOCK 文件、不改导出/Room**。下一步（步骤 4，另开 PR）：把校准接到 UI-12 的估算卡与曲线（需修改 `ConcentrationScreen.kt`/`ConcChart.kt`，各追加 display-approval），依赖 PR #149（UI-12）先合并。
 
+## MED-04 文件信息（用户自填类别/日期/机构）— 2026-10-29（分支 feature/med04-file-category-20261029，进行中）
+
+负责人要求前两项样图 06 差异（类别方块、每行日期/机构）由用户自填后实现，见 REQUIREMENTS §164。方案：Room 23 新表 `attachment_document_detail` + 备份清单版本 3（仅有信息时）+ 导入第二步与详情页编辑 + 文件库按样图显示。步骤与状态：①需求入库（本条）②数据层：实体、迁移 22→23、触发器、操作 ③备份清单 v3 往返 ④宿主接线与 UI（caps.categories 打开）⑤测试与截图 ⑥报告、PR。每步完成后更新本条。APK 仍暂缓。
+
+**追加（2026-10-29）MED-05（REQUIREMENTS §165）**：负责人要求文件库每行/详情页自动显示第一页缩略图，查看器要能翻页缩放；决定用系统 `PdfRenderer`，不打包第三方 pdfium。待 MED-04 的测试与 PR 之后在同一线上继续。
+
 ## UI-12 浓度页统一（一条 E2 合计曲线）— 2026-10-29（分支 feature/ui12-concentration-20261028，PR 待开）
 
 - 已完成：显示层 `ui/E2Total.kt`（M2 舌下 + 非舌下兼容计算按小时相加，背景只计一次；有舌下但 M2 不可用则不显示合计）；`ConcentrationScreen/ConcChart/UnifiedConcentrationScreen/ConcentrationPreview` 显示改动；四语言字符串；`E2TotalTest`、`Ui12ConcentrationTest` 和迁移的旧断言；REQUIREMENTS §162；追加式批准记录 `PD-2026-10-29-UI12-*`（4 条，哈希见 `display-approvals-after-archive.json`）；报告 `docs/audits/product-quality-2026-10/78-ui12-concentration.md`；截图 `docs/ui-audit/2026-10-28-ui12/`。
