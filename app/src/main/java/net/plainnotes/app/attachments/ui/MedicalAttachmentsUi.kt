@@ -327,19 +327,23 @@ import net.plainnotes.app.ui.StatusPill
             awaitEachGesture {
                 awaitFirstDown(requireUnconsumed=false)
                 var swipe=0f;var multi=false
+                // Motion events can arrive as a batch before Compose publishes another frame. Accumulate within the
+                // gesture rather than reading the last recomposed scale/offset for every individual delta.
+                var gestureScale=currentScale;var gestureOffset=currentOffset
                 do {
                     val event=awaitPointerEvent()
                     if(event.changes.count {it.pressed}>1)multi=true
                     val zoom=event.calculateZoom();val pan=event.calculatePan()
-                    if(multi || currentScale>1.01f) {
-                        val next=(currentScale*zoom).coerceIn(1f,MAX_SCALE)
-                        onScale(next);onOffset(clamp(currentOffset+pan,next))
+                    if(multi || gestureScale>1.01f) {
+                        gestureScale=(gestureScale*zoom).coerceIn(1f,MAX_SCALE)
+                        gestureOffset=clamp(gestureOffset+pan,gestureScale)
+                        onScale(gestureScale);onOffset(gestureOffset)
                         if(zoom!=1f || pan!=Offset.Zero)event.changes.forEach {if(it.positionChanged())it.consume()}
                     } else if(abs(pan.x)>abs(pan.y)) {
                         swipe+=pan.x;event.changes.forEach {if(it.positionChanged())it.consume()}
                     }
                 } while(event.changes.any {it.pressed})
-                if(!multi && currentScale<=1.01f && abs(swipe)>SWIPE_DISTANCE_DP*density)onSwipe(if(swipe<0)1 else -1)
+                if(!multi && gestureScale<=1.01f && abs(swipe)>SWIPE_DISTANCE_DP*density)onSwipe(if(swipe<0)1 else -1)
             }
         }
         .semantics {contentDescription=label;role=Role.Image;stateDescription=controlsState;onClick(controlsAction){onToggleControls();true}}

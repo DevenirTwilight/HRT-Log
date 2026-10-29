@@ -155,6 +155,8 @@ class Med05ViewerUiTest(private val locale: String, private val width: Int, priv
         assertReadingAreaFillsAvailableSpace()
         val before=ui.onNodeWithTag("attachment-viewer-viewport").fetchSemanticsNode().boundsInRoot.height
         ui.onNodeWithTag("attachment-viewer-page").performClick()
+        // A single tap is confirmed only after the platform's double-tap interval; observe the resulting state.
+        ui.waitUntil {ui.onAllNodesWithTag("attachment-viewer-toolbar").fetchSemanticsNodes().isEmpty()}
         ui.onAllNodesWithTag("attachment-viewer-toolbar").assertCountEquals(0)
         ui.onAllNodesWithTag("attachment-viewer-controls").assertCountEquals(0)
         val safe=ui.onNodeWithTag("attachment-viewer-safe-area").fetchSemanticsNode().boundsInRoot
@@ -162,6 +164,7 @@ class Med05ViewerUiTest(private val locale: String, private val width: Int, priv
         assertEquals(safe,full);assertTrue(full.height>before)
         ui.onAllNodesWithText("Synthetic record metadata").assertCountEquals(0)
         ui.onNodeWithTag("attachment-viewer-page").performClick()
+        ui.waitUntil {ui.onAllNodesWithTag("attachment-viewer-close").fetchSemanticsNodes().isNotEmpty()}
         ui.onNodeWithTag("attachment-viewer-close").assertIsDisplayed()
         assertReadingAreaFillsAvailableSpace()
     }
