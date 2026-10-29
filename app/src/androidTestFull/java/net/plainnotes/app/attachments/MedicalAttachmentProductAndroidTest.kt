@@ -114,6 +114,14 @@ class MedicalAttachmentProductAndroidTest {
         if(ui.onAllNodes(matcher and hasAnyAncestor(hasScrollAction())).fetchSemanticsNodes().isNotEmpty())node.performScrollTo()
         node.assertIsEnabled().performClick()
     }
+    /** The durable record receipt is shown by both the outcome card and the pending-file header.
+     * Waiting for only the latter races the controller handoff: the confirmation Dialog can already
+     * be open while the outer window still shows the outcome card. Neither layout means file COMMIT.
+     */
+    private fun awaitRecordCommitted(label:Int) {
+        val receipt=context.getString(R.string.lib_record_saved,text(label))
+        await {ui.onAllNodesWithText(receipt).fetchSemanticsNodes().isNotEmpty()}
+    }
     private fun tag(value:String)=press(hasTestTag(value))
     private fun button(id:Int)=press(hasText(text(id)))
     private fun visit() {
@@ -447,7 +455,7 @@ class MedicalAttachmentProductAndroidTest {
         tag("new-record-choose-file");pickSample("png","new-record-file-chosen")
         runBlocking {model.libraryRuntime.attachments(null,"SYNTHETIC no pre-save import").use {assertEquals(1,it.documents().size)}}
         tag("medical-save")
-        await {ui.onAllNodesWithTag("record-committed-before-file").fetchSemanticsNodes().isNotEmpty()}
+        awaitRecordCommitted(R.string.attach_default_visit)
         tag("attachments-confirm-attach")
         await {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
         val visit=MedicalAttachmentOperations.Target(MedicalAttachmentOperations.Kind.APPOINTMENT,runBlocking {model.libraryRuntime.currentRepository().appointments().single().id})
@@ -457,7 +465,7 @@ class MedicalAttachmentProductAndroidTest {
         ui.onNodeWithTag("lab-batch-value:0").performTextInput("130")
         tag("new-record-choose-file");pickSample("pdf","new-record-file-chosen")
         tag("lab-batch-save")
-        await {ui.onAllNodesWithTag("record-committed-before-file").fetchSemanticsNodes().isNotEmpty()}
+        awaitRecordCommitted(R.string.attach_default_lab)
         tag("attachments-confirm-attach")
         await {ui.onAllNodesWithText(text(R.string.attach_saved)).fetchSemanticsNodes().isNotEmpty()}
         val savedDraw=runBlocking {model.libraryRuntime.currentRepository().labPanels().single {it.id!=panel.id}}
