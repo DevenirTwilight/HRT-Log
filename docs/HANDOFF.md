@@ -1,3 +1,7 @@
+## 共享根节点测试路径补正 — 2026-10-29
+
+PR156也独立采用collection根查询，再主线程读坐标，避免fetchOneOrThrow在测试线程打印整棵动态根树；该源码路径在Compose ui-test1.9.3已核对，仍须原生证据验证与SnapshotStateObserver异常的因果关系。PR155同一最小测试修正5fb1bbf8，不混入双方生产代码。246项定向回归和已成功编译原件仍保留；56c17936最后一次本地编译日志停在KSP且进程已不存在，不能冒称成功，最终CI必须验证本次源码。
+
 ## 原生剩余失败跟进 — 2026-10-29
 
 PR153最终dfa7f6e9：API26/29/35原生已成功，当前仅两个Android主作业待结束。PR155 df7d1010 run40925785461 job123630783670仍出现SnapshotStateObserver线程异常，证明仅移动bounds不足；未改写PASS。检查Compose ui-test1.9.3源码，fetchOneOrThrow在测试线程保存printToString语义快照，1.9.5仍同实现；这是待验证的库级候选原因，不擅自升级依赖或关闭观察器。PR156 91848eb0 run40930251829 job123646480535仍在原484行BACK超时，树显示实验室Focused=true；IconButton在触摸模式下不能可靠取得初始焦点，现将请求目标移到独立focusable根容器，不禁用文本编辑。原生仍待验证。所有失败原作业保留。

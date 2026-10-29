@@ -88,7 +88,9 @@ class MedicalAttachmentProductAndroidTest {
     private fun scrollIntoComfort(list:String,node:SemanticsNodeInteraction) {
         node.performScrollTo()
         repeat(4) {
-            val root=bounds(ui.onAllNodes(isRoot()).onFirst())
+            // Do not make fetchOneOrThrow print the full dynamic root on the test thread.
+            val rootNode=ui.onAllNodes(isRoot()).fetchSemanticsNodes().first()
+            val root=ui.runOnIdle {rootNode.boundsInRoot}
             val bounds=bounds(node)
             val margin=root.height*0.2f
             val shift=when {bounds.bottom>root.bottom-margin->-(bounds.bottom-(root.bottom-margin)+16f)
