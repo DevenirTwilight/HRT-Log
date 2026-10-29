@@ -6,6 +6,14 @@
 - 下一步：本 PR 合并且主线 CI 通过后，做 Build 39 私下签名交付（负责人 2026-10-29「都做完给apk」已恢复；沿用既有私有正式签名、versionCode ≥ 39、不发公开 Release/tag；账本与收据走单独 docs PR）。
 - 待负责人复核：阈值 0.75；E1 午夜占位；法文 320dp 2× 横轴标签重叠（UI-12 遗留）；真机 / TalkBack 未做。
 
+## 接手最终主线回归修正 — 2026-10-29
+
+#152 已合并 `3ce3b739990d878cc2060d0f9128fd42e7b5f5ed`，#151 已合并 `14574302e4070c2b9bc885e8a8776ad4a94e16ab`。#151 最终源码 `acfa2cca0181f178b764283c76e6de1a1096dd7f` 与 squash 合并树一致；精确头全部检查成功。最终主线 Science `40873642195`、安全 `40873641935` 成功；Android `40873641886` 的 device-tests job `123446801031` 失败，其余四 job 成功，不得报告主线全绿。
+
+失败原件：该 job 日志中 `MedicalAttachmentProductAndroidTest.kt:460` 等待 `record-committed-before-file` 超时；完整生产树同时显示「Lab report saved.」、真实 `record-files:LAB_PANEL:2` 与 `attachments-confirm`，附件尚未确认提交。该 test tag 只在外层确认/保存分支出现，而已提交记录的 outcome card 也显示同一真实回执；测试错误地将瞬时布局等同于记录 COMMIT。修正只等待两种布局共同的本地化「记录已保存」事实，不改生产逻辑、超时、文件样本、SAF、确认、附件 COMMIT、重开或幂等断言。修正后原生结果必须由新精确 HEAD 验证，本地无设备不得标 PASS。失败运行永久保留，不因后继成功改写。
+
+APK 仍按负责人「apk暂缓」暂停，未签名、未交付；#153 是他人后续 UI 工作，本次不接手或覆盖。
+
 ## 接手验收与基线同步 — 2026-10-29
 
 MED-05 PR #152 已在11:18:18 UTC受保护合并，源码b73f72c7，合并3ce3b739990d878cc2060d0f9128fd42e7b5f5ed；PR全部检查成功，API26/512MiB查看器7项原生成功。本地精确头缩略图/翻页/四语UI定向206项零失败零跳过。主线Science/安全专项成功，Android完整构建及API29仍运行，不能写主线全绿。APK仍暂缓。
