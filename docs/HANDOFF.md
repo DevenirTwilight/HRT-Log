@@ -1,10 +1,13 @@
-## Build 39 私人交付 + 本轮合并汇总 — 2026-10-29
+## 重复的 Build 39（B）— 2026-10-29（事故记录，已披露）
 
-- **已合并到主线**：#149 UI-12（一条 E2 合计曲线）、#150 MED-04（文件信息）、#151 SL-CAL-02 引擎、#152 MED-05（缩略图与查看器）、#153 校准接到浓度页。主线 `aeb56839d708c325b5330e62e672be968992fa42`。
-- **主线 CI（push 运行 40936445038）**：jvm、device-tests、attachment-poc-compatibility 26/29、research-deep、science-change-gate、security-native 全部 SUCCESS；`android` 首次失败于 `Ui12ConcentrationTest.mixedRoutesCalibrateAsOneTotal[en/320dp/2x/dark=false]`（等估算卡的 30 秒在 CI 负载下超时，同一测试在 PR 运行里通过），按“只重跑一次”规则重跑，成功。若再出现，应把 `show()` 的等待放宽并查异步校准的耗时（不删断言）。
-- **Build39 私人交付（负责人「都做完给apk」）**：从主线 `aeb56839` 干净独立工作树，加源码外 `version39.init.gradle`（只把 versionCode 38→39）构建 fullRelease；只用原正式证书 `989ba045…79b1`（私有备份仓库 DevenirTwilight/- 确认 Private，只读克隆到受限临时目录，签后已删除，原备份未改）。成品 `HRT-Log-build39-full-official.apk` 14,519,454 字节，SHA-256 `14f9cf51c1c2760a15767607bc519aa279ceaa7505faa6b9c635f1c0f5961c5a`；v2/v3 通过，包名 net.plainnotes.app/39/0.2.0，四 ABI、64 位 ELF 与 ZIP 16KiB 对齐、无 INTERNET、非 debug，签名前后 324 个业务条目逐字节相同。收据 `docs/delivery/build39-private-verification.json`；账本追加 39，源码 versionCode 下限同步 39（下次交付需 ≥ 40）。会话私有文件发送，**不入 Git/公共 CI/Release/tag**；真机安装和人工 TalkBack 为 NOT_RUN。可直接覆盖安装；勿卸载、勿清数据；覆盖前先导出完整备份。
-- **协作提示**：#153 分支期间有其他账号（Reah Shirayuki、Celeste Twilight）推送了校准的失败状态/重试、已保存历史上下文解析与新的真机校准测试（`CalibrationProductAndroidTest`）；我只修了该测试把两个不同时间的化验放进一次 `saveLabs` 的错误。以后在同一分支工作前先 `git fetch` 看有没有别人的提交。
-- 待负责人复核（不变）：信息档位阈值 0.75；E1 午夜占位；法文 320dp 2× 图表横轴日期标签重叠（UI-12 遗留）；大图 2 的幂次缩小解码的放宽；Android 8 的 PDF 仍不支持；真机 / TalkBack 未做；导出 / PDF / 快照仍不含校准后的合计（§67 D-2）。
+- **事实**：同一天有**两份不同的 APK 都使用 versionCode 39**，证书相同（`989ba045…79b1`），文件名都叫 `HRT-Log-build39-full-official.apk`：
+  - **A**：源码 `d95952ee`（不含舌下校准 UI），SHA-256 `9c639f8c0a9ff3f30404fc965166f0500220d33c214f4aedb80de55f6f43a850`，14,486,686 字节，2026-10-29 14:57Z 签名，经负责人私有 GitHub 交付分支交付，记录在 PR #155（REQUIREMENTS §168）。
+  - **B**：源码 `aeb56839`（含 #149–#153，即 UI-12、MED-04、MED-05、校准引擎与校准界面），SHA-256 `14f9cf51c1c2760a15767607bc519aa279ceaa7505faa6b9c635f1c0f5961c5a`，14,519,454 字节，2026-10-29 晚按负责人「都做完给apk」在会话里作为附件发出。
+- **原因**：构建 B 的会话开工前没有查看仍是 OPEN 的交付记录 PR #155，不知道 A 已交付。这是流程错误，不是签名或代码问题。
+- **处理**：账本只能严格递增，39 已由 #155 记录为 A；B 不进账本，只在 `docs/delivery/build39b-duplicate-version-verification.json` 留存核验与身份（含「如何区分」）。**下一次交付必须 versionCode ≥ 40，并同时取代 A 和 B。** 在那之前两个包都能覆盖安装，但应用内版本号分不出它们，请以文件 SHA-256 区分。
+- **教训**：任何签名交付前，先 `gh pr list` 查看所有 OPEN 的 delivery/ledger PR 和 `docs/delivery/ledger.json` 的主线与分支状态；不依赖单一会话记忆。
+- B 的验证与 A 同类：v2/v3 单签名者、四 ABI、64 位 ELF 与 ZIP 16KiB 对齐、无 INTERNET、非 debug、签名前后 324 个业务条目逐字节相同；真机安装与人工 TalkBack NOT_RUN。主线 `aeb56839` CI：`android` 首次失败于 `Ui12ConcentrationTest.mixedRoutesCalibrateAsOneTotal[en/320dp/2x/dark=false]`（等待估算卡 30 秒超时，同一测试在 PR 运行中通过），按规则重跑一次后成功。
+- 本轮合并汇总：#149 UI-12、#150 MED-04、#151 SL-CAL-02 引擎、#152 MED-05、#153 校准接到浓度页，主线 `aeb56839d708c325b5330e62e672be968992fa42`。待负责人复核（不变）：信息档位阈值 0.75；E1 午夜占位；法文 320dp 2× 横轴日期标签重叠（UI-12 遗留）；大图按 2 的幂次缩小解码的放宽；Android 8 PDF 仍不支持；真机/TalkBack 未做；导出/PDF/快照不含校准后的合计（§67 D-2）。
 
 ## 校准历史时间回归补验 — 2026-10-29
 

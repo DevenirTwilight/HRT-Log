@@ -93,5 +93,13 @@
  "public_release": "NOT_AUTHORIZED",
  "signed_at": "2026-10-29T20:17:36.101618+00:00",
  "temporary_credentials_removed": true,
- "delivery_channel": "Session file attachment (private); not committed, not a public Release, no tag, no CI artifact"
+ "delivery_channel": "Session file attachment (private); not committed, not a public Release, no tag, no CI artifact",
+ "identity_warning": "DUPLICATE versionCode. This APK (build 39 'B', source aeb56839) was signed and sent in a session chat attachment at the owner's request after the first Build 39 ('A', source d95952ee, apk sha256 9c639f8c0a9ff3f30404fc965166f0500220d33c214f4aedb80de55f6f43a850, signed 2026-10-29T14:57Z, delivered through the owner's private GitHub delivery branch and recorded in PR #155) had already been delivered. Both files are named HRT-Log-build39-full-official.apk, both carry versionCode 39 and the same signing certificate, and they differ in content: B contains the lab calibration of the E2 total (#153), A does not. The session that built B did not know about A because PR #155 was still open.",
+ "first_build39": {
+  "apk_sha256": "9c639f8c0a9ff3f30404fc965166f0500220d33c214f4aedb80de55f6f43a850",
+  "source_sha": "d95952eed3f6732dd99297019a5fb02ca4304191",
+  "record": "PR #155"
+ },
+ "ledger": "NOT appended: the append-only ledger requires strictly increasing versionCode and 39 is recorded by PR #155 (build A). The next delivery must use versionCode >= 40 and supersedes both.",
+ "how_to_tell_them_apart": "Compare the file SHA-256 (A: 9c639f8c..., B: 14f9cf51...) or the size (A: 14,486,686 bytes, B: 14,519,454 bytes). The in-app version cannot tell them apart."
 }
