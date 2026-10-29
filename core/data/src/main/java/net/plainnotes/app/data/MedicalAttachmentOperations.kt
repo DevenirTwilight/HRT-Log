@@ -243,6 +243,45 @@ class MedicalAttachmentOperations internal constructor(private val access:Databa
             }
         }
     }
+    /** MED-04: what the user typed about a file. Every field optional; nothing here is inferred from the file, its name or the clock. */
+    data class Detail(val category:String?=null,val date:String?=null,val institution:String?=null,val revision:Long=0) {
+        init {
+            require(category==null || category in MedicalFileDetailSchema.categories)
+            require(date==null || runCatching {java.time.LocalDate.parse(date)}.getOrNull()?.toString()==date)
+            require(institution==null || institution.isNotBlank() && institution==institution.trim() && institution.length<=MedicalFileDetailSchema.INSTITUTION_MAX && institution.none {it.code<32 || it.code==127})
+        }
+        val empty get()=category==null && date==null && institution==null
+        companion object {
+            /** User text to a stored value: trimmed, blank means not entered, over-long input is rejected rather than cut. */
+            fun institutionOf(text:String):String? {val t=text.trim();require(t.length<=MedicalFileDetailSchema.INSTITUTION_MAX && t.none {it.code<32 || it.code==127});return t.ifEmpty {null}}
+        }
+    }
+    suspend fun details(cap:AttachmentSession.Capability):Map<UUID,Detail> =work(cap) {db,s->
+        AttachmentTransaction.commit(db,s,cap) {
+            permission()
+            db.openHelper.writableDatabase.query("SELECT document_uuid,file_category,document_date,institution,detail_revision FROM ${MedicalFileDetailSchema.TABLE} WHERE store_uuid=?",arrayOf(s.dataset)).use {c->
+                buildMap {while(c.moveToNext()){permission();put(UUID.fromString(c.getString(0)),Detail(c.getString(1),c.getString(2),c.getString(3),c.getLong(4)))}}
+            }
+        }
+    }
+    /** Compare-and-set on the detail's own revision (0 = none saved yet). Only an active file can be edited; saving never touches the original, its key or its links. */
+    suspend fun saveDetail(cap:AttachmentSession.Capability,document:UUID,expectedRevision:Long,detail:Detail):Long=work(cap) {db,s->
+        require(expectedRevision>=0)
+        AttachmentTransaction.commit(db,s,cap) {
+            permission();val raw=db.openHelper.writableDatabase
+            raw.query("SELECT 1 FROM attachment_document WHERE store_uuid=? AND document_uuid=? AND state='ACTIVE'",arrayOf(s.dataset,document.toString())).use {check(it.moveToFirst()) {"Only an active file can be edited"}}
+            val now=System.currentTimeMillis()
+            if(expectedRevision==0L) raw.compileStatement("INSERT INTO ${MedicalFileDetailSchema.TABLE}(store_uuid,document_uuid,file_category,document_date,institution,detail_revision,updated_utc) VALUES(?,?,?,?,?,1,?)").use {st->
+                st.bindString(1,s.dataset);st.bindString(2,document.toString())
+                detail.category?.let {st.bindString(3,it)} ?: st.bindNull(3);detail.date?.let {st.bindString(4,it)} ?: st.bindNull(4);detail.institution?.let {st.bindString(5,it)} ?: st.bindNull(5)
+                st.bindLong(6,now);check(st.executeInsert()>=0)
+            } else raw.compileStatement("UPDATE ${MedicalFileDetailSchema.TABLE} SET file_category=?,document_date=?,institution=?,detail_revision=detail_revision+1,updated_utc=? WHERE store_uuid=? AND document_uuid=? AND detail_revision=?").use {st->
+                detail.category?.let {st.bindString(1,it)} ?: st.bindNull(1);detail.date?.let {st.bindString(2,it)} ?: st.bindNull(2);detail.institution?.let {st.bindString(3,it)} ?: st.bindNull(3)
+                st.bindLong(4,now);st.bindString(5,s.dataset);st.bindString(6,document.toString());st.bindLong(7,expectedRevision);check(st.executeUpdateDelete()==1) {"File details changed elsewhere"}
+            }
+            expectedRevision+1
+        }
+    }
     /** Freeze a real typed identity when the user selects a relationship target; never infer one. */
     suspend fun resolveTarget(cap:AttachmentSession.Capability,target:Target):Target=work(cap) {db,s->
         AttachmentTransaction.commit(db,s,cap) {permission();target.copy(expectedUuid=UUID.fromString(requireNotNull(bindTarget(db,s,target))))}

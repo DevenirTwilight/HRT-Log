@@ -121,4 +121,6 @@ val migration20To21=object:Migration(20,21) { override fun migrate(db:SupportSQL
 
 val migration21To22=object:Migration(21,22) { override fun migrate(db:SupportSQLiteDatabase)=MedicalFilesSchema.migrate(db) }
 
-fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17, migration17To18,migration18To19,migration19To20,migration20To21,migration21To22)
+val migration22To23=object:Migration(22,23) { override fun migrate(db:SupportSQLiteDatabase)=MedicalFileDetailSchema.migrate(db) }
+
+fun allMigrations(today: () -> LocalDate = LocalDate::now): Array<Migration> = arrayOf(migration1To2(today), migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17, migration17To18,migration18To19,migration19To20,migration20To21,migration21To22,migration22To23)

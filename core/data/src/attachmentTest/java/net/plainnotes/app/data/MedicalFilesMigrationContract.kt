@@ -73,7 +73,7 @@ abstract class MedicalFilesMigrationContract {
                 val room=Room.databaseBuilder(context,NotesDatabase::class.java,name).openHelperFactory(factory()).addMigrations(*allMigrations()).addCallback(SchemaGuards).build()
                 try {
                     val raw=room.openHelper.writableDatabase
-                    assertEquals(22,raw.version);assertEquals(before,rows(raw));assertEquals(scope,AttachmentIdentity.current(raw))
+                    assertEquals(23,raw.version);assertEquals(before,rows(raw));assertEquals(scope,AttachmentIdentity.current(raw))
                     raw.query("PRAGMA foreign_key_check").use {assertFalse(it.moveToFirst())}
                     raw.query("PRAGMA table_info(attachment_journal)").use {c->var seen=false;while(c.moveToNext())if(c.getString(1)=="record_uuid"){assertEquals(0,c.getInt(3));seen=true};assertTrue(seen)}
                 }finally {room.close()}
