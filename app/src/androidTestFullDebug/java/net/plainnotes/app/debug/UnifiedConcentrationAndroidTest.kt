@@ -30,47 +30,50 @@ class UnifiedConcentrationAndroidTest {
     @After fun unregisterRealWindowIdle() { ui.unregisterIdlingResource(windowIdle) }
     private fun await(tag:String)=ui.waitUntil(30_000){ui.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty()}
     private fun noSelector() { for(choice in ResearchModel.entries)ui.onAllNodesWithTag("model-${choice.name}").assertCountEquals(0) }
-    @Test fun originalUiHasOnlyM2ReferenceAndOneChart() {
-        await("unified-chart");noSelector();ui.onNodeWithTag("research-not-personal").assertExists()
-        for(id in listOf(R.string.m2_chart_title,R.string.calib_title,R.string.pk_model_title))ui.onNodeWithText(ui.activity.getString(id)).assertExists()
-        ui.onNodeWithText(ui.activity.getString(R.string.calib_enable)).assertDoesNotExist()
+    // UI-12 (REQUIREMENTS §162): one estimate card, one "E2 curve", the research note under "Model and literature", readout card instead of the "  ·  " bubble.
+    @Test fun unifiedUiHasOneEstimateAndOneChart() {
+        await("e2-chart");noSelector();await("e2-estimate-card");ui.onAllNodesWithTag("research-not-personal").assertCountEquals(0)
+        for(id in listOf(R.string.ui12_curve_title,R.string.calib_title,R.string.pk_model_title))ui.onNodeWithText(ui.activity.getString(id)).assertExists()
+        ui.onNodeWithTag("calibration-switch").performScrollTo().assertIsNotEnabled()
         ui.onNodeWithText("pmol/L").performScrollTo().performClick()
-        ui.onNodeWithTag("unified-chart").performScrollTo().performTouchInput { click(center) }
-        ui.waitUntil(10_000){ui.onAllNodes(hasText("  ·  ",substring=true)).fetchSemanticsNodes().isNotEmpty()}
+        ui.onNodeWithTag("e2-chart").performScrollTo().performTouchInput { click(center) }
+        ui.waitUntil(10_000){ui.onAllNodesWithTag("chart-readout").fetchSemanticsNodes().isNotEmpty()}
     }
     @Test fun m2AndOriginalUnitSurviveRecreationAndRotation() {
-        await("unified-chart");ui.onNodeWithText("pmol/L").performScrollTo().performClick()
-        ui.activityRule.scenario.recreate();await("unified-chart");noSelector()
+        await("e2-chart");ui.onNodeWithText("pmol/L").performScrollTo().performClick()
+        ui.activityRule.scenario.recreate();await("e2-chart");noSelector()
         ui.onNode(hasText("pmol/L") and isSelected()).assertExists()  // D-1: no hero unit label; the selection survives
         for((requested,configuration) in listOf(android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE to android.content.res.Configuration.ORIENTATION_LANDSCAPE,
                 android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT to android.content.res.Configuration.ORIENTATION_PORTRAIT)) {
             ui.activityRule.scenario.onActivity { it.requestedOrientation=requested }
-            ui.waitUntil(30_000){ui.activity.resources.configuration.orientation==configuration};await("unified-chart");noSelector()
+            ui.waitUntil(30_000){ui.activity.resources.configuration.orientation==configuration};await("e2-chart");noSelector()
             ui.onNode(hasText("pmol/L") and isSelected()).assertExists()  // D-1: no hero unit label; the selection survives
         }
     }
     @Test fun observedLabsCannotCalibrateM2OnAndroid() {
-        await("unified-chart")
+        await("e2-chart")
         val value=kotlin.math.round(ResearchSublingualV01.studyScenario(0.0,listOf(-30.0,-20.0,-3.0).map{ExperimentalDose(it,1.0)},ResearchDisplayProtocol.candidate(ResearchModel.M2),ResearchDisplayProtocol.anchor(ResearchModel.M2))).toInt().toString()
         // D-1: no on-screen current number; the scenario is read from the preview the screen was given.
         fun scenario()=ui.activity.lastPreview!!.let{p->kotlin.math.round(p.valueAt(p.asOfH!!)!!).toInt().toString()}
-        org.junit.Assert.assertEquals(value,scenario());ui.onAllNodesWithText(value).assertCountEquals(0)
+        org.junit.Assert.assertEquals(value,scenario())
+        // UI-12 (§162) supersedes D-1 here: the estimate card shows the total as its one big number; with only sublingual doses it is the M2 scenario value.
+        ui.onNodeWithTag("e2-now-value").performScrollTo().assertTextContains(value,substring=true)
         val before=ui.activity.lastPreview!!.values.copyOf()
         ui.runOnUiThread { ui.activity.syntheticLabPgMl=9000.0;ui.activity.syntheticHistoryRevision++ }
-        await("unified-chart");ui.waitForIdle();org.junit.Assert.assertEquals(value,scenario())
+        await("e2-chart");ui.waitForIdle();org.junit.Assert.assertEquals(value,scenario())
         org.junit.Assert.assertArrayEquals(before,ui.activity.lastPreview!!.values,0.0)
-        ui.onNodeWithTag("m2-labs-separate").performScrollTo().assertExists()
-        ui.onNodeWithTag("m2-calibration-unavailable").assertExists()
-        ui.onNodeWithText(ui.activity.getString(R.string.calib_enable)).assertDoesNotExist()
+        // UI-12: labs are dots on the total (no separate list); calibration stays unavailable with sublingual doses.
+        ui.onAllNodesWithTag("m2-labs-separate").assertCountEquals(0)
+        ui.onNodeWithTag("calibration-unavailable-sl").performScrollTo().assertExists()
+        ui.onNodeWithTag("calibration-switch").assertIsNotEnabled()
     }
-    @Test fun mixedRoutesArePartialAndOnlyOtherRoutesUseCompatibilityCalibration() {
-        await("unified-chart");ui.runOnUiThread { ui.activity.syntheticExtraRoute="ORAL" }
-        await("m2-partial-scope");await("unified-chart")
-        ui.onNodeWithText(ui.activity.getString(R.string.m2_partial_scope)).assertExists()
+    @Test fun mixedRoutesAreOneTotalAndOnlyOtherRoutesUseCompatibilityCalibration() {
+        await("e2-chart");ui.runOnUiThread { ui.activity.syntheticExtraRoute="ORAL" }
+        ui.waitUntil(30_000){ui.onAllNodesWithText(ui.activity.getString(R.string.ui12_label_total)).fetchSemanticsNodes().isNotEmpty()}
+        ui.onAllNodesWithText(ui.activity.getString(R.string.m2_partial_scope)).assertCountEquals(0)
         ui.runOnUiThread { ui.activity.syntheticSublingualEnabled=false }
-        await("e2-compatibility-scope")
-        ui.waitUntil(30_000){ui.onAllNodesWithText(ui.activity.getString(R.string.m2_compatibility_current)).fetchSemanticsNodes().isNotEmpty()}
-        ui.onNodeWithText(ui.activity.getString(R.string.calib_enable)).assertExists();noSelector()
+        ui.waitUntil(30_000){ui.onAllNodesWithTag("calibration-switch").fetchSemanticsNodes().isEmpty() && ui.onAllNodesWithText(ui.activity.getString(R.string.calib_enable)).fetchSemanticsNodes().isNotEmpty()}
+        noSelector()
     }
     @Test fun actualProductPreviewReportsPeakAccuracyAndAndroidPerformance() {
         val now=600000.0

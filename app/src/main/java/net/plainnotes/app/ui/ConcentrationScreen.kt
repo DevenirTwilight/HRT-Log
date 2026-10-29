@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import net.plainnotes.app.conc.EligibilityReason
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -34,32 +36,39 @@ import kotlin.math.roundToInt
 
 class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: CalibrationMode)
 
+/**
+ * UI-12 (REQUIREMENTS §162): one page for every route. The E2 estimate is the sum of the routes ([E2Total]); the result comes first,
+ * one reminder sentence is the only caveat on the page, and sources, scope and limits live behind "Model and literature".
+ * Display only: no model, parameter, calibration or export changes here.
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable fun ConcentrationScreen(state: NotesState, result: ConcentrationResult?, loading: Boolean, weight: Double?, settings: ConcSettings,
                                     onSettings: (ConcSettings) -> Unit, onWeight: (Double) -> Unit, onEditMedication: (Long) -> Unit, onOpenLabs: () -> Unit,
                                     contentPadding: PaddingValues,records:List<net.plainnotes.app.data.RecordEntity> = emptyList(),profiles:Map<Long,net.plainnotes.app.data.ProfileEntity> = emptyMap(),
-                                    onConfirmHistory:(net.plainnotes.app.data.MedicationEntity,net.plainnotes.app.data.ProfileEntity?,java.time.LocalDate,java.time.LocalDate)->Unit={_,_,_,_->},onOpenHistory:()->Unit={}, preview:net.plainnotes.app.experimental.ConcentrationPreview?=null, referenceNotice:@Composable ()->Unit={}, m2Only:Boolean=false) {
+                                    onConfirmHistory:(net.plainnotes.app.data.MedicationEntity,net.plainnotes.app.data.ProfileEntity?,java.time.LocalDate,java.time.LocalDate)->Unit={_,_,_,_->},onOpenHistory:()->Unit={}, preview:net.plainnotes.app.experimental.ConcentrationPreview?=null,
+                                    referenceNotice:@Composable ()->Unit={}, basisNotice:@Composable ()->Unit={},
+                                    /** The compatibility result for non-sublingual estradiol only ([E2Total.nonSublingualInputs]); null when there is none. */
+                                    e2NonSublingual: ConcentrationResult? = null,
+                                    /** Times of the doses actually taken; only those before "now" are drawn as ticks. */
+                                    doseTimes: List<java.time.Instant> = emptyList()) {
     var repair by remember{mutableStateOf<net.plainnotes.app.data.MedicationEntity?>(null)}
     var editWeight by remember { mutableStateOf(false) }
+    var modelsOpen by rememberSaveable { mutableStateOf(false) }
     val factor = if (settings.pmol) Pk.PMOL_PER_PG else 1.0
     val unit = if (settings.pmol) "pmol/L" else "pg/mL"
     val chartLocale=currentLocale()
     val chartNumber=remember(chartLocale){java.text.NumberFormat.getNumberInstance(chartLocale).apply{maximumFractionDigits=3;isGroupingUsed=false}}
     fun fmt(v: Double) = (v * factor).roundToInt().toString()
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        // D-1: on the M2 page the scenario card is the one top-level explanation; the population-estimate caveat moves into
-        // the other-medicines card it describes, so two differently worded disclaimers never stack at the top.
-        if (preview == null) Surface(color = MaterialTheme.colorScheme.secondaryContainer, shape = MaterialTheme.shapes.medium) {
-            Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Outlined.Info, null, tint = MaterialTheme.colorScheme.onSecondaryContainer); Spacer(Modifier.width(10.dp))
-                Text(stringResource(R.string.pk_disclaimer_short), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSecondaryContainer)
-            }
-        }
-        // With a ready M2 curve the notice (calculation time, scope, research basis) follows the scenario card's plain
-        // explanation; loading errors and empty-history messages stay at the top.
-        val noticeAfterCard = preview != null && preview.timeH.isNotEmpty()
-        if (!noticeAfterCard) referenceNotice()
-        val missing = result?.missing.orEmpty()
+    val compatibilityHasSl = result?.models?.get(Curve.E2)?.any { it.key=="E2_SL" } == true
+    val previewReady = preview?.timeH?.isNotEmpty() == true
+    // A mixed total reads M2 at every compatibility grid point, so it is built off the main thread; single routes are O(1).
+    val needsAsync = previewReady && e2NonSublingual != null
+    val total: E2Total.Curve? = if (!needsAsync) remember(preview, result, e2NonSublingual) { E2Total.curve(preview, result, e2NonSublingual) }
+        else produceState<E2Total.Curve?>(null, preview, result, e2NonSublingual) { value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { E2Total.curve(preview, result, e2NonSublingual) } }.value
+    val hasTotal = total != null
+    val pending = needsAsync && !hasTotal
+    val missing = result?.missing.orEmpty()
+    val statusCards: @Composable () -> Unit = {
         if (missing.any { it.medicationId == null && it.input == MissingInput.WEIGHT }) SectionCard(stringResource(R.string.pk_need_weight_title)) {
             Text(stringResource(R.string.pk_need_weight_body), style = MaterialTheme.typography.bodyMedium)
             Button(onClick = { editWeight = true }) { Text(stringResource(R.string.pk_set_weight)) }
@@ -72,7 +81,7 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                     Column(Modifier.weight(1f)) {
                         Text(med.name, style = MaterialTheme.typography.titleSmall)
                         val labels = list.map { missingLabel(it.input) }
-                        Text(labels.joinToString(stringResource(R.string.list_separator)), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                        Text(labels.joinToString(stringResource(R.string.list_separator)), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Column {
                         if(list.any{it.input==MissingInput.ACTUAL_DOSE})TextButton(onClick=onOpenHistory){Text(stringResource(R.string.history))}
@@ -91,85 +100,57 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 Text(unsupportedLabel(why), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
+        referenceNotice()
         if (state.medications.none { it.molecule in listOf("E2", "CPA", "SPI", "P4") }) EmptyState(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.pk_no_e2_title), stringResource(R.string.pk_no_e2_body))
-
-        val compatibilityHasSl = result?.models?.get(Curve.E2)?.any { it.key=="E2_SL" } == true
-        val allowE2 = !m2Only || preview!=null || !compatibilityHasSl
-        if(m2Only && preview==null && compatibilityHasSl) Text(stringResource(R.string.m2_compatibility_contains_sl),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("m2-unsafe-compatibility"))
-        if (allowE2 && result != null && (preview?.timeH ?: result.timeH).isNotEmpty() && (preview != null || result.models.containsKey(Curve.E2))) {
-            // D-1 (REQUIREMENTS §67 item 4): the M2 card states what the curve is and shows no single "current" number.
-            if(preview!=null) ElevatedCard(Modifier.fillMaxWidth().testTag("m2-scenario-card"), colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
-                Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.m2_scenario_title), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                    Text(stringResource(R.string.m2_scenario_body), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.testTag("research-not-personal"))
-                }
-            }
-            if (preview != null) { if (noticeAfterCard) referenceNotice() } else ElevatedCard(Modifier.fillMaxWidth(), colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
-                Column(Modifier.padding(20.dp)) {
-                    Text(stringResource(if(m2Only) R.string.m2_compatibility_current else R.string.pk_current), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(result.currentPgMl?.let(::fmt) ?: "—", style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                        Spacer(Modifier.width(6.dp))
-                        Text(unit, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.padding(bottom = 8.dp))
-                    }
-                    val calibrated = result.calibration != null
-                    Text(stringResource(if (calibrated) R.string.pk_basis_calibrated else R.string.pk_basis_population, result.usedDoses),
-                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                    if (result.skippedDoses > 0) Text(stringResource(R.string.pk_skipped_doses, result.skippedDoses), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                }
-            }
-            var rangeDays by remember { mutableIntStateOf(14) }
-            var fullBand by remember { mutableStateOf(false) }
+        if (!hasTotal && !pending && compatibilityHasSl) Text(stringResource(R.string.m2_compatibility_contains_sl),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("m2-unsafe-compatibility"))
+    }
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(contentPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        // Missing-input cards follow the estimate; without one they come first.
+        if (!hasTotal) statusCards()
+        if (total != null) {
+            E2EstimateCard(total, result, ::fmt, unit)
+            var rangeDays by rememberSaveable { mutableIntStateOf(3) }
             SectionCard(null) {
-                Text(stringResource(if(preview!=null) R.string.m2_chart_title else if(m2Only) R.string.m2_compatibility_chart else R.string.pk_chart_title),style=MaterialTheme.typography.titleMedium)
-                val ranges=listOf(7,14,60)
-                AdaptiveChoice(ranges.map{stringResource(R.string.days_short,it)},ranges.indexOf(rangeDays),{rangeDays=ranges[it]})
-                // One time base for the M2 snapshot; measured labs are listed separately, never drawn on the scenario curve.
-                val nowH = m2ChartNowH(preview, result.nowH)
-                val chartUnit = if(preview!=null) stringResource(R.string.m2_scenario_unit, unit) else unit
-                val data = ChartData(preview?.timeH ?: result.timeH, (preview?.values ?: result.e2).let { values -> DoubleArray(values.size) { values[it] * factor } },
-                    result.bandInner?.takeIf { preview==null }?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
-                    result.bandOuter?.takeIf { preview==null }?.let { (l, h) -> DoubleArray(l.size) { l[it] * factor } to DoubleArray(h.size) { h[it] * factor } },
-                    nowH, m2ChartLabs(preview, result.labs, factor), unit = chartUnit,includeBandsInScale=fullBand,breaks=if(preview==null) result.calibrationBreaks else doubleArrayOf(),readAt={hour,cancel->cancel();(if(preview==null) result.evaluateAt(hour,cancel)?.center else preview.valueAt(hour))?.times(factor)})
-                key(rangeDays) {
-                    ConcChart(data, nowH - rangeDays * 24 * 0.75, nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(260.dp).then(if(preview!=null) Modifier.testTag("unified-chart") else Modifier)) { if(it>=10)it.roundToInt().toString() else chartNumber.format(it) }
+                Text(stringResource(R.string.ui12_curve_title), style = MaterialTheme.typography.titleMedium)
+                val ranges = listOf(3, 7)
+                AdaptiveChoice(ranges.map { stringResource(R.string.days_short, it) }, ranges.indexOf(rangeDays), { rangeDays = ranges[it] })
+                val nowH = total.nowH
+                val noon = stringResource(R.string.ui12_noon_tick)
+                val spoken = stringResource(if (settings.pmol) R.string.ui12_unit_pmol_spoken else R.string.ui12_unit_pg_spoken)
+                val data = remember(total, result, factor, doseTimes, rangeDays, noon, spoken, unit) {
+                    E2Total.chartData(total, result?.labs.orEmpty(), factor, doseTimes, rangeDays, unit, noon, spoken)
                 }
-                if(preview==null) {
-                    SwitchRow(stringResource(R.string.chart_full_band),fullBand){fullBand=it}
-                    if(!fullBand)Text(stringResource(R.string.chart_scale_note),style=MaterialTheme.typography.bodySmall)
+                val hasDoseMarks = data.marks.isNotEmpty()
+                key(rangeDays) {
+                    ConcChart(data, nowH - rangeDays * 24.0, nowH + if (rangeDays == 3) 12.0 else 24.0, Modifier.fillMaxWidth().height(260.dp).testTag("e2-chart")) { if(it>=10)it.roundToInt().toString() else chartNumber.format(it) }
                 }
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Legend(stringResource(R.string.legend_recorded), MaterialTheme.colorScheme.primary, dashed = false)
-                    Legend(stringResource(if(preview==null) R.string.legend_forecast else R.string.uc_original_tail), MaterialTheme.colorScheme.primary, dashed = true)
-                    if (preview==null && result.labs.isNotEmpty()) Legend(stringResource(R.string.legend_labs), MaterialTheme.colorScheme.tertiary, dot = true)
-                    if (preview==null && result.bandInner != null) Legend(stringResource(R.string.legend_band_inner), MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), block = true)
-                    if (preview==null && result.bandOuter != null) Legend(stringResource(R.string.legend_band_outer), MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), block = true)
+                    Legend(stringResource(R.string.ui12_legend_tail), MaterialTheme.colorScheme.primary, dashed = true)
+                    if (!result?.labs.isNullOrEmpty()) Legend(stringResource(R.string.legend_labs), MaterialTheme.colorScheme.tertiary, dot = true)
+                    if (hasDoseMarks) Legend(stringResource(R.string.legend_doses), MaterialTheme.colorScheme.secondary, tick = true)
                 }
-                if(preview==null) FlagNotes(result.flags[Curve.E2].orEmpty())
-                Text(stringResource(R.string.pk_chart_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(stringResource(R.string.pk_unit),style=MaterialTheme.typography.bodyMedium)
                 AdaptiveChoice(listOf("pg/mL","pmol/L"),if(settings.pmol)1 else 0,{onSettings(ConcSettings(it==1,settings.calibrate,settings.mode))})
             }
-            if(preview!=null && result.labs.isNotEmpty()) SectionCard(stringResource(R.string.m2_observed_labs), Modifier.testTag("m2-labs-separate")) {
-                Text(stringResource(R.string.m2_labs_separate_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                val formatter = remember(chartLocale) { java.time.format.DateTimeFormatter.ofLocalizedDateTime(java.time.format.FormatStyle.SHORT).withLocale(chartLocale).withZone(java.time.ZoneId.systemDefault()) }
-                result.labs.sortedByDescending { it.first }.forEach { (hour, value) ->
-                    Text(formatter.format(java.time.Instant.ofEpochMilli((hour * 3_600_000).toLong())) + " — " + fmt(value) + " " + unit, style = MaterialTheme.typography.bodyMedium)
-                }
-            }
-        } else if (loading) Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-        else if (preview==null && result != null && result.usedDoses==0 && result.simulatedMedications.isNotEmpty() && result.others.isEmpty())
+            statusCards()
+        } else if (pending || loading) Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+        else if (!previewReady && result != null && result.usedDoses==0 && result.others.isEmpty() && !compatibilityHasSl && state.medications.any { it.molecule in listOf("E2", "CPA", "SPI", "P4") })
             EmptyState(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.pk_no_doses_title), stringResource(R.string.pk_no_doses_body))
 
-        if (result != null && result.others.isNotEmpty()) OtherCurvesCard(result, populationNote = preview != null)
+        if (result != null && result.others.isNotEmpty()) OtherCurvesCard(result)
 
-        if(m2Only && (preview!=null || compatibilityHasSl)) SectionCard(stringResource(R.string.calib_title)) {
-            Text(stringResource(R.string.m2_calibration_unavailable),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("m2-calibration-unavailable"))
+        if (compatibilityHasSl || previewReady) SectionCard(stringResource(R.string.calib_title)) {
+            // The label has its own line so it never wraps into a narrow column beside the pill and the disabled switch (320 dp, 2x text).
+            Text(stringResource(R.string.calib_enable), style = MaterialTheme.typography.bodyLarge)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                StatusPill(stringResource(R.string.ui12_calib_unavailable), MaterialTheme.colorScheme.surfaceContainerHighest, MaterialTheme.colorScheme.onSurfaceVariant)
+                Spacer(Modifier.weight(1f))
+                Switch(checked = false, onCheckedChange = {}, enabled = false, modifier = Modifier.testTag("calibration-switch"))
+            }
+            Text(stringResource(R.string.ui12_calib_unavailable_sl),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("calibration-unavailable-sl"))
             OutlinedButton(onClick=onOpenLabs,modifier=Modifier.heightIn(min=48.dp)) { Text(stringResource(R.string.calib_manage_labs)) }
-        } else {
-            if(m2Only) Text(stringResource(R.string.m2_calibration_compatibility_scope),style=MaterialTheme.typography.bodySmall)
-            CalibrationCard(result, settings, onSettings, onOpenLabs, ::fmt, unit)
-        }
+        } else CalibrationCard(result, settings, onSettings, onOpenLabs, ::fmt, unit)
 
         SectionCard(stringResource(R.string.pk_model_title)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -179,16 +160,91 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
                 }
                 TextButton(onClick = { editWeight = true }) { Text(stringResource(R.string.edit)) }
             }
-            Text(stringResource(if(m2Only && preview!=null) R.string.m2_weight_scope else R.string.pk_weight_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             HorizontalDivider()
-            Text(stringResource(if(m2Only && preview!=null) R.string.m2_parameter_scope else R.string.pk_assumptions), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(stringResource(R.string.pk_source), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(onClickLabel = stringResource(R.string.ui12_models_title)) { modelsOpen = true }.testTag("models-literature-open"),
+                verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text(stringResource(R.string.ui12_models_title), style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.ui12_models_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
         }
-        val visibleModels=if(m2Only) result?.models.orEmpty().filterKeys { preview==null && !compatibilityHasSl || it!=Curve.E2 }.mapValues { (_,models) -> models.filterNot { it.key=="E2_SL" }.toSet() }.filterValues { it.isNotEmpty() } else result?.models.orEmpty()
-        if (visibleModels.isNotEmpty()) ModelsCard(visibleModels)
     }
+    if (modelsOpen) ModelsAndLiteratureWindow(result, e2NonSublingual, previewReady, basisNotice) { modelsOpen = false }
     repair?.let{med->HistoricalContextDialog(med,profiles[med.id],records.map{r->r.copy(config_snapshot=net.plainnotes.app.data.HistoricalContext.resolved(r,state.ruleSnapshots))},{repair=null}){m,p,from,to->onConfirmHistory(m,p,from,to);repair=null}}
     if (editWeight) WeightDialog(weight, { editWeight = false }) { onWeight(it); editWeight = false }
+}
+
+@Composable private fun routeName(route: E2Total.Route) = stringResource(when (route) {
+    E2Total.Route.SUBLINGUAL -> R.string.ui12_route_sl; E2Total.Route.ORAL -> R.string.ui12_route_oral; E2Total.Route.GEL -> R.string.ui12_route_gel
+    E2Total.Route.PATCH -> R.string.ui12_route_patch; E2Total.Route.INJECTION -> R.string.ui12_route_injection
+})
+
+/** The result first: label, the total now, the routes added and how many doses it rests on, and the one reminder sentence. */
+@Composable private fun E2EstimateCard(total: E2Total.Curve, result: ConcentrationResult?, fmt: (Double) -> String, unit: String) {
+    val locale = currentLocale()
+    fun cap(text: String) = text.replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+    val names = total.routes.map { routeName(it) }
+    ElevatedCard(Modifier.fillMaxWidth().testTag("e2-estimate-card"), colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.primaryContainer), elevation = CardDefaults.elevatedCardElevation(0.dp)) {
+        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                val label = if (total.routes.size == 1) stringResource(R.string.ui12_label_single, cap(names.single())) else stringResource(R.string.ui12_label_total)
+                Text(label, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.testTag("e2-label"))
+                if (total.calibrated) StatusPill(stringResource(R.string.ui12_label_calibrated), MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.primary)
+            }
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(total.nowValue?.let(fmt) ?: "—", style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.testTag("e2-now-value"))
+                Spacer(Modifier.width(6.dp))
+                Text(unit, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.padding(bottom = 8.dp))
+            }
+            val phrase = if (names.size == 1) cap(names.single()) else stringResource(R.string.ui12_sum_phrase,
+                names.dropLast(1).let { head -> if (head.size == 1) stringResource(R.string.ui12_list_last, head.single(), names.last())
+                    else stringResource(R.string.ui12_list_last, head.joinToString(stringResource(R.string.list_separator)), names.last()) })
+            Text(stringResource(R.string.ui12_basis, phrase, total.doseCount), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.testTag("e2-basis"))
+            if ((result?.skippedDoses ?: 0) > 0) Text(stringResource(R.string.pk_skipped_doses, result!!.skippedDoses), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
+            Spacer(Modifier.height(4.dp))
+            Text(stringResource(R.string.ui12_reminder), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.testTag("e2-reminder"))
+        }
+    }
+}
+
+/**
+ * "Model and literature": every explanation that used to sit on the page (nothing is deleted, only moved here): the research note,
+ * calculation time and basis, assumptions, weight and parameter scope, sources, flags and the model cards.
+ */
+@Composable private fun ModelsAndLiteratureWindow(result: ConcentrationResult?, nonSublingual: ConcentrationResult?, previewReady: Boolean,
+                                                 basisNotice: @Composable () -> Unit, onClose: () -> Unit) {
+    androidx.compose.ui.window.Dialog(onDismissRequest = onClose, properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)) {
+        Surface(Modifier.fillMaxSize().testTag("models-literature-window"), color = MaterialTheme.colorScheme.surface) {
+            Column(Modifier.fillMaxSize().systemBarsPadding()) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                    NavBackButton(onClose, "models-literature-back")
+                    Text(stringResource(R.string.ui12_models_title), style = MaterialTheme.typography.titleLarge)
+                }
+                Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    if (previewReady) Text(stringResource(R.string.m2_scenario_body), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("research-not-personal"))
+                    basisNotice()
+                    Text(stringResource(R.string.pk_disclaimer_short), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.ui12_baseline_once), style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("baseline-once-note"))
+                    Text(stringResource(if (previewReady) R.string.m2_weight_scope else R.string.pk_weight_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    HorizontalDivider()
+                    Text(stringResource(if (previewReady) R.string.m2_parameter_scope else R.string.pk_assumptions), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.pk_source), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    (result?.flags?.get(Curve.E2).orEmpty() + nonSublingual?.flags?.get(Curve.E2).orEmpty()).let { FlagNotes(it) }
+                    val sublingualInResult = result?.models?.get(Curve.E2)?.any { it.key == "E2_SL" } == true
+                    val models = result?.models.orEmpty().mapValues { (curve, set) ->
+                        when {
+                            curve != Curve.E2 -> set
+                            previewReady || sublingualInResult -> nonSublingual?.models?.get(Curve.E2).orEmpty()   // sublingual is M2 (above); never the retired model card
+                            else -> set
+                        }
+                    }.filterValues { it.isNotEmpty() }
+                    if (models.isNotEmpty()) ModelsCard(models)
+                }
+            }
+        }
+    }
 }
 
 @Composable internal fun CalibrationCard(result: ConcentrationResult?, settings: ConcSettings, onSettings: (ConcSettings) -> Unit, onOpenLabs: () -> Unit, fmt: (Double) -> String, unit: String) {
@@ -239,12 +295,13 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
     }
 }
 
-@Composable private fun Legend(label: String, color: androidx.compose.ui.graphics.Color, dashed: Boolean = false, dot: Boolean = false, block: Boolean = false) {
+@Composable private fun Legend(label: String, color: androidx.compose.ui.graphics.Color, dashed: Boolean = false, dot: Boolean = false, block: Boolean = false, tick: Boolean = false) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         androidx.compose.foundation.Canvas(Modifier.size(width = 22.dp, height = 10.dp)) {
             val y = size.height / 2
             when {
                 dot -> drawCircle(color, size.height / 2, center)
+                tick -> drawLine(color, androidx.compose.ui.geometry.Offset(size.width / 2, 0f), androidx.compose.ui.geometry.Offset(size.width / 2, size.height), 1.5.dp.toPx())
                 block -> drawRect(color)
                 else -> drawLine(color, androidx.compose.ui.geometry.Offset(0f, y), androidx.compose.ui.geometry.Offset(size.width, y), 2.dp.toPx(),
                     pathEffect = if (dashed) androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(8f, 6f)) else null)
@@ -279,36 +336,29 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
         Text(stringResource(when (f) {
             CurveFlag.EXTRAPOLATED_TIER -> R.string.flag_extrapolated_tier; CurveFlag.EXTRAPOLATED_AFTER_CALIBRATED_HOURS -> R.string.flag_after_8h
             CurveFlag.NO_PRODUCT_DATA -> R.string.flag_no_product_data; CurveFlag.ILLUSTRATIVE -> R.string.flag_illustrative
-        }), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+        }), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
-/** CPA, spironolactone, canrenone and progesterone: one chart at a time, each with its own unit and axis. */
-@Composable private fun OtherCurvesCard(result: ConcentrationResult, populationNote: Boolean = false) {
+/** CPA, spironolactone, canrenone and progesterone: one chart at a time, each with its own unit and axis. UI-12: 3 or 7 days, no interval bands. */
+@Composable private fun OtherCurvesCard(result: ConcentrationResult) {
     val curves = result.others.keys.sortedBy { it.ordinal }
     var selected by remember(curves) { mutableStateOf(curves.first()) }
-    var rangeDays by remember { mutableIntStateOf(14) }
-    var fullBand by remember { mutableStateOf(false) }
+    var rangeDays by rememberSaveable { mutableIntStateOf(3) }
     SectionCard(stringResource(R.string.pk_other_title)) {
-        if (populationNote) Text(stringResource(R.string.pk_disclaimer_short), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             curves.forEach { c -> FilterChip(selected == c, { selected = c }, label = { Text(curveLabel(c)) }) }
         }
         val b: BandedCurve = result.others.getValue(selected)
-        val data = ChartData(b.timeH, b.center, b.p25 to b.p75, b.p5 to b.p95, result.nowH, unit = selected.unit,includeBandsInScale=fullBand)
-        val ranges=listOf(7,14,60)
+        val noon = stringResource(R.string.ui12_noon_tick)
+        val data = ChartData(b.timeH, b.center, null, null, result.nowH, unit = selected.unit, axisDays = true, noonLabel = noon, lineWidthDp = if (rangeDays == 3) 2.6f else 2f)
+        val ranges=listOf(3,7)
         AdaptiveChoice(ranges.map{stringResource(R.string.days_short,it)},ranges.indexOf(rangeDays),{rangeDays=ranges[it]})
         val loc = currentLocale()
         val nf = remember(loc) { java.text.NumberFormat.getNumberInstance(loc).apply { maximumFractionDigits = 1; isGroupingUsed = false } }
         key(selected, rangeDays) {
-            ConcChart(data, result.nowH - rangeDays * 24 * 0.75, result.nowH + rangeDays * 24 * 0.25, Modifier.fillMaxWidth().height(220.dp)) { v ->
+            ConcChart(data, result.nowH - rangeDays * 24.0, result.nowH + if (rangeDays == 3) 12.0 else 24.0, Modifier.fillMaxWidth().height(220.dp).testTag("other-chart")) { v ->
                 if (v >= 10) v.roundToInt().toString() else nf.format(v) }
-        }
-        SwitchRow(stringResource(R.string.chart_full_band),fullBand){fullBand=it}
-        if(!fullBand)Text(stringResource(R.string.chart_scale_note),style=MaterialTheme.typography.bodySmall)
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Legend(stringResource(R.string.legend_band_inner), MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), block = true)
-            Legend(stringResource(R.string.legend_band_outer), MaterialTheme.colorScheme.primary.copy(alpha = 0.15f), block = true)
         }
         FlagNotes(result.flags[selected].orEmpty())
         when (selected) {
@@ -423,10 +473,3 @@ class ConcSettings(val pmol: Boolean, val calibrate: Boolean, val mode: Calibrat
             }}
         }},confirmButton={TextButton(onClick={details=false}){Text(stringResource(R.string.calib_history_done))}})
 }
-
-/** D-1: the M2 chart uses its snapshot's own time base, never the separately refreshed Legacy result's. */
-internal fun m2ChartNowH(preview: net.plainnotes.app.experimental.ConcentrationPreview?, legacyNowH: Double) = preview?.asOfH ?: legacyNowH
-
-/** D-1: measured labs are never drawn on the M2 scenario curve (they are listed separately); Legacy keeps its dots. */
-internal fun m2ChartLabs(preview: net.plainnotes.app.experimental.ConcentrationPreview?, labs: List<Pair<Double, Double>>, factor: Double) =
-    if (preview != null) emptyList() else labs.map { it.first to it.second * factor }
