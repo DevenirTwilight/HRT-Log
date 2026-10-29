@@ -77,25 +77,25 @@ class MedicalAttachmentProductAndroidTest {
     }
     /** Semantics lookup is a test API; coordinate resolution can measure/draw an Owner
      * and must execute on the same main thread as its AndroidComposeView. */
-    private fun bounds(node:SemanticsNodeInteraction):androidx.compose.ui.geometry.Rect {
-        val semantic=node.fetchSemanticsNode()
+    private fun bounds(matcher:SemanticsMatcher):androidx.compose.ui.geometry.Rect {
+        val semantic=ui.onAllNodes(matcher).fetchSemanticsNodes().single()
         return ui.runOnIdle {semantic.boundsInRoot}
     }
     /**
      * performScrollTo() aligns a row with the viewport edge, which on a 320x640 screen is behind the status/navigation bars and
      * the floating add button. A person scrolls until the row is comfortably inside; so does this, with real swipes on the list.
      */
-    private fun bounds(node:SemanticsNodeInteraction):androidx.compose.ui.geometry.Rect {
-        val semantic=node.fetchSemanticsNode()
+    private fun bounds(matcher:SemanticsMatcher):androidx.compose.ui.geometry.Rect {
+        val semantic=ui.onAllNodes(matcher).fetchSemanticsNodes().single()
         return ui.runOnIdle {semantic.boundsInRoot}
     }
-    private fun scrollIntoComfort(list:String,node:SemanticsNodeInteraction) {
+    private fun scrollIntoComfort(list:String,node:SemanticsNodeInteraction,matcher:SemanticsMatcher) {
         node.performScrollTo()
         repeat(4) {
             // Do not make fetchOneOrThrow print the full dynamic root on the test thread.
             val rootNode=ui.onAllNodes(isRoot()).fetchSemanticsNodes().first()
             val root=ui.runOnIdle {rootNode.boundsInRoot}
-            val bounds=bounds(node)
+            val bounds=bounds(matcher)
             val margin=root.height*0.2f
             val shift=when {bounds.bottom>root.bottom-margin->-(bounds.bottom-(root.bottom-margin)+16f)
                 bounds.top<root.top+margin->(root.top+margin-bounds.top)+16f else->0f}
@@ -164,12 +164,12 @@ class MedicalAttachmentProductAndroidTest {
         await {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty() || ui.onAllNodes(collapsedDraw).fetchSemanticsNodes().isNotEmpty()}
         // The floating add button overlaps the centre of this wide control on 320 dp; tap its free left part.
         if(ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isEmpty()) {
-            scrollIntoComfort("labs-home",ui.onAllNodes(collapsedDraw).onFirst())
+            scrollIntoComfort("labs-home",ui.onAllNodes(collapsedDraw).onFirst(),collapsedDraw)
             ui.onAllNodes(collapsedDraw).onFirst().performTouchInput {click(androidx.compose.ui.geometry.Offset(width*0.12f,center.y))}
         }
         await {ui.onAllNodesWithTag("lab-group-row:$id").fetchSemanticsNodes().isNotEmpty()}
         val row=ui.onNodeWithTag("lab-group-row:$id")
-        scrollIntoComfort("labs-home",row)
+        scrollIntoComfort("labs-home",row,hasTestTag("lab-group-row:$id"))
         // The real Labs FAB overlaps the right side of a low visible row on 320dp.
         // Tap its unobscured label side, relative to the actual semantic row bounds.
         // This is still a real touch on the existing result, not a ViewModel/URI shortcut.
@@ -364,9 +364,9 @@ class MedicalAttachmentProductAndroidTest {
         val label=context.getString(R.string.attach_item_description,saved.title,text(R.string.attach_kind_image),text(R.string.attach_status_saved))
         press(hasContentDescription(label))
         await {ui.onAllNodesWithTag("attachment-viewer-page").fetchSemanticsNodes().isNotEmpty()}
-        val closeBounds=bounds(ui.onNodeWithTag("attachment-viewer-close"))
-        val readerBounds=bounds(ui.onNodeWithTag("attachment-viewer"))
-        val viewport=bounds(ui.onNodeWithTag("attachment-viewer-viewport"))
+        val closeBounds=bounds(hasTestTag("attachment-viewer-close"))
+        val readerBounds=bounds(hasTestTag("attachment-viewer"))
+        val viewport=bounds(hasTestTag("attachment-viewer-viewport"))
         assertTrue("Reader Back belongs to the independent fullscreen window",closeBounds.top>=readerBounds.top && closeBounds.bottom<=viewport.top)
         assertEquals(readerBounds.width,viewport.width,1f)
         tag("attachment-viewer-close")
@@ -561,11 +561,11 @@ class MedicalAttachmentProductAndroidTest {
                 ui.onNodeWithTag("attachment-viewer-page-number").assert(hasText(context.getString(R.string.med05_page_of,3,3)))
                 nativeReaderShot("pdf-zoom-pan");tag("attachment-viewer-zoom-reset")
                 ui.onNodeWithTag("attachment-viewer-zoom-reset").assertIsNotEnabled()
-                val before=bounds(ui.onNodeWithTag("attachment-viewer-viewport")).height
+                val before=bounds(hasTestTag("attachment-viewer-viewport")).height
                 ui.onNodeWithTag("attachment-viewer-page").performTouchInput {click()}
                 await {ui.onAllNodesWithTag("attachment-viewer-controls").fetchSemanticsNodes().isEmpty()}
-                val full=bounds(ui.onNodeWithTag("attachment-viewer-viewport"))
-                assertEquals(bounds(ui.onNodeWithTag("attachment-viewer-safe-area")),full)
+                val full=bounds(hasTestTag("attachment-viewer-viewport"))
+                assertEquals(bounds(hasTestTag("attachment-viewer-safe-area")),full)
                 assertTrue(full.height>before);nativeReaderShot("pdf-controls-hidden")
                 ui.onNodeWithTag("attachment-viewer-page").performTouchInput {click()}
                 await {ui.onAllNodesWithTag("attachment-viewer-close").fetchSemanticsNodes().isNotEmpty()}
@@ -612,19 +612,19 @@ class MedicalAttachmentProductAndroidTest {
         ui.onNode(hasText(after) and hasAnyAncestor(hasTestTag("file-detail")),useUnmergedTree=true).assertExists()
     }
     private fun assertNativeReadingArea() {
-        val viewport=bounds(ui.onNodeWithTag("attachment-viewer-viewport"))
-        val toolbar=bounds(ui.onNodeWithTag("attachment-viewer-toolbar"))
-        val controls=bounds(ui.onNodeWithTag("attachment-viewer-controls"))
-        val safe=bounds(ui.onNodeWithTag("attachment-viewer-safe-area"))
+        val viewport=bounds(hasTestTag("attachment-viewer-viewport"))
+        val toolbar=bounds(hasTestTag("attachment-viewer-toolbar"))
+        val controls=bounds(hasTestTag("attachment-viewer-controls"))
+        val safe=bounds(hasTestTag("attachment-viewer-safe-area"))
         assertEquals(safe.width,viewport.width,1f);assertEquals(toolbar.bottom,viewport.top,1f);assertEquals(controls.top,viewport.bottom,1f)
-        assertEquals(viewport,bounds(ui.onNodeWithTag("attachment-viewer-page")))
+        assertEquals(viewport,bounds(hasTestTag("attachment-viewer-page")))
         ui.onAllNodesWithTag("attachment-viewer-linked").assertCountEquals(0);ui.onAllNodesWithTag("attachment-viewer-details").assertCountEquals(0)
     }
     private fun nativeReaderShot(name:String) {
         ui.waitForIdle()
         val bitmap=requireNotNull(instrumentation.uiAutomation.takeScreenshot()) {"Actual device screenshot unavailable"}
         try {
-            val reader=bounds(ui.onNodeWithTag("attachment-viewer"))
+            val reader=bounds(hasTestTag("attachment-viewer"))
             assertEquals("Reader covers the native display width",bitmap.width.toFloat(),reader.width,2f)
             assertEquals("Reader covers the native display height",bitmap.height.toFloat(),reader.height,2f)
             java.io.File(context.filesDir,"synthetic-reader-$name.png").outputStream().use {assertTrue(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,it))}
