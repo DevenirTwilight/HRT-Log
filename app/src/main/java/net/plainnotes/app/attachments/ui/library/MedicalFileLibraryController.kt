@@ -32,6 +32,7 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
     private var closed=false
     private var writing:Job?=null
     private var selection=0L
+    private var refreshGeneration=0L
     private val revoked=gateway.onRevoked {
         thumbnails.clear()
         mutable.value=State(loading=false,revoked=true,outcome=mutable.value.outcome)
@@ -47,14 +48,15 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
     fun refresh() {
         if(closed || state.value.revoked)return
         files.refresh()
+        val generation=++refreshGeneration
         scope.launch {
             try {
                 val docs=withContext(io) {gateway.documents()}
                 // The file list never waits for, or fails with, the user's own notes about the files.
                 val details=try {withContext(io) {gateway.details()}}catch(e:CancellationException) {throw e}catch(_:Exception) {null}
-                if(!closed && !state.value.revoked)mutable.update {it.copy(documents=docs,details=details.orEmpty(),detailsFailed=details==null,loading=false,failed=false)}
+                if(!closed && !state.value.revoked && generation==refreshGeneration)mutable.update {it.copy(documents=docs,details=details.orEmpty(),detailsFailed=details==null,loading=false,failed=false)}
             }catch(e:CancellationException) {throw e}
-            catch(_:Exception) {if(!closed && !state.value.revoked)mutable.update {it.copy(loading=false,failed=true,outcome=if(it.outcome==Outcome.COMMITTED)Outcome.LIST_STALE else it.outcome)}}
+            catch(_:Exception) {if(!closed && !state.value.revoked && generation==refreshGeneration)mutable.update {it.copy(loading=false,failed=true,outcome=if(it.outcome==Outcome.COMMITTED)Outcome.LIST_STALE else it.outcome)}}
         }
     }
     fun select(document:UUID?) {
@@ -116,6 +118,7 @@ internal class MedicalFileLibraryController(private val gateway:MedicalFileGatew
         if(!canWrite() || document.state!="ACTIVE" || state.value.detailsFailed || !Ops.validTitle(title))return
         val revision=state.value.details[document.document]?.revision ?: 0L
         val operation=UUID.randomUUID();pendingInfo=operation to document.document
+        refreshGeneration++ // An earlier list read cannot overwrite the real CAS receipt with an old name.
         files.closeViewer()
         mutable.update {it.copy(outcome=Outcome.WORKING,detailOutcome=DetailOutcome.NONE)}
         val worker=operation to document.document

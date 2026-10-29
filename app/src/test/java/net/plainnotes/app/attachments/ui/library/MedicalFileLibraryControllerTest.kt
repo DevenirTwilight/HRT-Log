@@ -25,7 +25,12 @@ class MedicalFileLibraryControllerTest {
         var relation:Pair<UUID,UUID>?=null;var life:Pair<UUID,UUID>?=null;var fact:Ops.RelationReceipt?=null
         val revoked=mutableListOf<()->Unit>()
         override fun pending():Pair<UUID,UUID>?=null
-        override suspend fun documents():List<Ops.Document> {documentReads++;if(failList)error("synthetic refresh failure");return docs}
+        var pauseNextDocumentRead:CompletableDeferred<Unit>?=null
+        override suspend fun documents():List<Ops.Document> {
+            documentReads++;if(failList)error("synthetic refresh failure")
+            val snapshot=docs;val pause=pauseNextDocumentRead;pauseNextDocumentRead=null
+            pause?.await();return snapshot
+        }
         override suspend fun pickerIntent()=Intent(Intent.ACTION_OPEN_DOCUMENT)
         override suspend fun preview(document:UUID):MedicalAttachmentGateway.Preview=error("not used")
         override suspend fun newImport(title:String):MedicalAttachmentGateway.Import=error("not used")
@@ -137,6 +142,17 @@ class MedicalFileLibraryControllerTest {
             assertEquals(MedicalFileLibraryController.DetailOutcome.SAVED,c.state.value.detailOutcome)
             assertEquals(document.copy(title="2026年10月雌二醇化验报告.pdf",revision=2),c.state.value.documents.single())
             assertEquals(typed.copy(revision=1),c.state.value.details.getValue(document.document))
+        }
+    }
+    @Test fun aListReadThatStartedBeforeTheRenameCannotRepublishTheOldNameAfterItsCommit() {
+        val g=Gateway().apply {docs=listOf(document)}
+        controller(g).use {c->
+            val oldRead=CompletableDeferred<Unit>();g.pauseNextDocumentRead=oldRead;c.refresh()
+            c.saveFileInfo(document,"New authoritative name",typed)
+            assertEquals("New authoritative name",c.state.value.documents.single().title)
+            oldRead.complete(Unit)
+            assertEquals("New authoritative name",c.state.value.documents.single().title)
+            assertEquals(MedicalFileLibraryController.DetailOutcome.SAVED,c.state.value.detailOutcome)
         }
     }
     @Test fun aCommittedRenameKeepsItsReceiptAndNewNameWhenTheFollowingRefreshFails() {
