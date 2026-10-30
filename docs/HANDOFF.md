@@ -1,3 +1,11 @@
+## PK-FR 第一阶段正在实施 — 2026-10-30（实时入库）
+
+- **最新负责人指令**：「开始做，全部成果实时入库」；覆盖未建模的雌激素/睾酮剂型，也使用法国官方 RCP §5.2 核验既有模型。不是仅做研究报告，亦不得伪称所有剂型已完成。
+- 已提交到 `feature/pk-france-estreva-20261030`：`E2_GEL_ESTREVA` 独立于 `E2_GEL_OTHER`；直接来源 ANSM ESTREVA 2026-07-06 RCP（CIS 63216075），单次1.5 mg Cmax≈40 pg/mL、重复给药Cmax≈70、24h≈40、4日趋稳。假设单吸收指数核、零基线、线性24h重复并由这3个汇总锚拟合 ka≈0.2692/h、lambda≈0.04048/h、A≈43.89 pg/mL/mg；由参数得表观半衰期≈17.1h**是模型假设，不是法国官方测得**。已加来源条目、单/多次锚回归、泛凝胶保留 NO_PRODUCT_DATA、四语名称及 UI 文献身份；专用模型使用既有 ILLUSTRATIVE 标签。版本、schema、签名、旧化验快照不改。以上只是模拟函数锚点回归，**不是独立临床验证**。
+- 代码查验事实：`Curve` 尚无 TESTOSTERONE、`ConcentrationCalculator.simulated` 暂不消费 T；现有 EV/EC/EB/EN/EU 注射只有 EV_IM。法国官方还核实 ANDROTARDYL TE 250mg IM、NEBIDO TU 1000mg IM，须区分 T 总浓度与未知基线后再决定给药增加量定标；按产品开发多剂量验证和长区间图形。
+- **待运行/未做**：本分支尚无完成的 Gradle/Android/CI、官方数值未作独立 held-out 验证、未完成 T 模型或 UI、未签名/交付 APK、真机/TalkBack NOT_RUN。不得让这些变成已完成声称。
+- 法国源台账：`docs/pk-research/france-official-rcp-coverage-2026-10-30.md`（#168，尚待合并时可用 PR 链接）。后续每完成一批继续在此顶部追加带提交/CI/来源/科学限制的状态。
+
 ## Build 41 已签名并私下交付 — 2026-10-30
 
 - **交付物**：`HRT-Log-build41-full-official.apk`，versionCode 41 / 0.2.0 / `net.plainnotes.app`，14,544,030 字节，SHA-256 `a5cc50eaff2ac2d86b563157b6003bcd9e3d56719557972d1abeb0da855a2970`；原正式证书 `989ba045…79b1`，v2/v3 通过、单签名者；**取代 Build 40**。负责人 2026-10-30 明确授权（“我授权签名”）；只在会话内私下发给负责人，不入 Git/CI/公开 Release/tag。
