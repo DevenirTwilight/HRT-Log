@@ -6,6 +6,15 @@
 - 注意：Robolectric 下 `waitUntil` 只推进帧时钟、不让主线程 looper 空闲；条件里不碰 Compose 节点时，要先 `waitForIdle()`，否则投递到主线程的续体不会执行。
 - 待做：PR CI 全绿后自动合并；设备测试（attachment-poc 26/29）是否不再出现同类故障，看接下来几次 CI。
 
+## Build 41 已签名并私下交付 — 2026-10-30
+
+- **交付物**：`HRT-Log-build41-full-official.apk`，versionCode 41 / 0.2.0 / `net.plainnotes.app`，14,544,030 字节，SHA-256 `a5cc50eaff2ac2d86b563157b6003bcd9e3d56719557972d1abeb0da855a2970`；原正式证书 `989ba045…79b1`，v2/v3 通过、单签名者；**取代 Build 40**。负责人 2026-10-30 明确授权（“我授权签名”）；只在会话内私下发给负责人，不入 Git/CI/公开 Release/tag。
+- **来源**：干净 `84135556`（#165 合并后的主线）+ 源码外 `version41.init.gradle`（仅 versionCode 40→41，哈希见收据）；未签名包 SHA-256 `830fc229…449b`。内容：UI-13 ①②（暖白底色、蓝/紫/玫红点缀、化验与浓度紫、复诊与医疗档案蓝）、UI-14 复诊页、校准卡三个按钮同一换行行、PDF 文件方块蓝色。
+- **核验**（收据 `docs/delivery/build41-private-verification.json`）：签名前后 324 个业务条目逐字节一致；原生库 64 位 ELF 与 ZIP 均 16KiB 对齐；无 INTERNET、非 debug；密钥临时副本已 shred。账本追加 41，源码默认 versionCode 同步 41。
+- **CI 如实记录**：签名时主线 `84135556` 自己的 CI 还没跑完；被构建的树与 #165 头 `7f9293f1` 上 CI 实际跑过的树相同（严格 up-to-date 合并），那里所有必需检查最终成功，但其中几个失败 job 各重跑了一次（API 26 模拟器连接被拒；API 29 的 Compose `SnapshotStateObserver` 多线程；`MedicalHomeConfirmFlowTest` 超时），Compose 类根因仍未证明。
+- 未做（NOT_RUN）：真机安装、人工 TalkBack、覆盖升级真实 APK 测试；不是公开 Beta。覆盖安装前先导出完整备份，不卸载、不清数据。
+- 待负责人确认（真机）：配色是否过多或过少；UI-14 复诊页的大卡与卡片；校准卡三个按钮在手机宽度下是 2 行；PDF 方块用蓝色是否合适；医疗档案里复诊文件的蓝色圆圈；`ConcChart` 里服药刻度的淡青绿是否看得清。
+
 ## UI-13 ②（化验/浓度/身心/医疗档案点缀）+ 校准卡按钮行 + PDF 文件方块 — 2026-10-30
 
 - 分支 `feature/ui13-accents-2-20261030`：颜色只改显示（REQUIREMENTS §175）；`ConcChart.kt`、`ConcentrationScreen.kt` 按受保护文件流程写了批准记录（`display-approvals-after-archive.json` 追加两条，证据提交 `fe6b3820…`），`Ui08Test` 的 ConcChart 哈希锁登记新哈希，`tools/pk-research/check_protocol.py` 通过。`LabsScreen.kt` 未改（化验行的小图标块在 `LabBatchEntry.kt`）。
