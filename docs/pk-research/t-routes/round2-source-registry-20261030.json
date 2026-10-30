@@ -1,0 +1,251 @@
+{
+  "id": "E2_T_ROUTE_COVERAGE_ROUND2_2026-10-30",
+  "phase": "RESEARCH_ONLY",
+  "scope": "candidate routes lacking production T model or additional E2 product-specific research",
+  "notes": [
+    "Coverage status refers to production engine per docs/BACKLOG.md and studies, not verified APK current inventory.",
+    "No cohort aggregate should be used as personal prediction; summary statistics are not necessarily a self-consistent time series."
+  ],
+  "cohorts": [
+    {
+      "id": "UK_LENZETTO_RCP_DAY14",
+      "analyte": "E2",
+      "form": "transdermal_spray",
+      "jurisdiction": "UK SmPC; not verified French-market listing",
+      "product": "Lenzetto 1.53 mg/spray",
+      "url": "https://www.medicines.org.uk/emc/product/11175/smpc",
+      "source_location": "5.2 Table 2",
+      "days_to_steady": [
+        7,
+        8
+      ],
+      "day": 14,
+      "metric_population": "postmenopausal women; geometric means; unadjusted for baseline",
+      "n_by_sprays": {
+        "1": 24,
+        "2": 23,
+        "3": 24
+      },
+      "spray_count": [
+        1,
+        2,
+        3
+      ],
+      "cmax_pg_ml": [
+        31.2,
+        46.1,
+        48.4
+      ],
+      "cmin_pg_ml": [
+        10.3,
+        16.4,
+        18.9
+      ],
+      "cavg_pg_ml": [
+        17.8,
+        28.2,
+        29.5
+      ],
+      "estrone_cmax_pg_ml": [
+        47.1,
+        58.4,
+        67.4
+      ],
+      "estrone_cmin_pg_ml": [
+        29,
+        39,
+        44.1
+      ],
+      "estrone_cavg_pg_ml": [
+        35.5,
+        48.7,
+        54.8
+      ],
+      "claimed_peak_clock_range": "02:00–06:00 following morning administration",
+      "caveats": [
+        "Geometric means of three distinct metrics; not one mean subject.",
+        "No baseline correction, no clock time of morning dose, no individual raw series.",
+        "Product-specific nonlinearity; no extrapolation beyond 1–3 sprays."
+      ]
+    },
+    {
+      "id": "US_XYOSTED_LABEL_WEEK12",
+      "analyte": "T",
+      "form": "subcutaneous_enanthate",
+      "jurisdiction": "US DailyMed",
+      "product": "Xyosted SC TE, titrated 50/75/100 mg weekly",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8a3d204c-be26-49e0-8599-0ac12a272e81",
+      "source_location": "12.3 Pharmacokinetics Table 3",
+      "n": 137,
+      "metric_population": "hypogonadal men; arithmetic mean of titrated-dose mixed cohort at week 12",
+      "period_hours": 168,
+      "cavg_ng_dl": 553,
+      "cmax_ng_dl": 790,
+      "cmin_ng_dl": 436,
+      "auc_ng_h_dl": 92955,
+      "tmax_median_hours": 11.9,
+      "tmax_range_hours": [
+        5.8,
+        168.7
+      ],
+      "steady_week": 6,
+      "caveats": [
+        "Median of individual Tmax is not the maximum time of cohort mean curve.",
+        "Different 50/75/100mg doses pooled after titration.",
+        "No full numeric individual series; baseline endogenous T unknown."
+      ]
+    },
+    {
+      "id": "US_ANDRODERM_RCP",
+      "analyte": "T",
+      "form": "transdermal_patch",
+      "jurisdiction": "US FDA historic label; discontinued product",
+      "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/020489s036lbl.pdf",
+      "source_location": "12.3 Pharmacokinetics",
+      "tmax_median_hours": 8,
+      "system_duration_hours": 24,
+      "post_removal_apparent_half_life_minutes": 70,
+      "hypogonadal_range_reached_within_hours": 24,
+      "claim_note": "Patch contains more drug than released dose; 2 or 4 mg/day refers to nominal delivered rate, not patch content.",
+      "caveats": [
+        "Historic formulation not interchangeable with other patches.",
+        "Withdrawal curve refers to observed total T return to hypogonadal levels; endogenous baseline remains.",
+        "Median peak alone does not identify a time-varying release function."
+      ]
+    },
+    {
+      "id": "US_JATENZO_ORAL_TU",
+      "analyte": "T",
+      "form": "oral_undecanoate",
+      "jurisdiction": "US DailyMed",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ed7b5d41-7475-4c10-99b9-b62b3434ae60",
+      "source_location": "12.3 Table 3 / food effect",
+      "n": 151,
+      "metric_population": "titrated mixed-dose hypogonadal men, NaF-EDTA plasma NOT ordinary serum",
+      "cavg_24h_ng_dl": 403,
+      "cmax_ng_dl": 1008,
+      "low_fat_15g_vs_30g_breakfast_exposure_ratio": 0.75,
+      "dosing_frequency_per_day": 2,
+      "caveats": [
+        "Plasma values are not equivalent to serum without assay preparation adjustment.",
+        "Food effect is not a universally transferable instantaneous peak scaling.",
+        "Lymphatic absorption, meal time, formulation matter."
+      ]
+    },
+    {
+      "id": "FTM_SC_CYPIONATE_2017",
+      "analyte": "T",
+      "form": "subcutaneous_cypionate",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5686655/",
+      "source_location": "Results / Figure 1; PMC full text",
+      "n": 11,
+      "metric_population": "transgender men on stable weekly SC T cypionate",
+      "between_doses_overall_mean_ng_dl": 627,
+      "between_doses_overall_sd_ng_dl": 206,
+      "pre_injection_ng_dl": 497,
+      "at_6h_ng_dl": 656,
+      "day5_ng_dl": 621,
+      "day7_ng_dl": 477,
+      "caveats": [
+        "Values at 0/6h/5d/7d are group mean ±SD where given, not individuals.",
+        "A pooled mean over seven sampling points is not Cavg via trapezoidal integration.",
+        "T cypionate and enanthate must have separate formulation evidence."
+      ]
+    },
+    {
+      "id": "US_NATESTO_T_NASAL",
+      "analyte": "T",
+      "form": "nasal_gel",
+      "jurisdiction": "US DailyMed",
+      "url": "https://dailymed.awsprod.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=dea6bed1-eaca-11e3-ac10-0800200c9a66&type=display",
+      "source_location": "12.3",
+      "dose_11mg_three_times_daily_ng_dl_avg": 421,
+      "tmax_minutes_approx": 40,
+      "half_life_minutes_range": [
+        10,
+        100
+      ],
+      "n": 69,
+      "caveats": [
+        "Tmax and half-life do not determine peak amplitude or TID basal feedback.",
+        "Product specific; fast mucosal pulses."
+      ]
+    },
+    {
+      "id": "TESTOPEL_IMPLANT_LABEL_AND_OBS",
+      "analyte": "T",
+      "form": "implant_pellet",
+      "jurisdiction": "US DailyMed plus observational research",
+      "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=03b9c0b1-5884-11e4-8ed6-0800200c9a66",
+      "extra_url": "https://pubmed.ncbi.nlm.nih.gov/22240203/",
+      "source_location": "label dosage + multi-institution observational cohort",
+      "n_insertions": 702,
+      "n_people": 380,
+      "per_pellet_mg": 75,
+      "absorbed_material_fraction_month1_approx": 0.3333333333333333,
+      "month2_approx": 0.25,
+      "month3_approx": 0.16666666666666666,
+      "effective_duration_months": [
+        4,
+        6
+      ],
+      "caveats": [
+        "Material dissolution fractions not systemic T C(t).",
+        "Different pellet number and implantation history strongly alter concentrations."
+      ]
+    },
+    {
+      "id": "E2_IMPLANT_TRANS_2023",
+      "analyte": "E2",
+      "form": "implant_pellet",
+      "jurisdiction": "Australia transgender cohort",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37845025/",
+      "source_location": "abstract (not individual data)",
+      "n_people": 38,
+      "n_implants": 88,
+      "most_common_dose_mg": 100,
+      "pct_100mg_dose": 68,
+      "median_reimplant_interval_days": 270,
+      "initial_100mg_time_to_at_or_below_250pmol_l_months": 4,
+      "subsequent_100mg_time_to_at_or_below_250pmol_l_months": 13,
+      "caveats": [
+        "Threshold duration does not define Tmax, trough, baseline, AUC, or post-insertion PK kernel.",
+        "Initial vs repeat differences prohibit assuming no accumulation.",
+        "Compounded formulation cannot be treated as a standardized commercial implant."
+      ]
+    }
+  ],
+  "additional_missing_routes": [
+    {
+      "analyte": "T",
+      "form": "intramuscular_cypionate",
+      "status": "LITERATURE_REVIEW",
+      "comment": "SC cypionate data cannot be directly treated as IM curve"
+    },
+    {
+      "analyte": "T",
+      "form": "buccal",
+      "status": "RESEARCH_MISSING"
+    },
+    {
+      "analyte": "T",
+      "form": "topical_solution",
+      "status": "RESEARCH_MISSING"
+    },
+    {
+      "analyte": "E2",
+      "form": "vaginal_systemic",
+      "status": "PRODUCT_SPECIFIC_RESEARCH_MISSING"
+    },
+    {
+      "analyte": "E2",
+      "form": "injectable_EB_EN_EC_EV_separate",
+      "status": "EXISTING_E2_ENGINE_NEEDS_ESTER_VEHICLE_ROUTE_AUDIT"
+    },
+    {
+      "analyte": "E2",
+      "form": "implant_pellet",
+      "status": "CONDITIONAL_LONG_TERM_EVIDENCE_NOT_IDENTIFIED"
+    }
+  ]
+}
