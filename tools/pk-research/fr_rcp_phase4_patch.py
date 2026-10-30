@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Non-production piecewise skin-depot + 24h patch-release scenario.
 
-ANRODERM historical FDA label: release for 24h and reported ~70min plasma
+ANDRODERM historical FDA label: release for 24h and reported ~70min plasma
 half-life after removal. Effective skin storage is UNIDENTIFIED, so no single
 candidate here is a validated testosterone concentration curve.
 """
