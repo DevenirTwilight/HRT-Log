@@ -133,6 +133,14 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
         if (!hasTotal) statusCards()
         if (total != null) {
             E2EstimateCard(total, result, ::fmt, unit)
+            // Show clinically important limits beside the primary E2 result, not only
+            // behind the model/literature detail sheet. Estreva is ANSM-anchored but
+            // still illustrative; unknown gels must retain their no-product-data flag.
+            val e2ModelFlags = result?.flags?.get(Curve.E2).orEmpty() + e2NonSublingual?.flags?.get(Curve.E2).orEmpty()
+            val visibleLimits = e2ModelFlags.filter {
+                it == CurveFlag.ILLUSTRATIVE || it == CurveFlag.NO_PRODUCT_DATA
+            }.toSet()
+            if (visibleLimits.isNotEmpty()) FlagNotes(visibleLimits)
             var rangeDays by rememberSaveable { mutableIntStateOf(3) }
             SectionCard(null) {
                 Text(stringResource(R.string.ui12_curve_title), style = MaterialTheme.typography.titleMedium)
