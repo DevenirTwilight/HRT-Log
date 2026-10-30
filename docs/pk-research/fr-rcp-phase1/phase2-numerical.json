@@ -154,7 +154,9 @@
         "no_baseline_steady_peak_trough_ratio": 2.3626934976804517,
         "second_peak_total_B0": 17.347673438397646,
         "second_peak_total_B3": 15.616489773380106,
-        "baseline_is_hypothetical": true
+        "baseline_is_hypothetical": true,
+        "fifth_peak_total_B0": 17.9046461802473,
+        "fifth_trough_total_B0": 7.578409247358279
       },
       {
         "release_half_life_days": 60,
@@ -164,7 +166,9 @@
         "no_baseline_steady_peak_trough_ratio": 2.0533763943506274,
         "second_peak_total_B0": 17.948431485147243,
         "second_peak_total_B3": 16.053404716470723,
-        "baseline_is_hypothetical": true
+        "baseline_is_hypothetical": true,
+        "fifth_peak_total_B0": 19.89149999053174,
+        "fifth_trough_total_B0": 9.6890212828344
       },
       {
         "release_half_life_days": 70,
@@ -174,7 +178,9 @@
         "no_baseline_steady_peak_trough_ratio": 1.85664445909675,
         "second_peak_total_B0": 18.413800334637667,
         "second_peak_total_B3": 16.391854788827395,
-        "baseline_is_hypothetical": true
+        "baseline_is_hypothetical": true,
+        "fifth_peak_total_B0": 21.77826906498416,
+        "fifth_trough_total_B0": 11.734072438813614
       },
       {
         "release_half_life_days": 90,
@@ -184,7 +190,9 @@
         "no_baseline_steady_peak_trough_ratio": 1.622154169853041,
         "second_peak_total_B0": 19.08577290014682,
         "second_peak_total_B3": 16.88056210919769,
-        "baseline_is_hypothetical": true
+        "baseline_is_hypothetical": true,
+        "fifth_peak_total_B0": 25.17000230731776,
+        "fifth_trough_total_B0": 15.527373183311305
       },
       {
         "release_half_life_days": 130,
@@ -194,7 +202,9 @@
         "no_baseline_steady_peak_trough_ratio": 1.4010287793963456,
         "second_peak_total_B0": 19.88178953436391,
         "second_peak_total_B3": 17.45948329771921,
-        "baseline_is_hypothetical": true
+        "baseline_is_hypothetical": true,
+        "fifth_peak_total_B0": 30.482698562176925,
+        "fifth_trough_total_B0": 21.783151710967854
       }
     ],
     "official_observations": {
@@ -203,7 +213,8 @@
       "steady_peak_approx": 11,
       "steady_trough_approx": 5
     },
-    "warning": "RCP total first and steady Cmax are approximate cohort summaries. Positive time-invariant accumulation implies steady peak > first peak, so do not exact-fit all cohort means."
+    "warning": "RCP total first and steady Cmax are approximate cohort summaries. Positive time-invariant accumulation implies steady peak > first peak, so do not exact-fit all cohort means.",
+    "risk": "Even at the fifth injection, single 90-day exponential depot assumption substantially over-accumulates relative to RCP ~11/5 ng/mL cohort means; this does not invalidate data or all mixture/time-varying models."
   },
   "P4": {
     "reused_brand_labels": [
