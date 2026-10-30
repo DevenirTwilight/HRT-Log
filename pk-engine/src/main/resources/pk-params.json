@@ -5,6 +5,26 @@
  "note": "Observed values from labels and PubMed-indexed studies. Each entry cites a reference id prefixed by its topic. No compartmental model parameters (ka etc.) were found in the literature.",
  "references": [
  {
+  "id": "fr_ANSM_20260904_ANDROGEL_50",
+  "authors": "BESINS HEALTHCARE / ANSM",
+  "year": "2026",
+  "title": "ANDROGEL 50 mg 1% gel, RCP §5.2 (2026-09-04)",
+  "journal": "French BDPM CIS 64205548",
+  "pmid": "",
+  "doi": "",
+  "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64205548/extrait"
+ },
+ {
+  "id": "fr_ANSM_20260204_ANDROGEL_162",
+  "authors": "BESINS HEALTHCARE / ANSM",
+  "year": "2026",
+  "title": "ANDROGEL 16.2 mg/g gel, RCP §5.2 (2026-02-04)",
+  "journal": "French BDPM CIS 68097237",
+  "pmid": "",
+  "doi": "",
+  "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68097237/extrait"
+ },
+ {
   "id": "fr_ANSMS_20260706_ESTREVA",
   "authors": "Theramex Ireland Limited / ANSM",
   "year": "2026",
@@ -7158,6 +7178,54 @@
    "rate_cv": 0.29,
    "rate_cv_source": "assumption: no between-person data on this half-life; borrowed from oral estradiol valerate (Zhang 2024, 29 %)"
   },
+  "T_GEL_ANDROGEL_1PCT": {
+  "unit": "ng/mL",
+  "ka_per_h": 0.5,
+  "terms": [
+   {
+    "A_per_mg": 0.08181818181818182,
+    "lambda_per_h": 0.06,
+    "t_half_h": 11.55245
+   }
+  ],
+  "basis": [
+   "fr_ANSM_20260904_ANDROGEL_50: after 5 g 1% gel = 50mg T, daily mean serum T INCREMENT ~2.5ng/mL; near day-2 steady; return to baseline ~72-96h after stop"
+  ],
+  "assumption": "ILLUSTRATIVE dose-attributable incremental T only, NOT total serum T. Single absorption/skin-depot decay; ka=0.5/h and lambda=0.06/h are not measured constants. Amplitude chosen so 50mg/daily steady state mean incremental concentration =2.5ng/mL at once-daily application. Predictive peak/trough, individual baseline and dose linearity beyond cited conditions are unverified.",
+  "cv": 1,
+  "cv_source": "Explicit assumption: RCP has no usable CV for the mean increment; not a statistical confidence interval",
+  "illustrative": true,
+  "no_product_data": false,
+  "rate_cv": 0.5,
+  "rate_cv_source": "Assumed scenario sensitivity, not fitted interpatient variability",
+  "products": [
+   "androgel_50mg_1pct"
+  ]
+ },
+  "T_GEL_ANDROGEL_1P62": {
+  "unit": "ng/mL",
+  "ka_per_h": 0.5,
+  "terms": [
+   {
+    "A_per_mg": 0.08888888888888889,
+    "lambda_per_h": 0.06,
+    "t_half_h": 11.55245
+   }
+  ],
+  "basis": [
+   "fr_ANSM_20260204_ANDROGEL_162: after 2.5g 16.2mg/g gel = 40.5mg T, mean serum T INCREMENT ~2.2ng/mL; near day-2 steady; return to baseline ~72-96h after stop"
+  ],
+  "assumption": "ILLUSTRATIVE dose-attributable incremental T only (NOT total serum T), distinct 16.2mg/g formula. Uses unmeasured empirical ka=0.5/h and lambda=0.06/h; amplitude calibrated only to the RCP group mean daily increment at 40.5mg, not to a dense individual profile. Unknown baseline, site, interpatient absorption and dose-response prevent absolute serum estimates.",
+  "cv": 1,
+  "cv_source": "Assumed, not measured in RCP §5.2",
+  "illustrative": true,
+  "no_product_data": false,
+  "rate_cv": 0.5,
+  "rate_cv_source": "Assumed scenario sensitivity, not measured physiological elimination",
+  "products": [
+   "androgel_16_2mg_per_g"
+  ]
+ },
   "E2_GEL_ESTREVA": {
   "unit": "pg/mL",
   "ka_per_h": 0.277747697,
