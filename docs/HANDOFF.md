@@ -1,9 +1,10 @@
-## Compose 间歇失败根因修复（进行中）— 2026-10-30
+## Compose 间歇失败根因修复 PR — 2026-10-30
 
 - 负责人“给我修”。根因已证明（REQUIREMENTS §176）：Compose 测试里界面协程在后台线程继续，测试拦截器在后台线程发 snapshot apply，导致重组/布局离开主线程。正式应用不受影响。
-- 分支 `fix/compose-main-thread`（工作树 `/home/user/wt-flake`）：`ui/OffMain.kt` 三个工具 + 各调用点替换 + `MainThreadResumeTest` + `Ui12ConcentrationTest.show()` 等待条件变严格。
-- 探针（临时，不入库）：在 `/home/user/wt-b41` 的 `NotesTheme.kt` 临时加了全局 apply 观察者，后台跑全部非截图 Compose 测试，结果写 `/tmp/claude-0/offmain-all.txt`；目前只命中 `Ui12ConcentrationTest`（浓度页）与 `CausalTimeUiTest`（ConcChart 点按），两处都已修。附件/文件库/BDPM 的作用域是静态排查发现的同类问题，一并修。
-- 待做：探针跑完后核对是否还有别的命中 → 在 wt-flake 编译并跑受影响测试 → 写 3 条显示批准（新哈希）、Ui08 ConcChart 哈希、check_protocol → 开 PR、自动合并。PR #166（Build 41 记录）的 API29 偶发失败已重跑一次。
+- 分支 `fix/compose-main-thread`（工作树 `/home/user/wt-flake`）：`ui/OffMain.kt`（`computeOffMain` / `resumeOnMain` / `rememberMainThreadScope`）+ 各调用点 + 药品参考资料对话框在主线程收集状态 + `MainThreadResumeTest` + `Ui12ConcentrationTest.show()` 等到没有转圈再读结果；三条显示批准（证据提交 `5e63b533`）、Ui08 ConcChart 新哈希，`check_protocol` 通过。
+- 证据：临时探针（全局 apply 观察者，只在会话机工作树里临时加，不入库）修复前跑全部非截图 Compose 测试：444 次非主线程提交，分布在浓度页、研究浓度页、ConcChart 点按、BDPM 官方详情、已记录商品资料、药品参考资料对话框、药品中心；全部在修复范围内。修复后同一套重跑结果见 PR。
+- 注意：Robolectric 下 `waitUntil` 只推进帧时钟、不让主线程 looper 空闲；条件里不碰 Compose 节点时，要先 `waitForIdle()`，否则投递到主线程的续体不会执行。
+- 待做：PR CI 全绿后自动合并；设备测试（attachment-poc 26/29）是否不再出现同类故障，看接下来几次 CI。
 
 ## UI-13 ②（化验/浓度/身心/医疗档案点缀）+ 校准卡按钮行 + PDF 文件方块 — 2026-10-30
 
