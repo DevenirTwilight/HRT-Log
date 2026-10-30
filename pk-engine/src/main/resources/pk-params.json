@@ -7202,17 +7202,11 @@
    "basis": [
     "E2_GEL_ESTROGEL and E2_GEL_DIVIGEL (no data for this product)"
    ],
-   "assumption": "No pharmacokinetic data for this product (home-made gel and other unknown formulations). Half-life is the geometric mean of the two products with data (36 h and 10 h, about 19 h); AUC per mg and absorption rate are their means. Shown with a wider band and the label 'no data for this product'.",
-   "checks": {
-    "estreva_single_1.5mg_cmax": 39.01375900420163
-   },
+   "assumption": "No pharmacokinetic data for this product (home-made gel and other unknown formulations). Estreva is modelled separately from ANSM RCP anchors, with provisional illustrated accuracy. Half-life is the geometric mean of the two products with data (36 h and 10 h, about 19 h); AUC per mg and absorption rate are their means. Shown with a wider band and the label 'no data for this product'.",
    "cv": 1.2,
    "cv_source": "assumption: wider than the Divigel label CV (about 0.9) because no product data exist",
    "e2_per_mg": 1.0,
-   "products": [
-    "estreva",
-    "diy"
-   ],
+   "products": ["diy"],
    "no_product_data": true,
    "rate_cv": 0.29,
    "rate_cv_source": "assumption: no between-person data on this half-life; borrowed from oral estradiol valerate (Zhang 2024, 29 %)"
