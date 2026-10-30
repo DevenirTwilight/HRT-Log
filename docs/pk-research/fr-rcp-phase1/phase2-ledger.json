@@ -128,7 +128,8 @@
         72,
         96
       ],
-      "assay": "unspecified"
+      "assay": "unspecified",
+      "rcp_revision": "2026-09-04"
     },
     {
       "cohort_id": "FR_ANDROGEL_1P62_40P5MG",
@@ -155,7 +156,8 @@
       "assay": "unspecified",
       "qualitative": [
         "Phase III day112 Cav/Cmax/Cmin are titrated subjects; cannot infer 40.5 mg single-dose response from group level"
-      ]
+      ],
+      "rcp_revision": "2026-02-04"
     },
     {
       "cohort_id": "FR_TE_250_IM",
