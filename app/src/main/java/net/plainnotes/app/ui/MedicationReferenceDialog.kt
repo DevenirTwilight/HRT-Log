@@ -44,7 +44,8 @@ import java.time.LocalDate
 /** Explicit reference association; catalogue browsing never prefills medication or inventory fields. */
 @OptIn(ExperimentalMaterial3Api::class,androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable fun MedicationReferenceDialog(controller:MedicationReferenceController,medicationName:(Long?)->String?={null},onDismiss:()->Unit) {
-    val state by controller.state.collectAsState()
+    // §176: the controller may publish from a background thread (tests inject an unconfined scope); collect on main.
+    val state by controller.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
     val catalogueState=rememberBdpmCatalogueUiState()
     var query by remember {mutableStateOf("")};var form by remember {mutableStateOf("")};var route by remember {mutableStateOf("")}
     var strengthFilter by remember {mutableStateOf("")}
