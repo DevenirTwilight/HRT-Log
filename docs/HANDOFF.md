@@ -1,3 +1,10 @@
+## PK-FR 睾酮酯单位底层已提交 — 2026-10-30
+
+- `pk-engine/Types.kt` 的 `Ester` 枚举后追加 `T`（未酯化睾酮）、`TE`（庚酸酯）、`TU`（十一酸酯）。保留所有旧枚举名及历史E2行为，不接通前端，也不擅自把任何录入值转换成血药浓度。
+- `pk-engine/Units.kt` 新增 `Pk.toTestosteroneFactor`，按来源可解释的分子量计算 288.42/400.60≈0.7200（ANDROTARDYL 250 mg → 180 mg T）和 288.42/456.71≈0.6315（NEBIDO 1000 mg → 631.5 mg T）；T本体为1，错误地用 E2 酯转换 T 严格抛错。
+- `TestosteroneMassTest.kt` 三项 JUnit5：酯→本体质量、T/E2交叉错误、TE/TU 注射当前仍明确 `NO_LITERATURE_ESTER` 且不输出捏造 `ng/mL` 曲线。**测试代码已推送、Android/JVM CI 结果仍待核实。**
+- 这只是日后模型的量纲基础，不等于睾酮各剂型已有曲线，也不能把TE/TU 质量比例误认为循环T生物利用度。
+
 ## PK-FR 睾酮凝胶官方证据与机器检查 — 2026-10-30（实时入库）
 
 - 通过 ANSM RCP §5.2 原文新增 `docs/pk-research/france-ansm-testosterone-gels-2026-10-30.json`，**产品分开**保存 TESTAVAN 20 mg/g（23mg/泵；第90日剂量调整后3组 n=5/45/89 的总T峰谷平均和2–4h达峰、涂抹部位比较）及 ANDROGEL 16.2mg/g（20.25mg/泵；吸收1–8.5%；2.5g后的平均总T增幅约2.2ng/mL；约2日稳态及72–96h回基线）的信息。源链接、CIS、版本、总T与增幅口径已入库。
