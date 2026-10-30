@@ -74,10 +74,15 @@ private fun niceStep(span: Double, target: Int): Double {
  * Zoomable chart (pinch to zoom the time axis, drag to pan, tap to read a value).
  * Kept dependency-free so the series styling (solid record / dashed forecast, CI bands, lab dots) stays exact.
  */
+/** UI-13: the dose ticks on the chart (and its legend) are a light teal; at high contrast they are the solid main teal. */
+internal fun doseMarkColor(c: androidx.compose.material3.ColorScheme, accent: AccentColors): androidx.compose.ui.graphics.Color =
+    if (accent.contrast == Contrast.HIGH) c.primary else c.primary.copy(alpha = 0.55f)
+
 @Composable fun ConcChart(data: ChartData, initialStart: Double, initialEnd: Double, modifier: Modifier = Modifier, valueLabel: (Double) -> String) {
     val c = MaterialTheme.colorScheme
     val line = c.primary; val band = c.primary; val grid = c.outlineVariant; val textColor = c.onSurfaceVariant
-    val labColor = c.tertiary; val nowColor = c.outline; val rangeColor = c.secondary; val markColor = c.secondary
+    // UI-13 (colours only): lab results are the purple accent, the dose ticks a light teal; every position, value and rule is unchanged.
+    val labColor = NotesTheme.accent.purple.main; val nowColor = c.outline; val rangeColor = c.secondary; val markColor = doseMarkColor(c, NotesTheme.accent)
     val measurer = rememberTextMeasurer()
     val minX = data.x.firstOrNull() ?: initialStart; val maxX = data.x.lastOrNull() ?: initialEnd
     var start by remember(initialStart,initialEnd,minX,maxX) { mutableDoubleStateOf(max(minX, initialStart)) }

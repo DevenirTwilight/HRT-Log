@@ -158,8 +158,10 @@ private fun itemIcon(key: String?) = when (key) {
     GroupedItem(index, count, modifier = Modifier.testTag("wb-item:${item.id}")) {
         Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Box(Modifier.size(40.dp).background(c.surfaceContainerHigh, CircleShape), contentAlignment = Alignment.Center) {
-                    Icon(itemIcon(item.builtin_key), null, Modifier.size(if (daily) 22.dp else 12.dp), tint = c.onSurfaceVariant) }
+                // UI-13: the mood page's accent is rose; the tile is a small mark in front of the item's name, never a button or a selected state.
+                val rose = NotesTheme.accent.rose
+                Box(Modifier.size(40.dp).background(rose.soft, CircleShape), contentAlignment = Alignment.Center) {
+                    Icon(itemIcon(item.builtin_key), null, Modifier.size(if (daily) 22.dp else 12.dp), tint = rose.main) }
                 Column(Modifier.weight(1f)) {
                     Text(label, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                     Text(if (value == null) stringResource(R.string.wb_item_unrecorded) else stringResource(R.string.wb_item_value, value),

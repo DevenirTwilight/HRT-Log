@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.hasScrollToIndexAction
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.performScrollToIndex
 import net.plainnotes.app.data.*
@@ -46,7 +47,7 @@ class Ui13AccentAreaTest(private val locale: String, private val width: Int, pri
         /** The upper limit written into the UI-13 report; a page above it fails. */
         const val MAX_ACCENT_SHARE = 0.08
         @JvmStatic @ParameterizedRobolectricTestRunner.Parameters(name = "{0}/{1}dp/{2}x/dark={3}")
-        fun params() = listOf("en", "fr-rFR").flatMap { l -> listOf(320 to 2f, 411 to 1f).flatMap { (w, f) -> listOf(false, true).map { arrayOf<Any>(l, w, f, it) } } }
+        fun params() = listOf("zh-rCN", "fr-rFR").flatMap { l -> listOf(320 to 2f, 411 to 1f).flatMap { (w, f) -> listOf(false, true).map { arrayOf<Any>(l, w, f, it) } } }
     }
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
     private val zone = ZoneId.systemDefault()
@@ -83,6 +84,7 @@ class Ui13AccentAreaTest(private val locale: String, private val width: Int, pri
     private val visits = listOf(visit(10, now.plus(Duration.ofDays(5)), false), visit(11, now.minus(Duration.ofDays(3)), false, "LAB"),
         visit(12, now.minus(Duration.ofDays(30)), true, note = "Note"), visit(13, now.minus(Duration.ofDays(400)), true, "OTHER"))
 
+    private val checkinItems = listOf(CheckinItemEntity(1, "DAY_MOOD", null, true, 0), CheckinItemEntity(2, "DAY_ENERGY", null, true, 1), CheckinItemEntity(3, "DAY_SLEEP", null, true, 2))
     private fun accentShare(bitmap: Bitmap, accents: AccentColors): Double {
         val tones = listOf(accents.blue, accents.purple, accents.rose).flatMap { listOf(it.main, it.container, it.onContainer, it.soft) }
             .map { it.toArgb() and 0xFFFFFF }.toHashSet()
@@ -112,22 +114,39 @@ class Ui13AccentAreaTest(private val locale: String, private val width: Int, pri
                     TopAppBar(title = { Text(stringResource(R.string.timeline)) }, actions = { TimelineAddMenu(host) })
                     LongitudinalScreen(NotesState(listOf(medA), appointments = listOf(visits[0]), loading = false), extraTimeline, {}, {}, {}, PaddingValues(), addHost = host)
                 }
-                else -> DrawerContent(Destination.CALENDAR, stockLow = 1) {}
+                3 -> DrawerContent(Destination.CALENDAR, stockLow = 1) {}
+                4 -> LabsScreen(extraTimeline.labs, emptyList(), {}, {}, PaddingValues())
+                5 -> { val sc = net.plainnotes.app.ui12.Ui12Fixture.sublingualCalibrated()
+                    ConcentrationScreen(sc.state, sc.result, false, 70.0, ConcSettings(false, true, net.plainnotes.app.pk.CalibrationMode.RETROSPECTIVE), {}, {}, {}, {}, PaddingValues(),
+                        sc.records, sc.state.profiles, preview = sc.preview, e2NonSublingual = sc.nonSublingual, doseTimes = sc.doseTimes, labs = sc.labs) }
+                6 -> WellbeingHubContent(NotesState(loading = false), NotesViewModel.ExtraState(items = checkinItems, scores = listOf(CheckinScoreEntity(today.toString(), 1, 4))), "FR",
+                    PaddingValues(), { _, _, _ -> }, { _, _ -> }, { _, _, _, _ -> }, {}, {})
+                else -> MedicalRecordsScreen(visits, {}, {}, {}, {}, {}, PaddingValues(), questionCounts = mapOf(10L to 3, 12L to 2), now = now)
             } }
         } } }
-        val names = listOf("home", "stock", "timeline", "drawer"); val shares = mutableMapOf<String, Double>()
+        val names = listOf("home", "stock", "timeline", "drawer", "labs", "concentration", "wellbeing", "medical"); val shares = mutableMapOf<String, Double>()
         names.forEachIndexed { i, name ->
             rule.runOnIdle { page = i }; rule.waitForIdle()
+            if (name == "concentration") rule.waitUntil(30_000) { rule.onAllNodesWithTag("calibration-switch").fetchSemanticsNodes().isNotEmpty() }
             val view = rule.activity.window.decorView
             val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
             rule.runOnUiThread { view.draw(android.graphics.Canvas(bitmap)) }
             assertTrue("$name rendered real pixels (${distinctColours(bitmap)} distinct colours)", distinctColours(bitmap) > 3)
             shares[name] = accentShare(bitmap, accents!!)
+            // Evidence images (UI13_SHOTS=<label>): the same pages and data on both sides of a change, nothing is asserted on them.
+            System.getenv("UI13_SHOTS")?.takeIf { it.isNotBlank() }?.let { label ->
+                val dir = File("build/ui13-shots/$label").apply { mkdirs() }
+                File(dir, "${i + 1}_${name}_${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+            }
         }
         println("UI13_AREA $locale/${width}dp/${font}x/dark=$dark " + shares.entries.joinToString(" ") { "${it.key}=${"%.4f".format(it.value)}" })
         assertEquals("home must carry no accent", 0.0, shares.getValue("home"), 0.0)
         assertEquals("stock must carry no accent", 0.0, shares.getValue("stock"), 0.0)
         assertTrue("the drawer's icon tiles are drawn in accent colours (${shares["drawer"]})", shares.getValue("drawer") > 0.0)
+        // These only prove the test really sees the page's accent tiles; at 320 dp with the largest font the first screen of the mood page is
+        // filled by its day card, so its items are below the fold there. The upper limit below holds everywhere, unchanged.
+        for (page in listOf("labs", "medical") + if (width >= 411) listOf("wellbeing") else emptyList())
+            assertTrue("$page carries its accent (${shares[page]})", shares.getValue(page) > 0.0)
         shares.forEach { (name, share) -> assertTrue("$name accent share $share exceeds $MAX_ACCENT_SHARE", share <= MAX_ACCENT_SHARE) }
     }
 }

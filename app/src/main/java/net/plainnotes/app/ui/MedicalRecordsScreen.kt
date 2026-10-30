@@ -12,6 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.EventNote
@@ -111,10 +112,10 @@ private fun LazyListScope.recordsArea(next:AppointmentEntity?,unconfirmed:List<A
     item("related") { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
         MedicalHeading(stringResource(R.string.medical_related))
         Row(Modifier.fillMaxWidth().height(IntrinsicSize.Max),horizontalArrangement=Arrangement.spacedBy(12.dp)) {
-            HubTile(Icons.Outlined.Science,stringResource(R.string.mh_labs_tile),pluralStringResource(R.plurals.mh_lab_draws,drawCount,drawCount)+" · "+stringResource(R.string.lab_group_count,resultCount),"medical-labs",onLabs,Modifier.weight(1f).fillMaxHeight())
+            HubTile(Icons.Outlined.Science,stringResource(R.string.mh_labs_tile),pluralStringResource(R.plurals.mh_lab_draws,drawCount,drawCount)+" · "+stringResource(R.string.lab_group_count,resultCount),"medical-labs",onLabs,Modifier.weight(1f).fillMaxHeight(),NotesTheme.accent.purple.main)
             HubTile(Icons.Outlined.Timeline,stringResource(R.string.medical_timeline),null,"medical-history",onHistory,Modifier.weight(1f).fillMaxHeight())
         }
-        onVisits?.let{visits->RelatedCard(Icons.AutoMirrored.Outlined.EventNote,stringResource(R.string.mh_visits_tile),"medical-center-visits",visits)}
+        onVisits?.let{visits->RelatedCard(Icons.AutoMirrored.Outlined.EventNote,stringResource(R.string.mh_visits_tile),"medical-center-visits",visits,NotesTheme.accent.blue.main)}
     } }
     item("bin") { TextButton(onClick=onTrash,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("medical-bin")){Text(stringResource(R.string.medical_bin))} }
 }
@@ -143,8 +144,9 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
             rows.forEachIndexed{i,(icon,text,action)->
                 GroupedItem(i,rows.size,onClick=action.second,modifier=Modifier.testTag(action.first)) {
                     Row(Modifier.fillMaxWidth().padding(horizontal=16.dp,vertical=12.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(16.dp)) {
-                        Surface(Modifier.size(40.dp),shape=CircleShape,color=MaterialTheme.colorScheme.secondaryContainer) {
-                            Box(contentAlignment=Alignment.Center){Icon(icon,null,Modifier.size(20.dp),tint=MaterialTheme.colorScheme.onSecondaryContainer)}
+                        val tone=if(action.first=="medical-lab-attachments")NotesTheme.accent.purple else NotesTheme.accent.blue
+                        Surface(Modifier.size(40.dp),shape=CircleShape,color=tone.container) {
+                            Box(contentAlignment=Alignment.Center){Icon(icon,null,Modifier.size(20.dp),tint=tone.onContainer)}
                         }
                         Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
                             Text(stringResource(text.first),style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
@@ -184,20 +186,20 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
 @Composable private fun MedicalHeading(text:String)=Text(text,style=sectionTitleStyle,modifier=Modifier.semantics{heading()})
 
 /** Sample 05: a tinted tile with an icon, a title and a one-line summary (not a bordered row). */
-@Composable private fun HubTile(icon:androidx.compose.ui.graphics.vector.ImageVector,title:String,summary:String?,tag:String,onClick:()->Unit,modifier:Modifier=Modifier) {
+@Composable private fun HubTile(icon:androidx.compose.ui.graphics.vector.ImageVector,title:String,summary:String?,tag:String,onClick:()->Unit,modifier:Modifier=Modifier,tint:Color?=null) {
     Surface(onClick,modifier.heightIn(min=96.dp).testTag(tag),shape=Corners.card,color=MaterialTheme.colorScheme.surfaceContainerLow) {
         Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-            Icon(icon,null,tint=MaterialTheme.colorScheme.primary)
+            Icon(icon,null,tint=tint ?: MaterialTheme.colorScheme.primary)
             Text(title,style=MaterialTheme.typography.titleSmall,fontWeight=FontWeight.Bold)
             summary?.let{Text(it,style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)}
         }
     }
 }
 
-@Composable private fun RelatedCard(icon:androidx.compose.ui.graphics.vector.ImageVector,label:String,tag:String,onClick:()->Unit) {
+@Composable private fun RelatedCard(icon:androidx.compose.ui.graphics.vector.ImageVector,label:String,tag:String,onClick:()->Unit,tint:Color?=null) {
     Surface(onClick,Modifier.fillMaxWidth().heightIn(min=56.dp).testTag(tag),shape=Corners.card,color=MaterialTheme.colorScheme.surfaceContainerLow) {
         Row(Modifier.padding(16.dp),verticalAlignment=Alignment.CenterVertically) {
-            Icon(icon,null,tint=MaterialTheme.colorScheme.primary);Spacer(Modifier.width(12.dp))
+            Icon(icon,null,tint=tint ?: MaterialTheme.colorScheme.primary);Spacer(Modifier.width(12.dp))
             Text(label,style=MaterialTheme.typography.titleSmall,modifier=Modifier.weight(1f))
             Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,null)
         }
@@ -303,7 +305,7 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
                 val locale=currentLocale()
                 Surface(color=c.surfaceContainerLowest,contentColor=c.onSurface,shape=RoundedCornerShape(14.dp),modifier=Modifier.testTag("medical-next-date")) {
                     Column(Modifier.padding(horizontal=12.dp,vertical=8.dp).widthIn(min=48.dp),horizontalAlignment=Alignment.CenterHorizontally) {
-                        Text(local.month.getDisplayName(java.time.format.TextStyle.SHORT,locale),style=MaterialTheme.typography.labelMedium,color=c.primary)
+                        Text(local.month.getDisplayName(java.time.format.TextStyle.SHORT,locale),style=MaterialTheme.typography.labelMedium,color=NotesTheme.accent.blue.main)
                         Text(local.dayOfMonth.toString(),style=MaterialTheme.typography.headlineSmall.tnum(),fontWeight=androidx.compose.ui.text.font.FontWeight.Bold)
                         Text(local.dayOfWeek.getDisplayName(java.time.format.TextStyle.SHORT,locale),style=MaterialTheme.typography.labelSmall)
                     }
@@ -318,18 +320,18 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
             }
             Surface(color=c.surfaceContainerLowest,contentColor=c.onSurface,shape=Corners.list) {
                 Column {
-                    InsetRow(Icons.AutoMirrored.Outlined.HelpOutline,stringResource(R.string.medical_next_questions,questions),"medical-next-questions"){onVisit(a)}
+                    InsetRow(Icons.AutoMirrored.Outlined.HelpOutline,stringResource(R.string.medical_next_questions,questions),"medical-next-questions",NotesTheme.accent.blue.main){onVisit(a)}
                     HorizontalDivider(Modifier.padding(start=52.dp),color=c.outlineVariant)
-                    InsetRow(Icons.Outlined.Description,stringResource(R.string.medical_next_pack),"medical-next-pack"){onVisit(a)}
+                    InsetRow(Icons.Outlined.Description,stringResource(R.string.medical_next_pack),"medical-next-pack",NotesTheme.accent.purple.main){onVisit(a)}
                 }
             }
         }
     }
 }
-@Composable private fun InsetRow(icon:androidx.compose.ui.graphics.vector.ImageVector,label:String,tag:String,onClick:()->Unit) {
+@Composable private fun InsetRow(icon:androidx.compose.ui.graphics.vector.ImageVector,label:String,tag:String,tint:Color,onClick:()->Unit) {
     Row(Modifier.fillMaxWidth().heightIn(min=56.dp).clickable(role=Role.Button,onClick=onClick).padding(horizontal=16.dp).testTag(tag),
         verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
-        Icon(icon,null,tint=MaterialTheme.colorScheme.primary,modifier=Modifier.size(24.dp))
+        Icon(icon,null,tint=tint,modifier=Modifier.size(24.dp))
         Text(label,style=MaterialTheme.typography.bodyLarge,modifier=Modifier.weight(1f))
         Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,null)
     }
@@ -339,7 +341,7 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
     val c=MaterialTheme.colorScheme
     Row(Modifier.fillMaxWidth().heightIn(min=56.dp).clickable(role=Role.Button){onVisit(a)}.padding(horizontal=16.dp,vertical=12.dp).testTag("medical-visit:${a.id}"),
         verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
-        Surface(shape=CircleShape,color=c.secondaryContainer,contentColor=c.onSecondaryContainer,modifier=Modifier.size(40.dp)) {
+        Surface(shape=CircleShape,color=NotesTheme.accent.blue.container,contentColor=NotesTheme.accent.blue.onContainer,modifier=Modifier.size(40.dp)) {
             Box(contentAlignment=Alignment.Center){Icon(Icons.AutoMirrored.Outlined.EventNote,null,Modifier.size(20.dp))}}
         Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
             Text(choiceLabel(a.type),style=MaterialTheme.typography.titleSmall,fontWeight=androidx.compose.ui.text.font.FontWeight.Bold)
@@ -358,8 +360,8 @@ private fun LazyListScope.filesArea(onVisits:(()->Unit)?,onLabs:()->Unit,onMedic
 @Composable private fun MedicalVisitCard(a:AppointmentEntity,questions:Int,onVisit:(AppointmentEntity)->Unit,onConfirm:((AppointmentEntity)->Unit)?) {
     ElevatedCard(Modifier.fillMaxWidth().testTag("medical-visit:${a.id}").clickable(role=Role.Button){onVisit(a)},shape=Corners.card) {
         Row(Modifier.padding(16.dp),verticalAlignment=Alignment.Top) {
-            Surface(shape=CircleShape,color=MaterialTheme.colorScheme.secondaryContainer){
-                Icon(Icons.AutoMirrored.Outlined.EventNote,null,Modifier.padding(8.dp).size(20.dp),tint=MaterialTheme.colorScheme.onSecondaryContainer)}
+            Surface(shape=CircleShape,color=NotesTheme.accent.blue.container){
+                Icon(Icons.AutoMirrored.Outlined.EventNote,null,Modifier.padding(8.dp).size(20.dp),tint=NotesTheme.accent.blue.onContainer)}
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(4.dp)) {
                 Text(choiceLabel(a.type),style=MaterialTheme.typography.titleMedium)

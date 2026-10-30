@@ -55,7 +55,9 @@ import net.plainnotes.app.attachments.ui.MedicalAttachmentsController.UnlinkStat
 import net.plainnotes.app.attachments.ui.MedicalAttachmentsController.State as AttachmentsState
 import net.plainnotes.app.ui.Corners
 import net.plainnotes.app.ui.GroupedItem
+import net.plainnotes.app.ui.AccentColors
 import net.plainnotes.app.ui.NotesTheme
+import net.plainnotes.app.ui.SemanticColors
 import net.plainnotes.app.ui.StatusPill
 
 /**
@@ -230,14 +232,20 @@ import net.plainnotes.app.ui.StatusPill
     }
 }
 
+/**
+ * The fill and text colours of a file-type tile. UI-13 (owner, 2026-10-30, after the samples): a PDF tile carries the blue accent, as in the
+ * sample file library; a picture keeps its warm tile, and a file that cannot be opened (or any other type) stays neutral grey.
+ */
+internal fun fileTileColors(kind:FileKind,available:Boolean,scheme:androidx.compose.material3.ColorScheme,semantic:SemanticColors,accent:AccentColors):Pair<androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color> = when {
+    !available->scheme.surfaceContainerHigh to scheme.outline
+    kind==FileKind.PDF->accent.blue.container to accent.blue.onContainer
+    kind==FileKind.IMAGE->semantic.attention.container to semantic.attention.onContainer
+    else->scheme.surfaceContainerHigh to scheme.onSurfaceVariant
+}
+
 /** File-type tile; the short code is a visual mark only (the localized type is read by TalkBack). */
 @Composable internal fun FileTile(kind:FileKind,available:Boolean) {
-    val (container,content)=when {
-        !available->MaterialTheme.colorScheme.surfaceContainerHigh to MaterialTheme.colorScheme.outline
-        kind==FileKind.PDF->MaterialTheme.colorScheme.secondaryContainer to MaterialTheme.colorScheme.onSecondaryContainer
-        kind==FileKind.IMAGE->NotesTheme.semantic.attention.container to NotesTheme.semantic.attention.onContainer
-        else->MaterialTheme.colorScheme.surfaceContainerHigh to MaterialTheme.colorScheme.onSurfaceVariant
-    }
+    val (container,content)=fileTileColors(kind,available,MaterialTheme.colorScheme,NotesTheme.semantic,NotesTheme.accent)
     Surface(Modifier.size(48.dp),shape=MaterialTheme.shapes.medium,color=container,contentColor=content) {
         Box(Modifier.padding(bottom=6.dp),contentAlignment=Alignment.BottomCenter) {
             Text(when(kind) {FileKind.PDF->"PDF";FileKind.IMAGE->"IMG";FileKind.OTHER->"FILE"},style=MaterialTheme.typography.labelSmall,fontWeight=FontWeight.SemiBold)

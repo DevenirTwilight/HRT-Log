@@ -151,8 +151,8 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Legend(stringResource(R.string.legend_recorded), MaterialTheme.colorScheme.primary, dashed = false)
                     Legend(stringResource(R.string.ui12_legend_tail), MaterialTheme.colorScheme.primary, dashed = true)
-                    if (!result?.labs.isNullOrEmpty()) Legend(stringResource(R.string.legend_labs), MaterialTheme.colorScheme.tertiary, dot = true)
-                    if (hasDoseMarks) Legend(stringResource(R.string.legend_doses), MaterialTheme.colorScheme.secondary, tick = true)
+                    if (!result?.labs.isNullOrEmpty()) Legend(stringResource(R.string.legend_labs), NotesTheme.accent.purple.main, dot = true)
+                    if (hasDoseMarks) Legend(stringResource(R.string.legend_doses), doseMarkColor(MaterialTheme.colorScheme, NotesTheme.accent), tick = true)
                 }
                 Text(stringResource(R.string.pk_unit),style=MaterialTheme.typography.bodyMedium)
                 AdaptiveChoice(listOf("pg/mL","pmol/L"),if(settings.pmol)1 else 0,{onSettings(ConcSettings(it==1,settings.calibrate,settings.mode))})
@@ -318,12 +318,14 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
             }
         }
         if (settings.calibrate && unsupportedUnits > 0) Text(stringResource(R.string.feedback_unit, unsupportedUnits), modifier = Modifier.testTag("calibration-unsupported-unit"))
-        CalibrationEligibilitySection(history, fmt, unit)
-        if (outcome?.decisions?.any { TotalE2Calibration.Reason.HISTORY_NOT_ELIGIBLE in it.reasons || TotalE2Calibration.Reason.SL_LAST_DOSE_UNKNOWN in it.reasons } == true)
-            OutlinedButton(onClick = onOpenHistory, modifier = Modifier.heightIn(min = 48.dp).testTag("calibration-open-history")) { Text(stringResource(R.string.history)) }
         if (outcome?.decisions?.any { TotalE2Calibration.Reason.LAB_TIME_NOT_PRECISE in it.reasons } == true)
             Text(stringResource(R.string.feedback_sampling_time), style = MaterialTheme.typography.bodySmall)
-        OutlinedButton(onClick = onOpenLabs, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.calib_manage_labs)) }
+        // Owner feedback 2026-10-30: the three actions share one wrapping row instead of one button per line.
+        CalibrationEligibilitySection(history, fmt, unit) {
+            if (outcome?.decisions?.any { TotalE2Calibration.Reason.HISTORY_NOT_ELIGIBLE in it.reasons || TotalE2Calibration.Reason.SL_LAST_DOSE_UNKNOWN in it.reasons } == true)
+                OutlinedButton(onClick = onOpenHistory, modifier = Modifier.heightIn(min = 48.dp).testTag("calibration-open-history")) { Text(stringResource(R.string.history)) }
+            OutlinedButton(onClick = onOpenLabs, modifier = Modifier.heightIn(min = 48.dp).testTag("calibration-manage-labs")) { Text(stringResource(R.string.calib_manage_labs)) }
+        }
     }
 }
 
@@ -518,15 +520,22 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
 
 
 /** Original chart observations are unchanged; every history decision is available without logging facts. */
-@Composable internal fun CalibrationEligibilitySection(result: ConcentrationResult?, fmt: (Double)->String, unit: String) {
+@OptIn(ExperimentalLayoutApi::class)
+@Composable internal fun CalibrationEligibilitySection(result: ConcentrationResult?, fmt: (Double)->String, unit: String, actions: (@Composable () -> Unit)? = null) {
     val rows=result?.labEligibility.orEmpty()
-    if(rows.isEmpty() && result?.models?.containsKey(Curve.E2)!=true)return
+    if(rows.isEmpty() && result?.models?.containsKey(Curve.E2)!=true){
+        if(actions!=null)FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){actions()}
+        return
+    }
     var details by remember{mutableStateOf(false)}
     val cutoff=if(result?.mode==CalibrationMode.CAUSAL)minOf(result.evaluationH,result.nowH) else result?.nowH ?: Double.POSITIVE_INFINITY
     val available=rows.filter{it.sampleH<=cutoff}
     Text(stringResource(R.string.calib_history_counts,available.count{it.eligible},available.count{!it.eligible}),style=MaterialTheme.typography.bodySmall)
     if(available.none{it.eligible} && result?.e2?.isNotEmpty()==true)Text(stringResource(R.string.calib_history_population),style=MaterialTheme.typography.bodySmall)
-    if(rows.isNotEmpty())OutlinedButton(onClick={details=true},modifier=Modifier.heightIn(min=48.dp)){Text(stringResource(R.string.calib_history_details))}
+    if(rows.isNotEmpty()||actions!=null)FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){
+        if(rows.isNotEmpty())OutlinedButton(onClick={details=true},modifier=Modifier.heightIn(min=48.dp).testTag("calibration-details-open")){Text(stringResource(R.string.calib_history_details))}
+        actions?.invoke()
+    }
     if(details)AlertDialog(onDismissRequest={details=false},title={Text(stringResource(R.string.calib_history_details))},
         text={LazyColumn(Modifier.heightIn(max=420.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
             item { Text(stringResource(R.string.calib_history_total,rows.count { it.eligible }),style=MaterialTheme.typography.bodySmall) }
