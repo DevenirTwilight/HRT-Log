@@ -161,7 +161,7 @@ import java.time.*
                     Text(type, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
                     Text(time, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = c.primary)
                 }
-                doctor?.let { VisitLine(Icons.Outlined.Person, it, 1) }
+                doctor?.let { VisitLine(Icons.Outlined.Person, it, Int.MAX_VALUE) } // the name is never cut; only a long location keeps two lines
                 place?.let { VisitLine(Icons.Outlined.LocationOn, it, 2) }
                 @OptIn(ExperimentalLayoutApi::class)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
