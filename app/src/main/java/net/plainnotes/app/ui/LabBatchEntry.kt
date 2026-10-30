@@ -129,6 +129,8 @@ internal fun labFlag(v: LabValueEntity): LabFlag? {
     Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("lab-group-row:${v.id}").clickable(role = Role.Button, onClick = onOpen).clearAndSetSemantics {
         contentDescription = spoken; role = Role.Button; onClick { onOpen(); true } }.padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        // UI-13: the labs accent is purple; a small icon tile in front of the name, never a status.
+        AccentIconTile(Icons.Outlined.Science, AccentKind.PURPLE, size = 32.dp, corner = 12.dp, iconSize = 20.dp)
         // Two lines (name, then value and flag) so nothing is cut mid-word at 320dp and font 2x.
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(name, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)

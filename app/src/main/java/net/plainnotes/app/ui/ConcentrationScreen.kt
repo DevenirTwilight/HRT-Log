@@ -151,8 +151,8 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Legend(stringResource(R.string.legend_recorded), MaterialTheme.colorScheme.primary, dashed = false)
                     Legend(stringResource(R.string.ui12_legend_tail), MaterialTheme.colorScheme.primary, dashed = true)
-                    if (!result?.labs.isNullOrEmpty()) Legend(stringResource(R.string.legend_labs), MaterialTheme.colorScheme.tertiary, dot = true)
-                    if (hasDoseMarks) Legend(stringResource(R.string.legend_doses), MaterialTheme.colorScheme.secondary, tick = true)
+                    if (!result?.labs.isNullOrEmpty()) Legend(stringResource(R.string.legend_labs), NotesTheme.accent.purple.main, dot = true)
+                    if (hasDoseMarks) Legend(stringResource(R.string.legend_doses), doseMarkColor(MaterialTheme.colorScheme, NotesTheme.accent), tick = true)
                 }
                 Text(stringResource(R.string.pk_unit),style=MaterialTheme.typography.bodyMedium)
                 AdaptiveChoice(listOf("pg/mL","pmol/L"),if(settings.pmol)1 else 0,{onSettings(ConcSettings(it==1,settings.calibrate,settings.mode))})
