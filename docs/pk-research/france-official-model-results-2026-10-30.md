@@ -29,6 +29,15 @@
   - https://base-donnees-publique.medicaments.gouv.fr/medicament/68097237/extrait
 - Tests `OfficialTestosteroneGelModelsTest` ensure per-product source identity, units, normalisation to mean **increment**, and declared limitations. Neither T product justifies predicting endogenous T suppression or exact personal blood tests.
 
+### Research-only: Estradiol cypionate (EC) IM, evidence outside ANSM
+
+- `OfficialEstradiolCypionateScenario.kt` and test: an empirical **reference-dose-only 5mg** EC intramuscular research candidate, not the legacy Engine's `EV_IM` and not accessible in production. A first-order two-exponential kernel is not compelled by the observed peak + window mean, so the candidate is a positive gamma response with an explicit fitted exponent ~3.139, **not** an assumed physiological rate.
+- Oriowo et al. (1980) original study abstract, 5mg EC IM in arachis oil, 10 people, peak around day 4 and ~11d elevation: https://pubmed.ncbi.nlm.nih.gov/7389356/. Rothman et al. (2024) reproduces study quantitative summaries: mean Cmax 337 pg/mL (95% CI 207–550) at 3.9 days, mean concentration 159 pg/mL (95% CI 108–235) over elevated period 11.8d: https://pmc.ncbi.nlm.nih.gov/articles/PMC11669617/ . This is ONE original cohort; the secondary paper is NOT another independent validation cohort.
+- US official DailyMed DEPO-ESTRADIOL 5mg/mL IM EC registration confirms formulation/route, **not** independent population timepoints: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9a4229fd-fecd-4ac1-9c4f-6d442533457f .
+- The candidate fits both same-cohort summary anchors and explicitly rejects other dose sizes. Source group baseline and potential concomitant levonorgestrel/ethinyl estradiol remain important; **no individual precision or dose scaling established**. It cannot yet be used to draw a general EC dosing curve. Need source-side dense timepoints and other independent cohorts.
+- FDA DailyMed DEPO-TESTOSTERONE (updated 2026-08-21) reports ~8-day IM T-cypionate apparent half-life, without an adequate dense curve or independent absolute baseline: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=cfbb53d4-b868-4a28-8436-f9112eb01c39 . Potential next T-CYP research anchor, not automatically a valid complete curve.
+- **New evidence gap:** full E2 benzoate, enanthate and undecylate (EB/EN/EU), E2 SC injections and sublingual EV still require formulation-matched independent timepoints before production claims. Older retrospective/informal secondary curve fits may be useful as hypotheses but should not be presented as verified original human clinical data.
+
 ## 2. Cross-product comparisons of EXISTING curves
 
 Machine-readable official checkpoints are stored in `docs/pk-research/france-official-rcp-checkpoints.json`. Reproduction script `python3 tools/pk-research/fr_rcp_check.py --json` reports each comparison, preserving the original source and analytic unit. Tests `test_fr_rcp_check.py` check unit conversions, numerical stability and known discrepancies. The values below were independently computed from **existing** fitted coefficients, not from a new fit.
