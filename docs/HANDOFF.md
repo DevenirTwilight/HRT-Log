@@ -1,3 +1,13 @@
+## Build 40 已签名并私下交付 — 2026-10-30
+
+- **交付物**：`HRT-Log-build40-full-official.apk`，versionCode 40 / 0.2.0 / `net.plainnotes.app`，14,527,646 字节，SHA-256 `44b0bc80abfde505b7cb4679981901f29fbc7943c986dbfb926c252d9afdff4f`；原正式证书 `989ba045…79b1`，v2/v3 通过、单签名者；它**取代同为 versionCode 39 的 A 和 B**。负责人 2026-10-30 明确授权签名并私下交付（只在会话内私下发给负责人，不入 Git/CI/公开 Release/tag）。
+- **来源**：干净 `475e4dd5` 工作树 + 源码外 `version40.init.gradle`（仅 versionCode 39→40，哈希见收据）；未签名包 SHA-256 `2e3c451c…5a34`。475e4dd5 与已全绿的 `58df0076` 相比，应用模块唯一差别是 #155 把源码默认 versionCode 38→39。
+- **核验**（收据 `docs/delivery/build40-private-verification.json`）：签名前后 324 个业务条目逐字节一致；八个原生库的 64 位 ELF LOAD 与 ZIP 均 16KiB 对齐；无 INTERNET（只有 ACCESS_NETWORK_STATE）；非 debug、无 testOnly/androidx.test；密钥只在受限临时目录，签后已 shred。账本追加 40，源码默认 versionCode 同步 40。
+- **必须如实记住的一点**：负责人授权时主线 `475e4dd5` 的 CI 还没跑完，我没有等它就签了。事后该 SHA 首次 CI：`android` 失败（Ui12ConcentrationTest 两个参数化用例：line 70 AssertionError 与 CalledFromWrongThreadException）、`attachment-poc-compatibility (29)` 失败（`Detected multithreaded access to SnapshotStateObserver`）、`(26)` 失败（`performMeasureAndLayout called during measure layout`），其余成功。同一产品源码的 `58df0076` 全部必需检查全绿。已按规则对该 run 重跑失败 job 一次，结果见下一条或 PR #160 评论；根因 **ROOT_CAUSE_NOT_PROVEN**（共同特征是 Compose 在两个线程上做 layout/observation，怀疑测试线程的语义树查询与主线程帧竞争，仅为假设）。
+- 未做（NOT_RUN）：真机安装、人工 TalkBack、覆盖升级真实 APK 测试、物理断电；未做外部安全审查；不是公开 Beta。负责人安装前先导出完整备份；直接覆盖安装，勿卸载、勿清数据。
+- #155 CI 上的间歇故障记录：API29 `CalibrationProductAndroidTest` 的 `performMeasureAndLayout`（重跑通过）；API26 `AutomaticImportAndroidTest` 的 `Could not get current state of activity … transition is incomplete`（重跑通过）；security-native (35, x86_64) 两次 setup-android 阶段 sdkmanager 失败（`Failed to write to file`、`Error on ZipFile unknown archive`，INFRA_FAILURE，第三次通过）。原始日志在会话机 `/tmp/claude-0/ci/`，不入库。
+- 下一步：确认 475e4dd5 重跑结果；若 Compose 线程类故障继续出现，考虑只改 androidTest/JVM 测试的轮询间隔（不放宽断言、不改超时），单独 PR；真机验收清单见 `docs/audits/product-quality-2026-10/82-release-readiness-2026-10-29.md`。
+
 ## 接手后的阶段评估与合并状态 — 2026-10-29
 
 - 完整评估见 `docs/audits/product-quality-2026-10/82-release-readiness-2026-10-29.md`：状态表、本轮发现并处理的真实问题、尚未解释的间歇故障、私测/公开 Beta/稳定版结论、下一步。
