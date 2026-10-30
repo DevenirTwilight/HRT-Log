@@ -1,9 +1,19 @@
 {
  "version": "0.1.0-literature-draft",
- "status": "Literature values only (M4a). Not used by the engine yet; awaiting review.",
+ "status": "Population PK parameters used by the engine; individual clinical accuracy not established. Estreva provisional RCP-anchor model added 2026-10-30.",
  "generated": "2026-10-06",
  "note": "Observed values from labels and PubMed-indexed studies. Each entry cites a reference id prefixed by its topic. No compartmental model parameters (ka etc.) were found in the literature.",
  "references": [
+  {
+   "id": "france_bdpm:ANSM_ESTREVA2026",
+   "authors": "Theramex Ireland (MAH); ANSM",
+   "year": "2026",
+   "title": "ESTREVA 0,1 %, gel — RCP section 5.2 (updated 2026-07-06)",
+   "journal": "French Base de données publique des médicaments (CIS 63216075)",
+   "pmid": "",
+   "doi": "",
+   "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63216075/extrait"
+  },
   {
    "id": "estradiol_oral_sl_im:ANSM_PROGYNOVA2",
    "authors": "Bayer HealthCare (MAH)",
@@ -7148,6 +7158,37 @@
    "rate_cv": 0.29,
    "rate_cv_source": "assumption: no between-person data on this half-life; borrowed from oral estradiol valerate (Zhang 2024, 29 %)"
   },
+  "E2_GEL_ESTREVA": {
+   "unit": "pg/mL",
+   "ka_per_h": 0.2691677,
+   "terms": [
+    {
+     "A_per_mg": 43.89038846,
+     "lambda_per_h": 0.04047523,
+     "t_half_h": 17.12522
+    }
+   ],
+   "basis": [
+    "france_bdpm:ANSM_ESTREVA2026 (1.5 mg gel abdomen 400 cm2: single mean peak ~40 pg/mL; day 22 repeated peak ~70 pg/mL; ~40 pg/mL 24h after last dose; steady state within 4 days)"
+   ],
+   "assumption": "Provisional illustrative single-input first-order population curve. ka, lambda and amplitude are inferred by assuming zero baseline, daily 1.5 mg dosing and linear accumulation, and simultaneously matching the RCP's three aggregate peak/24h anchors. The RCP does not give individual baseline, assay or time-to-peak, so these are NOT independently identified biological parameters or validated individual serum concentrations. Apparent t1/2 ~17.1 h is a modelling assumption, NOT measured by ANSM. Does not generalize to other application sites, different gels, or sublingual use.",
+   "checks": {
+    "single_1_5mg_peak_pg_ml": 40,
+    "ss_1_5mg_peak_pg_ml": 70,
+    "ss_1_5mg_24h_pg_ml": 40,
+    "ss_4days_peak_pg_ml": 68.31
+   },
+   "cv": 1.2,
+   "cv_source": "assumption: wide illustration band, not quantified by the RCP",
+   "e2_per_mg": 1,
+   "products": [
+    "estreva"
+   ],
+   "illustrative": true,
+   "no_product_data": false,
+   "rate_cv": 0.29,
+   "rate_cv_source": "assumption: no individual elimination-rate variance in RCP; borrowed from earlier population model"
+  },
   "E2_GEL_OTHER": {
    "unit": "pg/mL",
    "ka_per_h": 0.6199910680061218,
@@ -7161,7 +7202,7 @@
    "basis": [
     "E2_GEL_ESTROGEL and E2_GEL_DIVIGEL (no data for this product)"
    ],
-   "assumption": "No pharmacokinetic data for this product (Estreva, home-made gel, others). Half-life is the geometric mean of the two products with data (36 h and 10 h, about 19 h); AUC per mg and absorption rate are their means. Shown with a wider band and the label 'no data for this product'.",
+   "assumption": "No pharmacokinetic data for this product (home-made gel and other unknown formulations). Half-life is the geometric mean of the two products with data (36 h and 10 h, about 19 h); AUC per mg and absorption rate are their means. Shown with a wider band and the label 'no data for this product'.",
    "checks": {
     "estreva_single_1.5mg_cmax": 39.01375900420163
    },
