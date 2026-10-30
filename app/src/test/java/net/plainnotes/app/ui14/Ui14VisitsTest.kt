@@ -169,10 +169,13 @@ class Ui14VisitsTest(private val locale: String, private val width: Int, private
 
     @Test fun theCardIsSpokenAsOneSentenceWithTheWholeLocation() {
         setup(); show(listOf(upcoming, pastConfirmed)); scrollTo("visit-card:2")
-        val spoken = ui.onNodeWithTag("visit-card:2").fetchSemanticsNode().config[SemanticsProperties.ContentDescription].joinToString(" ")
+        val spoken = ui.onNodeWithTag("visit-card:2").fetchSemanticsNode().config[SemanticsProperties.Text].joinToString(" ") { it.text }
         assertTrue(spoken, LONG_PLACE in spoken); assertTrue(spoken, "Doctor Placeholder" in spoken); assertTrue(spoken, s(R.string.visit_completed) in spoken)
         // The pieces inside are decoration for the eye: none of them is a separate stop for TalkBack.
-        assertFalse(ui.onNodeWithTag("visit-card:2").fetchSemanticsNode().config.contains(SemanticsProperties.Text))
+        assertEquals("exactly one spoken sentence per card", 1, ui.onNodeWithTag("visit-card:2").fetchSemanticsNode().config[SemanticsProperties.Text].size)
+        assertFalse("no separate description next to it", ui.onNodeWithTag("visit-card:2").fetchSemanticsNode().config.contains(SemanticsProperties.ContentDescription))
+        // ...and the card can be found and pressed by the doctor's name, as the existing flows do.
+        ui.onNode(androidx.compose.ui.test.hasText("Doctor Placeholder", substring = true) and hasAnyAncestor(hasTestTag("visits-list")) and hasTestTag("visit-card:2")).assertExists()
     }
 
     @Test fun theMedicalRouteUsesTheVisitsOwnZoneForItsDayAndSoDoesTheDayCount() {

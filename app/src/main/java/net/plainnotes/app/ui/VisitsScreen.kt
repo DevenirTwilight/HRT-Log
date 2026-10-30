@@ -12,7 +12,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.text
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.pluralStringResource
@@ -145,10 +145,10 @@ import java.time.*
     val statusText = stringResource(if (confirmed) R.string.visit_completed else R.string.visit_not_confirmed)
     val questionText = if (questions > 0) stringResource(R.string.visit_question_count, questions) else null
     val packText = last?.let { stringResource(R.string.visit_last_pack, formatDateTime(Instant.ofEpochMilli(it.generated_utc))) }
-    // One spoken description for the whole card; the pieces inside are decoration for the eye.
+    // One spoken sentence for the whole card, carried as its text (so it can also be found by its words, e.g. the doctor's name); the pieces inside are decoration for the eye.
     val spoken = listOfNotNull(type, formatFullDate(date) + " " + time, doctor, place, statusText, questionText, packText).joinToString(", ")
     Surface(onClick = onClick, color = c.surfaceContainerLow, shape = RoundedCornerShape(28.dp), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
-        .semantics { contentDescription = spoken }.testTag("visit-card:${a.id}")) {
+        .semantics { text = androidx.compose.ui.text.AnnotatedString(spoken) }.testTag("visit-card:${a.id}")) {
         Row(Modifier.clearAndSetSemantics {}.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Column(Modifier.width(58.dp).background(accent.blue.container, RoundedCornerShape(18.dp)).padding(vertical = 8.dp).testTag("visit-date-tile:${a.id}"),
                 horizontalAlignment = Alignment.CenterHorizontally) {
