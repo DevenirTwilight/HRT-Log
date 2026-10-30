@@ -4,7 +4,8 @@
 - 分支 `fix/compose-main-thread`（工作树 `/home/user/wt-flake`）：`ui/OffMain.kt`（`computeOffMain` / `resumeOnMain` / `rememberMainThreadScope`）+ 各调用点 + 药品参考资料对话框在主线程收集状态 + `MainThreadResumeTest` + `Ui12ConcentrationTest.show()` 等到没有转圈再读结果；三条显示批准（证据提交 `5e63b533`）、Ui08 ConcChart 新哈希，`check_protocol` 通过。
 - 证据：临时探针（全局 apply 观察者，只在会话机工作树里临时加，不入库）修复前跑全部非截图 Compose 测试：444 次非主线程提交，分布在浓度页、研究浓度页、ConcChart 点按、BDPM 官方详情、已记录商品资料、药品参考资料对话框、药品中心；全部在修复范围内。修复后同一套重跑（77 类 2625 测试）：0 失败、非主线程提交 0 次（PR #167 评论）。
 - 注意：Robolectric 下 `waitUntil` 只推进帧时钟、不让主线程 looper 空闲；条件里不碰 Compose 节点时，要先 `waitForIdle()`，否则投递到主线程的续体不会执行。
-- 待做：PR CI 全绿后自动合并；设备测试（attachment-poc 26/29）是否不再出现同类故障，看接下来几次 CI。
+- PR #167 首次 CI：API29 为模拟器掉线（两个校准用例已通过，之后 `adb: device offline`，INFRA）；API26 全屏阅读器用例在 Activity 销毁时仍 SlotTable 越界 → 第二轮：所有 StateFlow 收集改在主线程，设备产品测试加 `OffMainApplyRecorder`（REQUIREMENTS §176 第二轮）。
+- 待做：PR CI 全绿后自动合并；设备测试（attachment-poc 26/29）是否不再出现同类故障，看接下来几次 CI；若 `OffMainApplyRecorder` 报出线程，按其中的线程名与主线程位置继续修。
 
 ## Build 41 已签名并私下交付 — 2026-10-30
 
