@@ -207,6 +207,19 @@
       "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
       "file_name": "HRT-Log-build40-full-official.apk",
       "channel": "claude-session-private-owner-file"
+    },
+    {
+      "date": "2026-10-30T14:52:00+00:00",
+      "version_code": 41,
+      "version_name": "0.2.0",
+      "application_id": "net.plainnotes.app",
+      "source_sha": "84135556b35d966d16a00c20c4649b111199fcfb",
+      "source_origin": "git",
+      "source_dirty": false,
+      "apk_sha256": "a5cc50eaff2ac2d86b563157b6003bcd9e3d56719557972d1abeb0da855a2970",
+      "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+      "file_name": "HRT-Log-build41-full-official.apk",
+      "channel": "claude-session-private-owner-file"
     }
   ]
 }
