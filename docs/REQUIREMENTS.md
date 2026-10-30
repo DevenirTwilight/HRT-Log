@@ -1792,3 +1792,21 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 依据：负责人 2026-10-29 接手指令（修复真实问题、核实全屏阅读在正式生产路径可用、不得放宽安全断言）。合并 #156 后，全屏阅读器的原生用例出现间歇失败；其中一次阅读器显示「这个文件无法显示」。分析见 HANDOFF 同日条目。
 
 **决定**：`AttachmentOwnedFiles.ProcessLease` 在另一个线程持有进程内存储锁时等待最多 5 秒再失败（不再立即失败）；同一线程重入仍立即失败。这是进程内互斥的等待策略，不改变加密容器、密钥、备份协议、Room、权限或任何断言。新增 `AttachmentProcessLeaseAndroidTest` 三项。根因是推断而非已证明；真机与人工 TalkBack：NOT_RUN。
+
+## 173. UI-13 — 全应用配色：青绿主色 + 点缀色，中性暖白底色（2026-10-30）
+
+- **编号**：UI-13 先前空缺（§156 只占用了 UI-10 至 UI-12），本节取下一个空闲 § 号。任务书原文归档在 `docs/design/ui13-accent-colors-2026-10-30/TASK_BOOK_ORIGINAL.md`（负责人 2026-10-30 的最新版本，已包含下面的对调）。
+- **负责人决定**：青绿仍是主色；蓝、紫、玫红只做小面积点缀（图标块、小标签、日期方块、时间线小圆点），不得用于按钮、大卡、选中项、曲线和图表主线；一个页面只用自己那一种点缀色，同一功能在所有页面同一颜色，点缀色只表示“属于哪一类”，不表示好坏或状态；背景、卡片、容器的灰改为中性暖白；已服/库存不足/已过时间/漏服/错误等语义状态色（UI-06）一个都不改。
+- **2026-10-30 对调**：样图原先“化验蓝、复诊紫”，负责人改为 **化验、浓度估算 = 紫；复诊、医疗档案（下次就诊、想问的问题、历史就诊圆圈）= 蓝；就诊资料包与化验类文件 = 紫（同一功能同一色）；身心状态 = 玫红**。任务书文字与样图冲突时以任务书为准。
+- **授权范围**：`NotesTheme.kt`、`AppShell.kt`、`LongitudinalScreen.kt`、`Components.kt`、`WellbeingScreen.kt`、`WellbeingHub.kt`、`CalendarScreen.kt` 为 HISTORY_ONLY，可改。`LabsScreen.kt`、`ConcentrationScreen.kt`、`ConcChart.kt` 为 PK_DISPLAY_REVIEW，**授权仅限颜色与图标块外观**，不得改数值、单位换算、点的位置、标记/范围逻辑、校准、数据流，且必须带 PK 显示回归。LIVE_LOCK 文件不触碰。不改 PDF/资料包/导出里的颜色，不升级依赖，不用实验性 API，不加开关、解释文字或新功能。
+- **分两个 PR**：① token + 底色 + 抽屉 + 时间线（含测试迁移）；② 化验 / 浓度 / 身心 / 医疗档案点缀（带 PK 显示回归）。
+- **PR①实现**：`core/ui` 新增 `AccentColors.kt`（`AccentTone` main/container/onContainer/soft，`NotesTheme.accent`，对比度 MEDIUM/HIGH 沿用 `raised()` 做法，高对比度下点缀图标与文字用 onSurface，动态取色回退到 secondary/tertiary 家族）和 `AccentTile.kt`（`AccentIconTile` 小图标块）；`NotesTheme.kt` 只改中性项（背景/表面/容器/outline/inverse）；`colors.xml` 的窗口背景同步；抽屉每个入口前 38dp、圆角 13dp 图标块，时间线事件类型色改为点缀色，珊瑚只保留提醒用法。
+- **验证（PR①）**：`AccentColorsTest`（token 与任务书表逐值一致、浅/深×三档对比度 AA、状态色逐值不变、中性色无绿偏、动态取色）、`Ui05TimelineTest` 新增类型色测试；旧含义 → 新含义：时间线化验由珊瑚（tertiaryContainer）改紫、就诊由 secondaryContainer 改蓝、阶段回顾由 inverseSurface 改玫红。真机、人工 TalkBack 为 NOT_RUN。
+
+## 174. UI-14 — 复诊页升级（2026-10-30）
+
+- **编号**：UI-14（先前空缺）。任务书原文归档在 `docs/design/ui13-accent-colors-2026-10-30/TASK_BOOK_UI14_ORIGINAL.md`。依赖 UI-13 的点缀色 token。
+- **范围**：只改复诊列表页（`VisitsScreen` 列表分支与 `VisitCard`）：青绿大卡（下一次/上一次就诊、天数标签、白色胶囊“记录已发生的就诊”按钮，`visits-record-past` 与回调不变）、分组标题、新就诊卡片（蓝色日期方块、状态/问题数标签、资料包为唯一的紫色小标签）、浮动按钮用 primaryContainer、空状态。详情页、对话框、资料包、导出、导航、数据库、通知不改。`VisitsScreen.kt` 为 HISTORY_ONLY。
+- **大卡逻辑**：有未来就诊取最早一次；否则取已确认（`completed_utc != null`）里最近一次；两者都没有则退化为空状态。天数按就诊所在时区的日历日算（`medical` 模式用该就诊的 `at_zone`，普通模式用系统时区），今天为 0 天；纯函数单测覆盖夏令时、跨年、跨月、跨时区。
+- 状态：**PR 未开始写页面**，等 UI-13 PR① 的 token 合并。
+
