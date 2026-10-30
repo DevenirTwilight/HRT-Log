@@ -82,8 +82,18 @@ def tu_steady_ratio(t_half_days: float, first_tpeak_days: float = 7.,
         return max(baseline_ng_ml + amp * (
             bateman(t, fast, slow) + bateman(t - day42, fast, slow))
                    for t in range(day42, day42 + 20 * 24 + 1, 6))
+    # The RCP describes loading on day 0 and day 42, followed by 70-day
+    # intervals. Fifth administration is day 252. Do not confuse the
+    # infinite-regimen mathematical limit above with actual 3–5 injections.
+    injection_days = (0, 42, 112, 182, 252)
+    fifth_shape = [sum(bateman((t - d) * 24, fast, slow)
+                       for d in injection_days)
+                   for t in (252 + j * .125 for j in range(561))]
+    scale_B0 = 11 / peak1
     return dict(release_half_life_days=t_half_days,
                 fast_h_inv=fast, slow_h_inv=slow,
+                fifth_peak_total_B0=max(fifth_shape) * scale_B0,
+                fifth_trough_total_B0=fifth_shape[-1] * scale_B0,
                 first_peak_h=bateman_tpeak(fast, slow),
                 no_baseline_steady_peak_trough_ratio=mx / mn,
                 second_peak_total_B0=second_peak_for_assumed_baseline(0.),
