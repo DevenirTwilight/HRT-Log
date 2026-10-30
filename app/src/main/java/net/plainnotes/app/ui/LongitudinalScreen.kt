@@ -390,12 +390,12 @@ internal fun eventKindIcon(kind:EventKind):androidx.compose.ui.graphics.vector.I
 /**
  * UI-05 D: one colour per type group (lab, visit, milestone, stage review, other), each a container/on-container pair so the icon keeps
  * ≥ 3:1 in light, dark and every contrast level (Ui05TimelineTest). UI-06: a missed dose uses the neutral missed token (never red).
- * UI-13 (2026-10-30): the type colours are the small accents — lab blue, visit purple, stage review rose, milestone teal — so coral
+ * UI-13 (2026-10-30): the type colours are the small accents — lab purple, visit blue (owner swap 2026-10-30), stage review rose, milestone teal — so coral
  * (tertiary) is only the reminder colour (low stock, past time) and no longer also a type colour.
  */
 internal fun eventTypeColors(kind:EventKind,c:ColorScheme,sem:SemanticColors=semanticColors(c,c.surface.luminance()<0.5f),
                              acc:AccentColors=accentColors(c,c.surface.luminance()<0.5f))=when(kind){
-    EventKind.LAB->acc.blue.container to acc.blue.onContainer;EventKind.APPOINTMENT->acc.purple.container to acc.purple.onContainer
+    EventKind.LAB->acc.purple.container to acc.purple.onContainer;EventKind.APPOINTMENT->acc.blue.container to acc.blue.onContainer
     EventKind.MILESTONE->c.primaryContainer to c.onPrimaryContainer;EventKind.REVIEW->acc.rose.container to acc.rose.onContainer
     EventKind.MISSED->sem.missed.container to sem.missed.onContainer;else->c.surfaceVariant to c.onSurfaceVariant}
 @Composable internal fun EventTypeBadge(kind:EventKind) {

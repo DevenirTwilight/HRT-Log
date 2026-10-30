@@ -371,12 +371,13 @@ internal val DRAWER_GROUPS: List<DrawerSection> = listOf(
 )
 
 /**
- * UI-13: the accent each drawer entry's icon tile uses. Blue marks the numbers pages, purple the medical record and visits, rose the mood page;
- * calendar, dose history, medications and stock stay teal, and timeline, settings and about are neutral grey. Only the small tile is coloured.
+ * UI-13: the accent each drawer entry's icon tile uses. Owner decision 2026-10-30 (after the samples): purple marks the numbers pages (labs and
+ * concentration), blue the medical record and visits, rose the mood page; calendar, dose history, medications and stock stay teal, and
+ * timeline, settings and about are neutral grey. Only the small tile is coloured.
  */
 internal fun drawerAccent(d: Destination): AccentKind = when (d) {
-    Destination.CONCENTRATION, Destination.LABS -> AccentKind.BLUE
-    Destination.MEDICAL, Destination.VISITS -> AccentKind.PURPLE
+    Destination.CONCENTRATION, Destination.LABS -> AccentKind.PURPLE
+    Destination.MEDICAL, Destination.VISITS -> AccentKind.BLUE
     Destination.WELLBEING -> AccentKind.ROSE
     Destination.CALENDAR, Destination.HISTORY, Destination.MEDICATIONS, Destination.STOCK -> AccentKind.TEAL
     Destination.TIMELINE, Destination.SETTINGS, Destination.ABOUT -> AccentKind.NEUTRAL

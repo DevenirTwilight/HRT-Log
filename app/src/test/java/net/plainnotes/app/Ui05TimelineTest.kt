@@ -125,14 +125,14 @@ class Ui05TimelineTest {
 
     /**
      * UI-13 (old meaning -> new meaning): a lab event used to be coral (tertiary container), a visit the teal-grey secondary container and a
-     * stage review the inverse surface. Now lab is the blue accent, visit purple and stage review rose; the milestone stays teal and coral is
+     * stage review the inverse surface. Now lab is the purple accent, visit blue (owner swapped blue and purple on 2026-10-30) and stage review rose; the milestone stays teal and coral is
      * only the reminder colour.
      */
     @Test fun typeColoursAreTheAccentsAndCoralIsNoLongerATypeColour() {
         for (dark in listOf(false, true)) {
             val c = notesColorScheme(dark); val a = accentColors(c, dark)
-            assertEquals(a.blue.container to a.blue.onContainer, eventTypeColors(EventKind.LAB, c))
-            assertEquals(a.purple.container to a.purple.onContainer, eventTypeColors(EventKind.APPOINTMENT, c))
+            assertEquals(a.purple.container to a.purple.onContainer, eventTypeColors(EventKind.LAB, c))
+            assertEquals(a.blue.container to a.blue.onContainer, eventTypeColors(EventKind.APPOINTMENT, c))
             assertEquals(a.rose.container to a.rose.onContainer, eventTypeColors(EventKind.REVIEW, c))
             assertEquals(c.primaryContainer to c.onPrimaryContainer, eventTypeColors(EventKind.MILESTONE, c))
             EventKind.entries.forEach { k -> assertTrue("$k must not use the coral reminder colour", eventTypeColors(k, c).first != c.tertiaryContainer) }
