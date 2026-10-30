@@ -47,7 +47,7 @@ class Ui13AccentAreaTest(private val locale: String, private val width: Int, pri
         /** The upper limit written into the UI-13 report; a page above it fails. */
         const val MAX_ACCENT_SHARE = 0.08
         @JvmStatic @ParameterizedRobolectricTestRunner.Parameters(name = "{0}/{1}dp/{2}x/dark={3}")
-        fun params() = listOf("en", "fr-rFR").flatMap { l -> listOf(320 to 2f, 411 to 1f).flatMap { (w, f) -> listOf(false, true).map { arrayOf<Any>(l, w, f, it) } } }
+        fun params() = listOf("zh-rCN", "fr-rFR").flatMap { l -> listOf(320 to 2f, 411 to 1f).flatMap { (w, f) -> listOf(false, true).map { arrayOf<Any>(l, w, f, it) } } }
     }
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
     private val zone = ZoneId.systemDefault()
@@ -133,6 +133,11 @@ class Ui13AccentAreaTest(private val locale: String, private val width: Int, pri
             rule.runOnUiThread { view.draw(android.graphics.Canvas(bitmap)) }
             assertTrue("$name rendered real pixels (${distinctColours(bitmap)} distinct colours)", distinctColours(bitmap) > 3)
             shares[name] = accentShare(bitmap, accents!!)
+            // Evidence images (UI13_SHOTS=<label>): the same pages and data on both sides of a change, nothing is asserted on them.
+            System.getenv("UI13_SHOTS")?.takeIf { it.isNotBlank() }?.let { label ->
+                val dir = File("build/ui13-shots/$label").apply { mkdirs() }
+                File(dir, "${i + 1}_${name}_${locale}_${width}dp_${if (font == 1f) "1x" else "2x"}_${if (dark) "dark" else "light"}.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+            }
         }
         println("UI13_AREA $locale/${width}dp/${font}x/dark=$dark " + shares.entries.joinToString(" ") { "${it.key}=${"%.4f".format(it.value)}" })
         assertEquals("home must carry no accent", 0.0, shares.getValue("home"), 0.0)
