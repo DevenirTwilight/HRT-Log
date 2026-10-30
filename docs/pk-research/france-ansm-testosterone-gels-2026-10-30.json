@@ -1,0 +1,129 @@
+{
+  "schema": "hrtlog-pk-evidence-rcp-1",
+  "status": "RESEARCH_ONLY_NOT_A_POPULATION_PK_MODEL",
+  "retrieved_on": "2026-10-30",
+  "method": "French government ANSM RCP section 5.2, source-specific observations. T values are total serum unless explicitly stated as an increase.",
+  "interpretation_rules": [
+    "Do not apply dose-linear interpolation to different groups after post-randomization dose titration.",
+    "Do not infer individual endogenous testosterone baseline from a serum total measurement.",
+    "Do not transfer gel PK between formulations, application sites or nominal pump quantities.",
+    "No extracted figure points are included: official label plot must be digitized and evaluated separately."
+  ],
+  "products": [
+    {
+      "id": "TESTAVAN_20MG_G",
+      "cis": "65871581",
+      "source": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65871581/extrait",
+      "rcp_updated": "2026-07-07",
+      "gel_strength_mg_per_g": 20,
+      "pump_gel_g": 1.15,
+      "pump_t_mg": 23,
+      "trial": {
+        "trial_id": "000127",
+        "phase": 3,
+        "days": 120,
+        "baseline_n": 159,
+        "patient_population": "men with documented hypogonadism aged18-75",
+        "day": 90,
+        "postbaseline_titration": true,
+        "analyte": "serum total testosterone",
+        "unit": "ng/dL",
+        "by_day90_dose": [
+          {
+            "nominal_daily_t_mg": 23,
+            "n": 5,
+            "cmin_mean": 191,
+            "cmin_sd": 49,
+            "cavg_mean": 368,
+            "cavg_sd": 121,
+            "cmax_mean": 721,
+            "cmax_sd": 254,
+            "tmax_median_h": 4.02
+          },
+          {
+            "nominal_daily_t_mg": 46,
+            "n": 45,
+            "cmin_mean": 277,
+            "cmin_sd": 140,
+            "cavg_mean": 506,
+            "cavg_sd": 207,
+            "cmax_mean": 1228,
+            "cmax_sd": 640,
+            "tmax_median_h": 2.02
+          },
+          {
+            "nominal_daily_t_mg": 69,
+            "n": 89,
+            "cmin_mean": 229,
+            "cmin_sd": 82,
+            "cavg_mean": 438,
+            "cavg_sd": 164,
+            "cmax_mean": 1099,
+            "cmax_sd": 595,
+            "tmax_median_h": 2.08
+          }
+        ],
+        "note": "Dose groups reflect achieved/titrated dose and different persons, not within-person controlled dose response."
+      },
+      "site_comparison": {
+        "same_total_t_serum": true,
+        "sites": [
+          {
+            "site": "upper_arm_shoulders",
+            "cmax_mean_ng_dl": 926,
+            "cavg_mean_ng_dl": 557
+          },
+          {
+            "site": "abdomen",
+            "cmax_mean_ng_dl": 451,
+            "cavg_mean_ng_dl": 372
+          },
+          {
+            "site": "inner_thigh",
+            "cmax_mean_ng_dl": 519,
+            "cavg_mean_ng_dl": 395
+          }
+        ],
+        "note": "Grouped product-specific site outcomes; original trial context and variability should be inspected before quantitative individual site multipliers."
+      },
+      "other": "Concentrations approximately pre-dose by 12h, no accumulation after daily application for 10d in cited study; current clinical chart cannot be inferred from summary only."
+    },
+    {
+      "id": "ANDROGEL_16_2MG_G",
+      "cis": "68097237",
+      "source": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68097237/extrait",
+      "rcp_updated": "2026-02-04",
+      "gel_strength_mg_per_g": 16.2,
+      "pump_gel_g": 1.25,
+      "pump_t_mg": 20.25,
+      "percutaneous_absorption_fraction_range": [
+        0.01,
+        0.085
+      ],
+      "first_hours_to_rise": 1,
+      "approx_steady_state_days": 2,
+      "example": {
+        "applied_gel_g": 2.5,
+        "nominal_testosterone_mg": 40.5,
+        "mean_total_testosterone_increase_ng_ml": 2.2
+      },
+      "post_stop_fall_begins_h": 24,
+      "return_to_baseline_h_range": [
+        72,
+        96
+      ],
+      "day112": {
+        "analyte": "serum total testosterone",
+        "unit": "ng/dL",
+        "combined_titrated_dose_groups": true,
+        "cavg_mean": 561,
+        "cavg_sd": 259,
+        "cmax_mean": 845,
+        "cmax_sd": 480,
+        "cmin_mean": 334,
+        "cmin_sd": 155
+      },
+      "note": "RCP mean increase is not a complete concentration-time series; labelled later total-serum statistics use titrated treatments."
+    }
+  ]
+}

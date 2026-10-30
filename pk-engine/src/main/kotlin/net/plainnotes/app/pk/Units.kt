@@ -12,6 +12,27 @@ object Pk {
         Ester.EU to 440.67,   // undecylate C29H44O3
     )
 
+    /**
+     * Testosterone (288.42 g/mol) and two ester preparations with direct ANSM RCP
+     * product-mass cross-checks (ANDROTARDYL TE 250 mg ~= 180 mg parent T;
+     * NEBIDO TU 1000 mg ~= 631.5 mg parent T).
+     *
+     * Molecular weights are formula-derived, not fitted pharmacokinetic
+     * parameters. Converting administered ester mass does NOT predict the
+     * concentration of circulating total/free testosterone.
+     */
+    private const val TESTOSTERONE_MOLAR_MASS = 288.42 // C19H28O2
+    private val TESTOSTERONE_ESTERS = mapOf(
+        Ester.T to TESTOSTERONE_MOLAR_MASS,
+        Ester.TE to 400.60, // testosterone enanthate C26H40O3
+        Ester.TU to 456.71, // testosterone undecanoate C30H48O3
+    )
+
+    /** Parent testosterone mass per mg of recorded testosterone compound. */
+    fun toTestosteroneFactor(ester: Ester): Double =
+        TESTOSTERONE_MOLAR_MASS / (TESTOSTERONE_ESTERS[ester]
+            ?: error("$ester is not a testosterone compound"))
+
     /** 1 pg/mL of estradiol in pmol/L (1000 / 272.39). */
     const val PMOL_PER_PG = 3.671
 

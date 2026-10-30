@@ -8,7 +8,7 @@ enum class Route(val code: String) {
 }
 
 /** Compound or estradiol ester. Doses are always the mass of this compound, not E2-equivalent. */
-enum class Ester { E2, EB, EV, EC, EN, EU, CPA, BICA, SPI, P4 }
+enum class Ester { E2, EB, EV, EC, EN, EU, CPA, BICA, SPI, P4, T, TE, TU }
 
 /** Per-event inputs that only some routes use. */
 data class DoseExtras(

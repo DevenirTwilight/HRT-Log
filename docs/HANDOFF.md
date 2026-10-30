@@ -1,3 +1,24 @@
+## PK-FR 睾酮酯单位底层已提交 — 2026-10-30
+
+- `pk-engine/Types.kt` 的 `Ester` 枚举后追加 `T`（未酯化睾酮）、`TE`（庚酸酯）、`TU`（十一酸酯）。保留所有旧枚举名及历史E2行为，不接通前端，也不擅自把任何录入值转换成血药浓度。
+- `pk-engine/Units.kt` 新增 `Pk.toTestosteroneFactor`，按来源可解释的分子量计算 288.42/400.60≈0.7200（ANDROTARDYL 250 mg → 180 mg T）和 288.42/456.71≈0.6315（NEBIDO 1000 mg → 631.5 mg T）；T本体为1，错误地用 E2 酯转换 T 严格抛错。
+- `TestosteroneMassTest.kt` 三项 JUnit5：酯→本体质量、T/E2交叉错误、TE/TU 注射当前仍明确 `NO_LITERATURE_ESTER` 且不输出捏造 `ng/mL` 曲线。**测试代码已推送、Android/JVM CI 结果仍待核实。**
+- 这只是日后模型的量纲基础，不等于睾酮各剂型已有曲线，也不能把TE/TU 质量比例误认为循环T生物利用度。
+
+## PK-FR 睾酮凝胶官方证据与机器检查 — 2026-10-30（实时入库）
+
+- 通过 ANSM RCP §5.2 原文新增 `docs/pk-research/france-ansm-testosterone-gels-2026-10-30.json`，**产品分开**保存 TESTAVAN 20 mg/g（23mg/泵；第90日剂量调整后3组 n=5/45/89 的总T峰谷平均和2–4h达峰、涂抹部位比较）及 ANDROGEL 16.2mg/g（20.25mg/泵；吸收1–8.5%；2.5g后的平均总T增幅约2.2ng/mL；约2日稳态及72–96h回基线）的信息。源链接、CIS、版本、总T与增幅口径已入库。
+- 新增 `tools/pk-research/test_ansm_testosterone_gel_evidence.py` 共5项检查：泵/凝胶/睾酮质量、产品不能混淆、TESTAVAN在调整剂量后的独立组平均值非单调（46mg组Cavg506、69mg组438ng/dL），不能当作剂量–个体响应、部位比较无证据不外推个人修正系数、ANDROGEL增量不是基线已知的总T曲线。
+- 与上述 T 注射研究及 Estreva 实现并行；**T 凝胶产品模型/APP UI 尚未实现**。新测试只有源码已提交，完成CI之前不得写 PASS。
+
+## PK-FR 睾酮注射剂科学前置门槛 — 2026-10-30（独立研究分支，实时入库）
+
+- 用户授权立即开发全部雌激素/睾酮剂型，并逐步将现有曲线对法国官方 RCP 核验、结果实时入库。
+- 分支 `research/pk-ansm-testosterone-20261030` 新增研究工具 `tools/pk-research/ansm_testosterone_depot.py`、独立5项测试 `test_ansm_testosterone_depot.py` 和 `docs/pk-research/france-testosterone-depot-feasibility-2026-10-30.md`；ANSM ANDROTARDYL/NEBIDO §5.2 的酯/父药质量、峰、油剂释放半衰期、长尾及稳态约束已落成机器核查。
+- **确证数学反例**：TE 以峰/4.5日释放拟合则第20/26日计算约1.44/0.57 ng/mL（官方总T ≥2/≥1）；TU 以首次11 ng/mL及90日释放拟合、假设10周重复5针后峰/谷约24.86/15.34，而官方报告稳态约11/5。零基线、一室线性和实验给药史均为假设，非真实用药准确性结论。
+- **不得投入临床生产**：未解决个体内源T基线、完整时间序列、重复注射来源一致性；没有添加 `Curve.TESTOSTERONE`，无应用新图、无APK。脚本已提交但这批自动测试/CI 是否通过需看 PR 证据。下步争取有基线多时点人体资料或建立有界仅相对形状模拟。
+- 同日独立 Estreva 产品分派在 PR #169；来源审计 PR #168。合并时保留三份历史和进度，别因分支交错覆盖。
+
 ## Build 41 已签名并私下交付 — 2026-10-30
 
 - **交付物**：`HRT-Log-build41-full-official.apk`，versionCode 41 / 0.2.0 / `net.plainnotes.app`，14,544,030 字节，SHA-256 `a5cc50eaff2ac2d86b563157b6003bcd9e3d56719557972d1abeb0da855a2970`；原正式证书 `989ba045…79b1`，v2/v3 通过、单签名者；**取代 Build 40**。负责人 2026-10-30 明确授权（“我授权签名”）；只在会话内私下发给负责人，不入 Git/CI/公开 Release/tag。
