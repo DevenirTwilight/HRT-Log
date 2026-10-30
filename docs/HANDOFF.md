@@ -1,3 +1,14 @@
+## PK-FORMULATIONS ① — French ANSM Estreva integration in progress (2026-10-30)
+
+- Owner request: implement missing estrogen/testosterone formulation curves **and** audit/upgrade existing models using official French RCP §5.2, committing all real findings progressively. Do not assert all formulations implemented or all curves scientifically validated.
+- Research ledger: `docs/pk-research/france-official-rcp-coverage-2026-10-30.md` on research PR #168 (that PR still open at initial coding check); production code task is branch `feature/pk-french-rcp-formulations-20261030`.
+- Code committed on feature branch: ANSM source `fr_ANSMS_20260706_ESTREVA`, illustrative `E2_GEL_ESTREVA` model (`pk-params.json`), Engine gelProductId=2 dispatch to this specific model, product 5 still NO_PRODUCT_DATA, `EngineTest` expectations updated and `FrenchRcpModelTest` added. Related commits `e6e72fc`, `1e5d859`, `aa554e1`, `dd88d72`.
+- French RCP anchors (fit, **not independent validation**): 1.5mg abdomen gel single Cmax ~40pg/mL; repeated day22 Cmax ~70, 24h ~40, steady reached by day4. One assumed first-order response `ka≈0.27775/h, lambda≈0.04000/h, A≈43.04 pg/mL/mg`; these are inferred, **not** physiological measured constants, no individual baseline measured. CV and individual accuracy are NOT verified. Original generic gel remains for unknown/home-made.
+- **Verification state**: Git commits successful; tests added but Gradle/Android CI not yet run. NOT independently verified on Android; no APK signed or delivered; original Build41 unchanged. Do not call production release approved.
+- Next: obtain CI result; add official external-label comparisons for existing oral E2/EV, patch, P4; implement T models with baseline/endogenous and ester mass safeguards. Keep historical snapshots, no INTERNET, four-language UI, avoid mixing antiandrogen blood concentration with endogenous testosterone effects.
+
+---
+
 ## Build 41 已签名并私下交付 — 2026-10-30
 
 - **交付物**：`HRT-Log-build41-full-official.apk`，versionCode 41 / 0.2.0 / `net.plainnotes.app`，14,544,030 字节，SHA-256 `a5cc50eaff2ac2d86b563157b6003bcd9e3d56719557972d1abeb0da855a2970`；原正式证书 `989ba045…79b1`，v2/v3 通过、单签名者；**取代 Build 40**。负责人 2026-10-30 明确授权（“我授权签名”）；只在会话内私下发给负责人，不入 Git/CI/公开 Release/tag。
