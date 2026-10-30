@@ -1,3 +1,10 @@
+## UI-13 配色 PR① 进行中 / UI-14 待 token — 2026-10-30
+
+- **UI-13 PR①**（分支 `feature/ui13-accent-tokens-20261030`）：中性暖白底色（NotesTheme + 窗口背景 colors.xml）、`core/ui` 点缀色 token（`AccentColors.kt`、`AccentTile.kt`，`NotesTheme.accent`）、抽屉图标块、时间线事件类型色。**负责人 2026-10-30 把蓝与紫对调**：化验、浓度估算 = 紫；复诊、医疗档案 = 蓝；就诊资料包 = 紫；身心状态 = 玫红。记录在 REQUIREMENTS §173，任务书原文已归档在样图目录。
+- 已跑：`AccentColorsTest` 6 项、`Ui05TimelineTest`/`Ui03DrawerTest`/`Ui05DrawerBadgeTest`/`DrawerScrollUiTest`/`Ui05ContrastTest` 通过。整套 `:app:testFullDebugUnitTest` 与 `:core:ui` 在本地跑过一次后才推（结果见 PR）。**未做**：面积自查测试、前后对比图、PR②（化验/浓度/身心/医疗档案点缀，PK_DISPLAY_REVIEW，仅限颜色）、UI-14 页面本身。真机与人工 TalkBack 为 NOT_RUN。
+- 主线 `android` 检查近几次在同一源码上每次失败不同的测试（Ui12ConcentrationTest 的 CalledFromWrongThread 与断言、导入流程 20 秒等待超时、MedicalHome 等），#161 这种纯文档 PR 也失败，所以与代码无关；`attachment-poc-compatibility` 里 `MedicalAttachmentProductAndroidTest.standalonePdfExplicitWholeDrawLinkFiveMembersAndReopenUseOneOriginal` 两次以 `performMeasureAndLayout` 失败，堆栈显示是测试线程 `fetchSemanticsNodes()`→`waitForIdle` 与主线程帧竞争。根因 ROOT_CAUSE_NOT_PROVEN，已按“每个失败重跑一次”处理，没有放宽任何断言。原始日志在会话机 `/tmp/claude-0/ci/`。
+- 下一步：推 PR①并跑 CI → 面积自查测试和前后对比图 → PR② → UI-14（等 token 合并）。
+
 ## Build 40 已签名并私下交付 — 2026-10-30
 
 - **交付物**：`HRT-Log-build40-full-official.apk`，versionCode 40 / 0.2.0 / `net.plainnotes.app`，14,527,646 字节，SHA-256 `44b0bc80abfde505b7cb4679981901f29fbc7943c986dbfb926c252d9afdff4f`；原正式证书 `989ba045…79b1`，v2/v3 通过、单签名者；它**取代同为 versionCode 39 的 A 和 B**。负责人 2026-10-30 明确授权签名并私下交付（只在会话内私下发给负责人，不入 Git/CI/公开 Release/tag）。

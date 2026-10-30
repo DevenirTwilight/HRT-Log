@@ -85,6 +85,8 @@ val LocalSemanticColors = staticCompositionLocalOf { semanticColors(notesColorSc
 /** `NotesTheme.semantic.missed` and so on, inside [NotesTheme]. */
 object NotesTheme {
     val semantic: SemanticColors @Composable @ReadOnlyComposable get() = LocalSemanticColors.current
+    /** UI-13: blue, purple and rose accents for small elements (icon tiles, tags, date tiles, timeline dots). */
+    val accent: AccentColors @Composable @ReadOnlyComposable get() = LocalAccentColors.current
     /** UI-07 C: heroNumber, statNumber, sectionTitle, cardTitle. */
     val typeExtra: TypeExtra @Composable @ReadOnlyComposable get() = currentTypeExtra()
 }

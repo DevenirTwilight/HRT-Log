@@ -14,28 +14,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
-/** Original teal/coral palette; tones follow the Material 3 tonal ladder. */
+/**
+ * Original teal/coral palette; tones follow the Material 3 tonal ladder. UI-13 (REQUIREMENTS, 2026-10-30): primary/secondary/tertiary/error
+ * and their containers are unchanged; the neutral background, surface, outline and inverse families are a warm neutral (no green cast).
+ */
 private val Light = lightColorScheme(
     primary = Color(0xFF006A63), onPrimary = Color.White, primaryContainer = Color(0xFF9EF2E8), onPrimaryContainer = Color(0xFF00201D),
     secondary = Color(0xFF4A6360), onSecondary = Color.White, secondaryContainer = Color(0xFFCCE8E4), onSecondaryContainer = Color(0xFF051F1D),
     tertiary = Color(0xFF8E4D35), onTertiary = Color.White, tertiaryContainer = Color(0xFFFFDBCE), onTertiaryContainer = Color(0xFF370E00),
     error = Color(0xFFBA1A1A), onError = Color.White, errorContainer = Color(0xFFFFDAD6), onErrorContainer = Color(0xFF410002),
-    background = Color(0xFFF4FBF9), onBackground = Color(0xFF161D1C), surface = Color(0xFFF4FBF9), onSurface = Color(0xFF161D1C),
-    surfaceVariant = Color(0xFFDAE5E2), onSurfaceVariant = Color(0xFF3F4947), outline = Color(0xFF6F7977), outlineVariant = Color(0xFFBEC9C6),
-    surfaceContainerLowest = Color.White, surfaceContainerLow = Color(0xFFEEF5F3), surfaceContainer = Color(0xFFE9EFED),
-    surfaceContainerHigh = Color(0xFFE3EAE8), surfaceContainerHighest = Color(0xFFDDE4E2), surfaceDim = Color(0xFFD5DBD9), surfaceBright = Color(0xFFF4FBF9),
-    inverseSurface = Color(0xFF2B3231), inverseOnSurface = Color(0xFFECF2F0), inversePrimary = Color(0xFF82D5CC),
+    background = Color(0xFFFBF9F7), onBackground = Color(0xFF1D1B1A), surface = Color(0xFFFBF9F7), onSurface = Color(0xFF1D1B1A),
+    surfaceVariant = Color(0xFFE2DCD8), onSurfaceVariant = Color(0xFF4C4642), outline = Color(0xFF7B7470), outlineVariant = Color(0xFFD8D1CC),
+    surfaceContainerLowest = Color.White, surfaceContainerLow = Color(0xFFF5F2EF), surfaceContainer = Color(0xFFEFEBE8),
+    surfaceContainerHigh = Color(0xFFE9E4E0), surfaceContainerHighest = Color(0xFFE3DDD9), surfaceDim = Color(0xFFDDD8D4), surfaceBright = Color(0xFFFBF9F7),
+    inverseSurface = Color(0xFF32302E), inverseOnSurface = Color(0xFFF5F0ED), inversePrimary = Color(0xFF82D5CC),
 )
 private val Dark = darkColorScheme(
     primary = Color(0xFF82D5CC), onPrimary = Color(0xFF003733), primaryContainer = Color(0xFF00504A), onPrimaryContainer = Color(0xFF9EF2E8),
     secondary = Color(0xFFB0CCC8), onSecondary = Color(0xFF1C3532), secondaryContainer = Color(0xFF324B48), onSecondaryContainer = Color(0xFFCCE8E4),
     tertiary = Color(0xFFFFB599), onTertiary = Color(0xFF55200B), tertiaryContainer = Color(0xFF71361F), onTertiaryContainer = Color(0xFFFFDBCE),
     error = Color(0xFFFFB4AB), onError = Color(0xFF690005), errorContainer = Color(0xFF93000A), onErrorContainer = Color(0xFFFFDAD6),
-    background = Color(0xFF0E1514), onBackground = Color(0xFFDDE4E2), surface = Color(0xFF0E1514), onSurface = Color(0xFFDDE4E2),
-    surfaceVariant = Color(0xFF3F4947), onSurfaceVariant = Color(0xFFBEC9C6), outline = Color(0xFF889391), outlineVariant = Color(0xFF3F4947),
-    surfaceContainerLowest = Color(0xFF090F0F), surfaceContainerLow = Color(0xFF161D1C), surfaceContainer = Color(0xFF1A2120),
-    surfaceContainerHigh = Color(0xFF252B2A), surfaceContainerHighest = Color(0xFF2F3635), surfaceDim = Color(0xFF0E1514), surfaceBright = Color(0xFF343B3A),
-    inverseSurface = Color(0xFFDDE4E2), inverseOnSurface = Color(0xFF2B3231), inversePrimary = Color(0xFF006A63),
+    background = Color(0xFF141211), onBackground = Color(0xFFE8E2DE), surface = Color(0xFF141211), onSurface = Color(0xFFE8E2DE),
+    surfaceVariant = Color(0xFF4C4642), onSurfaceVariant = Color(0xFFCFC6C1), outline = Color(0xFF968D88), outlineVariant = Color(0xFF4C4642),
+    surfaceContainerLowest = Color(0xFF0F0D0C), surfaceContainerLow = Color(0xFF1C1A18), surfaceContainer = Color(0xFF211F1D),
+    surfaceContainerHigh = Color(0xFF2B2826), surfaceContainerHighest = Color(0xFF353230), surfaceDim = Color(0xFF141211), surfaceBright = Color(0xFF3A3735),
+    inverseSurface = Color(0xFFE8E2DE), inverseOnSurface = Color(0xFF32302E), inversePrimary = Color(0xFF006A63),
 )
 
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
@@ -61,10 +64,10 @@ fun notesColorScheme(dark: Boolean, contrast: Contrast = Contrast.STANDARD): Col
     } else if (dark) Dark else Light
     val dynamic = dynamicColor && Build.VERSION.SDK_INT >= 31
     val colors = scheme.withContrast(contrast, dark)
-    // UI-06: semantic status tokens next to the Material scheme, same contrast level and dynamic rule.
+    // UI-06: semantic status tokens next to the Material scheme, same contrast level and dynamic rule. UI-13: accent tokens likewise.
     // UI-07 D: the system "Remove animations" setting, read once per theme composition.
     val reduce = ReduceMotion.fromSystem(LocalContext.current)
-    androidx.compose.runtime.CompositionLocalProvider(LocalSemanticColors provides semanticColors(colors, dark, contrast, dynamic), LocalReduceMotion provides reduce) {
+    androidx.compose.runtime.CompositionLocalProvider(LocalSemanticColors provides semanticColors(colors, dark, contrast, dynamic), LocalAccentColors provides accentColors(colors, dark, contrast, dynamic), LocalReduceMotion provides reduce) {
         MaterialTheme(colorScheme = colors, shapes = Shapes(small = androidx.compose.foundation.shape.RoundedCornerShape(10.dp), medium = androidx.compose.foundation.shape.RoundedCornerShape(16.dp), large = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)), content = content)
     }
 }

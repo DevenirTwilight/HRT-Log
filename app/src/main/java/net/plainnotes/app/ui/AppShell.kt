@@ -370,6 +370,19 @@ internal val DRAWER_GROUPS: List<DrawerSection> = listOf(
     DrawerSection.Divider(listOf(Destination.SETTINGS, Destination.ABOUT)),
 )
 
+/**
+ * UI-13: the accent each drawer entry's icon tile uses. Owner decision 2026-10-30 (after the samples): purple marks the numbers pages (labs and
+ * concentration), blue the medical record and visits, rose the mood page; calendar, dose history, medications and stock stay teal, and
+ * timeline, settings and about are neutral grey. Only the small tile is coloured.
+ */
+internal fun drawerAccent(d: Destination): AccentKind = when (d) {
+    Destination.CONCENTRATION, Destination.LABS -> AccentKind.PURPLE
+    Destination.MEDICAL, Destination.VISITS -> AccentKind.BLUE
+    Destination.WELLBEING -> AccentKind.ROSE
+    Destination.CALENDAR, Destination.HISTORY, Destination.MEDICATIONS, Destination.STOCK -> AccentKind.TEAL
+    Destination.TIMELINE, Destination.SETTINGS, Destination.ABOUT -> AccentKind.NEUTRAL
+}
+
 @Composable internal fun DrawerContent(selected: Destination, stockLow: Int = 0, onSelect: (Destination) -> Unit) {
     Column(Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 12.dp).testTag("drawer-content")) {
         Row(Modifier.padding(horizontal = 16.dp, vertical = 24.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -391,7 +404,7 @@ internal val DRAWER_GROUPS: List<DrawerSection> = listOf(
                 // UI-05 E: Stock shows how many medications are low (same set as the home strips), with a spoken description.
                 val stockBadge = d == Destination.STOCK && stockLow > 0
                 val badgeText = if (stockBadge) stringResource(R.string.drawer_stock_badge, stockLow) else ""
-                NavigationDrawerItem(label = { Text(stringResource(d.title)) }, icon = { Icon(d.icon, null) }, selected = selected == d,
+                NavigationDrawerItem(label = { Text(stringResource(d.title)) }, icon = { AccentIconTile(d.icon, drawerAccent(d), Modifier.testTag("drawer-icon:${d.name}")) }, selected = selected == d,
                     badge = if (!d.ready) ({ Text(stringResource(R.string.soon_badge), style = MaterialTheme.typography.labelSmall) })
                         else if (stockBadge) ({
                             Surface(color = MaterialTheme.colorScheme.tertiaryContainer, contentColor = MaterialTheme.colorScheme.onTertiaryContainer, shape = Corners.pill,
