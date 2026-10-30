@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>时间线 · 中性底色 + 点缀</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#006A63}a:hover{color:#004F4A}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 1100px; box-sizing: border-box; background: #FBF9F7; color: #1D1B1A; font-family: 'Noto Sans SC', system-ui, sans-serif; display: flex; flex-direction: column;">
+
+  <header style="height: 64px; display: flex; align-items: center; gap: 4px; padding: 0 8px; box-sizing: border-box;">
+    <button aria-label="打开菜单" style="width: 48px; height: 48px; border: 0; background: transparent; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: #1D1B1A;">
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <div style="flex: 1; font-size: 22px; font-weight: 500;">治疗时间线</div>
+    <button aria-label="添加" style="width: 48px; height: 48px; border: 0; background: transparent; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: #4C4642;">
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+  </header>
+
+  <main style="display: flex; flex-direction: column; gap: 20px; padding: 4px 16px 32px;">
+
+    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+      <button style="height: 36px; padding: 0 14px; border: 1px solid #7B7470; border-radius: 10px; background: #CCE8E4; color: #051F1D; font-family: inherit; font-size: 13px; font-weight: 500;">全部</button>
+      <button style="height: 36px; padding: 0 14px; border: 1px solid #D8D1CC; border-radius: 10px; background: transparent; color: #4C4642; font-family: inherit; font-size: 13px;">化验</button>
+      <button style="height: 36px; padding: 0 14px; border: 1px solid #D8D1CC; border-radius: 10px; background: transparent; color: #4C4642; font-family: inherit; font-size: 13px;">就诊</button>
+      <button style="height: 36px; padding: 0 14px; border: 1px solid #D8D1CC; border-radius: 10px; background: transparent; color: #4C4642; font-family: inherit; font-size: 13px;">里程碑</button>
+    </div>
+
+    <section aria-label="即将发生" style="display: flex; flex-direction: column; gap: 8px;">
+      <h2 style="margin: 0 4px; font-size: 14px; font-weight: 600; color: #4C4642;">即将发生</h2>
+      <a href="#visit" style="min-height: 64px; background: #FFFFFF; border: 1px dashed #D8D1CC; border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; gap: 14px; text-decoration: none; color: #1D1B1A;">
+        <div style="width: 40px; height: 40px; border-radius: 20px; background: #E9DDF5; color: #5A3E78; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+        </div>
+        <div style="flex: 1; min-width: 0;">
+          <div style="font-size: 15px; font-weight: 600;">内分泌科复诊</div>
+          <div style="font-size: 13px; color: #4C4642;">10月20日 周二 · 5 天后</div>
+        </div>
+      </a>
+    </section>
+
+    <section aria-label="当前时期" style="background: #F5F2EF; border-radius: 24px; padding: 18px 16px 12px; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: flex-start; gap: 8px;">
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px;">
+          <div style="align-self: flex-start; font-size: 12px; font-weight: 600; color: #00504A; background: #9EF2E8; padding: 2px 8px; border-radius: 6px;">当前时期</div>
+          <div style="font-size: 18px; font-weight: 600; margin-top: 4px;">9月8日 至今 · 第 38 天</div>
+        </div>
+        <button aria-label="编辑时期" style="width: 44px; height: 44px; margin: -4px -8px 0 0; border: 0; background: transparent; border-radius: 22px; display: flex; align-items: center; justify-content: center; color: #4C4642;">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5.5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="18.5" r="1.8"/></svg>
+        </button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px; font-size: 14px;">
+        <div style="display: flex; gap: 8px; align-items: center;"><div style="width: 6px; height: 6px; border-radius: 3px; background: #006A63;"></div>戊酸雌二醇 · 口服 · 2 mg · 每天 2 次</div>
+        <div style="display: flex; gap: 8px; align-items: center;"><div style="width: 6px; height: 6px; border-radius: 3px; background: #006A63;"></div>醋酸环丙孕酮 · 口服 · 12.5 mg · 每天 1 次</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; background: #FFFFFF; border-radius: 16px; overflow: hidden;">
+        <sc-for list="{{events}}" as="e" hint-placeholder-count="4">
+          <a href="#event" style="min-height: 60px; padding: 10px 14px; display: flex; align-items: center; gap: 14px; text-decoration: none; color: #1D1B1A; border-top: {{e.divider}};">
+            <div aria-hidden="true" style="width: 36px; height: 36px; border-radius: 18px; background: {{e.bg}}; color: {{e.fg}}; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px; font-weight: 700;">{{e.glyph}}</div>
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-size: 14px; font-weight: 500;">{{e.title}}</div>
+              <div style="font-size: 12px; color: #4C4642;">{{e.meta}}</div>
+            </div>
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7B7470" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </a>
+        </sc-for>
+      </div>
+      <a href="#history" style="align-self: flex-start; min-height: 44px; display: flex; align-items: center; font-size: 14px; font-weight: 600; text-decoration: none;">查看本时期的服药记录</a>
+    </section>
+
+    <section aria-label="方案未知的记录" style="display: flex; flex-direction: column; gap: 8px;">
+      <h2 style="margin: 0 4px; font-size: 14px; font-weight: 600; color: #4C4642;">没有方案的记录</h2>
+      <div style="font-size: 13px; color: #4C4642; margin: 0 4px;">这些事件发生时还没有记录服药方案。</div>
+      <a href="#lab" style="min-height: 60px; background: #FFFFFF; border-radius: 16px; padding: 10px 14px; display: flex; align-items: center; gap: 14px; text-decoration: none; color: #1D1B1A;">
+        <div aria-hidden="true" style="width: 36px; height: 36px; border-radius: 18px; background: #D6E3FF; color: #2C4A78; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px; font-weight: 700;">验</div>
+        <div style="flex: 1; min-width: 0;">
+          <div style="font-size: 14px; font-weight: 500;">化验 · 雌二醇（E2）</div>
+          <div style="font-size: 12px; color: #4C4642;">8月29日 周六</div>
+        </div>
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7B7470" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </a>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 12px; color: #4C4642; padding: 0 4px;">
+      <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 20px; height: 20px; border-radius: 10px; background: #D6E3FF; color: #2C4A78; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">验</div>化验</div>
+      <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 20px; height: 20px; border-radius: 10px; background: #E9DDF5; color: #5A3E78; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">诊</div>就诊</div>
+      <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 20px; height: 20px; border-radius: 10px; background: #9EF2E8; color: #00504A; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">★</div>里程碑</div>
+      <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 20px; height: 20px; border-radius: 10px; background: #F8DCE8; color: #8A3B5E; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">评</div>阶段回顾</div>
+    </div>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var types = {
+      milestone: { bg: '#9EF2E8', fg: '#00504A', glyph: '★' },
+      lab: { bg: '#D6E3FF', fg: '#2C4A78', glyph: '验' },
+      review: { bg: '#F8DCE8', fg: '#8A3B5E', glyph: '评' }
+    };
+    var raw = [
+      { t: 'milestone', title: '里程碑 · [你填写的名称]', meta: '10月8日 周四' },
+      { t: 'lab', title: '化验 · 雌二醇（E2）', meta: '10月7日 周三' },
+      { t: 'lab', title: '化验 · 睾酮', meta: '10月7日 周三' },
+      { t: 'review', title: '阶段回顾', meta: '10月5日 周一' }
+    ];
+    var events = raw.map(function (e, i) {
+      var s = types[e.t];
+      return { title: e.title, meta: e.meta, bg: s.bg, fg: s.fg, glyph: s.glyph, divider: i === 0 ? '0' : '1px solid #E9E4E0' };
+    });
+    return { events: events };
+  }
+}
+</script>
+</body>
+</html>

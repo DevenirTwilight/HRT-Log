@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>库存 · 中性底色</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#006A63}a:hover{color:#004F4A}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 1100px; box-sizing: border-box; background: #FBF9F7; color: #1D1B1A; font-family: 'Noto Sans SC', system-ui, sans-serif; display: flex; flex-direction: column;">
+
+  <header style="height: 64px; display: flex; align-items: center; gap: 4px; padding: 0 8px; box-sizing: border-box;">
+    <button aria-label="打开菜单" style="width: 48px; height: 48px; border: 0; background: transparent; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: #1D1B1A;">
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <div style="flex: 1; font-size: 22px; font-weight: 500;">库存</div>
+  </header>
+
+  <main style="display: flex; flex-direction: column; gap: 16px; padding: 4px 16px 32px;">
+
+    <article style="background: #F5F2EF; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: flex-start; gap: 8px;">
+        <div style="flex: 1; min-width: 0;">
+          <h2 style="margin: 0; font-size: 18px; font-weight: 600;">戊酸雌二醇</h2>
+          <div style="font-size: 13px; color: #4C4642; margin-top: 2px;">口服 · 每天 2 次</div>
+        </div>
+        <button aria-label="更多操作：修正余量、添加库存" style="width: 44px; height: 44px; margin: -8px -10px 0 0; border: 0; background: transparent; border-radius: 22px; display: flex; align-items: center; justify-content: center; color: #4C4642;">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5.5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="18.5" r="1.8"/></svg>
+        </button>
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 10px;">
+        <div style="font-size: 34px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1;">38 mg</div>
+        <div style="font-size: 15px; color: #4C4642;">约 9 天</div>
+      </div>
+      <div aria-hidden="true" style="height: 8px; border-radius: 4px; background: #CCE8E4; overflow: hidden;">
+        <div style="width: 27%; height: 8px; border-radius: 4px; background: #006A63;"></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px;">
+        <div>开封中：剩 8 / 30 mg</div>
+        <div style="color: #4C4642;">9月28日开封 · 另有 1 盒未开封</div>
+      </div>
+      <button style="height: 48px; border: 0; border-radius: 24px; background: #006A63; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 600;">开封新的一盒</button>
+      <div style="height: 1px; background: #D8D1CC;"></div>
+      <button aria-expanded="true" style="height: 44px; margin: -6px 0; border: 0; background: transparent; padding: 0; display: flex; align-items: center; gap: 8px; font-family: inherit; font-size: 14px; font-weight: 600; color: #006A63;">
+        包装记录（2）
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>
+      </button>
+      <div style="display: flex; flex-direction: column; background: #FFFFFF; border-radius: 16px; overflow: hidden;">
+        <a href="#pkg2" style="min-height: 56px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: #1D1B1A; border-bottom: 1px solid #E9E4E0;">
+          <div style="flex: 1;">
+            <div style="font-size: 14px; font-weight: 500;">#2 · 30 mg</div>
+            <div style="font-size: 12px; color: #4C4642;">未开封</div>
+          </div>
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7B7470" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#pkg1" style="min-height: 56px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: #1D1B1A;">
+          <div style="flex: 1;">
+            <div style="font-size: 14px; font-weight: 500;">#1 · 30 mg · 开封中</div>
+            <div style="font-size: 12px; color: #4C4642;">[药房名称] · 批号 [LOT]</div>
+          </div>
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7B7470" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </article>
+
+    <article style="background: #F5F2EF; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: flex-start; gap: 8px;">
+        <div style="flex: 1; min-width: 0;">
+          <h2 style="margin: 0; font-size: 18px; font-weight: 600;">雌二醇凝胶</h2>
+          <div style="font-size: 13px; color: #4C4642; margin-top: 2px;">经皮 · 每天 1 次</div>
+        </div>
+        <button aria-label="更多操作：修正余量、添加库存" style="width: 44px; height: 44px; margin: -8px -10px 0 0; border: 0; background: transparent; border-radius: 22px; display: flex; align-items: center; justify-content: center; color: #4C4642;">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5.5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="18.5" r="1.8"/></svg>
+        </button>
+      </div>
+      <div style="align-self: flex-start; display: flex; align-items: center; gap: 6px; background: #FFDBCE; color: #370E00; border-radius: 10px; padding: 5px 10px; font-size: 13px; font-weight: 600;">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg>
+        约 3 天后用完
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 10px;">
+        <div style="font-size: 34px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1;">6 mg</div>
+        <div style="font-size: 15px; color: #4C4642;">没有未开封的包装</div>
+      </div>
+      <div aria-hidden="true" style="height: 8px; border-radius: 4px; background: #F3D9CF; overflow: hidden;">
+        <div style="width: 8%; height: 8px; border-radius: 4px; background: #8E4D35;"></div>
+      </div>
+      <button style="height: 48px; border: 0; border-radius: 24px; background: #8E4D35; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 600;">添加库存</button>
+      <div style="height: 1px; background: #D8D1CC;"></div>
+      <button aria-expanded="false" style="height: 44px; margin: -6px 0; border: 0; background: transparent; padding: 0; display: flex; align-items: center; gap: 8px; font-family: inherit; font-size: 14px; font-weight: 600; color: #006A63;">
+        包装记录（1）
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+    </article>
+
+    <article style="background: #F5F2EF; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 600;">醋酸环丙孕酮</h2>
+      <div style="font-size: 14px; color: #4C4642;">还没有记录库存。记录后可以提前提醒你补货。</div>
+      <button style="align-self: flex-start; height: 44px; padding: 0 20px; border: 0; border-radius: 22px; background: #CCE8E4; color: #051F1D; font-family: inherit; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        开始记录库存
+      </button>
+    </article>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
