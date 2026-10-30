@@ -1,3 +1,9 @@
+## PK-FR 既有模型法国 RCP 回归已入库 — 2026-10-30
+
+- 新增 `tools/pk-research/test_france_rcp_existing_models.py`（6个独立于 Android 的 stdlib characterization tests），引用 ANSM ESTREVA/OROMONE/DUOVA/UTROGESTAN，使用精确 `pk-params.json` 方程复算单剂/21次每日稳态。记录 **已知** ORAL EV 与 DUOVA 总 E2 的差距和 P4 后段形状差距，不把“与RCP存在差距”硬说成验证通过或模型错；模型改善时须更新该测试与对应来源报告。
+- 定量对照及假设见 `docs/pk-research/france-rcp-model-crosscheck-2026-10-30.md`。新增 6项测试仅**源代码已提交**；CI 与实际通过情况仍待 GitHub 结果确认。
+- 研究中的 T IM 假设反例另在 PR #170（避免无来源直接给用户画绝对T）；E2/Estreva 生产及四语仍在 PR #169。
+
 ## PK-FR 第一阶段正在实施 — 2026-10-30（实时入库）
 
 - **最新负责人指令**：「开始做，全部成果实时入库」；覆盖未建模的雌激素/睾酮剂型，也使用法国官方 RCP §5.2 核验既有模型。不是仅做研究报告，亦不得伪称所有剂型已完成。
