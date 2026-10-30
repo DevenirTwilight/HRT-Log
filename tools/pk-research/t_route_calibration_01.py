@@ -90,7 +90,7 @@ def nebido():
     y=[38.,50.,37.,16.] # Population aggregate, FOUR NON-EQUIVALENT STAGES
     rows=[]
     for a in [.10,.12,.14,.16,.18,.20,.22]:
-        for wi in range(19):
+        for wi in range(1,19):
             w=wi/20
             k=lambda t:nebido_kernel(t,a,w)
             c1,t1=pmax(k,0,28,.5)
@@ -163,7 +163,7 @@ def test():
     assert 1<a['minimum_assumed_baseline_to_pass_ng_ml']<2
     assert all(len(x['post_last_application_day11_to14_ng_ml'])==4 for x in androgel()['shape_family'])
     n=nebido()
-    assert n['candidate_count']==133
+    assert n['candidate_count']==126
     assert n['minimum_score_candidate']['sse']>0
     assert n['minimum_score_candidate']['fitted_baseline_nmol_l']>=0
     return 10
