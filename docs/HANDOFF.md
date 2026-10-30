@@ -1,3 +1,9 @@
+## UI-14 复诊页升级 PR — 2026-10-30
+
+- UI-13 ① 已合并（#163，主线 `a022952a`）；UI-14 分支 `feature/ui14-visits-20261030` 已合并主线并开 PR（见 PR 号）。本地实际通过：`VisitHeroTest` 11、`Ui14VisitsTest` 384、`Ui09SourceGuardTest` 4；整套单元测试以 PR 的 CI 精确源码为准。
+- 本地后台 Gradle 运行在会话环境更新时会被悄悄带走（日志停住、没有 BUILD 行），所以较长的本地测试改在前台跑，不把半截结果当通过。
+- 待办：UI-13 第二个 PR（化验=紫、浓度估算图上化验点=紫并把服药刻度改淡青绿、身心状态=玫红、医疗档案蓝/紫；PK_DISPLAY_REVIEW，只限颜色与图标块外观，需 PK 显示回归）；两个 PR 的真机确认与 TalkBack 为 NOT_RUN；新 APK 需要负责人再授权签名。
+
 ## UI-13 配色 PR① 进行中 / UI-14 待 token — 2026-10-30
 
 - **UI-13 PR①**（分支 `feature/ui13-accent-tokens-20261030`）：中性暖白底色（NotesTheme + 窗口背景 colors.xml）、`core/ui` 点缀色 token（`AccentColors.kt`、`AccentTile.kt`，`NotesTheme.accent`）、抽屉图标块、时间线事件类型色。**负责人 2026-10-30 把蓝与紫对调**：化验、浓度估算 = 紫；复诊、医疗档案 = 蓝；就诊资料包 = 紫；身心状态 = 玫红。记录在 REQUIREMENTS §173，任务书原文已归档在样图目录。

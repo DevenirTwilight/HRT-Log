@@ -115,7 +115,8 @@ class AppShellBackNavigationTest {
         // Wait for the actual visit first; keep the exact-one FAB and both Back assertions.
         ui.waitUntil(10_000) { ui.onAllNodesWithText("Synthetic clinic", substring = true).fetchSemanticsNodes().isNotEmpty() }
         ui.onNodeWithText(context.getString(R.string.appointment), useUnmergedTree = true).assertExists()  // list FAB
-        ui.onAllNodesWithText("Synthetic clinic", substring = true).onFirst().performClick(); ui.waitForIdle()
+        // UI-14: the header card repeats the next visit's doctor, so press the visit card itself (the clickable node), not the first text with that name.
+        ui.onAllNodes(hasText("Synthetic clinic", substring = true) and hasClickAction()).onFirst().performClick(); ui.waitForIdle()
         ui.onNodeWithText(context.getString(R.string.appointment), useUnmergedTree = true).assertDoesNotExist()  // list FAB hidden in the detail
         back()
         ui.onNodeWithText(context.getString(R.string.appointment), useUnmergedTree = true).assertExists(); assertNotCalendar()
@@ -129,7 +130,8 @@ class AppShellBackNavigationTest {
             ui.onNodeWithTag("medical-tab:$tab").performClick();if(tab=="files")waitLibrary()
             ui.onNodeWithTag(if(tab=="files")"library" else "medical-list").performScrollToNode(hasTestTag(tag))
             ui.onNodeWithTag(tag).performClick();ui.waitForIdle()
-            ui.onNodeWithText(context.getString(R.string.visits_empty)).assertExists()
+            // UI-14: the header card also says it; the page's own empty-state body (this assertion's old target) must still be there.
+            ui.onNode(hasTestTag("empty-state-body") and hasText(context.getString(R.string.visits_empty))).assertExists()
             ui.onNodeWithTag("medical-center-back").performClick();ui.waitForIdle();if(tab=="files")waitLibrary()
             ui.onNodeWithTag(if(tab=="files")"library" else "medical-list").assertExists()
         }
@@ -188,7 +190,7 @@ class AppShellBackNavigationTest {
         ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-center-visits"))
         ui.onNodeWithTag("medical-center-visits").performClick()
         ui.waitUntil(10_000){ui.onAllNodesWithText("Synthetic preparation visit",substring=true).fetchSemanticsNodes().isNotEmpty()}
-        ui.onAllNodesWithText("Synthetic preparation visit",substring=true).onFirst().performClick()
+        ui.onAllNodes(hasText("Synthetic preparation visit",substring=true) and hasClickAction()).onFirst().performClick() // UI-14: the visit card, not the header card's text
         ui.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText(context.getString(R.string.visit_question_add)))
         ui.onNodeWithText(context.getString(R.string.visit_question_add)).assertHasClickAction()
         ui.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText(context.getString(R.string.visit_generate)))

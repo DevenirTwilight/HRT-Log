@@ -38,6 +38,7 @@ class Ui09SourceGuardTest {
         val allowed = mapOf(
             "CalendarScreen.kt" to 6,     // (lines) month title between arrows, weekday header over day columns, day / week / last-7-days cells
             "MedicalRecordsScreen.kt" to 1, // the date chip of the next visit (month / day / weekday inside a chip)
+            "VisitsScreen.kt" to 1,       // UI-14: the date tile of a visit card (month / day / weekday inside a tile), the same exception as the medical chip above
             "WellbeingDaily.kt" to 1,     // the date between the previous / next day arrows
             "AdaptiveControls.kt" to 1,   // a segmented control's label
             "LockScreen.kt" to 1,         // the PIN pad screen, centred around the keypad
