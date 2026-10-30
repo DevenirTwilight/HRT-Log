@@ -1,0 +1,105 @@
+{
+  "apk": "HRT-Log-build41-full-official.apk",
+  "package": {
+    "application_id": "net.plainnotes.app",
+    "version_code": 41,
+    "version_name": "0.2.0"
+  },
+  "apk_sha256": "a5cc50eaff2ac2d86b563157b6003bcd9e3d56719557972d1abeb0da855a2970",
+  "signing_cert_sha256": [
+    "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+  ],
+  "source": {
+    "SOURCE_SHA": "84135556b35d966d16a00c20c4649b111199fcfb",
+    "SOURCE_DIRTY": "false",
+    "SOURCE_ORIGIN": "git"
+  },
+  "bytes": 14544030,
+  "unsigned_apk_sha256": "830fc229b43afd5f3dd6f6b728f62df2dbc93010fe2700110a1c09d7d178449b",
+  "build_input_sha256": "2f921fd006eec42d91c4ac01aee180f9cb92ed8460afb394ee0a8080395c1928",
+  "build_input": "External version41.init.gradle changes only versionCode 40 to 41; clean git source 84135556",
+  "native_libraries": [
+    {
+      "name": "lib/arm64-v8a/libandroidx.graphics.path.so",
+      "sha256": "41e9a793c43a0f4fddb19e33f346bace464f30f888ba7b9eaf96294ea115bfb6",
+      "load_alignments": [
+        16384,
+        16384,
+        16384
+      ]
+    },
+    {
+      "name": "lib/arm64-v8a/libsqlcipher.so",
+      "sha256": "bc85746647ce4ea5f390eccd61e5236fbd11786a91802877b9fdbbb66a55192d",
+      "load_alignments": [
+        16384,
+        16384,
+        16384
+      ]
+    },
+    {
+      "name": "lib/armeabi-v7a/libandroidx.graphics.path.so",
+      "sha256": "41399eba6fc2a60f6f14642375c1824f3cf25eb8fec7397d753730a3ceda3e2b",
+      "load_alignments": []
+    },
+    {
+      "name": "lib/armeabi-v7a/libsqlcipher.so",
+      "sha256": "a3d6e16e4477961cffc563ad9e9b49aa9cf0f4def5f008a9b349c9afacec6170",
+      "load_alignments": []
+    },
+    {
+      "name": "lib/x86/libandroidx.graphics.path.so",
+      "sha256": "eb0570b41fd3bff25d8204a967c03bd7550719e768b791f680cc40cbe35f29af",
+      "load_alignments": []
+    },
+    {
+      "name": "lib/x86/libsqlcipher.so",
+      "sha256": "efd77986abfa03cff177ea1d9801bd3080bd8bfc90a26ac1a977da169c5b89c8",
+      "load_alignments": []
+    },
+    {
+      "name": "lib/x86_64/libandroidx.graphics.path.so",
+      "sha256": "4e56c996f13670e70082658de7880c4020eabf4f25e43387f88ed78a713fc9f0",
+      "load_alignments": [
+        16384,
+        16384,
+        16384
+      ]
+    },
+    {
+      "name": "lib/x86_64/libsqlcipher.so",
+      "sha256": "482f62c4d77e136d7cb7eb30d74a5c4cbadc3577d10ced1f13f3e745e1be7e7a",
+      "load_alignments": [
+        16384,
+        16384,
+        16384
+      ]
+    }
+  ],
+  "elf_16k": "PASS",
+  "zip_16k": "PASS",
+  "no_internet": "PASS",
+  "release_nondebug": "PASS",
+  "signature": "v2 and v3 verified, one original signer",
+  "payload_unchanged_by_signing": "PASS (324 non-META-INF entries identical)",
+  "contents": "UI-13 (warm neutral base, blue/purple/rose accents on small elements, owner swap: labs and concentration purple, visits and medical records blue), UI-14 (visits list header card and cards), calibration card actions in one wrapping row, PDF file tiles blue",
+  "physical_device": "NOT_RUN",
+  "manual_talkback": "NOT_RUN",
+  "hardware_power_loss": "NOT_RUN",
+  "external_security_review": "NOT_REVIEWED_EXTERNALLY",
+  "public_release": "NOT_AUTHORIZED",
+  "owner_authorization": "2026-10-30: \"我授权签名\" (Build 41, private delivery)",
+  "mainline_ci": {
+    "note": "Built and signed from the squash-merged main 84135556 after #165 merged. Main's own CI on that merge commit had not finished at signing time. The merged tree equals the exact tree CI ran on #165's head 7f9293f1 (strict up-to-date merging): android, jvm, device-tests, attachment-poc-compatibility 26/29 and security-native 26/27/29/35 all SUCCESS there, after one rerun each of the failed jobs (API 26 emulator connection refused; API 29 SnapshotStateObserver multithreaded access; MedicalHomeConfirmFlowTest timeout), root causes of the Compose ones not proven.",
+    "pr_165_head": "7f9293f19fe7ad0dab03dd6813bbe9c47a71f9d7"
+  },
+  "signed_at": "2026-10-30T14:51:00+00:00",
+  "delivery_channel": "Private file sent to the owner inside the Claude session; no public Release/tag; not committed to Git",
+  "owner_download_confirmed": false,
+  "installed_on_user_device": "NOT_RUN",
+  "temporary_credentials_removed": true,
+  "private_repository_main_unchanged": true,
+  "private_repository_access": "Private; key backup read-only from DevenirTwilight/-, temporary copy shredded",
+  "supersedes": "Build 40 (44b0bc80...), versionCode 40",
+  "delivered_at": "2026-10-30T14:53:00+00:00"
+}
