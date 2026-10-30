@@ -161,7 +161,8 @@ CPA 的结构：三项消除（0.8 h、43.9 h、78.6 h）共用一个吸收速�
 | 贴片 `E2_PATCH` | 佩戴期间按标称速率匀速释放进入皮肤储库（表观 t½ 6.8 h，标签撕掉后 5.9–7.7 h 的中点），再进入血浆（t½ 约 1 h）；按 Vivelle-Dot 各剂量的 Cavg 拟合 | Vivelle 35/47/71/94（标签 34/57/72/89）；Climara 22/44/88；撕掉后表观 t½ 在标签范围内（EngineTest） |
 | 凝胶 EstroGel/Oestrogel `E2_GEL_ESTROGEL` | t½ 36 h（标签）；Tmax 4.5 h（Järvinen 1999）；稳态 Cavg 28.3 | Cmax 偏低，见上 |
 | 凝胶 Divigel `E2_GEL_DIVIGEL` | t½ 10 h（标签）；三个剂量的稳态 Cavg | Sirviö 2026 1.5 mg Cavg 独立核对（EngineTest） |
-| 凝胶 其他产品 `E2_GEL_OTHER` | Estreva、自制等**无该产品数据**：t½ 取两者几何平均约 19 h，CV 1.2（宽区间），界面标注 | Estreva 1.5 mg 单次 Cmax 39（RCP 40） |
+| ESTREVA 0.1% 凝胶 `E2_GEL_ESTREVA`（2026-10-30 新增） | 法国 ANSM RCP §5.2 的 1.5mg 单次峰 ~40 pg/mL、连续用药第 22 天峰 ~70、末次 24h ~40；一阶经验形状参数由这些同源群体均值拟合，不是经独立人体数据验证的个体绝对浓度 | `FrenchRcpModelTest` 按官方 RCP 拟合锚点复算；**ILLUSTRATIVE**，非独立科学验证 |
+| 凝胶 其他产品 `E2_GEL_OTHER` | 仅自制或未知产品仍**无产品专属数据**；原通用宽区间参数不变，界面保留 NO_PRODUCT_DATA | 不能再把 ESTREVA 列为此类；既有无数据状态的历史文档为 2026-10-30 前快照 |
 | 肌注戊酸雌二醇 `EV_IM` | 一项库房吸收 + 一项消除，按 Schug 2012 的 Cmax、AUC 和 Oriowo 1980 的 Tmax 约 2 天联合拟合 | Tmax 48 h，10 mg Cmax 505.7 |
 | 舌下雌二醇 `E2_SL` | 黏膜快速项（上升和下降都约 1/h）+ 极小吞咽比例（按口服）；只校准默认档（约 10 分钟）；其他档按含服时间外推，标"外推，无文献" | Tmax 1 h、Cmax 144、AUC0-8 = 1.8 × 口服；8 小时后外推，见上 |
 | 舌下戊酸雌二醇 | 无文献，不画曲线，界面说明原因 | — |

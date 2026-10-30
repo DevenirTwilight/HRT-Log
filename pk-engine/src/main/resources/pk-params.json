@@ -1,9 +1,39 @@
 {
  "version": "0.1.0-literature-draft",
- "status": "Literature values only (M4a). Not used by the engine yet; awaiting review.",
+ "status": "Mixed production/research: Engine consumes E2/CPA/SPI/P4 and E2_GEL_ESTREVA; T_GEL_ANDROGEL_* are illustrative research-only, not dispatched in app.",
  "generated": "2026-10-06",
  "note": "Observed values from labels and PubMed-indexed studies. Each entry cites a reference id prefixed by its topic. No compartmental model parameters (ka etc.) were found in the literature.",
  "references": [
+ {
+  "id": "fr_ANSM_20260904_ANDROGEL_50",
+  "authors": "BESINS HEALTHCARE / ANSM",
+  "year": "2026",
+  "title": "ANDROGEL 50 mg 1% gel, RCP §5.2 (2026-09-04)",
+  "journal": "French BDPM CIS 64205548",
+  "pmid": "",
+  "doi": "",
+  "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64205548/extrait"
+ },
+ {
+  "id": "fr_ANSM_20260204_ANDROGEL_162",
+  "authors": "BESINS HEALTHCARE / ANSM",
+  "year": "2026",
+  "title": "ANDROGEL 16.2 mg/g gel, RCP §5.2 (2026-02-04)",
+  "journal": "French BDPM CIS 68097237",
+  "pmid": "",
+  "doi": "",
+  "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68097237/extrait"
+ },
+ {
+  "id": "fr_ANSMS_20260706_ESTREVA",
+  "authors": "Theramex Ireland Limited / ANSM",
+  "year": "2026",
+  "title": "ESTREVA 0,1 %, gel — RCP §5.2 Propriétés pharmacocinétiques (ANSM updated 2026-07-06)",
+  "journal": "France Base de Données Publique des Médicaments, CIS 63216075",
+  "pmid": "",
+  "doi": "",
+  "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63216075/extrait"
+ },
   {
    "id": "estradiol_oral_sl_im:ANSM_PROGYNOVA2",
    "authors": "Bayer HealthCare (MAH)",
@@ -7148,6 +7178,83 @@
    "rate_cv": 0.29,
    "rate_cv_source": "assumption: no between-person data on this half-life; borrowed from oral estradiol valerate (Zhang 2024, 29 %)"
   },
+  "T_GEL_ANDROGEL_1PCT": {
+  "unit": "ng/mL",
+  "ka_per_h": 0.5,
+  "terms": [
+   {
+    "A_per_mg": 0.08181818181818182,
+    "lambda_per_h": 0.06,
+    "t_half_h": 11.55245
+   }
+  ],
+  "basis": [
+   "fr_ANSM_20260904_ANDROGEL_50: after 5 g 1% gel = 50mg T, daily mean serum T INCREMENT ~2.5ng/mL; near day-2 steady; return to baseline ~72-96h after stop"
+  ],
+  "assumption": "ILLUSTRATIVE dose-attributable incremental T only, NOT total serum T. Single absorption/skin-depot decay; ka=0.5/h and lambda=0.06/h are not measured constants. Amplitude chosen so 50mg/daily steady state mean incremental concentration =2.5ng/mL at once-daily application. Predictive peak/trough, individual baseline and dose linearity beyond cited conditions are unverified.",
+  "cv": 1,
+  "cv_source": "Explicit assumption: RCP has no usable CV for the mean increment; not a statistical confidence interval",
+  "illustrative": true,
+  "no_product_data": false,
+  "rate_cv": 0.5,
+  "rate_cv_source": "Assumed scenario sensitivity, not fitted interpatient variability",
+  "products": [
+   "androgel_50mg_1pct"
+  ]
+ },
+  "T_GEL_ANDROGEL_1P62": {
+  "unit": "ng/mL",
+  "ka_per_h": 0.5,
+  "terms": [
+   {
+    "A_per_mg": 0.08888888888888889,
+    "lambda_per_h": 0.06,
+    "t_half_h": 11.55245
+   }
+  ],
+  "basis": [
+   "fr_ANSM_20260204_ANDROGEL_162: after 2.5g 16.2mg/g gel = 40.5mg T, mean serum T INCREMENT ~2.2ng/mL; near day-2 steady; return to baseline ~72-96h after stop"
+  ],
+  "assumption": "ILLUSTRATIVE dose-attributable incremental T only (NOT total serum T), distinct 16.2mg/g formula. Uses unmeasured empirical ka=0.5/h and lambda=0.06/h; amplitude calibrated only to the RCP group mean daily increment at 40.5mg, not to a dense individual profile. Unknown baseline, site, interpatient absorption and dose-response prevent absolute serum estimates.",
+  "cv": 1,
+  "cv_source": "Assumed, not measured in RCP §5.2",
+  "illustrative": true,
+  "no_product_data": false,
+  "rate_cv": 0.5,
+  "rate_cv_source": "Assumed scenario sensitivity, not measured physiological elimination",
+  "products": [
+   "androgel_16_2mg_per_g"
+  ]
+ },
+  "E2_GEL_ESTREVA": {
+  "unit": "pg/mL",
+  "ka_per_h": 0.277747697,
+  "terms": [
+   {
+    "A_per_mg": 43.0387377,
+    "lambda_per_h": 0.0400025385,
+    "t_half_h": 17.3276
+   }
+  ],
+  "basis": [
+   "fr_ANSMS_20260706_ESTREVA (1.5 mg on 400 cm² abdomen; single Cmax ~40 pg/mL, day-22 mean peak ~70 pg/mL, 24h post-last application ~40 pg/mL, approximate steady state by day 4)"
+  ],
+  "assumption": "ILLUSTRATIVE empirical first-order absorption/depot-release and decay fit to three group-mean ANSM RCP summary constraints. Without individual baseline, time series, Tmax or assay specification, this does NOT identify physiologic elimination or validate individual absolute E2. Baseline is not modelled; rate/dose linearity only checked around labelled 1.5 and 3 mg product studies. Site-specific and non-daily use not validated.",
+  "checks": {
+   "single_1_5mg_cmax_approx_pg_ml": 39.885,
+   "steady_day22_cmax_approx_pg_ml": 70.083,
+   "steady_day22_24h_approx_pg_ml": 39.97
+  },
+  "cv": 1.2,
+  "cv_source": "Assumption (no quantitative interpatient CV in cited Estreva RCP §5.2), deliberately broad; not an empirical confidence interval",
+  "e2_per_mg": 1,
+  "products": [
+   "estreva_0_1pct"
+  ],
+  "illustrative": true,
+  "rate_cv": 0.29,
+  "rate_cv_source": "Assumption only; apparent 17.33 h shape is inferred from sparse RCP summaries, not a measured disposition half-life"
+ },
   "E2_GEL_OTHER": {
    "unit": "pg/mL",
    "ka_per_h": 0.6199910680061218,
@@ -7161,16 +7268,16 @@
    "basis": [
     "E2_GEL_ESTROGEL and E2_GEL_DIVIGEL (no data for this product)"
    ],
-   "assumption": "No pharmacokinetic data for this product (Estreva, home-made gel, others). Half-life is the geometric mean of the two products with data (36 h and 10 h, about 19 h); AUC per mg and absorption rate are their means. Shown with a wider band and the label 'no data for this product'.",
+   "assumption": "No pharmacokinetic data for this product (home-made gel, unidentified products). Estreva now uses E2_GEL_ESTREVA separately. Half-life is the geometric mean of the two products with data (36 h and 10 h, about 19 h); AUC per mg and absorption rate are their means. Shown with a wider band and the label 'no data for this product'.",
    "checks": {
     "estreva_single_1.5mg_cmax": 39.01375900420163
    },
    "cv": 1.2,
-   "cv_source": "assumption: wider than the Divigel label CV (about 0.9) because no product data exist",
+   "cv_source": "assumption: wider than the Divigel label CV (about 0.9) because no product-specific data exist",
    "e2_per_mg": 1.0,
    "products": [
-    "estreva",
-    "diy"
+    "diy",
+    "unknown"
    ],
    "no_product_data": true,
    "rate_cv": 0.29,

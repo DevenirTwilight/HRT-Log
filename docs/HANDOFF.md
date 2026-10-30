@@ -1,3 +1,25 @@
+## PK-FORMULATIONS ② — ANSM T depot and gel research, official cross-model discrepancy tests (2026-10-30)
+
+- Owner request remains: complete missing estrogen and testosterone PK routes and review existing curves against French RCP, persist all intermediate work. **This checkpoint is partial, NOT ALL_FORMULATIONS_COMPLETE**.
+- Current feature PR #171 (`feature/pk-french-rcp-formulations-20261030`), auto-merge enabled, CI at this instant pending/queued (no success claimed). New code since checkpoint ①: `experimental/OfficialTestosteroneDepotShapes.kt` with ANSM-derived normalized TE IM/TU IM shapes and contract tests; `T_GEL_ANDROGEL_1PCT`, `T_GEL_ANDROGEL_1P62` incremental T research-only ng/mL models and tests, **not connected to app UI/Engine dispatch**. Those reference 50mg 1% gel daily +2.5ng/mL versus 40.5mg 1.62% gel +2.2ng/mL respectively. No absolute T prediction or suppression curves.
+- Existing production E2/P4 crosschecks now reproducible: `docs/pk-research/france-official-rcp-checkpoints.json`, `tools/pk-research/fr_rcp_check.py`, `test_fr_rcp_check.py`. OROMONE E2 oral 2mg steady group means within 1 SD but not independent (used in original model). DUOVA 1/2mg EV steady peak/trough generally higher than existing EV_ORAL model (different EV+MPA coformulation). UTROGESTAN oral 200mg single-dose 2h ~11.75 vs current 11.61ng/mL, **6h 2.0 vs 8.88**, **8h 1.64 vs 7.66**. Source baseline 0.13 ng/mL; report separately computes baseline-subtracted increments. Source assay and product differences unresolved; P4 production parameters unchanged.
+- **New definitive handoff/readme:** `docs/pk-research/france-official-model-results-2026-10-30.md` for implementation vs experimental vs unsupported, evidence roles and exact pending tasks. Source audit PR #168 separately still open at first coding check.
+- No T product choice in UI, no T clinical abs ng/mL estimates, no medication schema/backup migrations, no APK or owner signing. Existing app screenshots/Calib/PDF/Room/permissions preserved. Existing Estreva code `E2_GEL_ESTREVA` now dispatches in production but its RCP-only shape is `ILLUSTRATIVE` and requires CI/device tests before it is considered release quality.
+- **Next**: wait for definitive CI outcome; investigate failure jobs without weakening tests; label and validate P4/EV discrepancies before considering model replacement; add T formulations with adequate measured evidence, real historical route+product metadata and four-language UI; never mistake drug concentrations for testosterone suppression. No background agent or later delivery scheduled.
+
+---
+
+## PK-FORMULATIONS ① — French ANSM Estreva integration in progress (2026-10-30)
+
+- Owner request: implement missing estrogen/testosterone formulation curves **and** audit/upgrade existing models using official French RCP §5.2, committing all real findings progressively. Do not assert all formulations implemented or all curves scientifically validated.
+- Research ledger: `docs/pk-research/france-official-rcp-coverage-2026-10-30.md` on research PR #168 (that PR still open at initial coding check); production code task is branch `feature/pk-french-rcp-formulations-20261030`.
+- Code committed on feature branch: ANSM source `fr_ANSMS_20260706_ESTREVA`, illustrative `E2_GEL_ESTREVA` model (`pk-params.json`), Engine gelProductId=2 dispatch to this specific model, product 5 still NO_PRODUCT_DATA, `EngineTest` expectations updated and `FrenchRcpModelTest` added. Related commits `e6e72fc`, `1e5d859`, `aa554e1`, `dd88d72`.
+- French RCP anchors (fit, **not independent validation**): 1.5mg abdomen gel single Cmax ~40pg/mL; repeated day22 Cmax ~70, 24h ~40, steady reached by day4. One assumed first-order response `ka≈0.27775/h, lambda≈0.04000/h, A≈43.04 pg/mL/mg`; these are inferred, **not** physiological measured constants, no individual baseline measured. CV and individual accuracy are NOT verified. Original generic gel remains for unknown/home-made.
+- **Verification state**: Git commits successful; tests added but Gradle/Android CI not yet run. NOT independently verified on Android; no APK signed or delivered; original Build41 unchanged. Do not call production release approved.
+- Next: obtain CI result; add official external-label comparisons for existing oral E2/EV, patch, P4; implement T models with baseline/endogenous and ester mass safeguards. Keep historical snapshots, no INTERNET, four-language UI, avoid mixing antiandrogen blood concentration with endogenous testosterone effects.
+
+---
+
 ## Build 41 已签名并私下交付 — 2026-10-30
 
 - **交付物**：`HRT-Log-build41-full-official.apk`，versionCode 41 / 0.2.0 / `net.plainnotes.app`，14,544,030 字节，SHA-256 `a5cc50eaff2ac2d86b563157b6003bcd9e3d56719557972d1abeb0da855a2970`；原正式证书 `989ba045…79b1`，v2/v3 通过、单签名者；**取代 Build 40**。负责人 2026-10-30 明确授权（“我授权签名”）；只在会话内私下发给负责人，不入 Git/CI/公开 Release/tag。

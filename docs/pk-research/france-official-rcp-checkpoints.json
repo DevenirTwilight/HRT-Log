@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "date": "2026-10-30",
+  "policy": "Regulatory summary points are not blinded independent validation; never recast conflicting labels as exact population targets.",
+  "entries": [
+    {
+      "id": "OROMONE_E2_1MG",
+      "model": "E2_ORAL",
+      "regimen": "once_daily_steady",
+      "dose_mg": 1,
+      "unit": "pg/mL",
+      "population": "postmenopausal healthy women",
+      "product": "Oromone beta-E2 1mg",
+      "source": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63235054/extrait",
+      "evidence_role": "existing_fitting_or_crosscheck",
+      "observations": [
+        {
+          "statistic": "cmax",
+          "value": 48,
+          "sd": 17
+        },
+        {
+          "statistic": "cmin",
+          "value": 20.8,
+          "sd": 11.7
+        },
+        {
+          "statistic": "auc24",
+          "value": 751,
+          "sd": 331
+        }
+      ]
+    },
+    {
+      "id": "OROMONE_E2_2MG",
+      "model": "E2_ORAL",
+      "regimen": "once_daily_steady",
+      "dose_mg": 2,
+      "unit": "pg/mL",
+      "population": "postmenopausal healthy women",
+      "product": "Oromone beta-E2 2mg",
+      "source": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60071379/extrait",
+      "evidence_role": "existing_fitting_or_crosscheck",
+      "observations": [
+        {
+          "statistic": "cmax",
+          "value": 89,
+          "sd": 16
+        },
+        {
+          "statistic": "cmin",
+          "value": 35,
+          "sd": 13.4
+        },
+        {
+          "statistic": "auc24",
+          "value": 1486,
+          "sd": 374
+        }
+      ]
+    },
+    {
+      "id": "DUOVA_EV_1MG",
+      "model": "EV_ORAL",
+      "regimen": "once_daily_steady",
+      "dose_mg": 1,
+      "unit": "pmol/L",
+      "population": "postmenopausal women aged 50–65",
+      "product": "Duova EV 1mg with medroxyprogesterone acetate (not pure-EV)",
+      "source": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62617300/extrait",
+      "evidence_role": "cross_product_comparator",
+      "observations": [
+        {
+          "statistic": "cmax",
+          "value": 166
+        },
+        {
+          "statistic": "cmin",
+          "value": 101
+        },
+        {
+          "statistic": "cavg",
+          "value": 123
+        }
+      ]
+    },
+    {
+      "id": "DUOVA_EV_2MG",
+      "model": "EV_ORAL",
+      "regimen": "once_daily_steady",
+      "dose_mg": 2,
+      "unit": "pmol/L",
+      "population": "postmenopausal women aged 50–65",
+      "product": "Duova EV 2mg with medroxyprogesterone acetate (not pure-EV)",
+      "source": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66620660/extrait",
+      "evidence_role": "cross_product_comparator",
+      "observations": [
+        {
+          "statistic": "cmax",
+          "value": 308
+        },
+        {
+          "statistic": "cmin",
+          "value": 171
+        },
+        {
+          "statistic": "cavg",
+          "value": 228
+        }
+      ]
+    },
+    {
+      "id": "UTROGESTAN_P4_200MG",
+      "model": "P4_ORAL",
+      "regimen": "single",
+      "dose_mg": 200,
+      "unit": "ng/mL",
+      "population": "healthy volunteers; original RCP assay not specified",
+      "product": "Utrogestan micronized progesterone two oral 100mg capsules",
+      "source": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61673424/extrait",
+      "evidence_role": "external_cross_product_conflict",
+      "baseline_ng_ml": 0.13,
+      "observations": [
+        {
+          "statistic": "timepoint",
+          "hour": 1,
+          "value": 4.25
+        },
+        {
+          "statistic": "timepoint",
+          "hour": 2,
+          "value": 11.75
+        },
+        {
+          "statistic": "timepoint",
+          "hour": 4,
+          "value": 8.37
+        },
+        {
+          "statistic": "timepoint",
+          "hour": 6,
+          "value": 2
+        },
+        {
+          "statistic": "timepoint",
+          "hour": 8,
+          "value": 1.64
+        }
+      ]
+    }
+  ]
+}

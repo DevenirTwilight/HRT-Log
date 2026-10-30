@@ -52,7 +52,9 @@ class EngineTest {
         // Divigel: an independent study not used in fitting (Sirviö 2026, day 14 Cavg).
         for ((dose, cavg, sd) in listOf(Triple(0.5, 12.4, 7.0), Triple(1.0, 29.7, 7.3), Triple(1.5, 55.0, 33.1)))
             within("Sirviö 2026 Divigel $dose mg/day Cavg", mean(daily(4, dose), Curve.E2, 13 * 24.0, 14 * 24.0), cavg, sd)
-        assertEquals(setOf(CurveFlag.NO_PRODUCT_DATA), daily(2, 1.5).flags[Curve.E2], "Estreva has no product data")
+        assertEquals(setOf(CurveFlag.ILLUSTRATIVE), daily(2, 1.5).flags[Curve.E2], "Estreva uses its own ANSM-anchored illustrative curve")
+        assertEquals(setOf(CurveFlag.NO_PRODUCT_DATA), daily(5, 1.5).flags[Curve.E2], "Unidentified gel still has no product-specific source")
+        assertTrue(daily(2, 1.5).models.getValue(Curve.E2).any { it.key == "E2_GEL_ESTREVA" })
         assertEquals(emptySet<CurveFlag>(), daily(1, 1.5).flags[Curve.E2])
         // EstroGel / Oestrogel decline more slowly than Divigel after stopping (36 h vs 10 h on the labels).
         val eg = daily(1, 1.5); val dv = daily(4, 1.5)
