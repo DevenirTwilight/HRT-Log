@@ -33,6 +33,13 @@ import java.util.Locale
 @Composable fun formatTime(instant: Instant): String = formatTime(instant.atZone(ZoneId.systemDefault()).toLocalTime())
 @Composable fun formatDate(date: LocalDate): String = date.format(pattern("yMMMdEEE"))
 @Composable fun formatShortDate(date: LocalDate): String = date.format(pattern("MMMdEEE"))
+/** UI-14: the parts of a date the visits list shows separately, each in the locale's own pattern. */
+@Composable fun formatMonthDay(date: LocalDate): String = date.format(pattern("MMMMd"))
+@Composable fun formatMonthShort(date: LocalDate): String = date.format(pattern("MMM"))
+/** Just the number (the "d" pattern adds a day character in Chinese, which the date tile does not want). */
+@Composable fun formatDayOfMonth(date: LocalDate): String = java.text.NumberFormat.getIntegerInstance(currentLocale()).format(date.dayOfMonth)
+@Composable fun formatWeekdayShort(date: LocalDate): String = date.format(pattern("EEE"))
+@Composable fun formatWeekdayLong(date: LocalDate): String = date.format(pattern("EEEE"))
 /** Date with the year and no weekday, for a document date that may be years old. */
 @Composable fun formatMediumDate(date: LocalDate): String = date.format(pattern("yMMMd"))
 /** Full spoken date, e.g. for TalkBack names of calendar cells. */

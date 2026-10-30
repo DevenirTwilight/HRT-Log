@@ -137,7 +137,7 @@ class MedicalAttachmentProductAndroidTest {
         // UI-10: the Files area lists the visit files entrance; the visit page itself carries the related files inline.
         tag("medical-tab:files")
         tag("library-prepare")
-        press(hasText("SYNTHETIC product clinician",substring=true))
+        press(hasText("SYNTHETIC product clinician",substring=true) and hasClickAction()) // UI-14: the visit card; the header card repeats the doctor as plain text
         await {ui.onAllNodesWithTag("attachments").fetchSemanticsNodes().isNotEmpty()}
     }
     private fun back() {

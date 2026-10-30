@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- UI-14 (REQUIREMENTS §174): the visits list header card. Everything else on the page reuses existing strings. -->
+    <string name="visits_hero_next">Next visit</string>
+    <string name="visits_hero_last">Last visit</string>
+    <string name="visits_hero_today">Today</string>
+    <plurals name="visits_hero_in_days"><item quantity="one">In %d day</item><item quantity="other">In %d days</item></plurals>
+    <plurals name="visits_hero_days_ago"><item quantity="one">%d day ago</item><item quantity="other">%d days ago</item></plurals>
+</resources>
