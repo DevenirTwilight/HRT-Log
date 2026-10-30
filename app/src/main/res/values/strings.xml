@@ -557,6 +557,7 @@ Imported medications are paused. Open each one under Medications to confirm its 
 <string name="model_ev_oral">Oral estradiol valerate</string>
 <string name="model_gel_divigel">Estradiol gel (Divigel)</string>
 <string name="model_gel_estrogel">Estradiol gel (EstroGel / Oestrogel)</string>
+<string name="model_gel_estreva">Estradiol gel (Estreva, provisional ANSM RCP model)</string>
 <string name="model_gel_other">Estradiol gel (other products, no product data)</string>
 <string name="model_p4_oral">Oral progesterone (illustrative)</string>
 <string name="model_spi_canrenone">Canrenone from spironolactone</string>

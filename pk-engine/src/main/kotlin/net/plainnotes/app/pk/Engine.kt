@@ -14,7 +14,7 @@ enum class CurveFlag {
     EXTRAPOLATED_TIER,
     /** Sublingual data only cover 8 h after a dose. */
     EXTRAPOLATED_AFTER_CALIBRATED_HOURS,
-    /** Gel product without its own data (Estreva, home-made). */
+    /** Gel product without its own data (home-made or unspecified). */
     NO_PRODUCT_DATA,
     /** Illustrative curve only (progesterone). */
     ILLUSTRATIVE,
@@ -50,6 +50,7 @@ class EngineResult(
 object Engine {
     private val GEL_ESTROGEL = setOf(1, 3)   // Oestrogel, EstroGel (same 0.06 % formulation)
     private const val GEL_DIVIGEL = 4
+    private const val GEL_ESTREVA = 2
 
     fun choose(e: DoseEvent): ModelChoice {
         val m = PkParams.models
@@ -61,6 +62,7 @@ object Engine {
             Route.GEL -> if (e.ester != Ester.E2) ModelChoice.None(Unsupported.NO_LITERATURE_ESTER) else when (e.extras.gelProductId?.toInt()) {
                 in GEL_ESTROGEL -> use(Curve.E2, "E2_GEL_ESTROGEL")
                 GEL_DIVIGEL -> use(Curve.E2, "E2_GEL_DIVIGEL")
+                GEL_ESTREVA -> use(Curve.E2, "E2_GEL_ESTREVA", CurveFlag.ILLUSTRATIVE)
                 else -> use(Curve.E2, "E2_GEL_OTHER", CurveFlag.NO_PRODUCT_DATA)
             }
             Route.INJECTION -> if (e.ester == Ester.EV) use(Curve.E2, "EV_IM") else ModelChoice.None(Unsupported.NO_LITERATURE_ESTER)

@@ -133,6 +133,14 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
         if (!hasTotal) statusCards()
         if (total != null) {
             E2EstimateCard(total, result, ::fmt, unit)
+            // Show clinically important limits beside the primary E2 result, not only
+            // behind the model/literature detail sheet. Estreva is ANSM-anchored but
+            // still illustrative; unknown gels must retain their no-product-data flag.
+            val e2ModelFlags = result?.flags?.get(Curve.E2).orEmpty() + e2NonSublingual?.flags?.get(Curve.E2).orEmpty()
+            val visibleLimits = e2ModelFlags.filter {
+                it == CurveFlag.ILLUSTRATIVE || it == CurveFlag.NO_PRODUCT_DATA
+            }.toSet()
+            if (visibleLimits.isNotEmpty()) FlagNotes(visibleLimits)
             var rangeDays by rememberSaveable { mutableIntStateOf(3) }
             SectionCard(null) {
                 Text(stringResource(R.string.ui12_curve_title), style = MaterialTheme.typography.titleMedium)
@@ -466,7 +474,7 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
 
 @Composable fun modelLabel(key: String) = stringResource(when (key) {
     "EV_ORAL" -> R.string.model_ev_oral; "E2_ORAL" -> R.string.model_e2_oral; "CPA_ORAL" -> R.string.model_cpa_oral; "E2_PATCH" -> R.string.model_e2_patch
-    "E2_GEL_ESTROGEL" -> R.string.model_gel_estrogel; "E2_GEL_DIVIGEL" -> R.string.model_gel_divigel; "E2_GEL_OTHER" -> R.string.model_gel_other
+    "E2_GEL_ESTROGEL" -> R.string.model_gel_estrogel; "E2_GEL_DIVIGEL" -> R.string.model_gel_divigel; "E2_GEL_ESTREVA" -> R.string.model_gel_estreva; "E2_GEL_OTHER" -> R.string.model_gel_other
     "EV_IM" -> R.string.model_ev_im; "E2_SL" -> R.string.model_e2_sl; "SPI_PARENT" -> R.string.model_spi_parent; "SPI_CANRENONE" -> R.string.model_spi_canrenone
     "P4_ORAL" -> R.string.model_p4_oral; else -> R.string.choice_other
 })

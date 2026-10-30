@@ -52,7 +52,17 @@ class EngineTest {
         // Divigel: an independent study not used in fitting (Sirviö 2026, day 14 Cavg).
         for ((dose, cavg, sd) in listOf(Triple(0.5, 12.4, 7.0), Triple(1.0, 29.7, 7.3), Triple(1.5, 55.0, 33.1)))
             within("Sirviö 2026 Divigel $dose mg/day Cavg", mean(daily(4, dose), Curve.E2, 13 * 24.0, 14 * 24.0), cavg, sd)
-        assertEquals(setOf(CurveFlag.NO_PRODUCT_DATA), daily(2, 1.5).flags[Curve.E2], "Estreva has no product data")
+        assertEquals(setOf(CurveFlag.ILLUSTRATIVE), daily(2, 1.5).flags[Curve.E2], "Estreva uses its own limited RCP observations, not the unknown-gel fallback")
+        assertEquals(setOf(CurveFlag.NO_PRODUCT_DATA), daily(5, 1.5).flags[Curve.E2], "Unspecified/home-made gel still has no product-specific PK")
+        val estreva = daily(2, 1.5)
+        assertEquals(setOf("E2_GEL_ESTREVA"), estreva.models[Curve.E2]?.map { it.key }?.toSet())
+        // These are the three anchors used for the provisional model, not independent clinical validation.
+        val solo = Engine.simulate(listOf(ev("estreva", Route.GEL, 0.0, 1.5, Ester.E2, DoseExtras(gelProductId = 2.0))))!!
+        val singlePeak = solo.timeH.indices.filter { solo.timeH[it] in 0.0..24.0 }.maxOf { solo.curves.getValue(Curve.E2)[it] }
+        assertEquals(40.0, singlePeak, 2.0, "ANSM ESTREVA §5.2: single-dose peak, baseline assumed zero")
+        val ss = estreva.timeH.indices.filter { estreva.timeH[it] in 20 * 24.0..21 * 24.0 }
+        assertEquals(70.0, ss.maxOf { estreva.curves.getValue(Curve.E2)[it] }, 2.0, "ANSM ESTREVA §5.2: day-22 repeated-dose peak")
+        assertEquals(40.0, at(estreva, Curve.E2, 21 * 24.0), 2.0, "ANSM ESTREVA §5.2: 24h postdose")
         assertEquals(emptySet<CurveFlag>(), daily(1, 1.5).flags[Curve.E2])
         // EstroGel / Oestrogel decline more slowly than Divigel after stopping (36 h vs 10 h on the labels).
         val eg = daily(1, 1.5); val dv = daily(4, 1.5)

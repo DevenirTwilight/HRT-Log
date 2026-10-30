@@ -1,3 +1,22 @@
+## PK-FR 浓度首页解释性提示 — 2026-10-30
+
+- `ConcentrationScreen.kt` 已增加主 E2 曲线正下方的来源限制提示：`CurveFlag.ILLUSTRATIVE`（Estreva 暂定示意模型）或 `CurveFlag.NO_PRODUCT_DATA`（仍无专用数据的凝胶）时直接用既有四语 `FlagNotes` 显示，不再只藏在“模型与文献”内部。兼容 `e2NonSublingual` 混合剂型而不重算曲线、化验或校准。
+- 精确改动已提交到 PR #169，但显示回归、PK 审查 CI、TalkBack 和真机仍以实际检查结果为准；当前未写 PASS。
+
+## PK-FR 既有模型法国 RCP 回归已入库 — 2026-10-30
+
+- 新增 `tools/pk-research/test_france_rcp_existing_models.py`（6个独立于 Android 的 stdlib characterization tests），引用 ANSM ESTREVA/OROMONE/DUOVA/UTROGESTAN，使用精确 `pk-params.json` 方程复算单剂/21次每日稳态。记录 **已知** ORAL EV 与 DUOVA 总 E2 的差距和 P4 后段形状差距，不把“与RCP存在差距”硬说成验证通过或模型错；模型改善时须更新该测试与对应来源报告。
+- 定量对照及假设见 `docs/pk-research/france-rcp-model-crosscheck-2026-10-30.md`。新增 6项测试仅**源代码已提交**；CI 与实际通过情况仍待 GitHub 结果确认。
+- 研究中的 T IM 假设反例另在 PR #170（避免无来源直接给用户画绝对T）；E2/Estreva 生产及四语仍在 PR #169。
+
+## PK-FR 第一阶段正在实施 — 2026-10-30（实时入库）
+
+- **最新负责人指令**：「开始做，全部成果实时入库」；覆盖未建模的雌激素/睾酮剂型，也使用法国官方 RCP §5.2 核验既有模型。不是仅做研究报告，亦不得伪称所有剂型已完成。
+- 已提交到 `feature/pk-france-estreva-20261030`：`E2_GEL_ESTREVA` 独立于 `E2_GEL_OTHER`；直接来源 ANSM ESTREVA 2026-07-06 RCP（CIS 63216075），单次1.5 mg Cmax≈40 pg/mL、重复给药Cmax≈70、24h≈40、4日趋稳。假设单吸收指数核、零基线、线性24h重复并由这3个汇总锚拟合 ka≈0.2692/h、lambda≈0.04048/h、A≈43.89 pg/mL/mg；由参数得表观半衰期≈17.1h**是模型假设，不是法国官方测得**。已加来源条目、单/多次锚回归、泛凝胶保留 NO_PRODUCT_DATA、四语名称及 UI 文献身份；专用模型使用既有 ILLUSTRATIVE 标签。版本、schema、签名、旧化验快照不改。以上只是模拟函数锚点回归，**不是独立临床验证**。
+- 代码查验事实：`Curve` 尚无 TESTOSTERONE、`ConcentrationCalculator.simulated` 暂不消费 T；现有 EV/EC/EB/EN/EU 注射只有 EV_IM。法国官方还核实 ANDROTARDYL TE 250mg IM、NEBIDO TU 1000mg IM，须区分 T 总浓度与未知基线后再决定给药增加量定标；按产品开发多剂量验证和长区间图形。
+- **待运行/未做**：本分支尚无完成的 Gradle/Android/CI、官方数值未作独立 held-out 验证、未完成 T 模型或 UI、未签名/交付 APK、真机/TalkBack NOT_RUN。不得让这些变成已完成声称。
+- 法国源台账：`docs/pk-research/france-official-rcp-coverage-2026-10-30.md`（#168，尚待合并时可用 PR 链接）。后续每完成一批继续在此顶部追加带提交/CI/来源/科学限制的状态。
+
 ## Build 41 已签名并私下交付 — 2026-10-30
 
 - **交付物**：`HRT-Log-build41-full-official.apk`，versionCode 41 / 0.2.0 / `net.plainnotes.app`，14,544,030 字节，SHA-256 `a5cc50eaff2ac2d86b563157b6003bcd9e3d56719557972d1abeb0da855a2970`；原正式证书 `989ba045…79b1`，v2/v3 通过、单签名者；**取代 Build 40**。负责人 2026-10-30 明确授权（“我授权签名”）；只在会话内私下发给负责人，不入 Git/CI/公开 Release/tag。
