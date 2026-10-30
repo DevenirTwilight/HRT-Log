@@ -17,6 +17,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.room.Room
 import net.plainnotes.app.NotesState
 import net.plainnotes.app.NotesViewModel
@@ -78,6 +79,8 @@ class Ui14VisitsTest(private val locale: String, private val width: Int, private
         } } }
         ui.waitForIdle()
     }
+    /** The list is lazy: bring an item into the composition before asking about it. */
+    private fun scrollTo(tag: String) { ui.onNodeWithTag("visits-list").performScrollToNode(hasTestTag(tag)); ui.waitForIdle() }
     private fun text(tag: String, unmerged: Boolean = true) = ui.onNodeWithTag(tag, useUnmergedTree = unmerged).fetchSemanticsNode().config[SemanticsProperties.Text].joinToString("") { it.text }
 
     /** Text that is cut off, ellipsised or wider than its box, in every compose root of the window. */
@@ -110,24 +113,30 @@ class Ui14VisitsTest(private val locale: String, private val width: Int, private
         assertEquals(s(R.string.visits_hero_next), text("visits-hero-label"))
         ui.onNodeWithTag("visits-hero-days", useUnmergedTree = true).assertExists()
         ui.onNodeWithTag("visits-record-past").assertExists()
-        assertEquals(s(R.string.visits_upcoming), text("visits-group-upcoming")); assertEquals(s(R.string.visits_past), text("visits-group-past"))
-        assertEquals("2", text("visits-past-count"))
-        // The one very long location is meant to keep two lines; every other text must be whole.
-        val cut = clipped().filterNot { it.startsWith("Synthetic Outpatient") }
-        assertEquals(emptyList<String>(), cut); assertEquals(emptyList<String>(), outsideTheWindow())
+        // The one very long location is meant to keep two lines; every other text must be whole. Walk the whole lazy list.
+        val cut = mutableSetOf<String>(); val outside = mutableSetOf<String>()
+        for (tag in listOf("visits-group-upcoming", "visit-card:1", "visits-group-past", "visit-card:2", "visit-card:3")) {
+            scrollTo(tag)
+            if (tag == "visits-group-upcoming") assertEquals(s(R.string.visits_upcoming), text(tag))
+            if (tag == "visits-group-past") { assertEquals(s(R.string.visits_past), text(tag)); assertEquals("2", text("visits-past-count", unmerged = false)) }
+            cut += clipped().filterNot { it.startsWith("Synthetic Outpatient") }; outside += outsideTheWindow()
+        }
+        assertEquals(emptyList<String>(), cut.toList()); assertEquals(emptyList<String>(), outside.toList())
     }
 
     @Test fun tagsShowOnlyWhatTheVisitHas() {
         setup(); show(listOf(upcoming, pastConfirmed, pastUnconfirmed))
         // Confirmed past visit: confirmed tag, question count and pack tag. Unconfirmed past visit: the dashed tag only. Upcoming: the dashed tag only.
+        scrollTo("visit-card:2")
         ui.onNode(hasTestTag("visit-tag-confirmed") and hasAnyAncestor(hasTestTag("visit-card:2")), useUnmergedTree = true).assertExists()
         ui.onNode(hasTestTag("visit-tag-questions") and hasAnyAncestor(hasTestTag("visit-card:2")), useUnmergedTree = true).assertExists()
         ui.onNode(hasTestTag("visit-tag-pack") and hasAnyAncestor(hasTestTag("visit-card:2")), useUnmergedTree = true).assertExists()
+        ui.onNode(hasText(s(R.string.visit_completed)) and hasAnyAncestor(hasTestTag("visit-tag-confirmed")), useUnmergedTree = true).assertExists()
+        scrollTo("visit-card:3")
         ui.onNode(hasTestTag("visit-tag-unconfirmed") and hasAnyAncestor(hasTestTag("visit-card:3")), useUnmergedTree = true).assertExists()
         ui.onNode(hasTestTag("visit-tag-confirmed") and hasAnyAncestor(hasTestTag("visit-card:3")), useUnmergedTree = true).assertDoesNotExist()
         ui.onNode(hasTestTag("visit-tag-questions") and hasAnyAncestor(hasTestTag("visit-card:3")), useUnmergedTree = true).assertDoesNotExist()
         ui.onNode(hasTestTag("visit-tag-pack") and hasAnyAncestor(hasTestTag("visit-card:3")), useUnmergedTree = true).assertDoesNotExist()
-        ui.onNode(hasText(s(R.string.visit_completed)) and hasAnyAncestor(hasTestTag("visit-tag-confirmed")), useUnmergedTree = true).assertExists()
         ui.onNode(hasText(s(R.string.visit_not_confirmed)) and hasAnyAncestor(hasTestTag("visit-tag-unconfirmed")), useUnmergedTree = true).assertExists()
     }
 
@@ -155,11 +164,11 @@ class Ui14VisitsTest(private val locale: String, private val width: Int, private
     @Test fun theEntryButtonAndTheCardsKeepTheirCallbacks() {
         setup(); show(listOf(upcoming, pastConfirmed))
         ui.onNodeWithTag("visits-record-past").performClick(); assertEquals(1, recorded)
-        ui.onNodeWithTag("visit-card:2").performClick(); assertEquals(2L, selected)
+        scrollTo("visit-card:2"); ui.onNodeWithTag("visit-card:2").performClick(); assertEquals(2L, selected)
     }
 
     @Test fun theCardIsSpokenAsOneSentenceWithTheWholeLocation() {
-        setup(); show(listOf(upcoming, pastConfirmed))
+        setup(); show(listOf(upcoming, pastConfirmed)); scrollTo("visit-card:2")
         val spoken = ui.onNodeWithTag("visit-card:2").fetchSemanticsNode().config[SemanticsProperties.ContentDescription].joinToString(" ")
         assertTrue(spoken, LONG_PLACE in spoken); assertTrue(spoken, "Doctor Placeholder" in spoken); assertTrue(spoken, s(R.string.visit_completed) in spoken)
         // The pieces inside are decoration for the eye: none of them is a separate stop for TalkBack.
@@ -170,7 +179,7 @@ class Ui14VisitsTest(private val locale: String, private val width: Int, private
         setup()
         val tokyo = ZoneId.of("Asia/Tokyo")
         val v = AppointmentEntity(9, "ENDO", now.plus(Duration.ofDays(2)).toEpochMilli(), tokyo.id, null, null, null, 0, null)
-        show(listOf(v), medical = true)
+        show(listOf(v), medical = true); scrollTo("visit-card:9")
         val day = v.at_utc.let { Instant.ofEpochMilli(it).atZone(tokyo).dayOfMonth.toString() }
         ui.onNode(hasText(day) and hasAnyAncestor(hasTestTag("visit-date-tile:9")), useUnmergedTree = true).assertExists()
     }

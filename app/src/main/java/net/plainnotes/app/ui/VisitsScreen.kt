@@ -67,7 +67,7 @@ import java.time.*
     val upcoming = state.appointments.filter { it.at_utc >= now }.sortedBy { it.at_utc }
     val past = state.appointments.filter { it.at_utc < now }.sortedByDescending { it.at_utc }
     val hero = VisitHero.pick(state.appointments, now)
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
+    LazyColumn(Modifier.fillMaxSize().testTag("visits-list"), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         // UI-14: the header card carries the "record a past visit" entry (same tag, same callback as before) and the next or last visit.
         item("historical-visit") { VisitsHeroCard(hero, state.appointments.isEmpty(), medical, system, now, onAddHistorical) }
