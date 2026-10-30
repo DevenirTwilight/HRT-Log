@@ -121,7 +121,7 @@ class CalibrationProductAndroidTest {
         val repo = model.libraryRuntime.currentRepository()
         val now = Instant.now()
         val med = MedicationEntity(name="SYNTHETIC ANDROGEL", molecule="T", route="T_ANDROGEL_50", unit="MG", dose_per_intake=50.0,
-            container_capacity=1500.0, site_rotation=false, notifications_on=false, active=true, sort_order=999)
+            container_capacity=1500.0, soon_alert_minutes=15, late_after_minutes=120, site_rotation=false, notifications_on=false, active=true, sort_order=999)
         val id = runBlocking { repo.saveMedication(med, null, net.plainnotes.app.domain.RuleKind.EVERY_N_DAYS, 1,
             listOf(java.time.LocalTime.of(9, 0)), emptySet(), now) }
         runBlocking { repo.transaction { dao ->
@@ -132,6 +132,7 @@ class CalibrationProductAndroidTest {
         } }
         model.refresh().joinForTest()
         navigate(Destination.CONCENTRATION)
+        ui.waitUntil(30_000) { showing("concentration-analyte") }
         ui.onNodeWithText(context.getString(R.string.choice_t)).performClick()
         ui.waitUntil(30_000) { showing("t-relative-chart") }
         ui.onNodeWithTag("t-relative-chart").performScrollTo().assertIsDisplayed()
@@ -147,6 +148,7 @@ class CalibrationProductAndroidTest {
         val previous=context.filesDir.resolve("testosterone-native-pid").readText().trim().toInt()
         assertNotEquals(previous,android.os.Process.myPid())
         launch();navigate(Destination.CONCENTRATION)
+        ui.waitUntil(30_000) { showing("concentration-analyte") }
         ui.onNodeWithText(context.getString(R.string.choice_t)).performClick()
         ui.waitUntil(30_000) { showing("t-relative-chart") }
         ui.onNodeWithTag("t-relative-chart").performScrollTo().assertIsDisplayed()

@@ -24,7 +24,7 @@ class TestosteroneSnapshotBackupTest {
     @After fun close()=db.close()
     @Test fun productSelectionAndActualFrozenMassSurviveEncryptedBackupWithoutRewritingOldUnknowns()=runBlocking {
         val now=Instant.parse("2026-10-30T12:00:00Z")
-        val m=MedicationEntity(name="SYNTHETIC T",molecule="T",route=null,unit="MG",dose_per_intake=50.0,container_capacity=1500.0,
+        val m=MedicationEntity(name="SYNTHETIC T",molecule="T",route=null,unit="MG",dose_per_intake=50.0,container_capacity=1500.0,soon_alert_minutes=15,late_after_minutes=120,
             site_rotation=false,notifications_on=false,active=true,sort_order=0)
         val id=repo.saveMedication(m,null,RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.of(20,0)),emptySet(),now.minusSeconds(86400))
         val old=RecordEntity(medication_id=id,taken_utc=now.minusSeconds(3600).toEpochMilli(),taken_zone="UTC",actual_dose=50.0,

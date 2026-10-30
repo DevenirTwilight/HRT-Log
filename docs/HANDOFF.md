@@ -1,3 +1,7 @@
+## E2/T 候选实际回归检查点 — 2026-10-30
+
+PR #174（仍Draft）：生产入口/三T相对场景/明确仅记录状态均已实装；不是所有新绝对浓度模型完成。最终局部PK132项、四语/适配/旧E2校准54项、旧E2 UI+时期稳定性+翻译280项、历史上下文4项、真实保存+加密备份恢复1项、SL-CAL科学/冻结守卫32项均PASS。新增独立数值卷积测试也PASS。不改E2/冻结M2/Room/备份协议。第二次新备份夹具失败是active药物未填生产必需提醒窗口，已补15/120值并通过；native同样补齐，未放宽Repository断言。两次原始XML在t-routes/acceptance/failures。最终API26/29/35真实MainActivity+进程重启结果与必需CI仍待查询，不用Kotlin编译代替native。签名/真机/人工TalkBack未做。详见production-integration.md；未具备新绝对T曲线的充分外部证据，不能宣称全剂型交付。
+
 ## E2/T 曲线生产接线候选 — 2026-10-30（未完成全部剂型）
 
 基线84489514；本分支feature/sex-steroid-production-models-20261030。复用#173 be60ba49证据与程序，不改E2引擎、M2、TotalE2Calibration、旧快照、导出、Room或备份格式。真实浓度页增加E2/T；药物编辑显式选择T产品，现有medication.route保存命名空间制剂/途径码，历史快照冻结它，旧未知T不靠当前配置补造。新T三个产品ANDROGEL50/ANDROTARDYL/NEBIDO只显示相对敏感性形状，无绝对单位/内源性基线/临床验证，不复用E2校准；另8种T产品明确仅记录。E2其它缺失剂型及#169/#171同域工作未冒称完成。
