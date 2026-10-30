@@ -1,3 +1,11 @@
+## PK-FR-04 睾酮贴片连续释放/取下后模型入库 — 2026-10-30（RESEARCH_ONLY）
+
+- **第四阶段详细结果** `docs/pk-research/fr-rcp-phase1/PHASE4_RESULTS.md`，可运行源码`tools/pk-research/fr_rcp_phase4_patch.py`，机器数值`phase4-patch-results.json`。FDA历史ANDRODERM报告24h控制释放、Tmax均值约22h、Cavg/Cmax/Cmin约498/748/322ng/dL及移除后表观70分钟半衰期（2002 PDF已可视化核查）。
+- **本地真实执行** `fr_rcp_phase4_patch.py` 的原生Python数学正反自查PASS，6组固定24h输入+皮肤药库+血液消除的场景 × 97采样点；GitHub提交源码与本地成功执行源码严格一致（FNV32 `52c4fa0b`，3314字节）。未跑Android/Gradle，未验证人体个体曲线。
+- **不可忽视的负面结果**：皮肤药库假设1至24小时，24h揭除后至48h残余相对峰值约0.000004–0.5445，差异约13万倍；来源没有足够个体分时数据识别真实参数。不能用RCP总浓度峰值为每个用户编造皮肤吸收率/真实血T，不能把24小时持续贴片输入误做单剂Bolus模型。剂型仍未入生产。
+- 加上PK-FR-03的15家族37组，本阶段新增1家族6组，总**16个家族43条数学场景**（T贴片为持续输入，其余多为归一化双速率核），**不是全剂型绝对预测、不是临床验证**。仍需E2 EV舌下/SC、T各凝胶/植入等产品特异、同人完整人体时序。
+- 此会话全部研究/负结果已即时入PR #172分支；Build41生产、版本、Room、M2、用户历史、报告与签名均未更动。后续必须继续用户“研究到都有曲线”的目标，但**绝不把无来源剂型强制数值化并冒充科学完成**。
+
 ## PK-FR-03 欧美官方和人体研究扩展：15家族、37条可运行研究情景 — 2026-10-30
 
 - **完整交付与继续入口**：`docs/pk-research/fr-rcp-phase1/PHASE3_RESULTS.md`；证据矩阵 `phase3-evidence.json`（新增19条可追溯FDA/DailyMed/PubMed/ANSM/临床数据），`phase3-curve-metrics.json`（37条曲线的数学参数/采样值），新Python `tools/pk-research/fr_rcp_phase3_curves.py`、测试 `test_fr_rcp_phase3_curves.py`；本研究分支 `research/pk-rcp-curves-phase1-20261030`（与第一/二阶段共用PR #172）。**产出是可复算的研究，不是15个临床验证的正式绝对血浓度模型。**
