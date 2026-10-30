@@ -1,0 +1,100 @@
+{
+  "artifact_id": "T_PK_20261030_RESEARCH_RESULTS",
+  "status": "RESEARCH_ONLY_NOT_CLINICALLY_VALIDATED",
+  "as_of": "2026-10-30",
+  "products": [
+    "ANDROGEL_50mg_5g_sachet",
+    "ANDROTARDYL_250mg_IM",
+    "NEBIDO_1000mg_IM"
+  ],
+  "registered_outputs": {
+    "report1": "docs/pk-research/t-route-fit-01-report.md",
+    "report2": "docs/pk-research/t-route-fit-02-ichihara-2020.md",
+    "independent_observations": "docs/pk-research/t-routes/ichihara_2020_points_and_fit.csv",
+    "calibration_script": "tools/pk-research/t_route_calibration_01.py",
+    "human_cohort_fit_script": "tools/pk-research/t_ichihara_2020_fit.py",
+    "test1": "tools/pk-research/test_t_route_calibration_01.py",
+    "test2": "tools/pk-research/test_t_ichihara_2020_fit.py"
+  },
+  "androtardyl": {
+    "model": "two_input_illustrative_not_validated",
+    "reported_rcp_peak_total_ng_ml": 20,
+    "rcp_peak_window_days": [
+      1.5,
+      3
+    ],
+    "naive_single_depot_peak_days": 0.28,
+    "two_input_peak_days": 1.85,
+    "minimum_assumed_baseline_ng_ml_for_label_tail": 1.6485
+  },
+  "androgel_50": {
+    "status": "NON_IDENTIFIED_SHAPE_FAMILY",
+    "assumed_skin_rate_per_day": [
+      1,
+      1.5,
+      2.5
+    ],
+    "day13_increment_above_baseline_ng_ml": [
+      0.20963,
+      0.05899,
+      0.0044
+    ],
+    "note": "48-fold different washout while all rescaled to a HYPOTHETICAL 2.5 ng/mL steady 24h mean."
+  },
+  "nebido": {
+    "status": "SPARSE_MIXED_STAGE_ANSM_AGGREGATES_NOT_FIT_FOR_PERSONAL_MODEL",
+    "distinct_candidate_shapes": 126,
+    "rcp_aggregate_markers_nmol_l": [
+      38,
+      50,
+      37,
+      16
+    ],
+    "model_predicted_markers_nmol_l": [
+      40.8972519778,
+      43.1698254776,
+      41.4474512035,
+      15.4854713411
+    ],
+    "model_residual_nmol_l": [
+      2.89725,
+      -6.83017,
+      4.44745,
+      -0.51453
+    ],
+    "marker_sse_nmol_l_squared": 75.0898324148,
+    "first_model_peak_day": 10,
+    "rcp_first_peak_day_approx": 7,
+    "warning": "No external validation; scenario fixed baseline across initiation and maintenance."
+  },
+  "ichihara_2020": {
+    "source_doi": "10.1089/andro.2020.0002",
+    "population": "N=10 transgender men; aggregate mean T; not individual data",
+    "train_days": [
+      1,
+      3,
+      7,
+      14,
+      28
+    ],
+    "heldout_within_same_cohort_days": [
+      2,
+      21
+    ],
+    "two_input_train_rmse_ng_ml": 0.06135897465301354,
+    "two_input_holdout_rmse_ng_ml": 2.825374064857038,
+    "simple_train_rmse_ng_ml": 1.4793738868425772,
+    "simple_holdout_rmse_ng_ml": 2.8811905838681136,
+    "fitted_fast_rate_per_day": 0.2236,
+    "fitted_slow_component_weight": 0.7874,
+    "independently_validated": false
+  },
+  "local_raw_artifact_checksums": {
+    "standalone_full_zip_sha256": "cfd666195baa410849addd5e4f3f88562558a40131e4a55e931d01ec309115dd",
+    "raw_illustrative_csv_sha256": "12b8c2c368e9157d55479fe2cf43586b8e0c09d88ea7d4b0186d63aba244aefd",
+    "raw_calibration_json_sha256": "d7eb1791cd2be06c0a516812b3cf3a284cb6885fdca7330bdb64b856859081f8",
+    "raw_ichihara_json_sha256": "9750055b0ad322d977b01e34ccf9ba7007a8124494465708f4b4c37258b0fc2e",
+    "raw_ichihara_csv_sha256": "27d71e03d03d77ea9801330a0f226b2b54acd5948a1c3cb6535da866ad993594"
+  },
+  "traceability_note": "CSV data committed; high-density CSV and PNG are reproducible from checked-in scripts, hashes preserve exact 2026-10-30 local snapshots. No personally identifying or health data."
+}
