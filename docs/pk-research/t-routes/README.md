@@ -53,3 +53,14 @@ python3 -m unittest discover -s tools/pk-research -p 'test_t_*fit.py'
 - [可复现解析程序](../../../tools/pk-research/route_round2_steady_envelopes.py)及[独立守卫测试](../../../tools/pk-research/test_route_round2_steady_envelopes.py)。本地同构程序实际执行 7/7 PASS；精确仓库提交的 GitHub CI 仍需独立核验。
 
 **重点限制**：这些新图匹配汇总峰值、谷值、均值，但不代表人体实测完整曲线，不能用于首剂、漏服、停药或个人绝对预测。新增 T / E2 正式曲线的科学门槛依旧未满足。研究文件入库 ≠ 产品曲线已实现。
+
+
+### 第三项量化压力测试：T 皮下注射环戊丙酸酯
+
+- [真实人群四个时间锚下的研究程序](../../../tools/pk-research/t_sc_cypionate_partial.py)、[守卫测试](../../../tools/pk-research/test_t_sc_cypionate_partial.py)。
+- [676 条研究条件曲线 CSV](round2_sc_cypionate_partial_curves.csv)及[机器残差/病态峰值报告](round2_sc_cypionate_partial_results.json)。
+- 来源：2017 年 11 名跨性别男性按周皮下注射睾酮环戊丙酸酯，公开组均值 0 天 497、6 小时 656、第 5 天 621、第 7 天 477 ng/dL。所选锚点没有独立校验组。
+- 在人为周期谷值 487 ng/dL 的假设下，任选峰值发生于第 0.5、1、1.5 或 2 天，都能让数学模型精确经过 6h / 5d 两个点；对应隐含峰值约为 656.6、662.3、686.3、**154612 ng/dL（明显不合理，必须拒绝）**。最后一个是**反例而非真实人体峰值**，证明稀疏锚点拟合并不等于药代模型有效。
+- 人体第 0 天与第 7 天均值相差 20 ng/dL，但固定周期模型二者相等；此差异不代表统计学上否定稳态，原研究人体变异较大。不得把这些人群摘要当成一个人的连续实测记录。
+
+本轮新入库 751 + 676 = **1427 条合成研究曲线点**；均已带非临床标记，不改变产品浓度预测。
