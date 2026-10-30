@@ -1,6 +1,6 @@
 {
  "version": "0.1.0-literature-draft",
- "status": "Literature values only (M4a). Not used by the engine yet; awaiting review.",
+ "status": "Mixed production/research: Engine consumes E2/CPA/SPI/P4 and E2_GEL_ESTREVA; T_GEL_ANDROGEL_* are illustrative research-only, not dispatched in app.",
  "generated": "2026-10-06",
  "note": "Observed values from labels and PubMed-indexed studies. Each entry cites a reference id prefixed by its topic. No compartmental model parameters (ka etc.) were found in the literature.",
  "references": [
