@@ -388,18 +388,20 @@ internal fun eventKindIcon(kind:EventKind):androidx.compose.ui.graphics.vector.I
     EventKind.APPOINTMENT->Icons.Outlined.Event;EventKind.MILESTONE->Icons.Outlined.Flag;EventKind.PLANNED->Icons.Outlined.Schedule
 }
 /**
- * UI-05 D: one colour per type group (lab, visit, milestone, stage review, other), each a theme container/on-container pair
- * so the icon keeps ≥ 3:1 in light, dark and every contrast level (Ui05TimelineTest). UI-06: a missed dose uses the neutral
- * missed token (never red).
+ * UI-05 D: one colour per type group (lab, visit, milestone, stage review, other), each a container/on-container pair so the icon keeps
+ * ≥ 3:1 in light, dark and every contrast level (Ui05TimelineTest). UI-06: a missed dose uses the neutral missed token (never red).
+ * UI-13 (2026-10-30): the type colours are the small accents — lab blue, visit purple, stage review rose, milestone teal — so coral
+ * (tertiary) is only the reminder colour (low stock, past time) and no longer also a type colour.
  */
-internal fun eventTypeColors(kind:EventKind,c:ColorScheme,sem:SemanticColors=semanticColors(c,c.surface.luminance()<0.5f))=when(kind){
-    EventKind.LAB->c.tertiaryContainer to c.onTertiaryContainer;EventKind.APPOINTMENT->c.secondaryContainer to c.onSecondaryContainer
-    EventKind.MILESTONE->c.primaryContainer to c.onPrimaryContainer;EventKind.REVIEW->c.inverseSurface to c.inverseOnSurface
+internal fun eventTypeColors(kind:EventKind,c:ColorScheme,sem:SemanticColors=semanticColors(c,c.surface.luminance()<0.5f),
+                             acc:AccentColors=accentColors(c,c.surface.luminance()<0.5f))=when(kind){
+    EventKind.LAB->acc.blue.container to acc.blue.onContainer;EventKind.APPOINTMENT->acc.purple.container to acc.purple.onContainer
+    EventKind.MILESTONE->c.primaryContainer to c.onPrimaryContainer;EventKind.REVIEW->acc.rose.container to acc.rose.onContainer
     EventKind.MISSED->sem.missed.container to sem.missed.onContainer;else->c.surfaceVariant to c.onSurfaceVariant}
 @Composable internal fun EventTypeBadge(kind:EventKind) {
     // UI-07 A: a missed dose is the same status icon as everywhere else; the row's text names the type.
     if(kind==EventKind.MISSED){Box(Modifier.size(36.dp).testTag("event-badge:${kind.name}"),contentAlignment=androidx.compose.ui.Alignment.Center){StatusIcon(StatusIconKind.MISSED,StatusIconSizes.L)};return}
-    val (bg,fg)=eventTypeColors(kind,MaterialTheme.colorScheme,NotesTheme.semantic)
+    val (bg,fg)=eventTypeColors(kind,MaterialTheme.colorScheme,NotesTheme.semantic,NotesTheme.accent)
     Surface(shape=androidx.compose.foundation.shape.CircleShape,color=bg,contentColor=fg,modifier=Modifier.size(36.dp).testTag("event-badge:${kind.name}")){
         Box(contentAlignment=androidx.compose.ui.Alignment.Center){Icon(eventKindIcon(kind),null,Modifier.size(20.dp))}}
 }
