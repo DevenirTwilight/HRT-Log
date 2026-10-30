@@ -1,0 +1,196 @@
+{
+  "schema": "hrtlog.pk_france_phase1_numerical.v1",
+  "computed_on": "2026-10-30",
+  "source_pk_params_blob_sha": "f0ce49f09da31286f538affd9977ff36c26e272d",
+  "source_anchor_blob_sha": "1e1f5bacd7549c6b25fe8f8c721cc7db35e9e993",
+  "provenance": "Numerical cross-check computed in JS from fetched immutable GitHub blobs. Independently duplicated P4 SSE and grid search in local stdlib Python. Repository reproduction script tools/pk-research/fr_rcp_phase1.py was added but NOT itself executed in this environment.",
+  "protocol": {
+    "timestep_hours": 0.05,
+    "daily_steady_doses": 30,
+    "model": "old production fitted kernel, no physiology/clinical validation",
+    "dose_interpretation": "applied mass mg as currently interpreted by model; all modeled concentrations exclude endogenous baseline"
+  },
+  "E2_oral": {
+    "1x1mg": {
+      "source": "ANSM_OROMONE_1",
+      "observed_total": {
+        "cmax": 48,
+        "cmin": 20.8,
+        "cavg": 31.8,
+        "auc0_24": 751
+      },
+      "modeled_increment": {
+        "cmax": 41.28828,
+        "tmax_h": 5.65,
+        "cmin_24h": 19.75751,
+        "cavg_24h": 31.9374
+      },
+      "observed_peak_minus_trough": 27.2,
+      "modeled_peak_minus_trough": 21.53077
+    },
+    "1x2mg": {
+      "source": "ANSM_OROMONE_2",
+      "observed_total": {
+        "cmax": 89,
+        "cmin": 35,
+        "cavg": 62.9,
+        "auc0_24": 1486
+      },
+      "modeled_increment": {
+        "cmax": 82.57655,
+        "tmax_h": 5.65,
+        "cmin_24h": 39.51501,
+        "cavg_24h": 63.8748
+      },
+      "observed_peak_minus_trough": 54,
+      "modeled_peak_minus_trough": 43.06154
+    }
+  },
+  "EV_oral": {
+    "1x1mg": {
+      "source": "ANSM_DUOVA_1",
+      "observed_total_pg_ml": {
+        "cmax": 45.21929,
+        "cmin": 27.51294,
+        "cavg": 33.50586
+      },
+      "modeled_increment_pg_ml": {
+        "cmax": 31.65549,
+        "tmax_h": 5.1,
+        "cmin_24h": 14.63004,
+        "cavg_24h": 23.99949
+      },
+      "observed_peak_minus_trough_pg_ml": 17.70635,
+      "modeled_peak_minus_trough_pg_ml": 17.02545
+    },
+    "1x2mg": {
+      "source": "ANSM_DUOVA_2",
+      "observed_total_pg_ml": {
+        "cmax": 83.90084,
+        "cmin": 46.58131,
+        "cavg": 62.10842
+      },
+      "modeled_increment_pg_ml": {
+        "cmax": 63.31099,
+        "tmax_h": 5.1,
+        "cmin_24h": 29.26009,
+        "cavg_24h": 47.99898
+      },
+      "observed_peak_minus_trough_pg_ml": 37.31953,
+      "modeled_peak_minus_trough_pg_ml": 34.0509
+    }
+  },
+  "Estreva": {
+    "official_approx_total_pg_ml": {
+      "single_peak": 40,
+      "day22_peak": 70,
+      "day22_trough_24h": 40
+    },
+    "modeled_exogenous_increment_pg_ml": {
+      "E2_GEL_OTHER": {
+        "single": {
+          "cmax": 39.01376,
+          "tmax_h": 4.85,
+          "cmin_24h": 20.59739,
+          "cavg_24h": 29.63593
+        },
+        "repeat_day22": {
+          "cmax": 69.10787,
+          "tmax_h": 3.95,
+          "cmin_24h": 35.27706,
+          "cavg_24h": 53.12832
+        }
+      },
+      "E2_GEL_ESTROGEL": {
+        "single": {
+          "cmax": 23.98401,
+          "tmax_h": 4.5,
+          "cmin_24h": 16.85168,
+          "cavg_24h": 20.13206
+        },
+        "repeat_day22": {
+          "cmax": 66.29591,
+          "tmax_h": 3.3,
+          "cmin_24h": 45.53846,
+          "cavg_24h": 56.59758
+        }
+      }
+    }
+  },
+  "P4_oral": {
+    "source": "ANSM_UTROGESTAN",
+    "times_h": [
+      1,
+      2,
+      4,
+      6,
+      8
+    ],
+    "observed_total_ng_ml": [
+      4.25,
+      11.75,
+      8.37,
+      2,
+      1.64
+    ],
+    "assumed_constant_baseline_ng_ml": 0.13,
+    "observed_increment_ng_ml": [
+      4.12,
+      11.62,
+      8.239999999999998,
+      1.87,
+      1.5099999999999998
+    ],
+    "old_model_increment_ng_ml": [
+      10.71974337,
+      11.61108939,
+      10.29192002,
+      8.88381554,
+      7.66282173
+    ],
+    "old_sse": 134.817891275623,
+    "old_rmse": 5.19264655596013,
+    "grid_best_same_points": {
+      "ka_per_h": 0.6,
+      "fast_lambda_per_h": 0.4,
+      "slow_lambda_per_h": 0.01,
+      "fast_A_per_mg": 0.3052597920347487,
+      "slow_A_per_mg": 0,
+      "sse": 23.852532968,
+      "predicted_increment": [
+        7.41832639,
+        9.04391673,
+        6.78766911,
+        3.87034194,
+        1.98617021
+      ],
+      "grid_scenarios": 455,
+      "rmse": 2.1841489403382384
+    },
+    "interpretation": "Grid winner assigns ZERO to the second term: no evidence for a two-term requirement from this coarse scan; all five points TRAINED. Cannot use as independent validation."
+  },
+  "T_structural": {
+    "testosterone_enanthate": {
+      "release_half_life_days": 4.5,
+      "iv_elimination_t_half_hours_other_population": 1,
+      "mono_depot_bateman_tmax_hours": 6.818017291903314,
+      "official_peak_window_hours": [
+        36,
+        72
+      ]
+    },
+    "testosterone_undecanoate": {
+      "release_half_life_days": 90,
+      "release_half_life_sd_days": 40,
+      "maintenance_interval_days": 70,
+      "mono_exp_max_peak_trough_ratio": 1.7144879657061456,
+      "official_total_peak_trough_ratio": 2.2
+    }
+  },
+  "status": "RESEARCH ONLY: Not qualified for production. Baselines/assays/populations unmatched; no locked holdout; no T PK curve implemented.",
+  "numerical_checks": {
+    "independent_python_p4_sse_and_grid": "PASS",
+    "python_repo_script_exact_run": "NOT_RUN",
+    "android_gradle": "NOT_RUN"
+  }
+}

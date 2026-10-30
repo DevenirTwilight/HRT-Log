@@ -1,0 +1,223 @@
+{
+  "schema": "hrtlog.pk_france_phase2_rcp_ledger.v1",
+  "accessed": "2026-10-30",
+  "purpose": "source-level non-production modeling constraints; NOT patient advice",
+  "cohorts": [
+    {
+      "cohort_id": "FR_P4_ORAL_RCP_SHARED_200MG",
+      "source_reuse": [
+        "ANSM_UTROGESTAN_100_61673424",
+        "ANSM_UTROGESTAN_200_63157698",
+        "ANSM_PROGESTAN_100_68025857"
+      ],
+      "reason": "All quote identical 0.13→4.25/11.75/8.37/2/1.64 ng/mL mean after oral 2x100mg; do not count as three independent validation cohorts.",
+      "measurement": "total progesterone plasma mean",
+      "time_h": [
+        0,
+        1,
+        2,
+        4,
+        6,
+        8
+      ],
+      "mean_ng_ml": [
+        0.13,
+        4.25,
+        11.75,
+        8.37,
+        2,
+        1.64
+      ],
+      "dose_mg": 200,
+      "route": "oral",
+      "baseline_known_as_group_mean_at_predose": true,
+      "assay": "unspecified",
+      "urls": [
+        "https://base-donnees-publique.medicaments.gouv.fr/medicament/61673424/extrait",
+        "https://base-donnees-publique.medicaments.gouv.fr/medicament/63157698/extrait",
+        "https://base-donnees-publique.medicaments.gouv.fr/medicament/68025857/extrait"
+      ]
+    },
+    {
+      "cohort_id": "FR_TESTAVAN_STUDY_000127_DAY90",
+      "source": "TESTAVAN_RCP_65871581",
+      "cis": "65871581",
+      "rcp_revision": "2026-07-07",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/65871581/extrait",
+      "product": "TESTAVAN 20mg/g",
+      "route": "transdermal_gel",
+      "study": "dose-titrated distinct groups, day 90",
+      "analyte": "total_serum_testosterone",
+      "unit": "ng/dL",
+      "groups": [
+        {
+          "dose_mg": 23,
+          "n": 5,
+          "cmin_mean": 191,
+          "cmin_sd": 49,
+          "cavg_mean": 368,
+          "cavg_sd": 121,
+          "cmax_mean": 721,
+          "cmax_sd": 254,
+          "tmax_median_h": 4.02
+        },
+        {
+          "dose_mg": 46,
+          "n": 45,
+          "cmin_mean": 277,
+          "cmin_sd": 140,
+          "cavg_mean": 506,
+          "cavg_sd": 207,
+          "cmax_mean": 1228,
+          "cmax_sd": 640,
+          "tmax_median_h": 2.02
+        },
+        {
+          "dose_mg": 69,
+          "n": 89,
+          "cmin_mean": 229,
+          "cmin_sd": 82,
+          "cavg_mean": 438,
+          "cavg_sd": 164,
+          "cmax_mean": 1099,
+          "cmax_sd": 595,
+          "tmax_median_h": 2.08
+        }
+      ],
+      "site_comparison": {
+        "shoulder_arm": {
+          "cmax_mean_ng_dl": 926,
+          "cavg_mean_ng_dl": 557
+        },
+        "abdomen": {
+          "cmax_mean_ng_dl": 451,
+          "cavg_mean_ng_dl": 372
+        },
+        "inner_thigh": {
+          "cmax_mean_ng_dl": 519,
+          "cavg_mean_ng_dl": 395
+        }
+      },
+      "qualitative": [
+        "total T approaches predose ~12h after application",
+        "no apparent accumulation after 10 daily applications",
+        "application site affects total serum concentration",
+        "phase II within-study dose response differs from titrated day90 group averages"
+      ],
+      "baseline": "unknown",
+      "assay": "unspecified"
+    },
+    {
+      "cohort_id": "FR_ANDROGEL_1PCT_50MG",
+      "source": "ANSM_ANDROGEL_50_64205548",
+      "cis": "64205548",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/64205548/extrait",
+      "product": "ANDROGEL 1% 5g sachet 50mg T",
+      "route": "transdermal_gel",
+      "analyte": "total_testosterone",
+      "dose_mg": 50,
+      "unit": "ng/mL",
+      "average_increment_approx": 2.5,
+      "absorption_fraction_range": [
+        0.09,
+        0.14
+      ],
+      "steady_state_from_day": 2,
+      "post_stop_decline_from_hours_approx": 24,
+      "baseline_return_after_last_dose_h_range": [
+        72,
+        96
+      ],
+      "assay": "unspecified",
+      "rcp_revision": "2026-09-04"
+    },
+    {
+      "cohort_id": "FR_ANDROGEL_1P62_40P5MG",
+      "source": "ANSM_ANDROGEL_16P2_68097237",
+      "cis": "68097237",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68097237/extrait",
+      "product": "ANDROGEL 16.2 mg/g",
+      "route": "transdermal_gel",
+      "analyte": "total_testosterone",
+      "applied_g": 2.5,
+      "dose_mg": 40.5,
+      "unit": "ng/mL",
+      "average_increment_approx": 2.2,
+      "absorption_fraction_range": [
+        0.01,
+        0.085
+      ],
+      "steady_state_from_day": 2,
+      "post_stop_decline_from_hours_approx": 24,
+      "baseline_return_after_last_dose_h_range": [
+        72,
+        96
+      ],
+      "assay": "unspecified",
+      "qualitative": [
+        "Phase III day112 Cav/Cmax/Cmin are titrated subjects; cannot infer 40.5 mg single-dose response from group level"
+      ],
+      "rcp_revision": "2026-02-04"
+    },
+    {
+      "cohort_id": "FR_TE_250_IM",
+      "source": "ANSM_ANDROTARDYL",
+      "cis": "68178899",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68178899/extrait",
+      "ester": "testosterone_enanthate",
+      "route": "intramuscular",
+      "ester_dose_mg": 250,
+      "parent_t_equiv_mg": 180,
+      "analyte": "total_testosterone",
+      "unit": "ng/mL",
+      "observations": {
+        "cmax_approx": 20,
+        "tmax_days": [
+          1.5,
+          3
+        ],
+        "release_half_life_days_approx": 4.5,
+        "total_concentration_ge_2_ng_ml_to_day": 20,
+        "total_concentration_ge_1_ng_ml_to_day": 26
+      },
+      "population": "young men; unknown endogenous baseline and assay; thresholds group reported",
+      "note": "effective depot terminal rate is NOT intrinsic parent T clearance; do not use 7.8-day urinary metabolite elimination as plasma testosterone elimination"
+    },
+    {
+      "cohort_id": "FR_TU_1000_IM",
+      "source": "ANSM_NEBIDO",
+      "cis": "69033757",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/69033757/extrait",
+      "ester": "testosterone_undecanoate",
+      "route": "intramuscular",
+      "ester_dose_mg": 1000,
+      "parent_t_equiv_mg": 631.5,
+      "unit": "ng/mL",
+      "observations": {
+        "first_cmax_approx": 11,
+        "first_tmax_days_approx": 7,
+        "second_injection_day": 42,
+        "second_cmax_approx": 15,
+        "maintenance_interval_days": 70,
+        "steady_cmax_approx": 11,
+        "steady_cmin_approx": 5,
+        "steady_after_injections": [
+          3,
+          5
+        ],
+        "depot_release_t_half_days_mean": 90,
+        "depot_release_t_half_days_sd": 40
+      },
+      "population": "hypogonadal men; unknown individual baseline and sampling method",
+      "note": "IV testosterone t1/2~1h reported in other older men, not necessarily valid cross-population constraint"
+    }
+  ],
+  "rules": [
+    "Cohorts de-duplicated by underlying observation, not by brand count",
+    "Group totals must not be treated as exogenous increments",
+    "RCP PK not direct clinical validation for new simulation",
+    "Across titrated cohorts, absolute dose/mean should not be fitted as monotonic individual dose response",
+    "Cross-product formulation release not interchangeable",
+    "Fixed t1/2 alone does not identify full dose curve"
+  ]
+}

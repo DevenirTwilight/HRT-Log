@@ -1,0 +1,86 @@
+{
+  "schema": "hrtlog.pk_france_tu_mixture_identifiability.v1",
+  "computed_date": "2026-10-30",
+  "state": "IN_SAMPLE_EXPLORATORY_ONLY; NO_T_PRODUCTION_PK",
+  "mathematical_form": "B + (11-B) * sum((1-w)h_fast(t-dose)+w*h_90d(t-dose))",
+  "caveat": "w is normalized component peak amplitude, NOT injected depot mass/bioavailability; first peak day7 enforced; unknown individual baseline; all summary RCP anchors approximate group total serum concentrations.",
+  "target_approx_group_stats_ng_ml": {
+    "first_peak": 11,
+    "second_peak": 15,
+    "fifth_peak": 11,
+    "fifth_trough": 5
+  },
+  "n_scenarios": 1260,
+  "best_minimum_sse": {
+    "fast_half_life_d": 25,
+    "slow_90d_peak_weight": 0,
+    "constant_baseline_ng_ml": 3,
+    "pred_second_peak_ng_ml": 13.700896085232692,
+    "pred_fifth_peak_ng_ml": 12.449006895281446,
+    "pred_fifth_trough_ng_ml": 4.746151462186727,
+    "sse_approx_group_anchors": 3.851731044086857
+  },
+  "best_with_positive_90day_component": {
+    "fast_half_life_d": 25,
+    "slow_90d_peak_weight": 0.025,
+    "constant_baseline_ng_ml": 3,
+    "pred_second_peak_ng_ml": 13.780294352365614,
+    "pred_fifth_peak_ng_ml": 12.669815860812768,
+    "pred_fifth_trough_ng_ml": 4.984813551692264,
+    "sse_approx_group_anchors": 4.276197504105308
+  },
+  "top_five": [
+    {
+      "fast_half_life_d": 25,
+      "slow_90d_peak_weight": 0,
+      "constant_baseline_ng_ml": 3,
+      "pred_second_peak_ng_ml": 13.700896085232692,
+      "pred_fifth_peak_ng_ml": 12.449006895281446,
+      "pred_fifth_trough_ng_ml": 4.746151462186727,
+      "sse_approx_group_anchors": 3.851731044086857
+    },
+    {
+      "fast_half_life_d": 25,
+      "slow_90d_peak_weight": 0.025,
+      "constant_baseline_ng_ml": 3,
+      "pred_second_peak_ng_ml": 13.780294352365614,
+      "pred_fifth_peak_ng_ml": 12.669815860812768,
+      "pred_fifth_trough_ng_ml": 4.984813551692264,
+      "sse_approx_group_anchors": 4.276197504105308
+    },
+    {
+      "fast_half_life_d": 25,
+      "slow_90d_peak_weight": 0,
+      "constant_baseline_ng_ml": 4,
+      "pred_second_peak_ng_ml": 13.363284074578605,
+      "pred_fifth_peak_ng_ml": 12.267881033371266,
+      "pred_fifth_trough_ng_ml": 5.527882529413386,
+      "sse_approx_group_anchors": 4.565021300170477
+    },
+    {
+      "fast_half_life_d": 25,
+      "slow_90d_peak_weight": 0,
+      "constant_baseline_ng_ml": 2,
+      "pred_second_peak_ng_ml": 14.03850809588678,
+      "pred_fifth_peak_ng_ml": 12.630132757191626,
+      "pred_fifth_trough_ng_ml": 3.964420394960068,
+      "sse_approx_group_anchors": 4.654224606119103
+    },
+    {
+      "fast_half_life_d": 25,
+      "slow_90d_peak_weight": 0.025,
+      "constant_baseline_ng_ml": 2,
+      "pred_second_peak_ng_ml": 14.127831146411316,
+      "pred_fifth_peak_ng_ml": 12.878542843414365,
+      "pred_fifth_trough_ng_ml": 4.232915245653797,
+      "sse_approx_group_anchors": 4.878020744063904
+    }
+  ],
+  "key_negative_findings": [
+    "Lowest arithmetic SSE assigns w=0, so the summaries do not identify a necessary 90-day contribution in this grid.",
+    "Even best model does not match all RCP summary anchors; nonzero residual makes exact equal first/fifth peak impossible under a stationary additive model.",
+    "Fitted after seeing all group anchors; no independent validation. Study group means are not paired individual PK values."
+  ],
+  "no_independent_holdout": true,
+  "computation_source": "Independent JS implementation of submitted stdlib Python numerical grids; exact Python script in full repo not executed in this session."
+}

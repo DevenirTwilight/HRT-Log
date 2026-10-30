@@ -1,0 +1,214 @@
+{
+  "schema": "hrtlog.fr_rcp_research_anchor.v1",
+  "source_accessed_utc": "2026-10-30",
+  "data_origin": "French ANSM BDPM RCP section 5.2",
+  "constraints": "All published serum/plasma levels are reported observations, not guaranteed exogenous increments. Research only; do not distribute as production parameters.",
+  "references": [
+    {
+      "id": "ANSM_OROMONE_1",
+      "cis": "63235054",
+      "revision": "2025-07-18",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63235054/extrait",
+      "analyte": "E2",
+      "route": "oral",
+      "dose_mg": 1,
+      "unit": "pg/mL",
+      "context": "postmenopausal, RCP describes steady state but also a single-dose table; interpretation requires verification",
+      "stats": {
+        "cmax": 48,
+        "cmax_sd": 17,
+        "cmin": 20.8,
+        "cmin_sd": 11.7,
+        "cavg": 31.8,
+        "auc0_24": 751,
+        "auc0_24_sd": 331,
+        "tmax_h": [
+          4,
+          6
+        ]
+      },
+      "cross_study_baseline": "unknown",
+      "assay": "not specified"
+    },
+    {
+      "id": "ANSM_OROMONE_2",
+      "cis": "60071379",
+      "revision": "2025-07-18",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/60071379/extrait",
+      "analyte": "E2",
+      "route": "oral",
+      "dose_mg": 2,
+      "unit": "pg/mL",
+      "context": "postmenopausal; ambiguous single-dose/steady-state phrasing",
+      "stats": {
+        "cmax": 89,
+        "cmax_sd": 16,
+        "cmin": 35,
+        "cmin_sd": 13.4,
+        "cavg": 62.9,
+        "auc0_24": 1486,
+        "auc0_24_sd": 374,
+        "tmax_h": [
+          4,
+          6
+        ]
+      },
+      "cross_study_baseline": "unknown",
+      "assay": "not specified"
+    },
+    {
+      "id": "ANSM_ESTREVA",
+      "cis": "63216075",
+      "revision": "2026-07-06",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/63216075/extrait",
+      "analyte": "E2",
+      "route": "gel",
+      "dose_mg": 1.5,
+      "unit": "pg/mL",
+      "context": "400cm2 abdomen, 1.5g of 0.1% gel",
+      "stats": {
+        "single_dose_peak_approx": 40,
+        "steady_day22_peak_approx": 70,
+        "steady_24h_post_last_approx": 40,
+        "steady_reached_days_approx": 4,
+        "three_mg_auc_vs_1_5mg_approx": 2
+      },
+      "baseline": "unknown",
+      "assay": "not specified"
+    },
+    {
+      "id": "ANSM_UTROGESTAN",
+      "cis": "61673424",
+      "revision": "2026-03-13",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/61673424/extrait",
+      "analyte": "progesterone",
+      "route": "oral",
+      "dose_mg": 200,
+      "unit": "ng/mL",
+      "context": "two 100mg capsules ingested together, volunteers",
+      "stats": {
+        "timepoint_hours": [
+          0,
+          1,
+          2,
+          4,
+          6,
+          8
+        ],
+        "concentration_mean": [
+          0.13,
+          4.25,
+          11.75,
+          8.37,
+          2,
+          1.64
+        ]
+      },
+      "baseline": 0.13,
+      "assay": "not specified"
+    },
+    {
+      "id": "ANSM_ANDROTARDYL",
+      "cis": "68178899",
+      "revision": "2026-03-03",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68178899/extrait",
+      "analyte": "total_testosterone",
+      "route": "intramuscular",
+      "ester": "testosterone_enanthate",
+      "dose_mg_ester": 250,
+      "dose_mg_t_equivalent": 180,
+      "unit": "ng/mL",
+      "context": "young men, unknown endogenous baseline",
+      "stats": {
+        "observed_peak_approx": 20,
+        "tmax_days": [
+          1.5,
+          3
+        ],
+        "depot_release_half_life_days_approx": 4.5,
+        "concentration_ge_2_duration_days_approx": 20,
+        "concentration_ge_1_duration_days_approx": 26
+      },
+      "baseline": "unknown",
+      "assay": "not specified"
+    },
+    {
+      "id": "ANSM_NEBIDO",
+      "cis": "69033757",
+      "revision": "2026-01-29",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/69033757/extrait",
+      "analyte": "total_testosterone",
+      "route": "intramuscular",
+      "ester": "testosterone_undecanoate",
+      "dose_mg_ester": 1000,
+      "dose_mg_t_equivalent": 631.5,
+      "unit": "ng/mL",
+      "context": "men with hypogonadism; second injection 6 weeks after first, then 10-week intervals; no fixed endogenous baseline",
+      "stats": {
+        "first_peak_approx": 11,
+        "first_tmax_days_approx": 7,
+        "second_peak_approx": 15,
+        "steady_peak_approx": 11,
+        "steady_trough_approx": 5,
+        "steady_after_injection_numbers": [
+          3,
+          5
+        ],
+        "nominal_maintenance_interval_days": 70,
+        "depot_release_half_life_days_mean": 90,
+        "depot_release_half_life_days_sd": 40,
+        "iv_testosterone_elimination_half_life_hours_approx": 1
+      },
+      "baseline": "unknown",
+      "assay": "not specified"
+    },
+    {
+      "id": "ANSM_DUOVA_1",
+      "cis": "62617300",
+      "revision": "2025-07-31",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62617300/extrait",
+      "analyte": "E2",
+      "route": "oral",
+      "ester": "estradiol_valerate",
+      "dose_mg": 1,
+      "unit": "pmol/L",
+      "context": "repeated oral EV combined with medroxyprogesterone acetate 5 mg in postmenopausal women aged 50–65; values are total E2",
+      "stats": {
+        "cmax_approx": 166,
+        "cmin_approx": 101,
+        "cavg_approx": 123,
+        "tmax_h": [
+          4,
+          6
+        ]
+      },
+      "baseline": "unknown",
+      "assay": "not specified",
+      "warning": "MPA combination and endogenous E2 make direct exogenous-only comparisons inappropriate; conversion uses 3.671 pmol/L per pg/mL"
+    },
+    {
+      "id": "ANSM_DUOVA_2",
+      "cis": "66620660",
+      "revision": "2025-07-31",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66620660/extrait",
+      "analyte": "E2",
+      "route": "oral",
+      "ester": "estradiol_valerate",
+      "dose_mg": 2,
+      "unit": "pmol/L",
+      "context": "repeated oral EV combined with medroxyprogesterone acetate 5 mg in postmenopausal women aged 50–65; values are total E2",
+      "stats": {
+        "cmax_approx": 308,
+        "cmin_approx": 171,
+        "cavg_approx": 228,
+        "tmax_h": [
+          4,
+          6
+        ]
+      },
+      "baseline": "unknown",
+      "assay": "not specified",
+      "warning": "MPA combination and endogenous E2 make direct exogenous-only comparisons inappropriate; conversion uses 3.671 pmol/L per pg/mL"
+    }
+  ]
+}

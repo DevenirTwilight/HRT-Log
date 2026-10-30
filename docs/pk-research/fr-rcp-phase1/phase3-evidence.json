@@ -1,0 +1,312 @@
+{
+  "schema": "hrtlog.pk_france_phase3_evidence.v1",
+  "date": "2026-10-30",
+  "model_scope": "research curve-shape or evidence only",
+  "meaning": "A source record DOES NOT establish individual dose-to-total-level prediction",
+  "records": [
+    {
+      "id": "E2_EB_IM_1980",
+      "compound": "estradiol_benzoate",
+      "route": "IM",
+      "grade": "shape_window",
+      "study": "Oriowo et al. 1980 head-to-head 5mg n=10 EB",
+      "source": "https://www.sciencedirect.com/science/article/pii/S0010782480800187",
+      "dose_mg_ester": 5,
+      "measured": "E2 total serum/plasma",
+      "approx_tmax_day": 2,
+      "elevated_duration_days_range": [
+        4,
+        5
+      ],
+      "baseline": "oral contraceptive pretreatment, not numerical",
+      "warning": "Relative observations, no independent concentration amplitude here; not dosage-scalable"
+    },
+    {
+      "id": "E2_EC_IM_1980",
+      "compound": "estradiol_cypionate",
+      "route": "IM",
+      "grade": "shape_window",
+      "study": "Oriowo et al. 1980 head-to-head 5mg n=10 EC",
+      "source": "https://www.sciencedirect.com/science/article/pii/S0010782480800187",
+      "dose_mg_ester": 5,
+      "measured": "E2 total serum/plasma",
+      "approx_tmax_day": 4,
+      "elevated_duration_days_approx": 11,
+      "baseline": "oral contraceptive pretreatment, not numerical"
+    },
+    {
+      "id": "E2_EV_IM_1980",
+      "compound": "estradiol_valerate",
+      "route": "IM",
+      "grade": "crosscheck_existing",
+      "study": "Oriowo et al. 1980 5mg n=9 EV",
+      "source": "https://www.sciencedirect.com/science/article/pii/S0010782480800187",
+      "dose_mg_ester": 5,
+      "measured": "E2 total serum/plasma",
+      "approx_tmax_day": 2,
+      "elevated_duration_days_range": [
+        7,
+        8
+      ],
+      "baseline": "oral contraceptive pretreatment, not numerical"
+    },
+    {
+      "id": "E2_EN_IM_1986",
+      "compound": "estradiol_enanthate",
+      "route": "IM",
+      "grade": "shape_published_rates",
+      "study": "Wiemeyer et al. 1986 10mg menopausal women, RIA day1–31",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/3814225/",
+      "dose_mg_ester": 10,
+      "measured": "E2 serum",
+      "absorption_rate_per_day": 1.505,
+      "elimination_rate_per_day": 0.12445,
+      "elimination_half_life_day": 5.57,
+      "volume_distribution_L": 5087,
+      "baseline": "unknown",
+      "note": "PubMed abstract has rate constants, not amplitude/bioavailability or raw series; do not infer F from V"
+    },
+    {
+      "id": "E2_EU_IM_1975",
+      "compound": "estradiol_undecylate",
+      "route": "IM",
+      "grade": "evidence_without_identifiable_model",
+      "study": "Leyendecker/Geppert et al. 1975 equimolar 20mg E2, three women per ester in source of graph; 32.2mg EU used",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/1150068/",
+      "supplemental_graph_source": "https://commons.wikimedia.org/wiki/File:Estradiol_levels_after_injections_of_estradiol,_estradiol_benzoate,_estradiol_valerate,_and_estradiol_undecylate_in_women.png",
+      "measured": "E2 RIA",
+      "note": "Study has measurements, but source abstract lacks numerical time-series and long-term follow-up, so fit not identifiable; no use of any other drug's release profile"
+    },
+    {
+      "id": "T_TC_IM_AZMIRO",
+      "compound": "testosterone_cypionate",
+      "route": "IM",
+      "grade": "baseline_corrected_PK_summary",
+      "study": "US FDA AZMIRO 200mg IM single dose, n=26 hypogonadal men",
+      "source": "https://fda.report/DailyMed/235b5625-570d-3fba-e063-6394a90aa2d1",
+      "dose_mg_ester": 200,
+      "measured": "baseline-corrected total testosterone",
+      "cmax_ng_dl_mean": 758,
+      "cmax_ng_dl_sd": 288.7,
+      "tmax_h_median": 71.7,
+      "tmax_h_range": [
+        24,
+        191
+      ],
+      "auc0_t_hr_ng_dl_mean": 137218.7,
+      "auc0_t_hr_ng_dl_sd": 62360,
+      "apparent_half_life_days_approx": 8,
+      "warning": "median Tmax + arithmetic mean Cmax and AUC cannot be treated as a paired individual's observations; AUC0-t is NOT AUCinf"
+    },
+    {
+      "id": "T_TP_IM_1986",
+      "compound": "testosterone_propionate",
+      "route": "IM",
+      "grade": "isotope_supported_timing",
+      "study": "Fujioka et al. 1986 labeled 25mg IM GC-MS trace",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/3782423/",
+      "dose_mg_ester": 25,
+      "measured": "labeled exogenous testosterone separately from endogenous",
+      "exposure_above_physiologic_first_hours_approx": 48,
+      "serum_ester_parent_plateau_3to36h_ng_ml": [
+        2,
+        4
+      ],
+      "warning": "2–4ng/mL applies isotope-labeled propionate (ester), not equivalent to measured active testosterone"
+    },
+    {
+      "id": "T_TP_IM_REVIEW",
+      "compound": "testosterone_propionate",
+      "route": "IM",
+      "grade": "secondary_source",
+      "study": "Review of Behre et al. TP 50mg IM",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2686335/",
+      "dose_mg_ester": 50,
+      "measured": "T total serum",
+      "tmax_h_approx": 14,
+      "terminal_half_life_h_approx": 19,
+      "note": "Secondary evidence from a different dose and population; separate from 25mg isotope study"
+    },
+    {
+      "id": "T_TE_SC_XYOSTED",
+      "compound": "testosterone_enanthate",
+      "route": "SC",
+      "grade": "steady_state_PK_summary",
+      "study": "FDA DailyMed XYOSTED, n=137 adjusted 50/75/100mg weekly, W12",
+      "source": "https://www.dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8a3d204c-be26-49e0-8599-0ac12a272e81&type=display",
+      "measured": "total testosterone",
+      "cavg_ng_dl_mean": 553,
+      "cmax_ng_dl_mean": 790,
+      "cmin_ng_dl_mean": 436,
+      "tmax_h_median": 11.9,
+      "auc_0_168h_hr_ng_dl": 92955,
+      "steady_state_week": 6,
+      "warning": "The label's median Tmax is not necessarily the mean time-course maximum and data pool dose-titrated patients; don't fit as single 75mg dose"
+    },
+    {
+      "id": "T_TU_ORAL_JATENZO",
+      "compound": "testosterone_undecanoate",
+      "route": "oral",
+      "grade": "steady_state_PK_summary",
+      "study": "FDA DailyMed JATENZO N=151 after titration",
+      "source": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ed7b5d41-7475-4c10-99b9-b62b3434ae60",
+      "measured": "NaF-EDTA plasma total testosterone",
+      "cavg_ng_dl_mean": 403,
+      "cmax_ng_dl_mean": 1008,
+      "unit": "ng/dL",
+      "note": "Food-dependent absorption, BID dosing and sample preparation; cannot reuse injectable TU model"
+    },
+    {
+      "id": "T_TU_ORAL_TLANDO",
+      "compound": "testosterone_undecanoate",
+      "route": "oral",
+      "grade": "steady_state_PK_summary",
+      "study": "FDA DailyMed TLANDO 225mg oral",
+      "source": "https://www.dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=4b0b92e9-6d3c-a0e5-e1c7-342999f72580&type=display",
+      "measured": "total serum testosterone",
+      "cavg_ng_dl_mean": 476,
+      "cmax_morning_ng_dl_mean": 979,
+      "cmax_evening_ng_dl_mean": 989,
+      "tmax_h_median": 5,
+      "warning": "Not interchangeable with JATENZO due formulation and administration"
+    },
+    {
+      "id": "T_NASAL_NATESTO",
+      "compound": "testosterone",
+      "route": "intranasal",
+      "grade": "steady_state_PK_summary",
+      "study": "FDA DailyMed Natesto 11mg x3 daily, N=69",
+      "source": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dea6bed1-eaca-11e3-ac10-0800200c9a66",
+      "measured": "total serum testosterone",
+      "cavg_ng_dl_mean": 421,
+      "cmax_ng_dl_mean": 1044,
+      "cmin_ng_dl_mean": 215,
+      "tmax_minutes_approx": 40,
+      "half_life_minutes_range": [
+        10,
+        100
+      ],
+      "warning": "Endpoint total serum; no identified exogenous increment"
+    },
+    {
+      "id": "T_BUCCAL_STRIANT",
+      "compound": "testosterone",
+      "route": "buccal",
+      "grade": "steady_state_PK_summary",
+      "study": "FDA DailyMed Striant 30mg buccal BID W12 N82",
+      "source": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ac47efbe-025b-4688-bcd3-a10a0b012b34",
+      "measured": "total serum testosterone",
+      "cavg_ng_dl_mean": 520,
+      "cmax_ng_dl_mean": 970,
+      "cmin_ng_dl_mean": 290,
+      "first_tmax_h_range": [
+        10,
+        12
+      ],
+      "baseline_total_ng_dl_mean": 149,
+      "warning": "Buccal controlled release; cannot assume oral/SL shape"
+    },
+    {
+      "id": "E2_SPRAY_LENZETTO",
+      "compound": "estradiol",
+      "route": "transdermal_spray",
+      "grade": "steady_state_PK_summary",
+      "study": "Lenzetto UK SmPC day14, 1/2/3 sprays geometric mean",
+      "source": "https://www.medicines.org.uk/emc/product/11175/smpc",
+      "measured": "total serum estradiol",
+      "sprays": [
+        {
+          "n": 1,
+          "cmax_pg_ml": 31.2,
+          "cmin_pg_ml": 10.3,
+          "cavg_pg_ml": 17.8
+        },
+        {
+          "n": 2,
+          "cmax_pg_ml": 46.1,
+          "cmin_pg_ml": 16.4,
+          "cavg_pg_ml": 28.2
+        },
+        {
+          "n": 3,
+          "cmax_pg_ml": 48.4,
+          "cmin_pg_ml": 18.9,
+          "cavg_pg_ml": 29.5
+        }
+      ],
+      "warning": "Unadjusted for baseline, not linear dose-response"
+    },
+    {
+      "id": "E2_IMPLANT_CLARA",
+      "compound": "estradiol",
+      "route": "subcutaneous_implant",
+      "grade": "longitudinal_group_means",
+      "study": "2025 CLARA 25mg implant postmenopausal 24w",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13011948/",
+      "measured": "total serum estradiol",
+      "dose_mg": 25,
+      "baseline_pg_ml_mean": 31.6,
+      "week1_pg_ml_mean": 105.2,
+      "week3to20_pg_ml_approx": 80,
+      "week24_pg_ml_mean": 59.9,
+      "warning": "Different product/biodegradable implant; not generic injectable or pellet amplitude"
+    },
+    {
+      "id": "E2_SC_EV_EC_2025",
+      "compound": "estradiol_valerate_or_cypionate",
+      "route": "SC",
+      "grade": "cross_sectional_only",
+      "study": "Misakian et al. 2025 multicenter 6 sites / Herndon 2023 cohorts",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12641524/",
+      "measured": "E2 total serum",
+      "warning": "Cross-sectional/time-since-injection association, no individual full controlled PK series; do not assume SC=IM numerical curve"
+    },
+    {
+      "id": "E2_EV_SUBLINGUAL",
+      "compound": "estradiol_valerate",
+      "route": "sublingual",
+      "grade": "no_route_matched_PK_quantified",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/34781041/",
+      "warning": "Doll 2022 examines 17beta E2, NOT EV; do not transfer E2 sublingual model to EV without route matched human data"
+    },
+    {
+      "id": "T_PATCH_ANDRODERM",
+      "compound": "testosterone",
+      "route": "patch",
+      "grade": "historical_regulatory_steady_state",
+      "study": "Androderm FDA legacy label; steady n56 or 35 dose-titrated comparisons (not independent raw series)",
+      "source": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2002/020489_S007_ANDRODERM_AP.pdf",
+      "alternative_regional_reference": "https://ch.oddb.org/fr/gcc/fachinfo/reg/53615/chapter/kinetic",
+      "measured": "total serum T",
+      "old_label_peak_tmax_h_mean": 22,
+      "old_label_cavg_ng_dl_mean": 498,
+      "old_label_cmax_ng_dl_mean": 748,
+      "old_label_cmin_ng_dl_mean": 322,
+      "release_window_hours": 24,
+      "warning": "Patch is continuous input/removal system; never model as bolus. Old regulatory label, check present marketing status; timecourse values are total T."
+    },
+    {
+      "id": "T_IMPLANT_TESTOPEL",
+      "compound": "testosterone",
+      "route": "subcutaneous_implant",
+      "grade": "longitudinal_aggregate_not_identified_individual",
+      "study": "Multi institution observational study 702 implantations in 380 men (2012)",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/22240203/",
+      "label": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=03b9c0b1-5884-11e4-8ed6-0800200c9a66",
+      "measured": "total serum T",
+      "release_window_months_approx": [
+        4,
+        6
+      ],
+      "warning": "Multiple pellet counts, baseline and individual timepoints vary. No universal one-curve numeric dose mapping."
+    }
+  ],
+  "rules": [
+    "Never invent missing absolute amplitude for E2 EB/EC/EN/EU",
+    "Drug vs ester molecule mass is explicitly converted from molecular weights only with sources",
+    "TC baseline-corrected PK anchors are stronger than total testosterone, but population statistic summaries need independent time-series validation",
+    "No cross-species no TU injection shape proxy for EU",
+    "No using oral E2 studies to model SL EV",
+    "No extrapolating unavailable endpoints or clinical efficacy from normalized curves"
+  ]
+}

@@ -1,0 +1,313 @@
+{
+  "schema": "hrtlog.pk_france_phase2_shape_bounds.v1",
+  "computed_utc": "2026-10-30",
+  "source_ledger": "docs/pk-research/fr-rcp-phase1/phase2-ledger.json",
+  "state": "RESEARCH_ONLY; NOT fitted T curves; no individual validation",
+  "TE": {
+    "source_cohort": "FR_TE_250_IM",
+    "fixed_terminal_t_half_d": 4.5,
+    "family": "effective two-rate, nonnegative total baseline; not physiologic compartment identification",
+    "effective_rise_grid": [
+      {
+        "fast_h_inv": 0.025,
+        "tmax_hours": 73.17656057553101,
+        "tmax_days": 3.0490233573137924,
+        "threshold_constraints": {
+          "20": {
+            "required_baseline_ng_ml": 0.026186342066627562,
+            "relative_to_peak_increment": 0.09882006970408458,
+            "threshold_total_ng_ml": 2
+          },
+          "26": {
+            "required_baseline_ng_ml": 0.22436691515553037,
+            "relative_to_peak_increment": 0.03922165634428638,
+            "threshold_total_ng_ml": 1
+          }
+        },
+        "min_nonnegative_baseline_ng_ml": 0.22436691515553037
+      },
+      {
+        "fast_h_inv": 0.03,
+        "tmax_hours": 65.39259503746814,
+        "tmax_days": 2.724691459894506,
+        "threshold_constraints": {
+          "20": {
+            "required_baseline_ng_ml": 0.24369353327073065,
+            "relative_to_peak_increment": 0.0888985230962573,
+            "threshold_total_ng_ml": 2
+          },
+          "26": {
+            "required_baseline_ng_ml": 0.3051700207520806,
+            "relative_to_peak_increment": 0.035279816072545385,
+            "threshold_total_ng_ml": 1
+          }
+        },
+        "min_nonnegative_baseline_ng_ml": 0.3051700207520806
+      },
+      {
+        "fast_h_inv": 0.035,
+        "tmax_hours": 59.34639556162969,
+        "tmax_days": 2.4727664817345705,
+        "threshold_constraints": {
+          "20": {
+            "required_baseline_ng_ml": 0.3854166100049369,
+            "relative_to_peak_increment": 0.08231545671363197,
+            "threshold_total_ng_ml": 2
+          },
+          "26": {
+            "required_baseline_ng_ml": 0.3583678631871288,
+            "relative_to_peak_increment": 0.03266694602279548,
+            "threshold_total_ng_ml": 1
+          }
+        },
+        "min_nonnegative_baseline_ng_ml": 0.3854166100049369
+      },
+      {
+        "fast_h_inv": 0.04,
+        "tmax_hours": 54.48662758170025,
+        "tmax_days": 2.2702761492375103,
+        "threshold_constraints": {
+          "20": {
+            "required_baseline_ng_ml": 0.48549163573032905,
+            "relative_to_peak_increment": 0.07760935279531196,
+            "threshold_total_ng_ml": 2
+          },
+          "26": {
+            "required_baseline_ng_ml": 0.39621731152663936,
+            "relative_to_peak_increment": 0.03079929511911867,
+            "threshold_total_ng_ml": 1
+          }
+        },
+        "min_nonnegative_baseline_ng_ml": 0.48549163573032905
+      },
+      {
+        "fast_h_inv": 0.05,
+        "tmax_hours": 47.1046134038201,
+        "tmax_days": 1.962692225159171,
+        "threshold_constraints": {
+          "20": {
+            "required_baseline_ng_ml": 0.6182124924275892,
+            "relative_to_peak_increment": 0.0712930893000736,
+            "threshold_total_ng_ml": 2
+          },
+          "26": {
+            "required_baseline_ng_ml": 0.4467871821058013,
+            "relative_to_peak_increment": 0.028292681261461228,
+            "threshold_total_ng_ml": 1
+          }
+        },
+        "min_nonnegative_baseline_ng_ml": 0.6182124924275892
+      },
+      {
+        "fast_h_inv": 0.06,
+        "tmax_hours": 41.716148323521786,
+        "tmax_days": 1.7381728468134077,
+        "threshold_constraints": {
+          "20": {
+            "required_baseline_ng_ml": 0.7028484422755931,
+            "relative_to_peak_increment": 0.06721984609200903,
+            "threshold_total_ng_ml": 2
+          },
+          "26": {
+            "required_baseline_ng_ml": 0.47926058575408975,
+            "relative_to_peak_increment": 0.02667621360007927,
+            "threshold_total_ng_ml": 1
+          }
+        },
+        "min_nonnegative_baseline_ng_ml": 0.7028484422755931
+      },
+      {
+        "fast_h_inv": 0.07,
+        "tmax_hours": 37.57958569214505,
+        "tmax_days": 1.5658160705060438,
+        "threshold_constraints": {
+          "20": {
+            "required_baseline_ng_ml": 0.7618830793731911,
+            "relative_to_peak_increment": 0.06435749017094908,
+            "threshold_total_ng_ml": 2
+          },
+          "26": {
+            "required_baseline_ng_ml": 0.5020158919106663,
+            "relative_to_peak_increment": 0.02554028689985083,
+            "threshold_total_ng_ml": 1
+          }
+        },
+        "min_nonnegative_baseline_ng_ml": 0.7618830793731911
+      }
+    ]
+  },
+  "TU": {
+    "source_cohort": "FR_TU_1000_IM",
+    "sensitivity_t_half_d": [
+      50,
+      60,
+      70,
+      90,
+      130
+    ],
+    "q70d_first_peak7d_bateman_candidates": [
+      {
+        "release_half_life_days": 50,
+        "fast_h_inv": 0.022332971497996193,
+        "slow_h_inv": 0.0005776226504666211,
+        "first_peak_h": 168,
+        "no_baseline_steady_peak_trough_ratio": 2.3626934976804517,
+        "second_peak_total_B0": 17.347673438397646,
+        "second_peak_total_B3": 15.616489773380106,
+        "baseline_is_hypothetical": true,
+        "fifth_peak_total_B0": 17.9046461802473,
+        "fifth_trough_total_B0": 7.578409247358279
+      },
+      {
+        "release_half_life_days": 60,
+        "fast_h_inv": 0.023667388699947806,
+        "slow_h_inv": 0.0004813522087221842,
+        "first_peak_h": 168.00000000000003,
+        "no_baseline_steady_peak_trough_ratio": 2.0533763943506274,
+        "second_peak_total_B0": 17.948431485147243,
+        "second_peak_total_B3": 16.053404716470723,
+        "baseline_is_hypothetical": true,
+        "fifth_peak_total_B0": 19.89149999053174,
+        "fifth_trough_total_B0": 9.6890212828344
+      },
+      {
+        "release_half_life_days": 70,
+        "fast_h_inv": 0.024792677182988408,
+        "slow_h_inv": 0.00041258760747615793,
+        "first_peak_h": 168,
+        "no_baseline_steady_peak_trough_ratio": 1.85664445909675,
+        "second_peak_total_B0": 18.413800334637667,
+        "second_peak_total_B3": 16.391854788827395,
+        "baseline_is_hypothetical": true,
+        "fifth_peak_total_B0": 21.77826906498416,
+        "fifth_trough_total_B0": 11.734072438813614
+      },
+      {
+        "release_half_life_days": 90,
+        "fast_h_inv": 0.026620271420787912,
+        "slow_h_inv": 0.00032090147248145615,
+        "first_peak_h": 168,
+        "no_baseline_steady_peak_trough_ratio": 1.622154169853041,
+        "second_peak_total_B0": 19.08577290014682,
+        "second_peak_total_B3": 16.88056210919769,
+        "baseline_is_hypothetical": true,
+        "fifth_peak_total_B0": 25.17000230731776,
+        "fifth_trough_total_B0": 15.527373183311305
+      },
+      {
+        "release_half_life_days": 130,
+        "fast_h_inv": 0.02927651777123904,
+        "slow_h_inv": 0.00022216255787177734,
+        "first_peak_h": 168,
+        "no_baseline_steady_peak_trough_ratio": 1.4010287793963456,
+        "second_peak_total_B0": 19.88178953436391,
+        "second_peak_total_B3": 17.45948329771921,
+        "baseline_is_hypothetical": true,
+        "fifth_peak_total_B0": 30.482698562176925,
+        "fifth_trough_total_B0": 21.783151710967854
+      }
+    ],
+    "official_observations": {
+      "first_peak_approx": 11,
+      "second_peak_approx": 15,
+      "steady_peak_approx": 11,
+      "steady_trough_approx": 5
+    },
+    "warning": "RCP total first and steady Cmax are approximate cohort summaries. Positive time-invariant accumulation implies steady peak > first peak, so do not exact-fit all cohort means.",
+    "risk": "Even at the fifth injection, single 90-day exponential depot assumption substantially over-accumulates relative to RCP ~11/5 ng/mL cohort means; this does not invalidate data or all mixture/time-varying models."
+  },
+  "P4": {
+    "reused_brand_labels": [
+      "ANSM_UTROGESTAN_100_61673424",
+      "ANSM_UTROGESTAN_200_63157698",
+      "ANSM_PROGESTAN_100_68025857"
+    ],
+    "unique_underlying_rcp_cohorts": 1,
+    "source_timepoints_hours": [
+      0,
+      1,
+      2,
+      4,
+      6,
+      8
+    ],
+    "source_total_means_ng_ml": [
+      0.13,
+      4.25,
+      11.75,
+      8.37,
+      2,
+      1.64
+    ],
+    "baseline_scenarios_not_ci": [
+      {
+        "assumed_constant_baseline": 0,
+        "half_life_2to4h": 4.086960473937437,
+        "half_life_4to6h": 0.9684162549172403,
+        "half_life_6to8h": 6.985577241582313,
+        "difference_4to6h": 6.369999999999999
+      },
+      {
+        "assumed_constant_baseline": 0.13,
+        "half_life_2to4h": 4.033121394633833,
+        "half_life_4to6h": 0.9347515089672369,
+        "half_life_6to8h": 6.483198196532526,
+        "difference_4to6h": 6.369999999999998
+      },
+      {
+        "assumed_constant_baseline": 0.26,
+        "half_life_2to4h": 3.9792681844339572,
+        "half_life_4to6h": 0.9006515549626924,
+        "half_life_6to8h": 5.980520742953329,
+        "difference_4to6h": 6.369999999999999
+      }
+    ],
+    "warning": "Apparent slopes of cohort means are not individual terminal half-lives."
+  },
+  "T_gels": {
+    "titrated_groups_n": [
+      5,
+      45,
+      89
+    ],
+    "cavg_day90_46mg_ng_dl": 506,
+    "cavg_day90_69mg_ng_dl": 438,
+    "between_titrated_groups_cavg_69_over_46": 0.8656126482213439,
+    "cannot_fit_monotonic_individual_dose_response": true,
+    "arm_shoulder_vs_abdomen_cmax_ratio": 2.0532150776053215,
+    "arm_shoulder_vs_abdomen_cavg_ratio": 1.4973118279569892,
+    "product_comparisons": [
+      {
+        "product": "ANDROGEL 1% 50mg",
+        "mean_increment_ng_ml": 2.5,
+        "dose_mg": 50,
+        "baseline_return_h": [
+          72,
+          96
+        ]
+      },
+      {
+        "product": "ANDROGEL 16.2mg/g 2.5g",
+        "mean_increment_ng_ml": 2.2,
+        "dose_mg": 40.5,
+        "baseline_return_h": [
+          72,
+          96
+        ]
+      },
+      {
+        "product": "TESTAVAN 20mg/g",
+        "dose_mg": null,
+        "mean_increment_ng_ml": null,
+        "baseline_return_approx_within_daily_interval_h": 12
+      }
+    ],
+    "warning": "Total vs incremental, nonpaired titrated cohorts, applied site, vehicle, and different return-to-baseline operational definitions make cross-product fits invalid."
+  },
+  "admission": "No physiological parameters identified; not sufficient for production or dose advice.",
+  "numeric_checks": {
+    "method": "Independent JS implementation of formulas in checked-in Python; Python comparison on sample TE/TU grid performed separately.",
+    "repository_python_script_executed": "NOT_RUN",
+    "ci": "NOT_RUN"
+  }
+}
