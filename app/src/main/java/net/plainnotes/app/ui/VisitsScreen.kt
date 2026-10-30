@@ -4,6 +4,20 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.layout.*
@@ -49,35 +63,133 @@ import java.time.*
         return
     }
     val now = Instant.now().toEpochMilli()
+    val system = ZoneId.systemDefault()
     val upcoming = state.appointments.filter { it.at_utc >= now }.sortedBy { it.at_utc }
     val past = state.appointments.filter { it.at_utc < now }.sortedByDescending { it.at_utc }
+    val hero = VisitHero.pick(state.appointments, now)
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item("historical-visit") {
-            Button(onClick=onAddHistorical,modifier=Modifier.fillMaxWidth().heightIn(min=56.dp).testTag("visits-record-past")) {
-                Icon(Icons.Outlined.Add,null);Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.medical_add_visit))
+        // UI-14: the header card carries the "record a past visit" entry (same tag, same callback as before) and the next or last visit.
+        item("historical-visit") { VisitsHeroCard(hero, medical, system, now, onAddHistorical) }
+        if (state.appointments.isEmpty()) item { EmptyState(Icons.AutoMirrored.Outlined.EventNote, stringResource(R.string.visits), stringResource(R.string.visits_empty)) { Button(onClick = onAdd) { Text(stringResource(R.string.appointment)) } } }
+        if (upcoming.isNotEmpty()) item { Text(stringResource(R.string.visits_upcoming), style = MaterialTheme.typography.titleSmall, modifier = Modifier.semantics { heading() }.testTag("visits-group-upcoming")) }
+        items(upcoming, key = { "u${it.id}" }) { VisitCard(it, extra, medical, system) { onSelect(it.id) } }
+        if (past.isNotEmpty()) item {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.visits_past), style = MaterialTheme.typography.titleSmall, modifier = Modifier.semantics { heading() }.testTag("visits-group-past"))
+                Surface(color = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer, shape = Corners.pill, modifier = Modifier.testTag("visits-past-count")) {
+                    Text("${past.size}", style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
+                }
             }
         }
-        if (state.appointments.isEmpty()) item { EmptyState(Icons.AutoMirrored.Outlined.EventNote, stringResource(R.string.visits), stringResource(R.string.visits_empty)) { Button(onClick = onAdd) { Text(stringResource(R.string.appointment)) } } }
-        if (upcoming.isNotEmpty()) item { Text(stringResource(R.string.visits_upcoming), style = MaterialTheme.typography.titleSmall) }
-        items(upcoming, key = { "u${it.id}" }) { VisitCard(it, extra) { onSelect(it.id) } }
-        if (past.isNotEmpty()) item { Text(stringResource(R.string.visits_past), style = MaterialTheme.typography.titleSmall) }
-        items(past, key = { "p${it.id}" }) { VisitCard(it, extra) { onSelect(it.id) } }
+        items(past, key = { "p${it.id}" }) { VisitCard(it, extra, medical, system) { onSelect(it.id) } }
     }
 }
 
-@Composable private fun VisitCard(a: AppointmentEntity, extra: NotesViewModel.ExtraState, onClick: () -> Unit) {
+/**
+ * UI-14: the teal header card. Names the next visit (or, with none ahead, the last confirmed one) with its day count, and holds the
+ * white "record a past visit" capsule. The two shapes in the corner are decoration only and are not read out.
+ */
+@Composable private fun VisitsHeroCard(pick: VisitHeroPick?, medical: Boolean, system: ZoneId, nowMs: Long, onRecordPast: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    Surface(color = c.primary, contentColor = c.onPrimary, shape = RoundedCornerShape(32.dp), modifier = Modifier.fillMaxWidth().testTag("visits-hero")) {
+        Column(Modifier.drawBehind {
+            drawCircle(c.onPrimary.copy(alpha = 0.10f), radius = 64.dp.toPx(), center = Offset(size.width - 12.dp.toPx(), 8.dp.toPx()))
+            drawRoundRect(c.onPrimary.copy(alpha = 0.08f), topLeft = Offset(size.width - 120.dp.toPx(), size.height - 56.dp.toPx()), size = Size(72.dp.toPx(), 72.dp.toPx()),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(24.dp.toPx()))
+        }.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            if (pick != null) {
+                val v = pick.visit; val zone = VisitHero.displayZone(v, medical, system); val local = Instant.ofEpochMilli(v.at_utc).atZone(zone)
+                val days = VisitHero.days(VisitHero.dayOffset(v.at_utc, nowMs, zone))
+                val daysText = when (days) {
+                    VisitDays.Today -> stringResource(R.string.visits_hero_today)
+                    is VisitDays.Ahead -> pluralStringResource(R.plurals.visits_hero_in_days, days.days, days.days)
+                    is VisitDays.Ago -> pluralStringResource(R.plurals.visits_hero_days_ago, days.days, days.days)
+                }
+                val label = stringResource(if (pick.kind == VisitHeroKind.NEXT) R.string.visits_hero_next else R.string.visits_hero_last)
+                val line = listOf(formatWeekdayLong(local.toLocalDate()) + " " + formatTime(local.toLocalTime()), choiceLabel(v.type.ifBlank { "OTHER" })).joinToString(" · ")
+                val who = listOfNotNull(v.practitioner, v.location).filter { it.isNotBlank() }.joinToString(" · ")
+                Column(Modifier.semantics(mergeDescendants = true) {}.testTag("visits-hero-info"), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(label, style = MaterialTheme.typography.labelLarge, modifier = Modifier.testTag("visits-hero-label"))
+                    @OptIn(ExperimentalLayoutApi::class)
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp), itemVerticalAlignment = Alignment.CenterVertically) {
+                        Text(formatMonthDay(local.toLocalDate()), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.testTag("visits-hero-date"))
+                        Surface(color = c.onPrimary.copy(alpha = 0.18f), contentColor = c.onPrimary, shape = Corners.pill, modifier = Modifier.testTag("visits-hero-days")) {
+                            Text(daysText, style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp))
+                        }
+                    }
+                    Text(line, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.testTag("visits-hero-line"))
+                    if (who.isNotEmpty()) Text(who, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("visits-hero-who"))
+                }
+            } else {
+                Text(stringResource(R.string.visits_empty), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.testTag("visits-hero-empty"))
+            }
+            Button(onClick = onRecordPast, shape = Corners.pill, colors = ButtonDefaults.buttonColors(containerColor = c.onPrimary, contentColor = c.primary),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("visits-record-past")) {
+                Icon(Icons.Outlined.Add, null); Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.medical_add_visit))
+            }
+        }
+    }
+}
+
+@Composable private fun VisitCard(a: AppointmentEntity, extra: NotesViewModel.ExtraState, medical: Boolean, system: ZoneId, onClick: () -> Unit) {
     val questions = extra.visitQuestions.count { it.appointment_id == a.id }
     val last = extra.visitPacks.filter { it.appointment_id == a.id }.maxByOrNull { it.generated_utc }
-    ElevatedCard(Modifier.fillMaxWidth().clickable(onClick = onClick)) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(choiceLabel(a.type.ifBlank { "OTHER" }), style = MaterialTheme.typography.titleMedium)
-            Text(listOfNotNull(formatDate(Instant.ofEpochMilli(a.at_utc).atZone(ZoneId.systemDefault()).toLocalDate()) + " " + formatTime(Instant.ofEpochMilli(a.at_utc)), a.practitioner, a.location).joinToString(" · "))
-            Text(stringResource(if (a.completed_utc != null) R.string.visit_completed else R.string.visit_not_confirmed), style = MaterialTheme.typography.labelMedium,
-                color = if (a.completed_utc != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
-            if (questions > 0) Text(stringResource(R.string.visit_question_count, questions), style = MaterialTheme.typography.bodySmall)
-            last?.let { Text(stringResource(R.string.visit_last_pack, formatDateTime(Instant.ofEpochMilli(it.generated_utc))), style = MaterialTheme.typography.bodySmall) }
+    val zone = VisitHero.displayZone(a, medical, system); val local = Instant.ofEpochMilli(a.at_utc).atZone(zone); val date = local.toLocalDate()
+    val c = MaterialTheme.colorScheme; val sem = NotesTheme.semantic; val accent = NotesTheme.accent
+    val confirmed = a.completed_utc != null
+    val type = choiceLabel(a.type.ifBlank { "OTHER" }); val time = formatTime(local.toLocalTime())
+    val doctor = a.practitioner?.takeIf { it.isNotBlank() }; val place = a.location?.takeIf { it.isNotBlank() }
+    val statusText = stringResource(if (confirmed) R.string.visit_completed else R.string.visit_not_confirmed)
+    val questionText = if (questions > 0) stringResource(R.string.visit_question_count, questions) else null
+    val packText = last?.let { stringResource(R.string.visit_last_pack, formatDateTime(Instant.ofEpochMilli(it.generated_utc))) }
+    // One spoken description for the whole card; the pieces inside are decoration for the eye.
+    val spoken = listOfNotNull(type, formatFullDate(date) + " " + time, doctor, place, statusText, questionText, packText).joinToString(", ")
+    Surface(onClick = onClick, color = c.surfaceContainerLow, shape = RoundedCornerShape(28.dp), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+        .semantics { contentDescription = spoken }.testTag("visit-card:${a.id}")) {
+        Row(Modifier.clearAndSetSemantics {}.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+            Column(Modifier.width(58.dp).background(accent.blue.container, RoundedCornerShape(18.dp)).padding(vertical = 8.dp).testTag("visit-date-tile:${a.id}"),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(formatMonthShort(date), style = MaterialTheme.typography.labelSmall, color = accent.blue.onContainer, maxLines = 1)
+                Text(formatDayOfMonth(date), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = accent.blue.onContainer, maxLines = 1)
+                Text(formatWeekdayShort(date), style = MaterialTheme.typography.labelSmall, color = accent.blue.onContainer, maxLines = 1)
+            }
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Top) {
+                    Text(type, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                    Text(time, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = c.primary)
+                }
+                doctor?.let { VisitLine(Icons.Outlined.Person, it, 1) }
+                place?.let { VisitLine(Icons.Outlined.LocationOn, it, 2) }
+                @OptIn(ExperimentalLayoutApi::class)
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    if (confirmed) Box(Modifier.testTag("visit-tag-confirmed")) { StatusPill(statusText, sem.success.container, sem.success.onContainer, Icons.Rounded.Check) }
+                    else VisitDashedTag(statusText, Modifier.testTag("visit-tag-unconfirmed"))
+                    questionText?.let { Box(Modifier.testTag("visit-tag-questions")) { StatusPill(it, accent.blue.soft, accent.blue.main) } }
+                    packText?.let { Box(Modifier.testTag("visit-tag-pack")) { StatusPill(it, accent.purple.container, accent.purple.onContainer, Icons.Outlined.Description) } }
+                }
+            }
+        }
+    }
+}
+
+/** A line with a small accent icon; the text is cut after [maxLines] lines on screen, while the card's spoken description keeps it whole. */
+@Composable private fun VisitLine(icon: androidx.compose.ui.graphics.vector.ImageVector, text: String, maxLines: Int) {
+    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.Top) {
+        Icon(icon, null, Modifier.padding(top = 2.dp).size(16.dp), tint = NotesTheme.accent.blue.main)
+        Text(text, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = maxLines, overflow = TextOverflow.Ellipsis)
+    }
+}
+
+/** "Not confirmed" keeps its UI-06 look: a dashed outline and no fill, with the words, so it never depends on colour. */
+@Composable private fun VisitDashedTag(text: String, modifier: Modifier = Modifier) {
+    val sem = NotesTheme.semantic; val style = StatusStyles.of(DoseState.UNCONFIRMED)
+    Surface(color = androidx.compose.ui.graphics.Color.Transparent, contentColor = sem.unconfirmed.onContainer, shape = Corners.pill,
+        modifier = modifier.statusOutline(style, sem.unconfirmed, Corners.pill, 1.dp)) {
+        Row(Modifier.padding(horizontal = 10.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.AutoMirrored.Outlined.HelpOutline, null, Modifier.size(14.dp)); Spacer(Modifier.width(4.dp))
+            Text(text, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium)
         }
     }
 }
