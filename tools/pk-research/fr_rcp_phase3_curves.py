@@ -65,7 +65,7 @@ def profile(key: str, t_peak_h: float, half_life_h: float, evidence: str,
 
 def build() -> dict:
     specs = [
-        # Tmax and half-life sensitivity aren't patient-level PK estimates.
+        # E2 injection ester comparisons: Tmin and half-life scenario aren't PK estimates.
         ('E2_EB_IM', 48, [48, 96, 168], 'human_Tmax_only_tail_sensitivity', 'Oriowo1980'),
         ('E2_EC_IM', 96, [96, 168, 240], 'human_Tmax_only_tail_sensitivity', 'Oriowo1980'),
         ('E2_EV_IM', 48, [72, 120, 192], 'human_Tmax_only_tail_sensitivity', 'Oriowo1980'),
