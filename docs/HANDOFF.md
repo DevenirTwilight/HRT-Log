@@ -2,7 +2,7 @@
 
 - 负责人“给我修”。根因已证明（REQUIREMENTS §176）：Compose 测试里界面协程在后台线程继续，测试拦截器在后台线程发 snapshot apply，导致重组/布局离开主线程。正式应用不受影响。
 - 分支 `fix/compose-main-thread`（工作树 `/home/user/wt-flake`）：`ui/OffMain.kt`（`computeOffMain` / `resumeOnMain` / `rememberMainThreadScope`）+ 各调用点 + 药品参考资料对话框在主线程收集状态 + `MainThreadResumeTest` + `Ui12ConcentrationTest.show()` 等到没有转圈再读结果；三条显示批准（证据提交 `5e63b533`）、Ui08 ConcChart 新哈希，`check_protocol` 通过。
-- 证据：临时探针（全局 apply 观察者，只在会话机工作树里临时加，不入库）修复前跑全部非截图 Compose 测试：444 次非主线程提交，分布在浓度页、研究浓度页、ConcChart 点按、BDPM 官方详情、已记录商品资料、药品参考资料对话框、药品中心；全部在修复范围内。修复后同一套重跑结果见 PR。
+- 证据：临时探针（全局 apply 观察者，只在会话机工作树里临时加，不入库）修复前跑全部非截图 Compose 测试：444 次非主线程提交，分布在浓度页、研究浓度页、ConcChart 点按、BDPM 官方详情、已记录商品资料、药品参考资料对话框、药品中心；全部在修复范围内。修复后同一套重跑（77 类 2625 测试）：0 失败、非主线程提交 0 次（PR #167 评论）。
 - 注意：Robolectric 下 `waitUntil` 只推进帧时钟、不让主线程 looper 空闲；条件里不碰 Compose 节点时，要先 `waitForIdle()`，否则投递到主线程的续体不会执行。
 - 待做：PR CI 全绿后自动合并；设备测试（attachment-poc 26/29）是否不再出现同类故障，看接下来几次 CI。
 
