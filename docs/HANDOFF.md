@@ -1,3 +1,11 @@
+## PK-FR 睾酮注射剂科学前置门槛 — 2026-10-30（独立研究分支，实时入库）
+
+- 用户授权立即开发全部雌激素/睾酮剂型，并逐步将现有曲线对法国官方 RCP 核验、结果实时入库。
+- 分支 `research/pk-ansm-testosterone-20261030` 新增研究工具 `tools/pk-research/ansm_testosterone_depot.py`、独立5项测试 `test_ansm_testosterone_depot.py` 和 `docs/pk-research/france-testosterone-depot-feasibility-2026-10-30.md`；ANSM ANDROTARDYL/NEBIDO §5.2 的酯/父药质量、峰、油剂释放半衰期、长尾及稳态约束已落成机器核查。
+- **确证数学反例**：TE 以峰/4.5日释放拟合则第20/26日计算约1.44/0.57 ng/mL（官方总T ≥2/≥1）；TU 以首次11 ng/mL及90日释放拟合、假设10周重复5针后峰/谷约24.86/15.34，而官方报告稳态约11/5。零基线、一室线性和实验给药史均为假设，非真实用药准确性结论。
+- **不得投入临床生产**：未解决个体内源T基线、完整时间序列、重复注射来源一致性；没有添加 `Curve.TESTOSTERONE`，无应用新图、无APK。脚本已提交但这批自动测试/CI 是否通过需看 PR 证据。下步争取有基线多时点人体资料或建立有界仅相对形状模拟。
+- 同日独立 Estreva 产品分派在 PR #169；来源审计 PR #168。合并时保留三份历史和进度，别因分支交错覆盖。
+
 ## Build 41 已签名并私下交付 — 2026-10-30
 
 - **交付物**：`HRT-Log-build41-full-official.apk`，versionCode 41 / 0.2.0 / `net.plainnotes.app`，14,544,030 字节，SHA-256 `a5cc50eaff2ac2d86b563157b6003bcd9e3d56719557972d1abeb0da855a2970`；原正式证书 `989ba045…79b1`，v2/v3 通过、单签名者；**取代 Build 40**。负责人 2026-10-30 明确授权（“我授权签名”）；只在会话内私下发给负责人，不入 Git/CI/公开 Release/tag。
