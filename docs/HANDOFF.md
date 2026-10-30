@@ -1,3 +1,9 @@
+## PK-FR 睾酮凝胶官方证据与机器检查 — 2026-10-30（实时入库）
+
+- 通过 ANSM RCP §5.2 原文新增 `docs/pk-research/france-ansm-testosterone-gels-2026-10-30.json`，**产品分开**保存 TESTAVAN 20 mg/g（23mg/泵；第90日剂量调整后3组 n=5/45/89 的总T峰谷平均和2–4h达峰、涂抹部位比较）及 ANDROGEL 16.2mg/g（20.25mg/泵；吸收1–8.5%；2.5g后的平均总T增幅约2.2ng/mL；约2日稳态及72–96h回基线）的信息。源链接、CIS、版本、总T与增幅口径已入库。
+- 新增 `tools/pk-research/test_ansm_testosterone_gel_evidence.py` 共5项检查：泵/凝胶/睾酮质量、产品不能混淆、TESTAVAN在调整剂量后的独立组平均值非单调（46mg组Cavg506、69mg组438ng/dL），不能当作剂量–个体响应、部位比较无证据不外推个人修正系数、ANDROGEL增量不是基线已知的总T曲线。
+- 与上述 T 注射研究及 Estreva 实现并行；**T 凝胶产品模型/APP UI 尚未实现**。新测试只有源码已提交，完成CI之前不得写 PASS。
+
 ## PK-FR 睾酮注射剂科学前置门槛 — 2026-10-30（独立研究分支，实时入库）
 
 - 用户授权立即开发全部雌激素/睾酮剂型，并逐步将现有曲线对法国官方 RCP 核验、结果实时入库。
