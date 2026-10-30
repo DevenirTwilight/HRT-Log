@@ -70,7 +70,7 @@ import java.time.*
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = contentPadding.calculateTopPadding() + 8.dp,
         bottom = contentPadding.calculateBottomPadding() + 96.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         // UI-14: the header card carries the "record a past visit" entry (same tag, same callback as before) and the next or last visit.
-        item("historical-visit") { VisitsHeroCard(hero, medical, system, now, onAddHistorical) }
+        item("historical-visit") { VisitsHeroCard(hero, state.appointments.isEmpty(), medical, system, now, onAddHistorical) }
         if (state.appointments.isEmpty()) item { EmptyState(Icons.AutoMirrored.Outlined.EventNote, stringResource(R.string.visits), stringResource(R.string.visits_empty)) { Button(onClick = onAdd) { Text(stringResource(R.string.appointment)) } } }
         if (upcoming.isNotEmpty()) item { Text(stringResource(R.string.visits_upcoming), style = MaterialTheme.typography.titleSmall, modifier = Modifier.semantics { heading() }.testTag("visits-group-upcoming")) }
         items(upcoming, key = { "u${it.id}" }) { VisitCard(it, extra, medical, system) { onSelect(it.id) } }
@@ -78,7 +78,7 @@ import java.time.*
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.visits_past), style = MaterialTheme.typography.titleSmall, modifier = Modifier.semantics { heading() }.testTag("visits-group-past"))
                 Surface(color = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer, shape = Corners.pill, modifier = Modifier.testTag("visits-past-count")) {
-                    Text("${past.size}", style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp))
+                    Text("${past.size}", style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
                 }
             }
         }
@@ -90,14 +90,14 @@ import java.time.*
  * UI-14: the teal header card. Names the next visit (or, with none ahead, the last confirmed one) with its day count, and holds the
  * white "record a past visit" capsule. The two shapes in the corner are decoration only and are not read out.
  */
-@Composable private fun VisitsHeroCard(pick: VisitHeroPick?, medical: Boolean, system: ZoneId, nowMs: Long, onRecordPast: () -> Unit) {
+@Composable private fun VisitsHeroCard(pick: VisitHeroPick?, noVisits: Boolean, medical: Boolean, system: ZoneId, nowMs: Long, onRecordPast: () -> Unit) {
     val c = MaterialTheme.colorScheme
     Surface(color = c.primary, contentColor = c.onPrimary, shape = RoundedCornerShape(32.dp), modifier = Modifier.fillMaxWidth().testTag("visits-hero")) {
         Column(Modifier.drawBehind {
             drawCircle(c.onPrimary.copy(alpha = 0.10f), radius = 64.dp.toPx(), center = Offset(size.width - 12.dp.toPx(), 8.dp.toPx()))
             drawRoundRect(c.onPrimary.copy(alpha = 0.08f), topLeft = Offset(size.width - 120.dp.toPx(), size.height - 56.dp.toPx()), size = Size(72.dp.toPx(), 72.dp.toPx()),
                 cornerRadius = androidx.compose.ui.geometry.CornerRadius(24.dp.toPx()))
-        }.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        }.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             if (pick != null) {
                 val v = pick.visit; val zone = VisitHero.displayZone(v, medical, system); val local = Instant.ofEpochMilli(v.at_utc).atZone(zone)
                 val days = VisitHero.days(VisitHero.dayOffset(v.at_utc, nowMs, zone))
@@ -109,10 +109,10 @@ import java.time.*
                 val label = stringResource(if (pick.kind == VisitHeroKind.NEXT) R.string.visits_hero_next else R.string.visits_hero_last)
                 val line = listOf(formatWeekdayLong(local.toLocalDate()) + " " + formatTime(local.toLocalTime()), choiceLabel(v.type.ifBlank { "OTHER" })).joinToString(" · ")
                 val who = listOfNotNull(v.practitioner, v.location).filter { it.isNotBlank() }.joinToString(" · ")
-                Column(Modifier.semantics(mergeDescendants = true) {}.testTag("visits-hero-info"), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Column(Modifier.semantics(mergeDescendants = true) {}.testTag("visits-hero-info"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(label, style = MaterialTheme.typography.labelLarge, modifier = Modifier.testTag("visits-hero-label"))
                     @OptIn(ExperimentalLayoutApi::class)
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp), itemVerticalAlignment = Alignment.CenterVertically) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp), itemVerticalAlignment = Alignment.CenterVertically) {
                         Text(formatMonthDay(local.toLocalDate()), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, modifier = Modifier.testTag("visits-hero-date"))
                         Surface(color = c.onPrimary.copy(alpha = 0.18f), contentColor = c.onPrimary, shape = Corners.pill, modifier = Modifier.testTag("visits-hero-days")) {
                             Text(daysText, style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp))
@@ -121,7 +121,8 @@ import java.time.*
                     Text(line, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.testTag("visits-hero-line"))
                     if (who.isNotEmpty()) Text(who, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("visits-hero-who"))
                 }
-            } else {
+            } else if (noVisits) {
+                // Nothing at all: the existing empty-state sentence. With only unconfirmed past visits the card holds just the entry button.
                 Text(stringResource(R.string.visits_empty), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.testTag("visits-hero-empty"))
             }
             Button(onClick = onRecordPast, shape = Corners.pill, colors = ButtonDefaults.buttonColors(containerColor = c.onPrimary, contentColor = c.primary),
@@ -148,14 +149,14 @@ import java.time.*
     val spoken = listOfNotNull(type, formatFullDate(date) + " " + time, doctor, place, statusText, questionText, packText).joinToString(", ")
     Surface(onClick = onClick, color = c.surfaceContainerLow, shape = RoundedCornerShape(28.dp), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
         .semantics { contentDescription = spoken }.testTag("visit-card:${a.id}")) {
-        Row(Modifier.clearAndSetSemantics {}.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+        Row(Modifier.clearAndSetSemantics {}.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Column(Modifier.width(58.dp).background(accent.blue.container, RoundedCornerShape(18.dp)).padding(vertical = 8.dp).testTag("visit-date-tile:${a.id}"),
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(formatMonthShort(date), style = MaterialTheme.typography.labelSmall, color = accent.blue.onContainer, maxLines = 1)
                 Text(formatDayOfMonth(date), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = accent.blue.onContainer, maxLines = 1)
                 Text(formatWeekdayShort(date), style = MaterialTheme.typography.labelSmall, color = accent.blue.onContainer, maxLines = 1)
             }
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Top) {
                     Text(type, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
                     Text(time, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold, color = c.primary)
@@ -163,7 +164,7 @@ import java.time.*
                 doctor?.let { VisitLine(Icons.Outlined.Person, it, 1) }
                 place?.let { VisitLine(Icons.Outlined.LocationOn, it, 2) }
                 @OptIn(ExperimentalLayoutApi::class)
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     if (confirmed) Box(Modifier.testTag("visit-tag-confirmed")) { StatusPill(statusText, sem.success.container, sem.success.onContainer, Icons.Rounded.Check) }
                     else VisitDashedTag(statusText, Modifier.testTag("visit-tag-unconfirmed"))
                     questionText?.let { Box(Modifier.testTag("visit-tag-questions")) { StatusPill(it, accent.blue.soft, accent.blue.main) } }
@@ -176,8 +177,8 @@ import java.time.*
 
 /** A line with a small accent icon; the text is cut after [maxLines] lines on screen, while the card's spoken description keeps it whole. */
 @Composable private fun VisitLine(icon: androidx.compose.ui.graphics.vector.ImageVector, text: String, maxLines: Int) {
-    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.Top) {
-        Icon(icon, null, Modifier.padding(top = 2.dp).size(16.dp), tint = NotesTheme.accent.blue.main)
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Top) {
+        Icon(icon, null, Modifier.padding(top = 4.dp).size(16.dp), tint = NotesTheme.accent.blue.main)
         Text(text, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = maxLines, overflow = TextOverflow.Ellipsis)
     }
 }
@@ -187,7 +188,7 @@ import java.time.*
     val sem = NotesTheme.semantic; val style = StatusStyles.of(DoseState.UNCONFIRMED)
     Surface(color = androidx.compose.ui.graphics.Color.Transparent, contentColor = sem.unconfirmed.onContainer, shape = Corners.pill,
         modifier = modifier.statusOutline(style, sem.unconfirmed, Corners.pill, 1.dp)) {
-        Row(Modifier.padding(horizontal = 10.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.padding(horizontal = 12.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.AutoMirrored.Outlined.HelpOutline, null, Modifier.size(14.dp)); Spacer(Modifier.width(4.dp))
             Text(text, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Medium)
         }
