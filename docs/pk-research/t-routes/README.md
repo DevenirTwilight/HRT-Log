@@ -14,6 +14,9 @@
 | [8 时点人体群体均值、SD 和预测 CSV](ichihara_2020_points_and_fit.csv) | 可直接核对的人体公开文献数值及候选曲线对照（无个人数据） | 原始组均值 + 模型结果 |
 | [机器结果总账](results-manifest-20261030.json) | 拟合摘要、残差、源代码对应关系和先前本地 ZIP/CSV/PNG 的 SHA-256 校验值 | 研究产物索引 |
 | [人体 8 时点曲线 SVG](ichihara_2020_comparison.svg) | 入库可直接查看的实验均值与两个候选模型图 | 可视化，不是验证 |
+| [ANDROGEL 凝胶候选曲线 SVG](androgel_50_illustrative.svg) | 三组吸收速率假设对曲线影响 | 示意，未验证 |
+| [ANDROTARDYL 庚酸睾酮 SVG](androtardyl_illustrative.svg) | 不同基线假设的峰值和尾部 | 示意，未验证 |
+| [NEBIDO 十一酸睾酮 SVG](nebido_illustrative.svg) | 研究用固定基线混合储库候选曲线 | 示意，未验证 |
 
 ## 已提交的可重现程序
 
