@@ -161,6 +161,54 @@
       },
       "baseline": "unknown",
       "assay": "not specified"
+    },
+    {
+      "id": "ANSM_DUOVA_1",
+      "cis": "62617300",
+      "revision": "2025-07-31",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/62617300/extrait",
+      "analyte": "E2",
+      "route": "oral",
+      "ester": "estradiol_valerate",
+      "dose_mg": 1,
+      "unit": "pmol/L",
+      "context": "repeated oral EV combined with medroxyprogesterone acetate 5 mg in postmenopausal women aged 50–65; values are total E2",
+      "stats": {
+        "cmax_approx": 166,
+        "cmin_approx": 101,
+        "cavg_approx": 123,
+        "tmax_h": [
+          4,
+          6
+        ]
+      },
+      "baseline": "unknown",
+      "assay": "not specified",
+      "warning": "MPA combination and endogenous E2 make direct exogenous-only comparisons inappropriate; conversion uses 3.671 pmol/L per pg/mL"
+    },
+    {
+      "id": "ANSM_DUOVA_2",
+      "cis": "66620660",
+      "revision": "2025-07-31",
+      "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/66620660/extrait",
+      "analyte": "E2",
+      "route": "oral",
+      "ester": "estradiol_valerate",
+      "dose_mg": 2,
+      "unit": "pmol/L",
+      "context": "repeated oral EV combined with medroxyprogesterone acetate 5 mg in postmenopausal women aged 50–65; values are total E2",
+      "stats": {
+        "cmax_approx": 308,
+        "cmin_approx": 171,
+        "cavg_approx": 228,
+        "tmax_h": [
+          4,
+          6
+        ]
+      },
+      "baseline": "unknown",
+      "assay": "not specified",
+      "warning": "MPA combination and endogenous E2 make direct exogenous-only comparisons inappropriate; conversion uses 3.671 pmol/L per pg/mL"
     }
   ]
 }
