@@ -1,3 +1,11 @@
+## PK 候选真实失败与窄范围调度修复 — 2026-10-30
+
+#174的908d5263：API26/29/35原生完整设备/兼容作业已通过，Science及四API安全也通过，但综合Android push失败于旧MedicalHome确认对话框等待和UnifiedConcentrationUiTest的Default-worker触碰View异常；不得借其它绿色当全通过。完整原始HTML已入acceptance/failures，后者堆栈明确ApplyingContinuationInterceptor在DefaultDispatcher-worker-6提交视图；前者根因仍未独立证明。
+
+复用负责人已授权§176/#167的窄范围原代码（源ad642951）：OffMain.kt、UnifiedConcentrationScreen/ConcChart后台返回主线程，E2/T生产页同用computeOffMain，AppShell显式Main.immediate收集状态。未覆盖#167分支，不复制其其它医疗业务修改，不改变数值/参数/历史/数据库/权限/断言/数据规模/超时。追加§179.B及显示批准，UI08仅追加同一已批准图表线程哈希，PDF/资源校验保留。新机制probe首轮只轮询Map未驱动Robolectric主Looper而超时，加入既有waitForIdle同步、仍10s限，单项通过；全组85项0失败0skip及AndroidTest Kotlin编译PASS（/tmp/hrt-pk-main-final-target.log）。
+
+下一步只验收此修复准确HEAD的必需CI，保留Draft直到全部满足。不要盲目重跑908d；新源码变化才触发新CI。已有908d unsigned包及三API结果只作为明确版本参考，不冒充新HEAD验证；不签名、不交付、不宣称临床验证或全部剂型绝对模型已完成。
+
 ## T 正式失败重读修复及真实原生证据 — 2026-10-30
 
 #174新增定向用例先真实复现：T失败按钮的生产重读回调16/16项未触发（原始expected1/actual0 XML已入库），现T调用原有onRetryCalculation；NotesViewModel在原有runtime.verify/checkRequest后发布同一事务内records/ruleSnapshots，AppShell只把该原子快照交给T，避免独立extra刷新旧数据。原有E2数值/资格/系数/导出不变，新增只读字段不持久化，失败和撤权按原ConcState清空。适配4+四语UI48+E2适配/校准19=71项及AndroidTest Kotlin编译PASS；显示批准§179.A追加链，不改旧记录。数值标注采用页面语言的Locale。

@@ -59,3 +59,8 @@ See [local results](acceptance/local-results.json) for actually executed tests a
 ### Failure/retry closeout
 
 The first T failed-state retry only changed local retry state. A four-language target reproduced 16 failures (expected callback1, actual0). The repaired button invokes the existing production read; `ConcState` publishes its actual records/rule inputs only after existing runtime checks. T uses that one snapshot rather than `extra.records` from a separately refreshed list. No original E2 compute/fit argument changes or persisted fields. API29 source4d native4 cases passed before a later unchanged medical test failed; API35 lost the emulator in the old E2 reopen before T. Original receipts/partial outcomes are retained, not promoted into final-head native approval.
+
+
+### Confirmed CI thread boundary
+
+Source908d full-suite failure has an actual Default-worker→ApplyingContinuationInterceptor→ViewRootImpl trace. The candidate reuses the owner's PR167 coroutine bridge for PK producers/readout and pins shell state collection to Main, without changing mathematics. Exact mechanism, original failure HTML and85-case local regression are retained under acceptance/. The independent medical dialog timeout is not retrospectively assigned a proven root cause. New exact-head full checks remain required.

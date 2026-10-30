@@ -10,9 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.withContext
 import net.plainnotes.app.R
 import net.plainnotes.app.conc.formulations.TestosteroneHistory
 import net.plainnotes.app.data.RecordEntity
@@ -43,7 +41,7 @@ private sealed interface TLoad {
         produceState<TLoad>(TLoad.Loading) {
             if (loading) return@produceState
             value = if (failed) TLoad.Failed else try {
-                withContext(Dispatchers.Default) {
+                computeOffMain {
                     val audit = TestosteroneHistory.read(records, ruleSnapshots, nowH)
                     // Display a bounded grid, but retain ALL saved history, including old depot doses.
                     val steps = (days * 24 / if (product.route == "GEL") 0.5 else 2.0).toInt()

@@ -120,5 +120,30 @@
     "assertion": "expected production retry count1, observed0",
     "fix": "T retry invokes existing ViewModel read; same verified transaction publishes records/rule snapshots for T. No E2 numerical changes.",
     "raw_xml": "failures/retry-callback-before.xml"
+  },
+  "thread_regression": {
+    "source_before": "908d526309fa414942f3959eb3876d143164a804",
+    "run": 41123635349,
+    "job": 124296722998,
+    "artifact": 13011930500,
+    "full_suite": {
+      "tests": 4364,
+      "failed": 2,
+      "skipped": 609
+    },
+    "failures": [
+      "MedicalHomeConfirmFlowTest.confirmThenUndoInDetail timeout at110; root cause not proven",
+      "UnifiedConcentrationUiTest.failedM2NeverMasqueradesAsEmptyHistoryAndOtherMedicinesRemainAvailable: UI applied on DefaultDispatcher-worker-6"
+    ],
+    "fix": "Scoped identical reuse from owner-approved PR167: OffMain helper, UnifiedConcentrationScreen and chart continuation; own E2/T producers resumeMain, AppShell collectors Main.immediate. No medical business edits, algorithms, input sizes, scientific thresholds or test timeouts changed.",
+    "helper_source": "ad642951dfeb15a3c07f5bba1974e59e53f8dda4",
+    "helper_sha256": "9b87aa5f562f85fd3f3c23bf12ad4634d11f538f86a83a240caacd46e8920583",
+    "target_after": {
+      "tests": 85,
+      "failures": 0,
+      "skipped": 0,
+      "native_kotlin_compile": "PASS"
+    },
+    "probe_first_timeout": "New probe polled only a plain Map, so Robolectric main looper was not drained. Added standard waitForIdle within the same10s bound, then passed; no production or business assertion loosened."
   }
 }

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - failedM2NeverMasqueradesAsEmptyHistoryAndOtherMedicinesRemainAvailable</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<div class="breadcrumbs">
+<a class="breadcrumb" href="../index.html">all</a> &gt; 
+<a class="breadcrumb" href="index.html">net.plainnotes.app.UnifiedConcentrationUiTest</a> &gt; 
+<span class="breadcrumb">failedM2NeverMasqueradesAsEmptyHistoryAndOtherMedicinesRemainAvailable</span>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a class="failureGroup" href="#">Gradle Test Run :app:testFullDebugUnitTest</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Gradle Test Run :app:testFullDebugUnitTest</h2>
+<h1>failedM2NeverMasqueradesAsEmptyHistoryAndOtherMedicinesRemainAvailable</h1>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a class="" href="#">summary</a>
+</li>
+</ul>
+<div class="tab">
+<h2>summary</h2>
+<div>
+<div class="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox">
+<div class="counter">1</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox">
+<div class="counter">0</div>
+<p>skipped</p>
+</div>
+</td>
+<td>
+<div class="infoBox duration">
+<div class="counter">1m0.31s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox failures successRate">
+<div class="percent">0%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="result-details">
+<h3>Failure details</h3>
+<span class="code">
+<pre id="root-0-test-failure-failedM2NeverMasqueradesAsEmptyHistoryAndOtherMedicinesRemainAvailable">android.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views. Expected: SDK 35 Main Thread @kotlinx.coroutines.test runner#64958 Calling: DefaultDispatcher-worker-6 @coroutine#65023
+	at android.view.ViewRootImpl.checkThread(ViewRootImpl.java:11023)
+	at android.view.ViewRootImpl.requestLayout(ViewRootImpl.java:2473)
+	at android.view.View.requestLayout(View.java:28020)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at org.robolectric.shadows.ShadowView$ViewReflector$$Reflector21.requestLayout(Unknown Source)
+	at org.robolectric.shadows.ShadowView.requestLayout(ShadowView.java:268)
+	at android.view.View.requestLayout(View.java)
+	at android.view.View.requestLayout(View.java:28020)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at org.robolectric.shadows.ShadowView$ViewReflector$$Reflector21.requestLayout(Unknown Source)
+	at org.robolectric.shadows.ShadowView.requestLayout(ShadowView.java:268)
+	at android.view.View.requestLayout(View.java)
+	at android.view.View.requestLayout(View.java:28020)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at org.robolectric.shadows.ShadowView$ViewReflector$$Reflector21.requestLayout(Unknown Source)
+	at org.robolectric.shadows.ShadowView.requestLayout(ShadowView.java:268)
+	at android.view.View.requestLayout(View.java)
+	at android.view.View.requestLayout(View.java:28020)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at org.robolectric.shadows.ShadowView$ViewReflector$$Reflector21.requestLayout(Unknown Source)
+	at org.robolectric.shadows.ShadowView.requestLayout(ShadowView.java:268)
+	at android.view.View.requestLayout(View.java)
+	at android.view.View.requestLayout(View.java:28020)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at org.robolectric.shadows.ShadowView$ViewReflector$$Reflector21.requestLayout(Unknown Source)
+	at org.robolectric.shadows.ShadowView.requestLayout(ShadowView.java:268)
+	at android.view.View.requestLayout(View.java)
+	at androidx.compose.ui.platform.AndroidComposeView.scheduleMeasureAndLayout(AndroidComposeView.android.kt:1526)
+	at androidx.compose.ui.platform.AndroidComposeView.onRequestMeasure(AndroidComposeView.android.kt:1613)
+	at androidx.compose.ui.node.Owner.onRequestMeasure$default(Owner.kt:171)
+	at androidx.compose.ui.node.LayoutNode.requestRemeasure$ui_release(LayoutNode.kt:1131)
+	at androidx.compose.ui.node.LayoutNode.requestRemeasure$ui_release$default(LayoutNode.kt:1124)
+	at androidx.compose.ui.node.LayoutNode.invalidateMeasurements$ui_release(LayoutNode.kt:1183)
+	at androidx.compose.ui.node.LayoutNode.detach$ui_release(LayoutNode.kt:586)
+	at androidx.compose.ui.node.LayoutNode.onChildRemoved(LayoutNode.kt:367)
+	at androidx.compose.ui.node.LayoutNode.removeAt$ui_release(LayoutNode.kt:342)
+	at androidx.compose.ui.node.UiApplier.remove(UiApplier.android.kt:33)
+	at androidx.compose.runtime.changelist.Operation$RemoveNode.execute(Operation.kt:588)
+	at androidx.compose.runtime.changelist.Operation.executeWithComposeStackTrace(Operation.kt:62)
+	at androidx.compose.runtime.changelist.Operations.executeAndFlushAllPendingOperations(Operations.kt:350)
+	at androidx.compose.runtime.changelist.ChangeList.executeAndFlushAllPendingChanges(ChangeList.kt:90)
+	at androidx.compose.runtime.CompositionImpl.applyChangesInLocked(Composition.kt:1109)
+	at androidx.compose.runtime.CompositionImpl.applyChanges(Composition.kt:1149)
+	at androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2.invokeSuspend$lambda$22(Recomposer.kt:705)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$1.invoke(TestMonotonicFrameClock.jvm.kt:106)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$1.invoke(TestMonotonicFrameClock.jvm.kt:106)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.performFrame$lambda$10(TestMonotonicFrameClock.jvm.kt:151)
+	at androidx.compose.ui.test.FrameDeferringContinuationInterceptor.runWithoutResumingCoroutines(FrameDeferringContinuationInterceptor.jvm.kt:59)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.performFrame(TestMonotonicFrameClock.jvm.kt:133)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.access$performFrame(TestMonotonicFrameClock.jvm.kt:55)
+	at androidx.compose.ui.test.TestMonotonicFrameClock$withFrameNanos$2$1$2.invokeSuspend(TestMonotonicFrameClock.jvm.kt:111)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:375)
+	at kotlinx.coroutines.intrinsics.CancellableKt.startCoroutineCancellable(Cancellable.kt:26)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:358)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:134)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch(Builders.common.kt:53)
+	at kotlinx.coroutines.BuildersKt.launch(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch$default(Builders.common.kt:44)
+	at kotlinx.coroutines.BuildersKt.launch$default(Unknown Source)
+	at androidx.compose.ui.test.TestMonotonicFrameClock.withFrameNanos(TestMonotonicFrameClock.jvm.kt:109)
+	at androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2.invokeSuspend(Recomposer.kt:598)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at androidx.compose.ui.test.ApplyingContinuationInterceptor$SendApplyContinuation.resumeWith(ApplyingContinuationInterceptor.kt:52)
+	at androidx.compose.ui.test.FrameDeferringContinuationInterceptor$FrameDeferredContinuation.resumeWith(FrameDeferringContinuationInterceptor.jvm.kt:187)
+	at kotlinx.coroutines.DispatchedTaskKt.resume(DispatchedTask.kt:163)
+	at kotlinx.coroutines.DispatchedTaskKt.dispatch(DispatchedTask.kt:152)
+	at kotlinx.coroutines.CancellableContinuationImpl.dispatchResume(CancellableContinuationImpl.kt:470)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core(CancellableContinuationImpl.kt:504)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core$default(CancellableContinuationImpl.kt:493)
+	at kotlinx.coroutines.CancellableContinuationImpl.resumeWith(CancellableContinuationImpl.kt:359)
+	at androidx.compose.runtime.Recomposer$recompositionRunner$2.invokeSuspend$lambda$2(Recomposer.kt:1149)
+	at androidx.compose.runtime.snapshots.SnapshotKt.advanceGlobalSnapshot(Snapshot.kt:1980)
+	at androidx.compose.runtime.snapshots.SnapshotKt.advanceGlobalSnapshot(Snapshot.kt:1994)
+	at androidx.compose.runtime.snapshots.SnapshotKt.access$advanceGlobalSnapshot(Snapshot.kt:1)
+	at androidx.compose.runtime.snapshots.Snapshot$Companion.sendApplyNotifications(Snapshot.kt:680)
+	at androidx.compose.ui.test.ApplyingContinuationInterceptor$SendApplyContinuation.resumeWith(ApplyingContinuationInterceptor.kt:53)
+	at androidx.compose.ui.test.FrameDeferringContinuationInterceptor$FrameDeferredContinuation.resumeWith(FrameDeferringContinuationInterceptor.jvm.kt:187)
+	at kotlinx.coroutines.internal.DispatchedContinuationKt.resumeCancellableWith(DispatchedContinuation.kt:279)
+	at kotlinx.coroutines.DispatchedCoroutine.afterResume(Builders.common.kt:256)
+	at kotlinx.coroutines.AbstractCoroutine.resumeWith(AbstractCoroutine.kt:101)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:47)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:829)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+</pre>
+<button class="clipboard-copy-btn" aria-label="Copy to clipboard" data-copy-element-id="root-0-test-failure-failedM2NeverMasqueradesAsEmptyHistoryAndOtherMedicinesRemainAvailable">Copy</button>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 9.3.1</a> at Oct 30, 2026, 8:58:36 PM</p>
+</div>
+</div>
+</body>
+</html>

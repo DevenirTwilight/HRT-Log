@@ -335,6 +335,50 @@
     "path": "docs/REQUIREMENTS.md"
    },
    "owner_decision": "REQUIREMENTS §179.A, within the owner’s existing actual-history and production-integration authorization."
+  },
+  {
+   "id": "PD-2026-10-30-MAIN-THREAD-CONCCHART",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcChart.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-30",
+   "scope": "Threading only: the tap readout's readAt evaluation returns through computeOffMain instead of a bare withContext(Dispatchers.Default); two now-unused imports removed. Drawing, data, readout values and layout unchanged.",
+   "previous_sha256": "9fe98011e02aba34058f0e2ca77a7ac480123af9cc7c1f0d13827abfe13cecbe",
+   "new_sha256": "c0957b27c60245e1775993c196403a988e33d172f51c09fbe75600349e346951",
+   "evidence": {
+    "commit": "5e63b5338cd8d58c06474e977c1d6df75c3219ec",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §176 (2026-10-30): the owner's instruction 给我修 (fix the recurring intermittent Compose/CI failures at the root, no reruns, no loosened assertions); the proven root cause is background work resuming composition coroutines off the main thread in the Compose test environment.",
+   "human_review": "git diff of this file in the §176 PR: only the dispatcher call changes."
+  },
+  {
+   "id": "PD-2026-10-30-MAIN-THREAD-UNIFIEDSCREEN",
+   "file": "app/src/main/java/net/plainnotes/app/experimental/UnifiedConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-30",
+   "scope": "Threading only: the research audit and M2 preview computations return through computeOffMain instead of a bare withContext(Dispatchers.Default). Same model, inputs, protocol check, cancellation and display.",
+   "previous_sha256": "01808b49cd13d5bb9796c3d3c24b75321b084fa3d72dd53be19232f76e54161c",
+   "new_sha256": "14e5e62431ad95e6c712db180132cc6cc479621fc9f5b568ca1100fb581fa454",
+   "evidence": {
+    "commit": "5e63b5338cd8d58c06474e977c1d6df75c3219ec",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §176 (2026-10-30): the owner's instruction 给我修 (fix the recurring intermittent Compose/CI failures at the root, no reruns, no loosened assertions); the proven root cause is background work resuming composition coroutines off the main thread in the Compose test environment.",
+   "human_review": "git diff of this file in the §176 PR: only the dispatcher call changes."
+  },
+  {
+   "id": "PD-2026-10-30-PK-ASYNC-MAIN",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-30",
+   "scope": "Reuse PR167 computeOffMain for existing E2 async total/calibration; background math unchanged, continuation resumes on Main. No model values, eligibility, scientific thresholds, persistence or exports changed.",
+   "previous_sha256": "493cd13ccb2d50db71f91e3bdac1bac791c12fe8138e08cdca18661046eacc3e",
+   "new_sha256": "fd27d5a2b515bfb173ec86ac22430295424944243464e1bf4a759f6ffb823c44",
+   "evidence": {
+    "commit": "8d78650392fa79822b7e985603f3b56163068527",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS§179.B, reuses owner-approved §176 main-thread safety correction; actual default-worker UI failure in exact-head CI."
   }
  ]
 }
