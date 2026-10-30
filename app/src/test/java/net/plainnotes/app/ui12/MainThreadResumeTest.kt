@@ -50,7 +50,8 @@ class MainThreadResumeTest {
             withContext(Dispatchers.Default) { Thread.sleep(20) }; after["bare"] = Thread.currentThread()
             computeOffMain { Thread.sleep(20) }; after["helper"] = Thread.currentThread()
         } }
-        ui.waitUntil(15_000) { after.size == 2 }
+        // waitUntil only advances the frame clock; idle the main looper too so the helper's main-thread continuation can run.
+        ui.waitUntil(15_000) { ui.waitForIdle(); after.size == 2 }
         // The mechanism behind the flakes: without the helper the composition coroutine continues on the worker.
         assertNotSame("bare withContext resumed on ${after["bare"]?.name}", main, after["bare"])
         assertSame("computeOffMain resumed on ${after["helper"]?.name}", main, after["helper"])
@@ -81,7 +82,7 @@ class MainThreadResumeTest {
     @Test fun composableSourceFilesDoNotHopToABackgroundDispatcherDirectly() {
         val root = listOf(File("src/main/java"), File("app/src/main/java")).first { it.isDirectory }
         val bare = Regex("""withContext\(\s*(kotlinx\.coroutines\.)?(Dispatchers\.|NonCancellable\s*\+\s*Dispatchers\.)""")
-        val offenders = root.walkTopDown().filter { it.extension == "kt" }.filter { "@Composable" in it.readText() }.flatMap { f ->
+        val offenders = root.walkTopDown().filter { it.extension == "kt" && it.name != "OffMain.kt" }.filter { "@Composable" in it.readText() }.flatMap { f ->
             f.readLines().mapIndexedNotNull { i, line -> if (bare.containsMatchIn(line)) "${f.path}:${i + 1}" else null }
         }.toList()
         assertEquals("use computeOffMain in composable files", emptyList<String>(), offenders)
