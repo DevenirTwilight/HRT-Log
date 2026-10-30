@@ -1,3 +1,10 @@
+## UI-13 ②（化验/浓度/身心/医疗档案点缀）+ 校准卡按钮行 + PDF 文件方块 — 2026-10-30
+
+- 分支 `feature/ui13-accents-2-20261030`：颜色只改显示（REQUIREMENTS §175）；`ConcChart.kt`、`ConcentrationScreen.kt` 按受保护文件流程写了批准记录（`display-approvals-after-archive.json` 追加两条，证据提交 `fe6b3820…`），`Ui08Test` 的 ConcChart 哈希锁登记新哈希，`tools/pk-research/check_protocol.py` 通过。`LabsScreen.kt` 未改（化验行的小图标块在 `LabBatchEntry.kt`）。
+- 负责人当日反馈两处已处理：①“为什么三个按钮分三行？”——原因是三个独立 OutlinedButton 各自竖排；现在放进同一个自动换行行（放得下就并排）。手机宽度约 360dp 时三个按钮合计放不下一行，会是 2 行（前两个并排，“管理化验结果”换到下一行）。②样图里 PDF 的图标带颜色——PDF 文件方块用蓝色点缀（图片方块仍是原暖色，灰色给打不开的文件和其他类型）。
+- 本地实际通过：`Ui13AccentAreaTest` 8（面积自查，最大 1.71%）、`Ui12CalibrationActionsTest` 8、`FileTileColorsTest`、PK 显示回归 325（`Ui12*`、化验首页、校准资格、离群处置）、`Ui08Test` 等规则检查。整套单元测试以 PR CI 精确源码为准。**注意**：后台启动的长 Gradle 运行会在会话环境更新时被悄悄带走，较长的本地测试要在前台跑。
+- 待办：UI-14（PR #164）等 CI；两个 UI 的真机确认与 TalkBack 为 NOT_RUN；新 APK 需要负责人再授权签名。
+
 ## UI-13 配色 PR① 进行中 / UI-14 待 token — 2026-10-30
 
 - **UI-13 PR①**（分支 `feature/ui13-accent-tokens-20261030`）：中性暖白底色（NotesTheme + 窗口背景 colors.xml）、`core/ui` 点缀色 token（`AccentColors.kt`、`AccentTile.kt`，`NotesTheme.accent`）、抽屉图标块、时间线事件类型色。**负责人 2026-10-30 把蓝与紫对调**：化验、浓度估算 = 紫；复诊、医疗档案 = 蓝；就诊资料包 = 紫；身心状态 = 玫红。记录在 REQUIREMENTS §173，任务书原文已归档在样图目录。
