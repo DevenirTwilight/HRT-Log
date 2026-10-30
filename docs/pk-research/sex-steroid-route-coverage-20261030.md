@@ -23,7 +23,7 @@ Official links:
 - https://base-donnees-publique.medicaments.gouv.fr/medicament/63216075/extrait
 - https://m.base-donnees-publique.medicaments.gouv.fr/rcp-65281285-12
 - https://m.base-donnees-publique.medicaments.gouv.fr/rcp-64205548-10
-- https://base-donnees-publique.medicaments.gouv.fr/medicament/68097237/extrait
+- https://base-donnees-publique.medicaments.gouv.fr/medicament/64205548/extrait
 - https://base-donnees-publique.medicaments.gouv.fr/medicament/69033757/extrait
 
 Secondary contextual reviews (not independent parameter validation):
@@ -70,3 +70,7 @@ Secondary contextual reviews (not independent parameter validation):
 5. Only when each route has independent human evidence sufficient for amplitude and timing and compatibility gates pass, seek separate production integration into T selector; otherwise ship no false absolute predictions.
 
 **Result of this tranche:** primary-source PK constraints and a route-by-route evidence backlog are documented. There is **no justified claim that every dosage form has a usable validated absolute serum curve**.
+
+## Source correction 2026-10-30
+
+The initially recorded URL ending `/68097237/extrait` is **ANDROGEL 16.2 mg/g pump**, not ANDROGEL 50 mg sachet. It has been corrected above to `/64205548/extrait` for the 50 mg sachet. Never transfer formulation-specific absorption or exposure constraints between the two products. Verified against ANSM current RCP 2026-09-04.
