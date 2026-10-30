@@ -268,6 +268,37 @@
       "grade": "no_route_matched_PK_quantified",
       "source": "https://pubmed.ncbi.nlm.nih.gov/34781041/",
       "warning": "Doll 2022 examines 17beta E2, NOT EV; do not transfer E2 sublingual model to EV without route matched human data"
+    },
+    {
+      "id": "T_PATCH_ANDRODERM",
+      "compound": "testosterone",
+      "route": "patch",
+      "grade": "historical_regulatory_steady_state",
+      "study": "Androderm FDA legacy label; steady n56 or 35 dose-titrated comparisons (not independent raw series)",
+      "source": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2002/020489_S007_ANDRODERM_AP.pdf",
+      "alternative_regional_reference": "https://ch.oddb.org/fr/gcc/fachinfo/reg/53615/chapter/kinetic",
+      "measured": "total serum T",
+      "old_label_peak_tmax_h_mean": 22,
+      "old_label_cavg_ng_dl_mean": 498,
+      "old_label_cmax_ng_dl_mean": 748,
+      "old_label_cmin_ng_dl_mean": 322,
+      "release_window_hours": 24,
+      "warning": "Patch is continuous input/removal system; never model as bolus. Old regulatory label, check present marketing status; timecourse values are total T."
+    },
+    {
+      "id": "T_IMPLANT_TESTOPEL",
+      "compound": "testosterone",
+      "route": "subcutaneous_implant",
+      "grade": "longitudinal_aggregate_not_identified_individual",
+      "study": "Multi institution observational study 702 implantations in 380 men (2012)",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/22240203/",
+      "label": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=03b9c0b1-5884-11e4-8ed6-0800200c9a66",
+      "measured": "total serum T",
+      "release_window_months_approx": [
+        4,
+        6
+      ],
+      "warning": "Multiple pellet counts, baseline and individual timepoints vary. No universal one-curve numeric dose mapping."
     }
   ],
   "rules": [
