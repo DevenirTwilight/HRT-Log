@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>首页 · 中性底色</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#006A63}a:hover{color:#004F4A}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 1100px; box-sizing: border-box; background: #FBF9F7; color: #1D1B1A; font-family: 'Noto Sans SC', system-ui, sans-serif; display: flex; flex-direction: column;">
+
+  <header style="height: 64px; display: flex; align-items: center; gap: 4px; padding: 0 8px; box-sizing: border-box;">
+    <button aria-label="打开菜单" style="width: 48px; height: 48px; border: 0; background: transparent; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: #1D1B1A;">
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <div style="flex: 1; font-size: 22px; font-weight: 500;">HRT Log</div>
+    <button aria-label="选择日历起始日期" style="width: 48px; height: 48px; border: 0; background: transparent; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: #4C4642;">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+    </button>
+  </header>
+
+  <main style="display: flex; flex-direction: column; gap: 16px; padding: 4px 16px 32px;">
+
+    <section aria-label="今天" style="background: #006A63; color: #FFFFFF; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="font-size: 14px; font-weight: 500; opacity: 0.9;">今天 · 10月15日 周四</div>
+        <div style="font-size: 13px; font-weight: 500; background: rgba(255,255,255,0.16); padding: 4px 10px; border-radius: 999px;">1 / 2 已完成</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-size: 13px; opacity: 0.85;">下一次服药</div>
+        <div style="display: flex; align-items: baseline; gap: 12px;">
+          <div style="font-size: 44px; font-weight: 600; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; line-height: 1.1;">21:00</div>
+          <div style="font-size: 14px; opacity: 0.85;">还有 6 小时</div>
+        </div>
+        <div style="font-size: 18px; font-weight: 600; margin-top: 6px;">戊酸雌二醇</div>
+        <div style="font-size: 14px; opacity: 0.9;">2 mg · 口服</div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button style="flex: 1; height: 52px; border: 0; border-radius: 26px; background: #FFFFFF; color: #00504A; font-family: inherit; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          现在服用
+        </button>
+        <button aria-label="更多选项：其他时间、跳过" style="width: 52px; height: 52px; border: 1px solid rgba(255,255,255,0.5); border-radius: 26px; background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center;">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5.5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="18.5" r="1.8"/></svg>
+        </button>
+      </div>
+      <div style="height: 1px; background: rgba(255,255,255,0.2);"></div>
+      <div style="display: flex; align-items: center; gap: 12px; font-size: 14px;">
+        <div style="width: 28px; height: 28px; border-radius: 14px; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center;">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </div>
+        <div style="flex: 1;">
+          <div style="font-weight: 500;">醋酸环丙孕酮 · 12.5 mg</div>
+          <div style="font-size: 13px; opacity: 0.8;">09:04 已服用</div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="库存提醒" style="background: #FFDBCE; color: #370E00; border-radius: 16px; padding: 14px 12px 14px 16px; display: flex; align-items: center; gap: 12px;">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5L12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9"/></svg>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 15px; font-weight: 600;">雌二醇凝胶快用完了</div>
+        <div style="font-size: 13px;">约 3 天后用完</div>
+      </div>
+      <button style="height: 44px; padding: 0 16px; border: 0; border-radius: 22px; background: #8E4D35; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 600;">添加库存</button>
+    </section>
+
+    <section aria-label="日历" style="background: #F5F2EF; border-radius: 24px; padding: 12px 12px 16px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center;">
+        <button aria-label="上个月" style="width: 48px; height: 48px; border: 0; background: transparent; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: #4C4642;">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <div style="flex: 1; text-align: center; font-size: 17px; font-weight: 600;">2026年10月</div>
+        <button aria-label="下个月" style="width: 48px; height: 48px; border: 0; background: transparent; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: #4C4642;">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div role="group" aria-label="视图" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid #7B7470; border-radius: 22px; overflow: hidden; height: 40px;">
+        <button style="border: 0; border-right: 1px solid #7B7470; background: transparent; font-family: inherit; font-size: 14px; color: #1D1B1A;">日</button>
+        <button style="border: 0; border-right: 1px solid #7B7470; background: transparent; font-family: inherit; font-size: 14px; color: #1D1B1A;">周</button>
+        <button aria-pressed="true" style="border: 0; border-right: 1px solid #7B7470; background: #CCE8E4; font-family: inherit; font-size: 14px; font-weight: 600; color: #051F1D;">月</button>
+        <button style="border: 0; background: transparent; font-family: inherit; font-size: 14px; color: #1D1B1A;">年</button>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); text-align: center; font-size: 12px; color: #4C4642;">
+        <div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div><div>日</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); row-gap: 6px; column-gap: 4px;">
+        <sc-for list="{{cells}}" as="c" hint-placeholder-count="35">
+          <div aria-label="{{c.label}}" style="height: 46px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0px; box-sizing: border-box; background: {{c.bg}}; color: {{c.fg}}; border: {{c.border}}; font-size: 15px; font-weight: {{c.weight}}; font-variant-numeric: tabular-nums;">
+            <div style="line-height: 1.1;">{{c.d}}</div>
+            <div style="font-size: 10px; line-height: 1; height: 11px;">{{c.mark}}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 12px; color: #4C4642; padding: 0 4px;">
+        <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 18px; height: 18px; border-radius: 6px; background: #B8EDE6; color: #00201D; font-size: 11px; display: flex; align-items: center; justify-content: center;">✓</div>已服</div>
+        <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 18px; height: 18px; border-radius: 6px; background: #FFDBCE; color: #370E00; font-size: 11px; display: flex; align-items: center; justify-content: center;">½</div>部分漏服</div>
+        <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 18px; height: 18px; border-radius: 6px; border: 1.5px solid #BA1A1A; box-sizing: border-box; color: #BA1A1A; font-size: 11px; display: flex; align-items: center; justify-content: center;">✕</div>已漏服</div>
+        <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 18px; height: 18px; border-radius: 6px; background: #006A63; color: #FFFFFF; font-size: 11px; display: flex; align-items: center; justify-content: center;">•</div>今天</div>
+      </div>
+    </section>
+
+  </main>
+
+  <div style="position: relative; height: 0;">
+    <button style="position: absolute; right: 16px; bottom: 24px; height: 56px; padding: 0 20px 0 16px; border: 0; border-radius: 16px; background: #9EF2E8; color: #00201D; font-family: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.15);">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      添加
+    </button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var cells = [];
+    var prev = [28, 29, 30];
+    prev.forEach(function (d) { cells.push({ d: d, mark: '', bg: 'transparent', fg: '#A39C97', border: '0', weight: 400, label: '9月' + d + '日' }); });
+    for (var d = 1; d <= 31; d++) {
+      var c = { d: d, mark: '', bg: 'transparent', fg: '#1D1B1A', border: '0', weight: 400, label: '10月' + d + '日 计划服药' };
+      if (d < 15) { c.bg = '#B8EDE6'; c.fg = '#00201D'; c.mark = '✓'; c.label = '10月' + d + '日 已服'; }
+      if (d === 5) { c.bg = 'transparent'; c.fg = '#BA1A1A'; c.border = '1.5px solid #BA1A1A'; c.mark = '✕'; c.label = '10月5日 已漏服'; }
+      if (d === 9) { c.bg = '#FFDBCE'; c.fg = '#370E00'; c.mark = '½'; c.label = '10月9日 部分漏服'; }
+      if (d === 15) { c.bg = '#006A63'; c.fg = '#FFFFFF'; c.mark = '•'; c.weight = 700; c.label = '今天 10月15日 还有 1 次'; }
+      cells.push(c);
+    }
+    cells.push({ d: 1, mark: '', bg: 'transparent', fg: '#A39C97', border: '0', weight: 400, label: '11月1日' });
+    return { cells: cells };
+  }
+}
+</script>
+</body>
+</html>

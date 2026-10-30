@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>身心状态 · 中性底色 + 点缀</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#006A63}a:hover{color:#004F4A}
+button{cursor:pointer}
+.spring{transition:background-color 220ms ease,color 220ms ease,transform 380ms cubic-bezier(.34,1.56,.64,1)}
+.sun{transition:transform 900ms cubic-bezier(.34,1.56,.64,1)}
+@media (prefers-reduced-motion: reduce){.spring,.sun{transition:none}}
+textarea:focus{outline:2px solid #006A63;outline-offset:1px}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 1560px; box-sizing: border-box; background: #FBF9F7; color: #1D1B1A; font-family: 'Noto Sans SC', system-ui, sans-serif; display: flex; flex-direction: column;">
+
+  <header style="height: 64px; display: flex; align-items: center; gap: 4px; padding: 0 8px; box-sizing: border-box;">
+    <button aria-label="打开菜单" style="width: 48px; height: 48px; border: 0; background: transparent; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: #1D1B1A;">
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <div style="flex: 1; font-size: 22px; font-weight: 600;">身心状态</div>
+    <button aria-label="管理条目" style="width: 48px; height: 48px; border: 0; background: transparent; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: #4C4642;">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>
+    </button>
+  </header>
+
+  <main style="display: flex; flex-direction: column; gap: 16px; padding: 0 16px 32px;">
+
+    <div role="tablist" aria-label="身心状态" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; background: #E9E4E0; border-radius: 999px; padding: 4px;">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="3">
+        <button role="tab" aria-selected="{{t.sel}}" onClick="{{t.pick}}" class="spring" style="height: 44px; border: 0; border-radius: 999px; background: {{t.bg}}; color: {{t.fg}}; font-family: inherit; font-size: 14px; font-weight: {{t.w}};">{{t.name}}</button>
+      </sc-for>
+    </div>
+
+    <section aria-label="今天" style="position: relative; overflow: hidden; border-radius: 32px; background: #9EF2E8; color: #00201D; padding: 18px 20px 20px; min-height: 176px; box-sizing: border-box;">
+      <svg class="sun" aria-hidden="true" width="190" height="190" viewBox="0 0 150 150" style="position: absolute; right: -50px; top: -48px; transform: rotate({{sunTurn}}deg);">
+        <g fill="none" stroke="#D2FAF4" stroke-width="10" stroke-linecap="round">
+          <circle cx="75" cy="75" r="30"/>
+          <path d="{{rays}}"/>
+        </g>
+      </svg>
+      <div style="position: relative; display: flex; flex-direction: column; gap: 6px;">
+        <div style="display: flex; align-items: center; gap: 2px; margin-left: -12px;">
+          <button aria-label="前一天" onClick="{{prevDay}}" style="width: 44px; height: 44px; border: 0; background: transparent; border-radius: 22px; color: #00201D; display: flex; align-items: center; justify-content: center;">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+          </button>
+          <div style="font-size: 14px; font-weight: 700; min-width: 112px; text-align: center;">{{dayLabel}}</div>
+          <button aria-label="后一天" onClick="{{nextDay}}" disabled="{{isToday}}" style="width: 44px; height: 44px; border: 0; background: transparent; border-radius: 22px; color: {{nextColor}}; display: flex; align-items: center; justify-content: center;">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div style="font-size: 26px; font-weight: 800; line-height: 1.2; max-width: 220px;">{{heroTitle}}</div>
+        <div style="font-size: 14px; max-width: 240px;">记几项就好，不需要全填。<br>不打分，也不评判。</div>
+        <div style="align-self: flex-start; margin-top: 4px; height: 30px; padding: 0 12px; border-radius: 999px; background: rgba(255,255,255,0.7); font-size: 13px; font-weight: 700; display: flex; align-items: center; font-variant-numeric: tabular-nums;">已记录 {{count}} / 4 项</div>
+      </div>
+    </section>
+
+    <section aria-label="今天的记录" style="display: flex; flex-direction: column; gap: 3px;">
+      <sc-for list="{{items}}" as="i" hint-placeholder-count="4">
+        <div style="background: #FFFFFF; border-radius: {{i.radius}}; padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div aria-hidden="true" style="width: 40px; height: 40px; border-radius: 20px; background: #FCEFF4; color: #8A3B5E; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="{{i.icon}}"/></svg>
+            </div>
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-size: 16px; font-weight: 700;">{{i.name}}</div>
+              <div style="font-size: 12px; color: #4C4642;">{{i.state}}</div>
+            </div>
+            <sc-if value="{{i.has}}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{i.clear}}" style="height: 40px; padding: 0 12px; border: 0; border-radius: 20px; background: transparent; color: #006A63; font-family: inherit; font-size: 13px; font-weight: 600;">清除</button>
+            </sc-if>
+          </div>
+          <div role="radiogroup" aria-label="{{i.name}}" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px;">
+            <sc-for list="{{i.scale}}" as="s" hint-placeholder-count="5">
+              <button role="radio" aria-checked="{{s.sel}}" aria-label="{{s.spoken}}" onClick="{{s.pick}}" class="spring" style="height: 48px; border: {{s.border}}; border-radius: 999px; background: {{s.bg}}; color: {{s.fg}}; font-family: inherit; font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; transform: {{s.scale}}; box-sizing: border-box;">{{s.n}}</button>
+            </sc-for>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; color: #4C4642;"><span>{{i.low}}</span><span>{{i.high}}</span></div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section aria-label="备注" style="background: #FFFFFF; border-radius: 28px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+      <label for="wb-note" style="font-size: 16px; font-weight: 700;">今天的备注</label>
+      <textarea id="wb-note" placeholder="想写什么都可以，只有你自己能看到。" style="min-height: 96px; border: 1px solid #D8D1CC; border-radius: 16px; padding: 12px; font-family: inherit; font-size: 14px; color: #1D1B1A; background: #FBF9F7; resize: vertical; box-sizing: border-box;"></textarea>
+    </section>
+
+    <section aria-label="最近的记录" style="background: #F5F2EF; border-radius: 28px; padding: 16px; display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <h2 style="margin: 0; flex: 1; font-size: 16px; font-weight: 700;">最近的记录</h2>
+        <div style="display: flex; gap: 4px;">
+          <sc-for list="{{ranges}}" as="r" hint-placeholder-count="4">
+            <button onClick="{{r.pick}}" aria-pressed="{{r.sel}}" class="spring" style="height: 32px; padding: 0 10px; border: 0; border-radius: 999px; background: {{r.bg}}; color: {{r.fg}}; font-family: inherit; font-size: 12px; font-weight: 700;">{{r.name}}</button>
+          </sc-for>
+        </div>
+      </div>
+      <sc-for list="{{trends}}" as="t" hint-placeholder-count="4">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; align-items: baseline; gap: 8px;">
+            <div style="font-size: 13px; font-weight: 700;">{{t.name}}</div>
+            <div style="font-size: 12px; color: #4C4642;">记录了 {{t.days}} 天</div>
+          </div>
+          <svg role="img" aria-label="{{t.spoken}}" width="100%" height="44" viewBox="0 0 326 44" preserveAspectRatio="none">
+            <line x1="0" y1="40" x2="326" y2="40" stroke="#D8D1CC" stroke-width="1"/>
+            <path d="{{t.line}}" fill="none" stroke="#006A63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+          </svg>
+        </div>
+      </sc-for>
+      <div style="font-size: 12px; color: #4C4642;">只显示你自己记下的数值，没有记录的日子留空。</div>
+    </section>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1560}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { tab: 0, offset: 0, vals: { mood: 4, energy: null, sleep: 3, body: null }, range: 1 }; }
+  renderVals() {
+    var self = this, s = this.state;
+    var rays = [];
+    for (var i = 0; i < 8; i++) {
+      var t = Math.PI * 2 * i / 8, c = Math.cos(t), si = Math.sin(t);
+      rays.push('M' + (75 + c * 45).toFixed(1) + ' ' + (75 + si * 45).toFixed(1) + 'L' + (75 + c * 61).toFixed(1) + ' ' + (75 + si * 61).toFixed(1));
+    }
+    var tabs = ['每日', '症状', '阶段回顾'].map(function (n, k) {
+      var sel = s.tab === k;
+      return { name: n, sel: sel ? 'true' : 'false', bg: sel ? '#FFFFFF' : 'transparent', fg: sel ? '#00201D' : '#4C4642', w: sel ? 700 : 500, pick: function () { self.setState({ tab: k }); } };
+    });
+    var days = ['10月22日 周四', '10月21日 周三', '10月20日 周二', '10月19日 周一'];
+    var isToday = s.offset === 0;
+    var defs = [
+      { key: 'mood', name: '心情', low: '很低落', high: '很好', icon: 'M12 4v1.5M12 18.5V20M4 12h1.5M18.5 12H20M6.3 6.3l1.1 1.1M16.6 16.6l1.1 1.1M6.3 17.7l1.1-1.1M16.6 7.4l1.1-1.1M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z' },
+      { key: 'energy', name: '精力', low: '很累', high: '很充沛', icon: 'M13 3L5 13.5h6L10 21l8-10.5h-6z' },
+      { key: 'sleep', name: '睡眠', low: '很差', high: '很好', icon: 'M19 14.5A7.5 7.5 0 1 1 9.5 5a6 6 0 0 0 9.5 9.5z' },
+      { key: 'body', name: '身体感觉', low: '很不舒服', high: '很舒服', icon: 'M12 5.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM6 9h12M12 9v5M12 14l-3.5 7M12 14l3.5 7' }
+    ];
+    var count = 0;
+    var items = defs.map(function (d, k) {
+      var v = s.vals[d.key];
+      if (v != null) count++;
+      var scale = [1, 2, 3, 4, 5].map(function (n) {
+        var sel = v === n;
+        return {
+          n: n, sel: sel ? 'true' : 'false', spoken: d.name + ' ' + n + '，共 5 级',
+          bg: sel ? '#006A63' : '#FBF9F7', fg: sel ? '#FFFFFF' : '#4C4642', border: sel ? '0' : '1px solid #D8D1CC',
+          scale: sel ? 'scale(1.06)' : 'scale(1)',
+          pick: function () { var nv = Object.assign({}, self.state.vals); nv[d.key] = n; self.setState({ vals: nv }); }
+        };
+      });
+      return {
+        name: d.name, low: d.low, high: d.high, icon: d.icon, scale: scale, has: v != null,
+        state: v == null ? '还没记录' : '记为 ' + v + ' / 5',
+        clear: function () { var nv = Object.assign({}, self.state.vals); nv[d.key] = null; self.setState({ vals: nv }); },
+        radius: k === 0 ? '28px 28px 8px 8px' : (k === defs.length - 1 ? '8px 8px 28px 28px' : '8px')
+      };
+    });
+    var rangeNames = ['7 天', '30 天', '90 天', '全部'];
+    var ranges = rangeNames.map(function (n, k) {
+      var sel = s.range === k;
+      return { name: n, sel: sel ? 'true' : 'false', bg: sel ? '#006A63' : '#FFFFFF', fg: sel ? '#FFFFFF' : '#4C4642', pick: function () { self.setState({ range: k }); } };
+    });
+    var series = {
+      mood: [3, 4, null, 3, 4, 4, null, 2, 3, 4, 4, null, 3, 4],
+      energy: [2, 3, 3, null, 3, 4, 3, null, 2, 3, null, 3, 3, null],
+      sleep: [4, 3, null, 4, 4, 3, 3, 4, null, 3, 4, 4, null, 3],
+      body: [null, 3, 3, 3, null, 4, 4, 3, 3, null, 3, 4, 4, null]
+    };
+    var trends = defs.map(function (d) {
+      var arr = series[d.key].slice(), n = arr.length, path = '', pen = false, days = 0;
+      for (var k = 0; k < n; k++) {
+        var v = arr[k];
+        if (v == null) { pen = false; continue; }
+        days++;
+        var x = (k / (n - 1) * 318 + 4).toFixed(1), y = (40 - (v - 1) / 4 * 34).toFixed(1);
+        path += (pen ? 'L' : 'M') + x + ' ' + y + (pen ? '' : 'h0.01');
+        pen = true;
+      }
+      return { name: d.name, days: days, line: path, spoken: d.name + '，最近 14 天记录了 ' + days + ' 天' };
+    });
+    return {
+      tabs: tabs, rays: rays.join(' '), sunTurn: count * 22,
+      dayLabel: (isToday ? '今天 · ' : '') + days[s.offset],
+      heroTitle: count === 0 ? '今天感觉怎么样？' : (count === 4 ? '都记好了' : '已经记了一些'),
+      isToday: isToday, nextColor: isToday ? 'rgba(0,32,29,0.3)' : '#00201D',
+      prevDay: function () { if (self.state.offset < 3) self.setState({ offset: self.state.offset + 1 }); },
+      nextDay: function () { if (self.state.offset > 0) self.setState({ offset: self.state.offset - 1 }); },
+      count: count, items: items, ranges: ranges, trends: trends
+    };
+  }
+}
+</script>
+</body>
+</html>
