@@ -1,0 +1,32 @@
+[
+  {
+    "product": "ANDROTARDYL",
+    "cis": "68178899",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/68178899/extrait",
+    "retrieved_utc": "2026-10-30",
+    "http_result": "200",
+    "html_bytes": 179459,
+    "html_sha256": "b4d35a194ce5b4470ca3f277547dc636564876c1f3c6188b5c0f18f05cc9ae26",
+    "compound_mass_mg": 250,
+    "solution_volume_ml": 1,
+    "compound_mg_per_ml": 250.0,
+    "vehicle": "refined castor oil, benzyl benzoate (RCP6.1)",
+    "audit_scope": "RCP2 strength and RCP5.2 depot/parent half-life; no new concentration-time observations or validation",
+    "fulltext_redistributed": false
+  },
+  {
+    "product": "NEBIDO",
+    "cis": "69033757",
+    "url": "https://base-donnees-publique.medicaments.gouv.fr/medicament/69033757/extrait",
+    "retrieved_utc": "2026-10-30",
+    "http_result": "200",
+    "html_bytes": 185536,
+    "html_sha256": "080fe27efc9426652fa23795f6aa7a65477048dd12234882b522a75b9dfc2fc7",
+    "compound_mass_mg": 1000,
+    "solution_volume_ml": 4,
+    "compound_mg_per_ml": 250.0,
+    "vehicle": "refined castor oil, benzyl benzoate (RCP6.1)",
+    "audit_scope": "RCP2 strength and RCP5.2 depot/parent half-life; no new concentration-time observations or validation",
+    "fulltext_redistributed": false
+  }
+]

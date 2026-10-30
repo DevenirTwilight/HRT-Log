@@ -37,4 +37,12 @@ class TestosteroneHistoryTest {
         val r = TestosteroneHistory.read(listOf(record.copy(deleted_at_utc = 100), record.copy(status = "MISSED")), emptyMap(), 100.0)
         assertTrue(r.events.isEmpty())
     }
+    @Test fun frozenFixedStrengthConvertsVolumeForComputationWithoutEditingTheOriginalFact() {
+        val snapshot=MedicationSnapshot.encode(m.copy(route="T_ANDROTARDYL_IM",unit="ML"),null)
+        val input=record.copy(actual_dose=1.0,config_snapshot=snapshot)
+        val r=TestosteroneHistory.read(listOf(input),emptyMap(),100.0)
+        assertEquals(180.0,r.events.getValue("T_ANDROTARDYL_IM").single().parentMg,0.1)
+        assertEquals(1.0,input.actual_dose!!,0.0)
+        assertEquals("ML",MedicationSnapshot.decode(input.config_snapshot,1)!!.unit)
+    }
 }

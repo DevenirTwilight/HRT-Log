@@ -20,7 +20,10 @@ class TestosteroneFormulationsTest {
         assertEquals(180.0, T.parentMg(250.0, "MG", te)!!, 0.1)
         assertEquals(T.parentMg(1.0, "MG", te)!!, T.parentMg(1000.0, "UG", te)!!, 1e-12)
         assertEquals(T.parentMg(1.0, "MG", te)!!, T.parentMg(1_000_000.0, "NG", te)!!, 1e-12)
-        assertNull(T.parentMg(1.0, "ML", te))
+        assertEquals(T.parentMg(250.0, "MG", te), T.parentMg(1.0, "ML", te))
+        assertEquals(631.5, T.parentMg(4.0, "ML", T.product("T_NEBIDO_IM")!!)!!, 0.1)
+        assertNull(T.parentMg(1.0, "ML", gel))
+        assertNull(T.parentMg(1.0, "ML", T.product("T_CYPIONATE_IM")!!))
         assertNull(T.parentMg(1.0, "PUMP", gel))
         assertNull(T.parentMg(Double.NaN, "MG", te))
     }

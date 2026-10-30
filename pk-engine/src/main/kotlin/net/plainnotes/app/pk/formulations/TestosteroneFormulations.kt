@@ -9,13 +9,15 @@ import kotlin.math.max
 object TestosteroneFormulations {
     enum class Status { RESEARCH_SHAPE_ONLY, RECORD_ONLY }
     data class Product(val code: String, val name: String, val route: String, val ester: String,
-        val parentMassFraction: Double, val status: Status, val source: String, val version: String = "T-SHAPE-1")
+        val parentMassFraction: Double, val status: Status, val source: String, val version: String = "T-SHAPE-1",
+        /** Only fixed strengths verified in the exact product's official RCP, never a route default. */
+        val compoundMgPerMl: Double? = null)
     private const val ANSM = "https://base-donnees-publique.medicaments.gouv.fr/medicament/"
     val products = listOf(
         Product("T_ANDROGEL_50", "ANDROGEL 50 mg", "GEL", "T", 1.0, Status.RESEARCH_SHAPE_ONLY, ANSM + "64205548/extrait"),
         Product("T_ANDROGEL_162", "ANDROGEL 16.2 mg/g", "GEL", "T", 1.0, Status.RECORD_ONLY, ANSM + "68097237/extrait"),
-        Product("T_ANDROTARDYL_IM", "ANDROTARDYL", "IM", "TE", 288.42 / 400.59, Status.RESEARCH_SHAPE_ONLY, ANSM + "68178899/extrait"),
-        Product("T_NEBIDO_IM", "NEBIDO", "IM", "TU", 288.42 / 456.70, Status.RESEARCH_SHAPE_ONLY, ANSM + "69033757/extrait"),
+        Product("T_ANDROTARDYL_IM", "ANDROTARDYL 250 mg / 1 mL · IM", "IM", "TE", 288.42 / 400.59, Status.RESEARCH_SHAPE_ONLY, ANSM + "68178899/extrait", compoundMgPerMl = 250.0),
+        Product("T_NEBIDO_IM", "NEBIDO 1000 mg / 4 mL · IM", "IM", "TU", 288.42 / 456.70, Status.RESEARCH_SHAPE_ONLY, ANSM + "69033757/extrait", compoundMgPerMl = 250.0),
         Product("T_XYOSTED_SC", "XYOSTED", "SC", "TE", 288.42 / 400.59, Status.RECORD_ONLY, "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=XYOSTED"),
         Product("T_CYPIONATE_SC", "Testosterone cypionate · SC", "SC", "TC", 288.42 / 412.61, Status.RECORD_ONLY, "https://pmc.ncbi.nlm.nih.gov/articles/PMC5686655/"),
         Product("T_CYPIONATE_IM", "Testosterone cypionate · IM", "IM", "TC", 288.42 / 412.61, Status.RECORD_ONLY, "https://dailymed.nlm.nih.gov/dailymed/search.cfm?query=testosterone+cypionate"),
@@ -26,10 +28,14 @@ object TestosteroneFormulations {
     )
     fun product(code: String?): Product? = products.singleOrNull { it.code == code }
 
-    /** No guessed tablet fraction, mg/mL, pump amount, patch contents or ester equivalence. */
+    /** No guessed tablet fraction, pump amount, patch contents or unspecified product strength. */
     fun parentMg(amount: Double, unit: String, product: Product): Double? {
         if (!amount.isFinite() || amount <= 0) return null
-        val mg = when (unit) { "MG" -> amount; "UG" -> amount / 1_000; "NG" -> amount / 1_000_000; else -> return null }
+        val mg = when (unit) {
+            "MG" -> amount; "UG" -> amount / 1_000; "NG" -> amount / 1_000_000
+            "ML" -> amount * (product.compoundMgPerMl ?: return null)
+            else -> return null
+        }
         return (mg * product.parentMassFraction).takeIf { it.isFinite() && it > 0 }
     }
 

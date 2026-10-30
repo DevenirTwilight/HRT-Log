@@ -43,6 +43,11 @@
       "tests": 32,
       "failures": 0,
       "note": "Frozen archive assertions retained; exact two owner-authorized T source files appended to product-file allowlists, no wildcard."
+    },
+    "fixed_strength_adapter_and_four_language_ui": {
+      "tests": 36,
+      "failures": 0,
+      "skipped": 0
     }
   },
   "first_failure": {
@@ -56,7 +61,7 @@
   "source_files": {
     "tools/pk-research/t_ichihara_2020_fit.py": "b722172d0bf51d2fe8be462b77d96ce56dbdfc46ebe9e8f485ef5c4ac5db8d8d",
     "tools/pk-research/t_route_calibration_01.py": "1c41758221afd6621769cdc40f4f8659bc7fc1af0292bb86842187033f2fb498",
-    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/formulations/TestosteroneFormulations.kt": "11a16183cebe097aaa14285afbad22e3e308da513f0a5529ac7e65420b4b2657"
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/formulations/TestosteroneFormulations.kt": "0d1b8bb10f339d6715871ee9c46dca93f82e5a4c0c98d8208e0b776fdd85139a"
   },
   "second_failure": {
     "source_sha": "ef6a684fef528f2468a0ba3ef22b423fa3c9f484",
@@ -64,5 +69,10 @@
     "reason": "Synthetic active medication omits required soon_alert_minutes and late_after_minutes; saveMedication refuses at NotesRepository.kt:614 before backup",
     "fix": "Supply the same 15/120-minute required fields as the production editor; identical omission corrected in native fixture",
     "production_rules_changed": false
+  },
+  "release_build_first_attempt": {
+    "status": "INTERRUPTED_NOT_BUILT",
+    "log": "/tmp/hrt-t-unsigned-release.log",
+    "observation": "Execution environment restarted; exec process handle disappeared, no APK output, Gradle daemon idle. No OOM kill recorded in cgroup memory.events. Do not call this PASS or a demonstrated product OOM. One bounded resume planned."
   }
 }

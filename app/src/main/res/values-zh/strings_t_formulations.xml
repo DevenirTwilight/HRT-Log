@@ -10,5 +10,5 @@
     <string name="t_history_counts">此产品：%1$d 次可用用药 · %2$d 次不支持 · %3$d 次事实或质量单位缺失（全部睾酮记录）。</string>
     <string name="t_evidence">模型与来源</string>
     <string name="t_evidence_limits">官方说明书只约束部分指标，不能确定个人完整曲线。吸收速率与组分权重仍是假设。完整参数、失败拟合与人群限制均保存在源码仓库。尚无独立临床验证。</string>
-    <string name="t_formulation_history">选择准确产品与给药途径。剂量为实际记录的化合物质量，不是睾酮等效质量；仅适用于新记录，不改写旧记录的未知制剂。</string>
+    <string name="t_formulation_history">选择准确产品与途径。按化合物质量记录；仅两种明确固定浓度的注射剂可用 mL。不要填写睾酮等效质量。仅适用于新记录，不改写旧记录的未知制剂。</string>
 </resources>

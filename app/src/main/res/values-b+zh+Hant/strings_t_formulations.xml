@@ -10,5 +10,5 @@
     <string name="t_history_counts">此產品：%1$d 次可用用藥 · %2$d 次不支援 · %3$d 次事實或質量單位缺失（全部睪固酮記錄）。</string>
     <string name="t_evidence">模型與來源</string>
     <string name="t_evidence_limits">官方說明書只約束部分指標，不能確定個人完整曲線。吸收速率與組分權重仍是假設。完整參數、失敗擬合與人群限制均儲存在原始碼倉庫。尚無獨立臨床驗證。</string>
-    <string name="t_formulation_history">選擇準確產品與給藥途徑。劑量為實際記錄的化合物質量，不是睪固酮等效質量；僅適用於新記錄，不改寫舊記錄的未知製劑。</string>
+    <string name="t_formulation_history">選擇準確產品與途徑。按化合物質量記錄；僅兩種明確固定濃度的注射劑可用 mL。不要填寫睪固酮等效質量。僅適用於新記錄，不改寫舊記錄的未知製劑。</string>
 </resources>

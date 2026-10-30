@@ -10,5 +10,5 @@
     <string name="t_history_counts">This product: %1$d usable doses · %2$d unsupported · %3$d missing facts or mass units (all testosterone records).</string>
     <string name="t_evidence">Model and sources</string>
     <string name="t_evidence_limits">Official labels constrain parts of these curves, not a complete individual profile. Absorption rates and component weights remain assumptions. Full parameters, failed fits and study limitations are recorded in the source repository. No independent clinical validation.</string>
-    <string name="t_formulation_history">Choose the exact product and administration route. Dose must be the recorded compound mass, not testosterone-equivalent mass. This choice applies to new records only; old unknown formulations stay unknown.</string>
+    <string name="t_formulation_history">Choose the exact product and route. Record compound mass, or mL only for the two labelled fixed-strength injections, never testosterone-equivalent mass. This choice applies to new records only; old unknown formulations stay unknown.</string>
 </resources>

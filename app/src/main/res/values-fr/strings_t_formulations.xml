@@ -10,5 +10,5 @@
     <string name="t_history_counts">Ce produit : %1$d prises utilisables · %2$d non prises en charge · %3$d faits ou unités de masse manquants (toutes les prises de testostérone).</string>
     <string name="t_evidence">Modèle et sources</string>
     <string name="t_evidence_limits">Les notices ne contraignent que certains indicateurs, pas un profil individuel complet. Vitesses et poids restent des hypothèses. Paramètres, échecs et limites sont archivés dans le dépôt source. Aucune validation clinique indépendante.</string>
-    <string name="t_formulation_history">Choisir le produit et la voie exacts. La dose est la masse réelle du composé, pas une masse équivalente de testostérone. Ce choix ne réécrit pas les anciennes formulations inconnues.</string>
+    <string name="t_formulation_history">Choisir le produit et la voie exacts. Masse du composé, ou mL uniquement pour les deux injections de concentration explicite ; jamais une masse équivalente de testostérone. Ce choix ne réécrit pas les anciennes formulations inconnues.</string>
 </resources>
