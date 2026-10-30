@@ -1,3 +1,13 @@
+## PK-FR-03 欧美官方和人体研究扩展：15家族、37条可运行研究情景 — 2026-10-30
+
+- **完整交付与继续入口**：`docs/pk-research/fr-rcp-phase1/PHASE3_RESULTS.md`；证据矩阵 `phase3-evidence.json`（新增19条可追溯FDA/DailyMed/PubMed/ANSM/临床数据），`phase3-curve-metrics.json`（37条曲线的数学参数/采样值），新Python `tools/pk-research/fr_rcp_phase3_curves.py`、测试 `test_fr_rcp_phase3_curves.py`；本研究分支 `research/pk-rcp-curves-phase1-20261030`（与第一/二阶段共用PR #172）。**产出是可复算的研究，不是15个临床验证的正式绝对血浓度模型。**
+- **实际本地执行证据**：Python引擎生成 37组×241点归一化曲线，覆盖**15制剂/途径家族**；8项新unit tests经本地原生Python `unittest` 真实运行全部PASS、耗时0.113s；最后源码精确与GitHub提交内容一致（ASCII 7310字节、FNV32 `b4785a77`），所以本阶段代码对应已测源码。**第1/2阶段仓库原样执行和CI仍NOT_RUN；第3阶段Android/临床外测仍NOT_RUN**。
+- **新增真实人体证据**：EB/EV/EC肌注5mg约2/2/4日达峰（1980 Oriowo，三组不同受试者，同一原研究）；EN肌注10mg（1986 Wiemeyer）实测计算吸收1.505/d、消除0.12445/d→解析峰1.806日、终末半衰期5.57日；EU有1975人体研究，但后续长尾、个体差极大导致绝对模型不可辨识，程序中 EU **HYPOTHETICAL only**，不采用第三方用TU跨分子替代的猜测。
+- **首个新量纲化原型**：美国FDA/AZMIRO肌注TC200mg，官方基线扣除群均Cmax758ng/dL（n26）、中位Tmax71.7h、表观t½≈8日，求得ka≈0.0354835/h，限定200mg研究原型在峰值约758 ng/dL；`AUC∞≈271995` **不能**与FDA的 `AUC0–t≈137219`在缺末次采样时间下简单比较。没有个人T基线/长尾外验，**不可投产**。TP有1986同位素示踪+旧50mg综述，T TE SC有FDA XYOSTED，T TU oral有JATENZO/TLANDO，T鼻凝胶Natesto/口腔Striant、Testavan凝胶各有不同受限形状情景。
+- **找到但尚不可变正式曲线**：T ANDRODERM贴片旧FDA官方Cavg/Cmax/Cmin/Tmax，需**24h持续输入与移除算法**；T TESTOPEL植入人群研究702次植入，缺独立剂量/个体时序；E2喷雾Lenzetto稳态数据，E2 25mg植入CLARA长时点；E2 SC EV/EC为观测队列无受控连续曲线，舌下EV无匹配17β-E2之外的实测研究。所有缺口报告明示。
+- **已核对真实APP缺口**：`MedicationEditor.kt` 仅E2显示具体途径/酯型，虽有T分子选项但非E2无同类T编辑器；`ConcentrationCalculator.kt`不模拟T，`Engine.Curve`无T；不能因为已有研究核就自称可以在正式App绘制。产品端尚无任何T正式曲线，E2注射仍仅EV正式曲线。
+- **坚持原则**：用户要求研究至各制剂均有曲线，继续优先收集完整受试者基线/测量时点/产品数据，并逐一界定归一化情景与绝对浓度；**不支持虚构空白产品的pg/mL、把跨药物曲线套用给EU，或无独立验证就改变用户现有曲线**。既有M2、LabFit、PDF历史、备份、Room、签名Build41均不变。签名或公开发布仍需独立授权。
+
 ## PK-FR-02 法国官方曲线第二阶段研究完成入库 — 2026-10-30（RESEARCH_ONLY）
 
 - **成果**：详见 `docs/pk-research/fr-rcp-phase1/PHASE2_RESULTS.md`，新增 `phase2-ledger.json`、`phase2-numerical.json`、`phase2-tu-mixture-scan.json`、`tools/pk-research/fr_rcp_phase2.py`、`fr_rcp_phase2_mixture.py` 和测试 `test_fr_rcp_phase2.py`（9项）、`test_fr_rcp_phase2_mixture.py`（5项），全部已逐项提交本研究分支。ANSM RCP 原始页日期已复核：TESTAVAN 2026-07-07、ANDROGEL 50mg **2026-09-04**、ANDROGEL 16.2 2026-02-04。
