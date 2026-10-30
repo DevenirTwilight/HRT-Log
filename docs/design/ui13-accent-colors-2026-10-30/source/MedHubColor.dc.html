@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>医疗档案 · 文件库 · 中性底色 + 点缀</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#006A63}a:hover{color:#004F4A}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 1200px; box-sizing: border-box; background: #FBF9F7; color: #1D1B1A; font-family: 'Noto Sans SC', system-ui, sans-serif; display: flex; flex-direction: column;">
+
+  <header style="height: 64px; display: flex; align-items: center; gap: 4px; padding: 0 8px; box-sizing: border-box;">
+    <button aria-label="打开菜单" style="width: 48px; height: 48px; border: 0; background: transparent; border-radius: 24px; display: flex; align-items: center; justify-content: center; color: #1D1B1A;">
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <div style="flex: 1; font-size: 22px; font-weight: 500;">医疗档案</div>
+  </header>
+
+  <main style="display: flex; flex-direction: column; gap: 18px; padding: 4px 16px 32px;">
+
+    <label style="height: 52px; border-radius: 26px; background: #E9E4E0; display: flex; align-items: center; gap: 12px; padding: 0 18px; color: #4C4642;">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg>
+      <input type="search" placeholder="搜索标题、机构、类别" aria-label="搜索医疗资料" style="flex: 1; min-width: 0; border: 0; background: transparent; font-family: inherit; font-size: 15px; color: #1D1B1A; outline: none;">
+    </label>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+      <button style="height: 52px; border: 0; border-radius: 26px; background: #006A63; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        添加文件
+      </button>
+      <button style="height: 52px; border: 0; border-radius: 26px; background: #CCE8E4; color: #051F1D; font-family: inherit; font-size: 15px; font-weight: 600;">为就诊准备</button>
+    </div>
+
+    <a href="#inbox" style="background: #FFDBCE; color: #370E00; border-radius: 18px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; text-decoration: none;">
+      <div aria-hidden="true" style="width: 40px; height: 40px; border-radius: 12px; background: #8E4D35; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700;">3</div>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 15px; font-weight: 600;">待整理</div>
+        <div style="font-size: 13px;">导入后还没填日期或类别的文件</div>
+      </div>
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+    </a>
+
+    <section aria-label="按类别" style="display: flex; flex-direction: column; gap: 10px;">
+      <h2 style="margin: 0 4px; font-size: 15px; font-weight: 600;">按类别</h2>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+        <sc-for list="{{cats}}" as="c" hint-placeholder-count="6">
+          <a href="#cat" style="min-height: 76px; background: #F5F2EF; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; color: {{c.fg}};">
+            <div style="font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums;">{{c.n}}</div>
+            <div style="font-size: 13px; font-weight: 500;">{{c.name}}</div>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-label="最近资料" style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: baseline; padding: 0 4px;">
+        <h2 style="margin: 0; flex: 1; font-size: 15px; font-weight: 600;">最近资料</h2>
+        <a href="#all" style="font-size: 14px; font-weight: 600; text-decoration: none; min-height: 32px; display: flex; align-items: center;">全部 12 份</a>
+      </div>
+      <div style="display: flex; flex-direction: column; background: #FFFFFF; border-radius: 16px; overflow: hidden;">
+        <sc-for list="{{docs}}" as="d" hint-placeholder-count="3">
+          <a href="#doc" style="min-height: 76px; padding: 12px 14px; display: flex; align-items: center; gap: 14px; text-decoration: none; color: #1D1B1A; border-top: {{d.divider}};">
+            <div aria-hidden="true" style="width: 44px; height: 52px; flex-shrink: 0; border-radius: 8px; background: {{d.bg}}; color: {{d.fg}}; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; box-sizing: border-box; font-size: 10px; font-weight: 700; letter-spacing: 0.4px;">{{d.kind}}</div>
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-size: 15px; font-weight: 500;">{{d.title}}</div>
+              <div style="font-size: 13px; color: #4C4642;">{{d.meta}}</div>
+              <div style="font-size: 12px; color: {{d.linkColor}}; margin-top: 2px;">{{d.link}}</div>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-label="记录" style="display: flex; flex-direction: column; gap: 10px;">
+      <h2 style="margin: 0 4px; font-size: 15px; font-weight: 600;">记录</h2>
+      <div style="display: flex; flex-direction: column; background: #FFFFFF; border-radius: 16px; overflow: hidden;">
+        <a href="#visits" style="min-height: 52px; padding: 0 14px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: #1D1B1A;">
+          <span style="flex: 1; font-size: 15px;">就诊记录</span><span style="font-size: 13px; color: #4C4642;">4 次 · 下次 10月20日</span>
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7B7470" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#labs" style="min-height: 52px; padding: 0 14px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: #1D1B1A; border-top: 1px solid #E9E4E0;">
+          <span style="flex: 1; font-size: 15px;">化验记录</span><span style="font-size: 13px; color: #4C4642;">12 条</span>
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7B7470" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#doctors" style="min-height: 52px; padding: 0 14px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: #1D1B1A; border-top: 1px solid #E9E4E0;">
+          <span style="flex: 1; font-size: 15px;">医生和机构</span><span style="font-size: 13px; color: #4C4642;">3 位</span>
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7B7470" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <section aria-label="备份状态" style="background: #F5F2EF; border-radius: 16px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start;">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#006A63" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7.5 3v5.5c0 4.5-3.2 8-7.5 9.5-4.3-1.5-7.5-5-7.5-9.5V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>
+      <div style="flex: 1; font-size: 13px; color: #4C4642;">
+        <div style="font-size: 14px; font-weight: 600; color: #1D1B1A;">完整备份含医疗原件</div>
+        上次备份 10月12日 · 12 份文件全部可读
+      </div>
+    </section>
+
+    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+      <a href="#unlinked" style="min-height: 44px; padding: 0 12px; display: flex; align-items: center; font-size: 14px; font-weight: 600; text-decoration: none; color: #4C4642;">未关联文件（2）</a>
+      <a href="#bin" style="min-height: 44px; padding: 0 12px; display: flex; align-items: center; font-size: 14px; font-weight: 600; text-decoration: none; color: #4C4642;">回收站</a>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var cats = [
+      { name: '化验报告', n: 5 }, { name: '处方', n: 3 }, { name: '就诊说明', n: 2 },
+      { name: '医疗证明', n: 1 }, { name: '影像报告', n: 0 }, { name: '其他', n: 1 }
+    ].map(function (c) { c.fg = c.n === 0 ? '#7B7470' : '#1D1B1A'; return c; });
+    var docs = [
+      { kind: 'PDF', bg: '#D6E3FF', fg: '#2C4A78', title: '激素六项报告', meta: '化验报告 · 采样 10月7日 · [机构]', link: '已关联 2 条化验', linkColor: '#006A63' },
+      { kind: 'IMG', bg: '#E9DDF5', fg: '#5A3E78', title: '处方照片', meta: '处方 · 9月22日 · [医院]', link: '已关联 9月22日就诊', linkColor: '#006A63' },
+      { kind: 'PDF', bg: '#E9E4E0', fg: '#4C4642', title: '[文件标题]', meta: '日期未知 · 导入于 10月14日', link: '尚未关联', linkColor: '#7B7470' }
+    ].map(function (d, i) { d.divider = i === 0 ? '0' : '1px solid #E9E4E0'; return d; });
+    return { cats: cats, docs: docs };
+  }
+}
+</script>
+</body>
+</html>
