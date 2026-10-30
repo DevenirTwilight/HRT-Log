@@ -1821,3 +1821,9 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 - **其余只改颜色或图标块的文件**（HISTORY_ONLY 或未列入矩阵）：`LabBatchEntry.kt`（化验行前的紫色图标块）、`WellbeingDaily.kt`（每个项目前的玫红图标块）、`MedicalRecordsScreen.kt`（蓝：复诊、想问的问题、历史就诊圆圈；紫：化验入口、就诊资料包、化验类文件）、`MedicalAttachmentsUi.kt`（负责人指出样图里 PDF 的图标是带颜色的：PDF 文件方块用蓝色点缀，图片方块保持原暖色，打不开的文件与其他类型保持灰）。
 - **验证**：`Ui13AccentAreaTest`（8 个组合，页面扩展到化验、浓度、身心状态、医疗档案；点缀色占页面像素 ≤ 8%，实测最大 1.71%，首页与库存为 0）、`Ui12CalibrationActionsTest`（按钮行：放得下必须同一行，放不下才换行）、`FileTileColorsTest`、`Ui12ConcentrationTest`、`ConcChartAxisTest`、`Ui08PdfSummaryUnchangedTest`（PDF 汇总不受影响，ConcChart 新哈希登记）与 `tools/pk-research/check_protocol.py`。真机、人工 TalkBack 为 NOT_RUN。
 
+
+## 179. E2/T 剂型曲线实施授权（2026-10-30）
+
+负责人授权扫描实际生产覆盖、继承 PR #173 可复现证据并将合格新剂型接入现有浓度页。绝对估算、研究性相对形状、仅记录必须分开；不把稀疏汇总拟合或同队列留出称独立验证，不推断内源性T、反馈或抗雄药的浓度下降。不同产品/酯/载体/途径不回退共用模型。研究每轮立即入库。继承现有E2/M2/TotalE2Calibration、冻结P2、快照/导出/数据库/备份/库存/附件，不改参数或旧计算结果。
+
+显示批准 `PD-2026-10-30-SEX-STEROID-SELECTOR`：允许在 ConcentrationScreen.kt 增加E2/T选择及T的明确研究性/仅记录状态；E2分支的原数值与校准接线不变。新T模型独立文件、只读实际历史快照，不复用E2校准、不显示无依据的绝对单位。药物编辑仅显式选择制剂身份并冻结到现有历史快照，不从品牌文字猜测、不替历史补填当前选择。没有足够证据的剂型继续仅记录，不能填造参数。授权源码/PR/正常保护合并，不授权签名或公开APK。
