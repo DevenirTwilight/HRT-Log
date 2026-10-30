@@ -276,6 +276,36 @@
     "tests": "ConcChartAxisTest (8, incl. 500 random spacings: kept labels never overlap, the best label is always kept); Ui12ConcentrationTest 256 parameterised runs; full :app:testFullDebugUnitTest and PeriodStabilityTest in CI"
    },
    "human_review": "recommended: compare docs/ui-audit/2026-10-29-conc-axis/{before,after} (fr 320dp 2x light shows the fix)."
+  },
+  {
+   "id": "PD-2026-10-30-UI13-CONCCHART-COLOURS",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcChart.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-30",
+   "scope": "UI-13 colours only: the lab dots are the purple accent and the dose ticks a light teal (solid main teal at high contrast); adds doseMarkColor. Curve, grid, data, readouts, readAt, positions and range logic unchanged.",
+   "previous_sha256": "20f224d607ebc48d9a0dd036f4b070ba0935f26bae7d67f6b2fd37916528c5dc",
+   "new_sha256": "9fe98011e02aba34058f0e2ca77a7ac480123af9cc7c1f0d13827abfe13cecbe",
+   "evidence": {
+    "commit": "fe6b382038568df7dd5503c3c1912f7348e82c77",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §175 (2026-10-30): UI-13 task book sections 3.5 and 4 (colours and icon-tile appearance only) and the owner's feedback on the calibration card's button layout.",
+   "human_review": "compare docs/ui-audit/2026-10-30-ui13-2/{before,after}."
+  },
+  {
+   "id": "PD-2026-10-30-UI13-CONCENTRATION-COLOURS-AND-ACTIONS",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-30",
+   "scope": "UI-13 colours only for the chart legend (lab dot purple, dose tick as the chart), plus the owner's 2026-10-30 feedback that the calibration card's three actions share one wrapping row instead of one per line. Values, units, calibration, data flow and callbacks unchanged.",
+   "previous_sha256": "0de295e4c79f48bddf017ebc037655758c34287b3a11b82c6346bc0ef64a3a6f",
+   "new_sha256": "68d30c771872e7d6f045ddd66f26b589d03a110a35737463a5606b9387724082",
+   "evidence": {
+    "commit": "fe6b382038568df7dd5503c3c1912f7348e82c77",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §175 (2026-10-30): UI-13 task book sections 3.5 and 4 (colours and icon-tile appearance only) and the owner's feedback on the calibration card's button layout.",
+   "human_review": "compare docs/ui-audit/2026-10-30-ui13-2/{before,after}."
   }
  ]
 }
