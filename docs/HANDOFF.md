@@ -1,3 +1,21 @@
+## 接手后的阶段评估与合并状态 — 2026-10-29
+
+- 完整评估见 `docs/audits/product-quality-2026-10/82-release-readiness-2026-10-29.md`：状态表、本轮发现并处理的真实问题、尚未解释的间歇故障、私测/公开 Beta/稳定版结论、下一步。
+- 已合并：#156（文件改名 + 全屏阅读）、#159（存储进程锁有界等待）；主线 `4702b461`。进行中：#155（A 记录入账本 + B 披露，合并了原 #157）、#158（图表横轴标签）。
+- 结论摘要：具备私人测试条件；公开 Beta 暂不具备（真机/TalkBack NOT_RUN、间歇 Compose 崩溃未解释、覆盖升级无真实 APK 测试、LMK 一次证据未定论、发布说明未起草、需授权）；稳定版不具备。
+- 下一步：合并 #155/#158 → 主线全绿 → 构建 Build 40 候选（versionCode ≥ 40）→ 负责人授权后私下签名交付 → 真机试用。
+
+## 重复的 Build 39（B）— 2026-10-29（事故记录，已披露）
+
+- **事实**：同一天有**两份不同的 APK 都使用 versionCode 39**，证书相同（`989ba045…79b1`），文件名都叫 `HRT-Log-build39-full-official.apk`：
+  - **A**：源码 `d95952ee`（不含舌下校准 UI），SHA-256 `9c639f8c0a9ff3f30404fc965166f0500220d33c214f4aedb80de55f6f43a850`，14,486,686 字节，2026-10-29 14:57Z 签名，经负责人私有 GitHub 交付分支交付，记录在 PR #155（REQUIREMENTS §168）。
+  - **B**：源码 `aeb56839`（含 #149–#153，即 UI-12、MED-04、MED-05、校准引擎与校准界面），SHA-256 `14f9cf51c1c2760a15767607bc519aa279ceaa7505faa6b9c635f1c0f5961c5a`，14,519,454 字节，2026-10-29 晚按负责人「都做完给apk」在会话里作为附件发出。
+- **原因**：构建 B 的会话开工前没有查看仍是 OPEN 的交付记录 PR #155，不知道 A 已交付。这是流程错误，不是签名或代码问题。
+- **处理**：账本只能严格递增，39 已由 #155 记录为 A；B 不进账本，只在 `docs/delivery/build39b-duplicate-version-verification.json` 留存核验与身份（含「如何区分」）。**下一次交付必须 versionCode ≥ 40，并同时取代 A 和 B。** 在那之前两个包都能覆盖安装，但应用内版本号分不出它们，请以文件 SHA-256 区分。
+- **教训**：任何签名交付前，先 `gh pr list` 查看所有 OPEN 的 delivery/ledger PR 和 `docs/delivery/ledger.json` 的主线与分支状态；不依赖单一会话记忆。
+- B 的验证与 A 同类：v2/v3 单签名者、四 ABI、64 位 ELF 与 ZIP 16KiB 对齐、无 INTERNET、非 debug、签名前后 324 个业务条目逐字节相同；真机安装与人工 TalkBack NOT_RUN。主线 `aeb56839` CI：`android` 首次失败于 `Ui12ConcentrationTest.mixedRoutesCalibrateAsOneTotal[en/320dp/2x/dark=false]`（等待估算卡 30 秒超时，同一测试在 PR 运行中通过），按规则重跑一次后成功。
+- 本轮合并汇总：#149 UI-12、#150 MED-04、#151 SL-CAL-02 引擎、#152 MED-05、#153 校准接到浓度页，主线 `aeb56839d708c325b5330e62e672be968992fa42`。待负责人复核（不变）：信息档位阈值 0.75；E1 午夜占位；法文 320dp 2× 横轴日期标签重叠（UI-12 遗留）；大图按 2 的幂次缩小解码的放宽；Android 8 PDF 仍不支持；真机/TalkBack 未做；导出/PDF/快照不含校准后的合计（§67 D-2）。
+
 ## 阅读器偶发「这个文件无法显示」：存储进程锁立即失败 — 2026-10-29（接手后修复）
 
 - **现象**（合并 #156 后的 CI，同一原生用例 `fullscreenReaderRenamesThreePagePdfAndLargeImageThenReturnsToTheSameFile`）：#158 的 API 29 运行里，大图 PNG 的「全屏查看」打开后阅读器显示的是「这个文件无法显示」（`attachment-viewer-message`），30 秒内没有页面（run 40954203055、job 123729916632，工件 attachment-poc-api29）；同一用例在 #156 的 PR 运行（API 26/29/35 各 2 次）、主线 f4402a36 的 API 29/35 都通过。另一次（#157，run 40951055441、job 123719684213，API 35）是 Compose 内部断言 `performMeasureAndLayout called during measure layout`，发生在导入后点文件卡片的位置，**根因未证明**，不当作已解释。
@@ -29,6 +47,10 @@ PR156 sourcecfd44c55的Featherline低内存run40934190600/job123660585591/artifa
 ## 2026-10-29 PR153 已受保护合并，156整合检查点
 
 PR153最终源码dfa7f6e9的全部必需检查通过（Android两job、JVM、科学、API26/29/35及安全），无未解决评审；已正常squash合并为aeb56839d708c325b5330e62e672be968992fa42，未用admin绕过。正式主线开始复验，APK未构建交付。PR156已一次性同步这条已验收主线，保留双方全部HANDOFF与需求、校准实现和根节点测试修正；本轮自身仍Draft。新原生页码先更新/按钮等待旧页释放的测试时序已改为观察真实按钮恢复后再保留原assert。Featherline低内存run40934190600 job123660585591原始Process crashed与工件12923869325待独立核查，不能凭failed to clear log断言LMK。PR155根查询修正后API29 job123660106334仍有Snapshot线程失败，必须保留并继续定位，不能称已修复。
+
+## PR155 就诊撤回确认失败定位 — 2026-10-29
+
+原始HTML报告run40936737557/job123669608636/artifact12927745737明确110行失败为Failed to inject touch input / 找不到medical-correction-confirm；不是撤回后的DB断言失败。保留真正撤回按钮点击、确认按钮点击、原始时间不变及completed_utc清空断言。仅先滚动使撤回按钮可见，再用原10秒界限等待确认节点出现，不sleep、不删断言。原始失败HTML在/workspace/scratch/155-MedicalHome-failure.html；定向1项PASS/0skip、AndroidTest Kotlin编译PASS（5m48s），证据在delivery/build39-ci-followup-2026-10-29；最终CI另验。PR153已正常合并aeb56839。
 
 ## 校准历史时间回归补验 — 2026-10-29
 
@@ -99,6 +121,28 @@ PR153当前8c491bec：push原生API26/29/35通过，PR事件API29有共享Snapsh
 阅读器使用独立Dialog、安全边距与继承截图保护；内容占据工具栏以外全部阅读区，工具栏隐藏后占满安全区域。去除固定460dp预览卡/详情元数据；保留认证读取、API26/27 PDF拒绝、JPEG/PNG、按需翻页、5×缩放与内存上限。首轮针对性共742项：32个新增显隐/双指手势失败，28项既有条件skip，其余通过；原始日志/XML保存在/workspace/hrt-feedback-evidence/reader-first-failure，不改写为PASS。根因：同批MotionEvent先于重组，旧scale/offset快照覆盖增量；生产改为手势局部累计，末尾翻页判断使用最终scale。显隐测试等待双击识别窗口后的真实toolbar状态，不加sleep/不放宽面积断言。修复后这32项全部PASS，0skip。标题单测1项通过，App/core AndroidTest源码编译通过；最终完整必需CI及真实设备执行仍待验收，不能称NATIVE_PASS。
 
 新增真实MainActivity/SAF三页PDF与2400×1600PNG，重命名→列表/详情/整次LabPanel五成员→viewer标题、缩放/翻页/显隐/返回/重开；保留旧样本与断言。native截图与采样非峰值内存JSON由既有med02-product-native工件收集，尚未实际运行。core原生五成员/多关系场景补旧import核对、CAS冲突、回滚、不可变对象与完整归档恢复新名。校准在原PR #153独立接手，不混改PK或压低门槛。真机/人工TalkBack未执行；本候选未签名/交付APK。
+
+## PR155 原始节点读取剩余路径 — 2026-10-29
+
+5fb1bbf8原生失败仍保留。共享bounds helper虽然已把坐标放主线程，仍先fetchSemanticsNode()触发单节点诊断打印；现所有自定义坐标查询都直接用collection.fetchSemanticsNodes().single，再主线程读坐标，严格保留唯一节点要求，根查询保持原first语义。真实点击/滚动/SAF和原断言不改。准确新SHA原生待验证，不声称因果关系已完整证明。PR153已合并aeb56839；本PR待同步新主线并验收，Build39仍为原始交付，无新APK。
+
+## PR155 根节点诊断快照修正 — 2026-10-29
+
+df7d1010仍复现线程异常。进一步核对Compose ui-test1.9.3源码：fetchOneOrThrow先在调用线程保存整节点printToString，再返回节点；旧bounds helper在主线程读取坐标前仍调用这个单根节点路径。现仅把根查询改为collection.fetchSemanticsNodes().first，再主线程读取bounds，避免非必要的整棵动态树诊断快照；不禁用线程检查、不改断言、不升级依赖。准确新SHA原生验证待执行，不能提前写修复成功。原始job123630783670失败保留。当前PR153原生API26/29/35全部通过，仅Android主job待完成；PR156当前56c17936继续独立验收。
+
+## Build39 交付记录 PR155 原生失败检查点 — 2026-10-29
+
+原始run40897072088 API35 job123529017532 的 MainActivity 附件测试报 SnapshotStateObserver 跨线程；测试中直接在instrumentation线程读取布局坐标，已改为主线程读取，保留真实SAF与全部断言，根因和修复仍须新HEAD原生复验。另一次run40897063139 Android主job的 MedicalHomeConfirmFlowTest 第110行失败，原因尚未确定，不归咎于交付文档，也不写成PASS。原始失败保留；尚未构建/签名/交付新APK。
+
+## Build39 私人交付完成 — 2026-10-29
+
+负责人「干完了给apk」恢复APK交付（REQUIREMENTS §167）。#152 查看器和 #151 校准引擎均已合并；#154 修正记录成功回执等待，合并 `d95952eed3f6732dd99297019a5fb02ca4304191`，该主线 Android `40887646155` 五 job、Science `40887646147`、四 API 安全 `40887646281` 全部 SUCCESS。此前主线 `40873641886` API35 test tag 超时保持历史 FAIL；#154 当前源和合并树一致，未删业务断言。#153 校准界面是独立开放工作，不在本包中。
+
+从干净主线 d95952ee 构建 fullRelease（源码外 `version39.init.gradle` 仅把版本38→39，哈希见核验收据）；原正式证书 `989ba045…79b1`，包名 `net.plainnotes.app`、39/0.2.0。文件 `HRT-Log-build39-full-official.apk`，14,486,686 bytes，SHA-256 `9c639f8c0a9ff3f30404fc965166f0500220d33c214f4aedb80de55f6f43a850`。v2/v3、四ABI、64位ELF/ZIP16KiB、无INTERNET、非debug、Release隔离全部核验；签前后324个业务条目逐字节一致。私钥/密码临时副本已删除，原私有签名备份main完全不变。
+
+已上传既有本人私有库的独立orphan交付分支（只有APK、SHA256SUMS、说明与非敏感核验JSON）；确认仅负责人有访问权，并从全新空仓库仅fetch该交付分支、完整回读14,486,686bytes及相同SHA。下载入口仅给负责人，不入公开Git；不使用之前一直加载的工作区链接。没有公开Release/tag/公开APK。回读不等于负责人已下载/安装；真机、人工TalkBack、硬件断电仍NOT_RUN，独立外审NOT_REVIEWED_EXTERNALLY。建议先导出PNMEDBK2完整备份，再覆盖安装，勿卸载或清数据。
+
+核验收据 `docs/delivery/build39-private-verification.json`；账本追加39并将源码versionCode下限同步39。本记录提交不是APK源码，APK来源仍是d95952ee加已记录的外部版本参数，不把后续文档源码冒充已交付包。
 
 ## 接手最终主线回归修正 — 2026-10-29
 
