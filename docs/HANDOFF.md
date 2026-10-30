@@ -1,3 +1,14 @@
+## Build 40 候选（未签名）与 #155 CI 间歇故障记录 — 2026-10-30
+
+- **主线** `475e4dd5`（#158 图表横轴标签 `58df0076`、#155 Build 39 记录均已合并）。主线 CI：jvm、science-change-gate、security-native 26/27/29/35 已成功；android、device-tests、attachment-poc-compatibility 26/29 当时仍在运行——**以最终全绿为准，不以此条为证**。
+- **Build 40 候选**：从干净 `475e4dd5` 工作树加源码外 `version40.init.gradle`（仅把 versionCode 39→40）构建 `:app:assembleFullRelease`，**未签名**，`app-full-release-unsigned.apk` 14,482,701 字节，SHA-256 `2e3c451cacc50f066fd673ae3913dcd266fab2d00f87697937c2e5bcac6e5a34`；aapt2：包名 `net.plainnotes.app`、versionCode 40、versionName 0.2.0、无 INTERNET（仅 ACCESS_NETWORK_STATE）。四 ABI/ELF/ZIP 16KiB、签名前后条目对比等完整核验**尚未做**（签名后一并做）。
+- **未签名、未交付**：签名与私下交付需要负责人对 Build 40 明确授权（此前「都做完给apk」授权已被 Build 39 A、B 用掉）。不发公开 Release、不打 tag。签名时沿用原证书 `989ba045…79b1`，密钥只从私有备份仓库取、签后删除；账本与收据走单独 docs PR。
+- **#155 上遇到的间歇/基础设施故障（原始日志在会话机 `/tmp/claude-0/ci/`，不入库）**：
+  - API29 `CalibrationProductAndroidTest` 与此前相同的 Compose `performMeasureAndLayout called during measure layout`；单次重跑通过。根因仍 **ROOT_CAUSE_NOT_PROVEN**。
+  - API26 `AutomaticImportAndroidTest.realEntryAutomaticallyDetectsBothSourcesCommitsAndReopensHistory`：`NullPointerException: Could not get current state of activity … transition is incomplete. Current stage = STARTED`（ActivityScenario 启动阶段）；单次重跑通过。与改动无关（#155 只是文档），根因未证明。
+  - security-native (35, x86_64)：两次都在 setup-android 的 sdkmanager 阶段失败（`Failed to write to file`、`Error on ZipFile unknown archive`），**INFRA_FAILURE**，未执行任何测试；第三次运行通过。这是第二次对同一 job 重跑，理由是失败发生在测试体之前。
+- 下一步：主线 CI 全绿确认 → 向负责人请求 Build 40 签名/私下交付授权 → 授权后签名、完整核验、账本+收据 docs PR；真机验收与人工 TalkBack 仍 NOT_RUN。
+
 ## 接手后的阶段评估与合并状态 — 2026-10-29
 
 - 完整评估见 `docs/audits/product-quality-2026-10/82-release-readiness-2026-10-29.md`：状态表、本轮发现并处理的真实问题、尚未解释的间歇故障、私测/公开 Beta/稳定版结论、下一步。
