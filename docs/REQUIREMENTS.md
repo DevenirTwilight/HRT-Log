@@ -1831,3 +1831,9 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 ### 179.A 同一完整读取快照与失败重读
 
 显示批准 `PD-2026-10-30-SEX-STEROID-READ-RETRY`（继承本轮负责人实际历史、数据变化重算、失败说明和安全生产接线授权）：ConcentrationScreen.kt仅为T传递现有生产重读回调与同一次Repository事务的records/ruleSnapshots，不改E2计算/资格/校准/导出。NotesViewModel只在已有runtime.verify/checkRequest成功后发布额外只读输入，不持久化；取消/失败/撤权时沿用原状态清空。旧E2数值、参数及历史输出不变。T失败按钮不得只重新渲染旧数据；必须发起现有合法的生产读取。
+
+### 179.B 复用已授权主线程恢复以解除实际验收失败
+
+908d5263完整CI出现旧统一浓度页CalledFromWrongThreadException：ApplyingContinuationInterceptor在DefaultDispatcher-worker触发重组。复用已获负责人“给我修”授权的#167（§176，源ad642951dfeb15a3c07f5bba1974e59e53f8dda4）OffMain.kt和浓度相关窄范围修正，不覆盖原分支，不扩大到医疗附件业务/数据库/模型参数。
+
+`PD-2026-10-30-PK-ASYNC-MAIN`：ConcentrationScreen.kt只将既有后台总量/校准计算改为computeOffMain（计算仍在Default，恢复强制Main）；T页同样使用它。UnifiedConcentrationScreen/ConcChart沿用#167原批准记录及逐字节相同修改；AppShell仅明确StateFlow界面收集的Main.immediate上下文。UI-08图表批准哈希只追加同一已批准线程修改，不放宽PDF/原资源断言。保持旧失败及新机制回归，不把医疗确认超时直接认定为同一根因；后者仍以专项及最终完整CI验收。此修复不提供任何新的绝对浓度或临床验证批准。
