@@ -1810,3 +1810,11 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 - **大卡逻辑**：有未来就诊取最早一次；否则取已确认（`completed_utc != null`）里最近一次；两者都没有则退化为空状态。天数按就诊所在时区的日历日算（`medical` 模式用该就诊的 `at_zone`，普通模式用系统时区），今天为 0 天；纯函数单测覆盖夏令时、跨年、跨月、跨时区。
 - 状态：**PR 未开始写页面**，等 UI-13 PR① 的 token 合并。
 
+## 175. UI-13 ② — 化验、浓度、身心状态、医疗档案的点缀色；浓度页按钮行；PDF 文件方块（2026-10-30）
+
+- **依据**：UI-13 任务书（`docs/design/ui13-accent-colors-2026-10-30/TASK_BOOK_ORIGINAL.md`）§3.5、§4 与负责人 2026-10-30 的对调（化验、浓度估算 = 紫；复诊、医疗档案 = 蓝；就诊资料包与化验类文件 = 紫；身心状态 = 玫红）。本节是对两个 PK_DISPLAY_REVIEW 文件的授权记录，授权范围**仅限颜色与图标块外观**，以及下面第 3 条负责人当日直接提出的一处按钮排布。
+- **PD-2026-10-30-UI13-CONCCHART-COLOURS**（`ConcChart.kt`）：图上化验结果的小圆点由珊瑚改为紫色点缀，服药刻度由次色改为淡青绿（高对比度下为实心主色）；新增只返回颜色的 `doseMarkColor`。曲线、网格、数据、读数、`readAt`、点的位置与范围逻辑**未改**。
+- **PD-2026-10-30-UI13-CONCENTRATION-COLOURS-AND-ACTIONS**（`ConcentrationScreen.kt`）：图例的化验点与服药刻度颜色与图一致（同一个 `doseMarkColor`）；负责人反馈“为什么三个按钮分三行？”后，化验校准卡里的三个操作（查看校准资格、历史、管理化验结果）放进同一个自动换行的行，放得下就并排，放不下才换行；新增测试标签 `calibration-details-open`、`calibration-manage-labs`。数值、单位换算、校准、数据流和点击回调**未改**。`LabsScreen.kt` 本次未改。
+- **其余只改颜色或图标块的文件**（HISTORY_ONLY 或未列入矩阵）：`LabBatchEntry.kt`（化验行前的紫色图标块）、`WellbeingDaily.kt`（每个项目前的玫红图标块）、`MedicalRecordsScreen.kt`（蓝：复诊、想问的问题、历史就诊圆圈；紫：化验入口、就诊资料包、化验类文件）、`MedicalAttachmentsUi.kt`（负责人指出样图里 PDF 的图标是带颜色的：PDF 文件方块用蓝色点缀，图片方块保持原暖色，打不开的文件与其他类型保持灰）。
+- **验证**：`Ui13AccentAreaTest`（8 个组合，页面扩展到化验、浓度、身心状态、医疗档案；点缀色占页面像素 ≤ 8%，实测最大 1.71%，首页与库存为 0）、`Ui12CalibrationActionsTest`（按钮行：放得下必须同一行，放不下才换行）、`FileTileColorsTest`、`Ui12ConcentrationTest`、`ConcChartAxisTest`、`Ui08PdfSummaryUnchangedTest`（PDF 汇总不受影响，ConcChart 新哈希登记）与 `tools/pk-research/check_protocol.py`。真机、人工 TalkBack 为 NOT_RUN。
+
