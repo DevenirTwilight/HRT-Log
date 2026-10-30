@@ -57,6 +57,10 @@ class Ui12ConcentrationTest(private val locale: String, private val width: Int, 
         } }
         ui.waitUntil(30_000) { ui.onAllNodesWithTag("e2-estimate-card").fetchSemanticsNodes().isNotEmpty() || ui.onAllNodesWithTag("calibration-switch").fetchSemanticsNodes().isNotEmpty() || ui.onAllNodesWithTag("empty-state").fetchSemanticsNodes().isNotEmpty() ||
             ui.onAllNodesWithText(s(R.string.pk_need_weight_title)).fetchSemanticsNodes().isNotEmpty() }
+        // The calibrated/mixed total is built off the main thread and the page shows a spinner meanwhile (the calibration switch is
+        // already there); waitForIdle cannot see that work, so wait until no spinner is left before reading the result (§176).
+        ui.waitUntil(30_000) { ui.onAllNodes(SemanticsMatcher.expectValue(SemanticsProperties.ProgressBarRangeInfo, androidx.compose.ui.semantics.ProgressBarRangeInfo.Indeterminate))
+            .fetchSemanticsNodes().isEmpty() }
         ui.waitForIdle()
     }
     private fun shot(name: String) {

@@ -33,7 +33,7 @@ import net.plainnotes.app.data.MedicalAttachmentOperations as Ops
     val label=stringResource(if(target.kind==Ops.Kind.APPOINTMENT)R.string.attach_default_visit else R.string.attach_default_lab)
     LaunchedEffect(files.controller) {
         draft?.controller?.takeUncommittedSelection()?.let {selected->
-            files.controller.acceptUncommittedSelection(selected,label)
+            resumeOnMain {files.controller.acceptUncommittedSelection(selected,label)}
         }
     }
     val state by files.controller.state.collectAsState()

@@ -42,7 +42,7 @@ import java.util.UUID
     onPrepare:()->Unit,onBackup:()->Unit,chooseFor:Ops.Target?=null,onChosen:()->Unit={}) {
     val runtime by model.libraryRuntime.state.collectAsState()
     if(runtime !is RuntimeLibrarySession.State.Ready) {Text(stringResource(R.string.library_scope_changed));return}
-    val context=LocalContext.current;val owner=LocalLifecycleOwner.current;val scope=rememberCoroutineScope()
+    val context=LocalContext.current;val owner=LocalLifecycleOwner.current;val scope=net.plainnotes.app.ui.rememberMainThreadScope()
     val controller=remember(model,owner) {runCatching {model.medicalFileLibrary(context,owner,scope)}.getOrNull()}
     if(controller==null) {Text(stringResource(R.string.operation_error));return}
     val add=rememberAttachmentPicker(model,controller.files,stringResource(R.string.med03_default_file))
@@ -62,7 +62,7 @@ private data class FileInfoEditSnapshot(val document:Ops.Document,val detail:Ops
     onNewVisit:((AppointmentEntity)->Unit)->Unit,onNewDraw:((LabPanelEntity)->Unit)->Unit,onPrepare:()->Unit,onBackup:()->Unit,
     onSaveDraw:(List<LabValueEntity>,(LabPanelEntity?)->Unit)->Unit,chooseFor:Ops.Target?=null,onChosen:()->Unit={}) {
     val state by controller.state.collectAsState();val fileState by controller.files.state.collectAsState()
-    val scope=rememberCoroutineScope();val context=LocalContext.current
+    val scope=net.plainnotes.app.ui.rememberMainThreadScope();val context=LocalContext.current
     var query by remember {mutableStateOf("")};var type by remember {mutableStateOf<MedicalAttachmentsController.FileKind?>(null)}
     var unlinked by remember {mutableStateOf(false)};var bin by remember {mutableStateOf(false)}
     var picker by remember {mutableStateOf(false)}

@@ -33,7 +33,7 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
     if(!AttachmentFlowController.PUBLIC_ENTRY_ENABLED)return null
     val context=LocalContext.current
     val owner=LocalLifecycleOwner.current
-    val scope=rememberCoroutineScope()
+    val scope=net.plainnotes.app.ui.rememberMainThreadScope()
     val controller=remember(model,target,owner) {model.medicalAttachmentsForRecord(context,owner,target,scope)}
     val title=stringResource(when(target?.kind) {null->R.string.med03_default_file;MedicalAttachmentOperations.Kind.APPOINTMENT->R.string.attach_default_visit;else->R.string.attach_default_lab})
     val onAdd=rememberAttachmentPicker(model,controller,title)
@@ -43,7 +43,7 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
 
 /** Shared real SAF lifecycle for record, file-first and not-yet-saved-record selections. */
 @Composable internal fun rememberAttachmentPicker(model:NotesViewModel,controller:MedicalAttachmentsController,title:String):()->Unit {
-    val scope=rememberCoroutineScope()
+    val scope=net.plainnotes.app.ui.rememberMainThreadScope()
     val generation=remember(controller) {Session.generation}
     var awaiting by remember(controller) {mutableStateOf(false)}
     val picker=key(controller) {rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {result->

@@ -1,3 +1,10 @@
+## Compose 间歇失败根因修复（进行中）— 2026-10-30
+
+- 负责人“给我修”。根因已证明（REQUIREMENTS §176）：Compose 测试里界面协程在后台线程继续，测试拦截器在后台线程发 snapshot apply，导致重组/布局离开主线程。正式应用不受影响。
+- 分支 `fix/compose-main-thread`（工作树 `/home/user/wt-flake`）：`ui/OffMain.kt` 三个工具 + 各调用点替换 + `MainThreadResumeTest` + `Ui12ConcentrationTest.show()` 等待条件变严格。
+- 探针（临时，不入库）：在 `/home/user/wt-b41` 的 `NotesTheme.kt` 临时加了全局 apply 观察者，后台跑全部非截图 Compose 测试，结果写 `/tmp/claude-0/offmain-all.txt`；目前只命中 `Ui12ConcentrationTest`（浓度页）与 `CausalTimeUiTest`（ConcChart 点按），两处都已修。附件/文件库/BDPM 的作用域是静态排查发现的同类问题，一并修。
+- 待做：探针跑完后核对是否还有别的命中 → 在 wt-flake 编译并跑受影响测试 → 写 3 条显示批准（新哈希）、Ui08 ConcChart 哈希、check_protocol → 开 PR、自动合并。PR #166（Build 41 记录）的 API29 偶发失败已重跑一次。
+
 ## UI-13 ②（化验/浓度/身心/医疗档案点缀）+ 校准卡按钮行 + PDF 文件方块 — 2026-10-30
 
 - 分支 `feature/ui13-accents-2-20261030`：颜色只改显示（REQUIREMENTS §175）；`ConcChart.kt`、`ConcentrationScreen.kt` 按受保护文件流程写了批准记录（`display-approvals-after-archive.json` 追加两条，证据提交 `fe6b3820…`），`Ui08Test` 的 ConcChart 哈希锁登记新哈希，`tools/pk-research/check_protocol.py` 通过。`LabsScreen.kt` 未改（化验行的小图标块在 `LabBatchEntry.kt`）。

@@ -27,7 +27,7 @@ import net.plainnotes.app.attachments.ui.MedicalLibraryTransferController.*
 @Composable internal fun MedicalLibraryTransferPage(model:NotesViewModel,onReopen:()->Unit,onBack:()->Unit) {
     if(!AttachmentFlowController.PUBLIC_ENTRY_ENABLED)return
     val context=LocalContext.current
-    val scope=rememberCoroutineScope()
+    val scope=net.plainnotes.app.ui.rememberMainThreadScope()
     val controller=remember(model) {MedicalLibraryTransferController(RuntimeMedicalLibraryGateway(context.applicationContext,model.libraryRuntime),scope,model.libraryUiState)}
     val generation=remember(controller) {Session.generation}
     var awaiting by remember(controller) {mutableStateOf(false)}

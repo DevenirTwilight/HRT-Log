@@ -22,7 +22,7 @@ import net.plainnotes.app.data.*
     var error by remember(record.id,epoch){mutableStateOf(false)}
     var stale by remember(record.id,epoch){mutableStateOf(false)}
     LaunchedEffect(record.id,epoch) {
-        try {if(epoch!=null)loaded=loader(epoch,record.id)}
+        try {if(epoch!=null)loaded=resumeOnMain {loader(epoch,record.id)}}
         catch(e:CancellationException){throw e}
         catch(e:Exception){error=true;stale=e is ReferenceFailure && e.code==ReferenceError.STALE_SCOPE}
         finally {loading=false}
