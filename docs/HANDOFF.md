@@ -1,3 +1,11 @@
+## T 正式失败重读修复及真实原生证据 — 2026-10-30
+
+#174新增定向用例先真实复现：T失败按钮的生产重读回调16/16项未触发（原始expected1/actual0 XML已入库），现T调用原有onRetryCalculation；NotesViewModel在原有runtime.verify/checkRequest后发布同一事务内records/ruleSnapshots，AppShell只把该原子快照交给T，避免独立extra刷新旧数据。原有E2数值/资格/系数/导出不变，新增只读字段不持久化，失败和撤权按原ConcState清空。适配4+四语UI48+E2适配/校准19=71项及AndroidTest Kotlin编译PASS；显示批准§179.A追加链，不改旧记录。数值标注采用页面语言的Locale。
+
+4d76421e的API29已实际执行MainActivity T两项（首次保存/真实第二PID重开）和旧E2两项，4项原始OK/receipt在acceptance/native-api29-4d；整个作业随后失败于未改医疗附件用例line459的Compose performMeasureAndLayout，根因仍未证明，不能写整项API29 PASS。API35 PR作业在旧E2第二进程adb exit255且随后emulator5554 TCP拒绝，T尚未执行；不能断言应用OOM或LMK。完整run/job见acceptance/local-results.json。先保留Draft，不改附件代码或删断言。
+
+4d76421e unsigned fullRelease确已构建（有界恢复后4m36s），隔离及NoINTERNET检查PASS，SHA256 8c011b98789a0be4c83be701bda9746e2792a855b9a77a342ad5ee36f0399ec7；它不含随后失败重读修复，不作为最终交付。最终修复源码仍须精确HEAD CI/原生与新unsigned构建，不签名、不交付、不冒称真机或全部剂型完成。
+
 ## T 固定制剂体积换算与验收冻结 — 2026-10-30
 
 #174追加实际官方取证：ANDROTARDYL68178899为250mg/1mL、NEBIDO69033757为1000mg/4mL；已下载当前生产页并保存HTTP200/字节数/SHA256/剂型强度/载体元数据，不再分发整页。只有这两个明确产品可按250mg酯/mL计算，仍按TE/TU分子量转换成T质量；泛用环戊丙酸酯/泵/凝胶mL不猜。原记录的1mL不会改写成180mg。精确制剂名称含强度与IM，四语编辑提示同步。PK132项及新适配器4+四语UI32=36项PASS，0skip。其余旧E2/备份/科学证据见前条。尚不增加任何绝对T浓度承诺。

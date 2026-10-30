@@ -58,12 +58,14 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
                                     doseTimes: List<java.time.Instant> = emptyList(),
                                     /** SL-CAL-02: the saved lab rows; the common-coefficient calibration reads the E2 ones (never edits them). */
                                     labs: List<net.plainnotes.app.data.LabValueEntity> = emptyList(),
-                                    calculationInputFailed: Boolean = false, onRetryCalculation: () -> Unit = {}) {
+                                    calculationInputFailed: Boolean = false, onRetryCalculation: () -> Unit = {},
+                                    testosteroneRecords: List<net.plainnotes.app.data.RecordEntity> = records,
+                                    testosteroneRuleSnapshots: Map<Long,String> = state.ruleSnapshots) {
     var testosterone by rememberSaveable { mutableStateOf(false) }
     if (testosterone) {
-        val nowH = remember(records, result) { result?.nowH ?: java.time.Instant.now().toEpochMilli() / 3_600_000.0 }
-        TestosteroneConcentration(records, state.ruleSnapshots, nowH,
-            loading, calculationInputFailed, contentPadding, { testosterone = false }, onOpenHistory)
+        val nowH = remember(testosteroneRecords, result) { result?.nowH ?: java.time.Instant.now().toEpochMilli() / 3_600_000.0 }
+        TestosteroneConcentration(testosteroneRecords, testosteroneRuleSnapshots, nowH,
+            loading, calculationInputFailed, contentPadding, { testosterone = false }, onOpenHistory, onRetryCalculation)
         return
     }
     var repair by remember{mutableStateOf<net.plainnotes.app.data.MedicationEntity?>(null)}

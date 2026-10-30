@@ -31,7 +31,8 @@ private sealed interface TLoad {
 }
 
 @Composable internal fun TestosteroneConcentration(records: List<RecordEntity>, ruleSnapshots: Map<Long, String>,
-    nowH: Double, loading: Boolean, failed: Boolean, padding: PaddingValues, onE2: () -> Unit, onHistory: () -> Unit) {
+    nowH: Double, loading: Boolean, failed: Boolean, padding: PaddingValues, onE2: () -> Unit, onHistory: () -> Unit, onRetryInputs: () -> Unit) {
+    val locale = currentLocale()
     var productCode by rememberSaveable { mutableStateOf(T.products.first().code) }
     var days by rememberSaveable { mutableIntStateOf(7) }
     var scenario by rememberSaveable { mutableIntStateOf(1) }
@@ -65,7 +66,7 @@ private sealed interface TLoad {
             TLoad.Loading -> CircularProgressIndicator(Modifier.testTag("t-loading"))
             TLoad.Failed -> SectionCard(null) {
                 Text(stringResource(R.string.feedback_calculation_failed), modifier = Modifier.testTag("t-failed"))
-                TextButton(onClick = { retry++ }) { Text(stringResource(R.string.attach_retry)) }
+                TextButton(onClick = { retry++; onRetryInputs() }) { Text(stringResource(R.string.attach_retry)) }
             }
             is TLoad.Ready -> {
                 val ready = load
@@ -79,7 +80,7 @@ private sealed interface TLoad {
                     AdaptiveChoice(listOf("A", "B", "C"), scenario, { scenario = it })
                     val data = remember(ready, scenario) { ChartData(ready.shape.timeH, ready.shape.variants[scenario],
                         splitX = nowH, unit = "", marks = ready.audit.events[productCode].orEmpty().map { it.timeH }.toDoubleArray()) }
-                    ConcChart(data, start, nowH, Modifier.fillMaxWidth().height(260.dp).testTag("t-relative-chart")) { java.text.NumberFormat.getNumberInstance().apply { maximumFractionDigits = 2 }.format(it) }
+                    ConcChart(data, start, nowH, Modifier.fillMaxWidth().height(260.dp).testTag("t-relative-chart")) { java.text.NumberFormat.getNumberInstance(locale).apply { maximumFractionDigits = 2 }.format(it) }
                     Text(stringResource(R.string.t_normalized), style = MaterialTheme.typography.bodySmall)
                 }
                 SectionCard(null) {

@@ -48,6 +48,44 @@
       "tests": 36,
       "failures": 0,
       "skipped": 0
+    },
+    "retry_fix_and_adapter_ui_e2_calibration": {
+      "tests": 71,
+      "failures": 0,
+      "skipped": 0
+    },
+    "native_api29_reference_4d": {
+      "status": "T_CASES_PASS_PIPELINE_FAIL",
+      "source": "4d76421ea094c81346edd5e963d0e51a740d8f38",
+      "run": 41121721018,
+      "job": 124289464004,
+      "artifact": 13009840633,
+      "evidence": "native-api29-4d/",
+      "t_cases": 2,
+      "e2_cases": 2,
+      "total_ok": 4,
+      "t_previous_pid": 6125,
+      "t_new_pid": 6229,
+      "pipeline_failure": "Later unchanged MedicalAttachmentProductAndroidTest at line459: performMeasureAndLayout called during measure layout. Root cause not proven. Do not claim complete API29 gate PASS."
+    },
+    "native_api35_reference_4d": {
+      "status": "FAIL_T_NOT_RUN",
+      "run": 41121728985,
+      "job": 124289356347,
+      "failure": "adb instrument exit255 in existing second E2 process, emulator5554 TCP connection refused afterwards",
+      "root_cause": "ROOT_CAUSE_NOT_PROVEN",
+      "t_cases": "NOT_RUN",
+      "oom_lmk": "NOT_PROVEN"
+    },
+    "unsigned_release_reference_4d": {
+      "status": "BUILT",
+      "source": "4d76421ea094c81346edd5e963d0e51a740d8f38",
+      "sha256": "8c011b98789a0be4c83be701bda9746e2792a855b9a77a342ad5ee36f0399ec7",
+      "release_isolation": "PASS",
+      "manifest_no_internet": "PASS",
+      "not_latest_retry_fix": true,
+      "signed": false,
+      "delivered": false
     }
   },
   "first_failure": {
@@ -74,5 +112,13 @@
     "status": "INTERRUPTED_NOT_BUILT",
     "log": "/tmp/hrt-t-unsigned-release.log",
     "observation": "Execution environment restarted; exec process handle disappeared, no APK output, Gradle daemon idle. No OOM kill recorded in cgroup memory.events. Do not call this PASS or a demonstrated product OOM. One bounded resume planned."
+  },
+  "retry_defect": {
+    "before_source": "4d76421ea094c81346edd5e963d0e51a740d8f38",
+    "before_tests": 16,
+    "before_failures": 16,
+    "assertion": "expected production retry count1, observed0",
+    "fix": "T retry invokes existing ViewModel read; same verified transaction publishes records/rule snapshots for T. No E2 numerical changes.",
+    "raw_xml": "failures/retry-callback-before.xml"
   }
 }

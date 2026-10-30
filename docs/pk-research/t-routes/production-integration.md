@@ -31,7 +31,7 @@ Baseline `84489514efe638099650353329abfa9a79f2d871`; source research PR #173 `be
 
 ## Production call chain / stored identity
 
-`MainActivity → NotesApp/AppShell → existing concentration destination → ConcentrationScreen → E2/T selector → TestosteroneConcentration → TestosteroneHistory → TestosteroneFormulations`.
+`MainActivity → NotesApp/AppShell → existing concentration destination → ConcentrationScreen → E2/T selector → TestosteroneConcentration → same verified transaction records/rule snapshot → TestosteroneHistory → TestosteroneFormulations`.
 
 The existing medication editor adds exact T formulation selection. A namespaced formulation/route code is stored in existing `medication.route` TEXT (e.g. `T_NEBIDO_IM`); catalogue entries explicitly retain actual route/ester. This is a composite formulation identity, **not a claim that a brand is an administration route**. No schema, table, profile field or backup version is added. Existing `MedicationSnapshot.encode` freezes that code in every new rule/actual history. Old null/generic T routes remain unknown; current choices/names/profiles never rewrite them. No JSON clinical record or model coefficient is persisted by the new screen. Old readers do not model T, so cannot reinterpret these codes as E2.
 
@@ -54,3 +54,8 @@ Sum actual dose responses, preserve arbitrary intervals/changed/missed/stopped d
 Source scope, research groups, time points, methods/unknown methods and failed constraints remain in the copied #173 reports and source registry, not overwritten with a new success story. No full papers/images redistributed. Ichihara reproduction retained separately: 5 training times, 2 held-out times **same cohort**, train RMSE 0.06136 / held-out 2.82537 ng/mL. No external cohort validation; no absolute gain transplanted to ANDROTARDYL. Current source fulltext retrieval met a publisher access barrier; this round reproduced the already committed group summaries, not a freshly authenticated full table. Assay/formulation gaps remain evidence limitations.
 
 See [local results](acceptance/local-results.json) for actually executed tests and original fixture failure. Native CI must execute the added two-process MainActivity T tests on API26/29/35 before any native PASS claim. Four-language UI uses existing components and original chart; no fake clinical axis or network permission. Physical devices / manual TalkBack are NOT_RUN. New absolute E2/T product models and the full requested route set are **not complete** merely because these research curves render.
+
+
+### Failure/retry closeout
+
+The first T failed-state retry only changed local retry state. A four-language target reproduced 16 failures (expected callback1, actual0). The repaired button invokes the existing production read; `ConcState` publishes its actual records/rule inputs only after existing runtime checks. T uses that one snapshot rather than `extra.records` from a separately refreshed list. No original E2 compute/fit argument changes or persisted fields. API29 source4d native4 cases passed before a later unchanged medical test failed; API35 lost the emulator in the old E2 reopen before T. Original receipts/partial outcomes are retained, not promoted into final-head native approval.
