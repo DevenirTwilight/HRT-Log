@@ -106,6 +106,22 @@ def e2_profile(params: dict, data: dict) -> dict:
     return results
 
 
+def ev_profile(params: dict, data: dict) -> dict:
+    out = {}
+    for key, dose in (("ANSM_DUOVA_1", 1.), ("ANSM_DUOVA_2", 2.)):
+        obs = source_by_id(data, key)["stats"]
+        published = dict(cmax=obs["cmax_approx"] / 3.671,
+                         cmin=obs["cmin_approx"] / 3.671,
+                         cavg=obs["cavg_approx"] / 3.671)
+        prediction = metrics(day_curve(params["models"]["EV_ORAL"], dose))
+        out[key] = dict(observed_total_pg_ml={k: round(v, 5) for k, v in published.items()},
+                        predicted_increment_pg_ml={k: round(v, 5) for k, v in prediction.items()},
+                        observed_peak_minus_trough_pg_ml=round(published["cmax"] - published["cmin"], 5),
+                        modeled_peak_minus_trough_pg_ml=round(prediction["cmax"] - prediction["cmin_24h"], 5),
+                        warning="The RCP uses total estradiol in oral EV plus medroxyprogesterone combination; subtracting an unknown common baseline is NOT licensed.")
+    return out
+
+
 def gel_profile(params: dict) -> dict:
     out = {}
     for key in ("E2_GEL_OTHER", "E2_GEL_ESTROGEL"):
@@ -141,7 +157,7 @@ def run(param_path: Path, anchor_path: Path) -> dict:
     assert anchors["schema"] == "hrtlog.fr_rcp_research_anchor.v1"
     result = dict(research_state="NOT_PRODUCTION / IN_SAMPLE_ONLY",
                   formula="h(t) = dose * SUM[A_i*(exp(-lambda_i*t) - exp(-ka*t))]; 1/day superposition",
-                  comparisons=dict(oral_E2=e2_profile(params, anchors),
+                  comparisons=dict(oral_E2=e2_profile(params, anchors), oral_EV=ev_profile(params, anchors),
                                    Estreva=gel_profile(params), progesterone=p4_profile(params, anchors),
                                    testosterone=t_structural(anchors)),
                   limitations=["Existing HRT Log PK parameters are not regulator-endorsed models",
