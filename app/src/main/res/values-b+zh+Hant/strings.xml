@@ -557,6 +557,7 @@
 <string name="model_ev_oral">口服戊酸雌二醇</string>
 <string name="model_gel_divigel">雌二醇凝膠（Divigel）</string>
 <string name="model_gel_estrogel">雌二醇凝膠（EstroGel / Oestrogel）</string>
+<string name="model_gel_estreva">雌二醇凝膠（Estreva，法國官方資料暫定模型）</string>
 <string name="model_gel_other">雌二醇凝膠（其他產品，無該產品資料）</string>
 <string name="model_p4_oral">口服黃體酮（示意）</string>
 <string name="model_spi_canrenone">螺內酯代謝物坎利酮</string>
