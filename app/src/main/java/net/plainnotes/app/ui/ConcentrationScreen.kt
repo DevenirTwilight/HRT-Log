@@ -466,7 +466,7 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
 
 @Composable fun modelLabel(key: String) = stringResource(when (key) {
     "EV_ORAL" -> R.string.model_ev_oral; "E2_ORAL" -> R.string.model_e2_oral; "CPA_ORAL" -> R.string.model_cpa_oral; "E2_PATCH" -> R.string.model_e2_patch
-    "E2_GEL_ESTROGEL" -> R.string.model_gel_estrogel; "E2_GEL_DIVIGEL" -> R.string.model_gel_divigel; "E2_GEL_OTHER" -> R.string.model_gel_other
+    "E2_GEL_ESTROGEL" -> R.string.model_gel_estrogel; "E2_GEL_DIVIGEL" -> R.string.model_gel_divigel; "E2_GEL_ESTREVA" -> R.string.model_gel_estreva; "E2_GEL_OTHER" -> R.string.model_gel_other
     "EV_IM" -> R.string.model_ev_im; "E2_SL" -> R.string.model_e2_sl; "SPI_PARENT" -> R.string.model_spi_parent; "SPI_CANRENONE" -> R.string.model_spi_canrenone
     "P4_ORAL" -> R.string.model_p4_oral; else -> R.string.choice_other
 })
