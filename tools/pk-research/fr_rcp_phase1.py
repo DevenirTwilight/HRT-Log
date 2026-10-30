@@ -57,7 +57,7 @@ def p4_profile(params: dict, data: dict) -> dict:
     for ka in (.6, .9, 1.2, 1.5, 2., 2.5, 3., 4., 6.):
         for fast in (.2, .3, .4, .5, .6, .8, 1., 1.2):
             for slow in (.01, .02, .03, .05, .08, .12, .18):
-                if slow >= fast:
+                if slow >= fast or fast >= ka:
                     continue
                 xs = [200 * (math.exp(-fast * t) - math.exp(-ka * t)) for t in times]
                 ys = [200 * (math.exp(-slow * t) - math.exp(-ka * t)) for t in times]
