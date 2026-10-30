@@ -107,7 +107,7 @@ import java.time.*
                     is VisitDays.Ago -> pluralStringResource(R.plurals.visits_hero_days_ago, days.days, days.days)
                 }
                 val label = stringResource(if (pick.kind == VisitHeroKind.NEXT) R.string.visits_hero_next else R.string.visits_hero_last)
-                val line = listOf(formatWeekdayLong(local.toLocalDate()) + " " + formatTime(local.toLocalTime()), choiceLabel(v.type.ifBlank { "OTHER" })).joinToString(" · ")
+                val line = listOf(formatWeekdayShort(local.toLocalDate()) + " " + formatTime(local.toLocalTime()), choiceLabel(v.type.ifBlank { "OTHER" })).joinToString(" · ")
                 val who = listOfNotNull(v.practitioner, v.location).filter { it.isNotBlank() }.joinToString(" · ")
                 Column(Modifier.semantics(mergeDescendants = true) {}.testTag("visits-hero-info"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(label, style = MaterialTheme.typography.labelLarge, modifier = Modifier.testTag("visits-hero-label"))
