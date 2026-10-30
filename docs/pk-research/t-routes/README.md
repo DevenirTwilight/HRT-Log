@@ -43,3 +43,13 @@ python3 -m unittest discover -s tools/pk-research -p 'test_t_*fit.py'
 6. 交接：更新本索引，给出 commit SHA/PR；生产 PK/UI/历史/用户数据另行评估和批准，不暗中自动接入。
 
 **当前结果：** 三种 T 制剂的研究代码已提交；庚酸睾酮有公开 8 时点拟合，留出两点但尚无独立研究人群交叉验证。ANDROGEL/NEBIDO 仍仅有官方稀疏摘要约束，因此不能标记为稳定的绝对血药浓度模型。
+
+## 第二轮：未覆盖剂型与新研究（2026-10-30）
+
+- [缺失剂型清单、独立来源与研究报告](../round2-remaining-routes-20261030.md)：按制剂区分 T 皮下注射庚酸酯/环戊丙酸酯、T 透皮贴片、口服 TU、鼻凝胶、植入剂、E2 喷雾、E2 植入剂；保留 E2 其他酯型与特殊局部制剂的验证缺口。
+- [8 个新产品/研究来源的机器台账](round2-source-registry-20261030.json)：剂量、样本、人群、源 URL、统计定义与不能合并的队列边界。
+- [751 行新剂型研究曲线 CSV](round2_illustrative.csv)、[结构化研究结果](round2_research_results.json)：两个独立证据锚（LENZETTO 英国 SmPC / XYOSTED 美国 DailyMed），都是 `SYNTHETIC_STEADY_ENVELOPE`，不是可投产 PK 曲线。
+- [E2 喷雾六组条件曲线 SVG](round2_e2_spray_envelope.svg)、[T 皮下注射稳态条件曲线 SVG](round2_t_sc_envelope.svg)：已有 GitHub 可直接读取的矢量产物。
+- [可复现解析程序](../../../tools/pk-research/route_round2_steady_envelopes.py)及[独立守卫测试](../../../tools/pk-research/test_route_round2_steady_envelopes.py)。本地同构程序实际执行 7/7 PASS；精确仓库提交的 GitHub CI 仍需独立核验。
+
+**重点限制**：这些新图匹配汇总峰值、谷值、均值，但不代表人体实测完整曲线，不能用于首剂、漏服、停药或个人绝对预测。新增 T / E2 正式曲线的科学门槛依旧未满足。研究文件入库 ≠ 产品曲线已实现。
