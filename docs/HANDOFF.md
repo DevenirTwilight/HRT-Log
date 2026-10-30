@@ -1,3 +1,8 @@
+## PK-FR 浓度首页解释性提示 — 2026-10-30
+
+- `ConcentrationScreen.kt` 已增加主 E2 曲线正下方的来源限制提示：`CurveFlag.ILLUSTRATIVE`（Estreva 暂定示意模型）或 `CurveFlag.NO_PRODUCT_DATA`（仍无专用数据的凝胶）时直接用既有四语 `FlagNotes` 显示，不再只藏在“模型与文献”内部。兼容 `e2NonSublingual` 混合剂型而不重算曲线、化验或校准。
+- 精确改动已提交到 PR #169，但显示回归、PK 审查 CI、TalkBack 和真机仍以实际检查结果为准；当前未写 PASS。
+
 ## PK-FR 既有模型法国 RCP 回归已入库 — 2026-10-30
 
 - 新增 `tools/pk-research/test_france_rcp_existing_models.py`（6个独立于 Android 的 stdlib characterization tests），引用 ANSM ESTREVA/OROMONE/DUOVA/UTROGESTAN，使用精确 `pk-params.json` 方程复算单剂/21次每日稳态。记录 **已知** ORAL EV 与 DUOVA 总 E2 的差距和 P4 后段形状差距，不把“与RCP存在差距”硬说成验证通过或模型错；模型改善时须更新该测试与对应来源报告。
