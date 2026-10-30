@@ -1808,5 +1808,7 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 - **编号**：UI-14（先前空缺）。任务书原文归档在 `docs/design/ui13-accent-colors-2026-10-30/TASK_BOOK_UI14_ORIGINAL.md`。依赖 UI-13 的点缀色 token。
 - **范围**：只改复诊列表页（`VisitsScreen` 列表分支与 `VisitCard`）：青绿大卡（下一次/上一次就诊、天数标签、白色胶囊“记录已发生的就诊”按钮，`visits-record-past` 与回调不变）、分组标题、新就诊卡片（蓝色日期方块、状态/问题数标签、资料包为唯一的紫色小标签）、浮动按钮用 primaryContainer、空状态。详情页、对话框、资料包、导出、导航、数据库、通知不改。`VisitsScreen.kt` 为 HISTORY_ONLY。
 - **大卡逻辑**：有未来就诊取最早一次；否则取已确认（`completed_utc != null`）里最近一次；两者都没有则退化为空状态。天数按就诊所在时区的日历日算（`medical` 模式用该就诊的 `at_zone`，普通模式用系统时区），今天为 0 天；纯函数单测覆盖夏令时、跨年、跨月、跨时区。
-- 状态：**PR 未开始写页面**，等 UI-13 PR① 的 token 合并。
+- **实现（2026-10-30）**：`VisitHero.kt`（大卡选择与天数的纯函数）、`VisitsScreen.kt` 列表部分（青绿大卡 + 白色胶囊 `visits-record-past`、分组标题与“已过去”数量标签、蓝色日期方块卡片、医生/地点图标行、标签行、浮动按钮 `primaryContainer`）、`Format.kt` 的月日/星期拆分格式、四语字符串 `ui14_visits.xml`。资料包标签是本页唯一的紫色小标签。医生名换行而不截断，地点最多两行并由整张卡片的无障碍描述读完整内容。
+- **与现状的一处差别**：列表卡片以前在医疗档案路径下也按系统时区显示时间，而详情页按就诊自己的时区；任务书要求医疗档案路径按就诊时区算天数，所以大卡和卡片现在都按详情页的同一规则（`VisitHero.displayZone`）显示。**请负责人确认这一点。**
+- **测试**：`VisitHeroTest` 11 项（大卡选择、午夜边界、月末年末、夏令时、跨时区、显示时区）；`Ui14VisitsTest` 384 项（四语 × 320/411dp × 字号 1/1.3/2 × 浅/深：无文字裁切、不越窗，标签、分组、回调、整卡无障碍描述、医疗档案路径）；`Ui09SourceGuardTest` 更新一处：`VisitsScreen.kt` 的日期方块居中与 `MedicalRecordsScreen.kt` 的日期芯片同属已登记的居中例外（旧含义：该文件无居中文本；新含义：日期方块内的月/日/星期居中）。前后对比图在 `docs/ui-audit/2026-10-30-ui14/`。真机、人工 TalkBack 为 NOT_RUN。
 
