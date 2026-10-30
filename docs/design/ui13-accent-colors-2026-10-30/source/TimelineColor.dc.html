@@ -39,7 +39,7 @@ a{color:#006A63}a:hover{color:#004F4A}
     <section aria-label="即将发生" style="display: flex; flex-direction: column; gap: 8px;">
       <h2 style="margin: 0 4px; font-size: 14px; font-weight: 600; color: #4C4642;">即将发生</h2>
       <a href="#visit" style="min-height: 64px; background: #FFFFFF; border: 1px dashed #D8D1CC; border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; gap: 14px; text-decoration: none; color: #1D1B1A;">
-        <div style="width: 40px; height: 40px; border-radius: 20px; background: #E9DDF5; color: #5A3E78; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <div style="width: 40px; height: 40px; border-radius: 20px; background: #D6E3FF; color: #2C4A78; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
           <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
         </div>
         <div style="flex: 1; min-width: 0;">
@@ -83,7 +83,7 @@ a{color:#006A63}a:hover{color:#004F4A}
       <h2 style="margin: 0 4px; font-size: 14px; font-weight: 600; color: #4C4642;">没有方案的记录</h2>
       <div style="font-size: 13px; color: #4C4642; margin: 0 4px;">这些事件发生时还没有记录服药方案。</div>
       <a href="#lab" style="min-height: 60px; background: #FFFFFF; border-radius: 16px; padding: 10px 14px; display: flex; align-items: center; gap: 14px; text-decoration: none; color: #1D1B1A;">
-        <div aria-hidden="true" style="width: 36px; height: 36px; border-radius: 18px; background: #D6E3FF; color: #2C4A78; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px; font-weight: 700;">验</div>
+        <div aria-hidden="true" style="width: 36px; height: 36px; border-radius: 18px; background: #E9DDF5; color: #5A3E78; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px; font-weight: 700;">验</div>
         <div style="flex: 1; min-width: 0;">
           <div style="font-size: 14px; font-weight: 500;">化验 · 雌二醇（E2）</div>
           <div style="font-size: 12px; color: #4C4642;">8月29日 周六</div>
@@ -93,8 +93,8 @@ a{color:#006A63}a:hover{color:#004F4A}
     </section>
 
     <div style="display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 12px; color: #4C4642; padding: 0 4px;">
-      <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 20px; height: 20px; border-radius: 10px; background: #D6E3FF; color: #2C4A78; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">验</div>化验</div>
-      <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 20px; height: 20px; border-radius: 10px; background: #E9DDF5; color: #5A3E78; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">诊</div>就诊</div>
+      <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 20px; height: 20px; border-radius: 10px; background: #E9DDF5; color: #5A3E78; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">验</div>化验</div>
+      <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 20px; height: 20px; border-radius: 10px; background: #D6E3FF; color: #2C4A78; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">诊</div>就诊</div>
       <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 20px; height: 20px; border-radius: 10px; background: #9EF2E8; color: #00504A; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">★</div>里程碑</div>
       <div style="display: flex; align-items: center; gap: 6px;"><div style="width: 20px; height: 20px; border-radius: 10px; background: #F8DCE8; color: #8A3B5E; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">评</div>阶段回顾</div>
     </div>
@@ -107,7 +107,7 @@ class Component extends DCLogic {
   renderVals() {
     var types = {
       milestone: { bg: '#9EF2E8', fg: '#00504A', glyph: '★' },
-      lab: { bg: '#D6E3FF', fg: '#2C4A78', glyph: '验' },
+      lab: { bg: '#E9DDF5', fg: '#5A3E78', glyph: '验' },
       review: { bg: '#F8DCE8', fg: '#8A3B5E', glyph: '评' }
     };
     var raw = [

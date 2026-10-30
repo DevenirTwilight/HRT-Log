@@ -120,8 +120,8 @@ class Component extends DCLogic {
       { name: '医疗证明', n: 1 }, { name: '影像报告', n: 0 }, { name: '其他', n: 1 }
     ].map(function (c) { c.fg = c.n === 0 ? '#7B7470' : '#1D1B1A'; return c; });
     var docs = [
-      { kind: 'PDF', bg: '#D6E3FF', fg: '#2C4A78', title: '激素六项报告', meta: '化验报告 · 采样 10月7日 · [机构]', link: '已关联 2 条化验', linkColor: '#006A63' },
-      { kind: 'IMG', bg: '#E9DDF5', fg: '#5A3E78', title: '处方照片', meta: '处方 · 9月22日 · [医院]', link: '已关联 9月22日就诊', linkColor: '#006A63' },
+      { kind: 'PDF', bg: '#E9DDF5', fg: '#5A3E78', title: '激素六项报告', meta: '化验报告 · 采样 10月7日 · [机构]', link: '已关联 2 条化验', linkColor: '#006A63' },
+      { kind: 'IMG', bg: '#D6E3FF', fg: '#2C4A78', title: '处方照片', meta: '处方 · 9月22日 · [医院]', link: '已关联 9月22日就诊', linkColor: '#006A63' },
       { kind: 'PDF', bg: '#E9E4E0', fg: '#4C4642', title: '[文件标题]', meta: '日期未知 · 导入于 10月14日', link: '尚未关联', linkColor: '#7B7470' }
     ].map(function (d, i) { d.divider = i === 0 ? '0' : '1px solid #E9E4E0'; return d; });
     return { cats: cats, docs: docs };
