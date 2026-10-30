@@ -103,8 +103,8 @@ def build() -> dict:
         dict(id='E2_SPRAY_LENZETTO', reason='Steady-state Cmax/Cavg/Cmin but no verified Tmax shape'),
         dict(id='T_ANDROGEL_1pct', reason='Steady Cavg and effect of stopping; no fitted sample time course'),
         dict(id='T_ANDROGEL_1p62pct', reason='Different vehicle; no fitted sampled time course'),
-        dict(id='T_PATCH', reason='No verified product-specific numerical curve here'),
-        dict(id='T_IMPLANT', reason='No verified implant time-series identified in this pass'),
+        dict(id='T_PATCH', reason='Legacy regulatory steady peak/trough exist, but no fitted continuous-input and removal model'),
+        dict(id='T_IMPLANT', reason='Human long-term aggregate and label exist, but no dose/individual-time resolved fitted curve'),
     ]
     return dict(schema='hrtlog.pk_phase3_research_shape.v1', status='RESEARCH_ONLY',
                 key_warning='Dimensionless normalized sensitivities are NOT absolute serum concentration curves',
