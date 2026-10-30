@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+from functools import lru_cache
 from pathlib import Path
 
 from fr_rcp_phase2 import find_fast_for_tpeak, bateman
@@ -24,12 +25,18 @@ DOSE_DAYS = (0., 42., 112., 182., 252.)
 LN2 = math.log(2)
 
 
+@lru_cache(maxsize=32)
+def depot_coefficients(half_life_d: float) -> tuple[float, float, float]:
+    slow = LN2 / (half_life_d * 24.)
+    fast = find_fast_for_tpeak(slow, 7 * 24.)
+    return fast, slow, bateman(7 * 24., fast, slow)
+
+
 def normalized_depot(half_life_d: float, day: float) -> float:
     if day <= 0:
         return 0.
-    slow = LN2 / (half_life_d * 24.)
-    fast = find_fast_for_tpeak(slow, 7 * 24.)
-    return bateman(day * 24., fast, slow) / bateman(7 * 24., fast, slow)
+    fast, slow, normalizer = depot_coefficients(half_life_d)
+    return bateman(day * 24., fast, slow) / normalizer
 
 
 def shape_by_day(half_life_d: float, day_grid: list[float]) -> list[float]:
