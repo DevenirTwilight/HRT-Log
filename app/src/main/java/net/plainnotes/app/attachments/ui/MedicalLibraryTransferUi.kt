@@ -49,7 +49,7 @@ import net.plainnotes.app.attachments.ui.MedicalLibraryTransferController.*
 }
 
 @Composable internal fun MedicalLibraryTransferContent(controller:MedicalLibraryTransferController,onChoose:(Mode)->Unit,onReopen:()->Unit) {
-    val state by controller.state.collectAsState()
+    val state by controller.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
     var abortConfirmation by remember {mutableStateOf(false)}
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
         Text(stringResource(R.string.med_transfer_title),style=MaterialTheme.typography.headlineSmall)

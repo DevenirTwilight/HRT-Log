@@ -40,7 +40,7 @@ import java.util.UUID
 @Composable internal fun MedicalFileLibraryHost(model:NotesViewModel,appointments:List<AppointmentEntity>,labs:List<LabValueEntity>,panels:List<LabPanelEntity>,
     onRecord:(Ops.Target)->Unit,onNewVisit:((AppointmentEntity)->Unit)->Unit,onNewDraw:((LabPanelEntity)->Unit)->Unit,
     onPrepare:()->Unit,onBackup:()->Unit,chooseFor:Ops.Target?=null,onChosen:()->Unit={}) {
-    val runtime by model.libraryRuntime.state.collectAsState()
+    val runtime by model.libraryRuntime.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
     if(runtime !is RuntimeLibrarySession.State.Ready) {Text(stringResource(R.string.library_scope_changed));return}
     val context=LocalContext.current;val owner=LocalLifecycleOwner.current;val scope=net.plainnotes.app.ui.rememberMainThreadScope()
     val controller=remember(model,owner) {runCatching {model.medicalFileLibrary(context,owner,scope)}.getOrNull()}
@@ -61,7 +61,7 @@ private data class FileInfoEditSnapshot(val document:Ops.Document,val detail:Ops
     appointments:List<AppointmentEntity>,labs:List<LabValueEntity>,panels:List<LabPanelEntity>,onRecord:(Ops.Target)->Unit,
     onNewVisit:((AppointmentEntity)->Unit)->Unit,onNewDraw:((LabPanelEntity)->Unit)->Unit,onPrepare:()->Unit,onBackup:()->Unit,
     onSaveDraw:(List<LabValueEntity>,(LabPanelEntity?)->Unit)->Unit,chooseFor:Ops.Target?=null,onChosen:()->Unit={}) {
-    val state by controller.state.collectAsState();val fileState by controller.files.state.collectAsState()
+    val state by controller.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate);val fileState by controller.files.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
     val scope=net.plainnotes.app.ui.rememberMainThreadScope();val context=LocalContext.current
     var query by remember {mutableStateOf("")};var type by remember {mutableStateOf<MedicalAttachmentsController.FileKind?>(null)}
     var unlinked by remember {mutableStateOf(false)};var bin by remember {mutableStateOf(false)}
@@ -76,7 +76,7 @@ private data class FileInfoEditSnapshot(val document:Ops.Document,val detail:Ops
     var createAfterImport by remember {mutableStateOf(false)}
     var createRecord by remember {mutableStateOf(false)}
     var error by remember {mutableStateOf(false)}
-    val thumbs by controller.thumbnails.state.collectAsState()
+    val thumbs by controller.thumbnails.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
     val selected=state.documents.firstOrNull {it.document==state.selected}
     LaunchedEffect(state.revoked,selected?.document) {
         if(state.revoked || selected?.document!=editInfo?.document?.document)editInfo=null

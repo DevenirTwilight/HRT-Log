@@ -20,7 +20,7 @@ import java.time.ZoneId
 
 /** Only composed by the unlocked main data page; no receiver, notification, or background schedule. */
 @Composable fun BackupStatus(history:BackupHistory) {
-    val state by history.state.collectAsStateWithLifecycle()
+    val state by history.state.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
     val owner=LocalLifecycleOwner.current
     var revision by remember{mutableIntStateOf(0)}
     DisposableEffect(owner,history) {

@@ -92,5 +92,10 @@ class MainThreadResumeTest {
             f.readLines().mapIndexedNotNull { i, line -> if ("rememberCoroutineScope(" in line) "${f.name}:${i + 1}" else null }
         }.filterNot { it.startsWith("AppShell.kt:") }.toList()
         assertEquals("use rememberMainThreadScope", emptyList<String>(), plainScopes)
+        // A StateFlow may be written from any thread; its UI collector must continue on main.
+        val collectors = root.walkTopDown().filter { it.extension == "kt" }.flatMap { f ->
+            f.readLines().mapIndexedNotNull { i, line -> if (Regex("""collectAsState(WithLifecycle)?\(\)""").containsMatchIn(line)) "${f.name}:${i + 1}" else null }
+        }.toList()
+        assertEquals("collect on Dispatchers.Main.immediate", emptyList<String>(), collectors)
     }
 }

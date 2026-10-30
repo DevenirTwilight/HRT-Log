@@ -46,9 +46,13 @@ class MedicalAttachmentProductAndroidTest {
         instrumentation.uiAutomation.serviceInfo=service
         Disguise.disable(context);AppLock(context).disable();Session.reset();UiPrefs(context).disclaimerAccepted=true
     }
+    private val offMain=net.plainnotes.app.OffMainApplyRecorder()
     @After fun close() {
-        scenario?.close();Session.reset()
-        val service=instrumentation.uiAutomation.serviceInfo;service.flags=originalAccessibilityFlags;instrumentation.uiAutomation.serviceInfo=service
+        try {
+            scenario?.close();Session.reset()
+            val service=instrumentation.uiAutomation.serviceInfo;service.flags=originalAccessibilityFlags;instrumentation.uiAutomation.serviceInfo=service
+            offMain.assertNone()
+        } finally {offMain.close()}
     }
     private fun launch() {
         scenario=ActivityScenario.launch<MainActivity>(Intent(context,MainActivity::class.java))

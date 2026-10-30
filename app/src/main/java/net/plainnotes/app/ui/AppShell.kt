@@ -74,7 +74,7 @@ class UiPrefs(context: Context) {
 @Composable fun NotesApp(model: NotesViewModel, appearance: Appearance, onAppearance: (Appearance) -> Unit, backToCalendar: Boolean = true,
     writeProgress:net.plainnotes.app.domain.write.WriteProgressSummary?=null,
     onWriteResultCheck:(()->Unit)?=null,onWriteRetry:(()->Unit)?=null,onLibraryReopen:()->Unit={}) {
-    val library by model.librarySession.collectAsStateWithLifecycle()
+    val library by model.librarySession.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
     if(library !is net.plainnotes.app.runtime.RuntimeLibrarySession.State.Ready) {
         androidx.compose.material3.Surface(Modifier.fillMaxSize()) {
             Column(Modifier.fillMaxSize().padding(24.dp).testTag("library-request-boundary"),
@@ -94,7 +94,7 @@ class UiPrefs(context: Context) {
         }
         return
     }
-    val ownedWriteProgress by model.measuredWriteProgress.collectAsStateWithLifecycle()
+    val ownedWriteProgress by model.measuredWriteProgress.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
     val effectiveWriteProgress=writeProgress ?: ownedWriteProgress
     val checkWriteResult=onWriteResultCheck ?: {model.checkMeasuredSave();Unit}
     val context = LocalContext.current
@@ -103,20 +103,20 @@ class UiPrefs(context: Context) {
     // UI-02B: page-owned dialog state lives in holders (ShellHosts.kt), created here with the same remember/rememberSaveable.
     val wellbeingDialogs = rememberWellbeingDialogs()
     val stockDialogs = remember { StockDialogs() }
-    val state by model.state.collectAsStateWithLifecycle()
-    val editor by model.editor.collectAsStateWithLifecycle()
-    val override by model.override.collectAsStateWithLifecycle()
-    val conc by model.conc.collectAsStateWithLifecycle()
-    val extra by model.extra.collectAsStateWithLifecycle()
+    val state by model.state.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
+    val editor by model.editor.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
+    val override by model.override.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
+    val conc by model.conc.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
+    val extra by model.extra.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
     // Same projection as the timeline, so History labels and periods always agree (REQUIREMENTS §35).
     val historyLabels = remember(extra, state.appointments, state.ruleSnapshots) {
         runCatching { net.plainnotes.app.timeline.HistoryLabels.build(extra.records, net.plainnotes.app.timeline.PeriodTimelineProjection.build(extra, state.appointments, ruleSnapshots = state.ruleSnapshots), extra.annotations, java.time.ZoneId.systemDefault()) }.getOrDefault(emptyMap())
     }
-    val milestoneSave by model.milestoneSave.collectAsStateWithLifecycle()
-    val medicalSave by model.medicalVisitSave.collectAsStateWithLifecycle()
-    val importedLink by model.importedLink.collectAsStateWithLifecycle()
-    val notificationSlot by model.notificationSlot.collectAsStateWithLifecycle()
-    val reminderTest by model.reminderTest.collectAsStateWithLifecycle()
+    val milestoneSave by model.milestoneSave.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
+    val medicalSave by model.medicalVisitSave.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
+    val importedLink by model.importedLink.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
+    val notificationSlot by model.notificationSlot.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
+    val reminderTest by model.reminderTest.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
     var destination by rememberSaveable { mutableStateOf(Destination.CALENDAR) }
     // UI-02 A2: the settings page shown, kept across rotation and process recreation.
     var settingsPage by rememberSaveable { mutableStateOf(SettingsPage.OVERVIEW) }
@@ -139,7 +139,7 @@ class UiPrefs(context: Context) {
     var appointment by remember { mutableStateOf(false) }
     val medicationDialogs = remember { MedicationDialogs() }
     var referenceOpen by remember {mutableStateOf(false)}
-    val referenceVersion by model.referenceChanges.collectAsState()
+    val referenceVersion by model.referenceChanges.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
     val appContext=LocalContext.current.applicationContext
     val referenceLoaders=remember(model,appContext){DrugCenterLoaders(
         links={ids->model.medicationReferences.links(ids).mapValues {drugLinkStatus(it.value)}},
@@ -266,7 +266,7 @@ class UiPrefs(context: Context) {
                     extra.labPanels,{labDialogs.panel=it.id},{labDialogs.saveAs=it},onOpenDetail={medicalDialogs.lab=it.id})
                 Destination.SETTINGS -> {
                     val lockOn = remember(settingsPage) { net.plainnotes.app.security.AppLock(context).enabled }
-                    val backup by model.backupHistory.state.collectAsState()
+                    val backup by model.backupHistory.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
                     val regionLabel = stringResource(when (region) { "CN" -> R.string.wb_region_cn; "HK" -> R.string.wb_region_hk; "TW" -> R.string.wb_region_tw
                         "FR" -> R.string.wb_region_fr; "OTHER" -> R.string.wb_region_other; else -> R.string.wb_region_unset })
                     val summaries = SettingsSummaries(regionLabel, stringResource(if (lockOn) R.string.settings_lock_on else R.string.settings_lock_off),
