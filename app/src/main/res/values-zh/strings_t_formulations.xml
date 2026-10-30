@@ -1,0 +1,14 @@
+<resources>
+    <string name="t_formulation">睾酮制剂</string>
+    <string name="t_shape_warning">仅限研究性相对形状，不是血清睾酮预测。内源性睾酮和激素反馈未知。请勿据此调整剂量。</string>
+    <string name="t_actual_history">只计入已保存、有明确冻结制剂和已知质量的实际用药；不补造计划、漏服或未来剂量。</string>
+    <string name="t_record_only">支持记录用药；此制剂尚不支持可靠的浓度估算。</string>
+    <string name="t_no_qualified">此产品没有合格的实际用药。可为新记录选择制剂；当前选择不会改写旧记录。</string>
+    <string name="t_relative_title">相对形状 · 研究用途</string>
+    <string name="t_sensitivity">参数敏感性场景 A / B / C，不是置信区间；均非经过验证的个人曲线。</string>
+    <string name="t_normalized">每个场景在当前窗口最大值归一为 1。不能跨窗口或制剂比较；不表示绝对浓度、内源性基线或临床准确性。</string>
+    <string name="t_history_counts">此产品：%1$d 次可用用药 · %2$d 次不支持 · %3$d 次事实或质量单位缺失（全部睾酮记录）。</string>
+    <string name="t_evidence">模型与来源</string>
+    <string name="t_evidence_limits">官方说明书只约束部分指标，不能确定个人完整曲线。吸收速率与组分权重仍是假设。完整参数、失败拟合与人群限制均保存在源码仓库。尚无独立临床验证。</string>
+    <string name="t_formulation_history">选择准确产品与给药途径。剂量为实际记录的化合物质量，不是睾酮等效质量；仅适用于新记录，不改写旧记录的未知制剂。</string>
+</resources>

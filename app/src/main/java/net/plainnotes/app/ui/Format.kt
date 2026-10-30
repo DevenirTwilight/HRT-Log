@@ -74,7 +74,7 @@ fun inputNumber(value: Double): String = doseFormat.get()!!.format(value)
     }
 }
 
-@Composable fun choiceLabel(value: String): String = stringResource(choiceRes(value))
+@Composable fun choiceLabel(value: String): String = net.plainnotes.app.pk.formulations.TestosteroneFormulations.product(value)?.name ?: stringResource(choiceRes(value))
 fun choiceRes(value: String): Int = when (value) {
     "E2" -> R.string.choice_e2; "T" -> R.string.choice_t; "P4" -> R.string.choice_p4; "CPA" -> R.string.choice_cpa; "SPI" -> R.string.choice_spi
     "BICA" -> R.string.choice_bica; "FIN" -> R.string.choice_fin; "DUT" -> R.string.choice_dut; "DHT" -> R.string.choice_dht; "CMA" -> R.string.choice_cma

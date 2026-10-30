@@ -306,6 +306,21 @@
    },
    "owner_decision": "REQUIREMENTS §175 (2026-10-30): UI-13 task book sections 3.5 and 4 (colours and icon-tile appearance only) and the owner's feedback on the calibration card's button layout.",
    "human_review": "compare docs/ui-audit/2026-10-30-ui13-2/{before,after}."
+  },
+  {
+   "id": "PD-2026-10-30-SEX-STEROID-SELECTOR",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-30",
+   "scope": "Existing concentration destination: E2/T selector, separate relative-only T rendering from actual frozen history. E2 numerical/calibration body unchanged. No T absolute concentrations, clinical validation, endogenous baseline or E2 calibration reuse.",
+   "previous_sha256": "68d30c771872e7d6f045ddd66f26b589d03a110a35737463a5606b9387724082",
+   "new_sha256": "e254d40cb799f11f43d7a91410b36a5d6ccdf0a292da05fd57fa81a0ad318f10",
+   "evidence": {
+    "commit": "dcf2f5301b8b477262756b29e70b94a18dd7bfe4",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §179; owner explicitly authorizes evidence-bounded models and relative research shapes where absolute prediction is unsupported.",
+   "human_review": "Verify selector-only diff and separate T renderer; the old E2 body, fit and export path remain unchanged."
   }
  ]
 }

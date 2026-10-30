@@ -1,0 +1,14 @@
+<resources>
+    <string name="t_formulation">睪固酮製劑</string>
+    <string name="t_shape_warning">僅限研究性相對形狀，不是血清睪固酮預測。內源性睪固酮和荷爾蒙回饋未知。請勿據此調整劑量。</string>
+    <string name="t_actual_history">只計入已儲存、有明確凍結製劑與已知質量的實際用藥；不補造計畫、漏服或未來劑量。</string>
+    <string name="t_record_only">支援記錄用藥；此製劑尚不支援可靠的濃度估算。</string>
+    <string name="t_no_qualified">此產品沒有合格的實際用藥。可為新記錄選擇製劑；目前選擇不會改寫舊記錄。</string>
+    <string name="t_relative_title">相對形狀 · 研究用途</string>
+    <string name="t_sensitivity">參數敏感性情境 A / B / C，不是信賴區間；均非經過驗證的個人曲線。</string>
+    <string name="t_normalized">每個情境在目前視窗最大值歸一為 1。不能跨視窗或製劑比較；不表示絕對濃度、內源性基線或臨床準確性。</string>
+    <string name="t_history_counts">此產品：%1$d 次可用用藥 · %2$d 次不支援 · %3$d 次事實或質量單位缺失（全部睪固酮記錄）。</string>
+    <string name="t_evidence">模型與來源</string>
+    <string name="t_evidence_limits">官方說明書只約束部分指標，不能確定個人完整曲線。吸收速率與組分權重仍是假設。完整參數、失敗擬合與人群限制均儲存在原始碼倉庫。尚無獨立臨床驗證。</string>
+    <string name="t_formulation_history">選擇準確產品與給藥途徑。劑量為實際記錄的化合物質量，不是睪固酮等效質量；僅適用於新記錄，不改寫舊記錄的未知製劑。</string>
+</resources>

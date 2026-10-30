@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-30",
+  "baseline": "84489514efe638099650353329abfa9a79f2d871",
+  "research_source_pr": 173,
+  "research_source_sha": "be60ba49728fd54ed32c01edbbc723dbea57488b",
+  "new_absolute_models": [],
+  "implementation_status": "RESEARCH_SHAPE_ONLY, not product-complete for all requested routes",
+  "observed": {
+    "pk_jvm": {
+      "tests": 131,
+      "failures": 0,
+      "skipped": 0
+    },
+    "target_app_jvm": {
+      "tests": 54,
+      "failures": 0,
+      "skipped": 0
+    },
+    "research_unittests": 23,
+    "production_kotlin_compile": "PASS",
+    "android_test_kotlin_compile": "PASS",
+    "native_api26": "PENDING",
+    "native_api29": "PENDING",
+    "native_api35": "PENDING",
+    "physical_device": "NOT_RUN",
+    "talkback_manual": "NOT_RUN"
+  },
+  "first_failure": {
+    "class": "TestosteroneHistoryTest",
+    "tests": 3,
+    "reason": "Robolectric accidentally starts NotesApplication; API29 dynamic receiver test-host permission absent before adapter assertions",
+    "fix": "Use android.app.Application host for pure JSON adapter test; no production permission added",
+    "raw_log": "/tmp/hrt-t-target-tests.log",
+    "xml_sha256": "5090164fa346aa6b8f414fba04904e1f4c9b0676f87a4185ce7276bf833d3000"
+  },
+  "source_files": {
+    "tools/pk-research/t_ichihara_2020_fit.py": "b722172d0bf51d2fe8be462b77d96ce56dbdfc46ebe9e8f485ef5c4ac5db8d8d",
+    "tools/pk-research/t_route_calibration_01.py": "1c41758221afd6621769cdc40f4f8659bc7fc1af0292bb86842187033f2fb498",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/formulations/TestosteroneFormulations.kt": "11a16183cebe097aaa14285afbad22e3e308da513f0a5529ac7e65420b4b2657"
+  }
+}

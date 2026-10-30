@@ -1,3 +1,11 @@
+## E2/T 曲线生产接线候选 — 2026-10-30（未完成全部剂型）
+
+基线84489514；本分支feature/sex-steroid-production-models-20261030。复用#173 be60ba49证据与程序，不改E2引擎、M2、TotalE2Calibration、旧快照、导出、Room或备份格式。真实浓度页增加E2/T；药物编辑显式选择T产品，现有medication.route保存命名空间制剂/途径码，历史快照冻结它，旧未知T不靠当前配置补造。新T三个产品ANDROGEL50/ANDROTARDYL/NEBIDO只显示相对敏感性形状，无绝对单位/内源性基线/临床验证，不复用E2校准；另8种T产品明确仅记录。E2其它缺失剂型及#169/#171同域工作未冒称完成。
+
+实际验证：生产编译PASS；pk-engine现有+新内核131项PASS（新增第8项独立数值卷积仍待再跑）；适配器3+四语/小屏/大字/明暗UI32+E2适配/校准19=54项PASS，0skip。适配器首轮3项因Robolectric误起NotesApplication的receiver权限异常失败，改纯Application测试宿主后通过，原始XML哈希见acceptance/local-results.json；未改变生产权限。#173 Python研究23项PASS，Ichihara精确脚本复现训练0.06136/同队列留出2.82537ng/mL，不能称独立验证。旧E2 UI/时期稳定性/翻译、真实保存+加密备份恢复及冻结科研守卫正在执行。新增MainActivity两进程T历史/曲线测试接现有API26/29/35 runner，尚无native PASS；本机无KVM/连接设备。真机和人工TalkBack NOT_RUN，未签名或交付APK。
+
+下一步：读取/tmp/hrt-t-compat-tests.log与/tmp/hrt-t-science-compat.log；执行独立卷积数值回归；最终精确HEAD必需CI与真实原生结果；只修真实失败、不把所有新绝对曲线宣布完成。真实覆盖表及参数/来源/失败/回退边界：docs/pk-research/t-routes/production-integration.md。没有新的绝对T产品模型获得临床验证；部分接线不等于全任务完成。
+
 ## E2/T 剂型接手 — 2026-10-30
 
 实时主线 84489514efe638099650353329abfa9a79f2d871；#173研究Draft be60ba49；#169–172同域开放，保留其成果，不覆盖。新分支 feature/sex-steroid-production-models-20261030。现有生产Curve无T，编辑器对非E2不保存途径，不能用当前药名猜历史产品。先把证据等级和真实历史接入统一浓度页；稀疏摘要不升级绝对曲线，TE同队列拟合也不冒充独立验证。最新任务记录§179，旧E2/校准/冻结研究/数据库/签名不变。代码及原生验收尚未完成，不能声明产品完成。

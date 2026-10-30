@@ -115,4 +115,46 @@ class CalibrationProductAndroidTest {
             .put("sdk",android.os.Build.VERSION.SDK_INT).put("saved_doses",21).put("saved_e2_labs",2)
             .put("real_main_activity",true).put("calibration_recomputed",true).toString())
     }
+    /** Actual production destination and database; the relative curve must not reuse E2 calibration. */
+    @Test fun savedTestosteroneFormulationUsesActualHistoryInTheProductionDestination() {
+        launch()
+        val repo = model.libraryRuntime.currentRepository()
+        val now = Instant.now()
+        val med = MedicationEntity(name="SYNTHETIC ANDROGEL", molecule="T", route="T_ANDROGEL_50", unit="MG", dose_per_intake=50.0,
+            container_capacity=1500.0, site_rotation=false, notifications_on=false, active=true, sort_order=999)
+        val id = runBlocking { repo.saveMedication(med, null, net.plainnotes.app.domain.RuleKind.EVERY_N_DAYS, 1,
+            listOf(java.time.LocalTime.of(9, 0)), emptySet(), now) }
+        runBlocking { repo.transaction { dao ->
+            val actual = med.copy(id=id)
+            for (hours in listOf(8L, 32L)) dao.record(RecordEntity(medication_id=id,
+                taken_utc=now.minusSeconds(hours*3600).toEpochMilli(),taken_zone="UTC",actual_dose=50.0,
+                status="ON_TIME",origin="APP",revision=1,config_snapshot=MedicationSnapshot.encode(actual,null)))
+        } }
+        model.refresh().joinForTest()
+        navigate(Destination.CONCENTRATION)
+        ui.onNodeWithText(context.getString(R.string.choice_t)).performClick()
+        ui.waitUntil(30_000) { showing("t-relative-chart") }
+        ui.onNodeWithTag("t-relative-chart").performScrollTo().assertIsDisplayed()
+        ui.onAllNodesWithTag("e2-now-value").assertCountEquals(0)
+        ui.onAllNodesWithTag("calibration-switch").assertCountEquals(0)
+        ui.onNodeWithTag("t-shape-warning").performScrollTo().assertTextContains(context.getString(R.string.t_shape_warning))
+        val rows=runBlocking { repo.records().filter { it.medication_id==id } }
+        assertEquals(2,rows.size)
+        assertTrue(rows.all { MedicationSnapshot.decode(it.config_snapshot,id)?.route=="T_ANDROGEL_50" })
+        context.filesDir.resolve("testosterone-native-pid").writeText(android.os.Process.myPid().toString())
+    }
+    @Test fun newProcessReopensTestosteroneHistoryWithoutApplyingE2Calibration() {
+        val previous=context.filesDir.resolve("testosterone-native-pid").readText().trim().toInt()
+        assertNotEquals(previous,android.os.Process.myPid())
+        launch();navigate(Destination.CONCENTRATION)
+        ui.onNodeWithText(context.getString(R.string.choice_t)).performClick()
+        ui.waitUntil(30_000) { showing("t-relative-chart") }
+        ui.onNodeWithTag("t-relative-chart").performScrollTo().assertIsDisplayed()
+        ui.onAllNodesWithTag("calibration-switch").assertCountEquals(0)
+        context.filesDir.resolve("testosterone-native-reopen.json").writeText(org.json.JSONObject()
+            .put("previous_pid",previous).put("new_pid",android.os.Process.myPid())
+            .put("real_main_activity",true).put("relative_only",true).put("sdk",android.os.Build.VERSION.SDK_INT).toString())
+    }
+    private fun kotlinx.coroutines.Job.joinForTest() { runBlocking { join() } }
+
 }

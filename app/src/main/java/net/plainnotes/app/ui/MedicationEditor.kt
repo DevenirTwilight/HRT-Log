@@ -78,6 +78,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
     val soonV = soon.toIntOrNull()?.takeIf { it >= 0 }; val lateV = late.toIntOrNull()?.takeIf { it >= 0 }
     val intervalV = interval.toIntOrNull()?.takeIf { it in 1..36500 }
     val isE2 = molecule == "E2"
+    val isT = molecule == "T"
     // Application area is not a model input any more; a value saved by an older version is kept as is.
     val resolvedArea = p?.gel_area_cm2
     val valid = (!isE2 || route in E2_ROUTES) && (!featherlineReview || !isE2 || ester in estersFor(route)) && name.isNotBlank() && doseV != null && capV != null && expV != -1 && soonV != null && lateV != null && intervalV != null &&
@@ -85,7 +86,7 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
 
     fun save() {
         if (valid) onSave(MedicationDraft(
-            MedicationEntity(m?.id ?: 0, name.trim(), molecule, if (isE2) route else null, unit, doseV!!, capV!!, expV, soonV, lateV, siteRotation, if (siteRotation) "LR" else null, notifications, active, m?.sort_order ?: 0, null),
+            MedicationEntity(m?.id ?: 0, name.trim(), molecule, if (isE2 || isT) route else null, unit, doseV!!, capV!!, expV, soonV, lateV, siteRotation, if (siteRotation) "LR" else null, notifications, active, m?.sort_order ?: 0, null),
             if (isE2) ester else null, kind, intervalV!!, times.toList(), weekdays.toSet(),
             if (isE2) ProfileEntity(m?.id ?: 0, ester, "", slTier.takeIf { route == "SUBLINGUAL" }, gelProduct.takeIf { route == "GEL" }, gelSite.takeIf { route == "GEL" },
                 resolvedArea.takeIf { route == "GEL" }, patchRate.toDoubleOrNull()?.takeIf { route == "PATCH" && it > 0 }) else null,
@@ -114,6 +115,12 @@ class MedicationDraft(val medication: MedicationEntity, val ester: String?, val 
                     OutlinedTextField(name, { name = it }, Modifier.fillMaxWidth().testTag("medication-name"), label = { Text(stringResource(R.string.name)) }, singleLine = true, isError = tried && name.isBlank())
                     onReference?.let { open->TextButton(onClick=open,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp).testTag("medication-reference-entry")){Text(stringResource(R.string.ref2_browse))} }
                     DropdownField(stringResource(R.string.molecule), MOLECULES, molecule, { choiceLabel(it) }, { molecule = it }, detail = { if (it == "E2") null else brandNames(it) })
+                    if (isT) {
+                        val products = net.plainnotes.app.pk.formulations.TestosteroneFormulations.products
+                        DropdownField(stringResource(R.string.t_formulation), products,
+                            products.singleOrNull { it.code == route }, { it.name }, { route = it.code })
+                        Text(stringResource(R.string.t_formulation_history), style = MaterialTheme.typography.bodySmall)
+                    }
                     if (isE2) {
                         DropdownField(stringResource(R.string.route), E2_ROUTES, route.takeIf { it in E2_ROUTES }, { choiceLabel(it) }, isError = tried && route !in E2_ROUTES, onSelect = {
                             route = it; if (ester !in estersFor(it)) ester = if(featherlineReview) "" else estersFor(it).first(); if (it == "PATCH") unit = "PATCH" else if (unit == "PATCH") unit = "MG"
