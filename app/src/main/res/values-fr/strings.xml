@@ -557,6 +557,7 @@ Les médicaments importés sont en pause. Ouvrez-les dans Médicaments pour conf
 <string name="model_ev_oral">Valérate d’estradiol oral</string>
 <string name="model_gel_divigel">Gel d’estradiol (Divigel)</string>
 <string name="model_gel_estrogel">Gel d’estradiol (EstroGel / Oestrogel)</string>
+<string name="model_gel_estreva">Gel d’estradiol (Estreva, modèle provisoire selon le RCP ANSM)</string>
 <string name="model_gel_other">Gel d’estradiol (autres produits, pas de données)</string>
 <string name="model_p4_oral">Progestérone orale (indicative)</string>
 <string name="model_spi_canrenone">Canrénone issue de la spironolactone</string>
