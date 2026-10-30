@@ -77,8 +77,8 @@ import java.time.*
         if (past.isNotEmpty()) item {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.visits_past), style = MaterialTheme.typography.titleSmall, modifier = Modifier.semantics { heading() }.testTag("visits-group-past"))
-                Surface(color = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer, shape = Corners.pill, modifier = Modifier.testTag("visits-past-count")) {
-                    Text("${past.size}", style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                Surface(color = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.onPrimaryContainer, shape = Corners.pill) {
+                    Text("${past.size}", style = MaterialTheme.typography.labelMedium, modifier = Modifier.testTag("visits-past-count").padding(horizontal = 8.dp, vertical = 4.dp))
                 }
             }
         }

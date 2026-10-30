@@ -36,7 +36,8 @@ import java.util.Locale
 /** UI-14: the parts of a date the visits list shows separately, each in the locale's own pattern. */
 @Composable fun formatMonthDay(date: LocalDate): String = date.format(pattern("MMMMd"))
 @Composable fun formatMonthShort(date: LocalDate): String = date.format(pattern("MMM"))
-@Composable fun formatDayOfMonth(date: LocalDate): String = date.format(pattern("d"))
+/** Just the number (the "d" pattern adds a day character in Chinese, which the date tile does not want). */
+@Composable fun formatDayOfMonth(date: LocalDate): String = java.text.NumberFormat.getIntegerInstance(currentLocale()).format(date.dayOfMonth)
 @Composable fun formatWeekdayShort(date: LocalDate): String = date.format(pattern("EEE"))
 @Composable fun formatWeekdayLong(date: LocalDate): String = date.format(pattern("EEEE"))
 /** Date with the year and no weekday, for a document date that may be years old. */

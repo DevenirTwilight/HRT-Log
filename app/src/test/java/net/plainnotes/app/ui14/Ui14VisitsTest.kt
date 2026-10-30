@@ -118,7 +118,7 @@ class Ui14VisitsTest(private val locale: String, private val width: Int, private
         for (tag in listOf("visits-group-upcoming", "visit-card:1", "visits-group-past", "visit-card:2", "visit-card:3")) {
             scrollTo(tag)
             if (tag == "visits-group-upcoming") assertEquals(s(R.string.visits_upcoming), text(tag))
-            if (tag == "visits-group-past") { assertEquals(s(R.string.visits_past), text(tag)); assertEquals("2", text("visits-past-count", unmerged = false)) }
+            if (tag == "visits-group-past") { assertEquals(s(R.string.visits_past), text(tag)); assertEquals("2", text("visits-past-count")) }
             cut += clipped().filterNot { it.startsWith("Synthetic Outpatient") }; outside += outsideTheWindow()
         }
         assertEquals(emptyList<String>(), cut.toList()); assertEquals(emptyList<String>(), outside.toList())
@@ -137,7 +137,7 @@ class Ui14VisitsTest(private val locale: String, private val width: Int, private
         ui.onNode(hasTestTag("visit-tag-confirmed") and hasAnyAncestor(hasTestTag("visit-card:3")), useUnmergedTree = true).assertDoesNotExist()
         ui.onNode(hasTestTag("visit-tag-questions") and hasAnyAncestor(hasTestTag("visit-card:3")), useUnmergedTree = true).assertDoesNotExist()
         ui.onNode(hasTestTag("visit-tag-pack") and hasAnyAncestor(hasTestTag("visit-card:3")), useUnmergedTree = true).assertDoesNotExist()
-        ui.onNode(hasText(s(R.string.visit_not_confirmed)) and hasAnyAncestor(hasTestTag("visit-tag-unconfirmed")), useUnmergedTree = true).assertExists()
+        ui.onNode(hasText(s(R.string.visit_not_confirmed)) and hasAnyAncestor(hasTestTag("visit-tag-unconfirmed")) and hasAnyAncestor(hasTestTag("visit-card:3")), useUnmergedTree = true).assertExists()
     }
 
     @Test fun withNothingAheadTheLastConfirmedVisitHeadlinesAndAnUnconfirmedOneNeverDoes() {
@@ -180,7 +180,7 @@ class Ui14VisitsTest(private val locale: String, private val width: Int, private
         val tokyo = ZoneId.of("Asia/Tokyo")
         val v = AppointmentEntity(9, "ENDO", now.plus(Duration.ofDays(2)).toEpochMilli(), tokyo.id, null, null, null, 0, null)
         show(listOf(v), medical = true); scrollTo("visit-card:9")
-        val day = v.at_utc.let { Instant.ofEpochMilli(it).atZone(tokyo).dayOfMonth.toString() }
+        val day = java.text.NumberFormat.getIntegerInstance(java.util.Locale.forLanguageTag(locale.replace("-r", "-"))).format(Instant.ofEpochMilli(v.at_utc).atZone(tokyo).dayOfMonth)
         ui.onNode(hasText(day) and hasAnyAncestor(hasTestTag("visit-date-tile:9")), useUnmergedTree = true).assertExists()
     }
 }
