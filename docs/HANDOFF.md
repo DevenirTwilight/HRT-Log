@@ -1,3 +1,7 @@
+## PR #177 最终目标测试冻结 — 2026-10-31
+
+追加真实跳过对话框四语点击/保存校验，发现三个Switch缺少自身无障碍名；现有SwitchRow只补对应label的contentDescription，不改布局/业务。原生按真实label选择跳过，无控件坐标/序号猜测。57项App直接目标及33项core撤销共90项PASS，最终8项四语原XML入docs/fixes/explicit-skip-2026-10-31，AndroidTest编译PASS。原未具名Switch匹配失败原XML保留。接下来只收口最终准确HEAD的CI/API26/29/35真实MainActivity合同；均满足才能Ready正常保护合并。无真机/TalkBack人工/签名/发行。
+
 ## PR #177 接手：已确认跳过归回治疗阶段 — 2026-10-31
 
 沿用原分支与PR，远端446c618d无新提交。新增生产修正：提前跳过是已确认决策，保留原计划时刻但不进入Upcoming；空slot不当作显式计划证据。正常模式显示冻结药名与原时区计划时刻，详情显示计划剂量，简易/伪装隐私规则不变。用独立四语资源明确已跳过，不改变旧冻结strings/PDF摘要。原Repository/applyOverride/undoSkipped、库存、浓度、提醒、Room及备份协议均未改。

@@ -13,3 +13,7 @@
 - second-ui-text-matcher-failure.xml：完整时间确含UTC，新测试误用非子串Text matcher，改为明确substring=true；保留UTC断言和计划剂量断言。
 
 没有删旧断言、提高时限、改数据库/服药事实/药代参数/库存/提醒或签名。四语320dp/2倍字为自动Compose验证；真机、人工TalkBack未运行。无本机KVM，原生按既有CI实际运行。
+
+## 最终对话框/无障碍校验
+
+新增真实OverrideDialog四语交互，发现合并语义树中三个未具名Switch无法按可见兄弟标签唯一选择（override-unlabelled-switch-failure.xml）。在现有SwitchRow上为Switch添加自身label的contentDescription，不改布局、开关顺序或业务回调；MainActivity原生合同按该真实名称操作。四语下明确点击跳过、保存，结果严格等于仅skipped=true的原SlotOverride。最终8项四语界面/真实开关保存及AndroidTest编译PASS；全部直接App目标合计57项，core原撤销33项PASS。final-four-language-ui.xml为实际最终运行原件。最终精确HEAD的完整CI和原生仍待验收，先不合并。

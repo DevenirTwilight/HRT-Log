@@ -25,6 +25,17 @@ class ExplicitSkipTimelineUiTest(private val language:String) {
     companion object { @JvmStatic @ParameterizedRobolectricTestRunner.Parameters(name="{0}/320dp/2x") fun languages()=listOf("en","zh-rCN","b+zh+Hant","fr").map{arrayOf<Any>(it)} }
     @get:Rule val ui=createAndroidComposeRule<ComponentActivity>()
     @Before fun locale(){RuntimeEnvironment.setQualifiers("$language-w320dp-h640dp-xxhdpi")}
+    @Test fun actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose() {
+        val now=Instant.now();val at=now.plusSeconds(7200)
+        val slot=net.plainnotes.app.domain.Slot("synthetic-slot",7,1,at,at,ZoneId.of("UTC"),2.0,15,120,now)
+        var saved:net.plainnotes.app.domain.SlotOverride?=null
+        ui.setContent { MaterialTheme { OverrideDialog(net.plainnotes.app.domain.TimelineEntry(slot,net.plainnotes.app.domain.SlotState.PENDING),null,
+            net.plainnotes.app.domain.SlotOverride(slot.key),{}) { saved=it } } }
+        val label=ui.activity.getString(R.string.skipped)
+        ui.onNodeWithContentDescription(label).assertIsOff().performClick()
+        ui.onNode(hasText(ui.activity.getString(R.string.save)) and hasAnyAncestor(isDialog())).performClick()
+        org.junit.Assert.assertEquals(net.plainnotes.app.domain.SlotOverride(slot.key,skipped=true),saved)
+    }
     @Test fun confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose() {
         val now=Instant.now();val scheduled=now.plusSeconds(3600)
         val med=MedicationEntity(1,"Synthetic frozen medicine","E2","ORAL","MG",2.0,20.0,site_rotation=false,notifications_on=false,active=true,sort_order=0)

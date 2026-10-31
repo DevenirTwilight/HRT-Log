@@ -57,7 +57,7 @@ class ExplicitSkippedProductAndroidTest {
         ui.onNodeWithTag("recent-day:${scheduled.toLocalDate()}").performClick()
         ui.onNodeWithTag("day-dose:${slot.key}").performScrollTo()
         ui.onNode(hasText(context.getString(R.string.reschedule)) and hasAnyAncestor(hasTestTag("day-dose:${slot.key}"))).performClick()
-        ui.onNode(isToggleable() and hasAnySibling(hasAnyDescendant(hasText(context.getString(R.string.skipped))))).performClick()
+        ui.onNodeWithContentDescription(context.getString(R.string.skipped)).assertIsOff().performClick()
         ui.onNode(hasText(context.getString(R.string.save)) and hasAnyAncestor(isDialog())).performClick()
         ui.waitUntil(30_000){model.extra.value.records.any{it.medication_id==id && it.status=="SKIPPED"}}
         val skipped=model.extra.value.records.single{it.medication_id==id && it.status=="SKIPPED"}

@@ -2,7 +2,7 @@
   "base": "446c618dfcb9d0f77f7c6d2a43ed937a4ae0fb45",
   "local_observations": {
     "targeted_app": {
-      "tests": 53,
+      "tests": 57,
       "failures": 0,
       "skipped": 0,
       "scope": [
@@ -12,7 +12,7 @@
         "UndoSkippedHistoryUiTest:24",
         "Ui08PdfSummaryUnchangedTest:1",
         "ExplicitSkipBackupTest:1",
-        "ExplicitSkipTimelineUiTest:4"
+        "ExplicitSkipTimelineUiTest:8 (four-language timeline + actual skip toggle/save)"
       ]
     },
     "core_undo": {
@@ -20,7 +20,8 @@
       "failures": 0,
       "skipped": 0
     },
-    "android_test_kotlin": "PASS"
+    "android_test_kotlin": "PASS",
+    "toggle_accessibility": "PASS: exact named Switch, original planned time and dose preserved"
   },
   "native_API26_29_35": "PENDING_EXACT_HEAD_CI",
   "physical_device": "NOT_RUN",
