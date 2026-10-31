@@ -1,3 +1,12 @@
+## 2026-10-31 用户主动跳过服药：时间线错误显示待识别方案（候选待 CI）
+
+问题：`NotesRepository.applyOverride` 已用冻结方案快照保存 `APP/SKIPPED`、slot_key、rule_version_id 和 scheduled_utc；但 `ObservedTreatmentHistory` 不将尚未到时的未来跳过加入 resolvedRecords，`ImportedHistoryProjection` 随后把它显示为「待识别方案的历史记录」。这并不表示用户实际服药或方案缺失。
+
+候选修复（分支 `fix/explicit-skipped-dose-timeline-20261031`）：在 `PeriodTimelineProjection` 中仅将有真实 slot_key、规则版本、预定时刻且未删除的 `APP/SKIPPED` 记录映射为独立 `EventKind.SKIPPED`，保留预定时刻和冻结身份；排除它们的 imported-history 重复显示。跳过的日期还未到时保留在计划时刻排序的 upcoming 区域，但明确标「已跳过服药」。历史导入/无真实 slot 的记录仍沿旧识别流程。详情显示冻结药品名称与**计划**剂量，不把它当实际服药、医疗建议、治疗停药或浓度输入。代码仅改只读时间线投影和 UI 文案，不写入/修改任何记录、库存、药代、Room 或备份。
+
+新增 `ImportedHistoryTimelineTest` 三组：未来主动跳过；已过时跳过与未识别导入记录共存；撤销后被标记删除。原 `PeriodTimelineTest` 未关联的普通记录仍不生成单独服药卡。**截至提交时测试与真实设备均未执行，必须依据精确 HEAD 的 CI 后更新 PASS/FAIL/NOT_RUN；未构建、签名、发布 APK。**
+
+---
 ## Compose 间歇失败根因修复 PR — 2026-10-30（已合并 #167，主线 fdabc4ce）
 
 - 负责人“给我修”。根因已证明（REQUIREMENTS §176）：Compose 测试里界面协程在后台线程继续，测试拦截器在后台线程发 snapshot apply，导致重组/布局离开主线程。正式应用不受影响。
