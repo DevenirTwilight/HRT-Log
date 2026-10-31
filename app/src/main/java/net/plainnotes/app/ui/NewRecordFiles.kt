@@ -15,7 +15,7 @@ import net.plainnotes.app.data.MedicalAttachmentOperations as Ops
 
 /** Before the record exists this only holds the real picker result in memory; it never reads or imports it. */
 @Composable internal fun NewRecordFileChoice(files:RecordFiles,saving:Boolean) {
-    val state by files.controller.state.collectAsState()
+    val state by files.controller.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
     Column(Modifier.fillMaxWidth().testTag("new-record-files"),verticalArrangement=Arrangement.spacedBy(8.dp)) {
         Text(stringResource(R.string.attach_section),style=MaterialTheme.typography.titleSmall)
         Text(stringResource(R.string.med03_save_record_first),style=MaterialTheme.typography.bodySmall)
@@ -33,10 +33,10 @@ import net.plainnotes.app.data.MedicalAttachmentOperations as Ops
     val label=stringResource(if(target.kind==Ops.Kind.APPOINTMENT)R.string.attach_default_visit else R.string.attach_default_lab)
     LaunchedEffect(files.controller) {
         draft?.controller?.takeUncommittedSelection()?.let {selected->
-            files.controller.acceptUncommittedSelection(selected,label)
+            resumeOnMain {files.controller.acceptUncommittedSelection(selected,label)}
         }
     }
-    val state by files.controller.state.collectAsState()
+    val state by files.controller.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
     FileWindow(stringResource(R.string.attach_section),onDone) {
         Column(Modifier.fillMaxSize().padding(16.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
             val outcome=when(state.import) {

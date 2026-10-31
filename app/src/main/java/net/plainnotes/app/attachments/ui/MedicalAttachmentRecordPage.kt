@@ -33,7 +33,7 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
     if(!AttachmentFlowController.PUBLIC_ENTRY_ENABLED)return null
     val context=LocalContext.current
     val owner=LocalLifecycleOwner.current
-    val scope=rememberCoroutineScope()
+    val scope=net.plainnotes.app.ui.rememberMainThreadScope()
     val controller=remember(model,target,owner) {model.medicalAttachmentsForRecord(context,owner,target,scope)}
     val title=stringResource(when(target?.kind) {null->R.string.med03_default_file;MedicalAttachmentOperations.Kind.APPOINTMENT->R.string.attach_default_visit;else->R.string.attach_default_lab})
     val onAdd=rememberAttachmentPicker(model,controller,title)
@@ -43,7 +43,7 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
 
 /** Shared real SAF lifecycle for record, file-first and not-yet-saved-record selections. */
 @Composable internal fun rememberAttachmentPicker(model:NotesViewModel,controller:MedicalAttachmentsController,title:String):()->Unit {
-    val scope=rememberCoroutineScope()
+    val scope=net.plainnotes.app.ui.rememberMainThreadScope()
     val generation=remember(controller) {Session.generation}
     var awaiting by remember(controller) {mutableStateOf(false)}
     val picker=key(controller) {rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {result->
@@ -79,7 +79,7 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
 
 /** The related-files block of a record page: stateless over the controller's state. */
 @Composable internal fun RecordFilesSection(files:RecordFiles,targetLabel:String,modifier:Modifier=Modifier,scopeNote:String?=null) {
-    val state by files.controller.state.collectAsState()
+    val state by files.controller.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
     val controller=files.controller
     var choose by remember {mutableStateOf(false)}
     Column(modifier.testTag("record-files:${files.target?.kind}:${files.target?.id}")) {MedicalAttachmentsSection(state,targetLabel,onAdd=files.onAdd,onConfirm=controller::confirmImport,
@@ -88,7 +88,7 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
         onUnlink=controller::unlink,onDismissUnlinkMessage=controller::dismissUnlinkMessage,scopeNote=scopeNote,
         onChooseExisting=if(files.model!=null && files.target!=null)({choose=true})else null)}
     if(choose)files.model?.let {model->
-        val notes by model.state.collectAsState();val extra by model.extra.collectAsState()
+        val notes by model.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate);val extra by model.extra.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
         net.plainnotes.app.attachments.ui.library.FileWindow(stringResource(R.string.attach_choose_existing),{choose=false}) {
             net.plainnotes.app.attachments.ui.library.MedicalFileLibraryHost(model,notes.appointments,extra.labs,extra.labPanels,
                 onRecord={},onNewVisit={},onNewDraw={},onPrepare={},onBackup={},chooseFor=files.target,onChosen={choose=false;controller.refresh()})
@@ -98,7 +98,7 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
 
 /** The page-sized file page over a record page. System BACK closes it first; nothing stale stays when it is closed or revoked. */
 @Composable internal fun RecordFilesViewer(files:RecordFiles,targetLabel:String,modifier:Modifier=Modifier) {
-    val state by files.controller.state.collectAsState()
+    val state by files.controller.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
     val open=state.viewer!=MedicalAttachmentsController.Viewer.Closed
     BackHandler(open) {files.controller.closeViewer()}
     MedicalAttachmentViewer(state.viewer,files.controller::closeViewer,modifier,targetLabel,onPage=files.controller::showPage)
@@ -107,7 +107,7 @@ internal class RecordFiles(val controller:MedicalAttachmentsController,val onAdd
 /** Shared by the production page and the existing guarded synthetic host.
  * The caller supplies its already-scoped controller; no alternate authorization exists here. */
 @Composable internal fun MedicalAttachmentRecordContent(controller:MedicalAttachmentsController,targetLabel:String,onAdd:()->Unit,onExit:(()->Unit)?=null) {
-    val state by controller.state.collectAsState()
+    val state by controller.state.collectAsState(kotlinx.coroutines.Dispatchers.Main.immediate)
     BackHandler(state.viewer!=MedicalAttachmentsController.Viewer.Closed || onExit!=null) {
         if(state.viewer!=MedicalAttachmentsController.Viewer.Closed)controller.closeViewer()else onExit?.invoke()
     }

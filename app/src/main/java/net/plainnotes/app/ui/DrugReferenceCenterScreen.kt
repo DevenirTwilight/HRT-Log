@@ -282,8 +282,8 @@ private fun futureIcon(tag: String) = when (tag) {
     var sources by remember { mutableStateOf(DrugSourceInfo()) }
     LaunchedEffect(ids, linkVersion, loaders) {
         if (loaders == null) return@LaunchedEffect
-        links = try { loaders.links(ids) } catch (e: CancellationException) { throw e } catch (_: Exception) { emptyMap() }
-        sources = try { loaders.sources() } catch (e: CancellationException) { throw e } catch (_: Exception) { DrugSourceInfo() }
+        links = try { resumeOnMain { loaders.links(ids) } } catch (e: CancellationException) { throw e } catch (_: Exception) { emptyMap() }
+        sources = try { resumeOnMain { loaders.sources() } } catch (e: CancellationException) { throw e } catch (_: Exception) { DrugSourceInfo() }
     }
     var officialSection by rememberSaveable { mutableStateOf<String?>(null) }
     androidx.compose.ui.window.Dialog(onDismissRequest = { if(officialSection!=null) officialSection=null else onDismiss() },

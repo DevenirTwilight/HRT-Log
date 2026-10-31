@@ -15,8 +15,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import net.plainnotes.app.ui.computeOffMain
 import net.plainnotes.app.R
 import net.plainnotes.app.conc.ConcentrationCalculator
 import net.plainnotes.app.data.LabValueEntity
@@ -44,7 +43,7 @@ import java.time.Instant
     val asOf = remember(records, ruleSnapshots, tick) { now() }
     val audit = key(records,ruleSnapshots,asOf) {
         produceState<net.plainnotes.app.conc.experimental.SlAdapterAudit?>(null) {
-            value=withContext(Dispatchers.Default) { ExperimentalConcentrationComparison.audit(records,ruleSnapshots,asOf) }
+            value=computeOffMain { ExperimentalConcentrationComparison.audit(records,ruleSnapshots,asOf) }
         }.value
     }
     val scope=remember(records,ruleSnapshots,asOf) {
@@ -55,7 +54,7 @@ import java.time.Instant
         produceState<ResearchPreviewLoad>(ResearchPreviewLoad.Loading) {
             if (audit != null) {
                 value = try {
-                    ResearchPreviewLoad.Ready(withContext(Dispatchers.Default) {
+                    ResearchPreviewLoad.Ready(computeOffMain {
                         previewComputer(audit!!,model,ConcentrationCalculator.hours(asOf)).also {
                             require(it.model==ResearchModel.M2 && it.candidateId==ResearchDisplayProtocol.m2Id)
                         }

@@ -60,7 +60,7 @@ internal class BdpmCatalogueUiState(val catalogue:BdpmCatalogue,private val scop
 
 @Composable internal fun rememberBdpmCatalogueUiState():BdpmCatalogueUiState {
     val context=LocalContext.current
-    val scope=rememberCoroutineScope()
+    val scope=rememberMainThreadScope()
     return remember(context,scope){BdpmCatalogueUiState(BdpmCatalogue(context),scope)}
 }
 

@@ -26,8 +26,6 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kotlinx.coroutines.ensureActive
 import java.time.Instant
 import java.time.ZoneId
@@ -92,7 +90,7 @@ internal fun doseMarkColor(c: androidx.compose.material3.ColorScheme, accent: Ac
     LaunchedEffect(data,tapX) {
         tapValue=null
         tapX?.let { tx ->
-            val value=if(data.readAt!=null)withContext(Dispatchers.Default){data.readAt.invoke(tx){ensureActive()}} else null
+            val value=if(data.readAt!=null)computeOffMain{data.readAt.invoke(tx){ensureActive()}} else null
             value?.let{tapValue=tx to it}
         }
     }

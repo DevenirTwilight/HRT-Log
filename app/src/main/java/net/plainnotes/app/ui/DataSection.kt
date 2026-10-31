@@ -35,7 +35,7 @@ import java.time.LocalDate
         MedicalLibraryTransferDialog(model,onLibraryReopen) {medicalBackupOpen=false}
     }
     val context = LocalContext.current
-    val job by model.dataJob.collectAsStateWithLifecycle()
+    val job by model.dataJob.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
     var backupUri by remember { mutableStateOf<android.net.Uri?>(null) }
     var awaitingBackupPicker by remember { mutableStateOf(false) }
     val restore=remember { net.plainnotes.app.privacy.RestoreProtection() }
@@ -54,7 +54,7 @@ import java.time.LocalDate
             if(uri==null)model.cancelAutomaticImport() else model.openImport(uri,scope)
         }
     }
-    val state by model.state.collectAsStateWithLifecycle()
+    val state by model.state.collectAsStateWithLifecycle(context=kotlinx.coroutines.Dispatchers.Main.immediate)
     val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
         if(awaitingBackupPicker){awaitingBackupPicker=false;backupUri=uri} }
     val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->

@@ -82,7 +82,7 @@ private class TotalWithOutcome(val curve: E2Total.Curve?, val outcome: TotalE2Ca
     val built: TotalWithOutcome? = if (!needsAsync) remember(preview, result, e2NonSublingual) { build {} }
         else key(preview, result, e2NonSublingual, labs, wantCalibration, firstDoseH, calibrationRetry) {
             produceState<TotalWithOutcome?>(null) {
-                value = try { kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { build { ensureActive() } } }
+                value = try { computeOffMain { build { ensureActive() } } }
                 catch (cancelled: kotlinx.coroutines.CancellationException) { throw cancelled }
                 catch (_: Exception) { TotalWithOutcome(null, null, failed = true) }
             }.value
