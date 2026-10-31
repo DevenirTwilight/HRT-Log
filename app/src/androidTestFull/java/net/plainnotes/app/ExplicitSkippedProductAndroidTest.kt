@@ -45,16 +45,23 @@ class ExplicitSkippedProductAndroidTest {
         launch()
         val repo=model.libraryRuntime.currentRepository();val now=Instant.now();val zone=ZoneId.systemDefault()
         val today=now.atZone(zone).toLocalDate();val from=today.minusDays(4)
-        val id=runBlocking{repo.saveMedication(MedicationEntity(name="SYNTHETIC grouped skips",molecule="E2",route="ORAL",unit="MG",
+        val decidedAt=from.atTime(7,0).atZone(zone).toInstant()
+        // Prepare the unchanged five historical days as decisions made before their
+        // doses, atomically: a foreground read must not first materialize MISSED.
+        val (id,before)=runBlocking{repo.transaction {
+        val medication=repo.saveMedication(MedicationEntity(name="SYNTHETIC grouped skips",molecule="E2",route="ORAL",unit="MG",
             dose_per_intake=2.0,container_capacity=20.0,site_rotation=false,notifications_on=false,
             soon_alert_minutes=15,late_after_minutes=120,active=true,sort_order=0),null,RuleKind.EVERY_N_DAYS,1,
-            listOf(LocalTime.of(8,0),LocalTime.of(20,0)),emptySet(),from.minusDays(1).atStartOfDay(zone).toInstant())}
-        runBlocking{repo.addContainers(id,20.0,1,true)}
-        val before=runBlocking{repo.containers()}.filter{it.medication_id==id}
-        val slots=runBlocking{repo.calendar(now,zone,from)}.filter{it.slot.medicationId==id &&
+            listOf(LocalTime.of(8,0),LocalTime.of(20,0)),emptySet(),from.atStartOfDay(zone).toInstant())
+        repo.addContainers(medication,20.0,1,true)
+        val stock=repo.containers().filter{it.medication_id==medication}
+        val slots=repo.calendar(decidedAt,zone,from).filter{it.slot.medicationId==medication &&
             it.slot.at.atZone(zone).toLocalDate() in from..today}.map{it.slot}
         assertEquals(10,slots.size)
-        runBlocking{slots.forEach{repo.override(it,SlotOverride(it.key,skipped=true),now)};model.refresh().join()}
+        slots.forEach{repo.override(it,SlotOverride(it.key,skipped=true),decidedAt)}
+        medication to stock
+        }}
+        runBlocking{model.refresh().join()}
         ui.waitUntil(30_000){model.extra.value.records.count{it.medication_id==id && it.status=="SKIPPED"}==10}
         val rows=model.extra.value.records.filter{it.medication_id==id}.sortedBy{it.id}
         assertEquals(10,rows.size);assertTrue(rows.all{it.status=="SKIPPED" && it.taken_utc==null && it.actual_dose==null})

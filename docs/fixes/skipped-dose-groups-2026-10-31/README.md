@@ -6,6 +6,8 @@
 
 `before/`与`after/`是同一组合成数据在原NotesTheme中真实Compose窗口Canvas渲染（非ImageGen，非物理设备）：四语320dp/2倍字/浅色与411dp/普通字/深色。before仅换回082b1586原LongitudinalScreen，其他输入一致；8组新聚合断言在旧渲染器上全部预期失败。负责人真实截图没有入库。
 
-59项目标PASS、无skip，原XML/失败控制gzip及范围见acceptance.json；原生测试Kotlin编译PASS。API26/29/35实际MainActivity及最终准确HEAD必需CI仍待执行，不能用本地截图冒充原生通过。
+61项目标PASS、无skip，原XML/失败控制gzip及范围见acceptance.json；原生测试Kotlin编译PASS。API26/29/35实际MainActivity及最终准确HEAD必需CI仍待执行，不能用本地截图冒充原生通过。
 
 本分支包含已实际交付Build43的收据PR178；不隐瞒其API29真实失败，只有新HEAD全部门槛满足才能合入并将178关闭为已纳入。源版本44预留下一实际交付，未签名或替换现有43。PK173/174不混入本次修正。
+
+真实Room新增回归证实逐次撤销凭据导致旧候选无法聚合；显示key仅排除skip_original_slot_v1，原快照/每条撤销证据仍保留。原红XML及修复后61项XML见本目录。原生0c失败为历史夹具错误：先生成MISSED再override，被后端正确拒绝；改为同五天十次在合法提前时点原子准备，原保护/断言不变，原log保留。最终新HEAD原生验收仍待。

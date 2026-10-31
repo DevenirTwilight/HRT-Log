@@ -1,3 +1,9 @@
+## 连续跳过：真实记录分组修复及夹具根因 — 2026-10-31
+
+0c821221的PR41229046080/API29 job124619239801真实FAIL：夹具先以当前时钟生成过去MISSED，再override，被既有“Edit recorded history instead”保护正确拒绝。原完整log/gzip/SHA保留，非LMK/基础设施，不重跑同源碰绿。保持同五天十次、所有业务断言、原超时；改为原子公开API夹具在首日07提前明确跳过，首日00起效，防前台刷新先物化漏服。
+
+新增真实Room回归进一步实证发现生产显示key把逐次skip_original_slot_v1撤销凭据也当冻结药物身份，导致10条真实记录分成10个单例，0组。原红XML保留；仅显示key排除该已知可选逐次字段，保留所有其他冻结字段/阶段/规则/药物/时区，绝不写回快照或削弱撤销。修复后61项定向PASS、0skip、AndroidTest编译PASS（29秒）；原59全部断言保留，真实Room10条计数/原事实/库存/未知历史及1组断言PASS。新准确HEAD原生26/29/35和全部门槛仍须实际完成；未签名44、不借前源通过结果。
+
 ## 聚合真实重开用例冻结 — 2026-10-31
 
 新MainActivity五天十次合同在首次保存和新Activity重开后，均等待实际同medication的10条SKIPPED进入显示快照（仍原30s），再断言1摘要和原事实/库存不变；RuntimeReady不是初始读取完成。仅测试就绪条件，不改生产代码或断言。Kotlin原生编译5秒PASS；59项产品目标/8对before-after保持原通过字节，后续准确HEAD必需CI仍必跑。至此冻结功能和用例，不追加新功能，出现真正失败才处理。
@@ -10,7 +16,7 @@ PR178旧API29的RuntimeRequestUiAndroidTest在refresh.join后直接single读取�
 
 负责人指出每天2次连续5天会堆10行。新增纯显示TimelineSkippedGroups及Longitudinal摘要/展开：同阶段/药物/规则/冻结身份/原时区且相邻本地日期，2条起默认一条；次数/范围不宣称全部停药。原事件/ID/明细、治疗方案/时期/库存/浓度/备份完全保留，单次不聚合，筛选与简易模式不漏隐私，展开仍用原LazyColumn虚拟化。59项定向PASS、无skip；新原生夹具使用公开override(slot,...)，Kotlin编译PASS。真实渲染before/after8组合及旧渲染8个预期失败控制、初始截图辅助超时原件在docs/fixes/skipped-dose-groups-2026-10-31。
 
-新正式MainActivity合同：真实Repo10次提交→治疗时间线1摘要→展开/原详情→新Activity重开仍1摘要→原行和库存不变。旧真实日程跳过/撤销断言全保留，仅等待实际Skip开关出现再断言OFF（178曾即时找不到控件，唯一根因未证明）；178另有RuntimeRequestUiAndroidTest NoSuchElementException，未改断言/未重试当绿。原生26/29/35和最终新HEAD必需CI仍待，不宣称产品已验收。
+新正式MainActivity合同：真实Repo同一原子夹具保存10条明确跳过事实→治疗时间线1摘要→展开/原详情→新Activity重开仍1摘要→原行和库存不变。旧真实日程跳过/撤销断言全保留，仅等待实际Skip开关出现再断言OFF（178曾即时找不到控件，唯一根因未证明）；178另有RuntimeRequestUiAndroidTest NoSuchElementException，未改断言/未重试当绿。原生26/29/35和最终新HEAD必需CI仍待，不宣称产品已验收。
 
 基线082b，已无损纳入实际交付43的收据d15d0b64（PR178），其所有账本/说明保持。当前只预留源版本44，未签名/交付44；公开Release仍是已核验43。只有新PR所有门槛满足才正常保护合并，并将178关闭为已纳入，不假称独立合并。PK174仍Draft，无T候选混入；不触碰数据库/加密/配额/PK。
 

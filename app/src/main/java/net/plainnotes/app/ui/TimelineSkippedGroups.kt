@@ -5,6 +5,7 @@ import net.plainnotes.app.timeline.EventSource
 import net.plainnotes.app.timeline.PeriodEvent
 import java.time.LocalDate
 import java.time.ZoneId
+import org.json.JSONObject
 
 /** Display-only runs. Original events, facts and treatment boundaries are never rewritten. */
 internal data class TimelineSkippedGroup(val events:List<PeriodEvent>,val zone:ZoneId) {
@@ -15,6 +16,11 @@ internal data class TimelineSkippedGroup(val events:List<PeriodEvent>,val zone:Z
 
 internal object TimelineSkippedGroups {
     private data class Identity(val period:String,val medication:Long,val rule:Long,val snapshot:String,val zone:ZoneId)
+    // Undo evidence belongs to the individual slot, not the frozen medication identity.
+    // Remove only that known optional field from a display key; never rewrite the record.
+    private fun frozenIdentity(snapshot:String):String=runCatching {
+        JSONObject(snapshot).apply{remove("skip_original_slot_v1")}.toString()
+    }.getOrDefault(snapshot)
     fun build(events:List<PeriodEvent>):List<TimelineSkippedGroup> {
         val eligible=events.mapNotNull { e ->
             val r=(e.source as? EventSource.Intake)?.record ?: return@mapNotNull null
@@ -22,7 +28,7 @@ internal object TimelineSkippedGroups {
                 r.deleted_at_utc!=null || r.slot_key.isNullOrBlank() || r.rule_version_id==null || e.at==null ||
                 r.scheduled_utc!=e.at.toEpochMilli())return@mapNotNull null
             val zone=runCatching { ZoneId.of(r.scheduled_zone) }.getOrNull() ?: return@mapNotNull null
-            Identity(e.displayPeriodKey,r.medication_id,requireNotNull(r.rule_version_id),r.config_snapshot,zone) to e
+            Identity(e.displayPeriodKey,r.medication_id,requireNotNull(r.rule_version_id),frozenIdentity(r.config_snapshot),zone) to e
         }.groupBy({it.first},{it.second})
         return buildList {
             eligible.forEach { (identity,rows) ->
