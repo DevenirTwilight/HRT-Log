@@ -1,3 +1,10 @@
+## Build 42 已签名并私下交付 — 2026-10-31
+
+- **交付物**：`HRT-Log-build42-full-official.apk`，versionCode 42 / 0.2.0 / `net.plainnotes.app`，14,539,934 字节，SHA-256 `fe93a36d771e03e0cce7459b4e76f0f64a07c4daa5f6bd5d58632268ceca7c28`；原正式证书 `989ba045…79b1`，v2/v3 通过、单签名者；**取代 Build 41**。负责人 2026-10-31 “好了给apk”；只在会话内私下发给负责人，不入 Git/CI/公开 Release/tag。
+- **来源**：干净 `f112e109`（#167、#175 合并后的主线）+ 源码外 `version42.init.gradle`（仅 versionCode 41→42）；未签名包 SHA-256 `ea5ccc84…8d80`。内容：Build 41 + #167 线程修复（REQUIREMENTS §176，正式应用行为不变）。
+- **核验**（收据 `docs/delivery/build42-private-verification.json`）：签名前后 324 个业务条目逐字节一致；64 位原生库 ELF 与 ZIP 均 16KiB 对齐；无 INTERNET、非 debug；密钥临时副本已 shred。主线 `f112e109` 与 `fdabc4ce` 的 CI 在签名前已全部成功、无重跑。账本追加 42，源码默认 versionCode 同步 42。
+- 未做（NOT_RUN）：真机安装、人工 TalkBack、覆盖升级真实 APK 测试；不是公开 Beta。覆盖安装前先导出完整备份，不卸载、不清数据。
+
 ## Compose 间歇失败根因修复 PR — 2026-10-30（已合并 #167，主线 fdabc4ce）
 
 - 负责人“给我修”。根因已证明（REQUIREMENTS §176）：Compose 测试里界面协程在后台线程继续，测试拦截器在后台线程发 snapshot apply，导致重组/布局离开主线程。正式应用不受影响。
