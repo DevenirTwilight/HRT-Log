@@ -161,7 +161,9 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
     // Concentration (PK) page
     data class ConcState(val loading:Boolean=false,val result:ConcentrationResult?=null,val weight:Double?=null,val labs:List<LabValueEntity> = emptyList(),val doseTimes:List<Instant> = emptyList(),
         /** UI-12: the compatibility result for non-sublingual estradiol only (the other half of the E2 total); null without sublingual doses. */
-        val nonSublingual:ConcentrationResult? = null,val failed:Boolean=false)
+        val nonSublingual:ConcentrationResult? = null,val failed:Boolean=false,
+        /** Actual inputs from the same verified transaction; never reconstructed from mutable profiles. */
+        val recordsSnapshot:List<RecordEntity> = emptyList(), val ruleSnapshots:Map<Long,String> = emptyMap())
     val conc=MutableStateFlow(ConcState())
     private var concSettings=Pair(true,CalibrationMode.RETROSPECTIVE)
     fun concentrationSettings(calibrate:Boolean,mode:CalibrationMode){if(concSettings!=calibrate to mode){concSettings=calibrate to mode;loadConcentration()}}
@@ -187,7 +189,7 @@ data class EditMedication(val medication:MedicationEntity?,val profile:ProfileEn
             else ConcentrationCalculator.compute(x.medications,x.profiles,x.records,x.planned,emptyList(),weight,now,false,CalibrationMode.RETROSPECTIVE,snapshots,net.plainnotes.app.conc.HistoryRead(true,ConcentrationCalculator.hours(now)),checkCancelled={ensureActive()})
         } else null
         val doseTimes=net.plainnotes.app.ui.E2Calibration.actualDoseTimes(records,snapshots)
-        ensureActive();runtime.verify();runtime.checkRequest();conc.value=ConcState(false,result,weight,labs,doseTimes,nonSublingual)
+        ensureActive();runtime.verify();runtime.checkRequest();conc.value=ConcState(false,result,weight,labs,doseTimes,nonSublingual,recordsSnapshot=records,ruleSnapshots=snapshots)
     }catch(e:CancellationException){throw e}catch(e:Exception){conc.value=ConcState(failed=true);readFailure(e)} }.also{concJob=it} }
     // History, stock and well-being
     data class ExtraState(val records:List<RecordEntity> = emptyList(),val containers:List<ContainerEntity> = emptyList(),val items:List<CheckinItemEntity> = emptyList(),

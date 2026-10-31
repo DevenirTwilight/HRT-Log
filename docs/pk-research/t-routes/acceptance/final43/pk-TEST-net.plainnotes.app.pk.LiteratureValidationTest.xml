@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.LiteratureValidationTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:03:58.802Z" hostname="019d157e45d0" time="0.098">
+  <properties/>
+  <testcase name="numericallyStable()" classname="net.plainnotes.app.pk.LiteratureValidationTest" time="0.01"/>
+  <testcase name="oralMicronizedEstradiol()" classname="net.plainnotes.app.pk.LiteratureValidationTest" time="0.035"/>
+  <testcase name="cyproteroneAcetate()" classname="net.plainnotes.app.pk.LiteratureValidationTest" time="0.041"/>
+  <testcase name="oralEstradiolValerate()" classname="net.plainnotes.app.pk.LiteratureValidationTest" time="0.009"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

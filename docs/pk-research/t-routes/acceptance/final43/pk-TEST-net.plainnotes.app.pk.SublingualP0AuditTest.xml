@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.SublingualP0AuditTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:03:58.900Z" hostname="019d157e45d0" time="0.081">
+  <properties/>
+  <testcase name="causalFitsDoNotUseFutureLabsAtExactGridPoints()" classname="net.plainnotes.app.pk.SublingualP0AuditTest" time="0.001"/>
+  <testcase name="exactSingleDoseAndProductionInterpolationAreDifferent()" classname="net.plainnotes.app.pk.SublingualP0AuditTest" time="0.001"/>
+  <testcase name="fixedSublingualRateAndAmplitudeOnlyPriorBandAreStable()" classname="net.plainnotes.app.pk.SublingualP0AuditTest" time="0.001"/>
+  <testcase name="allWarningFallbackKeepsObservationWithoutClaimingExclusion()" classname="net.plainnotes.app.pk.SublingualP0AuditTest" time="0.0"/>
+  <testcase name="releasedParametersAndLiteratureAreIndependentInputs()" classname="net.plainnotes.app.pk.SublingualP0AuditTest" time="0.035"/>
+  <testcase name="repeatedDosesSuperposeAndRemainStableForLongHistories()" classname="net.plainnotes.app.pk.SublingualP0AuditTest" time="0.019"/>
+  <testcase name="generateActualKotlinPopulationAndCalibrationAuditOutputs()" classname="net.plainnotes.app.pk.SublingualP0AuditTest" time="0.018"/>
+  <testcase name="holdTimeTiersAreFlaggedAndUseUnvalidatedLinearScaling()" classname="net.plainnotes.app.pk.SublingualP0AuditTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

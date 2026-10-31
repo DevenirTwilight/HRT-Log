@@ -220,9 +220,10 @@ class ResearchGuard(unittest.TestCase):
         self.assertTrue(new)
         self.assertEqual([n for n in new if n.startswith(prefixes)], [])
         # SL-CAL-02 (REQUIREMENTS section 166) adds the total-E2 calibration engine under conc/. The archived classification cannot be edited
-        # (research_archive.verify_records), and current doctrine governs new product files by executable tests, so only that engine may be unclassified.
+        # (research_archive.verify_records). §179 additionally authorizes exactly two T files,
+        # protected by numeric convolution, historical identity and production navigation tests. No wildcard allowance.
         self.assertEqual(guard.unclassified(cls, json.loads((ROOT / 'docs/pk-research/p2/production-baseline.json').read_text())),
-                         ['app/src/main/java/net/plainnotes/app/conc/TotalE2Calibration.kt'])
+                         ['app/src/main/java/net/plainnotes/app/conc/TotalE2Calibration.kt', 'app/src/main/java/net/plainnotes/app/conc/formulations/TestosteroneHistory.kt', 'pk-engine/src/main/kotlin/net/plainnotes/app/pk/formulations/TestosteroneFormulations.kt'])
 
     def test_phase_matcher_rejects_production_ui_export_schema_and_workflow_paths(self):
         for bad in ('app/src/main/java/net/plainnotes/app/conc/ConcentrationCalculator.kt', 'pk-engine/src/main/kotlin/net/plainnotes/app/pk/LabFit.kt',

@@ -1,0 +1,149 @@
+{
+  "date": "2026-10-30",
+  "baseline": "84489514efe638099650353329abfa9a79f2d871",
+  "research_source_pr": 173,
+  "research_source_sha": "be60ba49728fd54ed32c01edbbc723dbea57488b",
+  "new_absolute_models": [],
+  "implementation_status": "RESEARCH_SHAPE_ONLY, not product-complete for all requested routes",
+  "observed": {
+    "pk_jvm": {
+      "tests": 131,
+      "failures": 0,
+      "skipped": 0
+    },
+    "target_app_jvm": {
+      "tests": 54,
+      "failures": 0,
+      "skipped": 0
+    },
+    "research_unittests": 23,
+    "production_kotlin_compile": "PASS",
+    "android_test_kotlin_compile": "PASS",
+    "native_api26": "PENDING",
+    "native_api29": "PENDING",
+    "native_api35": "PENDING",
+    "physical_device": "NOT_RUN",
+    "talkback_manual": "NOT_RUN",
+    "pk_jvm_final": {
+      "tests": 132,
+      "failures": 0,
+      "skipped": 0
+    },
+    "old_e2_ui_period_translations": {
+      "tests": 280,
+      "failures": 0,
+      "skipped": 0
+    },
+    "actual_encrypted_backup_roundtrip": {
+      "tests": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    "sl_cal_science_tests": {
+      "tests": 32,
+      "failures": 0,
+      "note": "Frozen archive assertions retained; exact two owner-authorized T source files appended to product-file allowlists, no wildcard."
+    },
+    "fixed_strength_adapter_and_four_language_ui": {
+      "tests": 36,
+      "failures": 0,
+      "skipped": 0
+    },
+    "retry_fix_and_adapter_ui_e2_calibration": {
+      "tests": 71,
+      "failures": 0,
+      "skipped": 0
+    },
+    "native_api29_reference_4d": {
+      "status": "T_CASES_PASS_PIPELINE_FAIL",
+      "source": "4d76421ea094c81346edd5e963d0e51a740d8f38",
+      "run": 41121721018,
+      "job": 124289464004,
+      "artifact": 13009840633,
+      "evidence": "native-api29-4d/",
+      "t_cases": 2,
+      "e2_cases": 2,
+      "total_ok": 4,
+      "t_previous_pid": 6125,
+      "t_new_pid": 6229,
+      "pipeline_failure": "Later unchanged MedicalAttachmentProductAndroidTest at line459: performMeasureAndLayout called during measure layout. Root cause not proven. Do not claim complete API29 gate PASS."
+    },
+    "native_api35_reference_4d": {
+      "status": "FAIL_T_NOT_RUN",
+      "run": 41121728985,
+      "job": 124289356347,
+      "failure": "adb instrument exit255 in existing second E2 process, emulator5554 TCP connection refused afterwards",
+      "root_cause": "ROOT_CAUSE_NOT_PROVEN",
+      "t_cases": "NOT_RUN",
+      "oom_lmk": "NOT_PROVEN"
+    },
+    "unsigned_release_reference_4d": {
+      "status": "BUILT",
+      "source": "4d76421ea094c81346edd5e963d0e51a740d8f38",
+      "sha256": "8c011b98789a0be4c83be701bda9746e2792a855b9a77a342ad5ee36f0399ec7",
+      "release_isolation": "PASS",
+      "manifest_no_internet": "PASS",
+      "not_latest_retry_fix": true,
+      "signed": false,
+      "delivered": false
+    }
+  },
+  "first_failure": {
+    "class": "TestosteroneHistoryTest",
+    "tests": 3,
+    "reason": "Robolectric accidentally starts NotesApplication; API29 dynamic receiver test-host permission absent before adapter assertions",
+    "fix": "Use android.app.Application host for pure JSON adapter test; no production permission added",
+    "raw_log": "/tmp/hrt-t-target-tests.log",
+    "xml_sha256": "5090164fa346aa6b8f414fba04904e1f4c9b0676f87a4185ce7276bf833d3000"
+  },
+  "source_files": {
+    "tools/pk-research/t_ichihara_2020_fit.py": "b722172d0bf51d2fe8be462b77d96ce56dbdfc46ebe9e8f485ef5c4ac5db8d8d",
+    "tools/pk-research/t_route_calibration_01.py": "1c41758221afd6621769cdc40f4f8659bc7fc1af0292bb86842187033f2fb498",
+    "pk-engine/src/main/kotlin/net/plainnotes/app/pk/formulations/TestosteroneFormulations.kt": "0d1b8bb10f339d6715871ee9c46dca93f82e5a4c0c98d8208e0b776fdd85139a"
+  },
+  "second_failure": {
+    "source_sha": "ef6a684fef528f2468a0ba3ef22b423fa3c9f484",
+    "class": "TestosteroneSnapshotBackupTest",
+    "reason": "Synthetic active medication omits required soon_alert_minutes and late_after_minutes; saveMedication refuses at NotesRepository.kt:614 before backup",
+    "fix": "Supply the same 15/120-minute required fields as the production editor; identical omission corrected in native fixture",
+    "production_rules_changed": false
+  },
+  "release_build_first_attempt": {
+    "status": "INTERRUPTED_NOT_BUILT",
+    "log": "/tmp/hrt-t-unsigned-release.log",
+    "observation": "Execution environment restarted; exec process handle disappeared, no APK output, Gradle daemon idle. No OOM kill recorded in cgroup memory.events. Do not call this PASS or a demonstrated product OOM. One bounded resume planned."
+  },
+  "retry_defect": {
+    "before_source": "4d76421ea094c81346edd5e963d0e51a740d8f38",
+    "before_tests": 16,
+    "before_failures": 16,
+    "assertion": "expected production retry count1, observed0",
+    "fix": "T retry invokes existing ViewModel read; same verified transaction publishes records/rule snapshots for T. No E2 numerical changes.",
+    "raw_xml": "failures/retry-callback-before.xml"
+  },
+  "thread_regression": {
+    "source_before": "908d526309fa414942f3959eb3876d143164a804",
+    "run": 41123635349,
+    "job": 124296722998,
+    "artifact": 13011930500,
+    "full_suite": {
+      "tests": 4364,
+      "failed": 2,
+      "skipped": 609
+    },
+    "failures": [
+      "MedicalHomeConfirmFlowTest.confirmThenUndoInDetail timeout at110; root cause not proven",
+      "UnifiedConcentrationUiTest.failedM2NeverMasqueradesAsEmptyHistoryAndOtherMedicinesRemainAvailable: UI applied on DefaultDispatcher-worker-6"
+    ],
+    "fix": "Scoped identical reuse from owner-approved PR167: OffMain helper, UnifiedConcentrationScreen and chart continuation; own E2/T producers resumeMain, AppShell collectors Main.immediate. No medical business edits, algorithms, input sizes, scientific thresholds or test timeouts changed.",
+    "helper_source": "ad642951dfeb15a3c07f5bba1974e59e53f8dda4",
+    "helper_sha256": "9b87aa5f562f85fd3f3c23bf12ad4634d11f538f86a83a240caacd46e8920583",
+    "target_after": {
+      "tests": 85,
+      "failures": 0,
+      "skipped": 0,
+      "native_kotlin_compile": "PASS"
+    },
+    "probe_first_timeout": "New probe polled only a plain Map, so Robolectric main looper was not drained. Added standard waitForIdle within the same10s bound, then passed; no production or business assertion loosened."
+  }
+}

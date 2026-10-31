@@ -1,0 +1,14 @@
+<resources>
+    <string name="t_formulation">Testosterone formulation</string>
+    <string name="t_shape_warning">Research shapes only — not serum testosterone predictions. Endogenous testosterone and hormonal feedback are unknown. Do not use these curves to change doses.</string>
+    <string name="t_actual_history">Only actual saved administrations with a frozen, explicit product and a known mass are included. No planned or missed doses are invented.</string>
+    <string name="t_record_only">Recording supported; reliable concentration estimation is not supported for this formulation.</string>
+    <string name="t_no_qualified">No qualified actual doses for this product. Select the formulation when recording future doses; the current selection does not rewrite older records.</string>
+    <string name="t_relative_title">Relative shape · research</string>
+    <string name="t_sensitivity">Parameter sensitivity scenarios (A / B / C), not confidence limits. None is a validated personal curve.</string>
+    <string name="t_normalized">Each scenario peaks at 1 within this window. Values cannot be compared across windows or formulations. No absolute concentration, baseline, or clinical accuracy is implied.</string>
+    <string name="t_history_counts">This product: %1$d usable doses · %2$d unsupported · %3$d missing facts or mass units (all testosterone records).</string>
+    <string name="t_evidence">Model and sources</string>
+    <string name="t_evidence_limits">Official labels constrain parts of these curves, not a complete individual profile. Absorption rates and component weights remain assumptions. Full parameters, failed fits and study limitations are recorded in the source repository. No independent clinical validation.</string>
+    <string name="t_formulation_history">Choose the exact product and route. Record compound mass, or mL only for the two labelled fixed-strength injections, never testosterone-equivalent mass. This choice applies to new records only; old unknown formulations stay unknown.</string>
+</resources>

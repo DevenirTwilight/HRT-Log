@@ -1847,3 +1847,28 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 - **核对**：`scripts/check_release_manifest.py`（无 INTERNET、应用身份与入口）与 `scripts/check_attachment_release_isolation.py`（发布包里没有测试/演示/POC 标记）对该 APK 通过；已签名文件同样通过隔离检查；说明里的宣传功能逐条对照源码，在此构建中都存在（离线无 INTERNET、提醒与库存、回收站、浓度曲线与校准、化验、身心状态、复诊与资料包、医疗文件库与阅读器、时间线、PDF/CSV 导出、应用锁与 SQLCipher、`.pnbak` 与 `.pnmedbk2`、伪装、四语）。隐私表述与 `PRIVACY.md` 一致（导出不加密；医疗文件加密保存；`.pnmedbk2` 与 `.pnbak` 是两种备份）。
 - **留档**：被替换前的文件哈希、旧 tag SHA 与回退办法见 `docs/releases/0.2.0-rebuild-2026-10-17-superseded.md`；新说明 `docs/releases/0.2.0-rebuild-2026-10-31.md`；同步了 `.github/release-assets.json`、README 的公开版本行、Build 42 收据。
 - **未做（NOT_RUN）**：真机 ARM 覆盖安装、人工读屏；不是公开 Beta；外部安全审查未做。
+
+## 179. E2/T 剂型曲线实施授权（2026-10-30）
+
+负责人授权扫描实际生产覆盖、继承 PR #173 可复现证据并将合格新剂型接入现有浓度页。绝对估算、研究性相对形状、仅记录必须分开；不把稀疏汇总拟合或同队列留出称独立验证，不推断内源性T、反馈或抗雄药的浓度下降。不同产品/酯/载体/途径不回退共用模型。研究每轮立即入库。继承现有E2/M2/TotalE2Calibration、冻结P2、快照/导出/数据库/备份/库存/附件，不改参数或旧计算结果。
+
+显示批准 `PD-2026-10-30-SEX-STEROID-SELECTOR`：允许在 ConcentrationScreen.kt 增加E2/T选择及T的明确研究性/仅记录状态；E2分支的原数值与校准接线不变。新T模型独立文件、只读实际历史快照，不复用E2校准、不显示无依据的绝对单位。药物编辑仅显式选择制剂身份并冻结到现有历史快照，不从品牌文字猜测、不替历史补填当前选择。没有足够证据的剂型继续仅记录，不能填造参数。授权源码/PR/正常保护合并，不授权签名或公开APK。
+
+### 179.A 同一完整读取快照与失败重读
+
+显示批准 `PD-2026-10-30-SEX-STEROID-READ-RETRY`（继承本轮负责人实际历史、数据变化重算、失败说明和安全生产接线授权）：ConcentrationScreen.kt仅为T传递现有生产重读回调与同一次Repository事务的records/ruleSnapshots，不改E2计算/资格/校准/导出。NotesViewModel只在已有runtime.verify/checkRequest成功后发布额外只读输入，不持久化；取消/失败/撤权时沿用原状态清空。旧E2数值、参数及历史输出不变。T失败按钮不得只重新渲染旧数据；必须发起现有合法的生产读取。
+
+### 179.B 复用已授权主线程恢复以解除实际验收失败
+
+908d5263完整CI出现旧统一浓度页CalledFromWrongThreadException：ApplyingContinuationInterceptor在DefaultDispatcher-worker触发重组。复用已获负责人“给我修”授权的#167（§176，源ad642951dfeb15a3c07f5bba1974e59e53f8dda4）OffMain.kt和浓度相关窄范围修正，不覆盖原分支，不扩大到医疗附件业务/数据库/模型参数。
+
+`PD-2026-10-30-PK-ASYNC-MAIN`：ConcentrationScreen.kt只将既有后台总量/校准计算改为computeOffMain（计算仍在Default，恢复强制Main）；T页同样使用它。UnifiedConcentrationScreen/ConcChart沿用#167原批准记录及逐字节相同修改；AppShell仅明确StateFlow界面收集的Main.immediate上下文。UI-08图表批准哈希只追加同一已批准线程修改，不放宽PDF/原资源断言。保持旧失败及新机制回归，不把医疗确认超时直接认定为同一根因；后者仍以专项及最终完整CI验收。此修复不提供任何新的绝对浓度或临床验证批准。
+
+
+## 2026-10-31 负责人授权：合并现有药代候选、正式 APK 与替换现有 Release
+
+负责人明确要求“合并，给apk，并替换现有release”。授权对现有#173研究/#174产品候选完成当前保护规则验收，沿用原正式证书签名full APK，交付并替换现有v0.2.0的附件/说明及与实际源码一致的tag；不新增签名身份、不覆盖用户数据。最高既有交付42，下一实际交付43（0.2.0，net.plainnotes.app），原证书989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1。签名须在精确源码必需CI/时期稳定性通过之后，原始失败保留，不绕过分支保护。
+
+#173的28个研究文件已在#174，除研究README扩展外逐字节相同；研究内容统一随#174受保护验收合入，届时可将#173关闭为已纳入，不能伪称其单独MERGED。#173原正常merge被当前规则以6项checks expected拒绝，记录而不绕过。T ANDROGEL50/ANDROTARDYL/NEBIDO仍为RESEARCH_SHAPE_ONLY、无血清浓度单位，其他产品RECORD_ONLY；不因发布而宣称已完成全部E2/T曲线或临床验证。公开说明延续§177不写内部构建号，机器账本保留versionCode和源码/文件/证书身份。
+
+若会话的Release写API仍受权限限制，沿§177已采用流程，允许一次性临时分支仅存公开签名APK、四附件、说明及有限发布工作流，完成旧状态预检、替换、tag与下载哈希核验后删除；私钥/密码不得进入该分支或CI。

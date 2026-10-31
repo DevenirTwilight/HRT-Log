@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.BaselineEligibilityTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:03:57.584Z" hostname="019d157e45d0" time="0.127">
+  <properties/>
+  <testcase name="explicitConfirmationIsTheOnlyBaselineSourceAndUnknownIdsDoNothing()" classname="net.plainnotes.app.pk.BaselineEligibilityTest" time="0.095"/>
+  <testcase name="earlyObservationIsNotAutomaticallyBaselineOrFitInput()" classname="net.plainnotes.app.pk.BaselineEligibilityTest" time="0.007"/>
+  <testcase name="nonE2EventDoesNotDefineTreatmentStart()" classname="net.plainnotes.app.pk.BaselineEligibilityTest" time="0.002"/>
+  <testcase name="explicitBaselineCannotLeakBeforeItIsSampledInCausalBands()" classname="net.plainnotes.app.pk.BaselineEligibilityTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

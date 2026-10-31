@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.data.TestosteroneSnapshotBackupTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:04:19.732Z" hostname="019d157e45d0" time="4.691">
+  <properties/>
+  <testcase name="productSelectionAndActualFrozenMassSurviveEncryptedBackupWithoutRewritingOldUnknowns" classname="net.plainnotes.app.data.TestosteroneSnapshotBackupTest" time="4.425"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

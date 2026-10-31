@@ -1,0 +1,246 @@
+{
+  "tests": [
+    {
+      "name": "net.plainnotes.app.ui12.MainThreadResumeTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.MedicalHomeConfirmFlowTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.conc.TestosteroneHistoryTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.Ui08PdfSummaryUnchangedTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodStabilityTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.RecordedReferenceUiTest",
+      "tests": "12",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.ui12.TestosteroneConcentrationUiTest",
+      "tests": "48",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "count": 74,
+  "command_log": "Local Gradle target completed BUILD SUCCESSFUL in4m18s; pk:test was up-to-date and is not counted here. PK rerun/backup/E2 regressions are next.",
+  "protocol_guard": "PASS, original archive hashes preserved; no deviations",
+  "delivery": "Not signed/published. Current exact-head CI and native gates remain required.",
+  "additional_actual_runs": [
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.LiteratureValidationTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.experimental.ResearchDisplayProtocolTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.LabDispositionTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest",
+      "tests": "14",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest",
+      "tests": "12",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.experimental.StudyAnchorsTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.experimental.ResearchShapeComparisonV01Test",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.experimental.PreparedResearchHistoryTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.experimental.UnifiedComparisonPerformanceTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.SublingualP1ATest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.BaselineEligibilityTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.CausalEvaluationTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.experimental.ResearchSublingualV01Test",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.SublingualP0AuditTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.EngineTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.formulations.TestosteroneFormulationsTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "pk",
+      "name": "net.plainnotes.app.pk.LabFitTest",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "data",
+      "name": "net.plainnotes.app.data.TestosteroneSnapshotBackupTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "e2",
+      "name": "net.plainnotes.app.ui12.E2CalibrationTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "e2",
+      "name": "net.plainnotes.app.conc.TotalE2CalibrationParityTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "module": "e2",
+      "name": "net.plainnotes.app.conc.TotalE2CalibrationTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "additional_count": 155,
+  "overall_count": 229,
+  "android_test_kotlin": "PASS"
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" tests="48" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:02:52.623Z" hostname="019d157e45d0" time="26.583">
+  <properties/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[en/320dp/2x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.657"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[en/320dp/2x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.977"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[en/320dp/2x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.731"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[en/320dp/2x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.66"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[en/320dp/2x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.808"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[en/320dp/2x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.709"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[en/411dp/1x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.398"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[en/411dp/1x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.595"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[en/411dp/1x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.487"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[en/411dp/1x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.407"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[en/411dp/1x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.508"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[en/411dp/1x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.464"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[zh-rCN/320dp/2x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.697"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[zh-rCN/320dp/2x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.707"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[zh-rCN/320dp/2x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.62"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[zh-rCN/320dp/2x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.578"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[zh-rCN/320dp/2x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.72"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[zh-rCN/320dp/2x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.589"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[zh-rCN/411dp/1x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.334"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[zh-rCN/411dp/1x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.477"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[zh-rCN/411dp/1x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.4"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[zh-rCN/411dp/1x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.345"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[zh-rCN/411dp/1x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.455"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[zh-rCN/411dp/1x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.428"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[zh-rTW/320dp/2x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.573"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[zh-rTW/320dp/2x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.656"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[zh-rTW/320dp/2x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.627"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[zh-rTW/320dp/2x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.591"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[zh-rTW/320dp/2x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.633"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[zh-rTW/320dp/2x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.683"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[zh-rTW/411dp/1x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.354"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[zh-rTW/411dp/1x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.419"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[zh-rTW/411dp/1x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.413"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[zh-rTW/411dp/1x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.373"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[zh-rTW/411dp/1x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.503"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[zh-rTW/411dp/1x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.427"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[fr/320dp/2x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.804"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[fr/320dp/2x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.757"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[fr/320dp/2x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.617"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[fr/320dp/2x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.576"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[fr/320dp/2x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.631"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[fr/320dp/2x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.6"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[fr/411dp/1x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.355"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[fr/411dp/1x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.447"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[fr/411dp/1x/dark=false]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.454"/>
+  <testcase name="failedInputRetryReturnsToTheProductionReadInsteadOfSpinningLocally[fr/411dp/1x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.404"/>
+  <testcase name="distinctPumpProductStaysRecordOnlyAndDoesNotBorrowSachetParameters[fr/411dp/1x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.443"/>
+  <testcase name="actualConcentrationSelectorShowsRelativeTAndReturnsWithoutReusingE2Calibration[fr/411dp/1x/dark=true]" classname="net.plainnotes.app.ui12.TestosteroneConcentrationUiTest" time="0.413"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.conc.TotalE2CalibrationParityTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:04:10.638Z" hostname="019d157e45d0" time="4.353">
+  <properties/>
+  <testcase name="constantsEqualTheReferenceAndProduction" classname="net.plainnotes.app.conc.TotalE2CalibrationParityTest" time="3.83"/>
+  <testcase name="everySyntheticCaseGivesTheReferencesNumbersAndDecision" classname="net.plainnotes.app.conc.TotalE2CalibrationParityTest" time="0.169"/>
+  <testcase name="theEligibilityRulesAreTheReferencesRules" classname="net.plainnotes.app.conc.TotalE2CalibrationParityTest" time="0.054"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

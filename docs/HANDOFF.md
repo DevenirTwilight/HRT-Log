@@ -1,3 +1,15 @@
+## #174 Build43 候选冻结 — 2026-10-31
+
+同步主线后的实际定向测试229项全部PASS、零skip（App74 + E2旧校准22 + PK132强制实际重跑 + SQLCipher实际加密备份恢复1），AndroidTest Kotlin编译PASS、check_protocol原冻结哈希守卫PASS。原XML及收据docs/pk-research/t-routes/acceptance/final43。旧65的Android失败是MedicalHome撤销等待line110；device失败最后为Demo fullScriptedFlow期间ADB offline、console拒连，不能仅凭故障注入日志的Process crashed定性为新App LMK。原全job gzip会附于PR证据。
+
+此候选含已合并#177跳过修复/就诊与只读资料测试同步，不改E2/M2参数、数据库schema、库存、附件或备份格式。版本43及签名/替换Release授权已记录，现有公开四文件和tag状态已仓库外备份并按GitHub digest逐一核对。还未签名、交付或替换；必须等待准确HEAD全部必需/原生检查，保护合并后从干净主线构建，再正式签名与下载复核。#173全部研究28文件已在此PR（README只是追加索引），通过后关闭为已纳入，不伪称单独合并。
+
+## 药代候选合并与正式交付授权 — 2026-10-31
+
+最新负责人要求合并、签名给APK并替换现有Release；已记REQUIREMENTS末节。复用#174（feature/sex-steroid-production-models-20261030），把已通过#177的主线082b1586无损合入，保留双方需求/交接全文、显示审批记录和原字节守卫；版本43（最高既有42）。#173研究28文件均在#174（仅README为新增索引），单独正常merge遭当前6 checks expected拒绝，未绕过；统一随174验收，可后续关闭173为已纳入。174旧65有Android/device失败及取消记录，不借其它绿色替代；准确新HEAD仍须全部门槛和API26/29/35真实产品验收。
+
+研究T相对曲线边界不变，非可靠血清浓度预测；尚未签名/交付/更改Release/tag。下一步目标测试→推原PR→最终CI→保护合并→精确主线fullRelease→原证书签名/核验→备份旧Release状态及四附件→替换并下载核对→交付账本/最终回执。签名私有凭据须仓库外临时恢复并清理。
+
 ## PR #177 最终就诊回归同步收口 — 2026-10-31
 
 f35881d1的PR真实MainActivity跳过/时间线/新Activity历史撤销，在API26/29/35原XML均PASS（无skip），原件gzip和artifact SHA见docs/fixes/explicit-skip-2026-10-31/f358-final-ci-evidence.json。push完整4334项仅MedicalHomeConfirmFlowTest line108找不到撤销控件失败，609原条件skip；同原测试本地17秒PASS，保留原HTML及全job gzip，不能声称唯一CI调度根因已证明。只加强旧测试：等待相同ID的已确认显示快照、主循环idle、无error；卡片滚动可见，点击后确认离开列表再找详情撤销；仍10秒，原COMMIT/日期不变/确认撤销/数据库结果断言全保留，不改就诊生产业务。最终局部医疗首页/资料只读/主循环测试全部PASS，原XML附后。保存回执会被AppShell消费，不把瞬时saved值当稳定就绪条件。
@@ -70,6 +82,44 @@ f35881d1的PR真实MainActivity跳过/时间线/新Activity历史撤销，在API
 - PR #167 首次 CI：API29 为模拟器掉线（两个校准用例已通过，之后 `adb: device offline`，INFRA）；API26 全屏阅读器用例在 Activity 销毁时仍 SlotTable 越界 → 第二轮：所有 StateFlow 收集改在主线程，设备产品测试加 `OffMainApplyRecorder`（REQUIREMENTS §176 第二轮）。
 - 已合并：最后一轮 CI 全绿（`android` 4315 测试 0 失败；中途两次基础设施故障——API29/35 模拟器掉线、一次 Gradle 打包卡死 6 小时被取消——各重跑一次通过，PR 评论有记录）。
 - 待做：设备测试（attachment-poc 26/29）是否不再出现同类故障，看接下来几次 CI；若 `OffMainApplyRecorder` 报出线程，按其中的线程名与主线程位置继续修。
+
+## PK 候选真实失败与窄范围调度修复 — 2026-10-30
+
+#174的908d5263：API26/29/35原生完整设备/兼容作业已通过，Science及四API安全也通过，但综合Android push失败于旧MedicalHome确认对话框等待和UnifiedConcentrationUiTest的Default-worker触碰View异常；不得借其它绿色当全通过。完整原始HTML已入acceptance/failures，后者堆栈明确ApplyingContinuationInterceptor在DefaultDispatcher-worker-6提交视图；前者根因仍未独立证明。
+
+复用负责人已授权§176/#167的窄范围原代码（源ad642951）：OffMain.kt、UnifiedConcentrationScreen/ConcChart后台返回主线程，E2/T生产页同用computeOffMain，AppShell显式Main.immediate收集状态。未覆盖#167分支，不复制其其它医疗业务修改，不改变数值/参数/历史/数据库/权限/断言/数据规模/超时。追加§179.B及显示批准，UI08仅追加同一已批准图表线程哈希，PDF/资源校验保留。新机制probe首轮只轮询Map未驱动Robolectric主Looper而超时，加入既有waitForIdle同步、仍10s限，单项通过；全组85项0失败0skip及AndroidTest Kotlin编译PASS（/tmp/hrt-pk-main-final-target.log）。
+
+下一步只验收此修复准确HEAD的必需CI，保留Draft直到全部满足。不要盲目重跑908d；新源码变化才触发新CI。已有908d unsigned包及三API结果只作为明确版本参考，不冒充新HEAD验证；不签名、不交付、不宣称临床验证或全部剂型绝对模型已完成。
+
+## T 正式失败重读修复及真实原生证据 — 2026-10-30
+
+#174新增定向用例先真实复现：T失败按钮的生产重读回调16/16项未触发（原始expected1/actual0 XML已入库），现T调用原有onRetryCalculation；NotesViewModel在原有runtime.verify/checkRequest后发布同一事务内records/ruleSnapshots，AppShell只把该原子快照交给T，避免独立extra刷新旧数据。原有E2数值/资格/系数/导出不变，新增只读字段不持久化，失败和撤权按原ConcState清空。适配4+四语UI48+E2适配/校准19=71项及AndroidTest Kotlin编译PASS；显示批准§179.A追加链，不改旧记录。数值标注采用页面语言的Locale。
+
+4d76421e的API29已实际执行MainActivity T两项（首次保存/真实第二PID重开）和旧E2两项，4项原始OK/receipt在acceptance/native-api29-4d；整个作业随后失败于未改医疗附件用例line459的Compose performMeasureAndLayout，根因仍未证明，不能写整项API29 PASS。API35 PR作业在旧E2第二进程adb exit255且随后emulator5554 TCP拒绝，T尚未执行；不能断言应用OOM或LMK。完整run/job见acceptance/local-results.json。先保留Draft，不改附件代码或删断言。
+
+4d76421e unsigned fullRelease确已构建（有界恢复后4m36s），隔离及NoINTERNET检查PASS，SHA256 8c011b98789a0be4c83be701bda9746e2792a855b9a77a342ad5ee36f0399ec7；它不含随后失败重读修复，不作为最终交付。最终修复源码仍须精确HEAD CI/原生与新unsigned构建，不签名、不交付、不冒称真机或全部剂型完成。
+
+## T 固定制剂体积换算与验收冻结 — 2026-10-30
+
+#174追加实际官方取证：ANDROTARDYL68178899为250mg/1mL、NEBIDO69033757为1000mg/4mL；已下载当前生产页并保存HTTP200/字节数/SHA256/剂型强度/载体元数据，不再分发整页。只有这两个明确产品可按250mg酯/mL计算，仍按TE/TU分子量转换成T质量；泛用环戊丙酸酯/泵/凝胶mL不猜。原记录的1mL不会改写成180mg。精确制剂名称含强度与IM，四语编辑提示同步。PK132项及新适配器4+四语UI32=36项PASS，0skip。其余旧E2/备份/科学证据见前条。尚不增加任何绝对T浓度承诺。
+
+unsigned Release首轮因执行环境重启中断：exec会话句柄消失、Gradle daemon空闲、APK未生成；cgroup无OOM kill记录，不能认作移动端OOM或成功构建。计划以冻结源码有界恢复一次。最终准确源码的GitHub原生/必需检查未全完成，#174继续Draft；不签名、不虚报真机或完成全剂型。
+
+## E2/T 候选实际回归检查点 — 2026-10-30
+
+PR #174（仍Draft）：生产入口/三T相对场景/明确仅记录状态均已实装；不是所有新绝对浓度模型完成。最终局部PK132项、四语/适配/旧E2校准54项、旧E2 UI+时期稳定性+翻译280项、历史上下文4项、真实保存+加密备份恢复1项、SL-CAL科学/冻结守卫32项均PASS。新增独立数值卷积测试也PASS。不改E2/冻结M2/Room/备份协议。第二次新备份夹具失败是active药物未填生产必需提醒窗口，已补15/120值并通过；native同样补齐，未放宽Repository断言。两次原始XML在t-routes/acceptance/failures。最终API26/29/35真实MainActivity+进程重启结果与必需CI仍待查询，不用Kotlin编译代替native。签名/真机/人工TalkBack未做。详见production-integration.md；未具备新绝对T曲线的充分外部证据，不能宣称全剂型交付。
+
+## E2/T 曲线生产接线候选 — 2026-10-30（未完成全部剂型）
+
+基线84489514；本分支feature/sex-steroid-production-models-20261030。复用#173 be60ba49证据与程序，不改E2引擎、M2、TotalE2Calibration、旧快照、导出、Room或备份格式。真实浓度页增加E2/T；药物编辑显式选择T产品，现有medication.route保存命名空间制剂/途径码，历史快照冻结它，旧未知T不靠当前配置补造。新T三个产品ANDROGEL50/ANDROTARDYL/NEBIDO只显示相对敏感性形状，无绝对单位/内源性基线/临床验证，不复用E2校准；另8种T产品明确仅记录。E2其它缺失剂型及#169/#171同域工作未冒称完成。
+
+实际验证：生产编译PASS；pk-engine现有+新内核131项PASS（新增第8项独立数值卷积仍待再跑）；适配器3+四语/小屏/大字/明暗UI32+E2适配/校准19=54项PASS，0skip。适配器首轮3项因Robolectric误起NotesApplication的receiver权限异常失败，改纯Application测试宿主后通过，原始XML哈希见acceptance/local-results.json；未改变生产权限。#173 Python研究23项PASS，Ichihara精确脚本复现训练0.06136/同队列留出2.82537ng/mL，不能称独立验证。旧E2 UI/时期稳定性/翻译、真实保存+加密备份恢复及冻结科研守卫正在执行。新增MainActivity两进程T历史/曲线测试接现有API26/29/35 runner，尚无native PASS；本机无KVM/连接设备。真机和人工TalkBack NOT_RUN，未签名或交付APK。
+
+下一步：读取/tmp/hrt-t-compat-tests.log与/tmp/hrt-t-science-compat.log；执行独立卷积数值回归；最终精确HEAD必需CI与真实原生结果；只修真实失败、不把所有新绝对曲线宣布完成。真实覆盖表及参数/来源/失败/回退边界：docs/pk-research/t-routes/production-integration.md。没有新的绝对T产品模型获得临床验证；部分接线不等于全任务完成。
+
+## E2/T 剂型接手 — 2026-10-30
+
+实时主线 84489514efe638099650353329abfa9a79f2d871；#173研究Draft be60ba49；#169–172同域开放，保留其成果，不覆盖。新分支 feature/sex-steroid-production-models-20261030。现有生产Curve无T，编辑器对非E2不保存途径，不能用当前药名猜历史产品。先把证据等级和真实历史接入统一浓度页；稀疏摘要不升级绝对曲线，TE同队列拟合也不冒充独立验证。最新任务记录§179，旧E2/校准/冻结研究/数据库/签名不变。代码及原生验收尚未完成，不能声明产品完成。
 
 ## Build 41 已签名并私下交付 — 2026-10-30
 

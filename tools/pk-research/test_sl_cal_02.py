@@ -40,10 +40,10 @@ class SlCal02Tests(unittest.TestCase):
 
     def test_the_engine_is_the_only_file_outside_the_archived_classification_and_the_archive_stays_untouched(self):
         # The archived guard classification is immutable (research_archive.verify_records), so the engine is NOT registered there;
-        # it is an ordinary product file protected by the parity and rule tests. Nothing else may appear unclassified.
+        # parity/rule tests protect it. §179 adds exactly the two independently tested T files below; no archived entry or wildcard is changed.
         cls = guard.classification()
         baseline = json.loads((ROOT / 'docs/pk-research/p2/production-baseline.json').read_text())
-        self.assertEqual(guard.unclassified(cls, baseline), [ENGINE])
+        self.assertEqual(guard.unclassified(cls, baseline), ['app/src/main/java/net/plainnotes/app/conc/TotalE2Calibration.kt', 'app/src/main/java/net/plainnotes/app/conc/formulations/TestosteroneHistory.kt', 'pk-engine/src/main/kotlin/net/plainnotes/app/pk/formulations/TestosteroneFormulations.kt'])
         self.assertNotIn(ENGINE, cls['live_lock_additional'])
         import research_archive
         self.assertGreater(research_archive.verify_records(), 0)

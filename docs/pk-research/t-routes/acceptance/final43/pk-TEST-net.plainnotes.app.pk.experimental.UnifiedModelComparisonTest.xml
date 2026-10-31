@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:04:06.871Z" hostname="019d157e45d0" time="0.393">
+  <properties/>
+  <testcase name="commonCalibrationAtOneHourAndBeforeDoseHasExactlyOneBackground()" classname="net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest" time="0.043"/>
+  <testcase name="repeatedDosesSuperposeIncrementNotBackground()" classname="net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest" time="0.09"/>
+  <testcase name="all32M1CandidatesMatchIndependentPythonReferenceAndLockedInputs()" classname="net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest" time="0.009"/>
+  <testcase name="invalidCalibrationTimeAndVersionFailClosed()" classname="net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest" time="0.08"/>
+  <testcase name="aucAddsBackgroundOnceAndUnitConversionIsSharedForAllCurves()" classname="net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest" time="0.049"/>
+  <testcase name="priceScenarioIgnoresPersonalHistoryAndSharesOneStudyAnchor()" classname="net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest" time="0.047"/>
+  <testcase name="legacyShapeUsesUnchangedProductionEngineOnIdenticalInputs()" classname="net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest" time="0.033"/>
+  <testcase name="exactReadoutMatchesAllGridSamplesAndFractionalTimeKernels()" classname="net.plainnotes.app.pk.experimental.UnifiedModelComparisonTest" time="0.037"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

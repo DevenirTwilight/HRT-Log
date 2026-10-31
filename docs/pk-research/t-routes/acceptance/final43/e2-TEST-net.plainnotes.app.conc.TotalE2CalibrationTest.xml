@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.conc.TotalE2CalibrationTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:04:14.999Z" hostname="019d157e45d0" time="0.011">
+  <properties/>
+  <testcase name="theBackgroundIsCountedOnceAndNeverScaled" classname="net.plainnotes.app.conc.TotalE2CalibrationTest" time="0.004"/>
+  <testcase name="aLabFarAboveTheCurveRaisesTheWholeCurveAndNothingCapsIt" classname="net.plainnotes.app.conc.TotalE2CalibrationTest" time="0.002"/>
+  <testcase name="leaveOneOutNeedsAtLeastTwoLabs" classname="net.plainnotes.app.conc.TotalE2CalibrationTest" time="0.0"/>
+  <testcase name="everyRejectedLabSaysWhyAndNothingIsFitted" classname="net.plainnotes.app.conc.TotalE2CalibrationTest" time="0.0"/>
+  <testcase name="onlyLowPointLabsGiveTooLittleInformationAndAreRefusedWithTheCurveLeftAlone" classname="net.plainnotes.app.conc.TotalE2CalibrationTest" time="0.002"/>
+  <testcase name="aLabNearTheDoseIsDownweightedNotRejected" classname="net.plainnotes.app.conc.TotalE2CalibrationTest" time="0.0"/>
+  <testcase name="curvesThatCannotDescribeTheLabsRefuseInsteadOfFitting" classname="net.plainnotes.app.conc.TotalE2CalibrationTest" time="0.0"/>
+  <testcase name="theFitDoesNotDependOnTheOrderOfTheLabs" classname="net.plainnotes.app.conc.TotalE2CalibrationTest" time="0.0"/>
+  <testcase name="theTierComesFromTheInformationGainOnly" classname="net.plainnotes.app.conc.TotalE2CalibrationTest" time="0.001"/>
+  <testcase name="noLabsMeansNoCalibration" classname="net.plainnotes.app.conc.TotalE2CalibrationTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.ui12.E2CalibrationTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:04:15.013Z" hostname="019d157e45d0" time="2.005">
+  <properties/>
+  <testcase name="eachLabIsJudgedByTheRulesAndNoneIsHidden" classname="net.plainnotes.app.ui12.E2CalibrationTest" time="0.462"/>
+  <testcase name="calibratedTotalIsBackgroundPlusFactorTimesTheTwoPartsAboveBackground" classname="net.plainnotes.app.ui12.E2CalibrationTest" time="0.266"/>
+  <testcase name="aRefusedCalibrationLeavesTheCurveUncalibrated" classname="net.plainnotes.app.ui12.E2CalibrationTest" time="0.166"/>
+  <testcase name="hoursSinceTheLastSublingualDoseComeFromTheRecordedDoses" classname="net.plainnotes.app.ui12.E2CalibrationTest" time="0.199"/>
+  <testcase name="aDateOnlyLabIsNeverTreatedAsHavingAClockTime" classname="net.plainnotes.app.ui12.E2CalibrationTest" time="0.156"/>
+  <testcase name="noE2LabMeansNoOutcomeAtAll" classname="net.plainnotes.app.ui12.E2CalibrationTest" time="0.184"/>
+  <testcase name="aFactorOfOneChangesNothingAndLabsNeverTouchTheM2Values" classname="net.plainnotes.app.ui12.E2CalibrationTest" time="0.222"/>
+  <testcase name="earliestExposureAndLastDoseDoNotDependOnListOrdering" classname="net.plainnotes.app.ui12.E2CalibrationTest" time="0.191"/>
+  <testcase name="panelMembershipAndSupportedUnitsDoNotHideE2ButUnknownUnitsRemainInTheReport" classname="net.plainnotes.app.ui12.E2CalibrationTest" time="0.154"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

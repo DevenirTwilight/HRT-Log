@@ -1,0 +1,14 @@
+<resources>
+    <string name="t_formulation">Formulation de testostérone</string>
+    <string name="t_shape_warning">Formes relatives de recherche uniquement, pas une prédiction de testostérone sérique. Production endogène et rétroaction hormonale inconnues. Ne pas ajuster les doses selon ces courbes.</string>
+    <string name="t_actual_history">Seules les prises réelles avec produit explicite figé et masse connue sont incluses. Aucune prise prévue, omise ou future inventée.</string>
+    <string name="t_record_only">Enregistrement possible ; aucune estimation fiable de concentration pour cette formulation.</string>
+    <string name="t_no_qualified">Aucune prise admissible pour ce produit. Choisir la formulation pour les nouvelles prises ne modifie pas les anciens enregistrements.</string>
+    <string name="t_relative_title">Forme relative · recherche</string>
+    <string name="t_sensitivity">Scénarios de sensibilité A / B / C, pas des intervalles de confiance. Aucune courbe personnelle validée.</string>
+    <string name="t_normalized">Le maximum de chaque scénario vaut 1 dans cette fenêtre. Comparaison impossible entre fenêtres ou formulations. Aucune concentration absolue, valeur basale ou exactitude clinique établie.</string>
+    <string name="t_history_counts">Ce produit : %1$d prises utilisables · %2$d non prises en charge · %3$d faits ou unités de masse manquants (toutes les prises de testostérone).</string>
+    <string name="t_evidence">Modèle et sources</string>
+    <string name="t_evidence_limits">Les notices ne contraignent que certains indicateurs, pas un profil individuel complet. Vitesses et poids restent des hypothèses. Paramètres, échecs et limites sont archivés dans le dépôt source. Aucune validation clinique indépendante.</string>
+    <string name="t_formulation_history">Choisir le produit et la voie exacts. Masse du composé, ou mL uniquement pour les deux injections de concentration explicite ; jamais une masse équivalente de testostérone. Ce choix ne réécrit pas les anciennes formulations inconnues.</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.CausalEvaluationTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:03:57.733Z" hostname="019d157e45d0" time="0.053">
+  <properties/>
+  <testcase name="deterministicSameTimeAndDiagnosticCannotUseSameTimeOrFuture()" classname="net.plainnotes.app.pk.CausalEvaluationTest" time="0.008"/>
+  <testcase name="futureForecastStopsAtSessionAvailabilityRetrospectiveCanUseLater()" classname="net.plainnotes.app.pk.CausalEvaluationTest" time="0.004"/>
+  <testcase name="independentFixedSlAmplitudeAndRandomQuantileOracle()" classname="net.plainnotes.app.pk.CausalEvaluationTest" time="0.003"/>
+  <testcase name="allDrawCountsRespectFutureNoninterferenceAndInclusiveBoundary()" classname="net.plainnotes.app.pk.CausalEvaluationTest" time="0.009"/>
+  <testcase name="mixedRouteRetainsNonSlRateAndSlFixedPopulationGolden()" classname="net.plainnotes.app.pk.CausalEvaluationTest" time="0.01"/>
+  <testcase name="cancellationDuringMonteCarloAndNoLabPriorUnchanged()" classname="net.plainnotes.app.pk.CausalEvaluationTest" time="0.003"/>
+  <testcase name="exactGridValuesAllBandsAgreeWithSegmentCurves()" classname="net.plainnotes.app.pk.CausalEvaluationTest" time="0.006"/>
+  <testcase name="emptySinglePointOutOfRangeAndCancelledInputs()" classname="net.plainnotes.app.pk.CausalEvaluationTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

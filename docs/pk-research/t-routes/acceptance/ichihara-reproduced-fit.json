@@ -1,0 +1,83 @@
+{
+  "source": "https://journals.sagepub.com/doi/full/10.1089/andro.2020.0002",
+  "source_table": "Ichihara et al 2020 Table 2 group mean and SD (N=10), IM enanthate 250mg",
+  "sampling_days": [
+    0,
+    1,
+    2,
+    3,
+    7,
+    14,
+    21,
+    28
+  ],
+  "mean_total_testosterone_ng_ml": [
+    0.75,
+    27.99,
+    21.69,
+    23.33,
+    14.48,
+    5.81,
+    2.72,
+    1.33
+  ],
+  "sd_ng_ml": [
+    0.5,
+    17.5,
+    9.6,
+    15.8,
+    4.7,
+    2.4,
+    1.6,
+    0.8
+  ],
+  "train_days": [
+    1,
+    3,
+    7,
+    14,
+    28
+  ],
+  "within_cohort_holdout_days": [
+    2,
+    21
+  ],
+  "fixed_group_mean_baseline_ng_ml": 0.75,
+  "assumed_depot_half_life_days": 4.5,
+  "assumed_parent_T_IV_half_life_hours": 1,
+  "simple_single_input": {
+    "gain": 3635.0521823419094,
+    "predictions_ng_ml": [
+      0.75,
+      29.87267657947233,
+      25.715240998175553,
+      22.151302626162938,
+      12.307342663184384,
+      4.681779081162503,
+      2.087581414135184,
+      1.205041853193565
+    ],
+    "train_rmse_ng_ml": 1.4793738868425772,
+    "within_cohort_holdout_rmse_ng_ml": 2.8811905838681136
+  },
+  "two_input": {
+    "transit_input_rate_day": 0.2236,
+    "slow_mass_weight": 0.7874,
+    "gain": 4012.9405039862518,
+    "predictions_ng_ml": [
+      0.75,
+      28.016685576653497,
+      25.673627610907364,
+      23.258865362039614,
+      14.566388444435047,
+      5.750893134100358,
+      2.409857661145617,
+      1.2842203407081725
+    ],
+    "train_rmse_ng_ml": 0.06135897465301354,
+    "within_cohort_holdout_rmse_ng_ml": 2.825374064857038
+  },
+  "warning": "Research fit to 5 group means, held-out 2 times from SAME cohort. Individual and independent cohort validity NOT established.",
+  "research_only": true,
+  "external_validation": false
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.LabDispositionTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:03:57.858Z" hostname="019d157e45d0" time="0.095">
+  <properties/>
+  <testcase name="futureStateCannotChangePastAndSamplingEqualityWorks()" classname="net.plainnotes.app.pk.LabDispositionTest" time="0.005"/>
+  <testcase name="residualThresholdHasStrictEqualityAndFiniteLogFloor()" classname="net.plainnotes.app.pk.LabDispositionTest" time="0.001"/>
+  <testcase name="dosesRepeatedHistorySamplesAndCancellationStayStable()" classname="net.plainnotes.app.pk.LabDispositionTest" time="0.029"/>
+  <testcase name="partialRemovalMatchesActualSubsetMapCovarianceAndEveryQuantile()" classname="net.plainnotes.app.pk.LabDispositionTest" time="0.003"/>
+  <testcase name="actualOutputsAndImmutablePopulationReport()" classname="net.plainnotes.app.pk.LabDispositionTest" time="0.038"/>
+  <testcase name="independentPureSlLogAmplitudeAndFixedSeedOracle()" classname="net.plainnotes.app.pk.LabDispositionTest" time="0.002"/>
+  <testcase name="invalidValuesBaselineAndDuplicateIdsHaveSeparateReasons()" classname="net.plainnotes.app.pk.LabDispositionTest" time="0.002"/>
+  <testcase name="noWarningAndNoCandidatesPreservePopulationPrior()" classname="net.plainnotes.app.pk.LabDispositionTest" time="0.001"/>
+  <testcase name="singleAndAllWarningsAreKeptNeverExcluded()" classname="net.plainnotes.app.pk.LabDispositionTest" time="0.001"/>
+  <testcase name="diagnosticLeavesOutSelfAndAllSameTimeAndReportsActualDisposition()" classname="net.plainnotes.app.pk.LabDispositionTest" time="0.006"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
