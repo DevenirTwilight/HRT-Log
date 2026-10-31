@@ -87,7 +87,7 @@
   "manual_talkback": "NOT_RUN",
   "hardware_power_loss": "NOT_RUN",
   "external_security_review": "NOT_REVIEWED_EXTERNALLY",
-  "public_release": "NOT_AUTHORIZED",
+  "public_release": "2026-10-31: the same APK replaced the public Release v0.2.0 on the owner's instruction (REQUIREMENTS §177); asset sha256 fe93a36d... verified by re-download",
   "owner_authorization": "2026-10-31: \"好了给apk\" (Build 42, private delivery)",
   "mainline_ci": {
     "note": "Main's own CI on f112e109 (and on the #167 merge fdabc4ce) completed with every required check SUCCESS and no reruns before signing.",
