@@ -1,3 +1,45 @@
+## PR #179 最小隔离修复本地验证通过 — 2026-10-31
+
+Room实际10条无边界→1组；新增第四天中午第二方案→7+3且原事实不变，与原生失败结构吻合。ExplicitSkipBackupTest 2项、TimelineSkippedGroupsTest 10项共12 PASS/0FAIL/0SKIP，AndroidTest编译PASS，Gradle2分23秒；原XML与本地收据native-isolation-fix/。初次旧增量编译FAIL保留，:core:ui:clean禁用增量后无生产源码变更通过。两个MainActivity用例均进入既有独立合成安装执行方式，每个API确实运行两条、原断言和超时保留。接下来只运行新准确HEAD必需CI，当前原生仍PENDING、Draft，不发布/签名、不合并研究PR。上一检查点的“本地进行中”仅历史。
+
+## PR #179 接手：7/10 原生失败为共享方案历史，隔离原生场景 — 2026-10-31
+
+27e826bb 仍 Draft，真实三API失败未改写成功。API29原XML证实先跑单次跳过/撤销（保留从前一天开始的方案），再跑五天十次；数据库确有10条SKIPPED，但真实治疗阶段边界把摘要分开，原semantics为7 doses、Oct27–Oct30。保留完整log/XML/hash至docs/fixes/skipped-dose-groups-2026-10-31/native-failure-27e826bb。新增Room反例验证第二方案造成7+3；两原生用例用既有emulator reset分别运行，严格每例1条无skip XML核验，不改生产分组/Repository/时期/库存/浓度/撤销或超时。新准确HEAD CI待运行，本地目标测试与AndroidTest编译进行中；初次本地编译core:ui旧增量产物报已存在符号不可见，原log保留，清理该模块并禁用增量复验中，不能声称PASS。
+
+#178全部交付账本、收据、README及Release机器清单与d15d0b64逐字节核对一致；本候选只把源码version floor保留为44。须#179真正合并后才关闭#178为已纳入。没有新的APK签名/发布授权，不签名或替换Release。#174与Issue117未扩大处理。
+
+## 连续跳过：真实记录分组修复及夹具根因 — 2026-10-31
+
+0c821221的PR41229046080/API29 job124619239801真实FAIL：夹具先以当前时钟生成过去MISSED，再override，被既有“Edit recorded history instead”保护正确拒绝。原完整log/gzip/SHA保留，非LMK/基础设施，不重跑同源碰绿。保持同五天十次、所有业务断言、原超时；改为原子公开API夹具在首日07提前明确跳过，首日00起效，防前台刷新先物化漏服。
+
+新增真实Room回归进一步实证发现生产显示key把逐次skip_original_slot_v1撤销凭据也当冻结药物身份，导致10条真实记录分成10个单例，0组。原红XML保留；仅显示key排除该已知可选逐次字段，保留所有其他冻结字段/阶段/规则/药物/时区，绝不写回快照或削弱撤销。修复后61项定向PASS、0skip、AndroidTest编译PASS（29秒）；原59全部断言保留，真实Room10条计数/原事实/库存/未知历史及1组断言PASS。新准确HEAD原生26/29/35和全部门槛仍须实际完成；未签名44、不借前源通过结果。
+
+## 聚合真实重开用例冻结 — 2026-10-31
+
+新MainActivity五天十次合同在首次保存和新Activity重开后，均等待实际同medication的10条SKIPPED进入显示快照（仍原30s），再断言1摘要和原事实/库存不变；RuntimeReady不是初始读取完成。仅测试就绪条件，不改生产代码或断言。Kotlin原生编译5秒PASS；59项产品目标/8对before-after保持原通过字节，后续准确HEAD必需CI仍必跑。至此冻结功能和用例，不追加新功能，出现真正失败才处理。
+
+## 聚合候选原生同步收口 — 2026-10-31
+
+PR178旧API29的RuntimeRequestUiAndroidTest在refresh.join后直接single读取显示快照，曾NoSuchElement。源码refresh可被shell新刷新取消，join取消Job并不等于相同目标已发布；现仅在原20s内等同ID/expectednote，再执行原全部断言。另一个缺Skip控件的原断言保留并等待真实控件。完整原job gzip及SHA加入聚合证据；不声称唯一故障根因已证明，不改任何生产Runtime/锁/恢复语义。第一聚合候选288f本地59PASS，刚启动的远端检查不能作为后续新HEAD验收；新HEAD必须重新满足全部门槛，无重复同SHA绿色重跑。
+
+## 跳过列表密度修正候选 — 2026-10-31
+
+负责人指出每天2次连续5天会堆10行。新增纯显示TimelineSkippedGroups及Longitudinal摘要/展开：同阶段/药物/规则/冻结身份/原时区且相邻本地日期，2条起默认一条；次数/范围不宣称全部停药。原事件/ID/明细、治疗方案/时期/库存/浓度/备份完全保留，单次不聚合，筛选与简易模式不漏隐私，展开仍用原LazyColumn虚拟化。59项定向PASS、无skip；新原生夹具使用公开override(slot,...)，Kotlin编译PASS。真实渲染before/after8组合及旧渲染8个预期失败控制、初始截图辅助超时原件在docs/fixes/skipped-dose-groups-2026-10-31。
+
+新正式MainActivity合同：真实Repo同一原子夹具保存10条明确跳过事实→治疗时间线1摘要→展开/原详情→新Activity重开仍1摘要→原行和库存不变。旧真实日程跳过/撤销断言全保留，仅等待实际Skip开关出现再断言OFF（178曾即时找不到控件，唯一根因未证明）；178另有RuntimeRequestUiAndroidTest NoSuchElementException，未改断言/未重试当绿。原生26/29/35和最终新HEAD必需CI仍待，不宣称产品已验收。
+
+基线082b，已无损纳入实际交付43的收据d15d0b64（PR178），其所有账本/说明保持。当前只预留源版本44，未签名/交付44；公开Release仍是已核验43。只有新PR所有门槛满足才正常保护合并，并将178关闭为已纳入，不假称独立合并。PK174仍Draft，无T候选混入；不触碰数据库/加密/配额/PK。
+
+## Build43 / #177 已正式交付及替换公开 Release — 2026-10-31
+
+负责人要求先交付177，已从合并主线082b1586干净源码完成full Universal正式签名APK（不含#174）；只用仓库外finalizeDsl init将42→43。主线Android41201313857、Science41201313911、安全41201313953全PASS；#177原生26/29/35及最终必需检查通过。初次init setter被app DSL覆盖为42，实际APK核验在签名前拒绝，最终正确43后才签署。
+
+正式APK14548126 bytes，SHA256 186538ac24783d4e6bd2ca852fbf577f6f05cb416ea62269f493bb1282d0228c；原证书989ba045…79b1、包名net.plainnotes.app、无INTERNET、非debug、4ABI、64位ELF16KiB、zipalign16KiB、Release隔离及来源082b/clean/git均PASS。私有备份仍Private，密钥/密码仓库外临时恢复，用完清理。
+
+发布run41219506988成功，保留既有v0.2.0标题/下载文件名，替换4附件/说明并将tag移到082b；从公开Release重新下载全部4件逐字节哈希/证书/实际version43验证通过。临时发布分支已自动删除（404已核对）。用户下载 https://github.com/DevenirTwilight/HRT-Log/releases/download/v0.2.0/plainnotes-0.2.0-full.apk ，已在会话给出。前一tag/资产哈希回退记录docs/releases/0.2.0-before-skip-2026-10-31.json；完整收据docs/delivery/build43-release-verification.json；真机/人工TalkBack NOT_RUN，不能冒称已安装验收。
+
+PK #174候选8ba4586f已推、229定向PASS、当前仍Draft/未合并，按负责人优先指令停止了本地PK自动合并/构建脚本（未取消有效远端CI），没有混入本包。其源码版本43只是旧候选号，后续实际交付须至少44。#17328研究文件完整在174，不能绕过6项expected保护强行合并。此PR只补实际交付账本/源码版本floor/Release机器清单及收据，不改任何PK、医疗、库存、数据库或安全语义。
+
 ## PR #177 最终就诊回归同步收口 — 2026-10-31
 
 f35881d1的PR真实MainActivity跳过/时间线/新Activity历史撤销，在API26/29/35原XML均PASS（无skip），原件gzip和artifact SHA见docs/fixes/explicit-skip-2026-10-31/f358-final-ci-evidence.json。push完整4334项仅MedicalHomeConfirmFlowTest line108找不到撤销控件失败，609原条件skip；同原测试本地17秒PASS，保留原HTML及全job gzip，不能声称唯一CI调度根因已证明。只加强旧测试：等待相同ID的已确认显示快照、主循环idle、无error；卡片滚动可见，点击后确认离开列表再找详情撤销；仍10秒，原COMMIT/日期不变/确认撤销/数据库结果断言全保留，不改就诊生产业务。最终局部医疗首页/资料只读/主循环测试全部PASS，原XML附后。保存回执会被AppShell消费，不把瞬时saved值当稳定就绪条件。

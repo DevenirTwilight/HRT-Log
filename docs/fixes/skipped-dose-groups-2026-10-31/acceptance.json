@@ -1,0 +1,97 @@
+{
+  "tests": [
+    {
+      "name": "net.plainnotes.app.ExplicitSkipBackupTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.TimelineSkippedGroupsTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.TimelineSkippedGroupUiTest",
+      "tests": "16",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.ExplicitSkipTimelineUiTest",
+      "tests": "12",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.ImportedHistoryTimelineTest",
+      "tests": "12",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodTimelineTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.Ui08PdfSummaryUnchangedTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.Lab04ProjectionUnchangedTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "total_pass": 61,
+  "android_test_kotlin": "PASS",
+  "baseline": "082b1586 original LongitudinalScreen; same synthetic fixture and NotesTheme, actual Canvas-rendered views.8/8 grouped-summary assertions fail as expected. Original XML retained, no business assertions removed.",
+  "screen_configs": [
+    "four languages:320dp/font2/light",
+    "four languages:411dp/font1/dark"
+  ],
+  "capture": "Existing repository window Canvas technique; initial captureToImage helper timed out (documented existing Robolectric limit), raw XML preserved. Not physical-device screenshots.",
+  "native_fixture": "New real MainActivity test seeds10 confirmed skips with public repo.override(slot,...), checks summary, original detail, new Activity and unchanged rows/stock. Original calendar/undo assertions retained; wait for actual skip switch before asserting OFF.",
+  "native_previous_failure": "Receipt PR178 API29 recorded missing Skip control at immediate assertion and RuntimeRequestUiAndroidTest NoSuchElementException. Not rerun or labeled infrastructure; unique roots NOT_PROVEN. Final new HEAD full gates still required.",
+  "no_changes": [
+    "raw records",
+    "period projection source",
+    "therapy standards",
+    "PK/stock/reminders",
+    "Room/schema",
+    "backup format",
+    "network permission"
+  ],
+  "physical_device": "NOT_RUN",
+  "manual_talkback": "NOT_RUN",
+  "native_wait_correction": {
+    "original_job": 124591996334,
+    "original_log_sha256": "aa27646710d80a7830d3aa56c333f207f636195ec2db9edee8ccd40be0aa1b44",
+    "failure": "RuntimeRequestUiAndroidTest NoSuchElementException; original file unchanged before this correction. A joined refresh may have been cancelled by shell refresh; unique CI root NOT_PROVEN.",
+    "minimal_correction": "Wait in existing20s bound for exact same ID and expected saved note before original single/assertEquals. All old stale-owner/restore/current-owner/medication-equality assertions remain. No production lifecycle/authority changes. Native compile and final new-head execution required."
+  },
+  "native_fixture_failure": {
+    "run": 41229046080,
+    "job": 124619239801,
+    "head": "0c8212217022b9c74653ffb14ff0439fc76e9fc5",
+    "status": "FAIL",
+    "root_cause": "Fixture called calendar at actual now before overriding past slots, legitimately materializing MISSED; public override rejected historical rewrite: Edit recorded history instead. Production guard retained.",
+    "log_sha256": "c9a2ef04e61baf7a74fc14be4050c93a8c007f748299015858fef87f6f79db29",
+    "correction": "Same five days/ten records prepared atomically as explicit decisions at first-day07 before08, effective start first-day00. No DAO injection, reduced sample, relaxed guard or timeout. New exact-head native execution required."
+  },
+  "real_record_regression": "PASS: actual public APIs/Room prepared five days/ten decisions. Prior production group key included per-slot skip_original_slot_v1 evidence and returned0 groups; original red XML retained. Display key now removes only this known optional undo field. Rows, originals, metadata, guards and evidence remain unchanged."
+}

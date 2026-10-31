@@ -30,6 +30,9 @@ class RuntimeRequestUiAndroidTest {
         runBlocking {repository.saveAppointment(target.copy(note="SYNTHETIC old displayed fact"))}
         lateinit var old:NotesViewModel;lateinit var refresh:Job
         ui.runOnUiThread {old=activity.model;refresh=old.refresh()};runBlocking {refresh.join()}
+        // A later shell refresh may cancel this Job. Joining a cancelled read
+        // is not proof that the displayed snapshot already contains the target.
+        ui.waitUntil(20000) {old.state.value.appointments.any {it.id==id && it.note=="SYNTHETIC old displayed fact"}}
         assertEquals("SYNTHETIC old displayed fact",old.state.value.appointments.single {it.id==id}.note)
         val doseBefore=runBlocking {repository.medications()}.map {it.dose_per_intake}
         runBlocking {repository.restoreBackup(archive,"SYNTHETIC ordinary backup".toCharArray())};archive.fill(0)

@@ -1,0 +1,32 @@
+{
+  "tests": [
+    {
+      "name": "net.plainnotes.app.ExplicitSkipBackupTest",
+      "tests": "2",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-31T20:45:29.323Z",
+      "hostname": "a9c3e6c5bc13",
+      "time": "4.939"
+    },
+    {
+      "name": "net.plainnotes.app.TimelineSkippedGroupsTest",
+      "tests": "10",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-10-31T20:45:34.268Z",
+      "hostname": "a9c3e6c5bc13",
+      "time": "0.012"
+    }
+  ],
+  "total_pass": 12,
+  "failures": 0,
+  "skipped": 0,
+  "android_test_kotlin": "PASS",
+  "gradle": "BUILD SUCCESSFUL in 2m 23s",
+  "native_api26_29_35": "PENDING",
+  "production_code_changes_this_fix": false,
+  "initial_local_compile": "FAIL: stale incremental core/ui output; existing symbols resolved after core:ui:clean, no source workaround"
+}

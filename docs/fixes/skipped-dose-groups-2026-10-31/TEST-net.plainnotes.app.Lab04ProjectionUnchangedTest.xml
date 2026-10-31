@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.Lab04ProjectionUnchangedTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-31T18:12:08.454Z" hostname="019d157e45d0" time="0.021">
+  <properties/>
+  <testcase name="projectionOutputIsTheSameAsBefore" classname="net.plainnotes.app.Lab04ProjectionUnchangedTest" time="0.009"/>
+  <testcase name="projectionSourcesAreTheBaseBytes" classname="net.plainnotes.app.Lab04ProjectionUnchangedTest" time="0.008"/>
+  <testcase name="skipApprovalStillRejectsAnyOtherProjectionEdit" classname="net.plainnotes.app.Lab04ProjectionUnchangedTest" time="0.002"/>
+  <system-out><![CDATA[LAB04_PROJECTION
+P|period-v2:UTC:clinical-v2:1767225600000:standard-v2:1:1767225600000:1|2026-01-01T00:00:00Z|null
+E|lab:30|LAB|2026-01-31T00:00:00Z|2026-01-31|period-v2:UTC:clinical-v2:1767225600000:standard-v2:1:1767225600000:1|[1]|false|Lab(value=LabValueEntity(id=30, analyte_code=E2, value=10.0, unit=IU/L, sampled_utc=1769817600000, sampled_zone=UTC, reference_lower=1.0, reference_upper=5.0, reference_unit=IU/L, laboratory=Synthetic Lab B, note=null, panel_id=null))
+E|lab:31|LAB|2026-01-31T00:00:00Z|2026-01-31|period-v2:UTC:clinical-v2:1767225600000:standard-v2:1:1767225600000:1|[1]|false|Lab(value=LabValueEntity(id=31, analyte_code=T, value=10.0, unit=IU/L, sampled_utc=1769817600000, sampled_zone=UTC, reference_lower=1.0, reference_upper=5.0, reference_unit=IU/L, laboratory=Synthetic Lab B, note=null, panel_id=null))
+E|lab:32|LAB|2026-01-31T00:00:00Z|2026-01-31|period-v2:UTC:clinical-v2:1767225600000:standard-v2:1:1767225600000:1|[1]|false|Lab(value=LabValueEntity(id=32, analyte_code=LH, value=10.0, unit=IU/L, sampled_utc=1769817600000, sampled_zone=UTC, reference_lower=1.0, reference_upper=5.0, reference_unit=IU/L, laboratory=Synthetic Lab C, note=null, panel_id=null))
+E|lab:20|LAB|2026-01-26T00:00:00Z|2026-01-26|period-v2:UTC:clinical-v2:1767225600000:standard-v2:1:1767225600000:1|[1]|false|Lab(value=LabValueEntity(id=20, analyte_code=PRL, value=10.0, unit=IU/L, sampled_utc=1769385600000, sampled_zone=UTC, reference_lower=1.0, reference_upper=5.0, reference_unit=IU/L, laboratory=null, note=null, panel_id=null))
+E|lab:1|LAB|2026-01-21T00:00:00Z|2026-01-21|period-v2:UTC:clinical-v2:1767225600000:standard-v2:1:1767225600000:1|[1]|false|Lab(value=LabValueEntity(id=1, analyte_code=FSH, value=10.0, unit=IU/L, sampled_utc=1768953600000, sampled_zone=UTC, reference_lower=1.0, reference_upper=5.0, reference_unit=IU/L, laboratory=Synthetic Lab A, note=null, panel_id=1))
+E|lab:2|LAB|2026-01-21T00:00:00Z|2026-01-21|period-v2:UTC:clinical-v2:1767225600000:standard-v2:1:1767225600000:1|[1]|false|Lab(value=LabValueEntity(id=2, analyte_code=LH, value=10.0, unit=IU/L, sampled_utc=1768953600000, sampled_zone=UTC, reference_lower=1.0, reference_upper=5.0, reference_unit=IU/L, laboratory=Synthetic Lab A, note=null, panel_id=1))
+E|lab:3|LAB|2026-01-21T00:00:00Z|2026-01-21|period-v2:UTC:clinical-v2:1767225600000:standard-v2:1:1767225600000:1|[1]|false|Lab(value=LabValueEntity(id=3, analyte_code=E2, value=10.0, unit=IU/L, sampled_utc=1768953600000, sampled_zone=UTC, reference_lower=1.0, reference_upper=5.0, reference_unit=IU/L, laboratory=Synthetic Lab A, note=null, panel_id=1))
+E|lab:4|LAB|2026-01-21T00:00:00Z|2026-01-21|period-v2:UTC:clinical-v2:1767225600000:standard-v2:1:1767225600000:1|[1]|false|Lab(value=LabValueEntity(id=4, analyte_code=T, value=10.0, unit=IU/L, sampled_utc=1768953600000, sampled_zone=UTC, reference_lower=1.0, reference_upper=5.0, reference_unit=IU/L, laboratory=Synthetic Lab A, note=null, panel_id=1))
+E|lab:5|LAB|2026-01-21T00:00:00Z|2026-01-21|period-v2:UTC:clinical-v2:1767225600000:standard-v2:1:1767225600000:1|[1]|false|Lab(value=LabValueEntity(id=5, analyte_code=ALT, value=10.0, unit=IU/L, sampled_utc=1768953600000, sampled_zone=UTC, reference_lower=1.0, reference_upper=5.0, reference_unit=IU/L, laboratory=Synthetic Lab A, note=null, panel_id=1))
+E|lab:6|LAB|2026-01-21T00:00:00Z|2026-01-21|period-v2:UTC:clinical-v2:1767225600000:standard-v2:1:1767225600000:1|[1]|false|Lab(value=LabValueEntity(id=6, analyte_code=AST, value=10.0, unit=IU/L, sampled_utc=1768953600000, sampled_zone=UTC, reference_lower=1.0, reference_upper=5.0, reference_unit=IU/L, laboratory=Synthetic Lab A, note=null, panel_id=1))
+U|lab:40|LAB|2026-07-20T00:00:00Z|2026-07-20|null|[]|false|Lab(value=LabValueEntity(id=40, analyte_code=FSH, value=10.0, unit=IU/L, sampled_utc=1784505600000, sampled_zone=UTC, reference_lower=1.0, reference_upper=5.0, reference_unit=IU/L, laboratory=null, note=null, panel_id=null))
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

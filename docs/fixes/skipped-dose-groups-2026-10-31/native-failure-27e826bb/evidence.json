@@ -1,0 +1,12 @@
+{
+  "source": "27e826bb52bc7d4787639971bf4c1611167bb718",
+  "run": 41231369289,
+  "job": 124626200356,
+  "artifact": 13054362236,
+  "artifact_sha256": "f3dcf262a1ac08611ec5e67d59ad63cf94fe6a5c229ba85d347598c9bef5e842",
+  "files": {
+    "api29-job.log.gz": "98ff3232df9b3db13d8e41dbd21e0ea7817b4fbd65e686f938fd26b284361571",
+    "api29.xml.gz": "5b1cfae6cd8d7a4ea675799b1a915fba3b901304f9cb410e45f7863a87249362"
+  },
+  "api29_job_uncompressed_bytes": 338979
+}

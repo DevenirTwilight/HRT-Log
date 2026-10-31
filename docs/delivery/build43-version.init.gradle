@@ -1,0 +1,7 @@
+allprojects { p ->
+    p.plugins.withId('com.android.application') {
+        p.extensions.getByName('androidComponents').finalizeDsl { extension ->
+            extension.defaultConfig.versionCode = 43
+        }
+    }
+}
