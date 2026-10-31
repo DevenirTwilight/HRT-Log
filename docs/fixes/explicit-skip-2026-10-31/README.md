@@ -21,3 +21,9 @@
 ## 已保存的改时/剂量覆盖丢失：实际生产缺陷
 
 四语真实OverrideDialog明确复现4/4：已有rescheduled/zone/dose=3.0的覆盖，在点击跳过后提交成全部null（原件saved-override-loss-before-fix.xml）。这会改变用户此前已经确认的计划槽位，不能只修时间线而掩盖。生产Dialogs.kt现在仅在skip=true时沿用initial已保存覆盖；隐藏的未保存表单草稿不作为新剂量提交；普通改时/改量、取消、重置及Repository原安全撤销均保持。修复后12项四语UI全PASS，App直接目标合计61项、core原撤销33项。原生MainActivity先准备已保存改时/3.0剂量，然后真实菜单跳过、COMMIT和历史撤销，严格断言原有效时间/剂量保持、无实际服药/库存变化，仍须准确HEAD的三API实际执行。
+
+## 综合CI唯一失败：旧LAB-04字节锁
+
+74c13371的PR Android run41187766886/job124498127656中4333项仅projectionSourcesAreTheBaseBytes失败，原LAB输出金标通过，609为已有条件跳过；完整原job日志gzip及原始hash在ci-original-failures.json。修正不更换BASE_DIGEST或BASE_SOURCES任何原值：新增精确授权记录，先锁本次全部源码SHA、只逆转四个明确skip差异，再逐字节验证原LAB04源码哈希；另一个原投影文件仍要求原字节。新增负向测试证明任意其它化验表达式/源码追加仍被拒绝。3项锁/金标及12投影+5时期共20项PASS；直接App目标共64，core33，总97项。生产文件均与74相同，新准确HEAD的完整CI仍必需。
+
+74同源原生API29、35已真实执行skip/重开/撤销，通过且无skip，原XMLgzip附于此；API26尚在执行时写此检查点，不冒称三API全部完成。API27 PR安全首次userdata磁盘4718MB不足7372MB导致设备未启动；完整原日志保留，仅该失败job一次重验已PASS，不是App/LMK修复。最终状态以PR #177准确HEAD的checks/最终验收评论为准，历史失败不删除。

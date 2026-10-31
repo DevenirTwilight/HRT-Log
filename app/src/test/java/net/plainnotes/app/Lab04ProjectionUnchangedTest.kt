@@ -41,8 +41,36 @@ class Lab04ProjectionUnchangedTest {
         assertEquals(BASE_DIGEST, sha(out))
     }
 
+    // PR177 authorizes exactly the explicit APP skip delta, not any LAB-04 projection change.
+    // Pin the complete approved source, undo only its four exact edits, then retain BOTH old base hashes.
+    private fun originalBytes(path:String,source:String):String {
+        val digest=BASE_SOURCES.getValue(path)
+        if(sha(source)==digest)return source
+        val approval=org.json.JSONObject(File("src/test/resources/explicit-skip-projection-approval.json").readText())
+        assertEquals("Only the owner-authorized skip source may differ",approval.getString("path"),path)
+        assertEquals("Original LAB-04 hash is never replaced",digest,approval.getString("baseSha256"))
+        assertEquals("Exact authorized source; any further edit needs its own review",approval.getString("approvedSha256"),sha(source))
+        var original=source
+        val edits=approval.getJSONArray("exactChanges")
+        assertEquals("Only the four explicit-skip edits",4,edits.length())
+        for(i in 0 until edits.length()) {
+            val edit=edits.getJSONObject(i);val after=edit.getString("approved")
+            assertEquals("One exact approved edit",1,Regex(Regex.escape(after)).findAll(original).count())
+            original=original.replace(after,edit.getString("base"))
+        }
+        return original
+    }
     @Test fun projectionSourcesAreTheBaseBytes() {
-        for ((path, digest) in BASE_SOURCES) assertEquals(path, digest, sha(File(path).readText()))
+        for ((path, digest) in BASE_SOURCES) assertEquals(path, digest, sha(originalBytes(path,File(path).readText())))
+    }
+    @Test fun skipApprovalStillRejectsAnyOtherProjectionEdit() {
+        val path="src/main/java/net/plainnotes/app/timeline/PeriodTimeline.kt"
+        val source=File(path).readText()
+        for(changed in listOf(source.replace("it.sampled_utc","it.id"),source+"\n// unrelated edit\n")) {
+            var rejected=false
+            try { originalBytes(path,changed) } catch(_:AssertionError){rejected=true}
+            org.junit.Assert.assertTrue("The old LAB-04 source boundary must remain strict",rejected)
+        }
     }
 
     companion object {

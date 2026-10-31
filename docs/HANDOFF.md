@@ -1,3 +1,9 @@
+## PR #177 综合CI字节锁收口 — 2026-10-31
+
+74c13371完整PR Android4333项仅LAB04 projectionSourcesAreTheBaseBytes失败（609原条件skip），旧化验输出金标通过。保留全部BASE_DIGEST/BASE_SOURCES原值；对用户已授权的四处SKIP投影差异建立完整SHA+精确逆转证明，逆转后继续比对原字节；新增任意其它化验/源码改动拒绝测试。3项原锁/金标/负向+投影12+时期5共20项PASS；直接App64+core33合计97项PASS。生产代码与74完全相同，仅守卫/审批证据及文档变化；新准确HEAD必需CI仍需完成。
+
+74原生API29、35真实MainActivity跳过/阶段归属/保存覆盖/新Activity历史/撤销均PASS，原XMLgzip见docs/fixes/explicit-skip-2026-10-31；API26尚PENDING，不能先称全通过。PR API27安全首次设备userdata磁盘不足、instrumentation未开始，原完整log压缩入库；仅该失败job一次重验PASS。原始失败/前后证据与原SHA均保留；不签名、交付或发行。最终远端精确SHA的结果与合并状态以PR #177 checks和最后验收评论为准，不把这些历史检查点当永久结论。
+
 ## PR #177 实证修复：跳过不能清空已保存覆盖 — 2026-10-31
 
 新四语真实OverrideDialog测试复现4/4生产缺陷：已保存rescheduled/zone/dose=3.0，切skip后onSave却全部null。Dialogs.kt最小修正：skip时保留initial已有覆盖，不提交隐藏的未保存编辑；普通更改/取消/重置与原Repository撤销不变。修复前原XML和修复后12项原XML在docs/fixes/explicit-skip-2026-10-31。现在61项App直接目标+33项core共94项PASS；最终原生编译PASS。MainActivity用例先准备已保存改时/3mg，再经正式TodayCard菜单完成跳过与历史撤销，保持原有效时间/剂量、无实际服药/库存影响。该最终修正必须在准确新HEAD执行三API和必需CI，旧b639原生结果不能替代；Draft保持直到验收，不能签名/交付/发版。
