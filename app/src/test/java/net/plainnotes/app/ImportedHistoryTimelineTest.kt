@@ -77,11 +77,13 @@ class ImportedHistoryTimelineTest {
             taken_utc=null,actual_dose=null,planned_dose=2.0,config_snapshot=frozen)
         val v=view(listOf(skipped),listOf(saved))
         assertEquals(1,v.projection.periods.size)
-        assertTrue(v.events.isEmpty()) // the scheduled hour is still in the future
-        val event=v.upcoming.single()
+        assertTrue(v.upcoming.isEmpty()) // a confirmed decision is not a future task
+        val event=v.events.single()
         assertEquals("skip:42",event.key)
         assertEquals(EventKind.SKIPPED,event.kind)
         assertEquals(scheduled,event.at)
+        assertEquals(v.projection.periods.single().key,event.displayPeriodKey)
+        assertEquals(setOf(saved.id),event.exactRegimenIds)
         assertEquals(skipped,(event.source as EventSource.Intake).record)
         assertTrue(v.importedHistory.isEmpty())
         assertNull(skipped.taken_utc)
@@ -94,14 +96,42 @@ class ImportedHistoryTimelineTest {
         val skipped=record(43,"APP",past,"SKIPPED").copy(
             slot_key="synthetic-slot",rule_version_id=17L,scheduled_utc=past.toEpochMilli(),
             taken_utc=null,actual_dose=null,planned_dose=2.0,config_snapshot=frozen)
-        val imported=record(44,"IMPORT_TM",past,"SKIPPED")
-        val unlinked=record(45,"APP",past,"SKIPPED")
-        val missed=record(46,"APP",past,"MISSED")
+        val imported=record(44,"IMPORT_TM",past,"SKIPPED").copy(medication_id=2)
+        val unlinked=record(45,"APP",past,"SKIPPED").copy(medication_id=2)
+        val missed=record(46,"APP",past,"MISSED").copy(medication_id=2)
         val v=view(listOf(skipped,imported,unlinked,missed),listOf(saved))
         assertEquals(listOf(EventKind.SKIPPED),v.events.map{it.kind})
         assertEquals("skip:43",v.events.single().key)
         assertEquals(setOf(44L,45L,46L),v.importedHistory.flatMap{it.records}.map{it.id}.toSet())
         assertEquals(listOf("SKIPPED"),v.events.map{(it.source as EventSource.Intake).record.status})
+    }
+    @Test fun changedClockDoseAndZoneKeepFrozenSlotInsteadOfCurrentPlan() {
+        val old=version(1,now.minusSeconds(86400),now.minusSeconds(1800),"08:00:00")
+        val current=version(2,now.minusSeconds(1800),null,"22:00:00")
+        val scheduled=now.plusSeconds(3600)
+        val skip=record(71,"APP",scheduled,"SKIPPED").copy(slot_key="wall:17@2026-10-08T00:00:00",
+            rule_version_id=17,scheduled_utc=scheduled.toEpochMilli(),scheduled_zone="Pacific/Auckland",
+            planned_dose=3.0,config_snapshot=RegimenDefinition.read(old.definition_json).medicationJson)
+        val other=record(72,"APP",scheduled,"ON_TIME").copy(medication_id=2)
+        val v=view(listOf(skip,other),listOf(old,current))
+        assertEquals(1,v.events.size);assertTrue(v.upcoming.isEmpty())
+        val shown=(v.events.single().source as EventSource.Intake).record
+        assertEquals(skip,shown);assertEquals(3.0,shown.planned_dose!!,0.0)
+        assertEquals("Pacific/Auckland",shown.scheduled_zone)
+        assertEquals(1,v.projection.periods.size) // clock changes and one skip do not stop treatment
+        assertEquals(2,v.projection.raw.size)
+        assertEquals(setOf(72L),v.importedHistory.flatMap{it.records}.map{it.id}.toSet())
+    }
+    @Test fun onlyTheChosenSlotOfTheChosenMedicineBecomesASkip() {
+        val saved=version(1,now.minusSeconds(86400),null)
+        val skip=record(81,"APP",now.plusSeconds(3600),"SKIPPED").copy(slot_key="wall:17@2026-10-07T13:00:00",
+            rule_version_id=17,planned_dose=2.0,config_snapshot=RegimenDefinition.read(saved.definition_json).medicationJson)
+        val otherSlot=record(82,"APP",now.plusSeconds(7200),"SKIPPED").copy(slot_key="",rule_version_id=17,medication_id=2)
+        val imported=skip.copy(id=83,origin="IMPORT_FEATHERLINE",medication_id=2)
+        val v=view(listOf(skip,otherSlot,imported),listOf(saved))
+        assertEquals(listOf("skip:81"),v.events.map{it.key})
+        assertEquals(setOf(82L,83L),v.importedHistory.flatMap{it.records}.map{it.id}.toSet())
+        assertEquals(1,v.projection.periods.size)
     }
     @Test fun undoneExplicitSkipNeverAppearsAsActiveStatusOrUnknownHistory() {
         val future=now.plusSeconds(3600)

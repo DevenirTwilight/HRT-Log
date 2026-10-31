@@ -1,0 +1,29 @@
+{
+  "base": "446c618dfcb9d0f77f7c6d2a43ed937a4ae0fb45",
+  "local_observations": {
+    "targeted_app": {
+      "tests": 53,
+      "failures": 0,
+      "skipped": 0,
+      "scope": [
+        "ImportedHistoryTimelineTest:12",
+        "PeriodTimelineTest:5",
+        "SourceNeutralContinuityTest:6",
+        "UndoSkippedHistoryUiTest:24",
+        "Ui08PdfSummaryUnchangedTest:1",
+        "ExplicitSkipBackupTest:1",
+        "ExplicitSkipTimelineUiTest:4"
+      ]
+    },
+    "core_undo": {
+      "tests": 33,
+      "failures": 0,
+      "skipped": 0
+    },
+    "android_test_kotlin": "PASS"
+  },
+  "native_API26_29_35": "PENDING_EXACT_HEAD_CI",
+  "physical_device": "NOT_RUN",
+  "manual_talkback": "NOT_RUN",
+  "signed_apk": "NOT_AUTHORIZED"
+}

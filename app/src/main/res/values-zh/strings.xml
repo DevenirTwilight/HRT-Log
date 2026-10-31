@@ -716,7 +716,7 @@
     <string name="timeline_regimen">方案记录 / 变更</string>
     <string name="timeline_dose">实际服药</string>
     <string name="timeline_missed">确认漏服</string>
-    <string name="timeline_skipped">已跳过服药</string>
+    <string name="timeline_skipped">跳过剂量</string>
     <string name="timeline_planned">计划剂量</string>
     <string name="milestone">里程碑</string>
     <string name="milestone_add">添加里程碑</string>

@@ -332,7 +332,10 @@ import java.time.*
         EventTypeBadge(event.kind)
         Column(Modifier.weight(1f)) {
             Text(eventKindLabel(event.kind)+(if(LocalSimpleMode.current)"" else " · "+eventTitle(event)),style=MaterialTheme.typography.titleSmall)
-            Text(formatDate(event.date),style=MaterialTheme.typography.bodySmall.tnum(),color=MaterialTheme.colorScheme.onSurfaceVariant)
+            val scheduled=(event.source as? EventSource.Intake)?.record?.scheduled_zone?.let{saved->
+                runCatching{event.at?.atZone(ZoneId.of(saved))}.getOrNull()}
+            Text(if(scheduled!=null)formatDate(scheduled.toLocalDate())+" · "+formatTime(scheduled.toLocalTime())+" · "+scheduled.zone.id else formatDate(event.date),
+                style=MaterialTheme.typography.bodySmall.tnum(),color=MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,null)
     }
@@ -450,7 +453,7 @@ internal fun eventTypeColors(kind:EventKind,c:ColorScheme,sem:SemanticColors=sem
 @Composable fun eventKindLabel(kind:EventKind)=stringResource(eventKindLabelRes(kind))
 internal fun eventKindLabelRes(kind:EventKind)=when(kind){
     EventKind.REGIMEN->R.string.timeline_regimen;EventKind.DOSE->R.string.timeline_dose;EventKind.MISSED->R.string.timeline_missed
-    EventKind.UNCONFIRMED->R.string.status_unconfirmed;EventKind.SKIPPED->R.string.timeline_skipped;EventKind.LAB->R.string.labs
+    EventKind.UNCONFIRMED->R.string.status_unconfirmed;EventKind.SKIPPED->R.string.timeline_explicit_skipped;EventKind.LAB->R.string.labs
     EventKind.SYMPTOM->R.string.wb_symptoms;EventKind.WELLBEING->R.string.wellbeing;EventKind.REVIEW->R.string.wb_reviews
     EventKind.APPOINTMENT->R.string.appointment;EventKind.MILESTONE->R.string.milestone;EventKind.PLANNED->R.string.timeline_planned
 }

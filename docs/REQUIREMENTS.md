@@ -1830,3 +1830,8 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 - **受保护文件**：`ConcentrationScreen.kt`、`ConcChart.kt`、`UnifiedConcentrationScreen.kt` 属 PK 显示审查范围，按负责人本条指令登记批准（`display-approvals-after-archive.json` 追加 PD-2026-10-30-MAIN-THREAD-CONCENTRATIONSCREEN、PD-2026-10-30-MAIN-THREAD-CONCCHART、PD-2026-10-30-MAIN-THREAD-UNIFIEDSCREEN），范围**仅限把后台计算的返回线程改为主线程**。LIVE_LOCK 文件未动。
 - **测试**：新增 `MainThreadResumeTest`：①演示机制（裸 `withContext` 在测试里于后台线程继续，`computeOffMain` 一定回到主线程）；②浓度页（校准合计 + 点按读数）全程没有任何非主线程的 snapshot 提交；③源码守卫：含 `@Composable` 的文件不得直接 `withContext(Dispatchers.…)`，`rememberCoroutineScope()` 只允许留在 `AppShell.kt`（抽屉/提示条动画，不做 IO）。`Ui12ConcentrationTest.show()` 原先只等到“校准开关出现”，而开关在后台计算完成前就已显示（同时页面还有转圈），这是第二个竞争；现在额外等到页面上没有不确定进度圈再读结果。这是等待条件变严格，没有删改任何断言。
 - **第二轮（同日，PR #167 首次 CI）**：API 26 设备测试 `MedicalAttachmentProductAndroidTest.fullscreenReaderRenamesThreePagePdfAndLargeImageThenReturnsToTheSameFile` 在 Activity 销毁时仍出现 `SlotTable.moveSlotGapTo` 越界（第一轮 JVM 探针覆盖不到设备专有路径）。同一机制的另一入口：控制器 / ViewModel 的 StateFlow 若在后台线程写入，`collectAsState()` 的收集协程会在写入线程继续。现在应用里所有 `collectAsState` / `collectAsStateWithLifecycle` 都在 `Dispatchers.Main.immediate` 上收集（正式应用里收集本来就在主线程，行为不变）；源码守卫禁止无上下文的写法；两个设备产品测试（附件、校准）加 `OffMainApplyRecorder`，收尾时断言没有非主线程 snapshot 提交，失败信息带出线程名与主线程当时位置，便于定位尚未覆盖的入口。设备上是否彻底消失，以之后的 CI 为准；ROOT_CAUSE 对该设备签名目前为“同一机制的高度可能来源，尚未在设备上直接证明”。
+
+
+## 主动跳过服药的治疗时间线归属（2026-10-31，PR #177）
+
+负责人授权继续原PR修复和受保护合并。仅未删除的APP来源、非空slot、规则版本和预定时刻明确的SKIPPED属于已确认跳过操作；无论计划时刻是否已到，都不是Upcoming待办，保持原计划时刻/冻结药物和计划剂量，在对应阶段展示一次，不生成待识别历史重复项。不得伪造实际服药、停药、库存扣减或浓度贡献。导入/缺失计划证据的历史保留原识别语义，原撤销安全机制不变。保留简易/伪装模式隐私边界。四语新标签单独资源，不改变冻结旧资源/PDF校验。真实MainActivity日程→跳过→时间线→历史→撤销及Room备份回归必须实测；无签名、交付或公开发行授权。

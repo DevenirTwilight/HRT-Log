@@ -1,3 +1,9 @@
+## PR #177 接手：已确认跳过归回治疗阶段 — 2026-10-31
+
+沿用原分支与PR，远端446c618d无新提交。新增生产修正：提前跳过是已确认决策，保留原计划时刻但不进入Upcoming；空slot不当作显式计划证据。正常模式显示冻结药名与原时区计划时刻，详情显示计划剂量，简易/伪装隐私规则不变。用独立四语资源明确已跳过，不改变旧冻结strings/PDF摘要。原Repository/applyOverride/undoSkipped、库存、浓度、提醒、Room及备份协议均未改。
+
+本地53项投影/四语UI/真实Room加密备份恢复/旧识别/撤销UI/PDF守卫，以及core撤销33项全PASS；新MainActivity真实日程→跳过→时间线→新Activity历史→撤销编译PASS。新原生合同接现有API26/29兼容列表，API35整套自然执行；原生与最终CI尚PENDING，不能合并或称产品验收完成。失败夹具与selector原XML/日志、执行范围在docs/fixes/explicit-skip-2026-10-31/，不改原安全断言/时限。无真机/人工TalkBack，无签名/交付/Release授权。下一步只查本提交准确HEAD的CI/原生，真实失败精确修复，保护条件满足才Ready正常合并。
+
 ## 2026-10-31 用户主动跳过服药：时间线错误显示待识别方案（候选待 CI）
 
 问题：`NotesRepository.applyOverride` 已用冻结方案快照保存 `APP/SKIPPED`、slot_key、rule_version_id 和 scheduled_utc；但 `ObservedTreatmentHistory` 不将尚未到时的未来跳过加入 resolvedRecords，`ImportedHistoryProjection` 随后把它显示为「待识别方案的历史记录」。这并不表示用户实际服药或方案缺失。
