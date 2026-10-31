@@ -1,0 +1,25 @@
+{
+  "failed_source": "958cbd7707635155438dfebd52558f3d8fd1e7c5",
+  "run": 41192745752,
+  "job": 124512723954,
+  "artifact": 13039979897,
+  "test": "RecordedReferenceUiTest.actualHistoryEditEntryOpensReadOnlySourceWithoutSavingTheRecord/zh-rTW",
+  "observed": "ComposeTimeoutException on plain vm.state.loading predicate at line75,10000ms; before any source-dialog interaction",
+  "mechanism": "Known paused-main-looper continuation boundary from REQUIREMENTS176/MainThreadResumeTest; unique CI scheduling root not fully proven by timeout alone",
+  "change": "test only: same10000ms plus existing ui.waitForIdle; add initialization error assertion; all read-only and unchanged-record assertions retained",
+  "actual_target_results": {
+    "RecordedReferenceUiTest": {
+      "tests": 12,
+      "failures": 0,
+      "skipped": 0
+    },
+    "MainThreadResumeTest": {
+      "tests": 3,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "raw_job_log_sha256": "96713df596524843b03cef8683838b170cd080405076407fc9a3a42d55360871",
+  "production_files_changed": false,
+  "auto_merge": "disabled immediately on failure; final new-head CI required"
+}

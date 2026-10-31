@@ -1,3 +1,9 @@
+## PR #177 最终全量回归：历史资料用例主循环同步 — 2026-10-31
+
+958cbd77三API设备及四API安全均PASS，但PR全量4334项中唯一FAIL是RecordedReferenceUiTest繁中初始化等待line75（10000ms，尚未进入资料弹窗交互；609原条件skip）。立即关闭auto-merge，未借另一个运行PASS代替。原HTML、完整job日志gzip和SHA见docs/fixes/explicit-skip-2026-10-31/readonly-sync-evidence.json。
+
+该测试仅轮询vm.state.loading，未驱动Robolectric暂停MainLooper；复用§176/MainThreadResumeTest已有同步方式ui.waitForIdle，保留10s及所有只读/不保存/原记录相等断言，另加初始化error必须null。12项四语资料回归+3项既有主线程机制共15项实际PASS（41秒），不改历史资料生产实现、数据/PK/附件/业务/时限。超时本身不足以证明唯一CI调度根因，证据中保留此限制。新准确HEAD必须全门通过后才重启auto-merge或正常合并；当前Ready无冲突但未合并。不签名/交付/公开发行。
+
 ## PR #177 与已合并交付记录 #176 无损同步 — 2026-10-31
 
 等待df89完整Android时，默认分支合入a7a882b5（#176，交付账本、Release历史和源码版本floor42）。只解REQUIREMENTS/HANDOFF两处冲突，双方有效内容完整保留，继承已批准版本42；不签名/交付APK、不触碰公开Release/tag。全部跳过功能生产源码与df89逐字节相同，LAB04原哈希及精确逆转证明保持。df89 API26/29/35真实MainActivity用例均已实际PASS，原XML及artifact哈希在PR最终原生验收评论6542070164及后续收据；df89完整Android尚在执行、不能冒称PASS。同步后的准确HEAD继续现有必需CI。当前代码可Ready for Review，按§106启用GitHub原生auto-merge，保护必须等最终检查成功，不绕过冲突/评审/失败。
