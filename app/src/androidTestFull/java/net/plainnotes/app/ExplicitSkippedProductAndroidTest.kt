@@ -54,7 +54,13 @@ class ExplicitSkippedProductAndroidTest {
             listOf(scheduled.toLocalTime()),emptySet(),now.minusSeconds(86400))}
         runBlocking{repo.addContainers(id,20.0,1,true);model.refresh().join()}
         val before=runBlocking{repo.containers()}.filter{it.medication_id==id}
-        val slot=runBlocking{repo.calendar(now,zone,scheduled.toLocalDate())}.single{it.slot.medicationId==id && it.slot.at==scheduled.toInstant()}.slot
+        val originalSlot=runBlocking{repo.calendar(now,zone,scheduled.toLocalDate())}.single{it.slot.medicationId==id && it.slot.at==scheduled.toInstant()}.slot
+        // Seed an already confirmed move/dose; the actual skip must preserve it, not reset it.
+        runBlocking {
+            repo.override(originalSlot,SlotOverride(originalSlot.key,originalSlot.at.minusSeconds(60),zone,3.0),now)
+            model.refresh().join()
+        }
+        val slot=runBlocking{repo.calendar(now,zone,scheduled.toLocalDate())}.single{it.slot.key==originalSlot.key}.slot
         ui.waitUntil(30_000){!model.state.value.loading && model.state.value.medications.any{it.id==id}}
         // Today's doses are in the real TodayCard, not the other-dates day list.
         val open=(model.state.value.slots+model.extra.value.upcoming).distinctBy{it.slot.key}
@@ -77,6 +83,7 @@ class ExplicitSkippedProductAndroidTest {
         ui.waitUntil(30_000){model.extra.value.records.any{it.medication_id==id && it.status=="SKIPPED"}}
         val skipped=model.extra.value.records.single{it.medication_id==id && it.status=="SKIPPED"}
         assertNull(skipped.taken_utc);assertNull(skipped.actual_dose);assertEquals(slot.at.toEpochMilli(),skipped.scheduled_utc)
+        assertEquals(3.0,skipped.planned_dose!!,0.0)
         navigate(Destination.TIMELINE)
         ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("timeline:skip:${skipped.id}"))
         ui.onNodeWithTag("timeline:skip:${skipped.id}").assertIsDisplayed()

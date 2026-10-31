@@ -73,8 +73,12 @@ fun Instant.toLocalHere(): LocalDateTime = atZone(ZoneId.systemDefault()).toLoca
             if (!initial.isDefault) TextButton(onClick = { onSave(SlotOverride(slot.key)) }) { Text(stringResource(R.string.reset_all)) }
         } },
         confirmButton = { Button(enabled = skip || !customDose || doseV != null, onClick = {
-            val t = if (moved && !skip) time.toInstantHere() else null
-            onSave(SlotOverride(slot.key, t, t?.let { ZoneId.systemDefault() }, if (customDose && !skip) doseV else null, skip))
+            // A skip changes execution status, not a previously saved move or planned dose.
+            // Unsaved edits hidden by the skip switch are not committed as new dose facts.
+            val t = if (skip) initial.rescheduled else if (moved) time.toInstantHere() else null
+            val z = if (skip) initial.zone else t?.let { ZoneId.systemDefault() }
+            val amount = if (skip) initial.dose else if (customDose) doseV else null
+            onSave(SlotOverride(slot.key, t, z, amount, skip))
         }) { Text(stringResource(R.string.save)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } })
 }

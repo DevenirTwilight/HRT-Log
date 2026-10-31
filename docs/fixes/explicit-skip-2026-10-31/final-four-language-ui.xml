@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="net.plainnotes.app.ExplicitSkipTimelineUiTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-31T09:02:58.073Z" hostname="019d157e45d0" time="9.322">
+<testsuite name="net.plainnotes.app.ExplicitSkipTimelineUiTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-31T09:11:52.452Z" hostname="019d157e45d0" time="11.482">
   <properties/>
-  <testcase name="actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose[en/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="6.462"/>
-  <testcase name="confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose[en/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.649"/>
-  <testcase name="actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose[zh-rCN/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.375"/>
-  <testcase name="confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose[zh-rCN/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.33"/>
-  <testcase name="actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose[b+zh+Hant/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.289"/>
-  <testcase name="confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose[b+zh+Hant/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.289"/>
-  <testcase name="actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose[fr/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.296"/>
-  <testcase name="confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose[fr/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.328"/>
+  <testcase name="actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose[en/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="6.642"/>
+  <testcase name="confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose[en/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.786"/>
+  <testcase name="skippingPreservesPreviouslySavedMoveAndDoseOverride[en/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.567"/>
+  <testcase name="actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose[zh-rCN/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.392"/>
+  <testcase name="confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose[zh-rCN/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.345"/>
+  <testcase name="skippingPreservesPreviouslySavedMoveAndDoseOverride[zh-rCN/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.31"/>
+  <testcase name="actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose[b+zh+Hant/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.357"/>
+  <testcase name="confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose[b+zh+Hant/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.296"/>
+  <testcase name="skippingPreservesPreviouslySavedMoveAndDoseOverride[b+zh+Hant/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.283"/>
+  <testcase name="actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose[fr/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.378"/>
+  <testcase name="confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose[fr/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.334"/>
+  <testcase name="skippingPreservesPreviouslySavedMoveAndDoseOverride[fr/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.362"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

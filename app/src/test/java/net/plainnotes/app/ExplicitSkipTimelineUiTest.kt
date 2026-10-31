@@ -36,6 +36,17 @@ class ExplicitSkipTimelineUiTest(private val language:String) {
         ui.onNode(hasText(ui.activity.getString(R.string.save)) and hasAnyAncestor(isDialog())).performClick()
         org.junit.Assert.assertEquals(net.plainnotes.app.domain.SlotOverride(slot.key,skipped=true),saved)
     }
+    @Test fun skippingPreservesPreviouslySavedMoveAndDoseOverride() {
+        val now=Instant.now();val original=now.plusSeconds(7200)
+        val slot=net.plainnotes.app.domain.Slot("synthetic-moved-slot",7,1,original,original,ZoneId.of("UTC"),2.0,15,120,now)
+        val initial=net.plainnotes.app.domain.SlotOverride(slot.key,original.plusSeconds(3600),ZoneId.of("UTC"),3.0)
+        var saved:net.plainnotes.app.domain.SlotOverride?=null
+        ui.setContent { MaterialTheme { OverrideDialog(net.plainnotes.app.domain.TimelineEntry(initial.apply(slot),net.plainnotes.app.domain.SlotState.PENDING),null,
+            initial,{}) { saved=it } } }
+        ui.onNodeWithContentDescription(ui.activity.getString(R.string.skipped)).performClick()
+        ui.onNode(hasText(ui.activity.getString(R.string.save)) and hasAnyAncestor(isDialog())).performClick()
+        org.junit.Assert.assertEquals(initial.copy(skipped=true),saved)
+    }
     @Test fun confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose() {
         val now=Instant.now();val scheduled=now.plusSeconds(3600)
         val med=MedicationEntity(1,"Synthetic frozen medicine","E2","ORAL","MG",2.0,20.0,site_rotation=false,notifications_on=false,active=true,sort_order=0)

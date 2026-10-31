@@ -1,3 +1,7 @@
+## PR #177 实证修复：跳过不能清空已保存覆盖 — 2026-10-31
+
+新四语真实OverrideDialog测试复现4/4生产缺陷：已保存rescheduled/zone/dose=3.0，切skip后onSave却全部null。Dialogs.kt最小修正：skip时保留initial已有覆盖，不提交隐藏的未保存编辑；普通更改/取消/重置与原Repository撤销不变。修复前原XML和修复后12项原XML在docs/fixes/explicit-skip-2026-10-31。现在61项App直接目标+33项core共94项PASS；最终原生编译PASS。MainActivity用例先准备已保存改时/3mg，再经正式TodayCard菜单完成跳过与历史撤销，保持原有效时间/剂量、无实际服药/库存影响。该最终修正必须在准确新HEAD执行三API和必需CI，旧b639原生结果不能替代；Draft保持直到验收，不能签名/交付/发版。
+
 ## PR #177 原生路径对照修正 — 2026-10-31
 
 正式日程当天剂量位于TodayCard，day-dose列表只为其它日期渲染。原生候选改为真实当天卡片的对应slot菜单→更改/跳过→有名称的开关→保存，不触碰生产逻辑、不注入数据库跳过。兼容同时间其它药、较晚剂量展开；解除后要求原时刻/剂量保持且槽位回到合法OPEN状态（PENDING/SOON/OVERDUE由既有当前时刻规则决定，不把未来两小时跨午夜假设当业务要求）。编译实际6秒PASS。90项局部结果不变；最终准确HEADCI原生仍PENDING。

@@ -17,3 +17,7 @@
 ## 最终对话框/无障碍校验
 
 新增真实OverrideDialog四语交互，发现合并语义树中三个未具名Switch无法按可见兄弟标签唯一选择（override-unlabelled-switch-failure.xml）。在现有SwitchRow上为Switch添加自身label的contentDescription，不改布局、开关顺序或业务回调；MainActivity原生合同按该真实名称操作。四语下明确点击跳过、保存，结果严格等于仅skipped=true的原SlotOverride。最终8项四语界面/真实开关保存及AndroidTest编译PASS；全部直接App目标合计57项，core原撤销33项PASS。final-four-language-ui.xml为实际最终运行原件。最终精确HEAD的完整CI和原生仍待验收，先不合并。
+
+## 已保存的改时/剂量覆盖丢失：实际生产缺陷
+
+四语真实OverrideDialog明确复现4/4：已有rescheduled/zone/dose=3.0的覆盖，在点击跳过后提交成全部null（原件saved-override-loss-before-fix.xml）。这会改变用户此前已经确认的计划槽位，不能只修时间线而掩盖。生产Dialogs.kt现在仅在skip=true时沿用initial已保存覆盖；隐藏的未保存表单草稿不作为新剂量提交；普通改时/改量、取消、重置及Repository原安全撤销均保持。修复后12项四语UI全PASS，App直接目标合计61项、core原撤销33项。原生MainActivity先准备已保存改时/3.0剂量，然后真实菜单跳过、COMMIT和历史撤销，严格断言原有效时间/剂量保持、无实际服药/库存变化，仍须准确HEAD的三API实际执行。
