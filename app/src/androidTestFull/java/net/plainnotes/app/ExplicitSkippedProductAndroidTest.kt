@@ -55,6 +55,7 @@ class ExplicitSkippedProductAndroidTest {
             it.slot.at.atZone(zone).toLocalDate() in from..today}.map{it.slot}
         assertEquals(10,slots.size)
         runBlocking{slots.forEach{repo.override(it,SlotOverride(it.key,skipped=true),now)};model.refresh().join()}
+        ui.waitUntil(30_000){model.extra.value.records.count{it.medication_id==id && it.status=="SKIPPED"}==10}
         val rows=model.extra.value.records.filter{it.medication_id==id}.sortedBy{it.id}
         assertEquals(10,rows.size);assertTrue(rows.all{it.status=="SKIPPED" && it.taken_utc==null && it.actual_dose==null})
         val first=rows.minBy{requireNotNull(it.scheduled_utc)}
@@ -69,6 +70,7 @@ class ExplicitSkippedProductAndroidTest {
         ui.onNodeWithTag("timeline:skip:${last.id}").assertIsDisplayed().performClick()
         ui.onNodeWithTag("timeline-event-time").assertExists()
         activity!!.close();activity=null;launch();navigate(Destination.TIMELINE)
+        ui.waitUntil(30_000){model.extra.value.records.count{it.medication_id==id && it.status=="SKIPPED"}==10}
         ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(summary))
         ui.onNodeWithTag(summary).assertExists()
         rows.forEach{ui.onNodeWithTag("timeline:skip:${it.id}").assertDoesNotExist()}

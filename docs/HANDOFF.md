@@ -1,3 +1,7 @@
+## 聚合真实重开用例冻结 — 2026-10-31
+
+新MainActivity五天十次合同在首次保存和新Activity重开后，均等待实际同medication的10条SKIPPED进入显示快照（仍原30s），再断言1摘要和原事实/库存不变；RuntimeReady不是初始读取完成。仅测试就绪条件，不改生产代码或断言。Kotlin原生编译5秒PASS；59项产品目标/8对before-after保持原通过字节，后续准确HEAD必需CI仍必跑。至此冻结功能和用例，不追加新功能，出现真正失败才处理。
+
 ## 聚合候选原生同步收口 — 2026-10-31
 
 PR178旧API29的RuntimeRequestUiAndroidTest在refresh.join后直接single读取显示快照，曾NoSuchElement。源码refresh可被shell新刷新取消，join取消Job并不等于相同目标已发布；现仅在原20s内等同ID/expectednote，再执行原全部断言。另一个缺Skip控件的原断言保留并等待真实控件。完整原job gzip及SHA加入聚合证据；不声称唯一故障根因已证明，不改任何生产Runtime/锁/恢复语义。第一聚合候选288f本地59PASS，刚启动的远端检查不能作为后续新HEAD验收；新HEAD必须重新满足全部门槛，无重复同SHA绿色重跑。
