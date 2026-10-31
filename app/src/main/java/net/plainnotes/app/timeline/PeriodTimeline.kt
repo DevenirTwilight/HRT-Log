@@ -101,13 +101,22 @@ object PeriodTimelineProjection {
                 if(at!=null && !future)projection.exactAt(at).filter{it.kind==SpanKind.SAVED}.map{it.sourceId}.toSet() else emptySet(),at==null)
             if(future)upcoming+=event else events+=event
         }
+        // A user-confirmed skip is a recorded decision, not an unrecognised regimen.
+        // Preserve the scheduled instant even if it is later today; do not fabricate actual intake.
+        // Imported or otherwise unauthenticated historical skips still use the old recognition flow.
+        val explicitSkips=extra.records.filter{r->r.deleted_at_utc==null && r.status=="SKIPPED" && r.origin=="APP" &&
+            r.slot_key!=null && r.rule_version_id!=null && r.scheduled_utc!=null}
+        val explicitSkipIds=explicitSkips.mapTo(mutableSetOf()){it.id}
+        val ruleToRegimen=extra.regimenLinks.associate{it.rule_id to it.regimen_id}
+        explicitSkips.forEach{r->add("skip:${r.id}",EventKind.SKIPPED,Instant.ofEpochMilli(requireNotNull(r.scheduled_utc)),null,
+            EventSource.Intake(r,ruleToRegimen[r.rule_version_id]))}
         extra.labs.forEach{add("lab:${it.id}",EventKind.LAB,Instant.ofEpochMilli(it.sampled_utc),null,EventSource.Lab(it))}
         extra.reviews.forEach{add("review:${it.id}",EventKind.REVIEW,null,LocalDate.parse(it.date),EventSource.Review(it))}
         extra.milestones.forEach{add("milestone:${it.id}",EventKind.MILESTONE,null,LocalDate.parse(it.date),EventSource.Milestone(it))}
         appointments.forEach{add("appointment:${it.id}",EventKind.APPOINTMENT,Instant.ofEpochMilli(it.at_utc),null,EventSource.Appointment(it))}
         val order=compareByDescending<PeriodEvent>{it.date}.thenByDescending{it.at}.thenBy{it.key}
         return PeriodTimeline(projection,events.sortedWith(order),upcoming.sortedWith(compareBy<PeriodEvent>{it.date}.thenBy{it.at}.thenBy{it.key}),
-            ImportedHistoryProjection.build(extra.records.filter{it.id !in historical.resolvedRecordIds},projection,now),historical.observed,
+            ImportedHistoryProjection.build(extra.records.filter{it.id !in historical.resolvedRecordIds && it.id !in explicitSkipIds},projection,now),historical.observed,
             extra.records.filter{it.id in historical.resolvedRecordIds},result.unavailable,mergedCoverage(projection,historical),HistoryPeriods.confirmed(extra.historyPeriods))
     }
 }
