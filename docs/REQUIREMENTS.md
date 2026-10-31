@@ -1837,3 +1837,13 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 负责人授权继续原PR修复和受保护合并。仅未删除的APP来源、非空slot、规则版本和预定时刻明确的SKIPPED属于已确认跳过操作；无论计划时刻是否已到，都不是Upcoming待办，保持原计划时刻/冻结药物和计划剂量，在对应阶段展示一次，不生成待识别历史重复项。不得伪造实际服药、停药、库存扣减或浓度贡献。导入/缺失计划证据的历史保留原识别语义，原撤销安全机制不变。跳过必须保留此前已保存的单次改时/时区/计划剂量覆盖，不能清空；隐藏未保存草稿不作为新剂量事实提交。保留简易/伪装模式隐私边界。四语新标签单独资源，不改变冻结旧资源/PDF校验。真实MainActivity日程→跳过→时间线→历史→撤销及Room备份回归必须实测；无签名、交付或公开发行授权。
 
 本修复获授权变更PeriodTimeline的显式跳过投影，不改变LAB-04语义：原BASE_DIGEST和两个BASE_SOURCES哈希都保留。允许对本次四个精确跳过差异建立完整SHA限定及逐项逆转证明，逆转后仍须匹配原字节；任意其它源码或化验改动必须拒绝。此范围不授权修改化验输出、分组、历史方案、PK或放宽原金标。
+
+## 177. 用最新主线替换公开 Release v0.2.0（2026-10-31）
+
+- **负责人指令**：2026-10-31“替换现有release，不用说build多少”。紧接着此前“好了给apk”的私下交付；本条覆盖 HANDOFF 中“不动公开 Release 与标签”的限制，仅限以下操作，范围与 §104 相同。
+- **做了什么**：用刚私下交付的同一个正式签名 APK（SHA-256 `fe93a36d…7c28`，源码 `f112e109b3b32e156e33518f71aad562cd168a05`，主线 `f112e109` 与其前一个提交 `fdabc4ce` 的 CI 在签名前已全部成功）替换现有 Release `v0.2.0`（id 404602730）的 4 个附件（APK、`SHA256SUMS.txt`、`SIGNING_CERTIFICATE.txt`、`THIRD_PARTY_NOTICES.md`——这份取仓库当前版本，因为 Tink 运行时依赖已变）；重写 Release 说明；把 tag `v0.2.0` 从 `76627bfe215987122666b38ea7a42ee08731cdde` 移到 `f112e109b3b32e156e33518f71aad562cd168a05`（同 §104，说明与源码才一致）。证书与旧公开 APK 相同（`989ba045…79b1`），可直接覆盖安装。
+- **说明里不写构建号**：Release 说明、`SIGNING_CERTIFICATE.txt`、README 的公开版本行都不再写内部构建编号 / versionCode；脚本在复核时检查说明里没有这类字样。机器清单 `.github/release-assets.json` 与账本保留 `version_code`，只用于核对，不对外宣传。
+- **方式**：会话不能编辑 Release 或移动 tag（HTTP 403）。与 §104 的做法一样，用一个只含 4 个附件、说明和一次性工作流的临时孤立分支 `release-upload-v0.2.0-20261031`（run 41184909240）：先核对旧状态（Release id、旧 tag SHA、旧 APK 哈希、新源码在默认分支上），再 `--clobber` 上传、替换说明、移动 tag，最后重新下载逐个核对哈希、核对 tag 与说明首行；成功后工作流删除该分支（已确认分支不存在）。这是“APK 不进仓库”规则的一次性例外（APK 本来就公开发布，不含密钥）。
+- **核对**：`scripts/check_release_manifest.py`（无 INTERNET、应用身份与入口）与 `scripts/check_attachment_release_isolation.py`（发布包里没有测试/演示/POC 标记）对该 APK 通过；已签名文件同样通过隔离检查；说明里的宣传功能逐条对照源码，在此构建中都存在（离线无 INTERNET、提醒与库存、回收站、浓度曲线与校准、化验、身心状态、复诊与资料包、医疗文件库与阅读器、时间线、PDF/CSV 导出、应用锁与 SQLCipher、`.pnbak` 与 `.pnmedbk2`、伪装、四语）。隐私表述与 `PRIVACY.md` 一致（导出不加密；医疗文件加密保存；`.pnmedbk2` 与 `.pnbak` 是两种备份）。
+- **留档**：被替换前的文件哈希、旧 tag SHA 与回退办法见 `docs/releases/0.2.0-rebuild-2026-10-17-superseded.md`；新说明 `docs/releases/0.2.0-rebuild-2026-10-31.md`；同步了 `.github/release-assets.json`、README 的公开版本行、Build 42 收据。
+- **未做（NOT_RUN）**：真机 ARM 覆盖安装、人工读屏；不是公开 Beta；外部安全审查未做。
