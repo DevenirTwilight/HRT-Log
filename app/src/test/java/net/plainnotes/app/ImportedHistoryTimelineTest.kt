@@ -67,6 +67,51 @@ class ImportedHistoryTimelineTest {
         val v=view(listOf(record(1,"IMPORT_TM",status="MISSED"),record(2,"IMPORT_TM",status="SKIPPED")))
         assertEquals(2,v.importedHistory.single().records.size);assertTrue(v.projection.periods.isEmpty());assertTrue(v.events.isEmpty())
     }
+    @Test fun explicitAppSkipBeforeScheduledHourHasItsOwnStatusInsteadOfUnknownHistory() {
+        val saved=version(1,now.minusSeconds(86400),null)
+        val scheduled=now.plusSeconds(4*3600)
+        val frozen=RegimenDefinition.read(saved.definition_json).medicationJson
+        val skipped=record(42,"APP",scheduled,"SKIPPED").copy(
+            slot_key="synthetic-scheduled-slot",rule_version_id=17L,
+            scheduled_utc=scheduled.toEpochMilli(),scheduled_zone="UTC",
+            taken_utc=null,actual_dose=null,planned_dose=2.0,config_snapshot=frozen)
+        val v=view(listOf(skipped),listOf(saved))
+        assertEquals(1,v.projection.periods.size)
+        assertTrue(v.events.isEmpty()) // the scheduled hour is still in the future
+        val event=v.upcoming.single()
+        assertEquals("skip:42",event.key)
+        assertEquals(EventKind.SKIPPED,event.kind)
+        assertEquals(scheduled,event.at)
+        assertEquals(skipped,(event.source as EventSource.Intake).record)
+        assertTrue(v.importedHistory.isEmpty())
+        assertNull(skipped.taken_utc)
+        assertNull(skipped.actual_dose)
+    }
+    @Test fun pastExplicitSkipIsVisibleButImportedAndUnlinkedSkipsRemainUnrecognised() {
+        val past=now.minusSeconds(3600)
+        val saved=version(1,now.minusSeconds(86400),null)
+        val frozen=RegimenDefinition.read(saved.definition_json).medicationJson
+        val skipped=record(43,"APP",past,"SKIPPED").copy(
+            slot_key="synthetic-slot",rule_version_id=17L,scheduled_utc=past.toEpochMilli(),
+            taken_utc=null,actual_dose=null,planned_dose=2.0,config_snapshot=frozen)
+        val imported=record(44,"IMPORT_TM",past,"SKIPPED")
+        val unlinked=record(45,"APP",past,"SKIPPED")
+        val missed=record(46,"APP",past,"MISSED")
+        val v=view(listOf(skipped,imported,unlinked,missed),listOf(saved))
+        assertEquals(listOf(EventKind.SKIPPED),v.events.map{it.kind})
+        assertEquals("skip:43",v.events.single().key)
+        assertEquals(setOf(44L,45L,46L),v.importedHistory.flatMap{it.records}.map{it.id}.toSet())
+        assertEquals(listOf("SKIPPED"),v.events.map{(it.source as EventSource.Intake).record.status})
+    }
+    @Test fun undoneExplicitSkipNeverAppearsAsActiveStatusOrUnknownHistory() {
+        val future=now.plusSeconds(3600)
+        val removed=record(55,"APP",future,"SKIPPED").copy(slot_key="synthetic-slot",
+            rule_version_id=17L,scheduled_utc=future.toEpochMilli(),deleted_at_utc=now.toEpochMilli())
+        val v=view(listOf(removed))
+        assertTrue(v.events.isEmpty())
+        assertTrue(v.upcoming.isEmpty())
+        assertTrue(v.importedHistory.isEmpty())
+    }
     @Test fun userLifecycleMilestonesAreFactsNotCommandsToRewriteSavedRegimens() {
         val versions=listOf(version(1,now.minusSeconds(10*86400),null))
         val facts=listOf("PAUSED","STOPPED","RESUMED").mapIndexed{i,k->MilestoneEntity(i+1L,"2026-10-0${i+1}",k,note="Synthetic reason")}
