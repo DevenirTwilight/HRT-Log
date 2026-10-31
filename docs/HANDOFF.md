@@ -1,3 +1,13 @@
+## Build43 / #177 已正式交付及替换公开 Release — 2026-10-31
+
+负责人要求先交付177，已从合并主线082b1586干净源码完成full Universal正式签名APK（不含#174）；只用仓库外finalizeDsl init将42→43。主线Android41201313857、Science41201313911、安全41201313953全PASS；#177原生26/29/35及最终必需检查通过。初次init setter被app DSL覆盖为42，实际APK核验在签名前拒绝，最终正确43后才签署。
+
+正式APK14548126 bytes，SHA256 186538ac24783d4e6bd2ca852fbf577f6f05cb416ea62269f493bb1282d0228c；原证书989ba045…79b1、包名net.plainnotes.app、无INTERNET、非debug、4ABI、64位ELF16KiB、zipalign16KiB、Release隔离及来源082b/clean/git均PASS。私有备份仍Private，密钥/密码仓库外临时恢复，用完清理。
+
+发布run41219506988成功，保留既有v0.2.0标题/下载文件名，替换4附件/说明并将tag移到082b；从公开Release重新下载全部4件逐字节哈希/证书/实际version43验证通过。临时发布分支已自动删除（404已核对）。用户下载 https://github.com/DevenirTwilight/HRT-Log/releases/download/v0.2.0/plainnotes-0.2.0-full.apk ，已在会话给出。前一tag/资产哈希回退记录docs/releases/0.2.0-before-skip-2026-10-31.json；完整收据docs/delivery/build43-release-verification.json；真机/人工TalkBack NOT_RUN，不能冒称已安装验收。
+
+PK #174候选8ba4586f已推、229定向PASS、当前仍Draft/未合并，按负责人优先指令停止了本地PK自动合并/构建脚本（未取消有效远端CI），没有混入本包。其源码版本43只是旧候选号，后续实际交付须至少44。#17328研究文件完整在174，不能绕过6项expected保护强行合并。此PR只补实际交付账本/源码版本floor/Release机器清单及收据，不改任何PK、医疗、库存、数据库或安全语义。
+
 ## PR #177 最终就诊回归同步收口 — 2026-10-31
 
 f35881d1的PR真实MainActivity跳过/时间线/新Activity历史撤销，在API26/29/35原XML均PASS（无skip），原件gzip和artifact SHA见docs/fixes/explicit-skip-2026-10-31/f358-final-ci-evidence.json。push完整4334项仅MedicalHomeConfirmFlowTest line108找不到撤销控件失败，609原条件skip；同原测试本地17秒PASS，保留原HTML及全job gzip，不能声称唯一CI调度根因已证明。只加强旧测试：等待相同ID的已确认显示快照、主循环idle、无error；卡片滚动可见，点击后确认离开列表再找详情撤销；仍10秒，原COMMIT/日期不变/确认撤销/数据库结果断言全保留，不改就诊生产业务。最终局部医疗首页/资料只读/主循环测试全部PASS，原XML附后。保存回执会被AppShell消费，不把瞬时saved值当稳定就绪条件。
