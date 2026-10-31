@@ -109,7 +109,7 @@ object PeriodTimelineProjection {
         val explicitSkipIds=explicitSkips.mapTo(mutableSetOf()){it.id}
         val ruleToRegimen=extra.regimenLinks.associate{it.rule_id to it.regimen_id}
         explicitSkips.forEach{r->add("skip:${r.id}",EventKind.SKIPPED,Instant.ofEpochMilli(requireNotNull(r.scheduled_utc)),null,
-            EventSource.Intake(r,ruleToRegimen[r.rule_version_id]))}
+            EventSource.Intake(r,r.rule_version_id?.let{ruleToRegimen[it]}))}
         extra.labs.forEach{add("lab:${it.id}",EventKind.LAB,Instant.ofEpochMilli(it.sampled_utc),null,EventSource.Lab(it))}
         extra.reviews.forEach{add("review:${it.id}",EventKind.REVIEW,null,LocalDate.parse(it.date),EventSource.Review(it))}
         extra.milestones.forEach{add("milestone:${it.id}",EventKind.MILESTONE,null,LocalDate.parse(it.date),EventSource.Milestone(it))}
