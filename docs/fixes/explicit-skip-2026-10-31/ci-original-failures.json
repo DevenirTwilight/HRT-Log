@@ -1,0 +1,19 @@
+{
+  "head": "74c13371fb2e58e480444fe415507c5490549525",
+  "original_failures": [
+    {
+      "file": "android-124498127656.log.gz",
+      "raw_sha256": "0fc93a2f635d47fc5487e106abc872271f51005a07c7ad6a8f25ea2758f4a887",
+      "raw_bytes": 190560,
+      "compressed_bytes": 25283
+    },
+    {
+      "file": "security-api27-124498121277.log.gz",
+      "raw_sha256": "9531856e4dcc581e10ea19cb491f867ed8070745bd7e6f56eb9da3c3d04ca587",
+      "raw_bytes": 221031,
+      "compressed_bytes": 28026
+    }
+  ],
+  "android": "4333 tests: only Lab04ProjectionUnchangedTest.projectionSourcesAreTheBaseBytes failed; 609 pre-existing conditional skips",
+  "security_api27": "userdata disk shortage before emulator boot and before any instrumentation; single job retry only"
+}

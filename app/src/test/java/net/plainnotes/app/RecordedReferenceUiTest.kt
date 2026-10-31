@@ -72,7 +72,10 @@ class RecordedReferenceUiTest(private val locale:String) {
         val dialogs=HistoryDialogs().apply{editRecord=pair.first;referenceEpoch=pair.second}
         val meds=runBlocking{repo.medications().associateBy{it.id}}
         ui.setContent{NotesTheme(ThemeMode.LIGHT){HistoryRecordDialogs(dialogs,vm,meds)}}
-        ui.waitUntil(10000){!vm.state.value.loading}
+        // Like MainThreadResumeTest, this plain StateFlow predicate must drain the paused main looper.
+        // Keep the original 10s deadline and all subsequent read-only/no-save assertions.
+        ui.waitUntil(10000){ui.waitForIdle();!vm.state.value.loading}
+        assertNull("Initial history read must succeed before interacting",vm.state.value.error)
         ui.onNodeWithTag("record-reference-entry").performScrollTo().performClick();awaitRead()
         ui.onNodeWithTag("record-reference-list").performScrollToNode(hasTestTag("record-reference-empty"))
         ui.onNodeWithTag("record-reference-empty").assertIsDisplayed()

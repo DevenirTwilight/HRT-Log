@@ -1,0 +1,40 @@
+{
+  "base": "446c618dfcb9d0f77f7c6d2a43ed937a4ae0fb45",
+  "local_observations": {
+    "targeted_app": {
+      "tests": 64,
+      "failures": 0,
+      "skipped": 0,
+      "scope": [
+        "ImportedHistoryTimelineTest:12",
+        "PeriodTimelineTest:5",
+        "SourceNeutralContinuityTest:6",
+        "UndoSkippedHistoryUiTest:24",
+        "Ui08PdfSummaryUnchangedTest:1",
+        "ExplicitSkipBackupTest:1",
+        "ExplicitSkipTimelineUiTest:12 (four-language timeline + actual skip/save + preserve saved override)",
+        "Lab04ProjectionUnchangedTest:3 (original golden + both original source hashes + unrelated-edit rejection)"
+      ]
+    },
+    "core_undo": {
+      "tests": 33,
+      "failures": 0,
+      "skipped": 0
+    },
+    "android_test_kotlin": "PASS",
+    "toggle_accessibility": "PASS: exact named Switch, original planned time and dose preserved",
+    "saved_override_loss": "REPRODUCED 4/4 before fix; VERIFIED 4/4 after preserving existing rescheduled/zone/dose"
+  },
+  "native_API26_29_35": "NEW_EXACT_HEAD_CI_PENDING; no production changes after74",
+  "physical_device": "NOT_RUN",
+  "manual_talkback": "NOT_RUN",
+  "signed_apk": "NOT_AUTHORIZED",
+  "native_prior_production_source_74": {
+    "head": "74c13371fb2e58e480444fe415507c5490549525",
+    "API29": "PASS, artifact13038620099, actual skip/reopen/undo3.565s, zero skipped",
+    "API35": "PASS, artifact13038197098, actual skip/reopen/undo2.817s, zero skipped",
+    "API26": "PENDING",
+    "full_PR_Android": "FAIL only LAB04 old source-byte lock; 4333 total,609 conditional skips",
+    "security_API27": "initial boot disk failure; one failed-job-only retry PASS; run41187766855 attempt2"
+  }
+}

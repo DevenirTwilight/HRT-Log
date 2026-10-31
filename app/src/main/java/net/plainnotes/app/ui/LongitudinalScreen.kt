@@ -320,6 +320,8 @@ import java.time.*
     is EventSource.Lab->analyteLabel(source.value.analyte_code)
     is EventSource.Milestone->source.value.title ?: milestoneKindLabel(source.value.kind)
     is EventSource.Appointment->choiceLabel(source.value.type)
+    is EventSource.Intake->MedicationSnapshot.decode(source.record.config_snapshot,source.record.medication_id)?.name
+        ?: stringResource(R.string.history_context_unknown)
     else->eventKindLabel(event.kind)
 }
 @Composable private fun EventRow(event:PeriodEvent,onOpen:(PeriodEvent)->Unit) {
@@ -330,7 +332,10 @@ import java.time.*
         EventTypeBadge(event.kind)
         Column(Modifier.weight(1f)) {
             Text(eventKindLabel(event.kind)+(if(LocalSimpleMode.current)"" else " · "+eventTitle(event)),style=MaterialTheme.typography.titleSmall)
-            Text(formatDate(event.date),style=MaterialTheme.typography.bodySmall.tnum(),color=MaterialTheme.colorScheme.onSurfaceVariant)
+            val scheduled=(event.source as? EventSource.Intake)?.record?.scheduled_zone?.let{saved->
+                runCatching{event.at?.atZone(ZoneId.of(saved))}.getOrNull()}
+            Text(if(scheduled!=null)formatDate(scheduled.toLocalDate())+" · "+formatTime(scheduled.toLocalTime())+" · "+scheduled.zone.id else formatDate(event.date),
+                style=MaterialTheme.typography.bodySmall.tnum(),color=MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,null)
     }
@@ -429,6 +434,12 @@ internal fun eventTypeColors(kind:EventKind,c:ColorScheme,sem:SemanticColors=sem
                     v.satisfaction?.let{Text(stringResource(R.string.wb_satisfaction)+" · $it/5")}
                 }
                 is EventSource.Milestone->s.value.note?.let{Text(it)}
+                is EventSource.Intake->{
+                    val r=s.record
+                    val snapshot=MedicationSnapshot.decode(r.config_snapshot,r.medication_id)
+                    Text(snapshot?.name ?: stringResource(R.string.history_context_unknown))
+                    r.planned_dose?.let{dose->Text(stringResource(R.string.history_planned_dose_label,formatDose(dose,snapshot?.unit)))}
+                }
                 else->{}
             }
         }
@@ -442,7 +453,7 @@ internal fun eventTypeColors(kind:EventKind,c:ColorScheme,sem:SemanticColors=sem
 @Composable fun eventKindLabel(kind:EventKind)=stringResource(eventKindLabelRes(kind))
 internal fun eventKindLabelRes(kind:EventKind)=when(kind){
     EventKind.REGIMEN->R.string.timeline_regimen;EventKind.DOSE->R.string.timeline_dose;EventKind.MISSED->R.string.timeline_missed
-    EventKind.UNCONFIRMED->R.string.status_unconfirmed;EventKind.SKIPPED->R.string.timeline_skipped;EventKind.LAB->R.string.labs
+    EventKind.UNCONFIRMED->R.string.status_unconfirmed;EventKind.SKIPPED->R.string.timeline_explicit_skipped;EventKind.LAB->R.string.labs
     EventKind.SYMPTOM->R.string.wb_symptoms;EventKind.WELLBEING->R.string.wellbeing;EventKind.REVIEW->R.string.wb_reviews
     EventKind.APPOINTMENT->R.string.appointment;EventKind.MILESTONE->R.string.milestone;EventKind.PLANNED->R.string.timeline_planned
 }
