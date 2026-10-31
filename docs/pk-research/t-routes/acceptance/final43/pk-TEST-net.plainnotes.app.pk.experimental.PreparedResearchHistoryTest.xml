@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.experimental.PreparedResearchHistoryTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:04:04.119Z" hostname="019d157e45d0" time="1.199">
+  <properties/>
+  <testcase name="closeRatesEmptyHistoryAndLongSlowTailRemainExact()" classname="net.plainnotes.app.pk.experimental.PreparedResearchHistoryTest" time="0.001"/>
+  <testcase name="longHistoryBenchmarkUsesIdenticalQueriesAndChecksEveryValue()" classname="net.plainnotes.app.pk.experimental.PreparedResearchHistoryTest" time="0.978"/>
+  <testcase name="allFrozenCandidatesMatchOriginalAcrossIrregularHistoryAndSaturationBoundaries()" classname="net.plainnotes.app.pk.experimental.PreparedResearchHistoryTest" time="0.219"/>
+  <system-out><![CDATA[PREVIEW_HISTORY_BENCHMARK model=M1 doses=360 points=10443 old_ms=394.970621 prepared_ms=19.02087 max_abs_error=1.1368683772161603E-13
+PREVIEW_HISTORY_BENCHMARK model=M2 doses=360 points=10443 old_ms=546.614116 prepared_ms=3.297073 max_abs_error=2.8421709430404007E-13
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

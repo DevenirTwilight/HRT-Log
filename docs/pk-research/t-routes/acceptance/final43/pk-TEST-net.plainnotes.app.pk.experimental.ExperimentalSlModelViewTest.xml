@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:04:02.765Z" hostname="019d157e45d0" time="1.146">
+  <properties/>
+  <testcase name="rejectsUnknownCandidateAndInvalidTime()" classname="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" time="0.002"/>
+  <testcase name="eachCandidateIsCoherentAndInsideTheExploredRange()" classname="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" time="0.067"/>
+  <testcase name="windowEndsAtEvaluationTimeWithoutForecastOrFutureDoses()" classname="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" time="0.005"/>
+  <testcase name="reusesResearchComparatorExactlyForItsOwnCandidate()" classname="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" time="0.011"/>
+  <testcase name="longHistoryStaysFastEnough()" classname="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" time="0.986"/>
+  <testcase name="nonSublingualEstradiolInputsAreIgnoredOrYieldNoView()" classname="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" time="0.004"/>
+  <testcase name="identicalInputsGiveIdenticalOutput()" classname="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" time="0.004"/>
+  <testcase name="longTailIsFlaggedAfterEightHoursWithoutADose()" classname="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" time="0.001"/>
+  <testcase name="irregularRepeatedDosesSuperposeLinearlyInM2()" classname="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" time="0.006"/>
+  <testcase name="veryCloseAndVerySmallDosesStayFiniteAndContinuous()" classname="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" time="0.001"/>
+  <testcase name="truncatingOldHistoryChangesNeitherCurveMeasurably()" classname="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" time="0.027"/>
+  <testcase name="everyOutputIsFiniteAndNonNegative()" classname="net.plainnotes.app.pk.experimental.ExperimentalSlModelViewTest" time="0.028"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

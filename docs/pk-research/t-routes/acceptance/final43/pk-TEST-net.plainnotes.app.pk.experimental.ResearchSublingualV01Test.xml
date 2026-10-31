@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.experimental.ResearchSublingualV01Test" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:04:06.169Z" hostname="019d157e45d0" time="0.03">
+  <properties/>
+  <testcase name="allCandidatesAreFiniteNormalizedAndNonnegative()" classname="net.plainnotes.app.pk.experimental.ResearchSublingualV01Test" time="0.001"/>
+  <testcase name="p2xReferencePointsAgreeWithPythonResearchKernel()" classname="net.plainnotes.app.pk.experimental.ResearchSublingualV01Test" time="0.001"/>
+  <testcase name="explicitStudyAnchorAndInputGuards()" classname="net.plainnotes.app.pk.experimental.ResearchSublingualV01Test" time="0.001"/>
+  <testcase name="candidateSeriesKeepsOneModelIdentityAcrossTheTimeAxis()" classname="net.plainnotes.app.pk.experimental.ResearchSublingualV01Test" time="0.001"/>
+  <testcase name="analyticTotalAucConservesUnitInputMass()" classname="net.plainnotes.app.pk.experimental.ResearchSublingualV01Test" time="0.022"/>
+  <testcase name="noBackdatingOrInventedDoseSchedule()" classname="net.plainnotes.app.pk.experimental.ResearchSublingualV01Test" time="0.001"/>
+  <testcase name="priceBaselineStratificationMustNotImplyPopulationWeights()" classname="net.plainnotes.app.pk.experimental.ResearchSublingualV01Test" time="0.001"/>
+  <testcase name="multiModelSpreadIsDescriptiveNotClinicalCoverage()" classname="net.plainnotes.app.pk.experimental.ResearchSublingualV01Test" time="0.001"/>
+  <testcase name="assumptionSlowInputIsNotTheCentralEliminationRate()" classname="net.plainnotes.app.pk.experimental.ResearchSublingualV01Test" time="0.001"/>
+  <testcase name="frozenNearOptimalCandidateSetHasExpectedProvenance()" classname="net.plainnotes.app.pk.experimental.ResearchSublingualV01Test" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

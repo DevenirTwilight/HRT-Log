@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.formulations.TestosteroneFormulationsTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:04:07.265Z" hostname="019d157e45d0" time="0.029">
+  <properties/>
+  <testcase name="massesAreCompoundMassNotVolumeOrEquivalents()" classname="net.plainnotes.app.pk.formulations.TestosteroneFormulationsTest" time="0.0"/>
+  <testcase name="causalFiniteNonnegativeAndNormalizedWithoutAbsoluteUnits()" classname="net.plainnotes.app.pk.formulations.TestosteroneFormulationsTest" time="0.007"/>
+  <testcase name="repeatChangedDoseMissedDoseAndStoppingUseOnlyActualEvents()" classname="net.plainnotes.app.pk.formulations.TestosteroneFormulationsTest" time="0.004"/>
+  <testcase name="invalidGridAndEventFailRatherThanQuietlyTruncate()" classname="net.plainnotes.app.pk.formulations.TestosteroneFormulationsTest" time="0.002"/>
+  <testcase name="analyticInputsMatchIndependentNumericalConvolution()" classname="net.plainnotes.app.pk.formulations.TestosteroneFormulationsTest" time="0.013"/>
+  <testcase name="exactProductIdentityAndRouteNeverFallback()" classname="net.plainnotes.app.pk.formulations.TestosteroneFormulationsTest" time="0.001"/>
+  <testcase name="firstOrderAndTransitRemainStableForCoincidentRates()" classname="net.plainnotes.app.pk.formulations.TestosteroneFormulationsTest" time="0.0"/>
+  <testcase name="longActingResidueIsNotCutAt180Days()" classname="net.plainnotes.app.pk.formulations.TestosteroneFormulationsTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

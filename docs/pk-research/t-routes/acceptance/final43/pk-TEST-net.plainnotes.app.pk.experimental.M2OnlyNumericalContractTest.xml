@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:04:03.912Z" hostname="019d157e45d0" time="0.206">
+  <properties/>
+  <testcase name="oneAndTwoMgTruePeaksAllRequestedAreasAndLateValuesMatchIndependentMath()" classname="net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest" time="0.155"/>
+  <testcase name="fixedCandidateHashVersionAndPriceProjectionCannotRegressToExample()" classname="net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest" time="0.002"/>
+  <testcase name="recordedTimestampSuperpositionAddsBackgroundOnceAndNeverInventsDoses()" classname="net.plainnotes.app.pk.experimental.M2OnlyNumericalContractTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.MedicalHomeConfirmFlowTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:00:52.078Z" hostname="019d157e45d0" time="8.806">
+  <properties/>
+  <testcase name="confirmThenUndoInDetail" classname="net.plainnotes.app.MedicalHomeConfirmFlowTest" time="8.528"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

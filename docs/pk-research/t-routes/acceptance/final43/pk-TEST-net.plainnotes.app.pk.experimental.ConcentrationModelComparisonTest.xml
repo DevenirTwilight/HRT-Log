@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:03:59.195Z" hostname="019d157e45d0" time="3.57">
+  <properties/>
+  <testcase name="candidateRangeContainsEveryCoherentCandidate()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="1.185"/>
+  <testcase name="tapReadOutIsTheExactKernelValueOnTheSameInputs()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="0.079"/>
+  <testcase name="longHistoryIsFastEnough()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="1.494"/>
+  <testcase name="responsesAt8h12h24hAreKernelValuesAfterTheOrigin()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="0.061"/>
+  <testcase name="identicalInputsGiveIdenticalOutputs()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="0.12"/>
+  <testcase name="longTailFollowsTheActualDoseTimes()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="0.057"/>
+  <testcase name="invalidOrUnsupportedInputs()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="0.001"/>
+  <testcase name="metricsConvergeAndHalfHourSamplingMissesThePeak()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="0.023"/>
+  <testcase name="ratioOnlyWithAPositiveDenominator()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="0.001"/>
+  <testcase name="aucIsTheTrapezoidOfTheCurveAndMatchesTheFrozenP2xColumn()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="0.284"/>
+  <testcase name="singleDosePeakEqualsModelTmaxAndOverlapShiftsThePeak()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="0.045"/>
+  <testcase name="bothCurvesEqualOneHourAfterAnIsolatedOneMilligramDose()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="0.016"/>
+  <testcase name="m2IsLinearInDose()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="0.127"/>
+  <testcase name="bothModelsUseTheSameDosesOnTheSameGrid()" classname="net.plainnotes.app.pk.experimental.ConcentrationModelComparisonTest" time="0.068"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

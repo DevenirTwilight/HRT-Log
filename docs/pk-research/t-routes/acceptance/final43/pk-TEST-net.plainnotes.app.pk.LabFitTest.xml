@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.LabFitTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:03:57.954Z" hostname="019d157e45d0" time="0.847">
+  <properties/>
+  <testcase name="recoversAKnownPersonalFactor()" classname="net.plainnotes.app.pk.LabFitTest" time="0.006"/>
+  <testcase name="halfAYearOfTwiceDailyDosesIsFast()" classname="net.plainnotes.app.pk.LabFitTest" time="0.789"/>
+  <testcase name="noLabsKeepsPriorAndBaselineRequiresExplicitConfirmation()" classname="net.plainnotes.app.pk.LabFitTest" time="0.003"/>
+  <testcase name="bandsContainTheCurveAndNarrowWithLabs()" classname="net.plainnotes.app.pk.LabFitTest" time="0.023"/>
+  <testcase name="tenFoldLabIsExcluded()" classname="net.plainnotes.app.pk.LabFitTest" time="0.011"/>
+  <testcase name="causalModeUsesOnlyEarlierLabs()" classname="net.plainnotes.app.pk.LabFitTest" time="0.011"/>
+  <system-out><![CDATA[bands for 10849 grid points, 630 events: 0.78 s
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

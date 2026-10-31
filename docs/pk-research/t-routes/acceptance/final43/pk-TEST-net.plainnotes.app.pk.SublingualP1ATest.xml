@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.SublingualP1ATest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:03:58.981Z" hostname="019d157e45d0" time="0.214">
+  <properties/>
+  <testcase name="amplitudeMapWithBaselineAndHighlyDiscordantLabsRemainsFinite()" classname="net.plainnotes.app.pk.SublingualP1ATest" time="0.002"/>
+  <testcase name="nonSlFactorsCovarianceAndPriorPosteriorBandsMatchActualVersionOneGolden()" classname="net.plainnotes.app.pk.SublingualP1ATest" time="0.011"/>
+  <testcase name="nonE2CurvesDoNotInheritSlAmplitudePolicyAndEmptyHistoryIsSafe()" classname="net.plainnotes.app.pk.SublingualP1ATest" time="0.01"/>
+  <testcase name="pureSlPosteriorMatchesIndependentOneDimensionalGaussianMap()" classname="net.plainnotes.app.pk.SublingualP1ATest" time="0.001"/>
+  <testcase name="mixedRoutesSeparateSwallowedSlFromRealOralAndRetainTheirRateCalibration()" classname="net.plainnotes.app.pk.SublingualP1ATest" time="0.031"/>
+  <testcase name="thirtyDayHistoriesAndDoseCorrectionsSuperposeWithoutRateDependence()" classname="net.plainnotes.app.pk.SublingualP1ATest" time="0.008"/>
+  <testcase name="exportWarmPerformanceAndSyntheticStabilitySummary()" classname="net.plainnotes.app.pk.SublingualP1ATest" time="0.136"/>
+  <testcase name="allSublingualPartsIgnoreRateAtAndAcrossTheCriticalPoint()" classname="net.plainnotes.app.pk.SublingualP1ATest" time="0.006"/>
+  <testcase name="posteriorDrawsUseOnlyAmplitudeAndMatchSeedAndSortedQuantiles()" classname="net.plainnotes.app.pk.SublingualP1ATest" time="0.002"/>
+  <testcase name="pgMlAndPmolLabsAndOutlierWarningRetainConsistentFits()" classname="net.plainnotes.app.pk.SublingualP1ATest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

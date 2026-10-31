@@ -1,3 +1,15 @@
+## #174 Build43 候选冻结 — 2026-10-31
+
+同步主线后的实际定向测试229项全部PASS、零skip（App74 + E2旧校准22 + PK132强制实际重跑 + SQLCipher实际加密备份恢复1），AndroidTest Kotlin编译PASS、check_protocol原冻结哈希守卫PASS。原XML及收据docs/pk-research/t-routes/acceptance/final43。旧65的Android失败是MedicalHome撤销等待line110；device失败最后为Demo fullScriptedFlow期间ADB offline、console拒连，不能仅凭故障注入日志的Process crashed定性为新App LMK。原全job gzip会附于PR证据。
+
+此候选含已合并#177跳过修复/就诊与只读资料测试同步，不改E2/M2参数、数据库schema、库存、附件或备份格式。版本43及签名/替换Release授权已记录，现有公开四文件和tag状态已仓库外备份并按GitHub digest逐一核对。还未签名、交付或替换；必须等待准确HEAD全部必需/原生检查，保护合并后从干净主线构建，再正式签名与下载复核。#173全部研究28文件已在此PR（README只是追加索引），通过后关闭为已纳入，不伪称单独合并。
+
+## 药代候选合并与正式交付授权 — 2026-10-31
+
+最新负责人要求合并、签名给APK并替换现有Release；已记REQUIREMENTS末节。复用#174（feature/sex-steroid-production-models-20261030），把已通过#177的主线082b1586无损合入，保留双方需求/交接全文、显示审批记录和原字节守卫；版本43（最高既有42）。#173研究28文件均在#174（仅README为新增索引），单独正常merge遭当前6 checks expected拒绝，未绕过；统一随174验收，可后续关闭173为已纳入。174旧65有Android/device失败及取消记录，不借其它绿色替代；准确新HEAD仍须全部门槛和API26/29/35真实产品验收。
+
+研究T相对曲线边界不变，非可靠血清浓度预测；尚未签名/交付/更改Release/tag。下一步目标测试→推原PR→最终CI→保护合并→精确主线fullRelease→原证书签名/核验→备份旧Release状态及四附件→替换并下载核对→交付账本/最终回执。签名私有凭据须仓库外临时恢复并清理。
+
 ## PR #177 最终就诊回归同步收口 — 2026-10-31
 
 f35881d1的PR真实MainActivity跳过/时间线/新Activity历史撤销，在API26/29/35原XML均PASS（无skip），原件gzip和artifact SHA见docs/fixes/explicit-skip-2026-10-31/f358-final-ci-evidence.json。push完整4334项仅MedicalHomeConfirmFlowTest line108找不到撤销控件失败，609原条件skip；同原测试本地17秒PASS，保留原HTML及全job gzip，不能声称唯一CI调度根因已证明。只加强旧测试：等待相同ID的已确认显示快照、主循环idle、无error；卡片滚动可见，点击后确认离开列表再找详情撤销；仍10秒，原COMMIT/日期不变/确认撤销/数据库结果断言全保留，不改就诊生产业务。最终局部医疗首页/资料只读/主循环测试全部PASS，原XML附后。保存回执会被AppShell消费，不把瞬时saved值当稳定就绪条件。

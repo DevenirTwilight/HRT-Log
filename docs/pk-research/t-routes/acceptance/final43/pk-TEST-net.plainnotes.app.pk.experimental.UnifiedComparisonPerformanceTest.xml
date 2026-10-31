@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.pk.experimental.UnifiedComparisonPerformanceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-31T16:04:06.235Z" hostname="019d157e45d0" time="0.636">
+  <properties/>
+  <testcase name="thirtyDayRepeatedHistoryHasBoundedChartAndExactReadout()" classname="net.plainnotes.app.pk.experimental.UnifiedComparisonPerformanceTest" time="0.635"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
