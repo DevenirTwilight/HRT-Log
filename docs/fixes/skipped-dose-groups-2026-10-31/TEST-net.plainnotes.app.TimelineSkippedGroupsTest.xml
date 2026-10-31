@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.TimelineSkippedGroupsTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-31T18:12:08.519Z" hostname="019d157e45d0" time="0.019">
+  <properties/>
+  <testcase name="aDateGapStartsAnotherRun" classname="net.plainnotes.app.TimelineSkippedGroupsTest" time="0.017"/>
+  <testcase name="fiveDaysTwiceDailyBecomeOneSummaryRetainingAllTenOriginalEvents" classname="net.plainnotes.app.TimelineSkippedGroupsTest" time="0.0"/>
+  <testcase name="importedDeletedUnlinkedOrUnverifiableSkipsAreNotGrouped" classname="net.plainnotes.app.TimelineSkippedGroupsTest" time="0.001"/>
+  <testcase name="frozenIdentityAndZoneChangesDoNotSilentlyMerge" classname="net.plainnotes.app.TimelineSkippedGroupsTest" time="0.0"/>
+  <testcase name="treatmentBoundaryAndRuleVersionRemainSeparate" classname="net.plainnotes.app.TimelineSkippedGroupsTest" time="0.0"/>
+  <testcase name="overridesRemainExactAndOrderDoesNotChangeGroupIdentity" classname="net.plainnotes.app.TimelineSkippedGroupsTest" time="0.001"/>
+  <testcase name="dstIsComparedAsLocalDatesNotTwentyFourHourDurations" classname="net.plainnotes.app.TimelineSkippedGroupsTest" time="0.0"/>
+  <testcase name="singleSkipStaysAnIndividualRow" classname="net.plainnotes.app.TimelineSkippedGroupsTest" time="0.0"/>
+  <testcase name="undoChangesOnlyTheCountAndNeverSynthesizesEvents" classname="net.plainnotes.app.TimelineSkippedGroupsTest" time="0.0"/>
+  <testcase name="twoDifferentMedicinesNeverShareOneSummary" classname="net.plainnotes.app.TimelineSkippedGroupsTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

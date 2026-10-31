@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.PeriodTimelineTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-31T18:12:08.478Z" hostname="019d157e45d0" time="0.039">
+  <properties/>
+  <testcase name="reminderMergedDisplayDoesNotChangeLegacyEpochContextOrTemplateOneFactsAndDigest" classname="net.plainnotes.app.PeriodTimelineTest" time="0.024"/>
+  <testcase name="executionAndDailyObservationsNeverEnterStoryOrCutPeriodsButImportantFactsRemain" classname="net.plainnotes.app.PeriodTimelineTest" time="0.002"/>
+  <testcase name="reminderClockAnchorZoneNamesAndPureModelSettingDoNotCutTheDisplay" classname="net.plainnotes.app.PeriodTimelineTest" time="0.008"/>
+  <testcase name="clockCrossingWithNonuniformDosesIsNotTreatedAsAProvenDistributionChange" classname="net.plainnotes.app.PeriodTimelineTest" time="0.001"/>
+  <testcase name="exactLabContextIsSeparateFromSameDayDisplayAndFutureEventsStayOutside" classname="net.plainnotes.app.PeriodTimelineTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

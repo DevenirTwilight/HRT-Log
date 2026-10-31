@@ -19,6 +19,45 @@ import java.time.*
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk=[28],application=android.app.Application::class)
 class ExplicitSkipBackupTest {
+    @Test fun fiveHistoricalDaysCanBePreparedAsTenExplicitEarlyDecisions()=runBlocking {
+        val context=ApplicationProvider.getApplicationContext<Context>()
+        val db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()
+        try {
+            val repo=NotesRepository(object:DatabaseAccess(context){override fun get(space:Space)=db})
+            val zone=ZoneId.of("Europe/Paris");val from=LocalDate.parse("2026-10-27")
+            val decidedAt=from.atTime(7,0).atZone(zone).toInstant()
+            val today=from.plusDays(4)
+            val (id,stock)=repo.transaction {
+                val id=repo.saveMedication(MedicationEntity(name="Synthetic grouped skips",molecule="E2",route="ORAL",unit="MG",dose_per_intake=2.0,container_capacity=20.0,
+                    soon_alert_minutes=15,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=0),null,
+                    RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.of(8,0),LocalTime.of(20,0)),emptySet(),from.atStartOfDay(zone).toInstant())
+                repo.addContainers(id,20.0,1,true)
+                val stock=repo.containers()
+                val slots=repo.calendar(decidedAt,zone,from).filter{it.slot.medicationId==id && it.slot.at.atZone(zone).toLocalDate() in from..today}.map{it.slot}
+                assertEquals(10,slots.size)
+                slots.forEach{repo.override(it,SlotOverride(it.key,skipped=true),decidedAt)}
+                id to stock
+            }
+            val displayAt=today.atTime(23,0).atZone(zone).toInstant()
+            repo.calendar(displayAt,zone,from)
+            val rows=repo.records().filter{it.medication_id==id}
+            assertEquals(10,rows.size)
+            assertTrue(rows.all{it.status=="SKIPPED" && it.taken_utc==null && it.actual_dose==null})
+            assertEquals(stock,repo.containers())
+            val view=PeriodTimelineProjection.build(NotesViewModel.ExtraState(records=rows,regimens=db.dao().regimens(),regimenLinks=db.dao().regimenLinks()),emptyList(),displayAt)
+            assertEquals(10,view.events.count{it.kind==EventKind.SKIPPED})
+            assertEquals(10,net.plainnotes.app.ui.TimelineSkippedGroups.build(view.events).single().events.size)
+            assertTrue(view.importedHistory.isEmpty())
+            // Another real plan beginning within the five days is a genuine global
+            // treatment-stage boundary. Never merge skips across it just to show ten.
+            repo.saveMedication(MedicationEntity(name="Synthetic second plan",molecule="E2",route="ORAL",unit="MG",dose_per_intake=1.0,container_capacity=20.0,
+                soon_alert_minutes=15,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=1),null,
+                RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),from.plusDays(3).atTime(12,0).atZone(zone).toInstant())
+            val staged=PeriodTimelineProjection.build(NotesViewModel.ExtraState(records=rows,regimens=db.dao().regimens(),regimenLinks=db.dao().regimenLinks()),emptyList(),displayAt)
+            assertEquals(listOf(3,7),net.plainnotes.app.ui.TimelineSkippedGroups.build(staged.events).map{it.events.size}.sorted())
+            assertEquals(rows,repo.records().filter{it.medication_id==id})
+        } finally {db.close()}
+    }
     @Test fun realSkipSurvivesEncryptedBackupWithoutIntakeStockOrPlanMutation()=runBlocking {
         val context=ApplicationProvider.getApplicationContext<Context>()
         val db=Room.inMemoryDatabaseBuilder(context,NotesDatabase::class.java).allowMainThreadQueries().addCallback(SchemaGuards).build()

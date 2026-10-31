@@ -41,6 +41,50 @@ class ExplicitSkippedProductAndroidTest {
         ui.onNodeWithTag("drawer-content").performScrollToNode(hasText(context.getString(to.title)))
         ui.onNodeWithTag("drawer-content").onChildren().filterToOne(hasText(context.getString(to.title))).performClick()
     }
+    @Test fun fiveDaysTwiceDailyHaveOneSummaryAndReopenWithoutTenRows() {
+        launch()
+        val repo=model.libraryRuntime.currentRepository();val now=Instant.now();val zone=ZoneId.systemDefault()
+        assertTrue("Requires an isolated synthetic installation, not another test’s treatment stages",runBlocking{repo.records().isEmpty() && repo.medications().isEmpty()})
+        val today=now.atZone(zone).toLocalDate();val from=today.minusDays(4)
+        val decidedAt=from.atTime(7,0).atZone(zone).toInstant()
+        // Prepare the unchanged five historical days as decisions made before their
+        // doses, atomically: a foreground read must not first materialize MISSED.
+        val (id,before)=runBlocking{repo.transaction {
+        val medication=repo.saveMedication(MedicationEntity(name="SYNTHETIC grouped skips",molecule="E2",route="ORAL",unit="MG",
+            dose_per_intake=2.0,container_capacity=20.0,site_rotation=false,notifications_on=false,
+            soon_alert_minutes=15,late_after_minutes=120,active=true,sort_order=0),null,RuleKind.EVERY_N_DAYS,1,
+            listOf(LocalTime.of(8,0),LocalTime.of(20,0)),emptySet(),from.atStartOfDay(zone).toInstant())
+        repo.addContainers(medication,20.0,1,true)
+        val stock=repo.containers().filter{it.medication_id==medication}
+        val slots=repo.calendar(decidedAt,zone,from).filter{it.slot.medicationId==medication &&
+            it.slot.at.atZone(zone).toLocalDate() in from..today}.map{it.slot}
+        assertEquals(10,slots.size)
+        slots.forEach{repo.override(it,SlotOverride(it.key,skipped=true),decidedAt)}
+        medication to stock
+        }}
+        runBlocking{model.refresh().join()}
+        ui.waitUntil(30_000){model.extra.value.records.count{it.medication_id==id && it.status=="SKIPPED"}==10}
+        val rows=model.extra.value.records.filter{it.medication_id==id}.sortedBy{it.id}
+        assertEquals(10,rows.size);assertTrue(rows.all{it.status=="SKIPPED" && it.taken_utc==null && it.actual_dose==null})
+        val first=rows.minBy{requireNotNull(it.scheduled_utc)}
+        val summary="timeline:skip-group:skip:${first.id}"
+        navigate(Destination.TIMELINE)
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(summary))
+        ui.onNodeWithTag(summary).assertTextContains(context.resources.getQuantityString(R.plurals.timeline_skip_count,10,10),substring=true)
+        rows.forEach{ui.onNodeWithTag("timeline:skip:${it.id}").assertDoesNotExist()}
+        ui.onNodeWithTag(summary).performClick()
+        val last=rows.maxBy{requireNotNull(it.scheduled_utc)}
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag("timeline:skip:${last.id}"))
+        ui.onNodeWithTag("timeline:skip:${last.id}").assertIsDisplayed().performClick()
+        ui.onNodeWithTag("timeline-event-time").assertExists()
+        activity!!.close();activity=null;launch();navigate(Destination.TIMELINE)
+        ui.waitUntil(30_000){model.extra.value.records.count{it.medication_id==id && it.status=="SKIPPED"}==10}
+        ui.onNodeWithTag("period-timeline").performScrollToNode(hasTestTag(summary))
+        ui.onNodeWithTag(summary).assertExists()
+        rows.forEach{ui.onNodeWithTag("timeline:skip:${it.id}").assertDoesNotExist()}
+        assertEquals(rows,model.extra.value.records.filter{it.medication_id==id}.sortedBy{it.id})
+        assertEquals(before,runBlocking{model.libraryRuntime.currentRepository().containers()}.filter{it.medication_id==id})
+    }
     @Test fun skipInCalendarBelongsToTreatmentAndCanBeUndoneAfterReopen() {
         launch()
         val repo=model.libraryRuntime.currentRepository()
@@ -78,6 +122,7 @@ class ExplicitSkippedProductAndroidTest {
         ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag(menu))
         ui.onNodeWithTag(menu).performClick()
         ui.onNodeWithText(context.getString(R.string.today_change_or_skip)).performClick()
+        ui.waitUntil(30_000){ui.onAllNodesWithContentDescription(context.getString(R.string.skipped)).fetchSemanticsNodes().isNotEmpty()}
         ui.onNodeWithContentDescription(context.getString(R.string.skipped)).assertIsOff().performClick()
         ui.onNode(hasText(context.getString(R.string.save)) and hasAnyAncestor(isDialog())).performClick()
         ui.waitUntil(30_000){model.extra.value.records.any{it.medication_id==id && it.status=="SKIPPED"}}

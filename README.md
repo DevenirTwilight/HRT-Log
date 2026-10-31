@@ -10,7 +10,7 @@ Version layers (do not confuse them):
   (including disabled attachment metadata tables), encrypted backup `PNBAK1` structured serialization **9**.
 - **Privately delivered builds**: signed with the official key and handed to the maintainer only; they are
   not public releases. See [`docs/delivery/ledger.json`](docs/delivery/ledger.json).
-- **Public release**: [v0.2.0](https://github.com/DevenirTwilight/HRT-Log/releases/tag/v0.2.0), rebuilt 2026-10-31 (source `f112e10`, full flavor only). It replaced the earlier public files (source `76627bf`), archived in [`docs/releases/`](docs/releases/0.2.0-rebuild-2026-10-17-superseded.md). Later default-branch commits are not in it.
+- **Public release**: [v0.2.0](https://github.com/DevenirTwilight/HRT-Log/releases/tag/v0.2.0), rebuilt 2026-10-31 (source `082b158`, full flavor only). It replaced the earlier public files (source `76627bf`), archived in [`docs/releases/`](docs/releases/0.2.0-rebuild-2026-10-17-superseded.md). Later default-branch commits are not in it.
 - **Open pull requests** are unmerged and not part of any build until merged.
 Current work and verification: [`docs/HANDOFF.md`](docs/HANDOFF.md);
 feature status and unapproved candidates: [`docs/BACKLOG.md`](docs/BACKLOG.md).
