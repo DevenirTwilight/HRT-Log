@@ -320,6 +320,8 @@ import java.time.*
     is EventSource.Lab->analyteLabel(source.value.analyte_code)
     is EventSource.Milestone->source.value.title ?: milestoneKindLabel(source.value.kind)
     is EventSource.Appointment->choiceLabel(source.value.type)
+    is EventSource.Intake->MedicationSnapshot.decode(source.record.config_snapshot,source.record.medication_id)?.name
+        ?: stringResource(R.string.history_context_unknown)
     else->eventKindLabel(event.kind)
 }
 @Composable private fun EventRow(event:PeriodEvent,onOpen:(PeriodEvent)->Unit) {
@@ -429,6 +431,12 @@ internal fun eventTypeColors(kind:EventKind,c:ColorScheme,sem:SemanticColors=sem
                     v.satisfaction?.let{Text(stringResource(R.string.wb_satisfaction)+" · $it/5")}
                 }
                 is EventSource.Milestone->s.value.note?.let{Text(it)}
+                is EventSource.Intake->{
+                    val r=s.record
+                    val snapshot=MedicationSnapshot.decode(r.config_snapshot,r.medication_id)
+                    Text(snapshot?.name ?: stringResource(R.string.history_context_unknown))
+                    r.planned_dose?.let{dose->Text(stringResource(R.string.history_planned_dose_label,formatDose(dose,snapshot?.unit)))}
+                }
                 else->{}
             }
         }
