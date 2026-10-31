@@ -45,7 +45,9 @@ class ExplicitSkippedProductAndroidTest {
         launch()
         val repo=model.libraryRuntime.currentRepository()
         val now=Instant.now();val zone=ZoneId.systemDefault()
-        val scheduled=now.atZone(zone).plusHours(2).withSecond(0).withNano(0)
+        val today=now.atZone(zone).toLocalDate()
+        val preferred=now.atZone(zone).plusHours(2).withSecond(0).withNano(0)
+        val scheduled=if(preferred.toLocalDate()==today)preferred else today.atTime(23,59).atZone(zone)
         val id=runBlocking{repo.saveMedication(MedicationEntity(name="SYNTHETIC explicit skip",molecule="E2",route="ORAL",unit="MG",
             dose_per_intake=2.0,container_capacity=20.0,site_rotation=false,notifications_on=false,
             soon_alert_minutes=15,late_after_minutes=120,active=true,sort_order=0),null,RuleKind.EVERY_N_DAYS,1,
@@ -54,9 +56,22 @@ class ExplicitSkippedProductAndroidTest {
         val before=runBlocking{repo.containers()}.filter{it.medication_id==id}
         val slot=runBlocking{repo.calendar(now,zone,scheduled.toLocalDate())}.single{it.slot.medicationId==id && it.slot.at==scheduled.toInstant()}.slot
         ui.waitUntil(30_000){!model.state.value.loading && model.state.value.medications.any{it.id==id}}
-        ui.onNodeWithTag("recent-day:${scheduled.toLocalDate()}").performClick()
-        ui.onNodeWithTag("day-dose:${slot.key}").performScrollTo()
-        ui.onNode(hasText(context.getString(R.string.reschedule)) and hasAnyAncestor(hasTestTag("day-dose:${slot.key}"))).performClick()
+        // Today's doses are in the real TodayCard, not the other-dates day list.
+        val open=(model.state.value.slots+model.extra.value.upcoming).distinctBy{it.slot.key}
+            .filter{it.state in OPEN_STATES && it.slot.at.atZone(zone).toLocalDate()==today}.sortedBy{it.slot.at}
+        val first=open.first()
+        val menu=when {
+            first.slot.key==slot.key -> "today-more"
+            first.slot.at==slot.at -> "today-more:${slot.key}"
+            else -> {
+                if(ui.onAllNodesWithTag("today-show-all:later").fetchSemanticsNodes().isNotEmpty())
+                    ui.onNodeWithTag("today-show-all:later").performScrollTo().performClick()
+                "today-later-more:${slot.key}"
+            }
+        }
+        ui.onNode(hasScrollToIndexAction()).performScrollToNode(hasTestTag(menu))
+        ui.onNodeWithTag(menu).performClick()
+        ui.onNodeWithText(context.getString(R.string.today_change_or_skip)).performClick()
         ui.onNodeWithContentDescription(context.getString(R.string.skipped)).assertIsOff().performClick()
         ui.onNode(hasText(context.getString(R.string.save)) and hasAnyAncestor(isDialog())).performClick()
         ui.waitUntil(30_000){model.extra.value.records.any{it.medication_id==id && it.status=="SKIPPED"}}
@@ -82,6 +97,9 @@ class ExplicitSkippedProductAndroidTest {
         ui.onNodeWithTag("timeline:skip:${skipped.id}").assertDoesNotExist()
         val current=model.libraryRuntime.currentRepository()
         assertEquals(before,runBlocking{current.containers()}.filter{it.medication_id==id})
-        assertEquals(SlotState.PENDING,runBlocking{current.calendar(Instant.now(),zone,scheduled.toLocalDate())}.single{it.slot.key==slot.key}.state)
+        val restored=runBlocking{current.calendar(Instant.now(),zone,scheduled.toLocalDate())}.single{it.slot.key==slot.key}
+        assertTrue(restored.state in OPEN_STATES)
+        assertEquals(slot.at,restored.slot.at)
+        assertEquals(slot.dose,restored.slot.dose,0.0)
     }
 }

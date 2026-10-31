@@ -1,3 +1,7 @@
+## PR #177 原生路径对照修正 — 2026-10-31
+
+正式日程当天剂量位于TodayCard，day-dose列表只为其它日期渲染。原生候选改为真实当天卡片的对应slot菜单→更改/跳过→有名称的开关→保存，不触碰生产逻辑、不注入数据库跳过。兼容同时间其它药、较晚剂量展开；解除后要求原时刻/剂量保持且槽位回到合法OPEN状态（PENDING/SOON/OVERDUE由既有当前时刻规则决定，不把未来两小时跨午夜假设当业务要求）。编译实际6秒PASS。90项局部结果不变；最终准确HEADCI原生仍PENDING。
+
 ## PR #177 最终目标测试冻结 — 2026-10-31
 
 追加真实跳过对话框四语点击/保存校验，发现三个Switch缺少自身无障碍名；现有SwitchRow只补对应label的contentDescription，不改布局/业务。原生按真实label选择跳过，无控件坐标/序号猜测。57项App直接目标及33项core撤销共90项PASS，最终8项四语原XML入docs/fixes/explicit-skip-2026-10-31，AndroidTest编译PASS。原未具名Switch匹配失败原XML保留。接下来只收口最终准确HEAD的CI/API26/29/35真实MainActivity合同；均满足才能Ready正常保护合并。无真机/TalkBack人工/签名/发行。
