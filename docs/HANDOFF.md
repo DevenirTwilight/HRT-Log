@@ -1,3 +1,9 @@
+## PR #177 最终就诊回归同步收口 — 2026-10-31
+
+f35881d1的PR真实MainActivity跳过/时间线/新Activity历史撤销，在API26/29/35原XML均PASS（无skip），原件gzip和artifact SHA见docs/fixes/explicit-skip-2026-10-31/f358-final-ci-evidence.json。push完整4334项仅MedicalHomeConfirmFlowTest line108找不到撤销控件失败，609原条件skip；同原测试本地17秒PASS，保留原HTML及全job gzip，不能声称唯一CI调度根因已证明。只加强旧测试：等待相同ID的已确认显示快照、主循环idle、无error；卡片滚动可见，点击后确认离开列表再找详情撤销；仍10秒，原COMMIT/日期不变/确认撤销/数据库结果断言全保留，不改就诊生产业务。最终局部医疗首页/资料只读/主循环测试全部PASS，原XML附后。保存回执会被AppShell消费，不把瞬时saved值当稳定就绪条件。
+
+同源PR API26安全首次ADB在测试前断开、底层退出原因未证实，单失败job一次重验PASS；push API26/API29有FATAL userdata磁盘不足原日志，不是App/LMK。当前最后测试同步候选生产代码逐字节保持三API通过版本，准确新HEAD必需CI仍需完成，不能借旧SHA成功或忽略任何失败合并。原故障/后续重验均留存。不签名、交付或发行；真机/人工TalkBack NOT_RUN。最终状态继续以PR #177准确checks及最终验收评论为准。
+
 ## PR #177 最终全量回归：历史资料用例主循环同步 — 2026-10-31
 
 958cbd77三API设备及四API安全均PASS，但PR全量4334项中唯一FAIL是RecordedReferenceUiTest繁中初始化等待line75（10000ms，尚未进入资料弹窗交互；609原条件skip）。立即关闭auto-merge，未借另一个运行PASS代替。原HTML、完整job日志gzip和SHA见docs/fixes/explicit-skip-2026-10-31/readonly-sync-evidence.json。
