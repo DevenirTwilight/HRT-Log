@@ -100,10 +100,19 @@ class MedicalHomeConfirmFlowTest {
             ui.waitUntil(10_000) { ui.onAllNodesWithTag("medical-confirm:$id").fetchSemanticsNodes().isNotEmpty() }
             ui.onNodeWithTag("medical-confirm:$id").performClick()
             ui.waitUntil(10_000) { runBlocking { db.dao().appointments().single().completed_utc } != null }
+            // The database COMMIT precedes the asynchronous display refresh. Wait for
+            // that same confirmed record before navigating, rather than treating a
+            // temporarily absent lazy-list button as a completed refresh.
+            ui.waitUntil(10_000) {
+                ui.waitForIdle()
+                model.state.value.appointments.singleOrNull { it.id == id }?.completed_utc != null
+            }
+            assertNull(model.state.value.error)
             ui.waitUntil(10_000) { ui.onAllNodesWithTag("medical-confirm:$id").fetchSemanticsNodes().isEmpty() }
             assertEquals(at.toEpochMilli(), runBlocking { db.dao().appointments().single().at_utc })   // nothing else changed
             ui.onNodeWithTag("medical-list").performScrollToNode(hasTestTag("medical-visit:$id"))
-            ui.onNodeWithTag("medical-visit:$id").performClick(); ui.waitForIdle()
+            ui.onNodeWithTag("medical-visit:$id").performScrollTo().assertIsDisplayed().performClick(); ui.waitForIdle()
+            ui.waitUntil(10_000) { ui.onAllNodesWithTag("medical-list").fetchSemanticsNodes().isEmpty() }
             // The medical detail's own undo: Retract, then its explicit confirmation.
             ui.onAllNodes(hasScrollToNodeAction()).onFirst().performScrollToNode(hasText(context.getString(R.string.medical_retract)) and hasClickAction())
             ui.onNode(hasText(context.getString(R.string.medical_retract)) and hasClickAction()).performScrollTo().assertIsDisplayed().performClick()

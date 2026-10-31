@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.RecordedReferenceUiTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-31T11:03:40.958Z" hostname="019d157e45d0" time="16.835">
+  <properties/>
+  <testcase name="actualHistoryEditEntryOpensReadOnlySourceWithoutSavingTheRecord[en/320dp/2x]" classname="net.plainnotes.app.RecordedReferenceUiTest" time="8.651"/>
+  <testcase name="oldUncapturedRecordShowsUnknownAndStaleRestoreDoesNotJoinReusedId[en/320dp/2x]" classname="net.plainnotes.app.RecordedReferenceUiTest" time="1.286"/>
+  <testcase name="originalContextRemainsVisibleAfterCurrentReferenceChanges[en/320dp/2x]" classname="net.plainnotes.app.RecordedReferenceUiTest" time="0.609"/>
+  <testcase name="actualHistoryEditEntryOpensReadOnlySourceWithoutSavingTheRecord[fr-rFR/320dp/2x]" classname="net.plainnotes.app.RecordedReferenceUiTest" time="0.699"/>
+  <testcase name="oldUncapturedRecordShowsUnknownAndStaleRestoreDoesNotJoinReusedId[fr-rFR/320dp/2x]" classname="net.plainnotes.app.RecordedReferenceUiTest" time="0.945"/>
+  <testcase name="originalContextRemainsVisibleAfterCurrentReferenceChanges[fr-rFR/320dp/2x]" classname="net.plainnotes.app.RecordedReferenceUiTest" time="0.554"/>
+  <testcase name="actualHistoryEditEntryOpensReadOnlySourceWithoutSavingTheRecord[zh-rCN/320dp/2x]" classname="net.plainnotes.app.RecordedReferenceUiTest" time="0.614"/>
+  <testcase name="oldUncapturedRecordShowsUnknownAndStaleRestoreDoesNotJoinReusedId[zh-rCN/320dp/2x]" classname="net.plainnotes.app.RecordedReferenceUiTest" time="0.752"/>
+  <testcase name="originalContextRemainsVisibleAfterCurrentReferenceChanges[zh-rCN/320dp/2x]" classname="net.plainnotes.app.RecordedReferenceUiTest" time="0.498"/>
+  <testcase name="actualHistoryEditEntryOpensReadOnlySourceWithoutSavingTheRecord[zh-rTW/320dp/2x]" classname="net.plainnotes.app.RecordedReferenceUiTest" time="0.528"/>
+  <testcase name="oldUncapturedRecordShowsUnknownAndStaleRestoreDoesNotJoinReusedId[zh-rTW/320dp/2x]" classname="net.plainnotes.app.RecordedReferenceUiTest" time="0.74"/>
+  <testcase name="originalContextRemainsVisibleAfterCurrentReferenceChanges[zh-rTW/320dp/2x]" classname="net.plainnotes.app.RecordedReferenceUiTest" time="0.465"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

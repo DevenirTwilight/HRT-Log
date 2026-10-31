@@ -308,33 +308,19 @@
    "human_review": "compare docs/ui-audit/2026-10-30-ui13-2/{before,after}."
   },
   {
-   "id": "PD-2026-10-30-SEX-STEROID-SELECTOR",
+   "id": "PD-2026-10-30-MAIN-THREAD-CONCENTRATIONSCREEN",
    "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
    "approver": "DevenirTwilight",
    "date": "2026-10-30",
-   "scope": "Existing concentration destination: E2/T selector, separate relative-only T rendering from actual frozen history. E2 numerical/calibration body unchanged. No T absolute concentrations, clinical validation, endogenous baseline or E2 calibration reuse.",
+   "scope": "Threading only: the off-main build of the calibrated/mixed E2 total returns through computeOffMain (main-thread resume) instead of a bare withContext(Dispatchers.Default). Same computation, inputs, cancellation, error handling and display.",
    "previous_sha256": "68d30c771872e7d6f045ddd66f26b589d03a110a35737463a5606b9387724082",
-   "new_sha256": "e254d40cb799f11f43d7a91410b36a5d6ccdf0a292da05fd57fa81a0ad318f10",
+   "new_sha256": "ce899c1ea250f7bece17e100c3f45a4f11ba497afcce97cc4bd501b249981110",
    "evidence": {
-    "commit": "dcf2f5301b8b477262756b29e70b94a18dd7bfe4",
+    "commit": "5e63b5338cd8d58c06474e977c1d6df75c3219ec",
     "path": "docs/REQUIREMENTS.md"
    },
-   "owner_decision": "REQUIREMENTS §179; owner explicitly authorizes evidence-bounded models and relative research shapes where absolute prediction is unsupported.",
-   "human_review": "Verify selector-only diff and separate T renderer; the old E2 body, fit and export path remain unchanged."
-  },
-  {
-   "id": "PD-2026-10-30-SEX-STEROID-READ-RETRY",
-   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
-   "approver": "DevenirTwilight",
-   "date": "2026-10-30",
-   "scope": "T branch only: pass verified atomic actual-record/rule input snapshot and existing production retry callback, rather than stale independent UI extra state. E2 numerical body/calibration unchanged.",
-   "previous_sha256": "e254d40cb799f11f43d7a91410b36a5d6ccdf0a292da05fd57fa81a0ad318f10",
-   "new_sha256": "493cd13ccb2d50db71f91e3bdac1bac791c12fe8138e08cdca18661046eacc3e",
-   "evidence": {
-    "commit": "0d0b681b42ec8f404e1484f3097aa847e3276bbe",
-    "path": "docs/REQUIREMENTS.md"
-   },
-   "owner_decision": "REQUIREMENTS §179.A, within the owner’s existing actual-history and production-integration authorization."
+   "owner_decision": "REQUIREMENTS §176 (2026-10-30): the owner's instruction 给我修 (fix the recurring intermittent Compose/CI failures at the root, no reruns, no loosened assertions); the proven root cause is background work resuming composition coroutines off the main thread in the Compose test environment.",
+   "human_review": "git diff of this file in the §176 PR: only the dispatcher call changes."
   },
   {
    "id": "PD-2026-10-30-MAIN-THREAD-CONCCHART",
@@ -365,6 +351,35 @@
    },
    "owner_decision": "REQUIREMENTS §176 (2026-10-30): the owner's instruction 给我修 (fix the recurring intermittent Compose/CI failures at the root, no reruns, no loosened assertions); the proven root cause is background work resuming composition coroutines off the main thread in the Compose test environment.",
    "human_review": "git diff of this file in the §176 PR: only the dispatcher call changes."
+  },
+  {
+   "id": "PD-2026-10-30-SEX-STEROID-SELECTOR",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-30",
+   "scope": "Existing concentration destination: E2/T selector, separate relative-only T rendering from actual frozen history. E2 numerical/calibration body unchanged. No T absolute concentrations, clinical validation, endogenous baseline or E2 calibration reuse.",
+   "previous_sha256": "68d30c771872e7d6f045ddd66f26b589d03a110a35737463a5606b9387724082",
+   "new_sha256": "e254d40cb799f11f43d7a91410b36a5d6ccdf0a292da05fd57fa81a0ad318f10",
+   "evidence": {
+    "commit": "dcf2f5301b8b477262756b29e70b94a18dd7bfe4",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §179; owner explicitly authorizes evidence-bounded models and relative research shapes where absolute prediction is unsupported.",
+   "human_review": "Verify selector-only diff and separate T renderer; the old E2 body, fit and export path remain unchanged."
+  },
+  {
+   "id": "PD-2026-10-30-SEX-STEROID-READ-RETRY",
+   "file": "app/src/main/java/net/plainnotes/app/ui/ConcentrationScreen.kt",
+   "approver": "DevenirTwilight",
+   "date": "2026-10-30",
+   "scope": "T branch only: pass verified atomic actual-record/rule input snapshot and existing production retry callback, rather than stale independent UI extra state. E2 numerical body/calibration unchanged.",
+   "previous_sha256": "e254d40cb799f11f43d7a91410b36a5d6ccdf0a292da05fd57fa81a0ad318f10",
+   "new_sha256": "493cd13ccb2d50db71f91e3bdac1bac791c12fe8138e08cdca18661046eacc3e",
+   "evidence": {
+    "commit": "0d0b681b42ec8f404e1484f3097aa847e3276bbe",
+    "path": "docs/REQUIREMENTS.md"
+   },
+   "owner_decision": "REQUIREMENTS §179.A, within the owner’s existing actual-history and production-integration authorization."
   },
   {
    "id": "PD-2026-10-30-PK-ASYNC-MAIN",

@@ -37,7 +37,7 @@ import org.json.JSONObject
     var browserFailed by remember(activeCis) {mutableStateOf(false)}
     LaunchedEffect(activeCis,expectedName,visible) {
         if(!visible)return@LaunchedEffect
-        try {entry=catalogue.official(activeCis,if(activeCis==cis)expectedName else null);failed=entry==null}
+        try {entry=resumeOnMain {catalogue.official(activeCis,if(activeCis==cis)expectedName else null)};failed=entry==null}
         catch(e:CancellationException){throw e}
         catch(_:Exception){failed=true}
     }

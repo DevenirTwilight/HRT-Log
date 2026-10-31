@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.ExplicitSkipTimelineUiTest" tests="8" skipped="0" failures="4" errors="0" timestamp="2026-10-31T09:01:50.905Z" hostname="019d157e45d0" time="9.462">
+  <properties/>
+  <testcase name="actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose[en/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="6.141">
+    <failure message="java.lang.AssertionError: Failed to assert the following: (ToggleableState = 'Off')&#10;Reason: Expected exactly '1' node but found '3' nodes that satisfy: ((ToggleableState is defined) &amp;&amp; (hasAnySiblingThat((Text + InputText + EditableText contains 'Skip this intake' (ignoreCase: false)) || (hasAnyDescendantThat(Text + InputText + EditableText contains 'Skip this intake' (ignoreCase: false))))))&#10;Nodes found:&#10;1) Node #17 at (l=732.0, t=456.0, r=888.0, b=552.0)px&#10;Focused = 'false'&#10;Role = 'Switch'&#10;ToggleableState = 'Off'&#10;Actions = [OnClick, RequestFocus]&#10;MergeDescendants = 'true'&#10;Has 6 siblings&#10;2) Node #22 at (l=732.0, t=636.0, r=888.0, b=732.0)px&#10;Focused = 'false'&#10;Role = 'Switch'&#10;ToggleableState = 'Off'&#10;Actions = [OnClick, RequestFocus]&#10;MergeDescendants = 'true'&#10;Has 6 siblings&#10;3) Node #27 at (l=732.0, t=816.0, r=888.0, b=912.0)px&#10;Focused = 'false'&#10;Role = 'Switch'&#10;ToggleableState = 'Off'&#10;Actions = [OnClick, RequestFocus]&#10;MergeDescendants = 'true'&#10;Has 6 siblings&#10;" type="java.lang.AssertionError">java.lang.AssertionError: Failed to assert the following: (ToggleableState = 'Off')
+Reason: Expected exactly '1' node but found '3' nodes that satisfy: ((ToggleableState is defined) &amp;&amp; (hasAnySiblingThat((Text + InputText + EditableText contains 'Skip this intake' (ignoreCase: false)) || (hasAnyDescendantThat(Text + InputText + EditableText contains 'Skip this intake' (ignoreCase: false))))))
+Nodes found:
+1) Node #17 at (l=732.0, t=456.0, r=888.0, b=552.0)px
+Focused = 'false'
+Role = 'Switch'
+ToggleableState = 'Off'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+Has 6 siblings
+2) Node #22 at (l=732.0, t=636.0, r=888.0, b=732.0)px
+Focused = 'false'
+Role = 'Switch'
+ToggleableState = 'Off'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+Has 6 siblings
+3) Node #27 at (l=732.0, t=816.0, r=888.0, b=912.0)px
+Focused = 'false'
+Role = 'Switch'
+ToggleableState = 'Off'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+Has 6 siblings
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:262)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertIsOff(Assertions.kt:81)
+	at net.plainnotes.app.ExplicitSkipTimelineUiTest.actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose(ExplicitSkipTimelineUiTest.kt:35)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:306)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:318)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:569)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt)
+	at androidx.compose.ui.test.IdlingStrategy.withStrategy$suspendImpl(IdlingStrategy.android.kt:55)
+	at androidx.compose.ui.test.IdlingStrategy.withStrategy(IdlingStrategy.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:566)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:99)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:549)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:318)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:524)
+	at org.robolectric.internal.SandboxTestRunner.executeInSandbox(SandboxTestRunner.java:494)
+	at org.robolectric.internal.SandboxTestRunner.access$900(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$7.evaluate(SandboxTestRunner.java:442)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.robolectric.internal.SandboxTestRunner.access$600(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$6.evaluate(SandboxTestRunner.java:333)
+	at org.robolectric.internal.SandboxTestRunner$3.evaluate(SandboxTestRunner.java:233)
+	at org.robolectric.internal.SandboxTestRunner$5.lambda$evaluate$0(SandboxTestRunner.java:317)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:101)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <testcase name="confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose[en/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.794"/>
+  <testcase name="actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose[zh-rCN/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.386">
+    <failure message="java.lang.AssertionError: Failed to assert the following: (ToggleableState = 'Off')&#10;Reason: Expected exactly '1' node but found '3' nodes that satisfy: ((ToggleableState is defined) &amp;&amp; (hasAnySiblingThat((Text + InputText + EditableText contains '跳过本次' (ignoreCase: false)) || (hasAnyDescendantThat(Text + InputText + EditableText contains '跳过本次' (ignoreCase: false))))))&#10;Nodes found:&#10;1) Node #130 at (l=732.0, t=470.0, r=888.0, b=566.0)px&#10;Focused = 'false'&#10;Role = 'Switch'&#10;ToggleableState = 'Off'&#10;Actions = [OnClick, RequestFocus]&#10;MergeDescendants = 'true'&#10;Has 6 siblings&#10;2) Node #135 at (l=732.0, t=650.0, r=888.0, b=746.0)px&#10;Focused = 'false'&#10;Role = 'Switch'&#10;ToggleableState = 'Off'&#10;Actions = [OnClick, RequestFocus]&#10;MergeDescendants = 'true'&#10;Has 6 siblings&#10;3) Node #140 at (l=732.0, t=830.0, r=888.0, b=926.0)px&#10;Focused = 'false'&#10;Role = 'Switch'&#10;ToggleableState = 'Off'&#10;Actions = [OnClick, RequestFocus]&#10;MergeDescendants = 'true'&#10;Has 6 siblings&#10;" type="java.lang.AssertionError">java.lang.AssertionError: Failed to assert the following: (ToggleableState = 'Off')
+Reason: Expected exactly '1' node but found '3' nodes that satisfy: ((ToggleableState is defined) &amp;&amp; (hasAnySiblingThat((Text + InputText + EditableText contains '跳过本次' (ignoreCase: false)) || (hasAnyDescendantThat(Text + InputText + EditableText contains '跳过本次' (ignoreCase: false))))))
+Nodes found:
+1) Node #130 at (l=732.0, t=470.0, r=888.0, b=566.0)px
+Focused = 'false'
+Role = 'Switch'
+ToggleableState = 'Off'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+Has 6 siblings
+2) Node #135 at (l=732.0, t=650.0, r=888.0, b=746.0)px
+Focused = 'false'
+Role = 'Switch'
+ToggleableState = 'Off'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+Has 6 siblings
+3) Node #140 at (l=732.0, t=830.0, r=888.0, b=926.0)px
+Focused = 'false'
+Role = 'Switch'
+ToggleableState = 'Off'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+Has 6 siblings
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:262)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertIsOff(Assertions.kt:81)
+	at net.plainnotes.app.ExplicitSkipTimelineUiTest.actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose(ExplicitSkipTimelineUiTest.kt:35)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:306)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:318)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:569)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt)
+	at androidx.compose.ui.test.IdlingStrategy.withStrategy$suspendImpl(IdlingStrategy.android.kt:55)
+	at androidx.compose.ui.test.IdlingStrategy.withStrategy(IdlingStrategy.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:566)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:99)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:549)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:318)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:524)
+	at org.robolectric.internal.SandboxTestRunner.executeInSandbox(SandboxTestRunner.java:494)
+	at org.robolectric.internal.SandboxTestRunner.access$900(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$7.evaluate(SandboxTestRunner.java:442)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.robolectric.internal.SandboxTestRunner.access$600(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$6.evaluate(SandboxTestRunner.java:333)
+	at org.robolectric.internal.SandboxTestRunner$3.evaluate(SandboxTestRunner.java:233)
+	at org.robolectric.internal.SandboxTestRunner$5.lambda$evaluate$0(SandboxTestRunner.java:317)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:101)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <testcase name="confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose[zh-rCN/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.339"/>
+  <testcase name="actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose[b+zh+Hant/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.275">
+    <failure message="java.lang.AssertionError: Failed to assert the following: (ToggleableState = 'Off')&#10;Reason: Expected exactly '1' node but found '3' nodes that satisfy: ((ToggleableState is defined) &amp;&amp; (hasAnySiblingThat((Text + InputText + EditableText contains '跳過本次' (ignoreCase: false)) || (hasAnyDescendantThat(Text + InputText + EditableText contains '跳過本次' (ignoreCase: false))))))&#10;Nodes found:&#10;1) Node #243 at (l=732.0, t=470.0, r=888.0, b=566.0)px&#10;Focused = 'false'&#10;Role = 'Switch'&#10;ToggleableState = 'Off'&#10;Actions = [OnClick, RequestFocus]&#10;MergeDescendants = 'true'&#10;Has 6 siblings&#10;2) Node #248 at (l=732.0, t=650.0, r=888.0, b=746.0)px&#10;Focused = 'false'&#10;Role = 'Switch'&#10;ToggleableState = 'Off'&#10;Actions = [OnClick, RequestFocus]&#10;MergeDescendants = 'true'&#10;Has 6 siblings&#10;3) Node #253 at (l=732.0, t=830.0, r=888.0, b=926.0)px&#10;Focused = 'false'&#10;Role = 'Switch'&#10;ToggleableState = 'Off'&#10;Actions = [OnClick, RequestFocus]&#10;MergeDescendants = 'true'&#10;Has 6 siblings&#10;" type="java.lang.AssertionError">java.lang.AssertionError: Failed to assert the following: (ToggleableState = 'Off')
+Reason: Expected exactly '1' node but found '3' nodes that satisfy: ((ToggleableState is defined) &amp;&amp; (hasAnySiblingThat((Text + InputText + EditableText contains '跳過本次' (ignoreCase: false)) || (hasAnyDescendantThat(Text + InputText + EditableText contains '跳過本次' (ignoreCase: false))))))
+Nodes found:
+1) Node #243 at (l=732.0, t=470.0, r=888.0, b=566.0)px
+Focused = 'false'
+Role = 'Switch'
+ToggleableState = 'Off'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+Has 6 siblings
+2) Node #248 at (l=732.0, t=650.0, r=888.0, b=746.0)px
+Focused = 'false'
+Role = 'Switch'
+ToggleableState = 'Off'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+Has 6 siblings
+3) Node #253 at (l=732.0, t=830.0, r=888.0, b=926.0)px
+Focused = 'false'
+Role = 'Switch'
+ToggleableState = 'Off'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+Has 6 siblings
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:262)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertIsOff(Assertions.kt:81)
+	at net.plainnotes.app.ExplicitSkipTimelineUiTest.actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose(ExplicitSkipTimelineUiTest.kt:35)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:306)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:318)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:569)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt)
+	at androidx.compose.ui.test.IdlingStrategy.withStrategy$suspendImpl(IdlingStrategy.android.kt:55)
+	at androidx.compose.ui.test.IdlingStrategy.withStrategy(IdlingStrategy.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:566)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:99)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:549)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:318)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:524)
+	at org.robolectric.internal.SandboxTestRunner.executeInSandbox(SandboxTestRunner.java:494)
+	at org.robolectric.internal.SandboxTestRunner.access$900(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$7.evaluate(SandboxTestRunner.java:442)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.robolectric.internal.SandboxTestRunner.access$600(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$6.evaluate(SandboxTestRunner.java:333)
+	at org.robolectric.internal.SandboxTestRunner$3.evaluate(SandboxTestRunner.java:233)
+	at org.robolectric.internal.SandboxTestRunner$5.lambda$evaluate$0(SandboxTestRunner.java:317)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:101)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <testcase name="confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose[b+zh+Hant/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.41"/>
+  <testcase name="actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose[fr/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.383">
+    <failure message="java.lang.AssertionError: Failed to assert the following: (ToggleableState = 'Off')&#10;Reason: Expected exactly '1' node but found '3' nodes that satisfy: ((ToggleableState is defined) &amp;&amp; (hasAnySiblingThat((Text + InputText + EditableText contains 'Sauter cette prise' (ignoreCase: false)) || (hasAnyDescendantThat(Text + InputText + EditableText contains 'Sauter cette prise' (ignoreCase: false))))))&#10;Nodes found:&#10;1) Node #356 at (l=732.0, t=456.0, r=888.0, b=552.0)px&#10;Focused = 'false'&#10;Role = 'Switch'&#10;ToggleableState = 'Off'&#10;Actions = [OnClick, RequestFocus]&#10;MergeDescendants = 'true'&#10;Has 6 siblings&#10;2) Node #361 at (l=732.0, t=636.0, r=888.0, b=732.0)px&#10;Focused = 'false'&#10;Role = 'Switch'&#10;ToggleableState = 'Off'&#10;Actions = [OnClick, RequestFocus]&#10;MergeDescendants = 'true'&#10;Has 6 siblings&#10;3) Node #366 at (l=732.0, t=816.0, r=888.0, b=912.0)px&#10;Focused = 'false'&#10;Role = 'Switch'&#10;ToggleableState = 'Off'&#10;Actions = [OnClick, RequestFocus]&#10;MergeDescendants = 'true'&#10;Has 6 siblings&#10;" type="java.lang.AssertionError">java.lang.AssertionError: Failed to assert the following: (ToggleableState = 'Off')
+Reason: Expected exactly '1' node but found '3' nodes that satisfy: ((ToggleableState is defined) &amp;&amp; (hasAnySiblingThat((Text + InputText + EditableText contains 'Sauter cette prise' (ignoreCase: false)) || (hasAnyDescendantThat(Text + InputText + EditableText contains 'Sauter cette prise' (ignoreCase: false))))))
+Nodes found:
+1) Node #356 at (l=732.0, t=456.0, r=888.0, b=552.0)px
+Focused = 'false'
+Role = 'Switch'
+ToggleableState = 'Off'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+Has 6 siblings
+2) Node #361 at (l=732.0, t=636.0, r=888.0, b=732.0)px
+Focused = 'false'
+Role = 'Switch'
+ToggleableState = 'Off'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+Has 6 siblings
+3) Node #366 at (l=732.0, t=816.0, r=888.0, b=912.0)px
+Focused = 'false'
+Role = 'Switch'
+ToggleableState = 'Off'
+Actions = [OnClick, RequestFocus]
+MergeDescendants = 'true'
+Has 6 siblings
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:262)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:254)
+	at androidx.compose.ui.test.AssertionsKt.assertIsOff(Assertions.kt:81)
+	at net.plainnotes.app.ExplicitSkipTimelineUiTest.actualOverrideDialogSelectsSkipWithoutChangingTimeOrDose(ExplicitSkipTimelineUiTest.kt:35)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$testWithDisposal$1.evaluate(AndroidComposeTestRule.android.kt:306)
+	at org.junit.rules.ExternalResource$1.evaluate(ExternalResource.java:54)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invokeSuspend(AndroidComposeTestRule.android.kt:318)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1$evaluate$1.invoke(AndroidComposeTestRule.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invokeSuspend(ComposeUiTest.android.kt:569)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1$1$1$1.invoke(ComposeUiTest.android.kt)
+	at androidx.compose.ui.test.IdlingStrategy.withStrategy$suspendImpl(IdlingStrategy.android.kt:55)
+	at androidx.compose.ui.test.IdlingStrategy.withStrategy(IdlingStrategy.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invokeSuspend(ComposeUiTest.android.kt:566)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$runTest$1$1.invoke(ComposeUiTest.android.kt)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.test.TestDispatcher.processEvent$kotlinx_coroutines_test(TestDispatcher.kt:24)
+	at kotlinx.coroutines.test.TestCoroutineScheduler.tryRunNextTaskUnless$kotlinx_coroutines_test(TestCoroutineScheduler.kt:99)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$workRunner$1.invokeSuspend(TestBuilders.kt:326)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+	at kotlinx.coroutines.test.TestBuildersJvmKt.createTestResult(TestBuildersJvm.kt:10)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:309)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt.runTest-8Mi8wO0(TestBuilders.kt:167)
+	at kotlinx.coroutines.test.TestBuildersKt.runTest-8Mi8wO0(Unknown Source)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment.runTest(ComposeUiTest.android.kt:549)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule$apply$1.evaluate(AndroidComposeTestRule.android.kt:318)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.robolectric.RobolectricTestRunner$HelperTestRunner$1.evaluate(RobolectricTestRunner.java:524)
+	at org.robolectric.internal.SandboxTestRunner.executeInSandbox(SandboxTestRunner.java:494)
+	at org.robolectric.internal.SandboxTestRunner.access$900(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$7.evaluate(SandboxTestRunner.java:442)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.robolectric.internal.SandboxTestRunner.access$600(SandboxTestRunner.java:67)
+	at org.robolectric.internal.SandboxTestRunner$6.evaluate(SandboxTestRunner.java:333)
+	at org.robolectric.internal.SandboxTestRunner$3.evaluate(SandboxTestRunner.java:233)
+	at org.robolectric.internal.SandboxTestRunner$5.lambda$evaluate$0(SandboxTestRunner.java:317)
+	at org.robolectric.internal.bytecode.Sandbox.lambda$runOnMainThread$0(Sandbox.java:101)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
+  <testcase name="confirmedSkipIsUnderTreatmentWithFrozenNameTimeAndPlannedDose[fr/320dp/2x]" classname="net.plainnotes.app.ExplicitSkipTimelineUiTest" time="0.395"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

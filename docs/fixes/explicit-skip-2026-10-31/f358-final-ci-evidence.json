@@ -1,0 +1,73 @@
+{
+  "source": "f35881d176d080c5a0a3d06e6c5d99407f3067d9",
+  "original_evidence": [
+    {
+      "file": "android-124520775254.log.gz",
+      "original_sha256": "c7093944271618847120129720e91a18ab459ea3c084b74b89f12832de95d3ca"
+    },
+    {
+      "file": "security-api26-124520646796.log.gz",
+      "original_sha256": "990d23fd8e7da7f9d7da69fd82972e43e1f55b8ef87b9344533a3e57d82aaf5b"
+    },
+    {
+      "file": "security-124520635086.log.gz",
+      "original_sha256": "5e18d1ad52ce820e2c284d89eade06d767c6b6b4c6f8d488c195cb59cafc86e4"
+    },
+    {
+      "file": "compat29-124520775359.log.gz",
+      "original_sha256": "ef80249cb94f4b6008ca0a6b724c867299663b4f97022a64a882a77ece82b4fc"
+    },
+    {
+      "head": "f35881d176d080c5a0a3d06e6c5d99407f3067d9",
+      "api": 26,
+      "run": 41195472054,
+      "artifact": 13041099194,
+      "zip_sha256": "c675d0270b1aa0eb1f0686163a43c6fedd616344d73be146c9d4a351f6e58cf5",
+      "xml": "app/build/outputs/androidTest-results/connected/debug/flavors/full/TEST-emulator-5554 - 8.0.0-_app-full.xml",
+      "testcase": {
+        "name": "skipInCalendarBelongsToTreatmentAndCanBeUndoneAfterReopen",
+        "classname": "net.plainnotes.app.ExplicitSkippedProductAndroidTest",
+        "time": "3.295"
+      },
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "head": "f35881d176d080c5a0a3d06e6c5d99407f3067d9",
+      "api": 29,
+      "run": 41195472054,
+      "artifact": 13040818222,
+      "zip_sha256": "85925100a26c4217db50dcc0c469902c63d6f598e84138a0d9e478ac07fc51c2",
+      "xml": "app/build/outputs/androidTest-results/connected/debug/flavors/full/TEST-emulator-5554 - 10-_app-full.xml",
+      "testcase": {
+        "name": "skipInCalendarBelongsToTreatmentAndCanBeUndoneAfterReopen",
+        "classname": "net.plainnotes.app.ExplicitSkippedProductAndroidTest",
+        "time": "2.767"
+      },
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "head": "f35881d176d080c5a0a3d06e6c5d99407f3067d9",
+      "api": 35,
+      "run": 41195472054,
+      "artifact": 13041460272,
+      "zip_sha256": "31c90d52752cf2c9bc4375c4561b42fbfcae651c5650c9394f32454f819a5777",
+      "xml": "app/build/outputs/androidTest-results/connected/debug/flavors/full/TEST-emulator-5554 - 15-_app-full.xml",
+      "testcase": {
+        "name": "skipInCalendarBelongsToTreatmentAndCanBeUndoneAfterReopen",
+        "classname": "net.plainnotes.app.ExplicitSkippedProductAndroidTest",
+        "time": "3.429"
+      },
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "full_suite_failure": "Push run41195468503: 4334 tests, one MedicalHomeConfirmFlowTest failure at MedicalHomeTest.kt108; 609 original conditional skips. Original HTML preserved. Same original test passed targeted local run17s; unique CI scheduling cause NOT_PROVEN. No node for retract in selected scrollable; prior test did not await confirmed display state or verify navigation left list.",
+  "correction": "Wait for existing display record completed_utc with main-loop idle; assert no state error; ensure actual card is scrolled visible and wait for list to disappear after click. Original COMMIT/date/undo assertions and10s remain. No production changes. The transient save receipt is consumed by AppShell and is deliberately not used as test readiness.",
+  "infrastructure": "PR API26 pre-test ADB disconnect: underlying termination NOT_PROVEN; one failed job retry passed. Push API26 and API29 explicit FATAL userdata disk shortage; not application/LMK. Original attempts retained.",
+  "acceptance": "New exact HEAD checks still required; f358 native results are historical, not substitute."
+}

@@ -1822,6 +1822,32 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 - **验证**：`Ui13AccentAreaTest`（8 个组合，页面扩展到化验、浓度、身心状态、医疗档案；点缀色占页面像素 ≤ 8%，实测最大 1.71%，首页与库存为 0）、`Ui12CalibrationActionsTest`（按钮行：放得下必须同一行，放不下才换行）、`FileTileColorsTest`、`Ui12ConcentrationTest`、`ConcChartAxisTest`、`Ui08PdfSummaryUnchangedTest`（PDF 汇总不受影响，ConcChart 新哈希登记）与 `tools/pk-research/check_protocol.py`。真机、人工 TalkBack 为 NOT_RUN。
 
 
+## 176. Compose 测试间歇失败的根因与修复：界面协程必须回到主线程（2026-10-30）
+
+- **负责人指令**：2026-10-30 “给我修”——修掉反复出现、每次失败位置不同的 Compose/CI 间歇失败，要找到根因，不靠重跑，也不放宽任何断言。
+- **根因（已证明）**：Compose 测试环境（`AndroidComposeUiTestEnvironment`，ui-test 1.9.3）让 LaunchedEffect / produceState / rememberCoroutineScope 的协程跑在 `UnconfinedTestDispatcher` 上。这类协程里只要有 `withContext(Dispatchers.Default/IO)`（或调用内部切到 IO 的挂起函数）返回，协程就在那个后台线程上继续；测试的 `ApplyingContinuationInterceptor` 随即在该后台线程调用 `Snapshot.sendApplyNotifications()`，于是重组、布局和节点修改在后台线程运行。CI 上看到的 `CalledFromWrongThreadException`、`Detected multithreaded access to SnapshotStateObserver`、`performMeasureAndLayout called during measure layout`、SlotTable 越界都是这一机制的不同表现。证据：PR #161 失败栈（`DispatchedCoroutine.afterResume → SendApplyContinuation → Recomposer.runRecomposeAndApplyChanges → ViewRootImpl.checkThread`，线程为 `DefaultDispatcher-worker`）；本地临时探针（注册全局 apply 观察者，记录非主线程触发）在 `Ui12ConcentrationTest` 一组 272 个用例中记录到 271 次非主线程提交，同时复现一次断言失败。**正式应用不受影响**：应用里这些协程跑在主线程调度器上，切回来时本来就回到主线程。
+- **修复**：新增 `app/.../ui/OffMain.kt`：`computeOffMain`（后台算完后回到主线程）、`resumeOnMain`（内部会切 IO 的挂起调用，返回一律落在主线程）、`rememberMainThreadScope`（交给会做 IO 再写界面状态的控制器的作用域，用 `Dispatchers.Main`）。替换处：`ConcentrationScreen.kt`（合计/校准计算）、`ConcChart.kt`（点按读数）、`experimental/UnifiedConcentrationScreen.kt`（两处研究显示计算）、医疗附件记录页与文件选择、文件库宿主（两处）、医疗档案导入导出、BDPM 搜索作用域与官方详情、已记录商品资料对话框、药品资料中心加载、新记录附件选择。只改线程，**计算、数值、显示、数据流不变**；应用里每次多一次主线程派发。
+- **受保护文件**：`ConcentrationScreen.kt`、`ConcChart.kt`、`UnifiedConcentrationScreen.kt` 属 PK 显示审查范围，按负责人本条指令登记批准（`display-approvals-after-archive.json` 追加 PD-2026-10-30-MAIN-THREAD-CONCENTRATIONSCREEN、PD-2026-10-30-MAIN-THREAD-CONCCHART、PD-2026-10-30-MAIN-THREAD-UNIFIEDSCREEN），范围**仅限把后台计算的返回线程改为主线程**。LIVE_LOCK 文件未动。
+- **测试**：新增 `MainThreadResumeTest`：①演示机制（裸 `withContext` 在测试里于后台线程继续，`computeOffMain` 一定回到主线程）；②浓度页（校准合计 + 点按读数）全程没有任何非主线程的 snapshot 提交；③源码守卫：含 `@Composable` 的文件不得直接 `withContext(Dispatchers.…)`，`rememberCoroutineScope()` 只允许留在 `AppShell.kt`（抽屉/提示条动画，不做 IO）。`Ui12ConcentrationTest.show()` 原先只等到“校准开关出现”，而开关在后台计算完成前就已显示（同时页面还有转圈），这是第二个竞争；现在额外等到页面上没有不确定进度圈再读结果。这是等待条件变严格，没有删改任何断言。
+- **第二轮（同日，PR #167 首次 CI）**：API 26 设备测试 `MedicalAttachmentProductAndroidTest.fullscreenReaderRenamesThreePagePdfAndLargeImageThenReturnsToTheSameFile` 在 Activity 销毁时仍出现 `SlotTable.moveSlotGapTo` 越界（第一轮 JVM 探针覆盖不到设备专有路径）。同一机制的另一入口：控制器 / ViewModel 的 StateFlow 若在后台线程写入，`collectAsState()` 的收集协程会在写入线程继续。现在应用里所有 `collectAsState` / `collectAsStateWithLifecycle` 都在 `Dispatchers.Main.immediate` 上收集（正式应用里收集本来就在主线程，行为不变）；源码守卫禁止无上下文的写法；两个设备产品测试（附件、校准）加 `OffMainApplyRecorder`，收尾时断言没有非主线程 snapshot 提交，失败信息带出线程名与主线程当时位置，便于定位尚未覆盖的入口。设备上是否彻底消失，以之后的 CI 为准；ROOT_CAUSE 对该设备签名目前为“同一机制的高度可能来源，尚未在设备上直接证明”。
+
+
+## 主动跳过服药的治疗时间线归属（2026-10-31，PR #177）
+
+负责人授权继续原PR修复和受保护合并。仅未删除的APP来源、非空slot、规则版本和预定时刻明确的SKIPPED属于已确认跳过操作；无论计划时刻是否已到，都不是Upcoming待办，保持原计划时刻/冻结药物和计划剂量，在对应阶段展示一次，不生成待识别历史重复项。不得伪造实际服药、停药、库存扣减或浓度贡献。导入/缺失计划证据的历史保留原识别语义，原撤销安全机制不变。跳过必须保留此前已保存的单次改时/时区/计划剂量覆盖，不能清空；隐藏未保存草稿不作为新剂量事实提交。保留简易/伪装模式隐私边界。四语新标签单独资源，不改变冻结旧资源/PDF校验。真实MainActivity日程→跳过→时间线→历史→撤销及Room备份回归必须实测；无签名、交付或公开发行授权。
+
+本修复获授权变更PeriodTimeline的显式跳过投影，不改变LAB-04语义：原BASE_DIGEST和两个BASE_SOURCES哈希都保留。允许对本次四个精确跳过差异建立完整SHA限定及逐项逆转证明，逆转后仍须匹配原字节；任意其它源码或化验改动必须拒绝。此范围不授权修改化验输出、分组、历史方案、PK或放宽原金标。
+
+## 177. 用最新主线替换公开 Release v0.2.0（2026-10-31）
+
+- **负责人指令**：2026-10-31“替换现有release，不用说build多少”。紧接着此前“好了给apk”的私下交付；本条覆盖 HANDOFF 中“不动公开 Release 与标签”的限制，仅限以下操作，范围与 §104 相同。
+- **做了什么**：用刚私下交付的同一个正式签名 APK（SHA-256 `fe93a36d…7c28`，源码 `f112e109b3b32e156e33518f71aad562cd168a05`，主线 `f112e109` 与其前一个提交 `fdabc4ce` 的 CI 在签名前已全部成功）替换现有 Release `v0.2.0`（id 404602730）的 4 个附件（APK、`SHA256SUMS.txt`、`SIGNING_CERTIFICATE.txt`、`THIRD_PARTY_NOTICES.md`——这份取仓库当前版本，因为 Tink 运行时依赖已变）；重写 Release 说明；把 tag `v0.2.0` 从 `76627bfe215987122666b38ea7a42ee08731cdde` 移到 `f112e109b3b32e156e33518f71aad562cd168a05`（同 §104，说明与源码才一致）。证书与旧公开 APK 相同（`989ba045…79b1`），可直接覆盖安装。
+- **说明里不写构建号**：Release 说明、`SIGNING_CERTIFICATE.txt`、README 的公开版本行都不再写内部构建编号 / versionCode；脚本在复核时检查说明里没有这类字样。机器清单 `.github/release-assets.json` 与账本保留 `version_code`，只用于核对，不对外宣传。
+- **方式**：会话不能编辑 Release 或移动 tag（HTTP 403）。与 §104 的做法一样，用一个只含 4 个附件、说明和一次性工作流的临时孤立分支 `release-upload-v0.2.0-20261031`（run 41184909240）：先核对旧状态（Release id、旧 tag SHA、旧 APK 哈希、新源码在默认分支上），再 `--clobber` 上传、替换说明、移动 tag，最后重新下载逐个核对哈希、核对 tag 与说明首行；成功后工作流删除该分支（已确认分支不存在）。这是“APK 不进仓库”规则的一次性例外（APK 本来就公开发布，不含密钥）。
+- **核对**：`scripts/check_release_manifest.py`（无 INTERNET、应用身份与入口）与 `scripts/check_attachment_release_isolation.py`（发布包里没有测试/演示/POC 标记）对该 APK 通过；已签名文件同样通过隔离检查；说明里的宣传功能逐条对照源码，在此构建中都存在（离线无 INTERNET、提醒与库存、回收站、浓度曲线与校准、化验、身心状态、复诊与资料包、医疗文件库与阅读器、时间线、PDF/CSV 导出、应用锁与 SQLCipher、`.pnbak` 与 `.pnmedbk2`、伪装、四语）。隐私表述与 `PRIVACY.md` 一致（导出不加密；医疗文件加密保存；`.pnmedbk2` 与 `.pnbak` 是两种备份）。
+- **留档**：被替换前的文件哈希、旧 tag SHA 与回退办法见 `docs/releases/0.2.0-rebuild-2026-10-17-superseded.md`；新说明 `docs/releases/0.2.0-rebuild-2026-10-31.md`；同步了 `.github/release-assets.json`、README 的公开版本行、Build 42 收据。
+- **未做（NOT_RUN）**：真机 ARM 覆盖安装、人工读屏；不是公开 Beta；外部安全审查未做。
+
 ## 179. E2/T 剂型曲线实施授权（2026-10-30）
 
 负责人授权扫描实际生产覆盖、继承 PR #173 可复现证据并将合格新剂型接入现有浓度页。绝对估算、研究性相对形状、仅记录必须分开；不把稀疏汇总拟合或同队列留出称独立验证，不推断内源性T、反馈或抗雄药的浓度下降。不同产品/酯/载体/途径不回退共用模型。研究每轮立即入库。继承现有E2/M2/TotalE2Calibration、冻结P2、快照/导出/数据库/备份/库存/附件，不改参数或旧计算结果。

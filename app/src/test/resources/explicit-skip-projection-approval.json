@@ -1,0 +1,25 @@
+{
+  "owner_requirement": "docs/REQUIREMENTS.md: 主动跳过服药的治疗时间线归属（2026-10-31，PR #177）",
+  "authorization_commit": "74c13371fb2e58e480444fe415507c5490549525",
+  "path": "src/main/java/net/plainnotes/app/timeline/PeriodTimeline.kt",
+  "baseSha256": "365d7f51d39008b89f261da8796570a75e92cc290a9559b7c64d65760783d879",
+  "approvedSha256": "af7f600b8125490f8e3e710b510f75d5f88f33f500a9109d53b613200dcb1438",
+  "exactChanges": [
+    {
+      "base": "        fun add(key:String,kind:EventKind,at:Instant?,day:LocalDate?,source:EventSource) {\n",
+      "approved": "        fun add(key:String,kind:EventKind,at:Instant?,day:LocalDate?,source:EventSource,confirmedDecision:Boolean=false) {\n"
+    },
+    {
+      "base": "            val future=if(at!=null)at>now else date>today\n",
+      "approved": "            val future=!confirmedDecision && (if(at!=null)at>now else date>today)\n"
+    },
+    {
+      "base": "",
+      "approved": "        // A user-confirmed skip is a recorded decision, not an unrecognised regimen.\n        // Preserve the scheduled instant even if it is later today; do not fabricate actual intake.\n        // Imported or otherwise unauthenticated historical skips still use the old recognition flow.\n        val explicitSkips=extra.records.filter{r->r.deleted_at_utc==null && r.status==\"SKIPPED\" && r.origin==\"APP\" &&\n            !r.slot_key.isNullOrBlank() && r.rule_version_id!=null && r.scheduled_utc!=null}\n        val explicitSkipIds=explicitSkips.mapTo(mutableSetOf()){it.id}\n        val ruleToRegimen=extra.regimenLinks.associate{it.rule_id to it.regimen_id}\n        explicitSkips.forEach{r->add(\"skip:${r.id}\",EventKind.SKIPPED,Instant.ofEpochMilli(requireNotNull(r.scheduled_utc)),null,\n            EventSource.Intake(r,r.rule_version_id?.let{ruleToRegimen[it]}),confirmedDecision=true)}\n"
+    },
+    {
+      "base": "            ImportedHistoryProjection.build(extra.records.filter{it.id !in historical.resolvedRecordIds},projection,now),historical.observed,\n",
+      "approved": "            ImportedHistoryProjection.build(extra.records.filter{it.id !in historical.resolvedRecordIds && it.id !in explicitSkipIds},projection,now),historical.observed,\n"
+    }
+  ]
+}

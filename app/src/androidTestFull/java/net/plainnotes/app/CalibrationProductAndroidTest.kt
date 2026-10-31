@@ -33,7 +33,8 @@ class CalibrationProductAndroidTest {
         Disguise.disable(context); AppLock(context).disable(); Session.reset()
         UiPrefs(context).disclaimerAccepted = true
     }
-    @After fun cleanup() { activity?.close(); Session.reset() }
+    private val offMain = OffMainApplyRecorder()
+    @After fun cleanup() { try { activity?.close(); Session.reset(); offMain.assertNone() } finally { offMain.close() } }
     private fun launch() {
         activity = ActivityScenario.launch(Intent(context, MainActivity::class.java))
         activity!!.onActivity { model = ViewModelProvider(it)[NotesViewModel::class.java] }

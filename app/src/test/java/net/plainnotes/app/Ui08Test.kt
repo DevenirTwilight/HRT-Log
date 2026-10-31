@@ -310,7 +310,9 @@ class Ui08PdfSummaryUnchangedTest {
         assertTrue("ConcChart.kt must be the original or an approved version", sha(File("src/main/java/net/plainnotes/app/ui/ConcChart.kt").readBytes()) in
             setOf("51d0f88bf158113f9a08415a7498043930055096194b7f0f967e7bcb59b26c06", "9fca1d03a34499c9597dcb2b4cdaf7a9f8e0e33cb784981845145277d675023a",
                 "20f224d607ebc48d9a0dd036f4b070ba0935f26bae7d67f6b2fd37916528c5dc",
-                "9fe98011e02aba34058f0e2ca77a7ac480123af9cc7c1f0d13827abfe13cecbe", "c0957b27c60245e1775993c196403a988e33d172f51c09fbe75600349e346951"))
+                "9fe98011e02aba34058f0e2ca77a7ac480123af9cc7c1f0d13827abfe13cecbe",
+                // §176: the tap readout's background work returns to the main thread (computeOffMain); drawing unchanged.
+                "c0957b27c60245e1775993c196403a988e33d172f51c09fbe75600349e346951"))
         val base = mapOf("values" to "caa533fbbe4165f32d7ba7f7a1f9c3620995c4b4a2de1e9f81353c9fd3a4638a", "values-zh" to "7d0d69f1e8734cde743aa0e94f669895003c4b6508acf76b6d2920b269f1ef84",
             "values-b+zh+Hant" to "2c53efeec7e47153485abac6f345dd11f43047849e9ebc140067b991be459a29", "values-fr" to "b12b41def544ec6069e8e941af03589bb9837403cb8426b4a1c16975c254eaf0")
         for ((dir, digest) in base) {

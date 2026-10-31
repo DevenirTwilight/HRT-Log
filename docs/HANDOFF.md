@@ -1,3 +1,76 @@
+## PR #177 最终就诊回归同步收口 — 2026-10-31
+
+f35881d1的PR真实MainActivity跳过/时间线/新Activity历史撤销，在API26/29/35原XML均PASS（无skip），原件gzip和artifact SHA见docs/fixes/explicit-skip-2026-10-31/f358-final-ci-evidence.json。push完整4334项仅MedicalHomeConfirmFlowTest line108找不到撤销控件失败，609原条件skip；同原测试本地17秒PASS，保留原HTML及全job gzip，不能声称唯一CI调度根因已证明。只加强旧测试：等待相同ID的已确认显示快照、主循环idle、无error；卡片滚动可见，点击后确认离开列表再找详情撤销；仍10秒，原COMMIT/日期不变/确认撤销/数据库结果断言全保留，不改就诊生产业务。最终局部医疗首页/资料只读/主循环测试全部PASS，原XML附后。保存回执会被AppShell消费，不把瞬时saved值当稳定就绪条件。
+
+同源PR API26安全首次ADB在测试前断开、底层退出原因未证实，单失败job一次重验PASS；push API26/API29有FATAL userdata磁盘不足原日志，不是App/LMK。当前最后测试同步候选生产代码逐字节保持三API通过版本，准确新HEAD必需CI仍需完成，不能借旧SHA成功或忽略任何失败合并。原故障/后续重验均留存。不签名、交付或发行；真机/人工TalkBack NOT_RUN。最终状态继续以PR #177准确checks及最终验收评论为准。
+
+## PR #177 最终全量回归：历史资料用例主循环同步 — 2026-10-31
+
+958cbd77三API设备及四API安全均PASS，但PR全量4334项中唯一FAIL是RecordedReferenceUiTest繁中初始化等待line75（10000ms，尚未进入资料弹窗交互；609原条件skip）。立即关闭auto-merge，未借另一个运行PASS代替。原HTML、完整job日志gzip和SHA见docs/fixes/explicit-skip-2026-10-31/readonly-sync-evidence.json。
+
+该测试仅轮询vm.state.loading，未驱动Robolectric暂停MainLooper；复用§176/MainThreadResumeTest已有同步方式ui.waitForIdle，保留10s及所有只读/不保存/原记录相等断言，另加初始化error必须null。12项四语资料回归+3项既有主线程机制共15项实际PASS（41秒），不改历史资料生产实现、数据/PK/附件/业务/时限。超时本身不足以证明唯一CI调度根因，证据中保留此限制。新准确HEAD必须全门通过后才重启auto-merge或正常合并；当前Ready无冲突但未合并。不签名/交付/公开发行。
+
+## PR #177 与已合并交付记录 #176 无损同步 — 2026-10-31
+
+等待df89完整Android时，默认分支合入a7a882b5（#176，交付账本、Release历史和源码版本floor42）。只解REQUIREMENTS/HANDOFF两处冲突，双方有效内容完整保留，继承已批准版本42；不签名/交付APK、不触碰公开Release/tag。全部跳过功能生产源码与df89逐字节相同，LAB04原哈希及精确逆转证明保持。df89 API26/29/35真实MainActivity用例均已实际PASS，原XML及artifact哈希在PR最终原生验收评论6542070164及后续收据；df89完整Android尚在执行、不能冒称PASS。同步后的准确HEAD继续现有必需CI。当前代码可Ready for Review，按§106启用GitHub原生auto-merge，保护必须等最终检查成功，不绕过冲突/评审/失败。
+
+## PR #177 综合CI字节锁收口 — 2026-10-31
+
+74c13371完整PR Android4333项仅LAB04 projectionSourcesAreTheBaseBytes失败（609原条件skip），旧化验输出金标通过。保留全部BASE_DIGEST/BASE_SOURCES原值；对用户已授权的四处SKIP投影差异建立完整SHA+精确逆转证明，逆转后继续比对原字节；新增任意其它化验/源码改动拒绝测试。3项原锁/金标/负向+投影12+时期5共20项PASS；直接App64+core33合计97项PASS。生产代码与74完全相同，仅守卫/审批证据及文档变化；新准确HEAD必需CI仍需完成。
+
+74原生API29、35真实MainActivity跳过/阶段归属/保存覆盖/新Activity历史/撤销均PASS，原XMLgzip见docs/fixes/explicit-skip-2026-10-31；API26尚PENDING，不能先称全通过。PR API27安全首次设备userdata磁盘不足、instrumentation未开始，原完整log压缩入库；仅该失败job一次重验PASS。原始失败/前后证据与原SHA均保留；不签名、交付或发行。最终远端精确SHA的结果与合并状态以PR #177 checks和最后验收评论为准，不把这些历史检查点当永久结论。
+
+## PR #177 实证修复：跳过不能清空已保存覆盖 — 2026-10-31
+
+新四语真实OverrideDialog测试复现4/4生产缺陷：已保存rescheduled/zone/dose=3.0，切skip后onSave却全部null。Dialogs.kt最小修正：skip时保留initial已有覆盖，不提交隐藏的未保存编辑；普通更改/取消/重置与原Repository撤销不变。修复前原XML和修复后12项原XML在docs/fixes/explicit-skip-2026-10-31。现在61项App直接目标+33项core共94项PASS；最终原生编译PASS。MainActivity用例先准备已保存改时/3mg，再经正式TodayCard菜单完成跳过与历史撤销，保持原有效时间/剂量、无实际服药/库存影响。该最终修正必须在准确新HEAD执行三API和必需CI，旧b639原生结果不能替代；Draft保持直到验收，不能签名/交付/发版。
+
+## PR #177 原生路径对照修正 — 2026-10-31
+
+正式日程当天剂量位于TodayCard，day-dose列表只为其它日期渲染。原生候选改为真实当天卡片的对应slot菜单→更改/跳过→有名称的开关→保存，不触碰生产逻辑、不注入数据库跳过。兼容同时间其它药、较晚剂量展开；解除后要求原时刻/剂量保持且槽位回到合法OPEN状态（PENDING/SOON/OVERDUE由既有当前时刻规则决定，不把未来两小时跨午夜假设当业务要求）。编译实际6秒PASS。90项局部结果不变；最终准确HEADCI原生仍PENDING。
+
+## PR #177 最终目标测试冻结 — 2026-10-31
+
+追加真实跳过对话框四语点击/保存校验，发现三个Switch缺少自身无障碍名；现有SwitchRow只补对应label的contentDescription，不改布局/业务。原生按真实label选择跳过，无控件坐标/序号猜测。57项App直接目标及33项core撤销共90项PASS，最终8项四语原XML入docs/fixes/explicit-skip-2026-10-31，AndroidTest编译PASS。原未具名Switch匹配失败原XML保留。接下来只收口最终准确HEAD的CI/API26/29/35真实MainActivity合同；均满足才能Ready正常保护合并。无真机/TalkBack人工/签名/发行。
+
+## PR #177 接手：已确认跳过归回治疗阶段 — 2026-10-31
+
+沿用原分支与PR，远端446c618d无新提交。新增生产修正：提前跳过是已确认决策，保留原计划时刻但不进入Upcoming；空slot不当作显式计划证据。正常模式显示冻结药名与原时区计划时刻，详情显示计划剂量，简易/伪装隐私规则不变。用独立四语资源明确已跳过，不改变旧冻结strings/PDF摘要。原Repository/applyOverride/undoSkipped、库存、浓度、提醒、Room及备份协议均未改。
+
+本地53项投影/四语UI/真实Room加密备份恢复/旧识别/撤销UI/PDF守卫，以及core撤销33项全PASS；新MainActivity真实日程→跳过→时间线→新Activity历史→撤销编译PASS。新原生合同接现有API26/29兼容列表，API35整套自然执行；原生与最终CI尚PENDING，不能合并或称产品验收完成。失败夹具与selector原XML/日志、执行范围在docs/fixes/explicit-skip-2026-10-31/，不改原安全断言/时限。无真机/人工TalkBack，无签名/交付/Release授权。下一步只查本提交准确HEAD的CI/原生，真实失败精确修复，保护条件满足才Ready正常合并。
+
+## 2026-10-31 用户主动跳过服药：时间线错误显示待识别方案（候选待 CI）
+
+问题：`NotesRepository.applyOverride` 已用冻结方案快照保存 `APP/SKIPPED`、slot_key、rule_version_id 和 scheduled_utc；但 `ObservedTreatmentHistory` 不将尚未到时的未来跳过加入 resolvedRecords，`ImportedHistoryProjection` 随后把它显示为「待识别方案的历史记录」。这并不表示用户实际服药或方案缺失。
+
+候选修复（分支 `fix/explicit-skipped-dose-timeline-20261031`）：在 `PeriodTimelineProjection` 中仅将有真实 slot_key、规则版本、预定时刻且未删除的 `APP/SKIPPED` 记录映射为独立 `EventKind.SKIPPED`，保留预定时刻和冻结身份；排除它们的 imported-history 重复显示。跳过的日期还未到时保留在计划时刻排序的 upcoming 区域，但明确标「已跳过服药」。历史导入/无真实 slot 的记录仍沿旧识别流程。详情显示冻结药品名称与**计划**剂量，不把它当实际服药、医疗建议、治疗停药或浓度输入。代码仅改只读时间线投影和 UI 文案，不写入/修改任何记录、库存、药代、Room 或备份。
+
+新增 `ImportedHistoryTimelineTest` 三组：未来主动跳过；已过时跳过与未识别导入记录共存；撤销后被标记删除。原 `PeriodTimelineTest` 未关联的普通记录仍不生成单独服药卡。**截至提交时测试与真实设备均未执行，必须依据精确 HEAD 的 CI 后更新 PASS/FAIL/NOT_RUN；未构建、签名、发布 APK。**
+
+---
+## Build 42 已签名并私下交付 — 2026-10-31
+
+- **交付物**：`HRT-Log-build42-full-official.apk`，versionCode 42 / 0.2.0 / `net.plainnotes.app`，14,539,934 字节，SHA-256 `fe93a36d771e03e0cce7459b4e76f0f64a07c4daa5f6bd5d58632268ceca7c28`；原正式证书 `989ba045…79b1`，v2/v3 通过、单签名者；**取代 Build 41**。负责人 2026-10-31 “好了给apk”；只在会话内私下发给负责人，不入 Git/CI/公开 Release/tag。
+- **来源**：干净 `f112e109`（#167、#175 合并后的主线）+ 源码外 `version42.init.gradle`（仅 versionCode 41→42）；未签名包 SHA-256 `ea5ccc84…8d80`。内容：Build 41 + #167 线程修复（REQUIREMENTS §176，正式应用行为不变）。
+- **核验**（收据 `docs/delivery/build42-private-verification.json`）：签名前后 324 个业务条目逐字节一致；64 位原生库 ELF 与 ZIP 均 16KiB 对齐；无 INTERNET、非 debug；密钥临时副本已 shred。主线 `f112e109` 与 `fdabc4ce` 的 CI 在签名前已全部成功、无重跑。账本追加 42，源码默认 versionCode 同步 42。
+- 未做（NOT_RUN）：真机安装、人工 TalkBack、覆盖升级真实 APK 测试；不是公开 Beta。覆盖安装前先导出完整备份，不卸载、不清数据。
+
+## 公开 Release v0.2.0 已替换为最新主线 — 2026-10-31
+
+- 负责人“替换现有release，不用说build多少”（REQUIREMENTS §177）。把刚私下交付的同一个正式签名 APK（SHA-256 `fe93a36d…7c28`，源码 `f112e109b3b32e156e33518f71aad562cd168a05`）换进 Release `v0.2.0`：4 个附件、说明、tag 都已更新；工作流 run 41184909240 重新下载后逐个核对哈希，tag 与说明首行也核对过，临时分支已被工作流删除。
+- 说明里**不写构建号**（也不写 versionCode）；README 公开版本行同样去掉。机器清单与账本里保留 `version_code`，只用于核对。
+- 被替换前的哈希与旧 tag `76627bfe` 见 `docs/releases/0.2.0-rebuild-2026-10-17-superseded.md`。合并后 `release-assets.yml` 会对已发布附件、tag 做只读复核。
+- NOT_RUN：真机 ARM 覆盖安装、人工读屏。
+
+## Compose 间歇失败根因修复 PR — 2026-10-30（已合并 #167，主线 fdabc4ce）
+
+- 负责人“给我修”。根因已证明（REQUIREMENTS §176）：Compose 测试里界面协程在后台线程继续，测试拦截器在后台线程发 snapshot apply，导致重组/布局离开主线程。正式应用不受影响。
+- 分支 `fix/compose-main-thread`（工作树 `/home/user/wt-flake`）：`ui/OffMain.kt`（`computeOffMain` / `resumeOnMain` / `rememberMainThreadScope`）+ 各调用点 + 药品参考资料对话框在主线程收集状态 + `MainThreadResumeTest` + `Ui12ConcentrationTest.show()` 等到没有转圈再读结果；三条显示批准（证据提交 `5e63b533`）、Ui08 ConcChart 新哈希，`check_protocol` 通过。
+- 证据：临时探针（全局 apply 观察者，只在会话机工作树里临时加，不入库）修复前跑全部非截图 Compose 测试：444 次非主线程提交，分布在浓度页、研究浓度页、ConcChart 点按、BDPM 官方详情、已记录商品资料、药品参考资料对话框、药品中心；全部在修复范围内。修复后同一套重跑（77 类 2625 测试）：0 失败、非主线程提交 0 次（PR #167 评论）。
+- 注意：Robolectric 下 `waitUntil` 只推进帧时钟、不让主线程 looper 空闲；条件里不碰 Compose 节点时，要先 `waitForIdle()`，否则投递到主线程的续体不会执行。
+- PR #167 首次 CI：API29 为模拟器掉线（两个校准用例已通过，之后 `adb: device offline`，INFRA）；API26 全屏阅读器用例在 Activity 销毁时仍 SlotTable 越界 → 第二轮：所有 StateFlow 收集改在主线程，设备产品测试加 `OffMainApplyRecorder`（REQUIREMENTS §176 第二轮）。
+- 已合并：最后一轮 CI 全绿（`android` 4315 测试 0 失败；中途两次基础设施故障——API29/35 模拟器掉线、一次 Gradle 打包卡死 6 小时被取消——各重跑一次通过，PR 评论有记录）。
+- 待做：设备测试（attachment-poc 26/29）是否不再出现同类故障，看接下来几次 CI；若 `OffMainApplyRecorder` 报出线程，按其中的线程名与主线程位置继续修。
+
 ## PK 候选真实失败与窄范围调度修复 — 2026-10-30
 
 #174的908d5263：API26/29/35原生完整设备/兼容作业已通过，Science及四API安全也通过，但综合Android push失败于旧MedicalHome确认对话框等待和UnifiedConcentrationUiTest的Default-worker触碰View异常；不得借其它绿色当全通过。完整原始HTML已入acceptance/failures，后者堆栈明确ApplyingContinuationInterceptor在DefaultDispatcher-worker-6提交视图；前者根因仍未独立证明。
