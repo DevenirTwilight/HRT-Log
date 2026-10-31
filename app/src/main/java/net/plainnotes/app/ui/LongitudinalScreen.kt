@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
@@ -27,6 +28,7 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.Icons
@@ -62,6 +64,7 @@ import java.time.*
     var edit by rememberSaveable(stateSaver=milestoneSaver){mutableStateOf<MilestoneEntity?>(null)}
     var removeId by rememberSaveable{mutableStateOf<Long?>(null)}
     var detailKey by rememberSaveable{mutableStateOf<String?>(null)}
+    val expandedSkips=remember{mutableStateMapOf<String,Boolean>()}
     var importKey by rememberSaveable{mutableStateOf<String?>(null)}
     var auditKey by rememberSaveable{mutableStateOf<String?>(null)}
     var focusKey by rememberSaveable{mutableStateOf<String?>(null)}
@@ -81,8 +84,16 @@ import java.time.*
     val periods=projection.periods.filter{it.from<=Instant.now()}.asReversed()
     // LAB-04: a lab draw (a panel, or results with the same time and laboratory) is one row, grouped as the labs page groups.
     val draws=remember(record,extra.labPanels){TimelineLabDraws.mergeable(record.events,record.upcoming,extra.labPanels)}
-    fun MutableList<StoryBlock>.addEvents(events:List<PeriodEvent>)=TimelineLabDraws.fold(events,draws).forEach{row->when(row){
-        is TimelineRow.One->add(StoryBlock(row.event.key,event=row.event));is TimelineRow.Draw->add(StoryBlock(row.draw.key,draw=row.draw))}}
+    fun MutableList<StoryBlock>.addEvents(events:List<PeriodEvent>) {
+        val grouped=TimelineSkippedGroups.build(events).flatMap{g->g.events.map{it.key to g}}.toMap()
+        val emitted=mutableSetOf<String>()
+        TimelineLabDraws.fold(events,draws).forEach{row->when(row){
+            is TimelineRow.One->{val g=grouped[row.event.key]
+                if(g==null)add(StoryBlock(row.event.key,event=row.event))
+                else if(emitted.add(g.key))add(StoryBlock(g.key,skips=g))}
+            is TimelineRow.Draw->add(StoryBlock(row.draw.key,draw=row.draw))
+        }}
+    }
     val blocks=buildList<StoryBlock> {
         if(record.upcoming.isNotEmpty() || record.importedHistory.any{it.future}){
             add(StoryBlock("upcoming"));addEvents(record.upcoming)
@@ -98,7 +109,9 @@ import java.time.*
     }
     // UI-02 A1: front-end type filter only; the projection and period cards are unchanged.
     var filter by rememberSaveable { mutableStateOf(TimelineFilter.ALL) }
-    val shown=remember(blocks,filter){if(filter==TimelineFilter.ALL)blocks else blocks.filter{b->b.event?.let{filter.matches(it.kind)} ?: b.draw?.let{filter.matches(EventKind.LAB)} ?: (b.imported==null || filter==TimelineFilter.OTHER)}}
+    val filtered=remember(blocks,filter){if(filter==TimelineFilter.ALL)blocks else blocks.filter{b->b.event?.let{filter.matches(it.kind)} ?: b.draw?.let{filter.matches(EventKind.LAB)} ?: b.skips?.let{filter.matches(EventKind.SKIPPED)} ?: (b.imported==null || filter==TimelineFilter.OTHER)}}
+    val shown=filtered.flatMap{b->if(b.skips!=null && expandedSkips[b.key]==true)
+        listOf(b)+b.skips.events.map{StoryBlock(it.key,event=it)} else listOf(b)}
     LaunchedEffect(saveState.saved?.id) {
         saveState.saved?.let{saved->
             edit=null;focusKey="milestone:${saved.id}"
@@ -109,7 +122,7 @@ import java.time.*
     LaunchedEffect(focusKey,record) {
         val target=focusKey?.let{key->(record.events+record.upcoming).firstOrNull{it.key==key}} ?: return@LaunchedEffect
         // A focused event hidden by the filter brings the full list back first.
-        fun StoryBlock.holds()=event?.key==target.key || draw?.events?.any{it.key==target.key}==true
+        fun StoryBlock.holds()=event?.key==target.key || draw?.events?.any{it.key==target.key}==true || skips?.events?.any{it.key==target.key}==true
         val visible=if(shown.any{it.holds()})shown else {filter=TimelineFilter.ALL;blocks}
         val index=visible.indexOfFirst{it.holds()}+2 // after the intro and filter items
         list.animateScrollToItem(index)
@@ -130,7 +143,7 @@ import java.time.*
     }
     // UI-05 D: events (and imported summaries) are drawn as the inset list of the group card above them: a period, the
     // upcoming card or the unknown card. Group membership is only the order of the unchanged projection's blocks.
-    fun isChild(b:StoryBlock)=b.event!=null || b.draw!=null || b.imported!=null
+    fun isChild(b:StoryBlock)=b.event!=null || b.draw!=null || b.imported!=null || b.skips!=null
     val groups=remember(shown){var group="";shown.map{b->if(!isChild(b))group=b.period?.key ?: b.key;group}}
     LazyColumn(Modifier.fillMaxSize().testTag("period-timeline"),state=list,contentPadding=PaddingValues(start=16.dp,end=16.dp,
         top=contentPadding.calculateTopPadding()+8.dp,bottom=contentPadding.calculateBottomPadding()+32.dp),verticalArrangement=Arrangement.Top) {
@@ -162,6 +175,8 @@ import java.time.*
                         }
                     }
                 }
+                block.skips!=null->GroupChild(group,first,last){
+                    SkippedGroupRow(block.skips,zone,expandedSkips[block.key]==true){expandedSkips[block.key]=expandedSkips[block.key]!=true}}
                 event!=null->GroupChild(group,first,last){EventRow(event,::open)}
                 // LAB-04: a panel opens its detail; a display-only group opens the labs page (it has no scroll-to-draw).
                 block.draw!=null->{val d=block.draw;GroupChild(group,first,last){TimelineLabDrawRow(d){d.draw.panel?.let{onLabPanel(it.id)} ?: onOpen(EventKind.LAB)}}}
@@ -345,6 +360,24 @@ private val TopCardShape=androidx.compose.foundation.shape.RoundedCornerShape(to
  * UI-05 D: one row of a group card's inset white list. The card's colour continues behind the list so the rows read as
  * part of the card above; upcoming rows are separate dashed cards instead. [group] is only a test hook for membership.
  */
+@Composable private fun SkippedGroupRow(group:TimelineSkippedGroup,viewingZone:ZoneId,expanded:Boolean,onToggle:()->Unit) {
+    val action=stringResource(if(expanded)R.string.timeline_skip_collapse else R.string.timeline_skip_expand)
+    val expansionState=stringResource(if(expanded)R.string.timeline_skip_expanded else R.string.timeline_skip_collapsed)
+    val range=if(group.from==group.through)formatMediumDate(group.from) else formatMediumDate(group.from)+" – "+formatMediumDate(group.through)
+    Row(Modifier.fillMaxWidth().heightIn(min=56.dp).clickable(role=androidx.compose.ui.semantics.Role.Button,onClickLabel=action,onClick=onToggle)
+        .semantics { stateDescription=expansionState }.testTag("timeline:${group.key}").padding(horizontal=12.dp,vertical=8.dp),
+        verticalAlignment=androidx.compose.ui.Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+        EventTypeBadge(EventKind.SKIPPED)
+        Column(Modifier.weight(1f)) {
+            Text(eventKindLabel(EventKind.SKIPPED)+(if(LocalSimpleMode.current)"" else " · "+eventTitle(group.events.first())),style=MaterialTheme.typography.titleSmall)
+            Text(pluralStringResource(R.plurals.timeline_skip_count,group.events.size,group.events.size)+" · "+range,
+                style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+            if(group.zone!=viewingZone)Text(group.zone.id,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight,null,Modifier.rotate(if(expanded)-90f else 90f))
+    }
+}
+
 @Composable private fun GroupChild(group:String,first:Boolean,last:Boolean,content:@Composable ()->Unit) {
     val c=MaterialTheme.colorScheme
     if(group=="upcoming") {
@@ -479,7 +512,7 @@ private val milestoneSaver=androidx.compose.runtime.saveable.Saver<MilestoneEnti
     save={v->v?.let{listOf(it.id.toString(),it.date,it.kind,it.title.orEmpty(),it.note.orEmpty())} ?: emptyList()},
     restore={v->v.takeIf{it.isNotEmpty()}?.let{MilestoneEntity(it[0].toLong(),it[1],it[2],it[3].takeIf(String::isNotEmpty),it[4].takeIf(String::isNotEmpty))}})
 
-private data class StoryBlock(val key:String,val period:DisplayPeriod?=null,val event:PeriodEvent?=null,val imported:ImportedHistorySummary?=null,val draw:TimelineLabDraw?=null)
+private data class StoryBlock(val key:String,val period:DisplayPeriod?=null,val event:PeriodEvent?=null,val imported:ImportedHistorySummary?=null,val draw:TimelineLabDraw?=null,val skips:TimelineSkippedGroup?=null)
 
 @Composable private fun importedRange(summary:ImportedHistorySummary,zone:ZoneId)=
     formatDate(summary.from.atZone(zone).toLocalDate())+" → "+formatDate(summary.through.atZone(zone).toLocalDate())

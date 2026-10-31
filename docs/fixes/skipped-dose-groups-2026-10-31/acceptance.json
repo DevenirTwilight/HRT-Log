@@ -1,0 +1,74 @@
+{
+  "tests": [
+    {
+      "name": "net.plainnotes.app.TimelineSkippedGroupUiTest",
+      "tests": "16",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.TimelineSkippedGroupsTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.Ui08PdfSummaryUnchangedTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.ImportedHistoryTimelineTest",
+      "tests": "12",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.ExplicitSkipTimelineUiTest",
+      "tests": "12",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.PeriodTimelineTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "net.plainnotes.app.Lab04ProjectionUnchangedTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "total_pass": 59,
+  "android_test_kotlin": "PASS",
+  "baseline": "082b1586 original LongitudinalScreen; same synthetic fixture and NotesTheme, actual Canvas-rendered views.8/8 grouped-summary assertions fail as expected. Original XML retained, no business assertions removed.",
+  "screen_configs": [
+    "four languages:320dp/font2/light",
+    "four languages:411dp/font1/dark"
+  ],
+  "capture": "Existing repository window Canvas technique; initial captureToImage helper timed out (documented existing Robolectric limit), raw XML preserved. Not physical-device screenshots.",
+  "native_fixture": "New real MainActivity test seeds10 confirmed skips with public repo.override(slot,...), checks summary, original detail, new Activity and unchanged rows/stock. Original calendar/undo assertions retained; wait for actual skip switch before asserting OFF.",
+  "native_previous_failure": "Receipt PR178 API29 recorded missing Skip control at immediate assertion and RuntimeRequestUiAndroidTest NoSuchElementException. Not rerun or labeled infrastructure; unique roots NOT_PROVEN. Final new HEAD full gates still required.",
+  "no_changes": [
+    "raw records",
+    "period projection source",
+    "therapy standards",
+    "PK/stock/reminders",
+    "Room/schema",
+    "backup format",
+    "network permission"
+  ],
+  "physical_device": "NOT_RUN",
+  "manual_talkback": "NOT_RUN"
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.plainnotes.app.TimelineSkippedGroupUiTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2026-10-31T18:11:48.304Z" hostname="019d157e45d0" time="15.86">
+  <properties/>
+  <testcase name="labFilterDoesNotLeakSkippedSummaryIntoLabResults[en/320dp/2x/LIGHT]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="7.191"/>
+  <testcase name="fiveDaysHaveOneCollapsedSummaryAndEveryOriginalDetailRemainsAvailable[en/320dp/2x/LIGHT]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="1.476"/>
+  <testcase name="labFilterDoesNotLeakSkippedSummaryIntoLabResults[en/411dp/1x/DARK]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.352"/>
+  <testcase name="fiveDaysHaveOneCollapsedSummaryAndEveryOriginalDetailRemainsAvailable[en/411dp/1x/DARK]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.538"/>
+  <testcase name="labFilterDoesNotLeakSkippedSummaryIntoLabResults[zh-rCN/320dp/2x/LIGHT]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.321"/>
+  <testcase name="fiveDaysHaveOneCollapsedSummaryAndEveryOriginalDetailRemainsAvailable[zh-rCN/320dp/2x/LIGHT]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.757"/>
+  <testcase name="labFilterDoesNotLeakSkippedSummaryIntoLabResults[zh-rCN/411dp/1x/DARK]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.291"/>
+  <testcase name="fiveDaysHaveOneCollapsedSummaryAndEveryOriginalDetailRemainsAvailable[zh-rCN/411dp/1x/DARK]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.601"/>
+  <testcase name="labFilterDoesNotLeakSkippedSummaryIntoLabResults[b+zh+Hant/320dp/2x/LIGHT]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.316"/>
+  <testcase name="fiveDaysHaveOneCollapsedSummaryAndEveryOriginalDetailRemainsAvailable[b+zh+Hant/320dp/2x/LIGHT]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.676"/>
+  <testcase name="labFilterDoesNotLeakSkippedSummaryIntoLabResults[b+zh+Hant/411dp/1x/DARK]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.284"/>
+  <testcase name="fiveDaysHaveOneCollapsedSummaryAndEveryOriginalDetailRemainsAvailable[b+zh+Hant/411dp/1x/DARK]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.53"/>
+  <testcase name="labFilterDoesNotLeakSkippedSummaryIntoLabResults[fr/320dp/2x/LIGHT]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.41"/>
+  <testcase name="fiveDaysHaveOneCollapsedSummaryAndEveryOriginalDetailRemainsAvailable[fr/320dp/2x/LIGHT]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.865"/>
+  <testcase name="labFilterDoesNotLeakSkippedSummaryIntoLabResults[fr/411dp/1x/DARK]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.309"/>
+  <testcase name="fiveDaysHaveOneCollapsedSummaryAndEveryOriginalDetailRemainsAvailable[fr/411dp/1x/DARK]" classname="net.plainnotes.app.TimelineSkippedGroupUiTest" time="0.592"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

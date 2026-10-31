@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="timeline_skip_count">
+        <item quantity="one">%1$d 次</item>
+        <item quantity="other">%1$d 次</item>
+    </plurals>
+    <string name="timeline_skip_expand">展开逐次记录</string>
+    <string name="timeline_skip_collapse">收起逐次记录</string>
+    <string name="timeline_skip_expanded">已展开</string>
+    <string name="timeline_skip_collapsed">已收起</string>
+</resources>

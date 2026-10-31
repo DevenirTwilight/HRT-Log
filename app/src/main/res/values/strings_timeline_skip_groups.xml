@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="timeline_skip_count">
+        <item quantity="one">%1$d dose</item>
+        <item quantity="other">%1$d doses</item>
+    </plurals>
+    <string name="timeline_skip_expand">Show individual skipped doses</string>
+    <string name="timeline_skip_collapse">Hide individual skipped doses</string>
+    <string name="timeline_skip_expanded">Expanded</string>
+    <string name="timeline_skip_collapsed">Collapsed</string>
+</resources>
