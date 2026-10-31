@@ -1,0 +1,101 @@
+{
+  "apk": "HRT-Log-build43-full-official.apk",
+  "package": {
+    "application_id": "net.plainnotes.app",
+    "version_code": 43,
+    "version_name": "0.2.0"
+  },
+  "apk_sha256": "186538ac24783d4e6bd2ca852fbf577f6f05cb416ea62269f493bb1282d0228c",
+  "signing_cert_sha256": [
+    "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+  ],
+  "source": {
+    "SOURCE_COMMIT_TIME_UTC": "2026-10-31T12:29:09Z",
+    "SOURCE_DIRTY": "false",
+    "SOURCE_ORIGIN": "git",
+    "SOURCE_SHA": "082b1586e21aed8bc8d0bee2d07de91d15f40359"
+  },
+  "bytes": 14548126,
+  "unsigned_apk_sha256": "2b0db72b6580918f8b01c9402e2d4a835afc5f7674c5bf446971c12c0a36d507",
+  "native_libraries": [
+    {
+      "name": "lib/arm64-v8a/libandroidx.graphics.path.so",
+      "sha256": "41e9a793c43a0f4fddb19e33f346bace464f30f888ba7b9eaf96294ea115bfb6",
+      "load_alignments_64bit": [
+        16384,
+        16384,
+        16384
+      ],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/arm64-v8a/libsqlcipher.so",
+      "sha256": "bc85746647ce4ea5f390eccd61e5236fbd11786a91802877b9fdbbb66a55192d",
+      "load_alignments_64bit": [
+        16384,
+        16384,
+        16384
+      ],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/armeabi-v7a/libandroidx.graphics.path.so",
+      "sha256": "41399eba6fc2a60f6f14642375c1824f3cf25eb8fec7397d753730a3ceda3e2b",
+      "load_alignments_64bit": [],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/armeabi-v7a/libsqlcipher.so",
+      "sha256": "a3d6e16e4477961cffc563ad9e9b49aa9cf0f4def5f008a9b349c9afacec6170",
+      "load_alignments_64bit": [],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/x86/libandroidx.graphics.path.so",
+      "sha256": "eb0570b41fd3bff25d8204a967c03bd7550719e768b791f680cc40cbe35f29af",
+      "load_alignments_64bit": [],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/x86/libsqlcipher.so",
+      "sha256": "efd77986abfa03cff177ea1d9801bd3080bd8bfc90a26ac1a977da169c5b89c8",
+      "load_alignments_64bit": [],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/x86_64/libandroidx.graphics.path.so",
+      "sha256": "4e56c996f13670e70082658de7880c4020eabf4f25e43387f88ed78a713fc9f0",
+      "load_alignments_64bit": [
+        16384,
+        16384,
+        16384
+      ],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/x86_64/libsqlcipher.so",
+      "sha256": "482f62c4d77e136d7cb7eb30d74a5c4cbadc3577d10ced1f13f3e745e1be7e7a",
+      "load_alignments_64bit": [
+        16384,
+        16384,
+        16384
+      ],
+      "same_as_previous_release": true
+    }
+  ],
+  "build_input": "External version43.init.gradle changes only versionCode42→43",
+  "build_input_sha256": "fa8a58b5ef1041e5d05d2ac62b7940a949036eeb037a3f1d4571aa2e8e830899",
+  "release_isolation": "PASS",
+  "no_internet": "PASS",
+  "physical_device": "NOT_RUN",
+  "manual_talkback": "NOT_RUN",
+  "private_credentials": "Private original backup verified; temporary recovered key/password removed",
+  "delivery": "PUBLISHED_AND_REDOWNLOADED_VERIFIED",
+  "delivery_time_utc": "2026-10-31T16:28:02.345983+00:00",
+  "scope": "Mainline #177 only, no unmerged #174 candidate",
+  "release_run": 41219506988,
+  "previous_apk_sha256": "fe93a36d771e03e0cce7459b4e76f0f64a07c4daa5f6bd5d58632268ceca7c28",
+  "tag": "v0.2.0",
+  "tag_source": "082b1586e21aed8bc8d0bee2d07de91d15f40359",
+  "initial_build_rejected": "Initial init setter was overwritten to42; package guard rejected before signing/publication. finalizeDsl recipe produced43 and was verified from actual APK."
+}

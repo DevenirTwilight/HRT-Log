@@ -1847,3 +1847,8 @@ B0 矩阵把 `ui/LabsScreen.kt` 归为 PK_DISPLAY_REVIEW（修改须带可核查
 - **核对**：`scripts/check_release_manifest.py`（无 INTERNET、应用身份与入口）与 `scripts/check_attachment_release_isolation.py`（发布包里没有测试/演示/POC 标记）对该 APK 通过；已签名文件同样通过隔离检查；说明里的宣传功能逐条对照源码，在此构建中都存在（离线无 INTERNET、提醒与库存、回收站、浓度曲线与校准、化验、身心状态、复诊与资料包、医疗文件库与阅读器、时间线、PDF/CSV 导出、应用锁与 SQLCipher、`.pnbak` 与 `.pnmedbk2`、伪装、四语）。隐私表述与 `PRIVACY.md` 一致（导出不加密；医疗文件加密保存；`.pnmedbk2` 与 `.pnbak` 是两种备份）。
 - **留档**：被替换前的文件哈希、旧 tag SHA 与回退办法见 `docs/releases/0.2.0-rebuild-2026-10-17-superseded.md`；新说明 `docs/releases/0.2.0-rebuild-2026-10-31.md`；同步了 `.github/release-assets.json`、README 的公开版本行、Build 42 收据。
 - **未做（NOT_RUN）**：真机 ARM 覆盖安装、人工读屏；不是公开 Beta；外部安全审查未做。
+
+
+## 2026-10-31 负责人优先交付指令：#177 合并后先给 APK
+
+负责人明确“177先合”“177合了就先给apk”，并已授权“合并，给apk，并替换现有release”。先从#177正式合并源码082b1586交付原证书full Universal Build43（前最高42），不等待/不混入未合并的#174；外部finalizeDsl init只递增versionCode42→43，源码干净。主线Android/Science/四API安全及此前API26/29/35真实跳过/撤销门槛通过。正式签名、Release四附件与说明替换、tag同步到真实源码、重新下载核对均完成；原私有凭据临时恢复后清理，不进入Git/CI。初始版本覆盖被APK核验拦截（42），未签名/未发布，保留拒绝收据；最终APK实际43。下一实际交付至少44，不因#174候选仍写43就重复交付版本号。#174仍Draft，未冒称曲线候选已合并。

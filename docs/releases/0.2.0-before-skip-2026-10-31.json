@@ -1,0 +1,34 @@
+{
+  "release_id": 404602730,
+  "tag": "v0.2.0",
+  "previous_tag_object": {
+    "sha": "f112e109b3b32e156e33518f71aad562cd168a05",
+    "type": "commit",
+    "url": "https://api.github.com/repos/DevenirTwilight/HRT-Log/git/commits/f112e109b3b32e156e33518f71aad562cd168a05"
+  },
+  "assets": [
+    {
+      "name": "plainnotes-0.2.0-full.apk",
+      "size": 14539934,
+      "digest": "sha256:fe93a36d771e03e0cce7459b4e76f0f64a07c4daa5f6bd5d58632268ceca7c28"
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "size": 271,
+      "digest": "sha256:da1040373774a710a77866d4f7662ede52c739d6387efe4471048ac3e24c475d"
+    },
+    {
+      "name": "SIGNING_CERTIFICATE.txt",
+      "size": 383,
+      "digest": "sha256:6d4a048a2b5bd3e8674e2888ebc71e5f46de97555ba35b42ad5863d513cf645c"
+    },
+    {
+      "name": "THIRD_PARTY_NOTICES.md",
+      "size": 7046,
+      "digest": "sha256:e214f01a426b5c94793d64db63bf532a1c1e59ebab86cc427f5ed8320247a33f"
+    }
+  ],
+  "replacement_run": 41219506988,
+  "replacement_source": "082b1586e21aed8bc8d0bee2d07de91d15f40359",
+  "rollback": "Previous four assets were locally backed up and checked by digest. Restore only with owner authorization; versionCode must not be lowered for installation."
+}

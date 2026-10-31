@@ -1,0 +1,18 @@
+{
+  "apk": "HRT-Log-build43-full-unsigned.apk",
+  "package": {
+    "application_id": "net.plainnotes.app",
+    "version_code": 42,
+    "version_name": "0.2.0"
+  },
+  "apk_sha256": "533ec4ee943d3e7372ccaffbabaca94bddf52ff00c5ec45b2d90b25876ef9b3d",
+  "signing_cert_sha256": [
+    "unsigned or invalid signature"
+  ],
+  "source": {
+    "SOURCE_COMMIT_TIME_UTC": "2026-10-31T12:29:09Z",
+    "SOURCE_DIRTY": "false",
+    "SOURCE_ORIGIN": "git",
+    "SOURCE_SHA": "082b1586e21aed8bc8d0bee2d07de91d15f40359"
+  }
+}
