@@ -1,0 +1,70 @@
+{
+  "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5686655/",
+  "cohort": "11 transgender men on weekly SC T cypionate; selected GROUP means",
+  "units": "ng/dL",
+  "published_group_mean_timepoints": {
+    "day0": 497,
+    "hour6": 656,
+    "day5": 621,
+    "day7": 477
+  },
+  "assumed_common_periodic_endpoint": 487,
+  "endpoint_approximation_error_ng_dl": {
+    "day0": -10,
+    "day7": 10
+  },
+  "fitted_to": [
+    "6h",
+    "5d"
+  ],
+  "heldout": [
+    "0d",
+    "7d"
+  ],
+  "independent_cohort_validation": false,
+  "family": [
+    {
+      "assumed_peak_day": 0.5,
+      "shape_power": 0.018104981452974196,
+      "implied_Cmax_ng_dl": 656.6208052968929,
+      "predicted_d0": 487,
+      "predicted_6h": 656,
+      "predicted_d5": 621,
+      "predicted_d7": 487,
+      "research_only": true
+    },
+    {
+      "assumed_peak_day": 1,
+      "shape_power": 0.053934080620583205,
+      "implied_Cmax_ng_dl": 662.3093466118753,
+      "predicted_d0": 487,
+      "predicted_6h": 656,
+      "predicted_d5": 621,
+      "predicted_d7": 487,
+      "research_only": true
+    },
+    {
+      "assumed_peak_day": 1.5,
+      "shape_power": 0.15846863141173262,
+      "implied_Cmax_ng_dl": 686.3057852723624,
+      "predicted_d0": 487,
+      "predicted_6h": 656,
+      "predicted_d5": 621,
+      "predicted_d7": 487,
+      "research_only": true
+    },
+    {
+      "assumed_peak_day": 2,
+      "shape_power": 5.1276896749290115,
+      "implied_Cmax_ng_dl": 154612.3617442285,
+      "predicted_d0": 487,
+      "predicted_6h": 656,
+      "predicted_d5": 621,
+      "predicted_d7": 487,
+      "research_only": true
+    }
+  ],
+  "rows": 676,
+  "note": "Cmax at 2d assumption is >150k ng/dL: mathematical absurdity, illustrates unrestricted sparse-anchor fitting. Do not infer any subject's true Cmax, dose, baseline or endocrine feedback.",
+  "scientific_status": "NONIDENTIFIED_ILLUSTRATIVE_ONLY"
+}
