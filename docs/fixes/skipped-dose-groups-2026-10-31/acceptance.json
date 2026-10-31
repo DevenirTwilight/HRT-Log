@@ -70,5 +70,11 @@
     "network permission"
   ],
   "physical_device": "NOT_RUN",
-  "manual_talkback": "NOT_RUN"
+  "manual_talkback": "NOT_RUN",
+  "native_wait_correction": {
+    "original_job": 124591996334,
+    "original_log_sha256": "aa27646710d80a7830d3aa56c333f207f636195ec2db9edee8ccd40be0aa1b44",
+    "failure": "RuntimeRequestUiAndroidTest NoSuchElementException; original file unchanged before this correction. A joined refresh may have been cancelled by shell refresh; unique CI root NOT_PROVEN.",
+    "minimal_correction": "Wait in existing20s bound for exact same ID and expected saved note before original single/assertEquals. All old stale-owner/restore/current-owner/medication-equality assertions remain. No production lifecycle/authority changes. Native compile and final new-head execution required."
+  }
 }

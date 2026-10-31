@@ -1,3 +1,7 @@
+## 聚合候选原生同步收口 — 2026-10-31
+
+PR178旧API29的RuntimeRequestUiAndroidTest在refresh.join后直接single读取显示快照，曾NoSuchElement。源码refresh可被shell新刷新取消，join取消Job并不等于相同目标已发布；现仅在原20s内等同ID/expectednote，再执行原全部断言。另一个缺Skip控件的原断言保留并等待真实控件。完整原job gzip及SHA加入聚合证据；不声称唯一故障根因已证明，不改任何生产Runtime/锁/恢复语义。第一聚合候选288f本地59PASS，刚启动的远端检查不能作为后续新HEAD验收；新HEAD必须重新满足全部门槛，无重复同SHA绿色重跑。
+
 ## 跳过列表密度修正候选 — 2026-10-31
 
 负责人指出每天2次连续5天会堆10行。新增纯显示TimelineSkippedGroups及Longitudinal摘要/展开：同阶段/药物/规则/冻结身份/原时区且相邻本地日期，2条起默认一条；次数/范围不宣称全部停药。原事件/ID/明细、治疗方案/时期/库存/浓度/备份完全保留，单次不聚合，筛选与简易模式不漏隐私，展开仍用原LazyColumn虚拟化。59项定向PASS、无skip；新原生夹具使用公开override(slot,...)，Kotlin编译PASS。真实渲染before/after8组合及旧渲染8个预期失败控制、初始截图辅助超时原件在docs/fixes/skipped-dose-groups-2026-10-31。
