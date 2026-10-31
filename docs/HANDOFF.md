@@ -1,3 +1,13 @@
+## PR #179 最小隔离修复本地验证通过 — 2026-10-31
+
+Room实际10条无边界→1组；新增第四天中午第二方案→7+3且原事实不变，与原生失败结构吻合。ExplicitSkipBackupTest 2项、TimelineSkippedGroupsTest 10项共12 PASS/0FAIL/0SKIP，AndroidTest编译PASS，Gradle2分23秒；原XML与本地收据native-isolation-fix/。初次旧增量编译FAIL保留，:core:ui:clean禁用增量后无生产源码变更通过。两个MainActivity用例均进入既有独立合成安装执行方式，每个API确实运行两条、原断言和超时保留。接下来只运行新准确HEAD必需CI，当前原生仍PENDING、Draft，不发布/签名、不合并研究PR。上一检查点的“本地进行中”仅历史。
+
+## PR #179 接手：7/10 原生失败为共享方案历史，隔离原生场景 — 2026-10-31
+
+27e826bb 仍 Draft，真实三API失败未改写成功。API29原XML证实先跑单次跳过/撤销（保留从前一天开始的方案），再跑五天十次；数据库确有10条SKIPPED，但真实治疗阶段边界把摘要分开，原semantics为7 doses、Oct27–Oct30。保留完整log/XML/hash至docs/fixes/skipped-dose-groups-2026-10-31/native-failure-27e826bb。新增Room反例验证第二方案造成7+3；两原生用例用既有emulator reset分别运行，严格每例1条无skip XML核验，不改生产分组/Repository/时期/库存/浓度/撤销或超时。新准确HEAD CI待运行，本地目标测试与AndroidTest编译进行中；初次本地编译core:ui旧增量产物报已存在符号不可见，原log保留，清理该模块并禁用增量复验中，不能声称PASS。
+
+#178全部交付账本、收据、README及Release机器清单与d15d0b64逐字节核对一致；本候选只把源码version floor保留为44。须#179真正合并后才关闭#178为已纳入。没有新的APK签名/发布授权，不签名或替换Release。#174与Issue117未扩大处理。
+
 ## 连续跳过：真实记录分组修复及夹具根因 — 2026-10-31
 
 0c821221的PR41229046080/API29 job124619239801真实FAIL：夹具先以当前时钟生成过去MISSED，再override，被既有“Edit recorded history instead”保护正确拒绝。原完整log/gzip/SHA保留，非LMK/基础设施，不重跑同源碰绿。保持同五天十次、所有业务断言、原超时；改为原子公开API夹具在首日07提前明确跳过，首日00起效，防前台刷新先物化漏服。

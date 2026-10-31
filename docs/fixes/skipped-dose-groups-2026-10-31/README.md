@@ -11,3 +11,14 @@
 本分支包含已实际交付Build43的收据PR178；不隐瞒其API29真实失败，只有新HEAD全部门槛满足才能合入并将178关闭为已纳入。源版本44预留下一实际交付，未签名或替换现有43。PK173/174不混入本次修正。
 
 真实Room新增回归证实逐次撤销凭据导致旧候选无法聚合；显示key仅排除skip_original_slot_v1，原快照/每条撤销证据仍保留。原红XML及修复后61项XML见本目录。原生0c失败为历史夹具错误：先生成MISSED再override，被后端正确拒绝；改为同五天十次在合法提前时点原子准备，原保护/断言不变，原log保留。最终新HEAD原生验收仍待。
+
+
+## 接手修复：真实原生 7/10 摘要（2026-10-31）
+
+原 HEAD `27e826bb`、run `41231369289` / API29 job `124626200356` 的原 XML 表明：先执行 `skipInCalendarBelongsToTreatmentAndCanBeUndoneAfterReopen`，再执行五天十次用例。前者在真实主库保存了从 `now.minusSeconds(86400)` 开始的另一方案，撤销仅撤销跳过，并不会删除该方案。后者共享同一安装数据库；十条 SKIPPED 事实断言通过，但目标摘要实际为 **7 doses / Oct27–Oct30**。分组明确包含 `displayPeriodKey`，全局治疗阶段在另一方案开始时分段；跨此真实边界合成一组反而违反产品合同。
+
+最小修复只涉及验收准备，不改变任何生产数据或分组语义：沿用既有合成 emulator reset，两个真实 MainActivity 用例分别单独安装执行，保留各自重开、撤销、原记录/库存和十次摘要全部断言；从后续 bulk 移出同两个用例，并通过严格 XML 校验保证每个确实运行且无 failure/error/skipped。五天用例新增“空合成历史”前置断言。不是跳过测试、直接插入 SKIPPED 或放宽 MISSED 保护。
+
+Room 正向回归补充真实第二方案在第四天中午开始的反例：必须分成7+3，原十条事实不变。此反例用于防止把测试隔离问题错误修成跨阶段生产合并。
+
+原件见 `native-failure-27e826bb/`（完整 API29 job、原 XML、artifact/hash）。原生修复结果尚待新准确 HEAD CI，不用本地测试冒充 MainActivity PASS。历史原生失败保留 FAIL。

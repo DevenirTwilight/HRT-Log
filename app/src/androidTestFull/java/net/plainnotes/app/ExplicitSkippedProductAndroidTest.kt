@@ -44,6 +44,7 @@ class ExplicitSkippedProductAndroidTest {
     @Test fun fiveDaysTwiceDailyHaveOneSummaryAndReopenWithoutTenRows() {
         launch()
         val repo=model.libraryRuntime.currentRepository();val now=Instant.now();val zone=ZoneId.systemDefault()
+        assertTrue("Requires an isolated synthetic installation, not another test’s treatment stages",runBlocking{repo.records().isEmpty() && repo.medications().isEmpty()})
         val today=now.atZone(zone).toLocalDate();val from=today.minusDays(4)
         val decidedAt=from.atTime(7,0).atZone(zone).toInstant()
         // Prepare the unchanged five historical days as decisions made before their

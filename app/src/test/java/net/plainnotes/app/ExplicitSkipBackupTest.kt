@@ -48,6 +48,14 @@ class ExplicitSkipBackupTest {
             assertEquals(10,view.events.count{it.kind==EventKind.SKIPPED})
             assertEquals(10,net.plainnotes.app.ui.TimelineSkippedGroups.build(view.events).single().events.size)
             assertTrue(view.importedHistory.isEmpty())
+            // Another real plan beginning within the five days is a genuine global
+            // treatment-stage boundary. Never merge skips across it just to show ten.
+            repo.saveMedication(MedicationEntity(name="Synthetic second plan",molecule="E2",route="ORAL",unit="MG",dose_per_intake=1.0,container_capacity=20.0,
+                soon_alert_minutes=15,late_after_minutes=60,site_rotation=false,notifications_on=false,active=true,sort_order=1),null,
+                RuleKind.EVERY_N_DAYS,1,listOf(LocalTime.NOON),emptySet(),from.plusDays(3).atTime(12,0).atZone(zone).toInstant())
+            val staged=PeriodTimelineProjection.build(NotesViewModel.ExtraState(records=rows,regimens=db.dao().regimens(),regimenLinks=db.dao().regimenLinks()),emptyList(),displayAt)
+            assertEquals(listOf(3,7),net.plainnotes.app.ui.TimelineSkippedGroups.build(staged.events).map{it.events.size}.sorted())
+            assertEquals(rows,repo.records().filter{it.medication_id==id})
         } finally {db.close()}
     }
     @Test fun realSkipSurvivesEncryptedBackupWithoutIntakeStockOrPlanMutation()=runBlocking {

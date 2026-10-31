@@ -140,6 +140,7 @@ jobs:
             # Execute both real SAF operation cases once, before unrelated bulk work.
             python3 scripts/run_attachment_operation_native.py
             python3 scripts/run_calibration_product_native.py
+            python3 scripts/run_explicit_skip_product_native.py
             python3 scripts/run_med02_product_native.py
             python3 scripts/run_library_lifecycle_native.py
             adb logcat -G 16M
@@ -158,7 +159,7 @@ jobs:
             python3 scripts/run_b3_gate_red.py
             adb logcat -G 16M
             # Both operation cases already ran above; retain every other original app case.
-            ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest,net.plainnotes.app.CalibrationProductAndroidTest,net.plainnotes.app.attachments.AttachmentOperationAndroidTest,net.plainnotes.app.imports.AutomaticImportAndroidTest --no-parallel --max-workers=2
+            ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notClass=net.plainnotes.app.ExplicitSkippedProductAndroidTest,net.plainnotes.app.attachments.MedicalAttachmentProductAndroidTest,net.plainnotes.app.CalibrationProductAndroidTest,net.plainnotes.app.attachments.AttachmentOperationAndroidTest,net.plainnotes.app.imports.AutomaticImportAndroidTest --no-parallel --max-workers=2
             # AGP can uninstall target/instrumentation APKs after connected tests (same as existing restart scripts).
             adb install -r -t app/build/outputs/apk/full/debug/app-full-debug.apk
             adb install -r -t app/build/outputs/apk/androidTest/full/debug/app-full-debug-androidTest.apk
@@ -254,6 +255,7 @@ jobs:
             # Execute both real SAF operation cases once, before unrelated bulk work.
             python3 scripts/run_attachment_operation_native.py
             python3 scripts/run_calibration_product_native.py
+            python3 scripts/run_explicit_skip_product_native.py
             python3 scripts/run_med02_product_native.py
             python3 scripts/run_library_lifecycle_native.py
             adb logcat -G 16M
@@ -272,7 +274,7 @@ jobs:
             python3 scripts/run_b3_gate_red.py
             ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.package=net.plainnotes.app.attachmentpoc --no-parallel --max-workers=2
             # China beta P0 regressions on API 26/29 (the full app suite runs on API 35 above).
-            ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.shell.InAppNavigationLockAndroidTest,net.plainnotes.app.shell.ReminderTestDeviceTest,net.plainnotes.app.shell.RuntimeRequestUiAndroidTest,net.plainnotes.app.privacy.RestoreProtectionAndroidTest,net.plainnotes.app.attachments.MedicalAttachmentUiAndroidTest,net.plainnotes.app.ExplicitSkippedProductAndroidTest --no-parallel --max-workers=2
+            ./gradlew :app:connectedFullDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.plainnotes.app.shell.InAppNavigationLockAndroidTest,net.plainnotes.app.shell.ReminderTestDeviceTest,net.plainnotes.app.shell.RuntimeRequestUiAndroidTest,net.plainnotes.app.privacy.RestoreProtectionAndroidTest,net.plainnotes.app.attachments.MedicalAttachmentUiAndroidTest --no-parallel --max-workers=2
             python3 scripts/run_attachment_poc_restart.py
             python3 scripts/collect_attachment_poc_evidence.py --output app/build/reports/attachment-poc-evidence.json
             python3 scripts/run_attachment_gate3_red.py
