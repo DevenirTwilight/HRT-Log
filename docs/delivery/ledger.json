@@ -246,6 +246,19 @@
       "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
       "file_name": "plainnotes-0.2.0-full.apk",
       "channel": "github-public-release-v0.2.0"
+    },
+    {
+      "date": "2026-11-01T00:21:53.897250+00:00",
+      "version_code": 44,
+      "version_name": "0.2.0",
+      "application_id": "net.plainnotes.app",
+      "source_sha": "afe13bcfa174c2322cd3ad64ec49f9fede213a07",
+      "source_origin": "git",
+      "source_dirty": false,
+      "apk_sha256": "89f862209f81cbf53c41975b250dd99d493370fd32617984254db4caf174070e",
+      "signing_cert_sha256": "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1",
+      "file_name": "plainnotes-0.2.0-full.apk",
+      "channel": "github-public-release-v0.2.0"
     }
   ]
 }

@@ -1,3 +1,13 @@
+## 跳过汇总已合并并正式交付／替换现有Release — 2026-11-01
+
+#179已正常保护合并afe13bcfa174c2322cd3ad64ec49f9fede213a07，主线12项作业全部PASS（Android41246546577、Science41246546498、安全41246546604、公开包只读41246546522）；主线与候选24f9f65e文件树一致。61直接回归、三API共6真实MainActivity目标均PASS/0skip。原7/10失败是共享测试历史造成真实阶段边界；隔离用例而不放宽分组，7+3反例保留。两次环境失败及唯一单job重验PASS原件见#179评论；历史PENDING仅当时检查点。最终完整证据评论6550140670。#178交付文件逐字节保留后已关闭为纳入，非重复合并；#174仍Draft、Issue117仍开放，未混入或重启研究。
+
+负责人现明确“给apk，替换release”，已从干净主线afe13bcf重新fullRelease（8分25秒），source原生44/0.2.0无版本覆盖，原正式证书989ba045…79b1。正式APK14548126 bytes，SHA256 89f862209f81cbf53c41975b250dd99d493370fd32617984254db4caf174070e；包名/44/0.2.0、sourceafe+clean/git、4ABI/64位ELF及ZIP16KiB、无INTERNET/非debug、Release隔离、DEX新汇总代码存在与签前后payload一致PASS。原私有库确认Private；临时签名副本清理，原备份未动。
+
+现有v0.2.0四附件/三语说明替换、tag082b→afe正常前移，发布run41256383607 SUCCESS；临时孤立发布分支自动删除(404核实)。四附件从公开Release独立下载逐字节、哈希/大小和APK证书/版本/源码全部PASS。源码floor44，账本追加实际44；下一实际交付>=45。旧43资产/说明/tag/哈希回退记录docs/releases/0.2.0-before-skip-groups-2026-11-01.json，实际收据docs/delivery/build44-release-verification.json。
+
+下载 https://github.com/DevenirTwilight/HRT-Log/releases/download/v0.2.0/plainnotes-0.2.0-full.apk 已在会话提供。不要卸载/清数据，建议先保存加密备份；真机安装、ARM覆盖升级和人工TalkBack NOT_RUN。此记录提交仅治理，APK真正来源仍afe13bcf，不把后续记录提交冒充APK源码。按正常PR保护与§106自动合并，不另开功能或签名研究。
+
 ## PR #179 最小隔离修复本地验证通过 — 2026-10-31
 
 Room实际10条无边界→1组；新增第四天中午第二方案→7+3且原事实不变，与原生失败结构吻合。ExplicitSkipBackupTest 2项、TimelineSkippedGroupsTest 10项共12 PASS/0FAIL/0SKIP，AndroidTest编译PASS，Gradle2分23秒；原XML与本地收据native-isolation-fix/。初次旧增量编译FAIL保留，:core:ui:clean禁用增量后无生产源码变更通过。两个MainActivity用例均进入既有独立合成安装执行方式，每个API确实运行两条、原断言和超时保留。接下来只运行新准确HEAD必需CI，当前原生仍PENDING、Draft，不发布/签名、不合并研究PR。上一检查点的“本地进行中”仅历史。
