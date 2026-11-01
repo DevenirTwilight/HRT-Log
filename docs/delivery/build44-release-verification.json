@@ -1,0 +1,101 @@
+{
+  "apk": "plainnotes-0.2.0-full.apk",
+  "package": {
+    "application_id": "net.plainnotes.app",
+    "version_code": 44,
+    "version_name": "0.2.0"
+  },
+  "apk_sha256": "89f862209f81cbf53c41975b250dd99d493370fd32617984254db4caf174070e",
+  "signing_cert_sha256": [
+    "989ba04532e4c3ec11c2de989d5b1905cf67bdc6c449361293ef62b8a59379b1"
+  ],
+  "source": {
+    "SOURCE_COMMIT_TIME_UTC": "2026-10-31T22:05:02Z",
+    "SOURCE_DIRTY": "false",
+    "SOURCE_ORIGIN": "git",
+    "SOURCE_SHA": "afe13bcfa174c2322cd3ad64ec49f9fede213a07"
+  },
+  "unsigned_payload_entries_unchanged": 410,
+  "bytes": 14548126,
+  "native_libraries": [
+    {
+      "name": "lib/arm64-v8a/libandroidx.graphics.path.so",
+      "sha256": "41e9a793c43a0f4fddb19e33f346bace464f30f888ba7b9eaf96294ea115bfb6",
+      "load_alignments_64bit": [
+        16384,
+        16384,
+        16384
+      ],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/arm64-v8a/libsqlcipher.so",
+      "sha256": "bc85746647ce4ea5f390eccd61e5236fbd11786a91802877b9fdbbb66a55192d",
+      "load_alignments_64bit": [
+        16384,
+        16384,
+        16384
+      ],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/armeabi-v7a/libandroidx.graphics.path.so",
+      "sha256": "41399eba6fc2a60f6f14642375c1824f3cf25eb8fec7397d753730a3ceda3e2b",
+      "load_alignments_64bit": [],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/armeabi-v7a/libsqlcipher.so",
+      "sha256": "a3d6e16e4477961cffc563ad9e9b49aa9cf0f4def5f008a9b349c9afacec6170",
+      "load_alignments_64bit": [],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/x86/libandroidx.graphics.path.so",
+      "sha256": "eb0570b41fd3bff25d8204a967c03bd7550719e768b791f680cc40cbe35f29af",
+      "load_alignments_64bit": [],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/x86/libsqlcipher.so",
+      "sha256": "efd77986abfa03cff177ea1d9801bd3080bd8bfc90a26ac1a977da169c5b89c8",
+      "load_alignments_64bit": [],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/x86_64/libandroidx.graphics.path.so",
+      "sha256": "4e56c996f13670e70082658de7880c4020eabf4f25e43387f88ed78a713fc9f0",
+      "load_alignments_64bit": [
+        16384,
+        16384,
+        16384
+      ],
+      "same_as_previous_release": true
+    },
+    {
+      "name": "lib/x86_64/libsqlcipher.so",
+      "sha256": "482f62c4d77e136d7cb7eb30d74a5c4cbadc3577d10ced1f13f3e745e1be7e7a",
+      "load_alignments_64bit": [
+        16384,
+        16384,
+        16384
+      ],
+      "same_as_previous_release": true
+    }
+  ],
+  "release_isolation": "PASS",
+  "no_internet": "PASS",
+  "skip_summary_in_dex": "PASS",
+  "physical_device": "NOT_RUN",
+  "manual_talkback": "NOT_RUN",
+  "delivery": "PUBLISHED_AND_REDOWNLOADED_VERIFIED",
+  "delivery_time_utc": "2026-11-01T00:21:53.897250+00:00",
+  "release_run": 41256383607,
+  "previous_apk_sha256": "186538ac24783d4e6bd2ca852fbf577f6f05cb416ea62269f493bb1282d0228c",
+  "tag": "v0.2.0",
+  "tag_source": "afe13bcfa174c2322cd3ad64ec49f9fede213a07",
+  "build_input": "Unmodified clean mainline fullRelease; source versionCode44; no version override",
+  "unsigned_apk_sha256": "fc2c1aa066619c907181cd2d6254633f51263c231622d9f416b7b9fc05714ffb",
+  "private_credentials": "Private original backup verified; temporary key/password/clone removed; original unchanged",
+  "scope": "Merged #179, no unmerged #174 research candidate"
+}
